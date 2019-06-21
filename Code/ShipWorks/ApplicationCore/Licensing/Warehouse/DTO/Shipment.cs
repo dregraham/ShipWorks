@@ -48,17 +48,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         public double HeightInInches { get; set; }
 
         [JsonProperty("packagingType")]
-        public int PackagingType { get; set; }
+        public string PackagingType { get; set; }
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class Shipment
     {
         [JsonProperty("tangoShipmentId")]
-        public string TangoShipmentId { get; set; }
+        public long TangoShipmentId { get; set; }
 
         [JsonProperty("shipworksShipmentId")]
-        public string ShipworksShipmentId { get; set; }
+        public long ShipworksShipmentId { get; set; }
 
         [JsonProperty("carrier")]
         public string Carrier { get; set; }
@@ -97,10 +97,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         public string ShippingAccount { get; set; }
 
         [JsonProperty("labelFormat")]
-        public int LabelFormat { get; set; }
+        public string LabelFormat { get; set; }
 
         [JsonProperty("estimatedDeliveryDate")]
-        public string EstimatedDeliveryDate { get; set; }
+        public DateTime EstimatedDeliveryDate { get; set; }
 
         [JsonProperty("packages")]
         public IEnumerable<Package> Packages { get; set; }

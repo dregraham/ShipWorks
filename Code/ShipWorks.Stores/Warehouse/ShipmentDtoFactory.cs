@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -37,8 +38,8 @@ namespace ShipWorks.Stores.Warehouse
 
             Shipment shipment = new Shipment
             {
-                TangoShipmentId = shipmentEntity.OnlineShipmentID,
-                ShipworksShipmentId = shipmentEntity.ShipmentID.ToString(),
+                TangoShipmentId = Convert.ToInt64(shipmentEntity.OnlineShipmentID),
+                ShipworksShipmentId = shipmentEntity.ShipmentID,
                 Carrier = EnumHelper.GetDescription(shipmentEntity.ShipmentTypeCode),
                 Service = shipmentAdapter.ServiceTypeName,
                 TrackingNumber = shipmentEntity.TrackingNumber,
@@ -61,8 +62,9 @@ namespace ShipWorks.Stores.Warehouse
                 OriginPostalCode = shipmentEntity.OriginPostalCode,
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
                 ShippingAccount = shipmentAdapter.AccountId.ToString(),
-                LabelFormat = shipmentEntity.ActualLabelFormat ?? 0,
-                //EstimatedDeliveryDate = this is all over the place, skipping for now
+                LabelFormat = EnumHelper.GetDescription((LabelFormatType) (shipmentEntity.ActualLabelFormat ?? 0)),
+                // todo: replace shipdate with something else
+                EstimatedDeliveryDate = shipmentEntity.ShipDate,
                 Packages = CreatePackages(shipmentAdapter.GetPackageAdapters())
             };
 
@@ -79,7 +81,8 @@ namespace ShipWorks.Stores.Warehouse
                     LengthInInches = packageAdapter.DimsLength,
                     WidthInInches = packageAdapter.DimsWidth,
                     HeightInInches = packageAdapter.DimsHeight,
-                    PackagingType = packageAdapter.PackagingType
+                    // todo: get packaging type name
+                    PackagingType = packageAdapter.PackagingType.ToString()
                 });
     }
 }
