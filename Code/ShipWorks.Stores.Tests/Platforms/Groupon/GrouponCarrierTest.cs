@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
     public class GrouponCarrierTest
     {
         [Fact]
-        public void GetCarrierCode_ReturnsUsps_WhenCarrierIsUspsAndServiceIsNotMediaMail()
+        public void GetCarrierCode_ReturnsUsps_WhenCarrierIsUsps()
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Postal = new PostalShipmentEntity();
@@ -22,25 +22,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
         }
 
         [Fact]
-        public void GetCarrierCode_ReturnsUspsmm_WhenCarrierIsUspsAndServiceIsMediaMail()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-            shipment.Postal = new PostalShipmentEntity();
-            shipment.Postal.Service = (int) PostalServiceType.MediaMail;
-            shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
-
-            Assert.Equal("uspsmm", GrouponCarrier.GetCarrierCode(shipment));
-        }
-
-        [Fact]
-        public void GetCarrierCode_ReturnsDhlgm_WhenCarrierIsDhl()
+        public void GetCarrierCode_ReturnsDhl_WhenCarrierIsDhl()
         {
             ShipmentEntity shipment = new ShipmentEntity();
             shipment.Postal = new PostalShipmentEntity();
             shipment.Postal.Service = (int) PostalServiceType.DhlParcelPlusExpedited;
             shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
-            Assert.Equal("dhlgm", GrouponCarrier.GetCarrierCode(shipment));
+            Assert.Equal("dhl", GrouponCarrier.GetCarrierCode(shipment));
         }
 
         [Fact]
@@ -52,39 +41,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Groupon
             shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
 
             Assert.Equal("fedex", GrouponCarrier.GetCarrierCode(shipment));
-        }
-
-        [Fact]
-        public void GetCarrierCode_ReturnsFedexhd_WhenCarrierIsFedexAndServiceIsHomeDelivery()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-            shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
-            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
-
-            Assert.Equal("Fedexhd", GrouponCarrier.GetCarrierCode(shipment));
-        }
-
-        [Fact]
-        public void GetCarrierCode_ReturnsFedexsp_WhenCarrierIsFedexAndServiceIsSmartPost()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-            shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int) FedExServiceType.SmartPost;
-            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
-
-            Assert.Equal("fedexsp", GrouponCarrier.GetCarrierCode(shipment));
-        }
-
-        [Fact]
-        public void GetCarrierCode_ReturnsFedexsp_WhenCarrierIsFedexAndServiceIsPriority()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-            shipment.FedEx = new FedExShipmentEntity();
-            shipment.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
-            shipment.ShipmentType = (int) ShipmentTypeCode.FedEx;
-
-            Assert.Equal("Fexp", GrouponCarrier.GetCarrierCode(shipment));
         }
 
         [Fact]
