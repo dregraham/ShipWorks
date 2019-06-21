@@ -8,6 +8,7 @@ using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -165,13 +166,14 @@ namespace ShipWorks.Stores.Platforms.Magento
                 using (IHttpResponseReader reader = request.GetResponse())
                 {
                     string result = reader.ReadResult();
-                    logEntry.LogResponse(result, "txt");
 
                     XmlDocument xmlResponse = new XmlDocument { XmlResolver = null };
                     xmlResponse.LoadXml(result);
 
                     XPathNavigator xpath = xmlResponse.CreateNavigator();
-                    GenericModuleResponse response = new GenericModuleResponse(HttpUtility.HtmlDecode(xpath.Value));
+                    string escapedValue = HtmlEntityUtility.DecodeHtmlWithoutXml(xpath.Value);
+                    logEntry.LogResponse(HttpUtility.HtmlDecode(escapedValue), "txt");
+                    GenericModuleResponse response = new GenericModuleResponse(escapedValue);
 
                     // Valid the module version and schema version
                     ValidateModuleVersion(response.ModuleVersion);
