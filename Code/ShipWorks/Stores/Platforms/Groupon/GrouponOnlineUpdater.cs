@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             foreach (IOrderEntity order in orders)
             {
-                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID).ConfigureAwait(false);
+                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID, false).ConfigureAwait(false);
 
                 // Check to see if shipment exists
                 if (shipment == null)

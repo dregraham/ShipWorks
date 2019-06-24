@@ -114,6 +114,9 @@
     <Compile Include="AssemblyInfo.cs">
       <id>f3a7aa6b-6a87-463b-9e15-1d4d3cb39acc</id>
     </Compile>
+    <Compile Include="CloseShipWorks.cs">
+      <id>ec15ca23-6aa0-4adc-ae3f-3c31cedac5ff</id>
+    </Compile>
     <Compile Include="CopyStagingHosts.cs">
       <id>66101e65-b729-4748-8ad1-d88160f96704</id>
     </Compile>

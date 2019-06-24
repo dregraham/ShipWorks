@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -46,9 +47,24 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         }
 
         /// <summary>
-        /// Complete the label creation process
+        /// Complete the label creation process for all shipments and returns
         /// </summary>
-        public ILabelResultLogResult Complete(ILabelPersistenceResult result)
+        public IEnumerable<ILabelResultLogResult> Complete(IEnumerable<ILabelPersistenceResult> labelPersistenceResults)
+        {
+            List<ILabelResultLogResult> labelResultLogResults = new List<ILabelResultLogResult>();
+
+            foreach (ILabelPersistenceResult result in labelPersistenceResults)
+            {
+                labelResultLogResults.Add(CompleteSingle(result));
+            }
+
+            return labelResultLogResults;
+        }
+
+        /// <summary>
+        /// Complete the label creation process for a single shipment
+        /// </summary>
+        private ILabelResultLogResult CompleteSingle(ILabelPersistenceResult result)
         {
             ShipmentEntity shipment = result.OriginalShipment;
             Exception exception = result.Exception;

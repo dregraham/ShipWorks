@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo.EmailIntegration
         public async Task<IEnumerable<EmailOutboundEntity>> GenerateOrderShipmentUpdateEmail(long orderID)
         {
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
 
             if (shipment == null)
             {

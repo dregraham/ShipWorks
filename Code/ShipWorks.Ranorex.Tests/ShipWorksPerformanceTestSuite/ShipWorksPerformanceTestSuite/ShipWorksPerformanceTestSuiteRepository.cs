@@ -50,6 +50,7 @@ namespace ShipWorksPerformanceTestSuite
         ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder _logondlg;
         ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder _whatsnext;
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder _shipworks1;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksSetupAppFolder _shipworkssetup;
 
         /// <summary>
         /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
@@ -89,6 +90,7 @@ namespace ShipWorksPerformanceTestSuite
             _logondlg = new ShipWorksPerformanceTestSuiteRepositoryFolders.LogonDlgAppFolder(this);
             _whatsnext = new ShipWorksPerformanceTestSuiteRepositoryFolders.WhatsNextAppFolder(this);
             _shipworks1 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder(this);
+            _shipworkssetup = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksSetupAppFolder(this);
         }
 
 #region Variables
@@ -312,6 +314,15 @@ namespace ShipWorksPerformanceTestSuite
         public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks1AppFolder ShipWorks1
         {
             get { return _shipworks1; }
+        }
+
+        /// <summary>
+        /// The ShipWorksSetup folder.
+        /// </summary>
+        [RepositoryFolder("3177780e-b701-41e5-832e-46d4a053c28a")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksSetupAppFolder ShipWorksSetup
+        {
+            get { return _shipworkssetup; }
         }
     }
 
@@ -4331,6 +4342,8 @@ namespace ShipWorksPerformanceTestSuite
         {
             RepoItemInfo _startfromscratchInfo;
             RepoItemInfo _detailedsetupInfo;
+            RepoItemInfo _doyoualreadyuseshipworksInfo;
+            RepoItemInfo _getsetupInfo;
 
             /// <summary>
             /// Creates a new SimpleDatabaseSetupWizard  folder.
@@ -4340,6 +4353,8 @@ namespace ShipWorksPerformanceTestSuite
             {
                 _startfromscratchInfo = new RepoItemInfo(this, "StartFromScratch", "container[@controlname='mainPanel']/?/?/button[@controlname='startFromScratch']", 30000, null, "62c67fd2-4b6f-4010-8879-abe6be9cfa7f");
                 _detailedsetupInfo = new RepoItemInfo(this, "DetailedSetup", "container[@controlname='mainPanel']/?/?/button[@controlname='detailedSetup']", 30000, null, "f4b34c4a-08f9-4427-86aa-c4104058eb8f");
+                _doyoualreadyuseshipworksInfo = new RepoItemInfo(this, "DoYouAlreadyUseShipWorks", "container[@controlname='mainPanel']//rawtext[@rawtext='Do you already use ShipWorks?']", 30000, null, "92906db8-b63f-4d74-b9b3-cdd44e2b2f53");
+                _getsetupInfo = new RepoItemInfo(this, "GetSetUp", ".//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up >']", 30000, null, "b8500301-15f0-4cce-be9e-fad7d22efb36");
             }
 
             /// <summary>
@@ -4411,6 +4426,54 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _detailedsetupInfo;
+                }
+            }
+
+            /// <summary>
+            /// The DoYouAlreadyUseShipWorks item.
+            /// </summary>
+            [RepositoryItem("92906db8-b63f-4d74-b9b3-cdd44e2b2f53")]
+            public virtual Ranorex.RawText DoYouAlreadyUseShipWorks
+            {
+                get
+                {
+                    return _doyoualreadyuseshipworksInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The DoYouAlreadyUseShipWorks item info.
+            /// </summary>
+            [RepositoryItemInfo("92906db8-b63f-4d74-b9b3-cdd44e2b2f53")]
+            public virtual RepoItemInfo DoYouAlreadyUseShipWorksInfo
+            {
+                get
+                {
+                    return _doyoualreadyuseshipworksInfo;
+                }
+            }
+
+            /// <summary>
+            /// The GetSetUp item.
+            /// </summary>
+            [RepositoryItem("b8500301-15f0-4cce-be9e-fad7d22efb36")]
+            public virtual Ranorex.RawText GetSetUp
+            {
+                get
+                {
+                    return _getsetupInfo.CreateAdapter<Ranorex.RawText>(true);
+                }
+            }
+
+            /// <summary>
+            /// The GetSetUp item info.
+            /// </summary>
+            [RepositoryItemInfo("b8500301-15f0-4cce-be9e-fad7d22efb36")]
+            public virtual RepoItemInfo GetSetUpInfo
+            {
+                get
+                {
+                    return _getsetupInfo;
                 }
             }
         }
@@ -5314,6 +5377,72 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _buttonokInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ShipWorksSetupAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("3177780e-b701-41e5-832e-46d4a053c28a")]
+        public partial class ShipWorksSetupAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _getsetupInfo;
+
+            /// <summary>
+            /// Creates a new ShipWorksSetup  folder.
+            /// </summary>
+            public ShipWorksSetupAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShipWorksSetup", "/form[@title='ShipWorks Setup']", parentFolder, 30000, null, true, "3177780e-b701-41e5-832e-46d4a053c28a", "")
+            {
+                _getsetupInfo = new RepoItemInfo(this, "GetSetUp", "element[@instance='1']/element[@instance='0']/element[2]/button[@accessiblename='Get set up >']", 30000, null, "0da20b23-b3d2-4e6f-8c2b-e1a8c9f044d3");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("3177780e-b701-41e5-832e-46d4a053c28a")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("3177780e-b701-41e5-832e-46d4a053c28a")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The GetSetUp item.
+            /// </summary>
+            [RepositoryItem("0da20b23-b3d2-4e6f-8c2b-e1a8c9f044d3")]
+            public virtual Ranorex.Button GetSetUp
+            {
+                get
+                {
+                    return _getsetupInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The GetSetUp item info.
+            /// </summary>
+            [RepositoryItemInfo("0da20b23-b3d2-4e6f-8c2b-e1a8c9f044d3")]
+            public virtual RepoItemInfo GetSetUpInfo
+            {
+                get
+                {
+                    return _getsetupInfo;
                 }
             }
         }

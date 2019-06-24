@@ -33,6 +33,8 @@ namespace ShipWorks.Shipping.Services
             LicenseCheckResults = new Dictionary<long, Exception>();
 
             OrderHashes = new List<string>();
+
+            Shipments = new List<ShipmentEntity>();
         }
 
         /// <summary>
@@ -79,5 +81,10 @@ namespace ShipWorks.Shipping.Services
         /// Local Rate ValidationResult
         /// </summary>
         public ILocalRateValidationResult LocalRateValidationResult { get; set; }
+
+        /// <summary>
+        /// List of shipments
+        /// </summary>
+        public IList<ShipmentEntity> Shipments { get; }
     }
 }

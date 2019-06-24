@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -21,7 +22,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     {
         private readonly AutoMock mock;
         private readonly LabelPersistenceStep testObject;
-        private readonly Mock<ILabelRetrievalResult> input;
+        private readonly Mock<ILabelRetrievalResult> labelResult1;
+        private readonly List<ILabelRetrievalResult> input;
         private readonly ShipmentEntity shipment;
         private readonly StoreEntity store;
 
@@ -33,12 +35,15 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             shipment = Create.Shipment(new OrderEntity()).AsOther().Build();
             store = Create.Store<StoreEntity>().Build();
 
-            input = mock.CreateMock<ILabelRetrievalResult>(r =>
+            labelResult1 = mock.CreateMock<ILabelRetrievalResult>(r =>
             {
                 r.SetupGet(x => x.Success).Returns(true);
                 r.SetupGet(x => x.OriginalShipment).Returns(shipment);
                 r.SetupGet(x => x.Store).Returns(store);
             });
+
+            input = new List<ILabelRetrievalResult>();
+            input.Add(labelResult1.Object);
         }
 
         [Fact]
@@ -47,26 +52,26 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var exception = new ShippingException();
             var entityLock = mock.Build<IDisposable>();
 
-            input.SetupGet(x => x.Success).Returns(false);
-            input.SetupGet(x => x.Exception).Returns(exception);
-            input.SetupGet(x => x.Canceled).Returns(true);
-            input.SetupGet(x => x.EntityLock).Returns(entityLock);
+            labelResult1.SetupGet(x => x.Success).Returns(false);
+            labelResult1.SetupGet(x => x.Exception).Returns(exception);
+            labelResult1.SetupGet(x => x.Canceled).Returns(true);
+            labelResult1.SetupGet(x => x.EntityLock).Returns(entityLock);
 
-            var result = testObject.SaveLabel(input.Object);
+            var result = testObject.SaveLabels(input);
 
-            Assert.Equal(false, result.Success);
-            Assert.Equal(exception, result.Exception);
-            Assert.Equal(true, result.Canceled);
-            Assert.Equal(entityLock, result.EntityLock);
+            Assert.Equal(false, result.First().Success);
+            Assert.Equal(exception, result.First().Exception);
+            Assert.Equal(true, result.First().Canceled);
+            Assert.Equal(entityLock, result.First().EntityLock);
         }
 
         [Fact]
         public void SaveLabel_DelegatesToDownloadedLabel()
         {
             var downloadedData = mock.Mock<IDownloadedLabelData>();
-            input.SetupGet(x => x.LabelData).Returns(downloadedData);
+            labelResult1.SetupGet(x => x.LabelData).Returns(downloadedData);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             downloadedData.Verify(x => x.Save());
         }
@@ -76,11 +81,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             var exception = new Exception();
             var downloadedData = mock.CreateMock<IDownloadedLabelData>(d => d.Setup(x => x.Save()).Throws(exception));
-            input.SetupGet(x => x.LabelData).Returns(downloadedData);
+            labelResult1.SetupGet(x => x.LabelData).Returns(downloadedData);
 
-            var result = testObject.SaveLabel(input.Object);
+            var result = testObject.SaveLabels(input);
 
-            Assert.Equal(exception, result.Exception.GetBaseException());
+            Assert.Equal(exception, result.First().Exception.GetBaseException());
         }
 
         [Fact]
@@ -89,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var insurance = mock.Mock<IInsureShipService>();
             insurance.Setup(x => x.IsInsuredByInsureShip(shipment)).Returns(true);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             insurance.Verify(x => x.Insure(shipment));
         }
@@ -100,7 +105,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var insurance = mock.Mock<IInsureShipService>();
             insurance.Setup(x => x.IsInsuredByInsureShip(shipment)).Returns(false);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             insurance.Verify(x => x.Insure(AnyShipment), Times.Never);
         }
@@ -113,10 +118,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             shipment.ShipCity = "Bar";
             shipment.ShipPostalCode = "12345";
 
-            input.SetupGet(x => x.Clone).Returns(clone);
-            input.SetupGet(x => x.FieldsToRestore).Returns(fields);
+            labelResult1.SetupGet(x => x.Clone).Returns(clone);
+            labelResult1.SetupGet(x => x.FieldsToRestore).Returns(fields);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             Assert.Equal("Foo", shipment.ShipCity);
             Assert.False(shipment.Fields[(int) ShipmentFieldIndex.ShipCity].IsChanged);
@@ -131,7 +136,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock.Mock<IUserSession>().SetupGet(x => x.Computer).Returns(new ComputerEntity { ComputerID = 5678 });
             mock.Mock<IUserSession>().SetupGet(x => x.User).Returns(new UserEntity { UserID = 1234 });
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             Assert.True(shipment.Processed);
             Assert.Equal(now, shipment.ProcessedDate);
@@ -145,7 +150,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var adapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             adapter.Verify(x => x.SaveAndRefetch(shipment));
         }
@@ -158,7 +163,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             shipment.ShipmentTypeCode = ShipmentTypeCode.Usps;
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             mock.Mock<IActionDispatcher>()
                 .Verify(x => x.DispatchShipmentProcessed(shipment, It.IsAny<ISqlAdapter>()));
@@ -172,7 +177,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             shipment.ShipmentTypeCode = ShipmentTypeCode.UpsWorldShip;
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             mock.Mock<IActionDispatcher>()
                 .Verify(x => x.DispatchShipmentProcessed(shipment, It.IsAny<ISqlAdapter>()), Times.Never);
@@ -184,7 +189,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var adapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
 
-            testObject.SaveLabel(input.Object);
+            testObject.SaveLabels(input);
 
             adapter.Verify(x => x.Commit());
         }
@@ -194,13 +199,13 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             var entityLock = mock.Build<IDisposable>();
 
-            input.SetupGet(x => x.EntityLock).Returns(entityLock);
+            labelResult1.SetupGet(x => x.EntityLock).Returns(entityLock);
 
-            var result = testObject.SaveLabel(input.Object);
+            var result = testObject.SaveLabels(input);
 
-            Assert.Equal(entityLock, result.EntityLock);
-            Assert.Equal(store, result.Store);
-            Assert.Equal(shipment, result.OriginalShipment);
+            Assert.Equal(entityLock, result.First().EntityLock);
+            Assert.Equal(store, result.First().Store);
+            Assert.Equal(shipment, result.First().OriginalShipment);
         }
 
         [Fact]
@@ -211,13 +216,13 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.CreateTransacted()).Returns(adapter);
             var entityLock = mock.Build<IDisposable>();
 
-            input.SetupGet(x => x.EntityLock).Returns(entityLock);
+            labelResult1.SetupGet(x => x.EntityLock).Returns(entityLock);
 
-            var result = testObject.SaveLabel(input.Object);
+            var result = testObject.SaveLabels(input);
 
-            Assert.Equal(entityLock, result.EntityLock);
-            Assert.Equal(store, result.Store);
-            Assert.Equal(shipment, result.OriginalShipment);
+            Assert.Equal(entityLock, result.First().EntityLock);
+            Assert.Equal(store, result.First().Store);
+            Assert.Equal(shipment, result.First().OriginalShipment);
         }
 
         public void Dispose()

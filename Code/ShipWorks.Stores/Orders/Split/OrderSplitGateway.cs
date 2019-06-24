@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public bool CanSplit(long orderID)
         {
-            return orderManager.GetLatestActiveShipment(orderID) == null;
+            return orderManager.GetLatestActiveShipment(orderID, true) == null;
         }
 
         /// <summary>

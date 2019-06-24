@@ -120,7 +120,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             foreach (var order in orders)
             {
                 // upload tracking number for the most recent processed, not voided shipment
-                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID).ConfigureAwait(false);
+                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(order.OrderID, false).ConfigureAwait(false);
                 if (shipment == null)
                 {
                     log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}.", order.OrderID);

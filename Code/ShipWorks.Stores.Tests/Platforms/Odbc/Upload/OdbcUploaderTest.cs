@@ -78,8 +78,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             OdbcUploader testObject = mock.Create<OdbcUploader>();
             await testObject.UploadLatestShipment(new OdbcStoreEntity(), 5);
 
-            orderManager.Verify(m => m.GetLatestActiveShipment(5), Times.Once);
-            orderManager.Verify(m => m.GetLatestActiveShipment(It.IsAny<long>()), Times.Once);
+            orderManager.Verify(m => m.GetLatestActiveShipment(5, true), Times.Once);
+            orderManager.Verify(m => m.GetLatestActiveShipment(It.IsAny<long>(), true), Times.Once);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Upload
             shipment.Order.ChangeOrderNumber("1");
 
             orderManager = mock.Mock<IOrderManager>();
-            orderManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>())).Returns(shipment);
+            orderManager.Setup(m => m.GetLatestActiveShipment(It.IsAny<long>(), true)).Returns(shipment);
         }
 
         private void SetupCommand(int rowsAffected)

@@ -179,7 +179,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The Phone property of the Entity Store<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Store"."Phone"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Phone { get; }
         /// <summary> The Fax property of the Entity Store<br/><br/>

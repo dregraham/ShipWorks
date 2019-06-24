@@ -540,6 +540,7 @@
     <Compile Include="Utility\GenericResult.cs" />
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
+    <Compile Include="Utility\HtmlEntityUtility.cs" />
     <Compile Include="Utility\IClrHelper.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\IEnvironmentWrapper.cs" />

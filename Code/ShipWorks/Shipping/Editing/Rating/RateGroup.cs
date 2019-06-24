@@ -52,6 +52,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         public virtual ShipmentTypeCode Carrier { get; set; }
 
         /// <summary>
+        /// Indicates if the return warning footnote should be shown for this rate group
+        /// </summary>
+        public bool showReturnFootnote { get; set; }
+
+        /// <summary>
         /// Adds a footnote factory to the FootnoteFactories collection.
         /// </summary>
         /// <param name="factory">The factory.</param>

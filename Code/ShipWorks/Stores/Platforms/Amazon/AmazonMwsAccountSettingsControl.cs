@@ -70,13 +70,13 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 switch (amazonStore.AmazonApiRegion)
                 {
                     case "US":
-                        return "http://developer.amazonservices.com";
+                        return "https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1";
                     case "CA":
-                        return "http://developer.amazonservices.ca";
+                        return "https://sellercentral.amazon.ca/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1";
                     case "MX":
-                        return "http://developer.amazonservices.com";
+                        return "https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1";
                     default:
-                        return "http://developer.amazonservices.co.uk";
+                        return "https://sellercentral.amazon.co.uk/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1";
                 }
             }
         }

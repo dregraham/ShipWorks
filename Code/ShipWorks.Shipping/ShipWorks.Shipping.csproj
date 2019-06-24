@@ -401,6 +401,8 @@
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
     <Compile Include="Profiles\ProfilePopupService.cs" />
+    <Compile Include="Services\AutoReturnShipmentService.cs" />
+    <Compile Include="Services\IAutoReturnShipmentService.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />

@@ -45,10 +45,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         [Description("UPS Standard")]
         UpsStandard = 11,
 
-        [Description("UPS First Class Innovations")]
+        [Description("UPS First Class Innovations®")]
         UpsMailInnovationsFirstClass = 12,
 
-        [Description("UPS Priority Mail Innovations")]
+        [Description("UPS Priority Mail Innovations®")]
         UpsMailInnovationsPriority = 13,
 
         [Description("UPS Expedited Mail Innovations®")]
@@ -88,13 +88,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         Ups3DaySelectFromCanada = 25,
 
         [Description("UPS Worldwide Express Saver™ (Canada)")]
-        UpsCaWorldWideExpressSaver=26,
+        UpsCaWorldWideExpressSaver = 26,
 
         [Description("UPS Worldwide Express Plus™ (Canada)")]
-        UpsCaWorldWideExpressPlus=27,
+        UpsCaWorldWideExpressPlus = 27,
 
         [Description("UPS Worldwide Express™ (Canada)")]
-        UpsCaWorldWideExpress=28,
+        UpsCaWorldWideExpress = 28,
 
         [Description("UPS Second Day Air Intra")]
         Ups2ndDayAirIntra = 29

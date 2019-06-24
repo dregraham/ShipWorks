@@ -1798,6 +1798,26 @@ DAPIxVgFicf/GQCdrAkiuOdOjQAAAABJRU5ErkJggg==
 			searchtimeout="30000ms">
 				/form[@controlname='SimpleDatabaseSetupWizard']/container[@controlname='mainPanel']/?/?/button[@controlname='detailedSetup']
 			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="92906db8-b63f-4d74-b9b3-cdd44e2b2f53"
+			name="DoYouAlreadyUseShipWorks"
+			refimgid="c068c03b-a54e-40f4-b73d-fbdacb07a716"
+			refpath="/form[@controlname='SimpleDatabaseSetupWizard']/container[@controlname='mainPanel']/container/text[@controlname='labelWelcomeAdvanced']/rawtext[@rawtext='Do you already use ShipWorks?']"
+			searchtimeout="30000ms">
+				/form[@controlname='SimpleDatabaseSetupWizard']/container[@controlname='mainPanel']//rawtext[@rawtext='Do you already use ShipWorks?']
+			</item>
+			<item
+			addcaps="unknown,rawtext"
+			capname="rawtext"
+			id="b8500301-15f0-4cce-be9e-fad7d22efb36"
+			name="GetSetUp"
+			refimgid="90813f56-9dbf-43b0-8e97-fec76a7c896c"
+			refpath="/form[@controlname='SimpleDatabaseSetupWizard']/container[@controlname='mainPanel']/container/button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up >']"
+			searchtimeout="30000ms">
+				/form[@controlname='SimpleDatabaseSetupWizard']//button[@controlname='detailedSetup']/rawtext[@rawtext='Get set up &gt;']
+			</item>
 			<basepath>
 				/form[@controlname='SimpleDatabaseSetupWizard']
 			</basepath>
@@ -2220,6 +2240,46 @@ MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			</item>
 			<basepath>
 				/form[@processname='ShipWorks' and @win32ownerwindowlevel='1']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAALYSURBVDhPfZF9LNRxHMe//5SnWhNZpglLOUeL
+G2mr1mVqJY1i62ZSCjWTodjKQ62QpgersUZxqpnKQ7o8n4ehUsk5bpwT5dyT54iw3Lufn9+S3ea9
+vfZ9+rxfvz9+ZLW4R/GdLAIz3Nx87xowV6vnQ0c/q3dkPr5VPlOZ+2X0V6ZQjjtFMvAetMD2qrDH
++lpNgVlY0R5mXDdVPZMJtbIp9I3MonvoN+r6psD/qEJAVitYiUKQkBKQs/khzLhuEgSy8OSGIQh7
+JpHXNoakeg3CC6Ug54uXyqFvQAJz/Jlx3YRmNp6+UtyHlIoBmhhqf/KpeLm8CC/bmxnXjW9cwfGL
+2WJcyGqnWdzvT/+8UuDzwIMZ101kairXK+U9jt9uYmiG/c3G/wSlOOd9+eLjEM4apkKIpCWXrR3O
+u6yVHqmV1PHm9iUJsDGqEiYUptHUGlsNEkwJKDyjsyFOjIA04MTs1527atpd3WKI9kfcHDQvgIlm
+aEcFmJeGorU+HmnPbuBQQhpsY0pxPUeI76/5GIoOQ+9RL3wLCoLU8xhEtuwF8qfNRKmV8aCV38eC
+yBwLiiSoqjdDWb4WqgJXDD9JwmRjCTTP70KVdQuah/cg2rodImu7RWbIeJOP5OenYMx0pWK8yQ/T
+kngMlq2Folwfcr4t+mPPQJmZCHnyJXyL4kEeGQaR1Q6027AWmSCqKpdmdTUH6mpnqKucMP7JjxLo
+0YKBHHNIeR7o5rmj+9RBmn5/X/rrtMCaNUwUZWYCRfkmqmBKM9LoTAn0lwR8Y0i4LujkcpY4wIHs
+MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
+9OTvDIOVFQadqioTKMr01AMCfR79SOXtFhuHzm2sLLE1a7bTjo0OG7uXhZaW5szzypQ9Wrc3L5oY
+MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="3177780e-b701-41e5-832e-46d4a053c28a"
+		isrooted="True"
+		name="ShipWorksSetup"
+		refpath="/form[@title='ShipWorks Setup']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="0da20b23-b3d2-4e6f-8c2b-e1a8c9f044d3"
+			name="GetSetUp"
+			refimgid="d657d6a4-9155-47ce-a6fb-caf79d09f34a"
+			refpath="/form[@title='ShipWorks Setup']/element[@instance='1']/element/element[@class='WindowsForms10.BUTTON.app.0.21af1a5_r6_ad1' and @instance='1']/button[@accessiblename='Get set up >']"
+			searchtimeout="30000ms">
+				/form[@title='ShipWorks Setup']/element[@instance='1']/element[@instance='0']/element[2]/button[@accessiblename='Get set up &gt;']
+			</item>
+			<basepath>
+				/form[@title='ShipWorks Setup']
 			</basepath>
 			<icon>
 				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx

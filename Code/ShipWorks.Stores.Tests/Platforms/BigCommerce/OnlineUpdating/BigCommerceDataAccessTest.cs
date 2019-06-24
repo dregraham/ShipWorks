@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
             await testObject.GetLatestActiveShipmentAsync(1006);
 
             mock.Mock<IOrderManager>()
-                .Verify(x => x.GetLatestActiveShipmentAsync(1006));
+                .Verify(x => x.GetLatestActiveShipmentAsync(1006, false));
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Tests.Platforms.BigCommerce
         {
             var shipment = new ShipmentEntity();
             mock.Mock<IOrderManager>()
-                .Setup(x => x.GetLatestActiveShipmentAsync(It.IsAny<long>()))
+                .Setup(x => x.GetLatestActiveShipmentAsync(It.IsAny<long>(), false))
                 .ReturnsAsync(shipment);
 
             var testObject = mock.Create<BigCommerceDataAccess>();

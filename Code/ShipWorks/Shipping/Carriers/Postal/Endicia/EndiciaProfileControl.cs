@@ -2,11 +2,11 @@
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Profiles;
 
@@ -76,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             if (IsScanBasedReturnsEnabled())
             {
                 AddValueMapping(endiciaProfile, EndiciaProfileFields.ScanBasedReturn, scanBasedPaymentState, scanBasedPayment);
+                SetParentCheckBox(returnState, returnShipment, scanBasedPaymentState, scanBasedPayment);
             }
 
             AddValueMapping(profile.Postal, PostalProfileFields.SortType, stateSortType, sortType, labelSortType);

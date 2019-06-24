@@ -227,30 +227,30 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
             switch (entityType)
             {
                 case EntityType.OrderEntity:
-                    {
-                        // If an OrderID was provided, consider all child items.  By using OfType<EbayOrerItemEntity>, we get rid
-                        // of any that are manual (but we double-check anyway)
-                        items.AddRange(DataProvider.GetRelatedEntities(entityID, EntityType.OrderItemEntity).OfType<EbayOrderItemEntity>().Where(i => !i.IsManual));
+                {
+                    // If an OrderID was provided, consider all child items.  By using OfType<EbayOrerItemEntity>, we get rid
+                    // of any that are manual (but we double-check anyway)
+                    items.AddRange(DataProvider.GetRelatedEntities(entityID, EntityType.OrderItemEntity).OfType<EbayOrderItemEntity>().Where(i => !i.IsManual));
 
-                        break;
-                    }
+                    break;
+                }
 
                 case EntityType.OrderItemEntity:
+                {
+                    // If its an item, attach the single item.
+                    EbayOrderItemEntity orderItem = DataProvider.GetEntity(entityID) as EbayOrderItemEntity;
+                    if (orderItem != null && !orderItem.IsManual)
                     {
-                        // If its an item, attach the single item.
-                        EbayOrderItemEntity orderItem = DataProvider.GetEntity(entityID) as EbayOrderItemEntity;
-                        if (orderItem != null && !orderItem.IsManual)
-                        {
-                            items.Add(orderItem);
-                        }
-
-                        break;
+                        items.Add(orderItem);
                     }
+
+                    break;
+                }
 
                 default:
-                    {
-                        throw new InvalidOperationException("eBay Messages can only be sent for an order or order item.");
-                    }
+                {
+                    throw new InvalidOperationException("eBay Messages can only be sent for an order or order item.");
+                }
             }
 
             foreach (EbayOrderItemEntity item in items.ToList())
@@ -334,7 +334,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OnlineUpdating
                 if (shipped.HasValue && shipped.Value)
                 {
                     // We have shipping information, so get the shipment details
-                    ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
+                    ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID, false);
 
                     if (shipment != null)
                     {

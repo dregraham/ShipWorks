@@ -15,7 +15,7 @@ create view ProcessedShipmentsView as
         SELECT ShipmentID, ShipmentType, ShipDate, Insurance, InsuranceProvider, ProcessedDate, ProcessedUserID, ProcessedComputerID,
 			ProcessedWithUiMode, Voided, VoidedDate, VoidedUserID, VoidedComputerID, TotalWeight, TrackingNumber, ShipmentCost,
 			ShipSenseStatus, Shipment.ShipAddressValidationStatus, Shipment.ShipResidentialStatus, Shipment.ShipPOBox,
-			Shipment.ShipMilitaryAddress, Shipment.ShipUSTerritory, RequestedLabelFormat, ActualLabelFormat,
+			Shipment.ShipMilitaryAddress, Shipment.ShipUSTerritory, RequestedLabelFormat, ActualLabelFormat, ReturnShipment,
 			[Order].OrderID, [Order].OrderNumberComplete, [Order].CombineSplitStatus
 		FROM Shipment
 			INNER JOIN [Order] ON Shipment.OrderID = [Order].OrderID
@@ -26,7 +26,7 @@ create view ProcessedShipmentsView as
         SELECT s.ShipmentID, s.ShipmentType, s.ShipDate, s.Insurance, s.InsuranceProvider, s.ProcessedDate, s.ProcessedUserID,
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
-			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.OrderID, s.OrderNumberComplete,
+			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
 			s.CombineSplitStatus, CONVERT(NVARCHAR(50), carrierService.[Service]) AS [Service]
         FROM ProcessedShipments s
         CROSS APPLY
@@ -49,7 +49,7 @@ create view ProcessedShipmentsView as
         SELECT s.ShipmentID, s.ShipmentType, s.ShipDate, s.Insurance, s.InsuranceProvider, s.ProcessedDate, s.ProcessedUserID,
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
-			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.OrderID, s.OrderNumberComplete,
+			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
 			s.CombineSplitStatus, c.ShippingServiceID
 		FROM AmazonSFPShipment c, ProcessedShipments s WHERE c.ShipmentID = s.ShipmentID  AND s.ShipmentType = 16
     ),
@@ -58,7 +58,7 @@ create view ProcessedShipmentsView as
         SELECT s.ShipmentID, s.ShipmentType, s.ShipDate, s.Insurance, s.InsuranceProvider, s.ProcessedDate, s.ProcessedUserID,
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
-			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.OrderID, s.OrderNumberComplete,
+			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
 			s.CombineSplitStatus, c.[Carrier] + ' ' + c.[Service] AS [Service]
 		FROM OtherShipment c, ProcessedShipments s WHERE c.ShipmentID = s.ShipmentID AND s.ShipmentType = 5
     )

@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.ProStores
             foreach (long orderID in orderKeys)
             {
                 // upload tracking number for the most recent processed, not voided shipment
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
                 if (shipment == null)
                 {
                     log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}.", orderID);
