@@ -8,8 +8,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class RecipientAddress
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("firstName")]
+        public string FirstName { get; set; }
+
+        [JsonProperty("lastName")]
+        public string LastName { get; set; }
 
         [JsonProperty("street1")]
         public string Street1 { get; set; }

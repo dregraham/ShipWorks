@@ -50,7 +50,8 @@ namespace ShipWorks.Stores.Warehouse
                 IsReturn = Convert.ToInt32(shipmentEntity.ReturnShipment),
                 RecipientAddress = new RecipientAddress
                 {
-                    Name = shipmentEntity.ShipUnparsedName,
+                    FirstName = shipmentEntity.ShipFirstName,
+                    LastName = shipmentEntity.ShipLastName,
                     Street1 = shipmentEntity.ShipStreet1,
                     Street2 = shipmentEntity.ShipStreet2,
                     Street3 = shipmentEntity.ShipStreet3,
