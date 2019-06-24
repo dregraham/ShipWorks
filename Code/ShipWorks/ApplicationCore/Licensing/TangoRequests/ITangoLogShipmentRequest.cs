@@ -12,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Log the given processed shipment to Tango.
         /// </summary>
-        Result LogShipment(DbConnection connection, StoreEntity store, ShipmentEntity shipment);
+        GenericResult<string> LogShipment(DbConnection connection, StoreEntity store, ShipmentEntity shipment);
     }
 }

@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        public async Task<Result> ShipOrder(Guid hubOrderID, ShipmentEntity shipmentEntity)
+        public async Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Warehouse
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.ShipOrder(hubOrderID.ToString("N")), Method.PUT);
 
-                    Shipment shipment = shipmentDtoFactory.CreateHubShipment(shipmentEntity);
+                    Shipment shipment = shipmentDtoFactory.CreateHubShipment(shipmentEntity, tangoShipmentID);
                     request.AddJsonBody(JsonConvert.SerializeObject(shipment));
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient

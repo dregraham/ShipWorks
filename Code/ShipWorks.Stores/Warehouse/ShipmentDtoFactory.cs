@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Create a shipment to send to SW hub
         /// </summary>
-        public Shipment CreateHubShipment(ShipmentEntity shipmentEntity)
+        public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
             InsuranceProvider insuranceType = (InsuranceProvider) shipmentEntity.InsuranceProvider;
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Warehouse
 
             Shipment shipment = new Shipment
             {
-                TangoShipmentId = Convert.ToInt64(shipmentEntity.OnlineShipmentID),
+                TangoShipmentId = Convert.ToInt64(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
                 Carrier = EnumHelper.GetDescription(shipmentEntity.ShipmentTypeCode),
                 Service = shipmentAdapter.ServiceTypeName,
