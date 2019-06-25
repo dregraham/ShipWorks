@@ -130,7 +130,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // Nothing to do here
+            EndSession();
         }
 
         /// <summary>
