@@ -10,6 +10,7 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -34,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         private readonly DataContext context;
         private readonly Mock<IProgressReporter> mockProgressReporter;
         private readonly DbConnection dbConnection;
-        private readonly long downloadLogID;
+        private readonly IDownloadEntity downloadLog;
         private OdbcRecord odbcRecord;
         private readonly OdbcStoreEntity store;
 
@@ -110,7 +111,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 
             StatusPresetManager.CheckForChanges();
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -118,7 +119,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
 
             Mock<IOdbcCommand> odbcCommand = mock.CreateMock<IOdbcCommand>();
             odbcCommand.Setup(c => c.Execute())
@@ -146,7 +147,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 
             store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject.Download("1", downloadLogID, dbConnection);
+            await testObject.Download("1", downloadLog.DownloadID, dbConnection);
 
             odbcCommand.Verify(v => v.Execute(), Times.Once);
         }
@@ -170,7 +171,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 
             store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject.Download("1", downloadLogID, dbConnection);
+            await testObject.Download("1", downloadLog.DownloadID, dbConnection);
 
             odbcCommand.Verify(v => v.Execute(), Times.Once);
         }
@@ -180,7 +181,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             odbcRecord = GetOdbcRecord("1", "Kevin");
 
             Create.Order<OrderEntity>(store, context.Customer)
-                .WithItem(i=>i.Set(item=>item.Name = "blah"))
+                .WithItem(i => i.Set(item => item.Name = "blah"))
                 .Set(o => o.OrderNumber = 1)
                 .Save();
 
@@ -194,7 +195,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
 
             store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject.Download("1", downloadLogID, dbConnection);
+            await testObject.Download("1", downloadLog.DownloadID, dbConnection);
 
             List<OrderItemEntity> orderItems;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -211,7 +212,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             odbcRecord = GetOdbcRecord("001", "Kevin");
 
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -230,10 +231,10 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
             store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
-            
+
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
 
-            var exception = await Assert.ThrowsAsync<DownloadException>(() => testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection));
+            var exception = await Assert.ThrowsAsync<DownloadException>(() => testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection));
             Assert.StartsWith("The store, Odbc Store, is set to download orders on order search only.", exception.Message);
         }
 
@@ -243,7 +244,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
             odbcRecord = GetOdbcRecord("001", "Kevin");
 
             var testObject = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             List<DownloadDetailEntity> downloadDetailEntities;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -259,11 +260,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         {
             odbcRecord = GetOdbcRecord("001", "Kevin");
             var testObject1 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject1.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             odbcRecord = GetOdbcRecord("001", "Alex");
             var testObject2 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject2.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -281,11 +282,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Odbc
         {
             odbcRecord = GetOdbcRecord("55", "Kevin");
             var testObject1 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject1.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject1.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             odbcRecord = GetOdbcRecord("0055", "Alex");
             var testObject2 = mock.Create<OdbcStoreDownloader>(TypedParameter.From<StoreEntity>(store));
-            await testObject2.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject2.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             List<OrderEntity> orders;
             using (SqlAdapter adapter = SqlAdapter.Default)

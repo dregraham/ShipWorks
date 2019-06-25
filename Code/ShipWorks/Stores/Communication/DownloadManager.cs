@@ -518,7 +518,7 @@ namespace ShipWorks.Stores.Communication
                                     AuditBehaviorUser.SuperUser,
                                     new AuditReason(initiatedBy == DownloadInitiatedBy.ShipWorks ? AuditReasonType.AutomaticDownload : AuditReasonType.ManualDownload)))
                                 {
-                                    await downloader.Download(progressItem, downloadLog.DownloadID, con).ConfigureAwait(false);
+                                    await downloader.Download(progressItem, downloadLog, con).ConfigureAwait(false);
                                 }
 
                                 // Item is complete
@@ -707,6 +707,7 @@ namespace ShipWorks.Stores.Communication
             downloadLog.Started = DateTime.UtcNow;
             downloadLog.Ended = null;
             downloadLog.Result = (int) DownloadResult.Unfinished;
+            downloadLog.BatchID = Guid.NewGuid();
 
             using (SqlAdapter adapter = new SqlAdapter())
             {

@@ -31,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
     {
         private readonly DataContext context;
         private readonly GrouponStoreEntity store;
-        private readonly long downloadLogID;
+        private readonly IDownloadEntity downloadLog;
         private readonly DateTime utcNow;
         private readonly HttpArchiveReplayServer replayServer;
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 
             StatusPresetManager.CheckForChanges();
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLog, connection);
                 }
 
                 var order = await GetOrderWithItems("GG-ZPKZ-WSTB-337S-VKMY");
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Groupon
 
                 using (DbConnection connection = SqlSession.Current.OpenConnection())
                 {
-                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLogID, connection);
+                    await downloader.Download(context.Mock.Build<IProgressReporter>(), downloadLog, connection);
                 }
 
                 var mergedOrder = await GetOrderWithItemsByParentOrderId("12345");

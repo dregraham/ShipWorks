@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings.Warehouse;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Users;
 
@@ -15,8 +19,26 @@ namespace ShipWorks.ApplicationCore.Settings
     public partial class ShipWorksSettings : Form
     {
         // Maps list item name to the settings page that should be displayed for it
-        private Dictionary<string, UserControl> settingsPages = new Dictionary<string, UserControl>();
+        private Dictionary<string, ISettingsPage> settingsPages = new Dictionary<string, ISettingsPage>();
         private readonly IMessenger messenger;
+
+        /// <summary>
+        /// Indicates if warehouse is allowed
+        /// </summary>
+        public static bool IsWarehouseAllowed
+        {
+            get
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                    // If warehouse is not allowed, return false
+                    return restrictionLevel == EditionRestrictionLevel.None;
+                }
+            }
+        }
 
         /// <summary>
         /// Constructor
@@ -34,6 +56,11 @@ namespace ShipWorks.ApplicationCore.Settings
 
             settingsPages["Logging"] = InitializeSettingsPage(new SettingsPageLogging());
             settingsPages["Keyboard && Barcode Shortcuts"] = InitializeSettingsPage(new SettingsPageShortcuts(this, scope));
+
+            if (IsWarehouseAllowed)
+            {
+                settingsPages["Warehouse"] = InitializeSettingsPage(scope.Resolve<IWarehouseSettingsViewModel>());
+            }
 
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
@@ -58,12 +85,11 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Initialize the settings page for use in the control
         /// </summary>
-        private UserControl InitializeSettingsPage(UserControl settingsPage)
+        private ISettingsPage InitializeSettingsPage(ISettingsPage settingsPage)
         {
-            settingsPage.Visible = false;
-            settingsPage.Parent = sectionContainer;
-            settingsPage.Dock = DockStyle.Fill;
-            settingsPage.AutoScroll = true;
+            settingsPage.Control.Visible = false;
+            settingsPage.Control.Parent = sectionContainer;
+            settingsPage.Control.Dock = DockStyle.Fill;
 
             return settingsPage;
         }
@@ -74,11 +100,11 @@ namespace ShipWorks.ApplicationCore.Settings
         private void OnChangeSettingsPage(object sender, EventArgs e)
         {
             string pageName = menuList.Items[menuList.SelectedIndex].ToString();
-            Control page = settingsPages[pageName];
+            ISettingsPage page = settingsPages[pageName];
 
             foreach (Control control in sectionContainer.Controls)
             {
-                bool isActivePage = (control == page);
+                bool isActivePage = (control == page.Control);
 
                 control.Visible = isActivePage;
 
@@ -95,14 +121,14 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            var loadedSettingsPages = settingsPages
+                .Select(x => x.Value)
+                .Where(x => x?.Control.Tag != null);
+
             // Save all settings pages
-            foreach (Control control in sectionContainer.Controls)
+            foreach (ISettingsPage settingsPage in loadedSettingsPages)
             {
-                SettingsPageBase pageBase = control as SettingsPageBase;
-                if (pageBase != null && control.Tag != null)
-                {
-                    pageBase.Save();
-                }
+                settingsPage.Save();
             }
 
             DialogResult = DialogResult.OK;

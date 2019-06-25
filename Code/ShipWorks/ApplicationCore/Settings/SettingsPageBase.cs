@@ -8,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Settings
     /// Base page for pages that are displayed in the options window
     /// </summary>
     [ToolboxItem(false)]
-    public partial class SettingsPageBase : UserControl
+    public partial class SettingsPageBase : UserControl, ISettingsPage
     {
         private ThemedBorderProvider borderProvider;
 
@@ -19,8 +19,14 @@ namespace ShipWorks.ApplicationCore.Settings
         {
             InitializeComponent();
 
+            AutoScroll = true;
             borderProvider = new ThemedBorderProvider(this);
         }
+
+        /// <summary>
+        /// Gets the control associated with the settings page
+        /// </summary>
+        public Control Control => this;
 
         /// <summary>
         /// Can be overridden by derived page to save any changes

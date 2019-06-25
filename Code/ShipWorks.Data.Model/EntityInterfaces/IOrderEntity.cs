@@ -513,6 +513,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Custom5 { get; }
+        /// <summary> The HubOrderID property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."HubOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Guid> HubOrderID { get; }
+        /// <summary> The HubSequence property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."HubSequence"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> HubSequence { get; }
         
         
         ICustomerEntity Customer { get; }

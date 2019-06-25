@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Yahoo.ApiIntegration;
 using ShipWorks.Stores.Platforms.Yahoo.EmailIntegration;
@@ -51,8 +52,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
-            downloader.Download(progressItem, downloadID, con);
+        public Task Download(IProgressReporter progressItem, IDownloadEntity downloadLog, DbConnection con) =>
+            downloader.Download(progressItem, downloadLog, con);
 
         /// <summary>
         /// Does not support downloading OrderNumbers

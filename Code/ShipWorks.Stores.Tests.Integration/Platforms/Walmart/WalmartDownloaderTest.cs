@@ -12,6 +12,7 @@ using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Communication;
@@ -38,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         private DbConnection dbConnection;
         private WalmartDownloader testObject;
         private readonly DateTime utcNow;
-        private long downloadLogID;
+        private IDownloadEntity downloadLog;
 
         public WalmartDownloaderTest(DatabaseFixture db)
         {
@@ -51,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
         {
             SetupContextWithFakeWebClient();
 
-            await testObject.Download(mockProgressReporter.Object, 0, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, mock.Build<IDownloadEntity>(), dbConnection);
 
             mockProgressReporter.VerifySet(reporter => reporter.Detail = "No orders to download.", Times.Once);
         }
@@ -65,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .SetupGet(d => d.UtcNow)
                 .Returns(utcNow);
 
-            await testObject.Download(mockProgressReporter.Object, 0, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, mock.Build<IDownloadEntity>(), dbConnection);
 
             mock.Mock<IWalmartWebClient>()
                 .Verify(client => client.GetOrders(store, utcNow.AddDays(-5)), Times.Once);
@@ -78,7 +79,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 
             firstBatch = CreateSingleOrderListType("5", "6", null);
 
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             WalmartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Setup(c => c.GetOrders(store, nextCursor))
                 .Returns(secondBatch);
 
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             List<WalmartOrderEntity> createdOrders;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -158,7 +159,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .SetupGet(d => d.UtcNow)
                 .Returns(utcNow);
 
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             WalmartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -225,7 +226,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
 
             StatusPresetManager.CheckForChanges();
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -233,7 +234,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
 
             dbConnection = SqlSession.Current.OpenConnection();
             testObject = mock.Create<WalmartDownloader>(new TypedParameter(typeof(StoreEntity), store));

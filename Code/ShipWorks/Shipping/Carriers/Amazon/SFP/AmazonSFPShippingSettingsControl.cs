@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
-using Autofac;
 using ShipWorks.Stores.Platforms.Amazon;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -47,11 +47,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             MethodConditions.EnsureArgumentIsNotNull(amazonCredentials, nameof(amazonCredentials));
 
-            amazonCredentials.Region = Geography.GetCountryCode((string)countries.SelectedItem);
+            amazonCredentials.Region = Geography.GetCountryCode((string) countries.SelectedItem);
             amazonCredentials.MerchantID = merchantID.Text;
             amazonCredentials.AuthToken = authToken.Text;
 
-            // If the credentials are not not blank we test them to ensure they are correct
+            // If the credentials are not blank we test them to ensure they are correct
             if (!string.IsNullOrWhiteSpace(merchantID.Text) && !string.IsNullOrWhiteSpace(authToken.Text))
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())

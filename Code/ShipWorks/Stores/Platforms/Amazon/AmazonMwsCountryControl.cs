@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -13,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
     [ToolboxItem(true)]
     public partial class AmazonMwsCountryControl : AccountSettingsControlBase
     {
-        AmazonStoreEntity amazonStore;
+        private AmazonStoreEntity amazonStore;
 
         /// <summary>
         /// Constructor
@@ -33,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             countries.SelectedItem = "United States";
         }
-        
+
         /// <summary>
         /// Load settings from the store entity
         /// </summary>
@@ -62,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 throw new ArgumentException("AmazonStoreEntity expected.", "store");
             }
 
-            saveStore.AmazonApiRegion = Geography.GetCountryCode((string)countries.SelectedItem);
+            saveStore.AmazonApiRegion = Geography.GetCountryCode((string) countries.SelectedItem);
 
             return true;
         }

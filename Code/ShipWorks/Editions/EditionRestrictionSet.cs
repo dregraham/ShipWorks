@@ -84,6 +84,7 @@ namespace ShipWorks.Editions
                 case EditionFeature.MyFilters:
                 case EditionFeature.AddOrderCustomer:
                 case EditionFeature.EndiciaScanForm:
+                case EditionFeature.Warehouse:
                     return CheckExistanceRestriction(feature);
 
                 case EditionFeature.PostalApoFpoPoboxOnly:

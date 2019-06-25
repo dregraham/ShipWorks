@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using ShipWorks.Tests.Shared;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -9,6 +8,7 @@ using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using ShipWorks.Tests.Shared;
 using Xunit;
 using It = Moq.It;
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             var testObject = mock.Create<ChannelAdvisorRestClient>();
             testObject.GetRefreshToken("blah", "blah");
 
-            logger.Verify(l=>l.LogRequest(variableRequestSubmitter.Object));
+            logger.Verify(l => l.LogRequest(variableRequestSubmitter.Object));
         }
 
         [Fact]
@@ -245,7 +245,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             string requestBody = $"{{\"Value\":{serializedShipment}}}";
 
-            mock.Mock<IHttpRequestSubmitterFactory>().Verify(f=>f.GetHttpTextPostRequestSubmitter(requestBody, "application/json"));
+            mock.Mock<IHttpRequestSubmitterFactory>().Verify(f => f.GetHttpTextPostRequestSubmitter(requestBody, "application/json"));
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.UploadShipmentDetails(shipment, "refresh", "1");
 
-            logger.Verify(l=>l.LogRequest(postRequestSubmitter.Object), Times.Once);
+            logger.Verify(l => l.LogRequest(postRequestSubmitter.Object), Times.Once);
         }
 
         [Fact]

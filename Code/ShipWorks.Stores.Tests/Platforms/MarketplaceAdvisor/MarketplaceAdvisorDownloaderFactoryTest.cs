@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Tests.Platforms.MarketplaceAdvisor
 {
     public class MarketplaceAdvisorDownloaderFactoryTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
 
         public MarketplaceAdvisorDownloaderFactoryTest()
         {
@@ -54,10 +54,11 @@ namespace ShipWorks.Stores.Tests.Platforms.MarketplaceAdvisor
 
             var progress = mock.Mock<IProgressReporter>().Object;
             var dbConnection = mock.Mock<DbConnection>().Object;
+            var downloadLog = mock.Build<IDownloadEntity>();
 
-            testObject.Download(progress, 1, dbConnection);
+            testObject.Download(progress, downloadLog, dbConnection);
             mock.Mock<IMarketplaceAdvisorOmsDownloader>()
-                .Verify(x => x.Download(progress, 1, dbConnection));
+                .Verify(x => x.Download(progress, downloadLog, dbConnection));
         }
 
         [Fact]

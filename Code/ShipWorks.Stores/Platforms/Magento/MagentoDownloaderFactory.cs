@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 
@@ -49,8 +50,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Download orders from the store
         /// </summary>
-        public Task Download(IProgressReporter progressItem, long downloadID, DbConnection con) =>
-            downloader.Download(progressItem, downloadID, con);
+        public Task Download(IProgressReporter progressItem, IDownloadEntity downloadLog, DbConnection con) =>
+            downloader.Download(progressItem, downloadLog, con);
 
         /// <summary>
         /// Does not support downloading OrderNumbers

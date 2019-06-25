@@ -14,5 +14,13 @@ namespace ShipWorks.Common.Threading
         {
 
         }
+
+        /// <summary>
+        /// Update the progress
+        /// </summary>
+        public void Update(int finishedCount)
+        {
+
+        }
     }
 }

@@ -269,6 +269,9 @@
     <Reference Include="Rebex.Smtp, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rebex.Smtp.2.0.6755\lib\net40\Rebex.Smtp.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SandDock.dll</HintPath>
@@ -363,6 +366,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
@@ -778,16 +782,48 @@
     <Compile Include="ApplicationCore\Interaction\SelectionDependentEntry.cs" />
     <Compile Include="ApplicationCore\IoCLogRequestModule.cs" />
     <Compile Include="ApplicationCore\IRegistrationOverride.cs" />
+    <Compile Include="ApplicationCore\Licensing\FakeTangoSecurityValidator.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
+    <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\WarehouseRestriction.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetRedirectToken.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ShipWorksReleaseInfo.cs" />
+    <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetRedirectToken.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\LinkDatabaseDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRefreshToken.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseAuthenticatedRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseEndpoints.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseLink.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\UploadSkusToWarehouse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseList.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRefreshToken.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettingsApi.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettingsViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseListViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseSettingsApi.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseSettingsViewModel.cs" />
+    <Compile Include="ApplicationCore\Settings\Warehouse\WarehouseViewModel.cs" />
     <Compile Include="ApplicationCore\ShipWorksSessionWrapper.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoLogShipmentProcessor.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoSecurityValidator.cs" />
@@ -802,6 +838,8 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
+    <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />
     <Compile Include="Data\Administration\ISqlSchemaUpdater.cs" />
     <Compile Include="ApplicationCore\MainGridHeaderViewModel.cs" />
     <Compile Include="Data\Administration\IUpdateService.cs" />
@@ -1068,6 +1106,7 @@
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
+    <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
@@ -1119,6 +1158,8 @@
     <Compile Include="Shipping\ShipSense\NullKnowledgebase.cs" />
     <Compile Include="Shipping\ShipSense\NullShipSenseSynchronizer.cs" />
     <Compile Include="Shipping\ShipSense\Population\NullShipSenseLoaderGateway.cs" />
+    <Compile Include="Stores\Management\GenerateDataKeyResponse.cs" />
+    <Compile Include="Stores\Management\IWarehouseStoreClient.cs" />
     <Compile Include="Stores\Orders\Archive\IOrderArchiver.cs" />
     <Compile Include="Common\IO\KeyboardShortcuts\ShortcutSession.cs" />
     <Compile Include="Data\Administration\Recovery\SqlAdapterRetry.cs" />
@@ -1309,7 +1350,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Properties\XamlNamespaces.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />    
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
+    <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
+    <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>

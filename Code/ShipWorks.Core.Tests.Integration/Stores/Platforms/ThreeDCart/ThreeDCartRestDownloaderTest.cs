@@ -9,6 +9,7 @@ using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
@@ -28,7 +29,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
         private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly Mock<IProgressReporter> mockProgressReporter;
-        private long downloadLogID;
+        private IDownloadEntity downloadLog;
         private DbConnection dbConnection;
         private ThreeDCartRestDownloader testObject;
         private readonly ThreeDCartOrder threeDCartOrder;
@@ -92,7 +93,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
 
             StatusPresetManager.CheckForChanges();
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -100,7 +101,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
                 .Set(x => x.Started = DateTime.UtcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
 
             StoreManager.CheckForChanges();
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
             threeDCartOrder.InvoiceNumberPrefix = "12";
 
             testObject = mock.Create<ThreeDCartRestDownloader>(TypedParameter.From(store));
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             ThreeDCartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -138,7 +139,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
             threeDCartOrder.InvoiceNumberPrefix = "12";
 
             testObject = mock.Create<ThreeDCartRestDownloader>(TypedParameter.From(store));
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             ThreeDCartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)
@@ -158,7 +159,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
             threeDCartOrder.InvoiceNumberPrefix = "12";
 
             testObject = mock.Create<ThreeDCartRestDownloader>(TypedParameter.From(store));
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
             ThreeDCartOrderEntity createdOrder;
             using (SqlAdapter adapter = SqlAdapter.Default)

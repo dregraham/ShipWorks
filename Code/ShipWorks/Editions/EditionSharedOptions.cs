@@ -66,5 +66,10 @@ namespace ShipWorks.Editions
         /// Indicates whether Stamps RR Donnelley consolidator is enabled for the customer's account
         /// </summary>
         public bool StampsRrDonnelleyEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates whether Warehouse is enabled for the customer's account
+        /// </summary>
+        public bool WarehouseEnabled { get; set; }
     }
 }

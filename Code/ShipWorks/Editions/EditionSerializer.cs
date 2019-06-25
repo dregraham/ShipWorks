@@ -119,6 +119,9 @@ namespace ShipWorks.Editions
 
                 bool stampsInsuranceEnabled = xOptions.Descendants("StampsInsurance").Any() && (bool) xOptions.Element("StampsInsurance");
                 edition.SharedOptions.StampsInsuranceEnabled = stampsInsuranceEnabled;
+
+                bool warehouseEnabled = xOptions.Descendants("WarehouseEnabled").Any() && (bool) xOptions.Element("WarehouseEnabled");
+                edition.SharedOptions.WarehouseEnabled = warehouseEnabled;
             }
         }
 
@@ -209,7 +212,8 @@ namespace ShipWorks.Editions
                 new XElement("StampsGlobegisticsEnabled", edition.SharedOptions.StampsGlobegisticsEnabled),
                 new XElement("StampsInsurance", edition.SharedOptions.StampsInsuranceEnabled),
                 new XElement("StampsIbcEnabled", edition.SharedOptions.StampsIbcEnabled),
-                new XElement("StampsRrDonnelleyEnabled", edition.SharedOptions.StampsRrDonnelleyEnabled)));
+                new XElement("StampsRrDonnelleyEnabled", edition.SharedOptions.StampsRrDonnelleyEnabled),
+                new XElement("WarehouseEnabled", edition.SharedOptions.WarehouseEnabled)));
 
             if (edition.ShipmentTypeFunctionality != null)
             {

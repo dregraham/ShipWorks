@@ -1,40 +1,39 @@
-﻿using Interapptive.Shared.Net;
-using Moq;
-using System;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Amazon;
-using Xunit;
+﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using Moq;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Platforms.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared;
+using Xunit;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
     [Trait("Store", "Amazon")]
     public class AmazonMwsResponseHandlerTest
     {
-        Mock<IHttpResponseReader> mockedHttpResponseReader;
-        AmazonMwsWebClientSettings mwsSettings;
-
-        const string amazonGetServiceStatusResponseFormat =
+        private Mock<IHttpResponseReader> mockedHttpResponseReader;
+        private readonly AmazonMwsWebClientSettings mwsSettings;
+        private const string amazonGetServiceStatusResponseFormat =
             "<?xml version=\"1.0\"?><GetServiceStatusResponse xmlns=\"https://mws.amazonservices.com/Orders/2013-09-01\"><GetServiceStatusResult><Status>{0}</Status><Timestamp>2015-08-24T18:25:28.458Z</Timestamp></GetServiceStatusResult><ResponseMetadata><RequestId>722ad8a6-9571-416c-ad1f-2052d291d434</RequestId></ResponseMetadata></GetServiceStatusResponse>";
-
-        const string amazonListOrdersResponseFormat =
+        private const string amazonListOrdersResponseFormat =
             "<?xml version=\"1.0\"?><ListOrdersResponse xmlns=\"https://mws.amazonservices.com/Orders/2013-09-01\"><ListOrdersResult><Orders>{0}</Orders><LastUpdatedBefore>2015-08-24T18:23:28Z</LastUpdatedBefore></ListOrdersResult><ResponseMetadata><RequestId>4cde7bfc-c0c9-4e31-810b-789f176a9bc4</RequestId></ResponseMetadata></ListOrdersResponse>";
-        
+
         public AmazonMwsResponseHandlerTest()
         {
             //mwsConnection = new AmazonMwsConnection("", "US", "");
-            
+
             var mock = AutoMock.GetLoose();
 
             IAmazonCredentials creds = mock.Build<IAmazonCredentials>();
+            IInterapptiveOnly interapptiveOnly = mock.Build<IInterapptiveOnly>();
 
-            mwsSettings = new AmazonMwsWebClientSettings(creds);
+            mwsSettings = new AmazonMwsWebClientSettings(creds, interapptiveOnly);
 
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
-            
         }
 
         [Fact]

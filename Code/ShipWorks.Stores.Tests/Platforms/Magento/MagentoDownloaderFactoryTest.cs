@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
-using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Magento;
 using ShipWorks.Stores.Platforms.Magento.Enums;
 using ShipWorks.Tests.Shared;
@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 {
     public class MagentoDownloaderFactoryTest : IDisposable
     {
-        readonly AutoMock mock;
+        private readonly AutoMock mock;
 
         public MagentoDownloaderFactoryTest()
         {
@@ -56,10 +56,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
 
             var progress = mock.Mock<IProgressReporter>().Object;
             var dbConnection = mock.Mock<DbConnection>().Object;
+            var downloadLog = mock.Build<IDownloadEntity>();
 
-            testObject.Download(progress, 1, dbConnection);
+            testObject.Download(progress, downloadLog, dbConnection);
             mock.Mock<IMagentoTwoRestDownloader>()
-                .Verify(x => x.Download(progress, 1, dbConnection));
+                .Verify(x => x.Download(progress, downloadLog, dbConnection));
         }
 
         [Fact]

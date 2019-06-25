@@ -118,6 +118,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Custom3 = source.Custom3;
             Custom4 = source.Custom4;
             Custom5 = source.Custom5;
+            HubOrderID = source.HubOrderID;
+            HubSequence = source.HubSequence;
             
             
             Customer = (ICustomerEntity) source.Customer?.AsReadOnly(objectMap);
@@ -634,6 +636,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Custom5 { get; }
+        /// <summary> The HubOrderID property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."HubOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> HubOrderID { get; }
+        /// <summary> The HubSequence property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."HubSequence"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> HubSequence { get; }
         
         
         public ICustomerEntity Customer { get; }

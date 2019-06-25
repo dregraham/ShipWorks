@@ -831,6 +831,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateDayOfWeek", typeof(System.DayOfWeek), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, 0, 0, 10);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateHourOfDay", typeof(System.Int32), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateHourOfDay, 0, 0, 10);
 			this.AddElementFieldInfo("ConfigurationEntity", "AutoUpdateStartDate", typeof(System.DateTime), false, false, false, false,  (int)ConfigurationFieldIndex.AutoUpdateStartDate, 0, 0, 7);
+			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseID", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseID, 50, 0, 0);
+			this.AddElementFieldInfo("ConfigurationEntity", "WarehouseName", typeof(System.String), false, false, false, false,  (int)ConfigurationFieldIndex.WarehouseName, 50, 0, 0);
 		}
 		/// <summary>Inits CustomerEntity's FieldInfo objects</summary>
 		private void InitCustomerEntityInfos()
@@ -966,6 +968,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DownloadEntity", "QuantityNew", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DownloadFieldIndex.QuantityNew, 0, 0, 10);
 			this.AddElementFieldInfo("DownloadEntity", "Result", typeof(System.Int32), false, false, false, false,  (int)DownloadFieldIndex.Result, 0, 0, 10);
 			this.AddElementFieldInfo("DownloadEntity", "ErrorMessage", typeof(System.String), false, false, false, true,  (int)DownloadFieldIndex.ErrorMessage, 2147483647, 0, 0);
+			this.AddElementFieldInfo("DownloadEntity", "BatchID", typeof(System.Guid), false, false, false, false,  (int)DownloadFieldIndex.BatchID, 0, 0, 0);
 		}
 		/// <summary>Inits DownloadDetailEntity's FieldInfo objects</summary>
 		private void InitDownloadDetailEntityInfos()
@@ -2340,6 +2343,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom3, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom4, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom5, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "HubOrderID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)OrderFieldIndex.HubOrderID, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "HubSequence", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.HubSequence, 0, 0, 19);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2672,6 +2677,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)ProductFieldIndex.CreatedDate, 0, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsActive", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsActive, 0, 0, 0);
 			this.AddElementFieldInfo("ProductEntity", "IsBundle", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.IsBundle, 0, 0, 0);
+			this.AddElementFieldInfo("ProductEntity", "UploadToWarehouseNeeded", typeof(System.Boolean), false, false, false, false,  (int)ProductFieldIndex.UploadToWarehouseNeeded, 0, 0, 0);
 		}
 		/// <summary>Inits ProductAttributeEntity's FieldInfo objects</summary>
 		private void InitProductAttributeEntityInfos()
@@ -3288,6 +3294,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "InitialDownloadOrder", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InitialDownloadOrder, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipClientID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InsureShipClientID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipApiKey", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.InsureShipApiKey, 255, 0, 0);
+			this.AddElementFieldInfo("StoreEntity", "WarehouseStoreID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.WarehouseStoreID, 0, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()

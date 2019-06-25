@@ -15,12 +15,18 @@ namespace ShipWorks.Common.Threading
         public BackgroundSingleItemProgressDialog()
         {
             ProgressItem = new ProgressItem("Background progress item");
+            Provider = new BackgroundProgressProvider(ProgressItem);
         }
 
         /// <summary>
         /// Progress item associated with the dialog
         /// </summary>
         public IProgressReporter ProgressItem { get; }
+
+        /// <summary>
+        /// Progress provider associated with the dialog
+        /// </summary>
+        public IProgressProvider Provider { get; }
 
         /// <summary>
         /// Get a progress updater from this progress reporter

@@ -1,4 +1,9 @@
-﻿using Autofac;
+﻿using System;
+using System.Data.Common;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -15,11 +20,6 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using System;
-using System.Data.Common;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         private readonly Mock<IProgressReporter> mockProgressReporter;
         private readonly DbConnection dbConnection;
         private readonly AmazonMwsDownloader testObject;
-        private readonly long downloadLogID;
+        private readonly IDownloadEntity downloadLog;
         private readonly Mock<IAmazonMwsClient> client;
         private readonly DateTime utcNow;
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                     mock.Override<IAmazonMwsClient>();
                     mock.Override<IDownloadStartingPoint>();
                 });
-            
+
             utcNow = DateTime.UtcNow;
 
             mock = context.Mock;
@@ -92,11 +92,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 {
                     func(xpath).Wait();
                 })
-                .Returns(Task.CompletedTask);                
+                .Returns(Task.CompletedTask);
 
             mock.MockFunc<AmazonStoreEntity, IAmazonMwsClient>(client);
 
-            downloadLogID = Create.Entity<DownloadEntity>()
+            downloadLog = Create.Entity<DownloadEntity>()
                 .Set(x => x.StoreID = store.StoreID)
                 .Set(x => x.ComputerID = context.Computer.ComputerID)
                 .Set(x => x.UserID = context.User.UserID)
@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 .Set(x => x.Started = utcNow)
                 .Set(x => x.Ended = null)
                 .Set(x => x.Result = (int) DownloadResult.Unfinished)
-                .Save().DownloadID;
+                .Save();
 
             dbConnection = SqlSession.Current.OpenConnection();
 
@@ -118,8 +118,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
         [Fact]
         public async Task CreatesMultipleCustomersWhenBuyerNameMatches()
         {
-            await testObject.Download(mockProgressReporter.Object, downloadLogID, dbConnection);
-            
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
+
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
             {
                 var query = new QueryFactory().Customer;
@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Amazon
                 Assert.Equal(2, brendas);
             }
         }
-      
+
         public void Dispose() => context.Dispose();
     }
 }

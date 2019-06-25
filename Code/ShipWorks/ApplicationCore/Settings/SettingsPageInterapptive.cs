@@ -326,9 +326,12 @@ namespace ShipWorks.ApplicationCore.Settings
                 activataionUrlText.Enabled = false;
             }
 
-            otherTangoUrlText.Text = selectedWebClientEnvironment.TangoUrl;
-            otherWarehouseUrlText.Text = selectedWebClientEnvironment.WarehouseUrl;
-            activataionUrlText.Text = selectedWebClientEnvironment.ActivationUrl;
+            if (!string.IsNullOrEmpty(selectedWebClientEnvironment.TangoUrl))
+            {
+                otherTangoUrlText.Text = selectedWebClientEnvironment.TangoUrl;
+                otherWarehouseUrlText.Text = selectedWebClientEnvironment.WarehouseUrl;
+                activataionUrlText.Text = selectedWebClientEnvironment.ActivationUrl;
+            }
         }
     }
 }

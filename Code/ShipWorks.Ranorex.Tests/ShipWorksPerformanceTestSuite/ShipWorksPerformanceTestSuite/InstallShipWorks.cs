@@ -53,7 +53,7 @@ namespace ShipWorksPerformanceTestSuite
             
             try
             {
-            Host.Local.RunApplication(@"C:\ShipWorks.exe"); // *************CHANGE PATH WHEN DEPLOYED TO RANOREX VM*****************
+            Host.Local.RunApplication(@"C:\ShipWorks.exe");
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.IAcceptTheAgreement1' at Center.", repo.SomeForm.IAcceptTheAgreement1Info, new RecordItemIndex(0));
             repo.SomeForm.IAcceptTheAgreement1.MoveTo();

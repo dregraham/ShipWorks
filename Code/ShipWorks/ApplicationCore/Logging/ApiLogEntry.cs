@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -10,8 +11,10 @@ using System.Xml.XPath;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Rebex.Mail;
+using RestSharp;
 using ShipWorks.ApplicationCore.Crashes;
 
 namespace ShipWorks.ApplicationCore.Logging
@@ -114,6 +117,46 @@ namespace ShipWorks.ApplicationCore.Logging
             }
 
             throw new InvalidOperationException("Unhandled HttpRequestSubmitter derivative.");
+        }
+
+        /// <summary>
+        /// Log an IRestRequest
+        /// </summary>
+        public void LogRequest(IRestRequest request)
+        {
+            var requestToLog = new
+            {
+                resource = request.Resource,
+                parameters = request.Parameters.Select(parameter => new
+                {
+                    name = parameter.Name,
+                    value = parameter.Value,
+                    type = parameter.Type.ToString()
+                }),
+                method = request.Method.ToString(),
+            };
+
+            string toLog = JsonConvert.SerializeObject(requestToLog);
+
+            WriteLog(toLog, ApiLogCategory.Request);
+        }
+
+        /// <summary>
+        /// Log an IRestResponse
+        /// </summary>
+        public void LogResponse(IRestResponse response)
+        {
+            var responseToLog = new
+            {
+                statusCode = response.StatusCode,
+                content = response.Content,
+                headers = response.Headers,
+                errorMessage = response.ErrorMessage,
+            };
+
+            string toLog = JsonConvert.SerializeObject(responseToLog);
+
+            WriteLog(toLog, ApiLogCategory.Response);
         }
 
         /// <summary>

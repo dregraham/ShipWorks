@@ -33,5 +33,11 @@ namespace ShipWorks.Stores.Communication
         /// such orders exist, then if there is an InitialDownloadPolicy it is applied.  Otherwise, 0 is returned.
         /// </summary>
         Task<long> OrderNumber(IStoreEntity store);
+
+        /// <summary>
+        /// Gets the largest HubSequence we have in our database for non-manual orders for this store.  If no
+        /// such orders exist, then 0 is returned.
+        /// </summary>
+        Task<long> HubSequence(IStoreEntity store);
     }
 }
