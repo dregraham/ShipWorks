@@ -64,8 +64,6 @@ namespace ShipWorks.Stores.Warehouse
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
                 ShippingAccount = shipmentAdapter.AccountId.ToString(),
                 LabelFormat = EnumHelper.GetDescription((LabelFormatType) (shipmentEntity.ActualLabelFormat ?? 0)),
-                // todo: replace shipdate with something else
-                EstimatedDeliveryDate = shipmentEntity.ShipDate,
                 Packages = CreatePackages(shipmentAdapter.GetPackageAdapters())
             };
 

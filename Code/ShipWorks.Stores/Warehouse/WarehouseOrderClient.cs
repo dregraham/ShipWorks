@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
@@ -26,15 +27,18 @@ namespace ShipWorks.Stores.Warehouse
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService, ShipmentDtoFactory shipmentDtoFactory)
+        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService,
+                                    ShipmentDtoFactory shipmentDtoFactory, Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.licenseService = licenseService;
             this.shipmentDtoFactory = shipmentDtoFactory;
+            log = logFactory(typeof(WarehouseOrderClient));
         }
 
         /// <summary>
@@ -83,15 +87,17 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        public async Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
+        public async Task UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
         {
             try
             {
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+                EditionRestrictionLevel restrictionLevel =
+                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
 
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    IRestRequest request = new RestRequest(WarehouseEndpoints.ShipOrder(hubOrderID.ToString("N")), Method.PUT);
+                    IRestRequest request =
+                        new RestRequest(WarehouseEndpoints.ShipOrder(hubOrderID.ToString("N")), Method.PUT);
 
                     Shipment shipment = shipmentDtoFactory.CreateHubShipment(shipmentEntity, tangoShipmentID);
                     request.AddJsonBody(JsonConvert.SerializeObject(shipment));
@@ -102,15 +108,14 @@ namespace ShipWorks.Stores.Warehouse
 
                     if (response.Failure)
                     {
-                        return Result.FromError(response.Message);
+                        log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub. {response.Message}",
+                                  response.Exception);
                     }
                 }
-
-                return Result.FromSuccess();
             }
             catch (Exception ex)
             {
-                return Result.FromError(ex);
+                log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub.", ex);
             }
         }
     }

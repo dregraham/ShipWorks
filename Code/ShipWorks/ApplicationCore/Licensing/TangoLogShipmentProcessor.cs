@@ -222,7 +222,8 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 if (shipment.Order.HubOrderID.HasValue)
                 {
-                    await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value).ConfigureAwait(false);
+                    await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value)
+                        .ConfigureAwait(false);
                 }
             }
         }

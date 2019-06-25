@@ -23,6 +23,6 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID);
+        Task UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID);
     }
 }
