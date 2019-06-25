@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -24,6 +25,7 @@ namespace ShipWorksPerformanceTestSuite
 	[TestModule("C7FEAAD9-B5ED-4097-9A55-E8ED71D09BBE", ModuleType.UserCode, 1)]
 	public class ProcessOrders : ITestModule
 	{
+		Stopwatch processTime = new Stopwatch();
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		
 		public ProcessOrders()
@@ -37,6 +39,14 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
+			ApplyProfileOther();
+			ProcessOrder();
+			
+			Timing.totalProcess500Time = processTime.ElapsedMilliseconds;
+		}
+		
+		void ApplyProfileOther()
+		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.ApplyProfile' at Center.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(4));
 			repo.ShippingDlg.ApplyProfile.Click();
 			Delay.Milliseconds(0);
@@ -48,14 +58,21 @@ namespace ShipWorksPerformanceTestSuite
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.CarrierName1' at Center.", repo.ShippingDlg.SplitContainer.CarrierName1Info, new RecordItemIndex(2));
 			repo.ShippingDlg.SplitContainer.CarrierNameInfo.WaitForExists(120000);
 			Delay.Milliseconds(0);
-			
+		}
+		
+		void ProcessOrder()
+		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.ProcessDropDownButton' at Center.", repo.ShippingDlg.ProcessDropDownButtonInfo, new RecordItemIndex(3));
 			repo.ShippingDlg.ProcessDropDownButton.Click();
 			Delay.Milliseconds(0);
 			
+			processTime.Start();
+			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='False') on item 'ShippingDlg.SplitContainer.ComboShipmentType'.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(0));
 			repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo.WaitForAttributeEqual(120000, "Enabled", "False");
 			Delay.Milliseconds(100);
+			
+			processTime.Stop();
 		}
 	}
 }

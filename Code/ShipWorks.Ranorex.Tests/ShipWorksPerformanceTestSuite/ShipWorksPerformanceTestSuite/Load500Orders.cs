@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -24,6 +25,7 @@ namespace ShipWorksPerformanceTestSuite
 	[TestModule("73A28C83-6DD2-4863-9261-44853DA1AC68", ModuleType.UserCode, 1)]
 	public class Load500Orders : ITestModule
 	{
+		Stopwatch loadTime  = new Stopwatch();
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		SelectAllOrders selectOrders = new SelectAllOrders();
 		Select500OrdersFilter select500filter = new Select500OrdersFilter();
@@ -41,21 +43,28 @@ namespace ShipWorksPerformanceTestSuite
 			
 			try {
 				
+				loadTime.Start();
 				LoadOrders();
                	Validate500OrdersLoaded();
+               	loadTime.Stop();
                	
 			} 
 			catch (Exception) {
 				
 				RetryAction.RetryOnFailure(3,1,() => {
 				       
+				    loadTime.Stop();
                    	select500filter.SelectFilter();
 	               	selectOrders.SelectOrders();
+	               	
+	               	loadTime.Start();
 	               	LoadOrders();
 	               	Validate500OrdersLoaded();
-	               	
+	               	loadTime.Stop();
 	           	});	
 			}
+			
+			Timing.totalLoad500Time = loadTime.ElapsedMilliseconds;
 		}
 		
 		public void LoadOrders()

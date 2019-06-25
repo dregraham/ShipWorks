@@ -81,4 +81,12 @@ namespace ShipWorksPerformanceTestSuite
 			}			
 		}
 	}
+	
+	public static class Timing
+	{
+		public static long totalLoad500Time = 0;
+		public static long totalApplyProfile500Time = 0;
+		public static long totalProcess500Time = 0;
+		public static long totalVoid500Time = 0;		
+	}
 }

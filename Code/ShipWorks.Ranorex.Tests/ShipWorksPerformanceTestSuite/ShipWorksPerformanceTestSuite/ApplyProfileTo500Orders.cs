@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -24,6 +25,7 @@ namespace ShipWorksPerformanceTestSuite
 	[TestModule("F12F721A-A36E-4A5A-88C3-A0C6E7A74A56", ModuleType.UserCode, 1)]
 	public class ApplyProfileTo500Orders : ITestModule
 	{
+		Stopwatch applyProfileTime = new Stopwatch();
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		
 		public ApplyProfileTo500Orders()
@@ -37,9 +39,11 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
-			SelectAllShipments();
-			ChangeCarrierBestRate();
-			ApplyBestRateProfile();
+			SelectAllShipments();						
+			ApplyBestRateProfile();			
+			applyProfileTime.Stop();
+			
+			Timing.totalApplyProfile500Time = applyProfileTime.ElapsedMilliseconds;
 		}
 		
 		public void SelectAllShipments()
@@ -52,6 +56,14 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.PrepareFocus(repo.ShippingDlg.SplitContainer.EntityGrid);
 			Keyboard.Press(System.Windows.Forms.Keys.A | System.Windows.Forms.Keys.Control, 30, Keyboard.DefaultKeyPressTime, 1, true);
 			Delay.Milliseconds(0);
+			
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.PreparingShipments' at Center.", repo.ProgressDlg.PreparingShipmentsInfo, new RecordItemIndex(0));
+			repo.ProgressDlg.PreparingShipmentsInfo.WaitForExists(120000);
+            Delay.Milliseconds(0);
+            
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ProgressDlg.PreparingShipments' at Center.", repo.ProgressDlg.PreparingShipmentsInfo, new RecordItemIndex(0));
+			repo.ProgressDlg.PreparingShipmentsInfo.WaitForNotExists(120000);
+            Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'ShippingDlg.SplitContainer.Selected500'.", repo.ShippingDlg.SplitContainer.Selected500Info, new RecordItemIndex(2));
 			Validate.AttributeEqual(repo.ShippingDlg.SplitContainer.Selected500Info, "Visible", "True");
@@ -90,6 +102,8 @@ namespace ShipWorksPerformanceTestSuite
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ContextMenuPrint.BestRateProfile' at Center.", repo.ContextMenuPrint.BestRateProfileInfo, new RecordItemIndex(0));
 			repo.ContextMenuPrint.BestRateProfile.Click();
 			Delay.Milliseconds(0);
+			
+			applyProfileTime.Start();
 			
 			Report.Log(ReportLevel.Info, "Wait", "Waiting 2m to not exist. Associated repository item: 'ProgressDlg.PreparingShipments'", repo.ProgressDlg.PreparingShipmentsInfo, new ActionTimeout(120000), new RecordItemIndex(1));
 			repo.ProgressDlg.PreparingShipmentsInfo.WaitForExists(120000);

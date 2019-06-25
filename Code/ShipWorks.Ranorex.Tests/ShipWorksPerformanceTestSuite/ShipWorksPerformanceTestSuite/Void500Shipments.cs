@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -24,6 +25,7 @@ namespace ShipWorksPerformanceTestSuite
 	[TestModule("CF731CEB-4065-4AFA-85C0-A45FC3AA463A", ModuleType.UserCode, 1)]
 	public class Void500Shipments : ITestModule
 	{
+		Stopwatch voidTime = new Stopwatch();
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		SelectAllOrders selectOrders = new SelectAllOrders();
 		Load500Orders loadOrders = new Load500Orders();
@@ -43,19 +45,28 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
-			if(repo.ShippingDlg.VoidSelected.Enabled == true)
-			{
+			try {
+				
 				VoidShipments();
+				voidTime.Start();
+
 				ConfirmVoidShipmentStarted();
 				ConfirmVoidShipmentEnded();
 				ConfirmAllVoided();
+				
+				voidTime.Stop();
+				
 				CloseShipOrdersDialog();
 			}
-			else
-			{
-				RetryAction.EscapeFromScreen(3);
+			catch (Exception) {
+				
+				RetryAction.RetryOnFailure(3,1,() => {
+				       
+               		RetryVoidShipment();
+	           	});					
 			}
 			
+			Timing.totalVoid500Time = voidTime.ElapsedMilliseconds;
 		}
 		
 		void VoidShipments()
@@ -144,16 +155,23 @@ namespace ShipWorksPerformanceTestSuite
 		
 		void RetryVoidShipment()
 		{
+			voidTime.Stop();
+			
 			RetryAction.EscapeFromScreen(3);
 			
 			select500filter.SelectFilter();
 			selectOrders.SelectOrders();
 			loadOrders.LoadOrders();
 			applyprofile.SelectAllShipments();
-			VoidShipments();
+			
+			VoidShipments();			
+			voidTime.Start();
+			
 			ConfirmVoidShipmentStarted();
 			ConfirmVoidShipmentEnded();
 			ConfirmAllVoided();
+			
+			voidTime.Stop();
 		}
 		
 		void CloseShipOrdersDialog()
