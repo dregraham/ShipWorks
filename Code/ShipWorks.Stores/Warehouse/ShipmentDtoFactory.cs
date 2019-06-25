@@ -82,8 +82,7 @@ namespace ShipWorks.Stores.Warehouse
                     LengthInInches = packageAdapter.DimsLength,
                     WidthInInches = packageAdapter.DimsWidth,
                     HeightInInches = packageAdapter.DimsHeight,
-                    // todo: get packaging type name
-                    PackagingType = packageAdapter.PackagingType.ToString()
+                    PackagingType = packageAdapter.PackagingTypeName
                 });
     }
 }

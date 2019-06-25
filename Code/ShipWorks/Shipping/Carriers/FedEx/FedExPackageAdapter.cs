@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -107,6 +108,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             get { return shipmentEntity.FedEx.PackagingType; }
             set { shipmentEntity.FedEx.PackagingType = value; }
         }
+
+        /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName => EnumHelper.GetDescription((FedExPackagingType) shipmentEntity.FedEx.PackagingType);
 
         /// <summary>
         /// Gets or sets the dims length.
