@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Warehouse
                 TangoShipmentId = Convert.ToInt64(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
                 ShippingProviderId = shipmentEntity.ShipmentType,
-                Carrier = EnumHelper.GetDescription(shipmentEntity.ShipmentTypeCode),
+                Carrier = GetCarrier(shipmentEntity),
                 Service = shipmentAdapter.ServiceTypeName,
                 TrackingNumber = shipmentEntity.TrackingNumber,
                 ShipDate = shipmentEntity.ShipDate,
@@ -83,5 +84,15 @@ namespace ShipWorks.Stores.Warehouse
                     HeightInInches = packageAdapter.DimsHeight,
                     PackagingType = packageAdapter.PackagingTypeName
                 });
+
+
+        private string GetCarrier(ShipmentEntity shipment)
+        {
+            ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
+
+            return shipmentType == ShipmentTypeCode.Other ?
+                shipment.Other.Carrier :
+                EnumHelper.GetDescription(shipmentType);
+        }
     }
 }
