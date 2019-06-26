@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using Autofac;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Rendering;
-using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Appearance;
@@ -771,13 +770,18 @@ namespace ShipWorks.Shipping.Editing
                         ShipmentEntity copy = shippingManager.CreateShipmentCopy(shipment, x =>
                         {
                             x.ReturnShipment = forReturn;
+                            if (forReturn)
+                            {
+                                x.IncludeReturn = false;
+                                x.ApplyReturnProfile = false;
+                            }
                         });
 
                         if (forReturn)
                         {
                             lifetimeScope.Resolve<IReturnItemRepository>().LoadReturnData(copy, true);
                         }
-                        
+
                         // remember for loading later
                         createdShipments.Add(copy);
                     }

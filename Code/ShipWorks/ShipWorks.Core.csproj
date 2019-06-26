@@ -877,7 +877,6 @@
     <Compile Include="OrderLookup\IOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
-    <Compile Include="OrderLookup\IPreviousShipmentReprintActionHandler.cs" />
     <Compile Include="OrderLookup\IPreviousShipmentVoidActionHandler.cs" />
     <Compile Include="OrderLookup\IShipmentHistory.cs" />
     <Compile Include="ApplicationCore\Licensing\Activation\CustomerLicenseActivationActivity.cs" />

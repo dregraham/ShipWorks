@@ -352,6 +352,9 @@ namespace ShipWorks.Shipping
             clonedShipment.ProcessedDate = null;
             clonedShipment.TrackingNumber = "";
             clonedShipment.Voided = false;
+            clonedShipment.VoidedComputerID = null;
+            clonedShipment.VoidedDate = null;
+            clonedShipment.VoidedUserID = null;
             clonedShipment.ActualLabelFormat = null;
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;

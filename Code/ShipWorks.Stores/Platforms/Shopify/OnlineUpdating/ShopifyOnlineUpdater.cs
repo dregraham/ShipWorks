@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             }
 
             // upload tracking number for the most recent processed, not voided shipment
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID, false);
             if (shipment == null)
             {
                 // log that there was no shipment, and return

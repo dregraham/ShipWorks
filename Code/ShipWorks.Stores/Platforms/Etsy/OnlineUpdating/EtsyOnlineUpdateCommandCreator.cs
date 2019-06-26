@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.Etsy.OnlineUpdating
         {
             try
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
 
                 if (shipment == null)
                 {

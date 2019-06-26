@@ -33,11 +33,21 @@ rxversion="8.1">
 			reportlevel="Info;20">
 			</testcase>
 			<testmodule
+			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
+			name="CloseShipWorks"
+			ref="82d40b1a-c4fc-4ba1-962a-81cc793c1f7e"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 			name="CopyStagingHosts"
 			ref="a008879e-2cde-4625-83db-df20be2f6541"
 			type="UserCode">
 			</testmodule>
+			<teardown
+			id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
+			name="teardown">
+			</teardown>
 			<setup
 			id="db46a630-9dda-4933-8bfc-a7e326045751"
 			name="setup">
@@ -75,6 +85,14 @@ rxversion="8.1">
 							name="RestoreDatabase">
 							</testmodule>
 						</setup>
+						<teardown
+						id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
+						name="teardown">
+							<testmodule
+							id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
+							name="CloseShipWorks">
+							</testmodule>
+						</teardown>
 					</testcase>
 				</testcase>
 			</testsuite>

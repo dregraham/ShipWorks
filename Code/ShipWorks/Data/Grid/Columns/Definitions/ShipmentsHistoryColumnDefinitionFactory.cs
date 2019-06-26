@@ -54,6 +54,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridMoneyDisplayType(), "Cost", 4.18m,
                     ProcessedShipmentFields.ShipmentCost),
 
+                new GridColumnDefinition("{5B7D5A28-E96C-4BFD-BCE9-0703D98CF9DA}", true,
+                    new GridBooleanDisplayType()
+                    {
+                        TrueText = "Yes",
+                        FalseText = "No"
+                    },
+                    "Return Shipment", "Yes",
+                    ProcessedShipmentFields.ReturnShipment),
+
                 new GridColumnDefinition("{0F413267-F462-45A2-AFBA-F27EAF268E5C}",
                     new ShipmentInsuredDisplayType(), "Insured By", new ShipmentEntity { Insurance = true, InsuranceProvider = (int) InsuranceProvider.ShipWorks },
                     ProcessedShipmentFields.ShipmentID),
@@ -104,7 +113,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{B42A0B4A-4947-45B1-9CBC-DBC7D1974662}",
                     new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
-                    "S: Residential status",  ValidationDetailStatusType.Yes,
+                    "S: Residential Status",  ValidationDetailStatusType.Yes,
                     ProcessedShipmentFields.ShipResidentialStatus)
                     { DefaultWidth = 100 },
 

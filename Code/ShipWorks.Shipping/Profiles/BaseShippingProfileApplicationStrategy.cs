@@ -36,6 +36,22 @@ namespace ShipWorks.Shipping.Profiles
             ApplyProfileValue(profile.RequestedLabelFormat, shipment, ShipmentFields.RequestedLabelFormat);
             shipmentType.SaveRequestedLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat, shipment);
 
+            ApplyProfileValue(profile.IncludeReturn, shipment, ShipmentFields.IncludeReturn);
+            ApplyProfileValue(profile.ApplyReturnProfile, shipment, ShipmentFields.ApplyReturnProfile);
+            ApplyProfileValue(profile.ReturnProfileID, shipment, ShipmentFields.ReturnProfileID);
+
+            // Special cases to keep IncludeReturn and ReturnShipment mutually exclusive
+            if (profile.IncludeReturn.HasValue && profile.IncludeReturn.Value)
+            {
+                shipment.SetNewFieldValue(ShipmentFields.ReturnShipment.FieldIndex, false);
+            }
+
+            if (profile.ReturnShipment.HasValue && profile.ReturnShipment.Value)
+            {
+                shipment.SetNewFieldValue(ShipmentFields.IncludeReturn.FieldIndex, false);
+                shipment.SetNewFieldValue(ShipmentFields.ApplyReturnProfile.FieldIndex, false);
+            }
+
             // Special case for insurance
             for (int i = 0; i < shipmentType.GetParcelCount(shipment); i++)
             {

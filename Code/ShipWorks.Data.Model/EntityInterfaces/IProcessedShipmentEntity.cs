@@ -98,7 +98,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TotalWeight"<br/>
         /// View field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Decimal TotalWeight { get; }
+        System.Double TotalWeight { get; }
         /// <summary> The TrackingNumber property of the Entity ProcessedShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on view field: "ProcessedShipmentsView"."TrackingNumber"<br/>
@@ -189,6 +189,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int32 CombineSplitStatus { get; }
+        /// <summary> The ReturnShipment property of the Entity ProcessedShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on view field: "ProcessedShipmentsView"."ReturnShipment"<br/>
+        /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean ReturnShipment { get; }
         
         
         

@@ -22047,6 +22047,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.CombineSplitStatus);}
 		}
+		/// <summary>Creates a new ProcessedShipmentEntity.ReturnShipment field instance</summary>
+		public static EntityField2 ReturnShipment
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ReturnShipment);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductEntity</summary>
@@ -24547,6 +24552,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ProcessedWithUiMode);}
 		}
+		/// <summary>Creates a new ShipmentEntity.IncludeReturn field instance</summary>
+		public static EntityField2 IncludeReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.IncludeReturn);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ApplyReturnProfile field instance</summary>
+		public static EntityField2 ApplyReturnProfile
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ApplyReturnProfile);}
+		}
+		/// <summary>Creates a new ShipmentEntity.ReturnProfileID field instance</summary>
+		public static EntityField2 ReturnProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ReturnProfileID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>
@@ -24896,6 +24916,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new ShippingProfileEntity.IncludeReturn field instance</summary>
+		public static EntityField2 IncludeReturn
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.IncludeReturn);}
+		}
+		/// <summary>Creates a new ShippingProfileEntity.ApplyReturnProfile field instance</summary>
+		public static EntityField2 ApplyReturnProfile
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.ApplyReturnProfile);}
+		}
+		/// <summary>Creates a new ShippingProfileEntity.ReturnProfileID field instance</summary>
+		public static EntityField2 ReturnProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingProfileFieldIndex.ReturnProfileID);}
 		}
 	}
 

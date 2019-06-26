@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Stores.Platforms.CommerceInterface.OnlineUpdating
@@ -45,11 +45,11 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.OnlineUpdating
         public IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands(StoreEntity store)
         {
             GenericModuleStoreEntity typedStore = (GenericModuleStoreEntity) store;
-            
+
             IMenuCommand uploadCommand = new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(context, typedStore));
             uploadCommand.BreakBefore = false;
-            
-            return new []{ uploadCommand };
+
+            return new[] { uploadCommand };
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.CommerceInterface.OnlineUpdating
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
                 if (shipment == null)
                 {
                     log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);

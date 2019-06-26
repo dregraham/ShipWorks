@@ -90,6 +90,8 @@ namespace ShipWorks.Shipping.Services
                 // Copy back any best rate events that were set on the clone
                 shipment.BestRateEvents |= clonedShipment.BestRateEvents;
 
+                rateResults.showReturnFootnote = shipment.ReturnShipment || shipment.IncludeReturn;
+
                 return rateResults is InvalidRateGroup ?
                     GenericResult.FromError(errorMessage, rateResults) :
                     GenericResult.FromSuccess(rateResults);

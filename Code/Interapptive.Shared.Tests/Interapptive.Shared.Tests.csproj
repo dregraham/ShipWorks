@@ -158,6 +158,7 @@
     <Compile Include="Utility\ExceptionExtensionsTest.cs" />
     <Compile Include="Utility\StreamUtilityTest.cs" />
     <Compile Include="Utility\TelemetricResultTest.cs" />
+    <Compile Include="Utility\HtmlEntityUtilityTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

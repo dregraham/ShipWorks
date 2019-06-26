@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -18,7 +20,8 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
     public class LabelResultLogStepTest : IDisposable
     {
         private readonly AutoMock mock;
-        private Mock<ILabelPersistenceResult> input;
+        private List<ILabelPersistenceResult> input;
+        private readonly Mock<ILabelPersistenceResult> persistenceResult1;
         private readonly ShipmentEntity shipment;
         private readonly ShipmentEntity shipmentForTango;
         private readonly StoreEntity store;
@@ -32,11 +35,14 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             shipmentForTango = Create.Shipment(new OrderEntity()).AsOther().Set(x => x.ShipmentID, 5678).Build();
             store = Create.Store<StoreEntity>().Build();
 
-            input = mock.Mock<ILabelPersistenceResult>();
-            input.SetupGet(x => x.OriginalShipment).Returns(shipment);
-            input.SetupGet(x => x.ShipmentForTango).Returns(shipmentForTango);
-            input.SetupGet(x => x.Store).Returns(store);
-            input.SetupGet(x => x.Success).Returns(true);
+            persistenceResult1 = mock.Mock<ILabelPersistenceResult>();
+            persistenceResult1.SetupGet(x => x.OriginalShipment).Returns(shipment);
+            persistenceResult1.SetupGet(x => x.ShipmentForTango).Returns(shipmentForTango);
+            persistenceResult1.SetupGet(x => x.Store).Returns(store);
+            persistenceResult1.SetupGet(x => x.Success).Returns(true);
+
+            input = new List<ILabelPersistenceResult>();
+            input.Add(persistenceResult1.Object);
 
             testObject = mock.Create<Shipping.Services.ShipmentProcessorSteps.LabelResultLogStep>();
         }
@@ -44,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void Finish_ClearsErrors_ForShipment()
         {
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>().Verify(x => x.Remove(1234));
         }
@@ -52,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         [Fact]
         public void Finish_LogsShipmentToTango_WhenShipmentTypeDoesNotFinishExternally()
         {
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             mock.Mock<ITangoLogShipmentProcessor>().Verify(x => x.Add(store, shipmentForTango));
         }
@@ -63,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             var sqlAdapter = mock.Mock<ISqlAdapter>();
             mock.Mock<ISqlAdapterFactory>().Setup(x => x.Create()).Returns(sqlAdapter);
 
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             sqlAdapter.Verify(x => x.SaveAndRefetch(shipment), Times.Never);
             sqlAdapter.Verify(x => x.Commit(), Times.Never);
@@ -76,10 +82,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         public void Finish_SetsError_WhenInputWasNotSuccessful(Type exceptionType)
         {
             var exception = CreateException(exceptionType);
-            input.SetupGet(x => x.Exception).Returns(exception);
-            input.SetupGet(x => x.Success).Returns(false);
+            persistenceResult1.SetupGet(x => x.Exception).Returns(exception);
+            persistenceResult1.SetupGet(x => x.Success).Returns(false);
 
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, exception, "processed"));
         }
@@ -88,10 +94,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         public void Finish_SetsError_WhenInputHasShippingException()
         {
             var exception = new ShippingException();
-            input.SetupGet(x => x.Exception).Returns(exception);
-            input.SetupGet(x => x.Success).Returns(false);
+            persistenceResult1.SetupGet(x => x.Exception).Returns(exception);
+            persistenceResult1.SetupGet(x => x.Success).Returns(false);
 
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, exception));
         }
@@ -109,12 +115,12 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 exception = new Exception($"Level {i}", exception);
             }
 
-            input.SetupGet(x => x.Exception).Returns(new ShippingException("Foo", exception));
-            input.SetupGet(x => x.Success).Returns(false);
+            persistenceResult1.SetupGet(x => x.Exception).Returns(new ShippingException("Foo", exception));
+            persistenceResult1.SetupGet(x => x.Success).Returns(false);
 
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
-            Assert.Equal<object>(outOfFundsException, result.OutOfFundsException);
+            Assert.Equal<object>(outOfFundsException, result.First().OutOfFundsException);
         }
 
         [Theory]
@@ -130,21 +136,21 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 exception = new Exception($"Level {i}", exception);
             }
 
-            input.SetupGet(x => x.Exception).Returns(new ShippingException("Foo", exception));
-            input.SetupGet(x => x.Success).Returns(false);
+            persistenceResult1.SetupGet(x => x.Exception).Returns(new ShippingException("Foo", exception));
+            persistenceResult1.SetupGet(x => x.Success).Returns(false);
 
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
-            Assert.Equal<object>(termsException, result.TermsAndConditionsException);
+            Assert.Equal<object>(termsException, result.First().TermsAndConditionsException);
         }
 
         [Fact]
         public void Finish_DisposesEntityLock_IfSet()
         {
             Mock<IDisposable> entityLock = mock.Mock<IDisposable>();
-            input.SetupGet(x => x.EntityLock).Returns(entityLock);
+            persistenceResult1.SetupGet(x => x.EntityLock).Returns(entityLock);
 
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             entityLock.Verify(x => x.Dispose());
         }
@@ -154,7 +160,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         {
             var shipmentType = mock.WithShipmentTypeFromShipmentManager(s =>
                 s.SetupGet(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Other));
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
             mock.Mock<IKnowledgebase>().Verify(x => x.LogShipment(shipmentType.Object, shipment));
         }
@@ -168,17 +174,17 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .AsUps(x => x.WithPackage())
                 .Set(x => x.ShipmentTypeCode = shipmentType)
                 .Build();
-            input.SetupGet(x => x.OriginalShipment).Returns(newShipment);
+            persistenceResult1.SetupGet(x => x.OriginalShipment).Returns(newShipment);
 
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
-            Assert.Equal(expected, result.WorldshipExported);
+            Assert.Equal(expected, result.First().WorldshipExported);
         }
 
         [Fact]
         public void Finish_DelegatesToShippingManager_ToRefreshShipment()
         {
-            testObject.Complete(input.Object);
+            testObject.Complete(input);
 
             mock.Mock<IShippingManager>().Verify(x => x.RefreshShipment(shipment));
         }
@@ -190,10 +196,10 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.RefreshShipment(It.IsAny<ShipmentEntity>()))
                 .Throws<ObjectDeletedException>();
 
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>().Verify(x => x.SetShipmentErrorMessage(1234, It.IsAny<Exception>()));
-            Assert.Contains("deleted", result.ErrorMessage);
+            Assert.Contains("deleted", result.First().ErrorMessage);
         }
 
         [Fact]
@@ -203,14 +209,14 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.RefreshShipment(It.IsAny<ShipmentEntity>()))
                 .Throws<ObjectDeletedException>();
 
-            input.Setup(x => x.Exception).Returns(new Exception("Foo"));
-            input.Setup(x => x.Success).Returns(false);
+            persistenceResult1.Setup(x => x.Exception).Returns(new Exception("Foo"));
+            persistenceResult1.Setup(x => x.Success).Returns(false);
 
-            var result = testObject.Complete(input.Object);
+            var result = testObject.Complete(input);
 
             mock.Mock<IShippingErrorManager>()
                 .Verify(x => x.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>()), Times.Never);
-            Assert.DoesNotContain("deleted", result.ErrorMessage);
+            Assert.DoesNotContain("deleted", result.First().ErrorMessage);
         }
 
         private Exception CreateException(Type exceptionType)

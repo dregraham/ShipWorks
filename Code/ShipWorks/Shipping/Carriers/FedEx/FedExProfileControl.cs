@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -24,6 +27,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     [KeyedComponent(typeof(ShippingProfileControlBase), ShipmentTypeCode.FedEx)]
     public partial class FedExProfileControl : ShippingProfileControlBase
     {
+        private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+        private BindingSource bindingSource = new BindingSource();
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -152,6 +158,29 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Insurance
             AddValueMapping(profile, ShippingProfileFields.Insurance, insuranceState, insuranceControl);
+
+            // Returns
+            RefreshIncludeReturnProfileMenu(profile.ShipmentType);
+            returnProfileID.DisplayMember = "Value";
+            returnProfileID.ValueMember = "Key";
+            returnProfileID.SelectedIndex = -1;
+
+            AddValueMapping(profile, ShippingProfileFields.ReturnShipment, returnShipmentState, returnShipment);
+            AddValueMapping(profile, ShippingProfileFields.IncludeReturn, includeReturnState, includeReturn);
+            AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
+            AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
+
+            // Map parent/child relationships
+            SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
+            SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileIDLabel);
+            SetParentCheckBox(returnShipmentState, returnShipment, saturdayReturnState, saturdayReturn);
+            SetParentCheckBox(returnShipmentState, returnShipment, returnTypeState, returnType);
+            SetParentCheckBox(returnShipmentState, returnShipment, returnTypeState, labelReturnType);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaReasonState, rmaReason);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaReasonState, labelRmaReason);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, rmaNumber);
+            SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, labelRmaNumber);
 
             packagesState.Checked = profile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
@@ -509,6 +538,81 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             panelPackageControls.Height = lastControl == null ? 0 : lastControl.Bottom + 4;
+        }
+
+        /// <summary>
+        /// Click of the Include Return checkbox
+        /// </summary>
+        private void OnIncludeReturnChanged(object sender, EventArgs e)
+        {
+            if (includeReturn.Checked)
+            {
+                returnShipment.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// Opening the return profiles menu
+        /// </summary>
+        private void OnReturnProfileIDOpened(object sender, EventArgs e)
+        {
+            RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+        }
+
+        /// <summary>
+        /// Click of the Return Shipment checkbox
+        /// </summary>
+        protected virtual void OnReturnShipmentChanged(object sender, EventArgs e)
+        {
+            if (returnShipment.Checked)
+            {
+                includeReturn.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// When ReturnProfileID dropdown is enabled
+        /// </summary>
+        protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
+        {
+            if (returnProfileID.Enabled)
+            {
+                RefreshIncludeReturnProfileMenu(Profile.ShipmentType);
+            }
+        }
+
+        /// <summary>
+        /// Add applicable profiles for the given shipment type to the context menu
+        /// </summary>
+        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode? shipmentTypeCode)
+        {
+            BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IShippingProfileService shippingProfileService = lifetimeScope.Resolve<IShippingProfileService>();
+
+                List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
+                    .GetConfiguredShipmentTypeProfiles()
+                    .Where(p => p.ShippingProfileEntity.ShippingProfileID != Profile.ShippingProfileID)
+                    .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
+                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
+                    .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
+                    .OrderBy(g => g.Value)
+                    .ToList<KeyValuePair<long, string>>();
+
+                newReturnProfiles = new BindingList<KeyValuePair<long, string>>(returnProfiles);
+            }
+
+            // Always add No Profile so if a selected profile is no longer a return profile, this becomes the default
+            newReturnProfiles.Insert(0, new KeyValuePair<long, string>(-1, "(No Profile)"));
+
+            includeReturnProfiles = newReturnProfiles;
+
+            // Reset data sources because calling resetbindings() doesn't work
+            bindingSource.DataSource = includeReturnProfiles;
+            returnProfileID.DataSource = bindingSource;
         }
 
     }

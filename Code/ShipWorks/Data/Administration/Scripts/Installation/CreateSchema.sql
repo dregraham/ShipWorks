@@ -491,7 +491,7 @@ CREATE TABLE [dbo].[Order]
 [ShipStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipPhone] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -694,7 +694,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[Order]') AND name = N'IX_SWDefault_ShipFirstName')
 CREATE NONCLUSTERED INDEX [IX_SWDefault_ShipFirstName] ON [dbo].[Order]
 (
-    [ShipFirstName] ASC
+	[ShipFirstName] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 PRINT N'Creating index [IX_SWDefault_Order_ShipMilitaryAddress] on [dbo].[Order]'
@@ -962,7 +962,7 @@ CREATE TABLE [dbo].[Store]
 [StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Phone] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Fax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1141,7 +1141,10 @@ CREATE TABLE [dbo].[ShippingProfile]
 [InsuranceInitialValueSource] [int] NULL,
 [InsuranceInitialValueAmount] [money] NULL,
 [ReturnShipment] [bit] NULL,
-[RequestedLabelFormat] [int] NULL
+[RequestedLabelFormat] [int] NULL,
+[IncludeReturn] [bit] NULL,
+[ApplyReturnProfile] [bit] NULL,
+[ReturnProfileID] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ShippingProfile] on [dbo].[ShippingProfile]'
@@ -1265,7 +1268,10 @@ CREATE TABLE [dbo].[Shipment]
 [OnlineShipmentID] [varchar] (128) NOT NULL,
 [BilledType] [int] NOT NULL,
 [BilledWeight] [float] NOT NULL,
-[ProcessedWithUiMode] [int] NULL
+[ProcessedWithUiMode] [int] NULL,
+[IncludeReturn] [bit] NOT NULL CONSTRAINT [DF_Shipment_IncludeReturns] DEFAULT ((0)),
+[ApplyReturnProfile] [bit] NOT NULL CONSTRAINT [DF_Shipment_ApplyReturnProfile] DEFAULT ((0)),
+[ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1))
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1298,9 +1304,9 @@ PRINT N'Creating index [IX_SWDefault_Shipment_OrderID_ShipSenseStatus] on [dbo].
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_OrderID_ShipSenseStatus] ON [dbo].[Shipment]
 (
-    [OrderID] ASC,
-    [Processed] ASC,
-    [ShipSenseStatus] ASC
+	[OrderID] ASC,
+	[Processed] ASC,
+	[ShipSenseStatus] ASC
 )
 GO
 PRINT N'Creating index [IX_SWDefault_Shipment_RequestedLabelFormat] on [dbo].[Shipment]'
@@ -5240,24 +5246,24 @@ GO
 PRINT N'Creating [dbo].[ExcludedServiceType]'
 GO
 CREATE TABLE [dbo].[ExcludedServiceType](
-    [ShipmentType] [int] NOT NULL,
-    [ServiceType] [int] NOT NULL,
+	[ShipmentType] [int] NOT NULL,
+	[ServiceType] [int] NOT NULL,
  CONSTRAINT [PK_ExcludedServiceType] PRIMARY KEY CLUSTERED
 (
-    [ShipmentType] ASC,
-    [ServiceType] ASC
+	[ShipmentType] ASC,
+	[ServiceType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
 PRINT N'Creating [dbo].[ExcludedPackageType]'
 GO
 CREATE TABLE [dbo].[ExcludedPackageType](
-    [ShipmentType] [int] NOT NULL,
-    [PackageType] [int] NOT NULL,
+	[ShipmentType] [int] NOT NULL,
+	[PackageType] [int] NOT NULL,
  CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED
 (
-    [ShipmentType] ASC,
-    [PackageType] ASC
+	[ShipmentType] ASC,
+	[PackageType] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -5470,24 +5476,24 @@ GO
 PRINT N'Creating [dbo].[ValidatedAddress]'
 GO
 CREATE TABLE [dbo].[ValidatedAddress](
-    [ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
-    [ConsumerID] [bigint] NOT NULL,
-    [AddressPrefix] [nvarchar](10) NOT NULL,
-    [IsOriginal] [bit] NOT NULL,
-    [Street1] [nvarchar](60) NOT NULL,
-    [Street2] [nvarchar](60) NOT NULL,
-    [Street3] [nvarchar](60) NOT NULL,
-    [City] [nvarchar](50) NOT NULL,
-    [StateProvCode] [nvarchar](50) NOT NULL,
-    [PostalCode] [nvarchar](20) NOT NULL,
-    [CountryCode] [nvarchar](50) NOT NULL,
-    [ResidentialStatus] [int] NOT NULL,
-    [POBox] [int] NOT NULL,
-    [USTerritory] [int] NOT NULL,
-    [MilitaryAddress] [int] NOT NULL,
+	[ValidatedAddressID] [bigint] IDENTITY(1100,1000) NOT NULL,
+	[ConsumerID] [bigint] NOT NULL,
+	[AddressPrefix] [nvarchar](10) NOT NULL,
+	[IsOriginal] [bit] NOT NULL,
+	[Street1] [nvarchar](60) NOT NULL,
+	[Street2] [nvarchar](60) NOT NULL,
+	[Street3] [nvarchar](60) NOT NULL,
+	[City] [nvarchar](50) NOT NULL,
+	[StateProvCode] [nvarchar](50) NOT NULL,
+	[PostalCode] [nvarchar](20) NOT NULL,
+	[CountryCode] [nvarchar](50) NOT NULL,
+	[ResidentialStatus] [int] NOT NULL,
+	[POBox] [int] NOT NULL,
+	[USTerritory] [int] NOT NULL,
+	[MilitaryAddress] [int] NOT NULL,
  CONSTRAINT [PK_ValidatedAddress] PRIMARY KEY CLUSTERED
 (
-    [ValidatedAddressID] ASC
+	[ValidatedAddressID] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -5495,7 +5501,7 @@ GO
 Print N'Creating [IX_SWDefault_ValidatedAddress_ConsumerIDAddressPrefix]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_ValidatedAddress_ConsumerIDAddressPrefix]
-    ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
+	ON [dbo].[ValidatedAddress]([ConsumerID] ASC, [AddressPrefix] ASC);
 GO
 
 PRINT N'Creating [dbo].[ShipmentReturnItem]'
@@ -6157,12 +6163,12 @@ GO
 PRINT N'Creating table to [dbo].[EtsyOrderItem]'
 GO
 CREATE TABLE [dbo].[EtsyOrderItem](
-    [OrderItemID] [bigint] NOT NULL,
+	[OrderItemID] [bigint] NOT NULL,
 	[TransactionID] [nvarchar] (300) NOT NULL,
 	[ListingID] [nvarchar] (100) NOT NULL
  CONSTRAINT [PK_EtsyOrderItem] PRIMARY KEY CLUSTERED
 (
-    [OrderItemID] ASC
+	[OrderItemID] ASC
 ) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
@@ -6178,10 +6184,10 @@ PRINT N'Creating [dbo].[LemonStandStore]'
 GO
 CREATE TABLE [dbo].[LemonStandStore]
 (
-    [StoreID] [bigint] NOT NULL,
-    [Token] [varchar](100) NOT NULL,
-    [StoreURL] [varchar](255) NOT NULL,
-    [StatusCodes] [xml] NULL,
+	[StoreID] [bigint] NOT NULL,
+	[Token] [varchar](100) NOT NULL,
+	[StoreURL] [varchar](255) NOT NULL,
+	[StatusCodes] [xml] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'
@@ -6217,10 +6223,10 @@ PRINT N'Creating [dbo].[LemonStandOrderItem]'
 GO
 CREATE TABLE [dbo].[LemonStandOrderItem]
 (
-    [OrderItemID] [bigint] NOT NULL,
-    [UrlName] [nvarchar](100) NOT NULL,
-    [ShortDescription] [nvarchar](255) NOT NULL,
-    [Category] [nvarchar](100) NOT NULL
+	[OrderItemID] [bigint] NOT NULL,
+	[UrlName] [nvarchar](100) NOT NULL,
+	[ShortDescription] [nvarchar](255) NOT NULL,
+	[Category] [nvarchar](100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_LemonStandOrderItem] on [dbo].[LemonStandOrderItem]'
@@ -6237,7 +6243,7 @@ GO
 
 CREATE NONCLUSTERED INDEX [IX_SWDefault_LemonStandOrderID] ON [dbo].[LemonStandOrder]
 (
-    [LemonStandOrderID] ASC
+	[LemonStandOrderID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
@@ -6264,18 +6270,18 @@ PRINT N'Creating [dbo].[OdbcStore]'
 GO
 CREATE TABLE [dbo].[OdbcStore]
 (
-    [StoreID] [bigint] NOT NULL,
-    [ImportConnectionString] [nvarchar](2048) NOT NULL,
-    [ImportMap] [nvarchar](max) NOT NULL,
-    [ImportStrategy] [int] NOT NULL,
-    [ImportColumnSourceType] [int] NOT NULL,
-    [ImportColumnSource] [nvarchar](max) NOT NULL,
-    [ImportOrderItemStrategy] [int] NOT NULL,
-    [UploadStrategy] [int] NOT NULL,
-    [UploadMap] [nvarchar](max) NOT NULL,
-    [UploadColumnSourceType] [int] NOT NULL,
-    [UploadColumnSource] [nvarchar](max) NOT NULL,
-    [UploadConnectionString] [nvarchar](2048) NOT NULL,
+	[StoreID] [bigint] NOT NULL,
+	[ImportConnectionString] [nvarchar](2048) NOT NULL,
+	[ImportMap] [nvarchar](max) NOT NULL,
+	[ImportStrategy] [int] NOT NULL,
+	[ImportColumnSourceType] [int] NOT NULL,
+	[ImportColumnSource] [nvarchar](max) NOT NULL,
+	[ImportOrderItemStrategy] [int] NOT NULL,
+	[UploadStrategy] [int] NOT NULL,
+	[UploadMap] [nvarchar](max) NOT NULL,
+	[UploadColumnSourceType] [int] NOT NULL,
+	[UploadColumnSource] [nvarchar](max) NOT NULL,
+	[UploadConnectionString] [nvarchar](2048) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'
@@ -6467,8 +6473,8 @@ PRINT N'Adding foreign keys to [dbo].[JetOrder]'
 GO
 ALTER TABLE [dbo].[JetOrder] ADD CONSTRAINT [FK_JetOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 CREATE TABLE [dbo].[UpsRateTable](
-    [UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UploadDate][DateTime2] NOT NULL)
+	[UpsRateTableID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UploadDate][DateTime2] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsRateTable] on [dbo].[UpsRateTable]'
 GO
@@ -6477,12 +6483,12 @@ GO
 PRINT N'Creating [dbo].[UpsPackageRate]'
 GO
 CREATE TABLE [dbo].[UpsPackageRate](
-    [UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UpsRateTableID][bigint] NOT NULL,
-    [Zone][varchar](3) NOT NULL,
-    [WeightInPounds][int] NOT NULL,
-    [Service][int] NOT NULL,
-    [Rate][Money] NOT NULL)
+	[UpsPackageRateID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[WeightInPounds][int] NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsPackageRate] on [dbo].[UpsPackageRate]'
 GO
@@ -6501,11 +6507,11 @@ GO
 PRINT N'Creating [dbo].[UpsLetterRate]'
 GO
 CREATE TABLE [dbo].[UpsLetterRate](
-    [UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UpsRateTableID][bigint] NOT NULL,
-    [Zone][varchar](3) NOT NULL,
-    [Service][int] NOT NULL,
-    [Rate][Money] NOT NULL)
+	[UpsLetterRateID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLetterRate] on [dbo].[UpsLetterRate]'
 GO
@@ -6519,11 +6525,11 @@ GO
 PRINT N'Creating [dbo].[UpsPricePerPound]'
 GO
 CREATE TABLE [dbo].[UpsPricePerPound](
-    [UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UpsRateTableID][bigint] NOT NULL,
-    [Zone][varchar](3) NOT NULL,
-    [Service][int] NOT NULL,
-    [Rate][Money] NOT NULL)
+	[UpsPricePerPoundID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[Zone][varchar](3) NOT NULL,
+	[Service][int] NOT NULL,
+	[Rate][Money] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsPricePerPound] on [dbo].[UpsPricePerPound]'
 GO
@@ -6538,10 +6544,10 @@ GO
 PRINT N'Creating [dbo].[UpsRateSurcharge]'
 GO
 CREATE TABLE [dbo].[UpsRateSurcharge](
-    [UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UpsRateTableID][bigint] NOT NULL,
-    [SurchargeType][int] NOT NULL,
-    [Amount][float] NOT NULL)
+	[UpsRateSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UpsRateTableID][bigint] NOT NULL,
+	[SurchargeType][int] NOT NULL,
+	[Amount][float] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsRateSurcharge] on [dbo].[UpsRateSurcharge]'
 GO
@@ -6560,9 +6566,9 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingZoneFile]'
 GO
 CREATE TABLE [dbo].[UpsLocalRatingZoneFile](
-    [ZoneFileID] [bigint] NOT NULL IDENTITY(1, 1),
-    [UploadDate] [DateTime2] NOT NULL,
-    [FileContent] [varbinary](max) NOT NULL)
+	[ZoneFileID] [bigint] NOT NULL IDENTITY(1, 1),
+	[UploadDate] [DateTime2] NOT NULL,
+	[FileContent] [varbinary](max) NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingZoneFile] on [dbo].[UpsLocalRatingZoneFile]'
 GO
@@ -6572,14 +6578,14 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingZone]'
 GO
 CREATE TABLE [dbo].[UpsLocalRatingZone](
-    [ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
-    [ZoneFileID] [bigint] NOT NULL,
-    [OriginZipFloor] [int] NOT NULL,
-    [OriginZipCeiling] [int] NOT NULL,
-    [DestinationZipFloor] [int] NOT NULL,
-    [DestinationZipCeiling] [int] NOT NULL,
-    [Service] [int] NOT NULL,
-    [Zone] [varchar](3) NOT NULL)
+	[ZoneID] [bigint] NOT NULL IDENTITY(1, 1),
+	[ZoneFileID] [bigint] NOT NULL,
+	[OriginZipFloor] [int] NOT NULL,
+	[OriginZipCeiling] [int] NOT NULL,
+	[DestinationZipFloor] [int] NOT NULL,
+	[DestinationZipCeiling] [int] NOT NULL,
+	[Service] [int] NOT NULL,
+	[Zone] [varchar](3) NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingZone] on [dbo].[UpsLocalRatingZone]'
 GO
@@ -6594,10 +6600,10 @@ GO
 PRINT N'Creating [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
 CREATE TABLE [dbo].UpsLocalRatingDeliveryAreaSurcharge(
-    [DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
-    [ZoneFileID] [bigint] NOT NULL,
-    [DestinationZip] [int] NOT NULL,
-    [DeliveryAreaType] [int] NOT NULL)
+	[DeliveryAreaSurchargeID] [bigint] NOT NULL IDENTITY(1, 1),
+	[ZoneFileID] [bigint] NOT NULL,
+	[DestinationZip] [int] NOT NULL,
+	[DeliveryAreaType] [int] NOT NULL)
 GO
 PRINT N'Creating primary key [PK_UpsLocalRatingDeliveryAreaSurcharge] on [dbo].[UpsLocalRatingDeliveryAreaSurcharge]'
 GO
@@ -7804,8 +7810,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-    declare @FilterNodeID bigint
-    declare @FilterNodeContentID bigint
+	declare @FilterNodeID bigint
+	declare @FilterNodeContentID bigint
 	select @FilterNodeID = FilterNodeID, @FilterNodeContentID = FilterNodeContentID from inserted
 
 	update FilterNodeContent
