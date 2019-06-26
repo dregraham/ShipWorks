@@ -57,7 +57,10 @@ namespace ShipWorks.Warehouse
             LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
             LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
 
-            LoadItems(orderEntity, warehouseOrder.Items);
+            if (orderEntity.IsNew)
+            {
+                LoadItems(orderEntity, warehouseOrder.Items);
+            }
 
             LoadCharges(orderEntity, warehouseOrder);
 
