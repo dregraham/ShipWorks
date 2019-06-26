@@ -103,7 +103,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.2\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=16.1460.0.26, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Compression.Base46.16.1.0.26\lib\net46\Syncfusion.Compression.Base.dll</HintPath>
