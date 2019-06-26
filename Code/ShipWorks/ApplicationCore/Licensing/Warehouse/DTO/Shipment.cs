@@ -63,6 +63,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         [JsonProperty("shipworksShipmentId")]
         public long ShipworksShipmentId { get; set; }
 
+        [JsonProperty("shippingProviderId")]
+        public int ShippingProviderId { get; set; }
+
         [JsonProperty("carrier")]
         public string Carrier { get; set; }
 

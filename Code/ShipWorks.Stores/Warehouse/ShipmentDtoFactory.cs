@@ -40,6 +40,7 @@ namespace ShipWorks.Stores.Warehouse
             {
                 TangoShipmentId = Convert.ToInt64(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
+                ShippingProviderId = shipmentEntity.ShipmentType,
                 Carrier = EnumHelper.GetDescription(shipmentEntity.ShipmentTypeCode),
                 Service = shipmentAdapter.ServiceTypeName,
                 TrackingNumber = shipmentEntity.TrackingNumber,
