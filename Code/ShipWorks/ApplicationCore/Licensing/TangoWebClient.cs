@@ -566,6 +566,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 postRequest.Variables.Add("action", "logshipmentvoided");
                 postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
+                postRequest.Variables.Add("tangoshipmentid", shipment.OnlineShipmentID);
                 postRequest.Variables.Add("license", license.Key);
 
                 ProcessXmlRequest(postRequest, "LogShipmentVoided", false);
