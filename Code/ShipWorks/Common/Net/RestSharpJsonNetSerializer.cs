@@ -9,23 +9,41 @@ namespace ShipWorks.Common.Net
     /// </summary>
     public class RestSharpJsonNetSerializer : IRestSerializer
     {
+        private readonly JsonSerializerSettings settings = null;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RestSharpJsonNetSerializer()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RestSharpJsonNetSerializer(JsonSerializerSettings settings)
+        {
+            this.settings = settings;
+        }
+
         /// <summary>
         /// Serialize the object
         /// </summary>
         public string Serialize(object obj) =>
-            JsonConvert.SerializeObject(obj);
+            JsonConvert.SerializeObject(obj, settings);
 
         /// <summary>
         /// Serialize the parameter
         /// </summary>
         public string Serialize(Parameter parameter) =>
-            JsonConvert.SerializeObject(parameter.Value);
+            JsonConvert.SerializeObject(parameter.Value, settings);
 
         /// <summary>
         /// Deserialize the response
         /// </summary>
         public T Deserialize<T>(IRestResponse response) =>
-            JsonConvert.DeserializeObject<T>(response.Content);
+            JsonConvert.DeserializeObject<T>(response.Content, settings);
 
         /// <summary>
         /// Supported content types

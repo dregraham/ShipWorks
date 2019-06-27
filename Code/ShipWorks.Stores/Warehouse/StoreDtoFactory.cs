@@ -53,6 +53,9 @@ namespace ShipWorks.Stores.Warehouse
                 case ChannelAdvisorStoreEntity channelAdvisorStore:
                     store = await AddChannelAdvisorStoreData(channelAdvisorStore).ConfigureAwait(false);
                     break;
+                case GenericModuleStoreEntity genericModuleStore:
+                    store = await AddGenericModuleStoreData(genericModuleStore).ConfigureAwait(false);
+                    break;
                 default:
                     throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(storeEntity.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
             }
@@ -100,6 +103,22 @@ namespace ShipWorks.Stores.Warehouse
             store.DownloadStartDate = GetUnixTimestampMillis(downloadStartDate);
 
             return store;
+        }
+
+        /// <summary>
+        /// Adds Amazon store data to the StoreDto
+        /// </summary>
+        private async Task<Store> AddGenericModuleStoreData(GenericModuleStoreEntity storeEntity)
+        {
+            string decryptedPassword = encryptionProviderFactory.CreateSecureTextEncryptionProvider(storeEntity.ModuleUsername).Decrypt(storeEntity.ModulePassword);
+
+            return new GenericModuleStore
+            {
+                Url = storeEntity.ModuleUrl,
+                Username = storeEntity.ModuleUsername,
+                Password = await encryptionService.Encrypt(decryptedPassword).ConfigureAwait(false),
+                ImportStartDetails = (ulong?) (storeEntity.InitialDownloadDays ?? storeEntity.InitialDownloadOrder),
+            };
         }
 
         /// <summary>

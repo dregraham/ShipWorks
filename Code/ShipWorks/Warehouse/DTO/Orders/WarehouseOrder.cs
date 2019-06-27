@@ -56,6 +56,8 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public int Zone { get; set; }
 
         public string OrderNumber { get; set; }
+        public string OrderNumberPrefix { get; set; }
+        public string OrderNumberPostfix { get; set; }
 
         public DateTime OrderDate { get; set; }
 

@@ -1,5 +1,7 @@
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Warehouse
@@ -12,6 +14,6 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load the order details from the warehouse order into the order entity
         /// </summary>
-        Task<OrderEntity> CreateOrder(WarehouseOrder warehouseOrder);
+        Task<OrderEntity> CreateOrder(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder);
     }
 }
