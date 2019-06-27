@@ -153,12 +153,9 @@ namespace ShipWorks.Editions
             }
 
             // Warehouse
-            using (var lifeimeScope = IoC.BeginLifetimeScope())
+            if (!sharedOptions.WarehouseEnabled)
             {
-                if (!sharedOptions.WarehouseEnabled || lifeimeScope.Resolve<ILicenseService>().IsLegacy)
-                {
-                    AddRestriction(EditionFeature.Warehouse, EditionRestrictionLevel.Hidden);
-                }
+                AddRestriction(EditionFeature.Warehouse, EditionRestrictionLevel.Hidden);
             }
 
             // Adds any Stamps consolidator restrictions, if required
