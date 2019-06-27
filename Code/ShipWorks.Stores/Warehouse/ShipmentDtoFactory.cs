@@ -33,22 +33,31 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
+            ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
+
             InsuranceProvider insuranceType = (InsuranceProvider) shipmentEntity.InsuranceProvider;
 
-            ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
+            int shipworksInsured = 0;
+            int carrierInsured = 0;
+
+            if (shipmentEntity.Insurance)
+            {
+                shipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks);
+                carrierInsured = Convert.ToInt32(insuranceType == InsuranceProvider.Carrier);
+            }
 
             Shipment shipment = new Shipment
             {
                 TangoShipmentId = Convert.ToInt64(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
                 ShippingProviderId = shipmentEntity.ShipmentType,
-                Carrier = GetCarrier(shipmentEntity),
+                Carrier = GetCarrierName(shipmentEntity),
                 Service = shipmentAdapter.ServiceTypeName,
                 TrackingNumber = shipmentEntity.TrackingNumber,
                 ShipDate = shipmentEntity.ShipDate,
                 CarrierCost = shipmentEntity.ShipmentCost,
-                ShipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks),
-                CarrierInsured = Convert.ToInt32(insuranceType == InsuranceProvider.Carrier),
+                ShipworksInsured = shipworksInsured,
+                CarrierInsured = carrierInsured,
                 IsReturn = Convert.ToInt32(shipmentEntity.ReturnShipment),
                 RecipientAddress = new RecipientAddress
                 {
@@ -86,7 +95,10 @@ namespace ShipWorks.Stores.Warehouse
                 });
 
 
-        private string GetCarrier(ShipmentEntity shipment)
+        /// <summary>
+        /// Get carrier name for the shipment
+        /// </summary>
+        private string GetCarrierName(ShipmentEntity shipment)
         {
             ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
 
