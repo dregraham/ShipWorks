@@ -75,11 +75,14 @@ namespace ShipWorks.Warehouse
 
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
         {
-            // todo: parse names if needed
-            localAddress.UnparsedName = warehouseOrderAddress.UnparsedName;
-            localAddress.FirstName = warehouseOrderAddress.FirstName;
-            localAddress.MiddleName = warehouseOrderAddress.MiddleName;
-            localAddress.LastName = warehouseOrderAddress.LastName;
+            PersonName parsedName = warehouseOrderAddress.UnparsedName.IsNullOrWhiteSpace() ? 
+                new PersonName(warehouseOrderAddress.FirstName, warehouseOrderAddress.MiddleName, warehouseOrderAddress.LastName) : 
+                PersonName.Parse(warehouseOrderAddress.UnparsedName);
+
+            localAddress.UnparsedName = parsedName.UnparsedName;
+            localAddress.FirstName = parsedName.First;
+            localAddress.MiddleName = parsedName.Middle;
+            localAddress.LastName = parsedName.Last;
             localAddress.Company = warehouseOrderAddress.Company;
             localAddress.Street1 = warehouseOrderAddress.Street1;
             localAddress.Street2 = warehouseOrderAddress.Street2;
