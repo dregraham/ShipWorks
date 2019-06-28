@@ -118,5 +118,10 @@ namespace ShipWorks.Stores.Warehouse
                 shipment.Other.Carrier :
                 EnumHelper.GetDescription(shipmentType);
         }
+
+        internal Shipment CreateHubVoid(long shipmentID, string tangoShipmentID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

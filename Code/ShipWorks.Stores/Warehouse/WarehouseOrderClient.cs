@@ -118,5 +118,40 @@ namespace ShipWorks.Stores.Warehouse
                 log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub.", ex);
             }
         }
+
+        /// <summary>
+        /// Send void to the hub
+        /// </summary>
+        public async Task UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel =
+                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    IRestRequest request =
+                        new RestRequest(WarehouseEndpoints.VoidShipment(hubOrderID.ToString("N")), Method.PUT);
+
+                    Shipment shipment = shipmentDtoFactory.CreateHubVoid(shipmentID, tangoShipmentID);
+                    request.AddJsonBody(JsonConvert.SerializeObject(shipment));
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Ship Order")
+                        .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        log.Error($"Failed to upload shipment {shipmentID} to hub. {response.Message}",
+                                  response.Exception);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to upload shipment {shipmentID} to hub.", ex);
+            }
+        }
     }
 }
