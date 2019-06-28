@@ -89,7 +89,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             if (shipmentEntity.ActualLabelFormat == null)
             {
-                return "Unknown";
+                return "Standard";
             }
             return EnumHelper.GetDescription((ThermalLanguage) (shipmentEntity.ActualLabelFormat));
         }
