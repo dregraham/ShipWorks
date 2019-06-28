@@ -110,6 +110,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             BilledType = source.BilledType;
             BilledWeight = source.BilledWeight;
             ProcessedWithUiMode = source.ProcessedWithUiMode;
+            IncludeReturn = source.IncludeReturn;
+            ApplyReturnProfile = source.ApplyReturnProfile;
+            ReturnProfileID = source.ReturnProfileID;
             
             AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
             AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
@@ -581,6 +584,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<ShipWorks.Settings.UIMode> ProcessedWithUiMode { get; }
+        /// <summary> The IncludeReturn property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."IncludeReturn"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean IncludeReturn { get; }
+        /// <summary> The ApplyReturnProfile property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."ApplyReturnProfile"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ApplyReturnProfile { get; }
+        /// <summary> The ReturnProfileID property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."ReturnProfileID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int64 ReturnProfileID { get; }
         
         public IAmazonSFPShipmentEntity AmazonSFP { get; }
         

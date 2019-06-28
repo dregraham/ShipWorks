@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,10 +9,8 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
-using System.Collections.Generic;
-using System.Linq;
 using ShipWorks.Stores.Orders;
+using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Jet
 {
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Jet
         /// </summary>
         public async Task UpdateShipmentDetails(long orderID, IJetStoreEntity store)
         {
-            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = orderManager.GetLatestActiveShipment(orderID, false);
 
             // Check to see if shipment exists and order has shippable line item
             if (shipment == null)

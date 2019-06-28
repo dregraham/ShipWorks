@@ -236,7 +236,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         /// </summary>
         private string GetShipmentDetails(MagentoOrderEntity orderEntity, string comments, bool emailCustomer, IEnumerable<Item> items, long originalOrderID)
         {
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderEntity.OrderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderEntity.OrderID, false);
             if (shipment == null)
             {
                 return string.Empty;

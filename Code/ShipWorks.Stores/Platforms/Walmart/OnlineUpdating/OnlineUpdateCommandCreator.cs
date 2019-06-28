@@ -93,13 +93,13 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
         {
             try
             {
-                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID).ConfigureAwait(false);
+                ShipmentEntity shipment = await orderManager.GetLatestActiveShipmentAsync(orderID, false).ConfigureAwait(false);
                 if (shipment != null)
                 {
                     await shippingManager.EnsureShipmentLoadedAsync(shipment).ConfigureAwait(false);
                     await onlineUpdater.UpdateShipmentDetails(store, shipment).ConfigureAwait(false);
                 }
-                
+
                 return Result.FromSuccess();
             }
             catch (WalmartException ex)

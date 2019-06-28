@@ -433,7 +433,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ShipPhone property of the Entity Order<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Order"."ShipPhone"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ShipPhone { get; }
         /// <summary> The ShipFax property of the Entity Order<br/><br/>

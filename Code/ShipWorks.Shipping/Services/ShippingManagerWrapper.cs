@@ -285,6 +285,8 @@ namespace ShipWorks.Shipping.Services
         {
             return CreateShipmentCopy(shipment, x =>
             {
+                x.IncludeReturn = false;
+                x.ApplyReturnProfile = false;
                 x.ReturnShipment = true;
                 returnItemRepository.LoadReturnData(x, true);
             });

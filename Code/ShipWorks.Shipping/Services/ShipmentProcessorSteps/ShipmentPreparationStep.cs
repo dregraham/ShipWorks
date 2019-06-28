@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using Interapptive.Shared;
-using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Stores;

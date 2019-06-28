@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
@@ -53,15 +54,32 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         }
 
         /// <summary>
-        /// Save the label generated in the previous phase
+        /// Save both labels generated in the previous phase
         /// </summary>
-        public ILabelPersistenceResult SaveLabel(ILabelRetrievalResult result)
+        public IEnumerable<ILabelPersistenceResult> SaveLabels(IEnumerable<ILabelRetrievalResult> labelRetrievalResults)
         {
-            if (!result.Success)
+            List<ILabelPersistenceResult> labelPersistenceResults = new List<ILabelPersistenceResult>();
+
+            foreach (ILabelRetrievalResult result in labelRetrievalResults)
             {
-                return new LabelPersistenceResult(result);
+                if (result.Success)
+                {
+                    labelPersistenceResults.Add(SaveSingleLabel(result));
+                }
+                else
+                {
+                    labelPersistenceResults.Add(new LabelPersistenceResult(result));
+                }
             }
 
+            return labelPersistenceResults;
+        }
+
+        /// <summary>
+        /// Save an individual label
+        /// </summary>
+        private LabelPersistenceResult SaveSingleLabel(ILabelRetrievalResult result)
+        {
             ShipmentEntity shipment = result.OriginalShipment;
             ShipmentEntity shipmentForTango = result.OriginalShipment;
 
@@ -73,7 +91,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
-                        log.Info("LabelPersistenceStep.SaveLabel: LabelData.Save");
+                        log.Info("LabelPersistenceStep.SaveSingleLabel: LabelData.Save");
                         result.LabelData.Save();
 
                         log.InfoFormat("Shipment {0} - ShipmentType.Process Complete", shipment.ShipmentID);
@@ -86,7 +104,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         DispatchShipmentProcessedActions(shipment, adapter);
 
-                        log.Info("LabelPersistenceStep.SaveLabel: adapter.Commit()");
+                        log.Info("LabelPersistenceStep.SaveSingleLabel: adapter.Commit()");
                         adapter.Commit();
                     }
 
@@ -101,7 +119,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Exception during LabelPersistenceStep.SaveLabel", ex);
+                    log.Error($"Exception during LabelPersistenceStep.SaveSingleLabel", ex);
                     return new LabelPersistenceResult(result, ex);
                 }
             }

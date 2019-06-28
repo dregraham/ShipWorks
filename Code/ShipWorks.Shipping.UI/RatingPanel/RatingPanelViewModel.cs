@@ -102,6 +102,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             {
                 SetRateResults(message.RateGroup.Rates, string.Empty,
                     message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
+
+                if (message.ShipmentAdapter != null && message.ShipmentAdapter.Shipment != null &&
+                    (message.ShipmentAdapter.Shipment.ReturnShipment || message.ShipmentAdapter.Shipment.IncludeReturn))
+                {
+                    var returnFootnoteFactory = new InformationFootnoteFactory("Rates reflect the service charge only and do not include additional fees for returns.");
+                    Footnotes = Footnotes.Concat(new[] { returnFootnoteFactory.CreateViewModel(message.ShipmentAdapter) });
+                    ShowFootnotes = true;
+                }
             }
             else
             {

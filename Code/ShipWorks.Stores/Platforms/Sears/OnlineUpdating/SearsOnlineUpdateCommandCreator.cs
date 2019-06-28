@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Sears.OnlineUpdating
         {
             try
             {
-                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+                ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
                 if (shipment == null)
                 {
                     log.WarnFormat("Not uploading shipment details for order {0} as it went away.", orderID);

@@ -376,6 +376,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ProcessedWithUiMode", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("CombineSplitStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
 		}
 		#endregion
 
@@ -558,9 +560,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."TotalWeight"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal TotalWeight
+		public virtual System.Double TotalWeight
 		{
-			get { return (System.Decimal)GetValue((int)ProcessedShipmentFieldIndex.TotalWeight, true); }
+			get { return (System.Double)GetValue((int)ProcessedShipmentFieldIndex.TotalWeight, true); }
 
 		}
 
@@ -712,6 +714,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.CombineSplitStatus, true); }
 			set	{ SetValue((int)ProcessedShipmentFieldIndex.CombineSplitStatus, value); }
+		}
+
+		/// <summary> The ReturnShipment property of the Entity ProcessedShipment<br/><br/></summary>
+		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ReturnShipment"<br/>
+		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ReturnShipment
+		{
+			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.ReturnShipment, true); }
+			set	{ SetValue((int)ProcessedShipmentFieldIndex.ReturnShipment, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

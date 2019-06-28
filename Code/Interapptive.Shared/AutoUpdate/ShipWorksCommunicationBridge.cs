@@ -34,23 +34,33 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public void StartPipeServer()
         {
-            PipeSecurity pipeSecurity = new PipeSecurity();
-            SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-            pipeSecurity.AddAccessRule(new PipeAccessRule(sid, PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
+            try
+            {
+                PipeSecurity pipeSecurity = new PipeSecurity();
+                SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                pipeSecurity.AddAccessRule(new PipeAccessRule(sid, PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
 
-            NamedPipeServerStream pipeServer = new NamedPipeServerStream(
-                instance,
-                PipeDirection.In,
-                10,
-                PipeTransmissionMode.Byte,
-                PipeOptions.Asynchronous,
-                255,
-                0,
-                pipeSecurity);
+                NamedPipeServerStream pipeServer = new NamedPipeServerStream(
+                    instance,
+                    PipeDirection.In,
+                    100,
+                    PipeTransmissionMode.Byte,
+                    PipeOptions.Asynchronous,
+                    255,
+                    0,
+                    pipeSecurity);
 
-            log.DebugFormat("Starting named pipe server {0}", instance);
+                log.DebugFormat("Starting named pipe server {0}", instance);
 
-            pipeServer.BeginWaitForConnection(WaitForConnectionCallBack, pipeServer);
+                pipeServer.BeginWaitForConnection(WaitForConnectionCallBack, pipeServer);
+            }
+            catch (Exception ex)
+            {
+                // this should never fail, if it does we dont want it to crash shipworks
+                // if the named pipe server isnt running auto update will kill the shipworks.exe
+                // when auto update kicks off
+                log.Error(ex);
+            }
         }
 
         /// <summary>

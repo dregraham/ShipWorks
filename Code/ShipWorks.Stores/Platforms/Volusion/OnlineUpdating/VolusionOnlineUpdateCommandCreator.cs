@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.OnlineUpdating
             // get the store from the order
             VolusionStoreEntity store = (VolusionStoreEntity) StoreManager.GetRelatedStore(orderID);
 
-            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID);
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);

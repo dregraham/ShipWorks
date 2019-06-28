@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ShipWorks.Properties;
 
 namespace ShipWorks.ApplicationCore.Dashboard.Content
@@ -47,8 +48,25 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         /// <summary>
         /// Update the version displayed in the bar
         /// </summary>
-        private void UpdateVersionDisplay() =>
-            DashboardBar.PrimaryText = $"ShipWorks will be updated on {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}";
+        private void UpdateVersionDisplay()
+        {
+            var now = DateTime.Now;
+            var timeUntilUpdateWindow = updateWindow.Subtract(now);
+
+            // Make sure we never say "1 days"
+            if (Math.Round(timeUntilUpdateWindow.TotalDays) <= 1)
+            {
+                DashboardBar.PrimaryText = $"ShipWorks is scheduled to update on {updateWindow.ToString("MMMM d")} at {updateWindow.ToString("h:00 tt")}. ";
+            }
+            else
+            {
+                DashboardBar.PrimaryText = $"ShipWorks is scheduled to update in {Math.Round(timeUntilUpdateWindow.TotalDays)} days. ";
+            }
+
+            DashboardBar.ApplyActions(new List<DashboardAction> {
+                new DashboardActionUrl("[link]Click here[/link] to learn more.",
+                "https://support.shipworks.com/hc/en-us/articles/360025461732-All-About-ShipWorks-AutoUpdate") });
+        }
 
         /// <summary>
         /// The dashboard item is being dismissed
