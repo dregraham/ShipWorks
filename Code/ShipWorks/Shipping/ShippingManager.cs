@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -42,6 +43,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Shipping
 {
@@ -826,11 +828,21 @@ namespace ShipWorks.Shipping
                         }
                     }
 
-                    // Void the shipment in tango
+                    // Void the shipment in tango and the hub
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
                         tangoWebClient.VoidShipment(store, shipment);
+
+                        Guid? hubOrderID = shipment.Order.HubOrderID;
+
+                        if (hubOrderID.HasValue)
+                        {
+                            IWarehouseOrderClient warehouseOrderClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
+                            Task.Run(async () => await warehouseOrderClient
+                                         .UploadVoid(shipmentID, hubOrderID.Value, shipment.OnlineShipmentID)
+                                         .ConfigureAwait(true));
+                        }
                     }
 
                     // Re-throw the insurance exception if there was one
