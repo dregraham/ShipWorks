@@ -34,10 +34,16 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public VoidShipment CreateVoidShipment(long shipmentID, string tangoShipmentID)
         {
+            long? parsedTangoShipmentID = null;
+            if (long.TryParse(tangoShipmentID, out long parsedID))
+            { 
+                parsedTangoShipmentID = parsedID;
+            }
+
             return new VoidShipment()
             {
                 ShipworksShipmentId = shipmentID,
-                TangoShipmentId = tangoShipmentID
+                TangoShipmentId = parsedTangoShipmentID
             };
         }
 
