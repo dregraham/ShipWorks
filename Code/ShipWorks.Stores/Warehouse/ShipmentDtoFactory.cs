@@ -30,6 +30,18 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// Get a void shipment object
+        /// </summary>
+        public VoidShipment CreateVoidShipment(long shipmentID, string tangoShipmentID)
+        {
+            return new VoidShipment()
+            {
+                ShipworksShipmentId = shipmentID,
+                TangoShipmentId = tangoShipmentID
+            };
+        }
+
+        /// <summary>
         /// Create a shipment to send to SW hub
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
@@ -117,11 +129,6 @@ namespace ShipWorks.Stores.Warehouse
             return shipmentType == ShipmentTypeCode.Other ?
                 shipment.Other.Carrier :
                 EnumHelper.GetDescription(shipmentType);
-        }
-
-        internal Shipment CreateHubVoid(long shipmentID, string tangoShipmentID)
-        {
-            throw new NotImplementedException();
         }
     }
 }

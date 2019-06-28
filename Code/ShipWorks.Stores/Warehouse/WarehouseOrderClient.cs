@@ -134,11 +134,11 @@ namespace ShipWorks.Stores.Warehouse
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.VoidShipment(hubOrderID.ToString("N")), Method.PUT);
 
-                    Shipment shipment = shipmentDtoFactory.CreateHubVoid(shipmentID, tangoShipmentID);
-                    request.AddJsonBody(JsonConvert.SerializeObject(shipment));
+                    VoidShipment voidShipment = shipmentDtoFactory.CreateVoidShipment(shipmentID, tangoShipmentID);
+                    request.AddJsonBody(JsonConvert.SerializeObject(voidShipment));
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
-                        .MakeRequest(request, "Ship Order")
+                        .MakeRequest(request, "Void Order")
                         .ConfigureAwait(true);
 
                     if (response.Failure)
