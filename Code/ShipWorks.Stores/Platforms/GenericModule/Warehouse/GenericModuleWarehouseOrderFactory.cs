@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GenericModule)]
     public class GenericModuleWarehouseOrderFactory : WarehouseOrderFactory
     {
-        private const string amazonEntryKey = "genericModule";
+        private const string genericModuleEntryKey = "genericModule";
         private readonly ILog log;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
             var genericStore = MethodConditions.EnsureArgumentIsNotNull(store as IGenericModuleStoreEntity, nameof(store));
             var genericStoreType = MethodConditions.EnsureArgumentIsNotNull(storeType as GenericModuleStoreType, nameof(storeType));
 
-            string amazonOrderID = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<GenericModuleWarehouseOrder>().AmazonOrderID;
+            string genericModuleOrderID = warehouseOrder.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleWarehouseOrder>().AmazonOrderID;
 
             // get the order instance
             var identifier = GenericModuleDownloader.CreateOrderIdentifier(
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
 
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
+                log.InfoFormat("Skipping order '{0}': {1}.", genericModuleOrderID, result.Message);
             }
 
             return result;
@@ -63,13 +63,13 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         /// </summary>
         protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            var amazonOrderEntity = (GenericModuleOrderEntity) orderEntity;
-            var amazonWarehouseOrder = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<GenericModuleWarehouseOrder>();
+            var genericModuleOrderEntity = (GenericModuleOrderEntity) orderEntity;
+            var genericModuleWarehouseOrder = warehouseOrder.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleWarehouseOrder>();
 
-            amazonOrderEntity.AmazonOrderID = amazonWarehouseOrder.AmazonOrderID;
-            amazonOrderEntity.IsFBA = amazonWarehouseOrder.IsFBA;
-            amazonOrderEntity.IsPrime = (AmazonIsPrime) amazonWarehouseOrder.IsPrime;
-            amazonOrderEntity.IsSameDay = amazonWarehouseOrder.IsSameDay;
+            genericModuleOrderEntity.AmazonOrderID = genericModuleWarehouseOrder.AmazonOrderID;
+            genericModuleOrderEntity.IsFBA = genericModuleWarehouseOrder.IsFBA;
+            genericModuleOrderEntity.IsPrime = (AmazonIsPrime) genericModuleWarehouseOrder.IsPrime;
+            genericModuleOrderEntity.IsSameDay = genericModuleWarehouseOrder.IsSameDay;
         }
 
         /// <summary>
@@ -77,10 +77,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         /// </summary>
         protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
-            var amazonItemEntity = (GenericModuleOrderItemEntity) itemEntity;
-            var amazonWarehouseItem = warehouseItem.AdditionalData[amazonEntryKey].ToObject<GenericModuleOrderItemEntity>();
+            var genericModuleItemEntity = (GenericModuleOrderItemEntity) itemEntity;
+            var genericModuleWarehouseItem = warehouseItem.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleOrderItemEntity>();
 
-            amazonItemEntity.AmazonOrderItemCode = amazonWarehouseItem.AmazonOrderItemCode;
+            genericModuleItemEntity.AmazonOrderItemCode = genericModuleWarehouseItem.AmazonOrderItemCode;
         }
     }
 }
