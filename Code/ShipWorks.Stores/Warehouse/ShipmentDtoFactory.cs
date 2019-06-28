@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
@@ -74,11 +75,23 @@ namespace ShipWorks.Stores.Warehouse
                 OriginPostalCode = shipmentEntity.OriginPostalCode,
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
                 ShippingAccount = shipmentAdapter.AccountId.ToString(),
-                LabelFormat = EnumHelper.GetDescription((LabelFormatType) (shipmentEntity.ActualLabelFormat ?? 0)),
+                LabelFormat = GetLabelFormat(shipmentEntity),
                 Packages = CreatePackages(shipmentAdapter.GetPackageAdapters())
             };
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Gets the label format
+        /// </summary>
+        private static string GetLabelFormat(ShipmentEntity shipmentEntity)
+        {
+            if (shipmentEntity.ActualLabelFormat == null)
+            {
+                return "Unknown";
+            }
+            return EnumHelper.GetDescription((ThermalLanguage) (shipmentEntity.ActualLabelFormat));
         }
 
         /// <summary>
@@ -93,7 +106,6 @@ namespace ShipWorks.Stores.Warehouse
                     HeightInInches = packageAdapter.DimsHeight,
                     PackagingType = packageAdapter.PackagingTypeName
                 });
-
 
         /// <summary>
         /// Get carrier name for the shipment
