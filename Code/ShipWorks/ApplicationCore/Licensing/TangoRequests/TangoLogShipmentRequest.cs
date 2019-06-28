@@ -57,7 +57,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// Log the given processed shipment to Tango.  isRetry is only for internal interapptive purposes to handle rare cases where shipments a customer
         /// insured did not make it up into tango, but the shipment did actually process.
         /// </summary>
-        public Result LogShipment(DbConnection connection, StoreEntity store, ShipmentEntity shipment)
+        public GenericResult<string> LogShipment(DbConnection connection, StoreEntity store, ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 

@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public int Index
         {
-            get { return packageAdapter.Index; }
+            get => packageAdapter.Index;
             set
             {
                 if (packageAdapter.Index != value)
@@ -43,10 +43,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// Id of the package to which this adapter applies
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public long PackageId
-        {
-            get { return packageAdapter.PackageId; }
-        }
+        public long PackageId => packageAdapter.PackageId;
 
         /// <summary>
         /// Gets or sets the weight.
@@ -54,8 +51,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public double Weight
         {
-            get { return packageAdapter.Weight; }
-            set { packageAdapter.Weight = value; }
+            get => packageAdapter.Weight;
+            set => packageAdapter.Weight = value;
         }
 
         /// <summary>
@@ -64,8 +61,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public double AdditionalWeight
         {
-            get { return packageAdapter.AdditionalWeight; }
-            set { packageAdapter.AdditionalWeight = value; }
+            get => packageAdapter.AdditionalWeight;
+            set => packageAdapter.AdditionalWeight = value;
         }
 
         /// <summary>
@@ -74,8 +71,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public bool ApplyAdditionalWeight
         {
-            get { return packageAdapter.ApplyAdditionalWeight; }
-            set { packageAdapter.ApplyAdditionalWeight = value; }
+            get => packageAdapter.ApplyAdditionalWeight;
+            set => packageAdapter.ApplyAdditionalWeight = value;
         }
 
         /// <summary>
@@ -84,8 +81,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public double DimsLength
         {
-            get { return packageAdapter.DimsLength; }
-            set { packageAdapter.DimsLength = value; }
+            get => packageAdapter.DimsLength;
+            set => packageAdapter.DimsLength = value;
         }
 
         /// <summary>
@@ -94,8 +91,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public double DimsWidth
         {
-            get { return packageAdapter.DimsWidth; }
-            set { packageAdapter.DimsWidth = value; }
+            get => packageAdapter.DimsWidth;
+            set => packageAdapter.DimsWidth = value;
         }
 
         /// <summary>
@@ -104,8 +101,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public double DimsHeight
         {
-            get { return packageAdapter.DimsHeight; }
-            set { packageAdapter.DimsHeight = value; }
+            get => packageAdapter.DimsHeight;
+            set => packageAdapter.DimsHeight = value;
         }
 
         /// <summary>
@@ -114,8 +111,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public long DimsProfileID
         {
-            get { return packageAdapter.DimsProfileID; }
-            set { packageAdapter.DimsProfileID = value; }
+            get => packageAdapter.DimsProfileID;
+            set => packageAdapter.DimsProfileID = value;
         }
 
         /// <summary>
@@ -124,9 +121,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public int PackagingType
         {
-            get { return packageAdapter.PackagingType; }
-            set { packageAdapter.PackagingType = value; }
+            get => packageAdapter.PackagingType;
+            set => packageAdapter.PackagingType = value;
         }
+
+        /// <summary>
+        /// Gets the packaging type name
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName => packageAdapter.PackagingTypeName;
 
         /// <summary>
         /// Gets or sets the insurance choice.
@@ -134,18 +137,15 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         [Obfuscation(Exclude = true)]
         public IInsuranceChoice InsuranceChoice
         {
-            get { return packageAdapter.InsuranceChoice; }
-            set { packageAdapter.InsuranceChoice = value; }
+            get => packageAdapter.InsuranceChoice;
+            set => packageAdapter.InsuranceChoice = value;
         }
 
         /// <summary>
         /// Gets an error, if any
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Error
-        {
-            get { return packageAdapter.Error; }
-        }
+        public string Error => packageAdapter.Error;
 
         /// <summary>
         /// Package adapter that this object is wrapping
@@ -155,10 +155,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel.ShipmentControl
         /// <summary>
         /// Gets an error for the given column name
         /// </summary>
-        public string this[string columnName]
-        {
-            get { return this[columnName]; }
-        }
+        public string this[string columnName] => this[columnName];
 
         /// <summary>
         /// Gets the hash code based on this package adapter's properties.

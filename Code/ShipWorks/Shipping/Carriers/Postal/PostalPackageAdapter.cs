@@ -91,6 +91,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName => EnumHelper.GetDescription((PostalPackagingType) shipment.Postal.PackagingType);
+
+        /// <summary>
         /// Gets or sets the dims length.
         /// </summary>
         [Obfuscation(Exclude = true)]
