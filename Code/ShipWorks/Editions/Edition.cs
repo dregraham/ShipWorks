@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Autofac;
 using Interapptive.Shared;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -147,6 +150,12 @@ namespace ShipWorks.Editions
             if (!sharedOptions.StampsInsuranceEnabled)
             {
                 AddRestriction(EditionFeature.StampsInsurance, EditionRestrictionLevel.Hidden);
+            }
+
+            // Warehouse
+            if (!sharedOptions.WarehouseEnabled)
+            {
+                AddRestriction(EditionFeature.Warehouse, EditionRestrictionLevel.Hidden);
             }
 
             // Adds any Stamps consolidator restrictions, if required

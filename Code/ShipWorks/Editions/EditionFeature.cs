@@ -158,7 +158,7 @@ namespace ShipWorks.Editions
         ShippingAccountConversion,
 
         /// <summary>
-        /// Constrols if using Stamps insurance is enabled for Usps users
+        /// Controls if using Stamps insurance is enabled for Usps users
         /// </summary>
         [Description("Your ShipWorks account does not support using Stamps insurance.")]
         StampsInsurance,
@@ -233,6 +233,12 @@ namespace ShipWorks.Editions
         /// All the stores in Shipworks match a store in Tango.
         /// </summary>
         [Description("You must upgrade ShipWorks or delete these channel(s) to use Shipworks.")]
-        ClientChannelsAccountedFor
+        ClientChannelsAccountedFor,
+
+        /// <summary>
+        /// Controls if customer is allowed to use Warehouse Site
+        /// </summary>
+        [Description("Your ShipWorks account does not support using warehouse functionality.")]
+        Warehouse,
     }
 }

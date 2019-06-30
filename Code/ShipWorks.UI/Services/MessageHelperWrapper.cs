@@ -202,7 +202,7 @@ namespace ShipWorks.UI.Services
 
             IDisposable disposable = ShowProgressDialog(title, description, progressProvider, TimeSpan.Zero);
 
-            return new SingleItemProgressDialog(disposable, progressItem);
+            return new SingleItemProgressDialog(disposable, progressItem, progressProvider);
         }
 
         /// <summary>

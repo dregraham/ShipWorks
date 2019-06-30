@@ -8,11 +8,11 @@ namespace ShipWorks.ApplicationCore
     /// </summary>
     public static class InterapptiveOnly
     {
-        static RegistryHelper internalRegistry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Internal");
+        private static readonly RegistryHelper internalRegistry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Internal");
 
         /// <summary>
         /// Special section of the Registry for "Internal" Interapptive-Only scoped settings
-        /// </summary> 
+        /// </summary>
         public static RegistryHelper Registry
         {
             get { return internalRegistry; }

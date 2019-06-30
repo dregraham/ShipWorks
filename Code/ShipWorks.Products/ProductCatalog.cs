@@ -5,7 +5,6 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
@@ -62,12 +61,33 @@ namespace ShipWorks.Products
             {
                 foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    using (DbCommand comm = conn.CreateCommand())
+                    var transaction = conn.BeginTransaction();
+                    try
                     {
-                        comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
-                        comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
+                        using (DbCommand comm = conn.CreateCommand())
+                        {
+                            comm.Transaction = transaction;
+                            comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
+                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
 
-                        await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        }
+
+                        using (DbCommand comm = conn.CreateCommand())
+                        {
+                            comm.Transaction = transaction;
+                            comm.CommandText = $"UPDATE Product SET UploadToWarehouseNeeded = 1 WHERE ProductId IN (SELECT DISTINCT ProductId FROM ProductVariant WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs))";
+                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
+
+                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
                     }
 
                     if (progressReporter.IsCancelRequested)
@@ -286,13 +306,16 @@ namespace ShipWorks.Products
                 productVariant.CreatedDate = now;
             }
 
+            // Set the product to be uploaded to the warehouse
+            product.UploadToWarehouseNeeded = true;
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 try
                 {
                     if (product.IsBundle)
                     {
-                        foreach(var bundle in productVariant.IncludedInBundles)
+                        foreach (var bundle in productVariant.IncludedInBundles)
                         {
                             await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                         }
@@ -445,6 +468,60 @@ namespace ShipWorks.Products
             secondHeaderRow[9] = "inches";
             secondHeaderRow[10] = "inches";
             dt.Rows.InsertAt(secondHeaderRow, 0);
+        }
+
+        /// <summary>
+        /// Fetch product variants to upload to the warehouse.
+        /// </summary>
+        public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize)
+        {
+            QueryFactory factory = new QueryFactory();
+            InnerOuterJoin from = factory.ProductVariant
+                .InnerJoin(factory.Product)
+                .On(ProductFields.ProductID == ProductVariantFields.ProductID);
+
+            EntityQuery<ProductVariantEntity> query = factory.ProductVariant
+                .From(from)
+                .Where(ProductFields.UploadToWarehouseNeeded == true)
+                .Limit(pageSize);
+
+            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
+            {
+                query = query.WithPath(path);
+            }
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<ProductVariantEntity>();
+        }
+
+        /// <summary>
+        /// Fetch count of product variants to upload to the warehouse.
+        /// </summary>
+        public async Task<int> FetchProductVariantsForUploadToWarehouseCount(ISqlAdapter sqlAdapter)
+        {
+            QueryFactory factory = new QueryFactory();
+            InnerOuterJoin from = factory.ProductVariant
+                .InnerJoin(factory.Product)
+                .On(ProductFields.ProductID == ProductVariantFields.ProductID);
+
+            var query = factory.ProductVariant
+                .Select(Functions.CountRow())
+                .From(from)
+                .Where(ProductFields.UploadToWarehouseNeeded == true);
+
+            return await sqlAdapter.FetchScalarAsync<int>(query).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Reset the NeedsUploadToWarehouse flag for the given variants
+        /// </summary>
+        public async Task<int> ResetNeedsWarehouseUploadFlag(ISqlAdapter sqlAdapter, IEnumerable<IProductVariantEntity> variants)
+        {
+            var productIds = variants.Select(x => x.ProductID).Distinct();
+            var updateTemplate = new ProductEntity { UploadToWarehouseNeeded = false };
+            var predicateBucket = new RelationPredicateBucket(ProductFields.ProductID.In(productIds));
+
+            return await sqlAdapter.UpdateEntitiesDirectlyAsync(updateTemplate, predicateBucket);
         }
 
         /// <summary>

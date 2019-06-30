@@ -17,7 +17,10 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(WebClientEnvironmentFactory));
         private readonly IEncryptionProvider encryptionProvider;
+        private readonly ITangoSecurityValidator fakeTangoSecurityValidator;
+        private readonly ITangoSecurityValidator realTangoSecurityValidator;
         private List<WebClientEnvironment> environments;
+
         private const string EnvironmentSelectedName = "EnvironmentSelectedName";
         private const string EnvironmentOtherTangoUrl = "EnvironmentOtherTangoUrl";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
@@ -26,9 +29,12 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// <summary>
         /// Constructor
         /// </summary>
-        public WebClientEnvironmentFactory(IEncryptionProviderFactory encryptionProviderFactory)
+        public WebClientEnvironmentFactory(IEncryptionProviderFactory encryptionProviderFactory, 
+            ITangoSecurityValidator realTangoSecurityValidator)
         {
             encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("interapptive");
+            fakeTangoSecurityValidator = new FakeTangoSecurityValidator();
+            this.realTangoSecurityValidator = realTangoSecurityValidator;
 
             try
             {
@@ -118,13 +124,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Production",
-                TangoUrl =      "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                TangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "https://www.interapptive.com/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "https://warehouse.interapptive.com/",
+                WarehouseUrl = "https://hub.shipworks.com/",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -136,13 +143,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "QASC",
-                TangoUrl =      "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                TangoUrl = "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "https://qasc.interapptive.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "",
+                WarehouseUrl = "",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -154,13 +162,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Staging",
-                TangoUrl =      "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                TangoUrl = "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "https://staging.interapptive.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "",
+                WarehouseUrl = "",
                 HeaderShipWorksUsername = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA=="),
                 HeaderShipWorksPassword = encryptionProvider.Decrypt("lavEgsQoKGM="),
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = true
+                ForcePreCallCertificationValidation = true,
+                TangoSecurityValidator = realTangoSecurityValidator
             };
         }
 
@@ -172,13 +181,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Warehouse - QA",
-                TangoUrl =      "http://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
-                ActivationUrl = "http://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "http://qa.www.warehouseapp.link/",
+                TangoUrl = "https://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                ActivationUrl = "https://qa.fakeshipworksnet.warehouseapp.link/ShipWorksNet/ActivationV1.svc",
+                WarehouseUrl = "https://qa.api.warehouseapp.link/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -190,13 +200,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Warehouse - Staging",
-                TangoUrl =      "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                TangoUrl = "https://www.interapptive.com/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "https://www.interapptive.com/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "http://staging.www.warehouseapp.link/",
+                WarehouseUrl = "http://staging.api.warehouseapp.link/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -208,13 +219,14 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             return new WebClientEnvironment()
             {
                 Name = "Localhost",
-                TangoUrl =      "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
+                TangoUrl = "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "http://localhost:4002/ShipWorksNet/ActivationV1.svc",
-                WarehouseUrl =  "http://localhost:4001/",
+                WarehouseUrl = "http://localhost:4001/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
 
@@ -223,16 +235,25 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         /// </summary>
         private WebClientEnvironment CreateOtherEnvironment(string tangoUrl, string warehouseUrl, string activationUrl)
         {
+            string username = "none";
+            string password = "none";
+            if (tangoUrl.IndexOf("www.interapptive.com", StringComparison.InvariantCultureIgnoreCase) > 0)
+            {
+                username = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA==");
+                password = encryptionProvider.Decrypt("lavEgsQoKGM=");
+            }
+
             return new WebClientEnvironment()
             {
                 Name = "Other",
                 TangoUrl = tangoUrl,
                 WarehouseUrl = warehouseUrl,
                 ActivationUrl = activationUrl,
-                HeaderShipWorksUsername = "none",
-                HeaderShipWorksPassword = "none",
+                HeaderShipWorksUsername = username,
+                HeaderShipWorksPassword = password,
                 SoapAction = "http://stamps.com/xml/namespace/2015/06/shipworks/shipworksv1/IShipWorks/ShipworksPost",
-                ForcePreCallCertificationValidation = false
+                ForcePreCallCertificationValidation = false,
+                TangoSecurityValidator = fakeTangoSecurityValidator
             };
         }
     }

@@ -1,15 +1,24 @@
 ﻿using System;
 using System.Xml.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
     /// <summary>
     /// Class for handling Amazon MWS API Related Settings
     /// </summary>
+    [Component]
     public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
-        public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials)
+        private readonly IInterapptiveOnly interapptiveOnly;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials, IInterapptiveOnly interapptiveOnly)
         {
+            this.interapptiveOnly = interapptiveOnly;
             Credentials = mwsCredentials;
         }
 
@@ -19,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public IAmazonCredentials Credentials { get; set; }
 
         // Default base namespace for Amazon requests and responses
-        private static string endpointNamespace = "https://mws.amazonservices.com";
+        private static readonly string endpointNamespace = "https://mws.amazonservices.com";
 
         /// <summary>
         /// HTTP endpoint of the Amazon service
@@ -28,6 +37,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get
             {
+                if (interapptiveOnly.IsInterapptiveUser)
+                {
+                    var useLiveEndpoint = interapptiveOnly.Registry.GetValue("AmazonMwsLive", true);
+                    var endpointOverride = interapptiveOnly.Registry.GetValue("AmazonMwsEndpoint", string.Empty);
+
+                    if (!useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
+                    {
+                        return endpointOverride;
+                    }
+                }
+
                 switch (Credentials.Region)
                 {
                     case "US":

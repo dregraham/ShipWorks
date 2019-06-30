@@ -27,13 +27,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public TangoWebRequestClient(
             ILogEntryFactory logEntryFactory,
-            ITangoSecurityValidator securityValidator,
             WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
-            this.securityValidator = securityValidator;
             this.logEntryFactory = logEntryFactory;
-
             webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            securityValidator = webClientEnvironment.TangoSecurityValidator;
         }
 
         /// <summary>
@@ -105,6 +103,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private GenericResult<string> PerformRequest(IHttpVariableRequestSubmitter postRequest, ApiLogEntry logEntry, TelemetricResult<Unit> telemetricResult) =>
             securityValidator
                 .ValidateSecureConnection(telemetricResult, postRequest.Uri)
+                .Do(() => logEntry.LogRequest(postRequest))
                 .Map(() => telemetricResult.RunTimedEvent("ActualRequest", postRequest.GetResponse))
                 .Bind(result => ParseValidatedResponse(telemetricResult, result))
                 .Do(response => telemetricResult.RunTimedEvent("LogResponse", () => logEntry.LogResponse(response)));

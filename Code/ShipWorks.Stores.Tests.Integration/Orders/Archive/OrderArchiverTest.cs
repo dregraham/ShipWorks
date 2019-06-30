@@ -203,7 +203,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                         StoreID = store.StoreID,
                         Computer = computer,
                         ComputerID = computer.ComputerID,
-                        UserID = 1002
+                        UserID = 1002,
+                        BatchID = Guid.NewGuid()
                     };
                     download.InitializeNullsToDefault();
                     sqlAdapter.SaveAndRefetch(download);

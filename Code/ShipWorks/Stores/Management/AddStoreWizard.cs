@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Business;
@@ -9,6 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using log4net;
 using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -33,6 +35,7 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -976,8 +979,11 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping into the complete page
         /// </summary>
-        private void OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
+        private async Task OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
+            NextEnabled = false;
+            Cursor = Cursors.WaitCursor;
+
             wizardPageFinished.LoadDownloadControl();
 
             try
@@ -991,6 +997,12 @@ namespace ShipWorks.Stores.Management
                 }
 
                 if (!ValidateLicense(e))
+                {
+                    return;
+                }
+
+                if (WarehouseStoreTypes.IsSupported(store.StoreTypeCode) &&
+                    (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
                 }
@@ -1023,6 +1035,32 @@ namespace ShipWorks.Stores.Management
             finally
             {
                 FilterLayoutContext.PopScope();
+                Cursor = DefaultCursor;
+                NextEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Upload the store to the ShipWorks Warehouse app
+        /// </summary>
+        private async Task<Result> UploadStoreToWarehouse(WizardSteppingIntoEventArgs e)
+        {
+            using (var innerScope = scope.BeginLifetimeScope())
+            {
+                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store)
+                    .ConfigureAwait(true);
+                if (result.Failure)
+                {
+                    innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
+                    
+                    MessageHelper.ShowError(
+                        this,
+                        $"An error occurred saving the store to ShipWorks.");
+                    e.Skip = true;
+                    e.SkipToPage = wizardPageSettings;
+                    BackEnabled = true;
+                }
+                return result;
             }
         }
 
@@ -1127,30 +1165,39 @@ namespace ShipWorks.Stores.Management
             BackEnabled = false;
 
             ILicense license = licenseService.GetLicense(store);
-            EnumResult<LicenseActivationState> activateResult = license.Activate(store);
+            EnumResult<LicenseActivationState> activateResult;
+            try
+            {
+                activateResult = license.Activate(store);
+            }
+            catch (TangoException)
+            {
+                activateResult = null;
+            }
 
-            if (activateResult.Value != LicenseActivationState.Active)
+            if (activateResult?.Value != LicenseActivationState.Active)
             {
                 e.Skip = true;
 
                 if (license.IsLegacy)
                 {
-                    MessageHelper.ShowError(this, activateResult.Message);
+                    MessageHelper.ShowError(this, activateResult?.Message ?? "Error activating license.");
                     e.SkipToPage = wizardPageAlreadyActive;
                 }
                 else
                 {
-                    if (activateResult.Value == LicenseActivationState.MaxChannelsExceeded)
+                    if (activateResult?.Value == LicenseActivationState.MaxChannelsExceeded)
                     {
                         IChannelLimitFactory factory = channelLimitFactory();
                         Control channelLimitControl =
-                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode, EditionFeature.ChannelCount, this);
+                            (Control) factory.CreateControl((ICustomerLicense) license, (StoreTypeCode) Store.TypeCode,
+                                EditionFeature.ChannelCount, this);
 
                         wizardPageActivationError.SetElementHost(channelLimitControl);
                     }
 
                     showActivationError = true;
-                    wizardPageActivationError.ErrorMessage = activateResult.Message;
+                    wizardPageActivationError.ErrorMessage = activateResult?.Message ?? "Error activating license.";
                     e.SkipToPage = wizardPageActivationError;
                 }
             }

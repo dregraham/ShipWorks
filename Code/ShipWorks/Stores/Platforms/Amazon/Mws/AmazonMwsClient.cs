@@ -35,32 +35,35 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     [Component]
     public sealed class AmazonMwsClient : IAmazonMwsClient
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
 
         public const int MaxItemsPerProductDetailsRequest = 5;
 
         // MWS settings class
-        AmazonMwsWebClientSettings mwsSettings;
+        private IAmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
-        AmazonStoreEntity store;
+        private AmazonStoreEntity store;
 
         // Throttling request submitter
-        AmazonMwsRequestThrottle throttler;
+        private AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
         private readonly AmazonStoreType storeType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsClient(AmazonStoreEntity store, IShippingManager shippingManager, Func<StoreEntity, AmazonStoreType> getStoreType)
+        public AmazonMwsClient(AmazonStoreEntity store,
+            IShippingManager shippingManager,
+            Func<StoreEntity, AmazonStoreType> getStoreType,
+            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings)
         {
             storeType = getStoreType(store);
             this.shippingManager = shippingManager;
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
-            this.mwsSettings = new AmazonMwsWebClientSettings(store as IAmazonCredentials);
+            this.mwsSettings = getWebClientSettings(store);
             this.throttler = new AmazonMwsRequestThrottle();
         }
 
@@ -656,6 +659,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 AmazonMwsResponseHandler.RaiseErrors(amazonMwsApiCall, response, mwsSettings);
 
                 return response;
+            }
+            catch (XmlException xmlException)
+            {
+                throw new AmazonException("Invalid data received from Amazon", xmlException);
             }
             catch (Exception ex)
             {

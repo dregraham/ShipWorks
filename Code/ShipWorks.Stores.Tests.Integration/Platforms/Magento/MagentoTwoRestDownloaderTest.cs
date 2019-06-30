@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Magento
                 using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
 
-                    await testObject.Download(progress, downloadEntity.DownloadID, con).ConfigureAwait(false);
+                    await testObject.Download(progress, downloadEntity, con).ConfigureAwait(false);
                 }
             }
 

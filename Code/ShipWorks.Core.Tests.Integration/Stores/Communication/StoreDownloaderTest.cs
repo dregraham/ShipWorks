@@ -30,7 +30,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
             this.db = db;
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
         }
-       
+
         [Theory]
         [InlineData(AddressValidationStoreSettingType.ValidateAndNotify, AddressValidationStoreSettingType.ManualValidationOnly, "US", AddressValidationStatusType.Pending)]
         [InlineData(AddressValidationStoreSettingType.ManualValidationOnly, AddressValidationStoreSettingType.ManualValidationOnly, "US", AddressValidationStatusType.NotChecked)]
@@ -44,14 +44,14 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
         {
             Modify.Store(context.Store)
                 .Set(s => s.DomesticAddressValidationSetting = domesticStoreSetting)
-                .Set(s=> s.InternationalAddressValidationSetting = internationalStoreSetting)
+                .Set(s => s.InternationalAddressValidationSetting = internationalStoreSetting)
                 .Save();
 
             var statusCreator = Create.Entity<StatusPresetEntity>()
                 .Set(x => x.StoreID, context.Store.StoreID)
                 .Set(x => x.StatusText, "status")
                 .Set(x => x.IsDefault, true);
-            
+
             statusCreator.Set(x => x.StatusTarget, 0).Save();
             statusCreator.Set(x => x.StatusTarget, 1).Save();
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
 
             using (DbConnection conn = SqlSession.Current.OpenConnection())
             {
-                await testObject.Download(context.Mock.Mock<IProgressReporter>().Object, downloadEntity.DownloadID, conn);
+                await testObject.Download(context.Mock.Mock<IProgressReporter>().Object, downloadEntity, conn);
             }
 
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
@@ -82,7 +82,7 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Communication
                 var query = new QueryFactory().Order
                     .Select(OrderFields.ShipAddressValidationStatus)
                     .Where(OrderFields.OrderNumber == 42);
-                    
+
                 var addressValidationStatus = await sqlAdapter.FetchScalarAsync<int>(query);
                 Assert.Equal(expectedOrderStatus, (AddressValidationStatusType) addressValidationStatus);
             }

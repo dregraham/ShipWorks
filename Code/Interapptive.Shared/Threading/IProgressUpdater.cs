@@ -6,8 +6,13 @@
     public interface IProgressUpdater
     {
         /// <summary>
-        /// Update the progress
+        /// Update the progress by a single item
         /// </summary>
         void Update();
+
+        /// <summary>
+        /// Update the progress by the specified amount
+        /// </summary>
+        void Update(int finishedCount);
     }
 }

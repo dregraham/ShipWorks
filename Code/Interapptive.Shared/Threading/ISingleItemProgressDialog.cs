@@ -14,6 +14,11 @@ namespace Interapptive.Shared.Threading
         IProgressReporter ProgressItem { get; }
 
         /// <summary>
+        /// Progress provider associated with the dialog
+        /// </summary>
+        IProgressProvider Provider { get; }
+
+        /// <summary>
         /// Get a progress updater from this progress reporter
         /// </summary>
         IProgressUpdater ToUpdater(int totalItems);

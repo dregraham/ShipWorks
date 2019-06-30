@@ -267,7 +267,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
             this.wizardPageFinished.Title = "Setup Complete";
-            this.wizardPageFinished.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoComplete);
+            this.wizardPageFinished.SteppingIntoAsync += OnSteppingIntoComplete;
             // 
             // wizardPageAlreadyActive
             // 

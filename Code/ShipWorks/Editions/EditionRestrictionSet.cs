@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -102,9 +103,30 @@ namespace ShipWorks.Editions
                 case EditionFeature.StampsRrDonnelleyConsolidator:
                 case EditionFeature.StampsInsurance:
                     return CheckNonExistanceRestriction(feature);
+                case EditionFeature.Warehouse:
+                    return CheckWarehouseRestriction();
+
             }
 
             throw new InvalidOperationException("Unhandled EditionFeature: " + feature);
+        }
+
+        /// <summary>
+        /// Check to see if warehouse mode is restricted
+        /// </summary>
+        private EditionRestrictionIssue CheckWarehouseRestriction()
+        {
+            // the warehouse feature is restricted by default and enabled
+            // only if the flag comes down from tango, when the restrictions are null
+            // nothing has come down from tango so we restrict the warehouse feature
+            if (restrictions.None())
+            {
+                return new EditionRestrictionIssue(
+                    new EditionRestriction(null, EditionFeature.None, EditionRestrictionLevel.Forbidden),
+                    null);
+            }
+
+            return CheckExistanceRestriction(EditionFeature.Warehouse);
         }
 
         /// <summary>

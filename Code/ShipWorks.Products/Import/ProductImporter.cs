@@ -180,6 +180,9 @@ namespace ShipWorks.Products.Import
 
             await updateProductAction(productVariant, row, sqlAdapter).ConfigureAwait(false);
 
+            // Set the product to be uploaded to the warehouse
+            productVariant.Product.UploadToWarehouseNeeded = true;
+
             await sqlAdapter.SaveEntityAsync(productVariant.Product, true, true).ConfigureAwait(false);
             sqlAdapter.Commit();
             return isNew;

@@ -23,6 +23,7 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Management
 {
@@ -382,7 +383,7 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Save the values from the store settings tab to the entity
         /// </summary>
-        private bool SaveSettingsTab()
+        private async Task<bool> SaveSettingsTab()
         {
             downloadSettingsControl.Save();
             manualOrderSettingsControl.SaveToEntity(store);
@@ -391,7 +392,23 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                result = storeSettingsControl.SaveToEntity(store);
+                if (store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        Result warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
+                        if (warehouseResult.Failure)
+                        {
+                            MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
+                            result = false;
+                        }
+                    }
+                }
+
+                if (result)
+                {
+                    result = storeSettingsControl.SaveToEntity(store);
+                }
             }
 
             // Check whether we should reset any pending address validations
@@ -568,7 +585,7 @@ namespace ShipWorks.Stores.Management
                     }
 
                     // Save the settings tab to the store entity
-                    if (!SaveSettingsTab())
+                    if (!await SaveSettingsTab().ConfigureAwait(true))
                     {
                         optionControl.SelectedPage = optionPageSettings;
                         return;

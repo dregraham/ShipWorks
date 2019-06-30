@@ -178,6 +178,10 @@
       <type name="Interapptive.Shared.IO.Text.Csv.Resources.ExceptionMessage" />
       <type name="Interapptive.Shared.Properties.Flags" />
       <type name="ShipWorks.UI.Controls.ShipWorksComboBox" />
+	  <type name=".*" regex="true" excludetype="false">
+		<customattribute name=".*CompilerGeneratedAttribute" regex="true" />
+		<propertymember name=".*" regex="true" />
+	  </type>
     </excludelist>
     <mapping>
       <mapoutput overwrite="true">

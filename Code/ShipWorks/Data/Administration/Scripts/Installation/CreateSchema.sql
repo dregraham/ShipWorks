@@ -524,7 +524,9 @@ CREATE TABLE [dbo].[Order]
 [Custom2] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom2] DEFAULT (''),
 [Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom3] DEFAULT (''),
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
-[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT ('')
+[Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT (''),
+[HubOrderID] [uniqueidentifier] NULL,
+[HubSequence] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -718,6 +720,10 @@ GO
 PRINT N'Creating index [IX_SWDefault_Order_CombineSplitStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_CombineSplitStatus] ON [dbo].[Order] ([CombineSplitStatus])
+GO
+PRINT N'Creating index [IX_SWDefault_Order_HubSequence] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_HubSequence] ON [dbo].[Order] ([HubSequence])
 GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
@@ -972,7 +978,8 @@ CREATE TABLE [dbo].[Store]
 [InitialDownloadDays] [int] NULL,
 [InitialDownloadOrder] [bigint] NULL,
 [InsureShipClientID] [bigint] NULL,
-[InsureShipApiKey] [nvarchar] (255) NULL
+[InsureShipApiKey] [nvarchar] (255) NULL,
+[WarehouseStoreID] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'
@@ -1548,7 +1555,8 @@ CREATE TABLE [dbo].[Download]
 [QuantityTotal] [int] NULL,
 [QuantityNew] [int] NULL,
 [Result] [int] NOT NULL,
-[ErrorMessage] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ErrorMessage] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[BatchID] [uniqueidentifier] NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_Download] on [dbo].[Download]'
@@ -4536,7 +4544,9 @@ CREATE TABLE [dbo].[Configuration]
 [DefaultPickListTemplateID] [bigint] NULL,
 [AutoUpdateDayOfWeek] [int] NOT NULL,
 [AutoUpdateHourOfDay] [int] NOT NULL,
-[AutoUpdateStartDate] [datetime2] NOT NULL
+[AutoUpdateStartDate] [datetime2] NOT NULL,
+[WarehouseID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseID] DEFAULT (''),
+[WarehouseName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Configuration_WarehouseName] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Configuration] on [dbo].[Configuration]'
@@ -7950,7 +7960,8 @@ CREATE TABLE [dbo].[Product]
 [ProductID] [bigint] NOT NULL IDENTITY(1201, 1000),
 [CreatedDate] [datetime] NOT NULL,
 [IsActive] [bit] NOT NULL,
-[IsBundle] [bit] NOT NULL
+[IsBundle] [bit] NOT NULL,
+[UploadToWarehouseNeeded] [bit] NOT NULL CONSTRAINT [DF_Product_UploadToWarehouseNeeded] DEFAULT (1)
 )
 GO
 PRINT N'Creating primary key [PK_Product] on [dbo].[Product]'
