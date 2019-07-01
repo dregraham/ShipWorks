@@ -34,16 +34,10 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public VoidShipment CreateVoidShipment(long shipmentID, string tangoShipmentID)
         {
-            long? parsedTangoShipmentID = null;
-            if (long.TryParse(tangoShipmentID, out long parsedID))
-            { 
-                parsedTangoShipmentID = parsedID;
-            }
-
             return new VoidShipment()
             {
                 ShipworksShipmentId = shipmentID,
-                TangoShipmentId = parsedTangoShipmentID ?? default(long)
+                TangoShipmentId = GetTangoShipmentIDFromString(tangoShipmentID)
             };
         }
 
@@ -67,7 +61,7 @@ namespace ShipWorks.Stores.Warehouse
 
             Shipment shipment = new Shipment
             {
-                TangoShipmentId = Convert.ToInt64(tangoShipmentID),
+                TangoShipmentId = GetTangoShipmentIDFromString(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
                 ShippingProviderId = shipmentEntity.ShipmentType,
                 Carrier = GetCarrierName(shipmentEntity),
@@ -98,6 +92,20 @@ namespace ShipWorks.Stores.Warehouse
             };
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Gets the shipment id. If shipmentID notnumeric, return 0
+        /// </summary>
+        private static long GetTangoShipmentIDFromString(string tangoShipmentID)
+        {
+            long? parsedTangoShipmentID = null;
+            if (long.TryParse(tangoShipmentID, out long parsedID))
+            {
+                parsedTangoShipmentID = parsedID;
+            }
+
+            return parsedTangoShipmentID ?? default(long);
         }
 
         /// <summary>
