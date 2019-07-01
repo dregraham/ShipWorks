@@ -6,6 +6,8 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -29,9 +31,9 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load the order details from the warehouse order into the order entity
         /// </summary>
-        public async Task<OrderEntity> CreateOrder(WarehouseOrder warehouseOrder)
+        public async Task<OrderEntity> CreateOrder(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            GenericResult<OrderEntity> result = await CreateStoreOrderEntity(warehouseOrder).ConfigureAwait(false);
+            GenericResult<OrderEntity> result = await CreateStoreOrderEntity(store, storeType, warehouseOrder).ConfigureAwait(false);
             if (result.Failure)
             {
                 return null;
@@ -100,7 +102,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
-        protected abstract Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder);
+        protected abstract Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder);
 
         /// <summary>
         /// Load store specific order details

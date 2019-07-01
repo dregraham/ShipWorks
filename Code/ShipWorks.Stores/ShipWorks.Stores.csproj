@@ -442,6 +442,9 @@
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleIsFBACondition.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\GenericModule\CoreExtensions\Filters\Orders\GenericModuleIsPrimeCondition.cs" />
+    <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseItem.cs" />
+    <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseOrder.cs" />
+    <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />
     <Compile Include="Platforms\InfiPlex\CoreExtensions\Filters\Orders\InfiPlexAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\InfiPlex\CoreExtensions\Filters\Orders\InfiPlexIsFBACondition.cs" />
@@ -905,6 +908,7 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
     <Compile Include="Warehouse\StoreDtoFactory.cs" />
