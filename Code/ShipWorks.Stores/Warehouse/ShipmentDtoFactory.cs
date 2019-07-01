@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Warehouse
             return new VoidShipment()
             {
                 ShipworksShipmentId = shipmentID,
-                TangoShipmentId = parsedTangoShipmentID
+                TangoShipmentId = parsedTangoShipmentID ?? default(long)
             };
         }
 

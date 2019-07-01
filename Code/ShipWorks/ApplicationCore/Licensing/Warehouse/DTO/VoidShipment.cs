@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
     public class VoidShipment
     {
         [JsonProperty("tangoShipmentId")]
-        public string TangoShipmentId { get; set; }
+        public long TangoShipmentId { get; set; }
 
         [JsonProperty("shipworksShipmentId")]
         public long ShipworksShipmentId { get; set; }
