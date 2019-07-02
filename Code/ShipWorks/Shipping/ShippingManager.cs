@@ -253,6 +253,9 @@ namespace ShipWorks.Shipping
                 shipment.ShipSenseStatus = entry.Matches(shipment) ? (int) ShipSenseStatus.Applied : (int) ShipSenseStatus.Overwritten;
             }
 
+            shipment.LoggedShippedToHub = false;
+            shipment.LoggedVoidToHub = false;
+
             // Explicitly save the shipment here to delete any entities in the Removed buckets of the
             // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
@@ -361,6 +364,8 @@ namespace ShipWorks.Shipping
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
+            clonedShipment.LoggedShippedToHub = false;
+            clonedShipment.LoggedVoidToHub = false;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
@@ -834,15 +839,6 @@ namespace ShipWorks.Shipping
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
                         tangoWebClient.VoidShipment(store, shipment);
 
-                        Guid? hubOrderID = shipment.Order.HubOrderID;
-
-                        if (hubOrderID.HasValue)
-                        {
-                            IWarehouseOrderClient warehouseOrderClient = lifetimeScope.Resolve<IWarehouseOrderClient>();
-                            Task.Run(async () => await warehouseOrderClient
-                                         .UploadVoid(shipmentID, hubOrderID.Value, shipment.OnlineShipmentID)
-                                         .ConfigureAwait(true));
-                        }
                     }
 
                     // Re-throw the insurance exception if there was one

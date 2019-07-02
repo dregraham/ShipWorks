@@ -801,6 +801,7 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />

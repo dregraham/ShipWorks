@@ -1,12 +1,22 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
+
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
-    /// Log shipments to the hub
+    /// Interface for logging shipments to the hub
     /// </summary>
     public interface IHubShipmentLogger
     {
-        void LogProcessedShipments();
+        /// <summary>
+        /// Log processed shipments to the hub
+        /// </summary>
+        Task LogProcessedShipments(IEnumerable<ShipmentEntity> shipments);
 
-        void LogVoidedShipments();
+        /// <summary>
+        /// Log voided shipments to the hub
+        /// </summary>
+        Task LogVoidedShipments(IEnumerable<ShipmentEntity> shipments);
     }
 }
