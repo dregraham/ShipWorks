@@ -697,7 +697,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "public notes", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "public notes", new DateTime(2017, 7, 7), NoteVisibility.Public, false), Times.Once);
         }
 
         [Fact]
@@ -709,7 +709,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "special instructions", new DateTime(2017, 7, 7), NoteVisibility.Public), Times.Once);
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "special instructions", new DateTime(2017, 7, 7), NoteVisibility.Public, false), Times.Once);
         }
 
         [Fact]
@@ -721,7 +721,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "private notes", new DateTime(2017, 7, 7), NoteVisibility.Internal), Times.Once);
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), "private notes", new DateTime(2017, 7, 7), NoteVisibility.Internal, false), Times.Once);
         }
 
         [Fact]
@@ -733,7 +733,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
             testObject.LoadOrder(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory.Object);
 
-            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<NoteVisibility>()), Times.Never);
+            orderElementFactory.Verify(f => f.CreateNote(It.IsAny<OrderEntity>(), It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<NoteVisibility>(), false), Times.Never);
         }
 
         #region LoadCharges

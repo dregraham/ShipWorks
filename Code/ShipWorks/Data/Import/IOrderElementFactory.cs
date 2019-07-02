@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Import
         /// <summary>
         /// Create a new note and attach it to the order.
         /// </summary>
-        Task<NoteEntity> CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility);
+        Task<NoteEntity> CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility, bool ignoreDuplicateText = false);
 
         /// <summary>
         /// Create a new payment detail attached to the order
