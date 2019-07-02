@@ -908,6 +908,7 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\EbayStore.cs" />
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />

@@ -13,7 +13,7 @@ namespace ShipWorks.Warehouse
         /// The store types that are supported by Warehouse
         /// </summary>
         private static IEnumerable<StoreTypeCode> supportedStoreTypes =>
-            new[] { StoreTypeCode.Amazon, StoreTypeCode.ChannelAdvisor, StoreTypeCode.GenericModule };
+            new[] { StoreTypeCode.Amazon, StoreTypeCode.ChannelAdvisor, StoreTypeCode.Ebay, StoreTypeCode.GenericModule };
 
         /// <summary>
         /// Is the given StoreTypeCode supported

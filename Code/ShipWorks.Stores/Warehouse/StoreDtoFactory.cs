@@ -106,7 +106,7 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
-        /// Adds Amazon store data to the StoreDto
+        /// Adds GenericModule store data to the StoreDto
         /// </summary>
         private async Task<Store> AddGenericModuleStoreData(GenericModuleStoreEntity storeEntity)
         {
@@ -119,6 +119,24 @@ namespace ShipWorks.Stores.Warehouse
                 Password = await encryptionService.Encrypt(decryptedPassword).ConfigureAwait(false),
                 ImportStartDetails = (ulong?) (storeEntity.InitialDownloadDays ?? storeEntity.InitialDownloadOrder),
             };
+        }
+
+        /// <summary>
+        /// Adds Ebay store data to the StoreDto
+        /// </summary>
+        /// <returns></returns>
+        private async Task<Store> AddEbayStoreData(EbayStoreEntity storeEntity)
+        {
+            EbayStore store = new EbayStore();
+
+            var downloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity)
+                .ConfigureAwait(false);
+
+            store.DownloadStartDate = GetUnixTimestampMillis(downloadStartDate);
+            store.EbayToken = await encryptionService.Encrypt(storeEntity.EBayToken).ConfigureAwait(false);
+
+            return store;
+
         }
 
         /// <summary>
