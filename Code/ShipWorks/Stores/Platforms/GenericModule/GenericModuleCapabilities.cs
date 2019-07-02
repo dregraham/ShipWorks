@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public GenericVariantDataType OnlineCustomerDataType { get; set; }
 
         /// <summary>
-        /// Indiciates if uploading online shipment details is supported
+        /// Indicates if uploading online shipment details is supported
         /// </summary>
         public bool OnlineShipmentDetails { get; set; }
 

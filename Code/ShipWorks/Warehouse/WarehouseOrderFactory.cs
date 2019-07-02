@@ -8,6 +8,7 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -33,43 +34,54 @@ namespace ShipWorks.Warehouse
         /// </summary>
         public async Task<OrderEntity> CreateOrder(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            GenericResult<OrderEntity> result = await CreateStoreOrderEntity(store, storeType, warehouseOrder).ConfigureAwait(false);
-            if (result.Failure)
+            try
             {
-                return null;
+                GenericResult<OrderEntity> result = await CreateStoreOrderEntity(store, storeType, warehouseOrder).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    return null;
+                }
+
+                OrderEntity orderEntity = result.Value;
+
+                // todo: orderid, storeid, warehousecustomerid
+                // todo: figure out what should and shouldn't be downloaded when new
+                orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
+                orderEntity.OrderDate = warehouseOrder.OrderDate;
+                orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
+                orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
+                orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
+                orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
+                orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
+                orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
+                orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
+                orderEntity.ShipByDate = warehouseOrder.ShipByDate;
+                orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
+                orderEntity.HubSequence = warehouseOrder.HubSequence;
+
+                LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
+                LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
+
+                LoadItems(orderEntity, warehouseOrder.Items);
+
+                LoadCharges(orderEntity, warehouseOrder);
+
+                LoadPaymentDetails(orderEntity, warehouseOrder);
+
+                await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
+
+                LoadStoreOrderDetails(orderEntity, warehouseOrder);
+
+                return orderEntity;
             }
-
-            OrderEntity orderEntity = result.Value;
-
-            // todo: orderid, storeid, warehousecustomerid
-            // todo: figure out what should and shouldn't be downloaded when new
-            orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
-            orderEntity.OrderDate = warehouseOrder.OrderDate;
-            orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
-            orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
-            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
-            orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
-            orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
-            orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
-            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
-            orderEntity.ShipByDate = warehouseOrder.ShipByDate;
-            orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
-            orderEntity.HubSequence = warehouseOrder.HubSequence;
-
-            LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
-            LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
-
-            LoadItems(orderEntity, warehouseOrder.Items);
-
-            LoadCharges(orderEntity, warehouseOrder);
-
-            LoadPaymentDetails(orderEntity, warehouseOrder);
-
-            await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
-
-            LoadStoreOrderDetails(orderEntity, warehouseOrder);
-
-            return orderEntity;
+            catch (KeyNotFoundException ex)
+            {
+                throw new DownloadException("Could not load store specific data for order", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new DownloadException("Could not load store specific data for order", ex.InnerException);
+            }
         }
 
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)

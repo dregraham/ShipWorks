@@ -38,8 +38,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
             var genericStore = MethodConditions.EnsureArgumentIsNotNull(store as IGenericModuleStoreEntity, nameof(store));
             var genericStoreType = MethodConditions.EnsureArgumentIsNotNull(storeType as GenericModuleStoreType, nameof(storeType));
 
-            string genericModuleOrderID = warehouseOrder.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleWarehouseOrder>().AmazonOrderID;
-
             // get the order instance
             var identifier = GenericModuleDownloader.CreateOrderIdentifier(
                 (GenericStoreDownloadStrategy) genericStore.ModuleDownloadStrategy,
@@ -52,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
 
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", genericModuleOrderID, result.Message);
+                log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, result.Message);
             }
 
             return result;
@@ -78,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             var genericModuleItemEntity = (GenericModuleOrderItemEntity) itemEntity;
-            var genericModuleWarehouseItem = warehouseItem.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleOrderItemEntity>();
+            var genericModuleWarehouseItem = warehouseItem.AdditionalData[genericModuleEntryKey].ToObject<GenericcModuleWarehouseItem>();
 
             genericModuleItemEntity.AmazonOrderItemCode = genericModuleWarehouseItem.AmazonOrderItemCode;
         }
