@@ -1423,7 +1423,13 @@ namespace ShipWorks.Stores.Communication
         /// Create a note for the given order
         /// </summary>
         Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
-            NoteVisibility noteVisibility, bool ignoreDuplicateText = false) => InstantiateNote(order, noteText, noteDate, noteVisibility, ignoreDuplicateText);
+            NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility);
+
+        /// <summary>
+        /// Create a note for the given order
+        /// </summary>
+        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility noteVisibility, bool ignoreDuplicateText) => InstantiateNote(order, noteText, noteDate, noteVisibility, ignoreDuplicateText);
 
         /// <summary>
         /// Crate a payment for the given order
