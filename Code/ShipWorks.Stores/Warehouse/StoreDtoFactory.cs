@@ -53,6 +53,9 @@ namespace ShipWorks.Stores.Warehouse
                 case ChannelAdvisorStoreEntity channelAdvisorStore:
                     store = await AddChannelAdvisorStoreData(channelAdvisorStore).ConfigureAwait(false);
                     break;
+                case EbayStoreEntity ebayStore:
+                    store = await AddEbayStoreData(ebayStore).ConfigureAwait(false);
+                    break;
                 case GenericModuleStoreEntity genericModuleStore:
                     store = await AddGenericModuleStoreData(genericModuleStore).ConfigureAwait(false);
                     break;
