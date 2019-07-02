@@ -44,14 +44,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ITangoLogShipmentRequest tangoLogShipmentRequest;
         private readonly ISqlAppLock sqlAppLock;
-        private readonly IWarehouseOrderClient warehouseOrderClient;
         private readonly IHubShipmentLogger hubShipmentLogger;
-        private readonly ITangoShipmentLogger tangoShipmentLogger;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
         private TaskCompletionSource<Unit> delayTaskCompletionSource = new TaskCompletionSource<Unit>();
-
-        
 
         /// <summary>
         /// Constructor
@@ -64,9 +60,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             IStoreManager storeManager,
             ISqlAdapterFactory sqlAdapterFactory,
             ISqlAppLock sqlAppLock,
-            IWarehouseOrderClient warehouseOrderClient,
-            IHubShipmentLogger hubShipmentLogger,
-            ITangoShipmentLogger tangoShipmentLogger)
+            IHubShipmentLogger hubShipmentLogger)
         {
             this.sqlAppLock = sqlAppLock;
             this.sqlSession = sqlSession;
@@ -74,9 +68,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.storeManager = storeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.tangoLogShipmentRequest = tangoLogShipmentRequest;
-            this.warehouseOrderClient = warehouseOrderClient;
             this.hubShipmentLogger = hubShipmentLogger;
-            this.tangoShipmentLogger = tangoShipmentLogger;
         }
 
         /// <summary>
@@ -152,9 +144,12 @@ namespace ShipWorks.ApplicationCore.Licensing
                             await AddFailedShipments(connection).ConfigureAwait(false);
                             
                         } while (shipmentsToLog.Any() && !cancellationToken.IsCancellationRequested);
-                        
-                        hubShipmentLogger.LogProcessedShipments();
-                        hubShipmentLogger.LogVoidedShipments();
+
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await hubShipmentLogger.LogProcessedShipments(connection, cancellationToken).ConfigureAwait(false);
+                            await hubShipmentLogger.LogVoidedShipments(connection, cancellationToken).ConfigureAwait(false);
+                        }
                     }
                     catch (Exception ex)
                     {

@@ -1,8 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Warehouse;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -14,46 +18,80 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     public class HubShipmentLogger : IHubShipmentLogger
     {
         private readonly IWarehouseOrderClient warehouseOrderClient;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubShipmentLogger(IWarehouseOrderClient warehouseOrderClient)
+        public HubShipmentLogger(IWarehouseOrderClient warehouseOrderClient, ISqlAdapterFactory sqlAdapterFactory)
         {
             this.warehouseOrderClient = warehouseOrderClient;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
         /// Log processed shipments to the hub
         /// </summary>
-        public async Task LogProcessedShipments(IEnumerable<ShipmentEntity> shipments)
+        public async Task LogProcessedShipments(DbConnection connection, CancellationToken cancellationToken)
         {
-            IEnumerable<ShipmentEntity> shipmentsToLog = shipments.Where(s => s.Order.HubOrderID.HasValue &&
-                                                                              s.Processed &&
-                                                                              !s.Voided &&
-                                                                              s.LoggedShippedToHub == false);
-
-            foreach (var shipmentToLog in shipmentsToLog)
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
-                await warehouseOrderClient.UploadShipment(shipmentToLog, shipmentToLog.Order.HubOrderID.Value, shipmentToLog.OnlineShipmentID)
-                    .ConfigureAwait(false);
+                // todo: add shipment.order.hubOrderID is not null
+                var query = new QueryFactory().Shipment
+                    .Where(ShipmentFields.Processed == true)
+                    .AndWhere(ShipmentFields.Voided == false)
+                    .AndWhere(ShipmentFields.LoggedShippedToHub == false)
+                    .WithPath(ShipmentEntity.PrefetchPathOrder)
+                    .OrderBy(ShipmentFields.ProcessedDate.Descending())
+                    .Limit(20);
+
+                EntityCollection<ShipmentEntity> shipmentCollection = new EntityCollection<ShipmentEntity>();
+
+                await sqlAdapter.FetchQueryAsync(query, shipmentCollection, cancellationToken).ConfigureAwait(false);
+
+                foreach (var shipmentToLog in shipmentCollection)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    await warehouseOrderClient.UploadShipment(shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
+                                                              shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+                }
             }
         }
 
         /// <summary>
         /// Log voided shipments to the hub
         /// </summary>
-        public async Task LogVoidedShipments(IEnumerable<ShipmentEntity> shipments)
+        public async Task LogVoidedShipments(DbConnection connection, CancellationToken cancellationToken)
         {
-            IEnumerable<ShipmentEntity> voidedShipmentsToLog = shipments.Where(s => s.Order.HubOrderID.HasValue &&
-                                                                                    s.Voided &&
-                                                                                    s.LoggedShippedToHub == true &&
-                                                                                    s.LoggedVoidToHub == false);
-
-            foreach (var shipmentToLog in voidedShipmentsToLog)
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
-                await warehouseOrderClient.UploadVoid(shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value, shipmentToLog.OnlineShipmentID)
-                    .ConfigureAwait(false);
+                // todo: add shipment.order.hubOrderID is not null
+                var query = new QueryFactory().Shipment
+                    .Where(ShipmentFields.Voided == true)
+                    .AndWhere(ShipmentFields.LoggedShippedToHub == true)
+                    .AndWhere(ShipmentFields.LoggedVoidToHub == false)
+                    .WithPath(ShipmentEntity.PrefetchPathOrder)
+                    .OrderBy(ShipmentFields.ProcessedDate.Descending())
+                    .Limit(20);
+
+                EntityCollection<ShipmentEntity> shipmentCollection = new EntityCollection<ShipmentEntity>();
+
+                await sqlAdapter.FetchQueryAsync(query, shipmentCollection, cancellationToken).ConfigureAwait(false);
+
+                foreach (var shipmentToLog in shipmentCollection)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    await warehouseOrderClient.UploadVoid(shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
+                                                          shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+                }
             }
         }
     }

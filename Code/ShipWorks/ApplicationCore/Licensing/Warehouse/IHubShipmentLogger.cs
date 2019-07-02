@@ -1,6 +1,6 @@
-using System.Collections.Generic;
+using System.Data.Common;
+using System.Threading;
 using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -12,11 +12,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Log processed shipments to the hub
         /// </summary>
-        Task LogProcessedShipments(IEnumerable<ShipmentEntity> shipments);
+        Task LogProcessedShipments(DbConnection connection, CancellationToken cancellationToken);
 
         /// <summary>
         /// Log voided shipments to the hub
         /// </summary>
-        Task LogVoidedShipments(IEnumerable<ShipmentEntity> shipments);
+        Task LogVoidedShipments(DbConnection connection, CancellationToken cancellationToken);
     }
 }
