@@ -20,13 +20,15 @@ namespace ShipWorks.Stores.Warehouse
     public class ShipmentDtoFactory
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
         }
 
         /// <summary>
@@ -138,11 +140,17 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         private string GetCarrierName(ShipmentEntity shipment)
         {
-            ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
+            ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
-            return shipmentType == ShipmentTypeCode.Other ?
-                shipment.Other.Carrier :
-                EnumHelper.GetDescription(shipmentType);
+            if (shipmentTypeCode == ShipmentTypeCode.Other)
+            {
+                ShipmentType shipmentType = shipmentTypeManager.Get(shipmentTypeCode);
+
+                shipmentType.LoadShipmentData(shipment, false);
+                return shipment.Other.Carrier;
+            }
+
+            return EnumHelper.GetDescription(shipmentTypeCode);
         }
     }
 }

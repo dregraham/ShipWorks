@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        public async Task UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
+        public async Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
         {
             try
             {
@@ -110,19 +110,27 @@ namespace ShipWorks.Stores.Warehouse
                     {
                         log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub. {response.Message}",
                                   response.Exception);
+                        return Result.FromError(response.Exception);
                     }
+
+                    return Result.FromSuccess();
                 }
+
+                string restrictedErrorMessage = "Attempted to upload shipment to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                return Result.FromError(restrictedErrorMessage);
             }
             catch (Exception ex)
             {
                 log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub.", ex);
+                return Result.FromError(ex);
             }
         }
 
         /// <summary>
         /// Send void to the hub
         /// </summary>
-        public async Task UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID)
+        public async Task<Result> UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID)
         {
             try
             {
@@ -145,12 +153,21 @@ namespace ShipWorks.Stores.Warehouse
                     {
                         log.Error($"Failed to upload shipment {shipmentID} to hub. {response.Message}",
                                   response.Exception);
+                        return Result.FromError(response.Exception);
                     }
+
+                    return Result.FromSuccess();
                 }
+
+                string restrictedErrorMessage = "Attempted to upload voided shipment to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                return Result.FromError(restrictedErrorMessage);
+
             }
             catch (Exception ex)
             {
                 log.Error($"Failed to upload shipment {shipmentID} to hub.", ex);
+                return Result.FromError(ex);
             }
         }
     }

@@ -207,7 +207,6 @@ namespace ShipWorks.ApplicationCore.Licensing
                     .Do(_ => log.InfoFormat("Logged shipment {0}", shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipment.ShipmentID));
                 
-                
                 if (shipment.Order.HubOrderID.HasValue)
                 {
                     await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value)

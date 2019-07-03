@@ -2,6 +2,8 @@ using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -36,7 +38,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
-                // todo: add shipment.order.hubOrderID is not null
                 var queryFactory = new QueryFactory();
                 var query = queryFactory.Shipment
                     .From(QueryTarget.InnerJoin(queryFactory.Order)
@@ -60,8 +61,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return;
                     }
 
-                    await warehouseOrderClient.UploadShipment(shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
-                                                              shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+                    Result uploadResult = await warehouseOrderClient.UploadShipment(
+                        shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
+                        shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+
+                    if (uploadResult.Success)
+                    {
+                        ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedShippedToHub = true };
+                        sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
+                                                          new RelationPredicateBucket(
+                                                              new PredicateExpression(
+                                                                  ShipmentFields.ShipmentID ==
+                                                                  shipmentToLog.ShipmentID)));
+                    }
                 }
             }
         }
@@ -73,7 +85,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
-                // todo: add shipment.order.hubOrderID is not null
                 var query = new QueryFactory().Shipment
                     .Where(ShipmentFields.Voided == true)
                     .AndWhere(ShipmentFields.LoggedShippedToHub == true)
@@ -93,8 +104,19 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return;
                     }
 
-                    await warehouseOrderClient.UploadVoid(shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
-                                                          shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+                    Result uploadResult = await warehouseOrderClient.UploadVoid(
+                        shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
+                        shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+
+                    if (uploadResult.Success)
+                    {
+                        ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedVoidToHub = true };
+                        sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
+                                                          new RelationPredicateBucket(
+                                                              new PredicateExpression(
+                                                                  ShipmentFields.ShipmentID ==
+                                                                  shipmentToLog.ShipmentID)));
+                    }
                 }
             }
         }
