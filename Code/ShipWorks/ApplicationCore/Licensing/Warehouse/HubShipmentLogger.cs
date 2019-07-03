@@ -37,10 +37,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
             {
                 // todo: add shipment.order.hubOrderID is not null
-                var query = new QueryFactory().Shipment
+                var queryFactory = new QueryFactory();
+                var query = queryFactory.Shipment
+                    .From(QueryTarget.InnerJoin(queryFactory.Order)
+                        .On(ShipmentFields.OrderID == OrderFields.OrderID))
                     .Where(ShipmentFields.Processed == true)
                     .AndWhere(ShipmentFields.Voided == false)
                     .AndWhere(ShipmentFields.LoggedShippedToHub == false)
+                    .AndWhere(OrderFields.HubOrderID.IsNotNull())
                     .WithPath(ShipmentEntity.PrefetchPathOrder)
                     .OrderBy(ShipmentFields.ProcessedDate.Descending())
                     .Limit(20);

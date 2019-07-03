@@ -45,6 +45,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ITangoLogShipmentRequest tangoLogShipmentRequest;
         private readonly ISqlAppLock sqlAppLock;
         private readonly IHubShipmentLogger hubShipmentLogger;
+        private readonly IWarehouseOrderClient warehouseOrderClient;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
         private TaskCompletionSource<Unit> delayTaskCompletionSource = new TaskCompletionSource<Unit>();
@@ -60,7 +61,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             IStoreManager storeManager,
             ISqlAdapterFactory sqlAdapterFactory,
             ISqlAppLock sqlAppLock,
-            IHubShipmentLogger hubShipmentLogger)
+            IHubShipmentLogger hubShipmentLogger,
+            IWarehouseOrderClient warehouseOrderClient)
         {
             this.sqlAppLock = sqlAppLock;
             this.sqlSession = sqlSession;
@@ -69,6 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.tangoLogShipmentRequest = tangoLogShipmentRequest;
             this.hubShipmentLogger = hubShipmentLogger;
+            this.warehouseOrderClient = warehouseOrderClient;
         }
 
         /// <summary>
@@ -200,9 +203,16 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 ShipmentEntity shipment = shipmentToLog.Shipment;
 
-                tangoLogShipmentRequest.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
+                GenericResult<string> result = tangoLogShipmentRequest.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
                     .Do(_ => log.InfoFormat("Logged shipment {0}", shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipment.ShipmentID));
+                
+                
+                if (shipment.Order.HubOrderID.HasValue)
+                {
+                    await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value)
+                        .ConfigureAwait(false);
+                }
             }
         }
 
