@@ -34,8 +34,10 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private const string AppLockName = "TangoLogShipmentProcessorRunning";
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoLogShipmentProcessor));
-        private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog = 
+
+        private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog =
             new BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)>();
+
         private const int RunInterval = 60 * 1000;
         private static readonly object collectionLock = new object();
         private readonly ISqlSession sqlSession;
@@ -45,7 +47,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ITangoLogShipmentRequest tangoLogShipmentRequest;
         private readonly ISqlAppLock sqlAppLock;
         private readonly IHubShipmentLogger hubShipmentLogger;
-        private readonly IWarehouseOrderClient warehouseOrderClient;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
         private TaskCompletionSource<Unit> delayTaskCompletionSource = new TaskCompletionSource<Unit>();
@@ -61,8 +62,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             IStoreManager storeManager,
             ISqlAdapterFactory sqlAdapterFactory,
             ISqlAppLock sqlAppLock,
-            IHubShipmentLogger hubShipmentLogger,
-            IWarehouseOrderClient warehouseOrderClient)
+            IHubShipmentLogger hubShipmentLogger)
         {
             this.sqlAppLock = sqlAppLock;
             this.sqlSession = sqlSession;
@@ -71,7 +71,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.tangoLogShipmentRequest = tangoLogShipmentRequest;
             this.hubShipmentLogger = hubShipmentLogger;
-            this.warehouseOrderClient = warehouseOrderClient;
         }
 
         /// <summary>
@@ -113,7 +112,8 @@ namespace ShipWorks.ApplicationCore.Licensing
                 }
 
                 delayTaskCompletionSource = new TaskCompletionSource<Unit>();
-                await Task.WhenAny(Task.Delay(RunInterval, cancellationToken), delayTaskCompletionSource.Task).ConfigureAwait(false);
+                await Task.WhenAny(Task.Delay(RunInterval, cancellationToken), delayTaskCompletionSource.Task)
+                    .ConfigureAwait(false);
                 delayTaskCompletionSource = null;
             }
         }
@@ -145,13 +145,15 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                             // Get the next page
                             await AddFailedShipments(connection).ConfigureAwait(false);
-                            
+
                         } while (shipmentsToLog.Any() && !cancellationToken.IsCancellationRequested);
 
                         if (!cancellationToken.IsCancellationRequested)
                         {
-                            await hubShipmentLogger.LogProcessedShipments(connection, cancellationToken).ConfigureAwait(false);
-                            await hubShipmentLogger.LogVoidedShipments(connection, cancellationToken).ConfigureAwait(false);
+                            await hubShipmentLogger.LogProcessedShipments(connection, cancellationToken)
+                                .ConfigureAwait(false);
+                            await hubShipmentLogger.LogVoidedShipments(connection, cancellationToken)
+                                .ConfigureAwait(false);
                         }
                     }
                     catch (Exception ex)
@@ -203,17 +205,24 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 ShipmentEntity shipment = shipmentToLog.Shipment;
 
-                GenericResult<string> result = tangoLogShipmentRequest.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
+                GenericResult<string> result = tangoLogShipmentRequest
+                    .LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
                     .Do(_ => log.InfoFormat("Logged shipment {0}", shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipment.ShipmentID));
-                
-                if (shipment.Order.HubOrderID.HasValue)
+
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
                 {
-                    await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value)
-                        .ConfigureAwait(false);
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    
+                    await hubShipmentLogger.LogProcessedShipment(shipment, sqlAdapter).ConfigureAwait(false);
                 }
             }
         }
+
+
 
         /// <summary>
         /// Log an exception raised while processing

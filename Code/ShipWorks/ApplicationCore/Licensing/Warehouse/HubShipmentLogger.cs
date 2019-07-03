@@ -60,20 +60,29 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     {
                         return;
                     }
+                }
+            }
+        }
 
-                    Result uploadResult = await warehouseOrderClient.UploadShipment(
-                        shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
-                        shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+        /// <summary>
+        /// Logs a single system
+        /// </summary>
+        public async Task LogProcessedShipment(ShipmentEntity shipmentToLog, ISqlAdapter sqlAdapter)
+        {
+            if (shipmentToLog.Order.HubOrderID.HasValue)
+            {
+                Result uploadResult = await warehouseOrderClient.UploadShipment(
+                    shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
+                    shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
 
-                    if (uploadResult.Success)
-                    {
-                        ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedShippedToHub = true };
-                        sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
-                                                          new RelationPredicateBucket(
-                                                              new PredicateExpression(
-                                                                  ShipmentFields.ShipmentID ==
-                                                                  shipmentToLog.ShipmentID)));
-                    }
+                if (uploadResult.Success)
+                {
+                    ShipmentEntity shipmentToUpdate = new ShipmentEntity {LoggedShippedToHub = true};
+                    sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
+                        new RelationPredicateBucket(
+                            new PredicateExpression(
+                                ShipmentFields.ShipmentID ==
+                                shipmentToLog.ShipmentID)));
                 }
             }
         }
