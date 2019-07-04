@@ -58,14 +58,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     refreshToken = redirectTokenResult.Value.refreshToken;
                 }
 
-                logEntry.LogRequest(restRequest);
+                logEntry.LogRequest(restRequest, "json");
 
                 restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
 
                 IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
 
                 restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
-                logEntry.LogResponse(restResponse);
+                logEntry.LogResponse(restResponse, "json");
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)
                 {
@@ -97,7 +97,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             {
                 if (restResponse != null)
                 {
-                    logEntry.LogResponse(restResponse);
+                    logEntry.LogResponse(restResponse, "json");
                 }
 
                 return GenericResult.FromError<IRestResponse>(e.Message);
