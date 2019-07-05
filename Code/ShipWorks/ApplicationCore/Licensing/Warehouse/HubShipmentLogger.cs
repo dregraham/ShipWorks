@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data.Connection;
@@ -22,14 +23,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     {
         private readonly IWarehouseOrderClient warehouseOrderClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubShipmentLogger(IWarehouseOrderClient warehouseOrderClient, ISqlAdapterFactory sqlAdapterFactory)
+        public HubShipmentLogger(IWarehouseOrderClient warehouseOrderClient, ISqlAdapterFactory sqlAdapterFactory, Func<Type, ILog> logFactory)
         {
             this.warehouseOrderClient = warehouseOrderClient;
             this.sqlAdapterFactory = sqlAdapterFactory;
+            log = logFactory(GetType());
         }
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                    log.Error(e);
                     throw;
                 }
             }
