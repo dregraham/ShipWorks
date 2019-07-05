@@ -25,5 +25,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Log voided shipments to the hub
         /// </summary>
         Task LogVoidedShipments(DbConnection connection, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Log voided shipment to the hub
+        /// </summary>
+        Task LogVoidedShipment(ShipmentEntity shipmentToLog, ISqlAdapter sqlAdapter);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,14 +53,25 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 EntityCollection<ShipmentEntity> shipmentCollection = new EntityCollection<ShipmentEntity>();
 
-                await sqlAdapter.FetchQueryAsync(query, shipmentCollection, cancellationToken).ConfigureAwait(false);
-
-                foreach (var shipmentToLog in shipmentCollection)
+                try
                 {
-                    if (cancellationToken.IsCancellationRequested)
+                    await sqlAdapter.FetchQueryAsync(query, shipmentCollection, cancellationToken)
+                        .ConfigureAwait(false);
+
+                    foreach (ShipmentEntity shipmentToLog in shipmentCollection)
                     {
-                        return;
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
+                        await LogProcessedShipment(shipmentToLog, sqlAdapter).ConfigureAwait(false);
                     }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
                 }
             }
         }
@@ -113,20 +125,28 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return;
                     }
 
-                    Result uploadResult = await warehouseOrderClient.UploadVoid(
-                        shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
-                        shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
-
-                    if (uploadResult.Success)
-                    {
-                        ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedVoidToHub = true };
-                        sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
-                                                          new RelationPredicateBucket(
-                                                              new PredicateExpression(
-                                                                  ShipmentFields.ShipmentID ==
-                                                                  shipmentToLog.ShipmentID)));
-                    }
+                    await LogVoidedShipment(shipmentToLog, sqlAdapter).ConfigureAwait(false);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Log voided shipment to the hub
+        /// </summary>
+        public async Task LogVoidedShipment(ShipmentEntity shipmentToLog, ISqlAdapter sqlAdapter)
+        {
+            Result uploadResult = await warehouseOrderClient.UploadVoid(
+                shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
+                shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+
+            if (uploadResult.Success)
+            {
+                ShipmentEntity shipmentToUpdate = new ShipmentEntity {LoggedVoidToHub = true};
+                sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
+                    new RelationPredicateBucket(
+                        new PredicateExpression(
+                            ShipmentFields.ShipmentID ==
+                            shipmentToLog.ShipmentID)));
             }
         }
     }

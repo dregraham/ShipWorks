@@ -16,6 +16,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -839,6 +840,13 @@ namespace ShipWorks.Shipping
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
                         tangoWebClient.VoidShipment(store, shipment);
 
+                        using (SqlAdapter adapter = new SqlAdapter(true))
+                        {
+                            var hubShipmentLogger = lifetimeScope.Resolve<IHubShipmentLogger>();
+                            hubShipmentLogger.LogVoidedShipment(shipment, adapter).Wait();
+                            
+                            adapter.Commit();
+                        }
                     }
 
                     // Re-throw the insurance exception if there was one
