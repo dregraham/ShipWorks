@@ -786,7 +786,6 @@
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebRequestClient.cs" />
     <Compile Include="ApplicationCore\IShipWorksSession.cs" />
     <Compile Include="ApplicationCore\Licensing\FeatureRestrictions\WarehouseRestriction.cs" />
-    <Compile Include="ApplicationCore\Licensing\ITangoShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetRedirectToken.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\ITangoGetReleaseByVersionRequest.cs" />

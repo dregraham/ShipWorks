@@ -210,6 +210,11 @@ namespace ShipWorks.ApplicationCore.Licensing
                     .Do(_ => log.InfoFormat("Logged shipment {0}", shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipment.ShipmentID));
 
+                if (result.Failure)
+                {
+                    return;
+                }
+
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
                 {
                     if (cancellationToken.IsCancellationRequested)
@@ -217,7 +222,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                         return;
                     }
                     
-                    await hubShipmentLogger.LogProcessedShipment(shipment, sqlAdapter).ConfigureAwait(false);
+                    await hubShipmentLogger.LogProcessedShipment(shipment, result.Value, sqlAdapter).ConfigureAwait(false);
                 }
             }
         }

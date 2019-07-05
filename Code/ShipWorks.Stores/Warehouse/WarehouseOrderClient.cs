@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Warehouse
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
                         .MakeRequest(request, "Void Order")
-                        .ConfigureAwait(true);
+                        .ConfigureAwait(false);
 
                     if (response.Failure)
                     {

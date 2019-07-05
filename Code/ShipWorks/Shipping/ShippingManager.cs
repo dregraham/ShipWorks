@@ -840,12 +840,10 @@ namespace ShipWorks.Shipping
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
                         tangoWebClient.VoidShipment(store, shipment);
 
-                        using (SqlAdapter adapter = new SqlAdapter(true))
+                        using (SqlAdapter adapter = new SqlAdapter())
                         {
                             var hubShipmentLogger = lifetimeScope.Resolve<IHubShipmentLogger>();
                             hubShipmentLogger.LogVoidedShipment(shipment, adapter).Wait();
-                            
-                            adapter.Commit();
                         }
                     }
 

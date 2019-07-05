@@ -65,7 +65,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                             return;
                         }
 
-                        await LogProcessedShipment(shipmentToLog, sqlAdapter).ConfigureAwait(false);
+                        await LogProcessedShipment(shipmentToLog, shipmentToLog.OnlineShipmentID, sqlAdapter).ConfigureAwait(false);
                     }
                 }
                 catch (Exception e)
@@ -77,15 +77,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         }
 
         /// <summary>
-        /// Logs a single system
+        /// Logs a single shipment
         /// </summary>
-        public async Task LogProcessedShipment(ShipmentEntity shipmentToLog, ISqlAdapter sqlAdapter)
+        public async Task LogProcessedShipment(ShipmentEntity shipmentToLog, string tangoShipmentID, ISqlAdapter sqlAdapter)
         {
             if (shipmentToLog.Order.HubOrderID.HasValue)
             {
                 Result uploadResult = await warehouseOrderClient.UploadShipment(
                     shipmentToLog, shipmentToLog.Order.HubOrderID.Value,
-                    shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
+                    tangoShipmentID).ConfigureAwait(false);
 
                 if (uploadResult.Success)
                 {
