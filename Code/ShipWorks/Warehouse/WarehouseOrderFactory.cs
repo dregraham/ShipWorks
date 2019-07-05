@@ -46,7 +46,6 @@ namespace ShipWorks.Warehouse
 
                 // todo: orderid, storeid, warehousecustomerid
                 // todo: figure out what should and shouldn't be downloaded when new
-                orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
                 orderEntity.OrderDate = warehouseOrder.OrderDate;
                 orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
                 orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
@@ -58,6 +57,12 @@ namespace ShipWorks.Warehouse
                 orderEntity.ShipByDate = warehouseOrder.ShipByDate;
                 orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
                 orderEntity.HubSequence = warehouseOrder.HubSequence;
+
+                orderEntity.Custom1 = warehouseOrder.Custom1;
+                orderEntity.Custom2 = warehouseOrder.Custom2;
+                orderEntity.Custom3 = warehouseOrder.Custom3;
+                orderEntity.Custom4 = warehouseOrder.Custom4;
+                orderEntity.Custom5 = warehouseOrder.Custom5;
 
                 LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
                 LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
