@@ -1,0 +1,98 @@
+﻿using System;
+using System.Threading.Tasks;
+using Common.Logging;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Import;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
+using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.DTO.Orders;
+
+namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
+{
+    /// <summary>
+    /// ChannelAdvisor warehouse order factory
+    /// </summary>
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Ebay)]
+    public class EbayWarehouseOrderFactory : WarehouseOrderFactory
+    {
+        private const string ebayEntryKey = "ebay";
+        private readonly ILog log;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public EbayWarehouseOrderFactory(IOrderElementFactory orderElementFactory,
+            Func<Type, ILog> logFactory) : base(orderElementFactory)
+        {
+            log = logFactory(typeof(EbayWarehouseOrderFactory));
+        }
+
+        /// <summary>
+        /// Create an order entity with an Ebay identifier
+        /// </summary>
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
+        {
+            long ebayOrderID = long.Parse(warehouseOrder.OrderNumber);
+
+            // get the order instance
+            GenericResult<OrderEntity> result = await orderElementFactory
+                .CreateOrder(new OrderNumberIdentifier(ebayOrderID)).ConfigureAwait(false);
+
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", ebayOrderID, result.Message);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Load Ebay order details
+        /// </summary>
+        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            EbayOrderEntity ebayOrderEntity = (EbayOrderEntity) orderEntity;
+            var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
+
+            ebayOrderEntity.EbayBuyerID = ebayWarehouseOrder.EbayBuyerID;
+            ebayOrderEntity.SelectedShippingMethod = ebayWarehouseOrder.SelectedShippingMethod;
+            ebayOrderEntity.SellingManagerRecord = ebayWarehouseOrder.SellingManagerRecord;
+            ebayOrderEntity.GspEligible = ebayWarehouseOrder.GspEligible;
+            ebayOrderEntity.GspFirstName = ebayWarehouseOrder.GspFirstName;
+            ebayOrderEntity.GspLastName = ebayWarehouseOrder.GspLastName;
+            ebayOrderEntity.GspStreet1 = ebayWarehouseOrder.GspStreet1;
+            ebayOrderEntity.GspStreet2 = ebayWarehouseOrder.GspStreet2;
+            ebayOrderEntity.GspCity = ebayWarehouseOrder.GspCity;
+            ebayOrderEntity.GspStateProvince = ebayWarehouseOrder.GspStateProvince;
+            ebayOrderEntity.GspPostalCode = ebayWarehouseOrder.GspPostalCode;
+            ebayOrderEntity.GspCountryCode = ebayWarehouseOrder.GspCountryCode;
+            ebayOrderEntity.GspReferenceID = ebayWarehouseOrder.GspReferenceID;
+            ebayOrderEntity.GuaranteedDelivery = ebayWarehouseOrder.GuaranteedDelivery;
+        }
+
+        /// <summary>
+        /// Load Ebay item details
+        /// </summary>
+        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+            EbayOrderItemEntity ebayItemEntity = (EbayOrderItemEntity) itemEntity;
+            var ebayWarehouseItem = warehouseItem.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();
+
+            ebayItemEntity.EbayItemID = ebayWarehouseItem.EbayItemID;
+            ebayItemEntity.EbayTransactionID = ebayWarehouseItem.EbayTransactionID;
+            ebayItemEntity.SellingManagerRecord = ebayWarehouseItem.SellingManagerRecord;
+            ebayItemEntity.PaymentStatus = ebayWarehouseItem.PaymentStatus;
+            ebayItemEntity.PaymentMethod = ebayWarehouseItem.PaymentMethod;
+            ebayItemEntity.CompleteStatus = ebayWarehouseItem.CompleteStatus;
+            ebayItemEntity.FeedbackLeftType = ebayWarehouseItem.FeedbackLeftType;
+            ebayItemEntity.FeedbackLeftComments = ebayWarehouseItem.FeedbackLeftComments;
+            ebayItemEntity.FeedbackReceivedType = ebayWarehouseItem.FeedbackReceivedType;
+            ebayItemEntity.FeedbackReceivedComments = ebayWarehouseItem.FeedbackReceivedComments;
+            ebayItemEntity.MyEbayPaid = ebayWarehouseItem.MyEbayPaid;
+            ebayItemEntity.MyEbayShipped = ebayWarehouseItem.MyEbayShipped;
+        }
+    }
+}
