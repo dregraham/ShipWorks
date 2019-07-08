@@ -61,6 +61,11 @@ namespace ShipWorks.Shipping.Services
         int PackagingType { get; set; }
 
         /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        string PackagingTypeName { get; }
+
+        /// <summary>
         /// Gets or sets the insurance choice.
         /// </summary>
         IInsuranceChoice InsuranceChoice { get; set; }

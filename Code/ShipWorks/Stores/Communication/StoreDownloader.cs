@@ -574,7 +574,7 @@ namespace ShipWorks.Stores.Communication
             noteText = noteText.Trim();
 
             // If we need to ignore adding any notes that are dupes of ones that exist...
-            if (ignoreDuplicateText && await NoteExists(order, noteText).ConfigureAwait(false))
+            if (ignoreDuplicateText && await NoteExists(order, noteText, visibility).ConfigureAwait(false))
             {
                 return null;
             }
@@ -594,12 +594,13 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Check whether the given note text exists in the order
         /// </summary>
-        private async Task<bool> NoteExists(OrderEntity order, string noteText)
+        private async Task<bool> NoteExists(OrderEntity order, string noteText, NoteVisibility visibility)
         {
             // First see if any of the current (newly downloaded) notes match this note
             if (order.Notes.Any(n =>
-                string.Compare(n.Text, noteText, StringComparison.CurrentCultureIgnoreCase) == 0
-                && n.Source == (int) NoteSource.Downloaded))
+                string.Compare(n.Text, noteText, StringComparison.CurrentCultureIgnoreCase) == 0 &&
+                n.Visibility == (int) visibility &&
+                n.Source == (int) NoteSource.Downloaded))
             {
                 return true;
             }
@@ -618,6 +619,7 @@ namespace ShipWorks.Stores.Communication
                 .From(relationPredicateBucket.Relations)
                 .Where(relationPredicateBucket.PredicateExpression)
                 .AndWhere(NoteFields.Text == noteText)
+                .AndWhere(NoteFields.Visibility == (int) visibility)
                 .AndWhere(NoteFields.Source == (int) NoteSource.Downloaded);
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
@@ -1422,6 +1424,12 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
             NoteVisibility noteVisibility) => InstantiateNote(order, noteText, noteDate, noteVisibility);
+
+        /// <summary>
+        /// Create a note for the given order
+        /// </summary>
+        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate,
+            NoteVisibility noteVisibility, bool ignoreDuplicateText) => InstantiateNote(order, noteText, noteDate, noteVisibility, ignoreDuplicateText);
 
         /// <summary>
         /// Crate a payment for the given order

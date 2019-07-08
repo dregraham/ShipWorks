@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -106,6 +107,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             get { return -1; }
             set { }
+        }
+
+        /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName
+        {
+            // Not supported
+            get => string.Empty;
         }
 
         /// <summary>
