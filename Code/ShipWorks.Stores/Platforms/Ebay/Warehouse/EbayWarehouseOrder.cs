@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {
@@ -11,6 +12,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// <summary>
         /// The EbayBuyerID of the EbayOrder
         /// </summary>
+        [JsonProperty("ebayBuyerId")]
         public string EbayBuyerID { get; set; }
 
         /// <summary>
@@ -71,6 +73,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// <summary>
         /// The GspReferenceID of the EbayOrder
         /// </summary>
+        [JsonProperty("gspReferenceId")]
         public string GspReferenceID { get; set; }
 
         /// <summary>

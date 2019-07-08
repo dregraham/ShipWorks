@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {
@@ -11,11 +12,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// <summary>
         /// The EbayItemID of the EbayOrderItem
         /// </summary>
+        [JsonProperty("ebayItemId")]
         public long EbayItemID { get; set; }
 
         /// <summary>
         /// The EbayTransactionID of the EbayOrderItem
         /// </summary>
+        [JsonProperty("ebayTransactionId")]
         public long EbayTransactionID { get; set; }
 
         /// <summary>
