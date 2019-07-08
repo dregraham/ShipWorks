@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
