@@ -6,14 +6,13 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {
     /// <summary>
-    /// ChannelAdvisor warehouse order factory
+    /// Ebay warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Ebay)]
     public class EbayWarehouseOrderFactory : WarehouseOrderFactory
@@ -35,15 +34,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            long ebayOrderID = long.Parse(warehouseOrder.OrderNumber);
+            var identifier = new EbayOrderIdentifier(warehouseOrder.OrderNumber);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
-                .CreateOrder(new OrderNumberIdentifier(ebayOrderID)).ConfigureAwait(false);
+                .CreateOrder(identifier).ConfigureAwait(false);
 
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", ebayOrderID, result.Message);
+                log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, result.Message);
             }
 
             return result;
