@@ -60,11 +60,11 @@ namespace ShipWorks.Warehouse
             if (orderEntity.IsNew)
             {
                 LoadItems(orderEntity, warehouseOrder.Items);
+
+                LoadCharges(orderEntity, warehouseOrder);
+
+                LoadPaymentDetails(orderEntity, warehouseOrder);
             }
-
-            LoadCharges(orderEntity, warehouseOrder);
-
-            LoadPaymentDetails(orderEntity, warehouseOrder);
 
             await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
@@ -203,7 +203,7 @@ namespace ShipWorks.Warehouse
             foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
             {
                 await orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
-                                               (NoteVisibility) warehouseOrderCharge.Visibility).ConfigureAwait(false);
+                                               (NoteVisibility) warehouseOrderCharge.Visibility, true).ConfigureAwait(false);
             }
         }
     }

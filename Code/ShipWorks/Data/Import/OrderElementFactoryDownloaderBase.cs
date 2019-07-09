@@ -79,6 +79,12 @@ namespace ShipWorks.Data.Import
             InstantiateNote(order, noteText, noteDate, noteVisibility, true);
 
         /// <summary>
+        /// Create a new note and attach it to the order.
+        /// </summary>
+        Task<NoteEntity> IOrderElementFactory.CreateNote(OrderEntity order, string noteText, DateTime noteDate, NoteVisibility noteVisibility, bool ignoreDuplicateText) =>
+            InstantiateNote(order, noteText, noteDate, noteVisibility, ignoreDuplicateText);
+
+        /// <summary>
         /// Create a new payment detail attached to the order
         /// </summary>
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order)
