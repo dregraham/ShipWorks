@@ -4,9 +4,11 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -17,7 +19,6 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -818,7 +819,9 @@ namespace ShipWorks.Data.Administration
             DirectoryInfo di = new DirectoryInfo(filePath);
             DirectorySecurity ds = di.GetAccessControl();
 
-            ds.AddAccessRule(new FileSystemAccessRule("Everyone",
+            SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+
+            ds.AddAccessRule(new FileSystemAccessRule(sid,
                 FileSystemRights.Modify | FileSystemRights.ReadPermissions | FileSystemRights.Delete,
                 InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit,
                 PropagationFlags.None,
