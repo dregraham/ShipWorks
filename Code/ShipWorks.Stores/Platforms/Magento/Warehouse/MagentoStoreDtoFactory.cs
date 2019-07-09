@@ -31,12 +31,11 @@ namespace ShipWorks.Stores.Warehouse
         public async Task<Store> Create(StoreEntity baseStoreEntity)
         {
             var storeEntity = baseStoreEntity as MagentoStoreEntity;
-            var store = await genericModuleStoreDtoFactory.Create(storeEntity).ConfigureAwait(false);
+            var store = await genericModuleStoreDtoFactory.Update(new MagentoStore(), storeEntity).ConfigureAwait(false);
 
-            var magentoStore = store as MagentoStore;
-            magentoStore.MagentoVersion = (uint) storeEntity.MagentoVersion;
+            store.MagentoVersion = (uint) storeEntity.MagentoVersion;
 
-            return magentoStore;
+            return store;
         }
     }
 }

@@ -39,19 +39,24 @@ namespace ShipWorks.Stores.Warehouse
         /// ShipWorks warehouse mode.</exception>
         public async Task<Store> Create(StoreEntity baseStoreEntity)
         {
-            GenericModuleStoreEntity storeEntity = baseStoreEntity as GenericModuleStoreEntity;
+            var store = await Update(new GenericModuleStore(), baseStoreEntity as GenericModuleStoreEntity).ConfigureAwait(false);
+            return store;
+        }
+
+        /// <summary>
+        /// Update a store DTO with data from an entity
+        /// </summary>
+        public async Task<T> Update<T>(T store, GenericModuleStoreEntity storeEntity) where T : GenericModuleStore
+        {
             string decryptedPassword = encryptionProviderFactory.
                 CreateSecureTextEncryptionProvider(storeEntity.ModuleUsername)
                 .Decrypt(storeEntity.ModulePassword);
 
-            var store = new GenericModuleStore
-            {
-                Url = storeEntity.ModuleUrl,
-                Username = storeEntity.ModuleUsername,
-                Password = await helpers.EncryptSecret(decryptedPassword).ConfigureAwait(false),
-                ImportStartDetails = (ulong?) (storeEntity.InitialDownloadDays ?? storeEntity.InitialDownloadOrder),
-                OnlineStoreCode = storeEntity.ModuleOnlineStoreCode,
-            };
+            store.Url = storeEntity.ModuleUrl;
+            store.Username = storeEntity.ModuleUsername;
+            store.Password = await helpers.EncryptSecret(decryptedPassword).ConfigureAwait(false);
+            store.ImportStartDetails = (ulong?) (storeEntity.InitialDownloadDays ?? storeEntity.InitialDownloadOrder);
+            store.OnlineStoreCode = storeEntity.ModuleOnlineStoreCode;
 
             return helpers.PopulateCommonData(storeEntity, store);
         }
