@@ -1350,12 +1350,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\XamlNamespaces.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />    
+    <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
@@ -4777,12 +4777,6 @@
     <Compile Include="Stores\Platforms\Infopia\WizardPages\InfopiaOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>InfopiaOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.Designer.cs">
-      <DependentUpon>MagentoAccountSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Magento\MagentoDownloader.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.cs">
@@ -4790,12 +4784,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.Designer.cs">
       <DependentUpon>MagentoStoreSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.Designer.cs">
-      <DependentUpon>MagentoAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
@@ -9328,14 +9316,8 @@
     <EmbeddedResource Include="Stores\Platforms\Magento\CoreExtensions\Actions\MagentoShipmentUploadTaskEditor.resx">
       <DependentUpon>MagentoShipmentUploadTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.resx">
-      <DependentUpon>MagentoAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.resx">
       <DependentUpon>MagentoStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.resx">
-      <DependentUpon>MagentoAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Magento\WizardPages\MagentoOnlineUpdateActionControl.resx">
       <DependentUpon>MagentoOnlineUpdateActionControl.cs</DependentUpon>
