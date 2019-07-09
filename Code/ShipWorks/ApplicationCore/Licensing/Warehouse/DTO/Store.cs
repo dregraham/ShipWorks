@@ -9,19 +9,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// <summary>
         /// The type of store this is
         /// </summary>
-        [JsonProperty("Name")]
         public string Name { get; set; }
 
         /// <summary>
         /// The type of store this is
         /// </summary>
-        [JsonProperty("StoreType")]
         public int StoreType { get; set; }
 
         /// <summary>
         /// The unique identifier for the store
         /// </summary>
-        [JsonProperty("UniqueIdentifier")]
         public string UniqueIdentifier { get; set; }
     }
 }
