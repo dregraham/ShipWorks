@@ -35,7 +35,6 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
-using ShipWorks.Warehouse;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -1000,7 +999,7 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                if (WarehouseStoreTypes.IsSupported(store.StoreTypeCode) &&
+                if (SelectedStoreType.ShouldUseHub(store) &&
                     (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
@@ -1050,7 +1049,7 @@ namespace ShipWorks.Stores.Management
                 if (result.Failure)
                 {
                     innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
-                    
+
                     MessageHelper.ShowError(
                         this,
                         $"An error occurred saving the store to ShipWorks.");

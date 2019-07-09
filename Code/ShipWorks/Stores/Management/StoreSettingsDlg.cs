@@ -23,7 +23,6 @@ using ShipWorks.Messaging.Messages;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Management
 {
@@ -392,7 +391,7 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                if (store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
+                if (store?.WarehouseStoreID != null && store.IsDirty && storeType.ShouldUseHub(store))
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {

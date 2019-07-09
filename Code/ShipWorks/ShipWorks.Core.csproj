@@ -1360,7 +1360,6 @@
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
-    <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>

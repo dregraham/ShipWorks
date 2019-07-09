@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
-            var testObject = mock.Create<StoreDtoFactory>();
+            var testObject = mock.Create<AmazonStoreDtoFactory>();
             mock.Mock<IStoreTypeManager>()
                 .Setup(x => x.GetType(AnyStore))
                 .Returns(mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(amazonStoreEntity)));
