@@ -83,7 +83,16 @@ namespace ShipWorks.Stores.Warehouse
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.Stores, Method.POST);
-                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
                     request.RequestFormat = DataFormat.Json;
 
                     Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
