@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Pipes;
 using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -36,7 +37,8 @@ namespace Interapptive.Shared.AutoUpdate
             try
             {
                 PipeSecurity pipeSecurity = new PipeSecurity();
-                pipeSecurity.AddAccessRule(new PipeAccessRule(@"Everyone", PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
+                SecurityIdentifier sid = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                pipeSecurity.AddAccessRule(new PipeAccessRule(sid, PipeAccessRights.ReadWrite | PipeAccessRights.CreateNewInstance, AccessControlType.Allow));
 
                 NamedPipeServerStream pipeServer = new NamedPipeServerStream(
                     instance,

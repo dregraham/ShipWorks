@@ -981,6 +981,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task OnSteppingIntoComplete(object sender, WizardSteppingIntoEventArgs e)
         {
+            NextEnabled = false;
             Cursor = Cursors.WaitCursor;
 
             wizardPageFinished.LoadDownloadControl();
@@ -1035,6 +1036,7 @@ namespace ShipWorks.Stores.Management
             {
                 FilterLayoutContext.PopScope();
                 Cursor = DefaultCursor;
+                NextEnabled = true;
             }
         }
 

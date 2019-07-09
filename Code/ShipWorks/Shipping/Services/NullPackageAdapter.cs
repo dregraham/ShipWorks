@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Interapptive.Shared.Utility;
@@ -64,6 +65,15 @@ namespace ShipWorks.Shipping.Services
         {
             get { return -1; }
             set { /* Not applicable */ }
+        }
+
+        /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        public string PackagingTypeName
+        {
+            // Not supported
+            get => string.Empty;
         }
 
         /// <summary>
