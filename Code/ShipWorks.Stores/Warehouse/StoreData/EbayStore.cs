@@ -18,5 +18,10 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// The auth token for this store
         /// </summary>
         public string EbayToken { get; set; }
+
+        /// <summary>
+        /// Whether or not to use the eBay sandbox
+        /// </summary>
+        public bool UseSandbox { get; set; }
     }
 }

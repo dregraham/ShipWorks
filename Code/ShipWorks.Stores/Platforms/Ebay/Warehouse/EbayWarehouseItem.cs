@@ -42,26 +42,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         public int CompleteStatus { get; set; }
 
         /// <summary>
-        /// The FeedbackLeftType of the EbayOrderItem
-        /// </summary>
-        public int FeedbackLeftType { get; set; }
-
-        /// <summary>
-        /// The FeedbackLeftComments of the EbayOrderItem
-        /// </summary>
-        public string FeedbackLeftComments { get; set; }
-
-        /// <summary>
-        /// The FeedbackReceivedType of the EbayOrderItem
-        /// </summary>
-        public int FeedbackReceivedType { get; set; }
-
-        /// <summary>
-        /// The FeedbackReceivedComments of the EbayOrderItem
-        /// </summary>
-        public string FeedbackReceivedComments { get; set; }
-
-        /// <summary>
         /// The MyEbayPaid of the EbayOrderItem
         /// </summary>
         public bool MyEbayPaid { get; set; }

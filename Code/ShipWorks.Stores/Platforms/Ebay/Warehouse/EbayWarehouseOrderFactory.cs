@@ -86,10 +86,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             ebayItemEntity.PaymentStatus = ebayWarehouseItem.PaymentStatus;
             ebayItemEntity.PaymentMethod = ebayWarehouseItem.PaymentMethod;
             ebayItemEntity.CompleteStatus = ebayWarehouseItem.CompleteStatus;
-            ebayItemEntity.FeedbackLeftType = ebayWarehouseItem.FeedbackLeftType;
-            ebayItemEntity.FeedbackLeftComments = ebayWarehouseItem.FeedbackLeftComments;
-            ebayItemEntity.FeedbackReceivedType = ebayWarehouseItem.FeedbackReceivedType;
-            ebayItemEntity.FeedbackReceivedComments = ebayWarehouseItem.FeedbackReceivedComments;
             ebayItemEntity.MyEbayPaid = ebayWarehouseItem.MyEbayPaid;
             ebayItemEntity.MyEbayShipped = ebayWarehouseItem.MyEbayShipped;
         }

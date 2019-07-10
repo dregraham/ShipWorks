@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Ebay;
 using ShipWorks.Stores.Warehouse.Encryption;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -137,6 +138,7 @@ namespace ShipWorks.Stores.Warehouse
 
             store.DownloadStartDate = GetUnixTimestampMillis(downloadStartDate);
             store.EbayToken = await encryptionService.Encrypt(storeEntity.EBayToken).ConfigureAwait(false);
+            store.UseSandbox = !EbayUrlUtilities.UseLiveServer;
 
             return store;
 
