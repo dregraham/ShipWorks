@@ -73,6 +73,11 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public WarehouseOrderAddress ShipAddress { get; set; }
         public string ChannelOrderID { get; set; }
         public DateTime? ShipByDate { get; set; }
+        public string Custom1 { get; set; }
+        public string Custom2 { get; set; }
+        public string Custom3 { get; set; }
+        public string Custom4 { get; set; }
+        public string Custom5 { get; set; }
         public List<WarehouseOrderCharge> Charges { get; set; }
         public List<WarehouseOrderPaymentDetail> PaymentDetails { get; set; }
         public List<WarehouseOrderNote> Notes { get; set; }

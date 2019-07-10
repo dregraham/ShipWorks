@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Users;
@@ -141,7 +142,12 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse();
             if (warehouse != null)
             {
-                var associationResponse = await warehouseSettingsApi.Link(warehouse.Id).ConfigureAwait(true);
+                Result associationResponse;
+                using (messageHelper.ShowProgressDialog("Linking warehouse...", "Linking warehouse..."))
+                {
+                    associationResponse = await warehouseSettingsApi.Link(warehouse.Id).ConfigureAwait(true);
+                }
+
                 if (associationResponse.Success)
                 {
                     configurationData.UpdateConfiguration(x =>

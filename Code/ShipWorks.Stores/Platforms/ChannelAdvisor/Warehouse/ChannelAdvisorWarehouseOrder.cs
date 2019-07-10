@@ -1,3 +1,4 @@
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
@@ -5,6 +6,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
     /// <summary>
     /// ChannelAdvisor warehouse order
     /// </summary>
+    [Obfuscation]
     public class ChannelAdvisorWarehouseOrder
     {
         /// <summary>

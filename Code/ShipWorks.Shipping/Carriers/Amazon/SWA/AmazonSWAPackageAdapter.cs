@@ -91,6 +91,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         }
 
         /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName
+        {
+            get => string.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets the dims length.
         /// </summary>
         [Obfuscation(Exclude = true)]

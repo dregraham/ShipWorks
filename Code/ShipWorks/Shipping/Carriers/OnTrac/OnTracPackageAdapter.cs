@@ -4,6 +4,7 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using Shared.System.ComponentModel.DataAnnotations;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 
@@ -85,6 +86,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             get { return shipment.OnTrac.PackagingType; }
             set { shipment.OnTrac.PackagingType = value; }
         }
+
+        /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName => EnumHelper.GetDescription((OnTracPackagingType) shipment.OnTrac.PackagingType);
 
         /// <summary>
         /// Gets or sets the dims length.

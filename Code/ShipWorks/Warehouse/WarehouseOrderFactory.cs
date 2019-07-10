@@ -46,7 +46,6 @@ namespace ShipWorks.Warehouse
 
                 // todo: orderid, storeid, warehousecustomerid
                 // todo: figure out what should and shouldn't be downloaded when new
-                orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
                 orderEntity.OrderDate = warehouseOrder.OrderDate;
                 orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
                 orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
@@ -59,14 +58,23 @@ namespace ShipWorks.Warehouse
                 orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
                 orderEntity.HubSequence = warehouseOrder.HubSequence;
 
+                orderEntity.Custom1 = warehouseOrder.Custom1;
+                orderEntity.Custom2 = warehouseOrder.Custom2;
+                orderEntity.Custom3 = warehouseOrder.Custom3;
+                orderEntity.Custom4 = warehouseOrder.Custom4;
+                orderEntity.Custom5 = warehouseOrder.Custom5;
+
                 LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
                 LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
 
-                LoadItems(orderEntity, warehouseOrder.Items);
+                if (orderEntity.IsNew)
+                {
+                	LoadItems(orderEntity, warehouseOrder.Items);
 
                 LoadCharges(orderEntity, warehouseOrder);
 
                 LoadPaymentDetails(orderEntity, warehouseOrder);
+            }
 
                 await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
@@ -86,11 +94,14 @@ namespace ShipWorks.Warehouse
 
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
         {
-            // todo: parse names if needed
-            localAddress.UnparsedName = warehouseOrderAddress.UnparsedName;
-            localAddress.FirstName = warehouseOrderAddress.FirstName;
-            localAddress.MiddleName = warehouseOrderAddress.MiddleName;
-            localAddress.LastName = warehouseOrderAddress.LastName;
+            PersonName parsedName = warehouseOrderAddress.UnparsedName.IsNullOrWhiteSpace() ? 
+                new PersonName(warehouseOrderAddress.FirstName, warehouseOrderAddress.MiddleName, warehouseOrderAddress.LastName) : 
+                PersonName.Parse(warehouseOrderAddress.UnparsedName);
+
+            localAddress.UnparsedName = parsedName.UnparsedName;
+            localAddress.FirstName = parsedName.First;
+            localAddress.MiddleName = parsedName.Middle;
+            localAddress.LastName = parsedName.Last;
             localAddress.Company = warehouseOrderAddress.Company;
             localAddress.Street1 = warehouseOrderAddress.Street1;
             localAddress.Street2 = warehouseOrderAddress.Street2;
@@ -211,7 +222,7 @@ namespace ShipWorks.Warehouse
             foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
             {
                 await orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
-                                               (NoteVisibility) warehouseOrderCharge.Visibility).ConfigureAwait(false);
+                                               (NoteVisibility) warehouseOrderCharge.Visibility, true).ConfigureAwait(false);
             }
         }
     }

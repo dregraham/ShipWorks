@@ -74,16 +74,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 if (restResponse.StatusCode == HttpStatusCode.Forbidden)
                 {
-                    // Get new token using the refresh token
-                    GenericResult<TokenResponse> refreshTokenResult = await warehouseRefreshToken.RefreshToken(refreshToken)
+                    GenericResult<TokenResponse> redirectTokenResult = await warehouseRemoteLoginWithToken.RemoteLoginWithToken()
                         .ConfigureAwait(false);
 
-                    if (refreshTokenResult.Failure)
+                    if (redirectTokenResult.Failure)
                     {
-                        return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from refreshToken.");
+                        return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from redirectToken.");
                     }
 
-                    restResponse = await ResendAction(restRequest, restClient, refreshTokenResult);
+                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)
@@ -130,7 +129,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            // Nothing to do here
+            EndSession();
         }
 
         /// <summary>

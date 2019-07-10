@@ -91,6 +91,16 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         }
 
         /// <summary>
+        /// Gets the packaging type name.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string PackagingTypeName
+        {
+            // Not supported
+            get => string.Empty;
+        }
+
+        /// <summary>
         /// Gets or sets the dims length.
         /// </summary>
         [Obfuscation(Exclude = true)]

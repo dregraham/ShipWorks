@@ -17,6 +17,7 @@ namespace ShipWorks.Tests.Shared
         public double DimsHeight { get; set; }
         public long DimsProfileID { get; set; }
         public int PackagingType { get; set; }
+        public string PackagingTypeName { get; }
         public IInsuranceChoice InsuranceChoice { get; set; }
 
         public string HashCode()
