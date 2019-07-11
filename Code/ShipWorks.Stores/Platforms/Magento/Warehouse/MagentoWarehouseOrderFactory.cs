@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
@@ -18,17 +17,18 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
     /// Magento warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Magento)]
-    public class MagentoWarehouseOrderFactory : WarehouseOrderFactory
+    public class MagentoWarehouseOrderFactory : GenericModuleWarehouseOrderFactory
     {
         private const string MagentoEntryKey = "Magento";
         private readonly ILog log;
+
         //private readonly MagentoDownloader magentoDownloader;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public MagentoWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) :
-            base(orderElementFactory)
+            base(orderElementFactory, logFactory)
         {
             log = logFactory(typeof(MagentoWarehouseOrderFactory));
         }
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
         {
             var genericStore = MethodConditions.EnsureArgumentIsNotNull(store as IGenericModuleStoreEntity, nameof(store));
             var genericStoreType = MethodConditions.EnsureArgumentIsNotNull(storeType as GenericModuleStoreType, nameof(storeType));
-            
+
             // get the order instance
             var identifier = GenericModuleDownloader.CreateOrderIdentifier(
                 (GenericStoreDownloadStrategy) genericStore.ModuleDownloadStrategy,
@@ -64,18 +64,12 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
         /// </summary>
         protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
+            base.LoadStoreOrderDetails(orderEntity, warehouseOrder);
+
             var magentoOrderEntity = (MagentoOrderEntity) orderEntity;
             var magentoWarehouseOrder = warehouseOrder.AdditionalData[MagentoEntryKey].ToObject<MagentoWarehouseOrder>();
 
             magentoOrderEntity.MagentoOrderID = magentoWarehouseOrder.MagentoOrderID;
-        }
-
-        /// <summary>
-        /// Load store specific item details
-        /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
-        {
-            throw new NotImplementedException();
         }
     }
 }

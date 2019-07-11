@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
     /// Generic Module warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GenericModule)]
+    [Component(RegistrationType.Self)]
     public class GenericModuleWarehouseOrderFactory : WarehouseOrderFactory
     {
         private const string genericModuleEntryKey = "genericModule";
