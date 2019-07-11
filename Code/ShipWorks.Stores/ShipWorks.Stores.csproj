@@ -256,6 +256,8 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
