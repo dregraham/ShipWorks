@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Magento)]
     public class MagentoWarehouseOrderFactory : GenericModuleWarehouseOrderFactory
     {
-        private const string MagentoEntryKey = "Magento";
+        private const string MagentoEntryKey = "magento";
         private readonly ILog log;
 
         //private readonly MagentoDownloader magentoDownloader;
