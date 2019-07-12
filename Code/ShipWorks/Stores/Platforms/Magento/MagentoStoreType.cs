@@ -201,6 +201,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public override bool ShouldUseHub(IStoreEntity store) =>
             store is IMagentoStoreEntity magentoStore &&
-            magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST;
+            (
+                magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST ||
+                magentoStore.MagentoVersion == (int) MagentoVersion.PhpFile);
     }
 }
