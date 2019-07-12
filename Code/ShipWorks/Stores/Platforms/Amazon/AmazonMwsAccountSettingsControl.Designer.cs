@@ -90,6 +90,15 @@
             this.form.Size = new System.Drawing.Size(508, 308);
             this.form.TabIndex = 73;
             // 
+            // step2
+            // 
+            this.step2.AutoSize = true;
+            this.step2.Location = new System.Drawing.Point(-3, 20);
+            this.step2.Name = "step2";
+            this.step2.Size = new System.Drawing.Size(381, 13);
+            this.step2.TabIndex = 40;
+            this.step2.Text = "2.  If prompted to sign in, do so using your Amazon seller account credentials.";
+            // 
             // step1
             // 
             this.step1.AutoSize = true;
@@ -99,6 +108,94 @@
             this.step1.TabIndex = 39;
             this.step1.Text = "1.  Go to";
             // 
+            // copyAccountNumber
+            // 
+            this.copyAccountNumber.Location = new System.Drawing.Point(182, 86);
+            this.copyAccountNumber.Name = "copyAccountNumber";
+            this.copyAccountNumber.Size = new System.Drawing.Size(128, 23);
+            this.copyAccountNumber.TabIndex = 3;
+            this.copyAccountNumber.Text = "Copy To Clipboard";
+            this.copyAccountNumber.UseVisualStyleBackColor = true;
+            this.copyAccountNumber.Click += new System.EventHandler(this.OnCopyAccountNumberClick);
+            // 
+            // merchantID
+            // 
+            this.merchantID.Location = new System.Drawing.Point(155, 183);
+            this.merchantID.Name = "merchantID";
+            this.merchantID.Size = new System.Drawing.Size(118, 21);
+            this.merchantID.TabIndex = 4;
+            // 
+            // marketplaceID
+            // 
+            this.marketplaceID.Location = new System.Drawing.Point(155, 239);
+            this.marketplaceID.Name = "marketplaceID";
+            this.marketplaceID.Size = new System.Drawing.Size(118, 21);
+            this.marketplaceID.TabIndex = 6;
+            // 
+            // buttonChooseMarketplace
+            // 
+            this.buttonChooseMarketplace.Location = new System.Drawing.Point(279, 238);
+            this.buttonChooseMarketplace.Name = "buttonChooseMarketplace";
+            this.buttonChooseMarketplace.Size = new System.Drawing.Size(146, 23);
+            this.buttonChooseMarketplace.TabIndex = 7;
+            this.buttonChooseMarketplace.Text = "Choose My Marketplace...";
+            this.buttonChooseMarketplace.UseVisualStyleBackColor = true;
+            this.buttonChooseMarketplace.Click += new System.EventHandler(this.OnClickFindMarketplaces);
+            // 
+            // step8
+            // 
+            this.step8.AutoSize = true;
+            this.step8.Location = new System.Drawing.Point(-1, 242);
+            this.step8.Name = "step8";
+            this.step8.Size = new System.Drawing.Size(150, 13);
+            this.step8.TabIndex = 68;
+            this.step8.Text = "8. Enter your Marketplace ID:";
+            // 
+            // authToken
+            // 
+            this.authToken.Location = new System.Drawing.Point(155, 210);
+            this.authToken.Name = "authToken";
+            this.authToken.Size = new System.Drawing.Size(268, 21);
+            this.authToken.TabIndex = 5;
+            // 
+            // authTokenLabel
+            // 
+            this.authTokenLabel.AutoSize = true;
+            this.authTokenLabel.Location = new System.Drawing.Point(83, 213);
+            this.authTokenLabel.Name = "authTokenLabel";
+            this.authTokenLabel.Size = new System.Drawing.Size(66, 13);
+            this.authTokenLabel.TabIndex = 66;
+            this.authTokenLabel.Text = "Auth Token:";
+            // 
+            // accountNumber
+            // 
+            this.accountNumber.BackColor = System.Drawing.Color.White;
+            this.accountNumber.Location = new System.Drawing.Point(74, 87);
+            this.accountNumber.Name = "accountNumber";
+            this.accountNumber.ReadOnly = true;
+            this.accountNumber.Size = new System.Drawing.Size(102, 21);
+            this.accountNumber.TabIndex = 2;
+            this.accountNumber.Text = "1025-5115-6476";
+            // 
+            // step5Next
+            // 
+            this.step5Next.AutoSize = true;
+            this.step5Next.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.step5Next.Location = new System.Drawing.Point(55, 115);
+            this.step5Next.Name = "step5Next";
+            this.step5Next.Size = new System.Drawing.Size(33, 13);
+            this.step5Next.TabIndex = 56;
+            this.step5Next.Text = "Next";
+            // 
+            // merchantIDLabel
+            // 
+            this.merchantIDLabel.AutoSize = true;
+            this.merchantIDLabel.Location = new System.Drawing.Point(98, 186);
+            this.merchantIDLabel.Name = "merchantIDLabel";
+            this.merchantIDLabel.Size = new System.Drawing.Size(51, 13);
+            this.merchantIDLabel.TabIndex = 61;
+            this.merchantIDLabel.Text = "Seller ID:";
+            // 
             // mwsLink
             // 
             this.mwsLink.AutoSize = true;
@@ -107,19 +204,105 @@
             this.mwsLink.ForeColor = System.Drawing.Color.Blue;
             this.mwsLink.Location = new System.Drawing.Point(45, 0);
             this.mwsLink.Name = "mwsLink";
-            this.mwsLink.Size = new System.Drawing.Size(194, 13);
-            this.mwsLink.TabIndex = 63;
-            this.mwsLink.Text = "https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisplayed=1&devAuth=1.";
+            this.mwsLink.Size = new System.Drawing.Size(508, 13);
+            this.mwsLink.TabIndex = 1;
+            this.mwsLink.Text = "https://sellercentral.amazon.com/gp/mws/registration/register.html?signInPageDisp" +
+    "layed=1&devAuth=1.";
             this.mwsLink.Click += new System.EventHandler(this.OnMWSLinkClick);
             // 
-            // step2
+            // step7
             // 
-            this.step2.AutoSize = true;
-            this.step2.Location = new System.Drawing.Point(-3, 20);
-            this.step2.Name = "step2";
-            this.step2.Size = new System.Drawing.Size(63, 13);
-            this.step2.TabIndex = 40;
-            this.step2.Text = "2.  If prompted to sign in, do so using your Amazon seller account credentials.";
+            this.step7.AutoSize = true;
+            this.step7.Location = new System.Drawing.Point(-3, 163);
+            this.step7.Name = "step7";
+            this.step7.Size = new System.Drawing.Size(410, 13);
+            this.step7.TabIndex = 60;
+            this.step7.Text = "7.  Copy the Seller ID and Auth Token from the confirmation page and enter it her" +
+    "e:";
+            // 
+            // step6Next
+            // 
+            this.step6Next.AutoSize = true;
+            this.step6Next.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.step6Next.Location = new System.Drawing.Point(275, 139);
+            this.step6Next.Name = "step6Next";
+            this.step6Next.Size = new System.Drawing.Size(36, 13);
+            this.step6Next.TabIndex = 59;
+            this.step6Next.Text = "Next.";
+            // 
+            // step6
+            // 
+            this.step6.AutoSize = true;
+            this.step6.Location = new System.Drawing.Point(-3, 139);
+            this.step6.Name = "step6";
+            this.step6.Size = new System.Drawing.Size(280, 13);
+            this.step6.TabIndex = 58;
+            this.step6.Text = "6.  Accept the Amazon MWS License Agreement and click";
+            // 
+            // step5Part2
+            // 
+            this.step5Part2.AutoSize = true;
+            this.step5Part2.Location = new System.Drawing.Point(85, 115);
+            this.step5Part2.Name = "step5Part2";
+            this.step5Part2.Size = new System.Drawing.Size(43, 13);
+            this.step5Part2.TabIndex = 57;
+            this.step5Part2.Text = "button.";
+            // 
+            // step5
+            // 
+            this.step5.AutoSize = true;
+            this.step5.Location = new System.Drawing.Point(-3, 115);
+            this.step5.Name = "step5";
+            this.step5.Size = new System.Drawing.Size(63, 13);
+            this.step5.TabIndex = 55;
+            this.step5.Text = "5.  Click the";
+            // 
+            // step4Part2
+            // 
+            this.step4Part2.AutoSize = true;
+            this.step4Part2.Location = new System.Drawing.Point(127, 65);
+            this.step4Part2.Name = "step4Part2";
+            this.step4Part2.Size = new System.Drawing.Size(85, 13);
+            this.step4Part2.TabIndex = 53;
+            this.step4Part2.Text = "text box, enter:";
+            // 
+            // step4DeveloperID
+            // 
+            this.step4DeveloperID.AutoSize = true;
+            this.step4DeveloperID.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.step4DeveloperID.Location = new System.Drawing.Point(47, 65);
+            this.step4DeveloperID.Name = "step4DeveloperID";
+            this.step4DeveloperID.Size = new System.Drawing.Size(81, 13);
+            this.step4DeveloperID.TabIndex = 52;
+            this.step4DeveloperID.Text = "Developer ID";
+            // 
+            // step4
+            // 
+            this.step4.AutoSize = true;
+            this.step4.Location = new System.Drawing.Point(-3, 65);
+            this.step4.Name = "step4";
+            this.step4.Size = new System.Drawing.Size(52, 13);
+            this.step4.TabIndex = 51;
+            this.step4.Text = "4.  In the";
+            // 
+            // step3ShipWorks
+            // 
+            this.step3ShipWorks.AutoSize = true;
+            this.step3ShipWorks.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.step3ShipWorks.Location = new System.Drawing.Point(227, 42);
+            this.step3ShipWorks.Name = "step3ShipWorks";
+            this.step3ShipWorks.Size = new System.Drawing.Size(70, 13);
+            this.step3ShipWorks.TabIndex = 50;
+            this.step3ShipWorks.Text = "ShipWorks.";
+            // 
+            // step3Part2
+            // 
+            this.step3Part2.AutoSize = true;
+            this.step3Part2.Location = new System.Drawing.Point(153, 42);
+            this.step3Part2.Name = "step3Part2";
+            this.step3Part2.Size = new System.Drawing.Size(77, 13);
+            this.step3Part2.TabIndex = 49;
+            this.step3Part2.Text = "text box, type";
             // 
             // step3
             // 
@@ -133,198 +316,17 @@
             // step3DevelopersName
             // 
             this.step3DevelopersName.AutoSize = true;
-            this.step3DevelopersName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.step3DevelopersName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.step3DevelopersName.Location = new System.Drawing.Point(47, 42);
             this.step3DevelopersName.Name = "step3DevelopersName";
-            this.step3DevelopersName.Size = new System.Drawing.Size(105, 13);
+            this.step3DevelopersName.Size = new System.Drawing.Size(109, 13);
             this.step3DevelopersName.TabIndex = 48;
             this.step3DevelopersName.Text = "Developer\'s Name";
-            // 
-            // step3Part2
-            // 
-            this.step3Part2.AutoSize = true;
-            this.step3Part2.Location = new System.Drawing.Point(153, 42);
-            this.step3Part2.Name = "step3Part2";
-            this.step3Part2.Size = new System.Drawing.Size(77, 13);
-            this.step3Part2.TabIndex = 49;
-            this.step3Part2.Text = "text box, type";
-            // 
-            // step3ShipWorks
-            // 
-            this.step3ShipWorks.AutoSize = true;
-            this.step3ShipWorks.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.step3ShipWorks.Location = new System.Drawing.Point(227, 42);
-            this.step3ShipWorks.Name = "step3ShipWorks";
-            this.step3ShipWorks.Size = new System.Drawing.Size(70, 13);
-            this.step3ShipWorks.TabIndex = 50;
-            this.step3ShipWorks.Text = "ShipWorks.";
-            // 
-            // step4
-            // 
-            this.step4.AutoSize = true;
-            this.step4.Location = new System.Drawing.Point(-3, 65);
-            this.step4.Name = "step4";
-            this.step4.Size = new System.Drawing.Size(52, 13);
-            this.step4.TabIndex = 51;
-            this.step4.Text = "4.  In the";
-            // 
-            // step4DeveloperID
-            // 
-            this.step4DeveloperID.AutoSize = true;
-            this.step4DeveloperID.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.step4DeveloperID.Location = new System.Drawing.Point(47, 65);
-            this.step4DeveloperID.Name = "step4DeveloperID";
-            this.step4DeveloperID.Size = new System.Drawing.Size(236, 13);
-            this.step4DeveloperID.TabIndex = 52;
-            this.step4DeveloperID.Text = "Developer ID";
-            // 
-            // step4Part2
-            // 
-            this.step4Part2.AutoSize = true;
-            this.step4Part2.Location = new System.Drawing.Point(127, 65);
-            this.step4Part2.Name = "step4Part2";
-            this.step4Part2.Size = new System.Drawing.Size(85, 13);
-            this.step4Part2.TabIndex = 53;
-            this.step4Part2.Text = "text box, enter:";
-            // 
-            // accountNumber
-            // 
-            this.accountNumber.BackColor = System.Drawing.Color.White;
-            this.accountNumber.Location = new System.Drawing.Point(74, 87);
-            this.accountNumber.Name = "accountNumber";
-            this.accountNumber.ReadOnly = true;
-            this.accountNumber.Size = new System.Drawing.Size(102, 21);
-            this.accountNumber.TabIndex = 54;
-            this.accountNumber.Text = "1025-5115-6476";
-            // 
-            // copyAccountNumber
-            // 
-            this.copyAccountNumber.Location = new System.Drawing.Point(182, 86);
-            this.copyAccountNumber.Name = "copyAccountNumber";
-            this.copyAccountNumber.Size = new System.Drawing.Size(128, 23);
-            this.copyAccountNumber.TabIndex = 72;
-            this.copyAccountNumber.Text = "Copy To Clipboard";
-            this.copyAccountNumber.UseVisualStyleBackColor = true;
-            this.copyAccountNumber.Click += new System.EventHandler(this.OnCopyAccountNumberClick);
-            // 
-            // step5
-            // 
-            this.step5.AutoSize = true;
-            this.step5.Location = new System.Drawing.Point(-3, 115);
-            this.step5.Name = "step5";
-            this.step5.Size = new System.Drawing.Size(66, 13);
-            this.step5.TabIndex = 55;
-            this.step5.Text = "5.  Click the";
-            // 
-            // step5Next
-            // 
-            this.step5Next.AutoSize = true;
-            this.step5Next.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.step5Next.Location = new System.Drawing.Point(55, 115);
-            this.step5Next.Name = "step5Next";
-            this.step5Next.Size = new System.Drawing.Size(33, 13);
-            this.step5Next.TabIndex = 56;
-            this.step5Next.Text = "Next";
-            // 
-            // step5Part2
-            // 
-            this.step5Part2.AutoSize = true;
-            this.step5Part2.Location = new System.Drawing.Point(85, 115);
-            this.step5Part2.Name = "step5Part2";
-            this.step5Part2.Size = new System.Drawing.Size(43, 13);
-            this.step5Part2.TabIndex = 57;
-            this.step5Part2.Text = "button.";
-            // 
-            // step6
-            // 
-            this.step6.AutoSize = true;
-            this.step6.Location = new System.Drawing.Point(-3, 139);
-            this.step6.Name = "step6";
-            this.step6.Size = new System.Drawing.Size(280, 13);
-            this.step6.TabIndex = 58;
-            this.step6.Text = "6.  Accept the Amazon MWS License Agreement and click";
-            // 
-            // step6Next
-            // 
-            this.step6Next.AutoSize = true;
-            this.step6Next.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.step6Next.Location = new System.Drawing.Point(275, 139);
-            this.step6Next.Name = "step6Next";
-            this.step6Next.Size = new System.Drawing.Size(36, 13);
-            this.step6Next.TabIndex = 59;
-            this.step6Next.Text = "Next.";
-            // 
-            // step7
-            // 
-            this.step7.AutoSize = true;
-            this.step7.Location = new System.Drawing.Point(-3, 163);
-            this.step7.Name = "step7";
-            this.step7.Size = new System.Drawing.Size(410, 13);
-            this.step7.TabIndex = 60;
-            this.step7.Text = "7.  Copy the Seller ID and Auth Token from the confirmation page and enter it here:";
-            // 
-            // merchantIDLabel
-            // 
-            this.merchantIDLabel.AutoSize = true;
-            this.merchantIDLabel.Location = new System.Drawing.Point(98, 186);
-            this.merchantIDLabel.Name = "merchantIDLabel";
-            this.merchantIDLabel.Size = new System.Drawing.Size(51, 13);
-            this.merchantIDLabel.TabIndex = 61;
-            this.merchantIDLabel.Text = "Seller ID:";
-            // 
-            // merchantID
-            // 
-            this.merchantID.Location = new System.Drawing.Point(155, 183);
-            this.merchantID.Name = "merchantID";
-            this.merchantID.Size = new System.Drawing.Size(118, 21);
-            this.merchantID.TabIndex = 3;
-            // 
-            // authTokenLabel
-            // 
-            this.authTokenLabel.AutoSize = true;
-            this.authTokenLabel.Location = new System.Drawing.Point(83, 213);
-            this.authTokenLabel.Name = "authTokenLabel";
-            this.authTokenLabel.Size = new System.Drawing.Size(66, 13);
-            this.authTokenLabel.TabIndex = 66;
-            this.authTokenLabel.Text = "Auth Token:";
-            // 
-            // authToken
-            // 
-            this.authToken.Location = new System.Drawing.Point(155, 210);
-            this.authToken.Name = "authToken";
-            this.authToken.Size = new System.Drawing.Size(268, 21);
-            this.authToken.TabIndex = 10;
-            // 
-            // step8
-            // 
-            this.step8.AutoSize = true;
-            this.step8.Location = new System.Drawing.Point(-1, 242);
-            this.step8.Name = "step8";
-            this.step8.Size = new System.Drawing.Size(150, 13);
-            this.step8.TabIndex = 68;
-            this.step8.Text = "8. Enter your Marketplace ID:";
-            // 
-            // marketplaceID
-            // 
-            this.marketplaceID.Location = new System.Drawing.Point(155, 239);
-            this.marketplaceID.Name = "marketplaceID";
-            this.marketplaceID.Size = new System.Drawing.Size(118, 21);
-            this.marketplaceID.TabIndex = 69;
-            // 
-            // buttonChooseMarketplace
-            // 
-            this.buttonChooseMarketplace.Location = new System.Drawing.Point(279, 238);
-            this.buttonChooseMarketplace.Name = "buttonChooseMarketplace";
-            this.buttonChooseMarketplace.Size = new System.Drawing.Size(146, 23);
-            this.buttonChooseMarketplace.TabIndex = 7;
-            this.buttonChooseMarketplace.Text = "Choose My Marketplace...";
-            this.buttonChooseMarketplace.UseVisualStyleBackColor = true;
-            this.buttonChooseMarketplace.Click += new System.EventHandler(this.OnClickFindMarketplaces);
             // 
             // title
             // 
             this.title.AutoSize = true;
-            this.title.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.title.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.title.Location = new System.Drawing.Point(22, 11);
             this.title.Name = "title";
             this.title.Size = new System.Drawing.Size(235, 13);

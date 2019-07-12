@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.XPath;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Data.Import.Xml
 {
@@ -29,7 +29,7 @@ namespace ShipWorks.Data.Import.Xml
 
             // Channel Order ID
             order.ChannelOrderID = XPathUtility.Evaluate(xpath, "ChannelOrderID", "");
-            
+
             bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
 
             if (success)
@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Import.Xml
 
             // Load Address info
             LoadAddressInfo(order, xpath);
-            
+
             // Notes
             LoadNotes(factory, order, xpath);
 
@@ -112,29 +112,6 @@ namespace ShipWorks.Data.Import.Xml
             order.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
             order.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
             order.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
-        }
-
-        /// <summary>
-        /// Loads ShipByDate from the module XML
-        /// </summary>
-        private static void LoadShipByDate(OrderEntity order, XPathNavigator xpath)
-        {
-            bool success = DateTime.TryParse(XPathUtility.Evaluate(xpath, "ShipByDate", ""), out DateTime result);
-
-            if (success)
-            {
-                DateTime shipByDate = result;
-
-                // Convert to UTC
-                if (shipByDate.Kind == DateTimeKind.Local || shipByDate.Kind == DateTimeKind.Unspecified)
-                {
-                    order.ShipByDate = shipByDate.ToUniversalTime();
-                }
-                else
-                {
-                    order.ShipByDate = shipByDate;
-                }
-            }
         }
 
         /// <summary>
@@ -243,9 +220,9 @@ namespace ShipWorks.Data.Import.Xml
             item.UnitPrice = XPathUtility.Evaluate(xpath, "UnitPrice", 0.0M);
             item.UnitCost = XPathUtility.Evaluate(xpath, "UnitCost", 0.0M);
             item.Weight = XPathUtility.Evaluate(xpath, "Weight", 0.0);
-            item.Length = XPathUtility.Evaluate(xpath, "Length", 0.0M); 
-            item.Width = XPathUtility.Evaluate(xpath, "Width", 0.0M); 
-            item.Height = XPathUtility.Evaluate(xpath, "Height", 0.0M); 
+            item.Length = XPathUtility.Evaluate(xpath, "Length", 0.0M);
+            item.Width = XPathUtility.Evaluate(xpath, "Width", 0.0M);
+            item.Height = XPathUtility.Evaluate(xpath, "Height", 0.0M);
             item.Image = XPathUtility.Evaluate(xpath, "Image", "");
             item.Thumbnail = XPathUtility.Evaluate(xpath, "ThumbnailImage", item.Image);
             item.Location = XPathUtility.Evaluate(xpath, "Location", "");
@@ -333,7 +310,7 @@ namespace ShipWorks.Data.Import.Xml
             string fullName = XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FullName", "").Trim();
             if (fullName.Length == 0)
             {
-                order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)PersonNameParseStatus.Simple);
+                order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) PersonNameParseStatus.Simple);
                 order.SetNewFieldValue(dbPrefix + "FirstName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FirstName", "").Trim());
                 order.SetNewFieldValue(dbPrefix + "MiddleName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/MiddleName", "").Trim());
                 order.SetNewFieldValue(dbPrefix + "LastName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/LastName", "").Trim());
@@ -343,7 +320,7 @@ namespace ShipWorks.Data.Import.Xml
                 // parse the name for its parts
                 PersonName personName = PersonName.Parse(fullName);
 
-                order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)personName.ParseStatus);
+                order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int) personName.ParseStatus);
                 order.SetNewFieldValue(dbPrefix + "UnparsedName", personName.UnparsedName.Trim());
                 order.SetNewFieldValue(dbPrefix + "FirstName", personName.First.Trim());
                 order.SetNewFieldValue(dbPrefix + "MiddleName", personName.Middle.Trim());
