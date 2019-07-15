@@ -5,19 +5,20 @@ using OpenQA.Selenium.Firefox;
 using System;
 using System.IO;
 
-namespace XunitSpecflow.Steps
+namespace HubOrderPerformance.Steps
 {
     public class BaseSteps
     {
         IAlert alert;
         IWebDriver _driver;
+
         public IWebDriver SetWebDriver(string browser)
         {
             switch (browser)
             {
                 case "Chrome":
                     ChromeOptions chromeOptions = new ChromeOptions();
-                    chromeOptions.AddArgument("--headless");
+                    //chromeOptions.AddArgument("--headless");
                     _driver = new ChromeDriver(Directory.GetCurrentDirectory(), chromeOptions);
                     _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
@@ -25,7 +26,7 @@ namespace XunitSpecflow.Steps
 
                 case "Firefox":
                     FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    firefoxOptions.AddArgument("--headless");
+                    //firefoxOptions.AddArgument("--headless");
                     _driver = new FirefoxDriver(Directory.GetCurrentDirectory(), firefoxOptions);
                     _driver.Manage().Window.Maximize();
                     _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
