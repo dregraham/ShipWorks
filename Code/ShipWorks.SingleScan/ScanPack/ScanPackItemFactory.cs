@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products;
@@ -8,6 +9,7 @@ namespace ShipWorks.SingleScan.ScanPack
     /// <summary>
     /// ScanPackItem Factory
     /// </summary>
+    [Component]
     public class ScanPackItemFactory : IScanPackItemFactory
     {
         private readonly IProductCatalog productCatalog;
