@@ -1371,7 +1371,7 @@ namespace ShipWorks.Stores.Communication
                         count += 1;
                         Progress.Detail = "Downloading order " + count.ToString("#,##0");
 
-                        OrderEntity orderEntity = await orderFactory.CreateOrder(warehouseOrder).ConfigureAwait(false);
+                        OrderEntity orderEntity = await orderFactory.CreateOrder(Store, StoreType, warehouseOrder).ConfigureAwait(false);
                         await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
                     }
 

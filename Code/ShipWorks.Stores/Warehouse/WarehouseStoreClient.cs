@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -47,7 +49,16 @@ namespace ShipWorks.Stores.Warehouse
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.UpdateStoreCredentials(store.WarehouseStoreID?.ToString("D")), Method.POST);
-                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
                     request.RequestFormat = DataFormat.Json;
 
                     Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
@@ -83,7 +94,16 @@ namespace ShipWorks.Stores.Warehouse
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.Stores, Method.POST);
-                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
                     request.RequestFormat = DataFormat.Json;
 
                     Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
