@@ -5,6 +5,7 @@ using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Warehouse
@@ -55,8 +56,16 @@ namespace ShipWorks.Stores.Warehouse
             store.Url = storeEntity.ModuleUrl;
             store.Username = storeEntity.ModuleUsername;
             store.Password = await helpers.EncryptSecret(decryptedPassword).ConfigureAwait(false);
-            store.ImportStartDetails = (ulong?) (storeEntity.InitialDownloadDays ?? storeEntity.InitialDownloadOrder);
             store.OnlineStoreCode = storeEntity.ModuleOnlineStoreCode;
+
+            if (storeEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime)
+            {
+                store.ImportStartDetails = (ulong?) storeEntity.InitialDownloadDays ?? 30;
+            }
+            else
+            {
+                store.ImportStartDetails = (ulong?) storeEntity.InitialDownloadOrder ?? 0;
+            }
 
             return helpers.PopulateCommonData(storeEntity, store);
         }
