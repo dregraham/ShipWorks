@@ -49,6 +49,12 @@ namespace ShipWorks.SingleScan.ScanPack
         private ScanPackItem CreateItem(ProductVariantEntity product, OrderItemEntity item)
         {
             string imageUrl = string.IsNullOrWhiteSpace(product.ImageUrl) ? item.Image : product.ImageUrl;
+
+            if (string.IsNullOrWhiteSpace(imageUrl))
+            {
+                imageUrl = item.Thumbnail;
+            }
+
             string name = string.IsNullOrWhiteSpace(product.Name) ? item.Name : product.Name;
 
             return new ScanPackItem(name, imageUrl, item.Quantity);
