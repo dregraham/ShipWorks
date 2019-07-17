@@ -392,7 +392,12 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                if (store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
+                if (result)
+                {
+                    result = storeSettingsControl.SaveToEntity(store);
+                }
+
+                if (result && store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
@@ -408,11 +413,6 @@ namespace ShipWorks.Stores.Management
                             result = false;
                         }
                     }
-                }
-
-                if (result)
-                {
-                    result = storeSettingsControl.SaveToEntity(store);
                 }
             }
 
