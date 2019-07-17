@@ -7,6 +7,13 @@ using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.OrderLookup
 {
+    /// <summary>
+    /// Utility for retrieving an orderid from an order
+    /// </summary>
+    /// <remarks>
+    /// handles on demand downloads and confirming the correct order
+    /// when there are multiple matching results
+    /// </remarks>
     [Component]
     public class OrderLookupOrderIDRetriever : IOrderLookupOrderIDRetriever
     {
@@ -29,8 +36,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get OrderID based on scanned text
         /// </summary>
-        /// <param name="scannedText"></param>
-        /// <returns></returns>
         public async Task<TelemetricResult<long?>> GetOrderID(string scannedText,
             string userInputTelemetryTimeSliceName,
             string dataLoadingTelemetryTimeSliceName,

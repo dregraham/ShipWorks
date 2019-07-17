@@ -322,6 +322,7 @@
     <Compile Include="FieldManager\IOrderLookupFieldManagerDialog.cs" />
     <Compile Include="FieldManager\OrderLookupFieldManagerViewModel.cs" />
     <Compile Include="FieldManager\OrderLookupFieldLayoutProvider.cs" />
+    <Compile Include="IOrderLookupOrderIDRetriever.cs" />
     <Compile Include="Layout\IOrderLookupLayout.cs" />
     <Compile Include="IOrderLookupConfirmationService.cs" />
     <Compile Include="IOrderLookupPanelFactory.cs" />
@@ -331,6 +332,7 @@
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
+    <Compile Include="OrderLookupOrderIDRetriever.cs" />
     <Compile Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml.cs">
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
