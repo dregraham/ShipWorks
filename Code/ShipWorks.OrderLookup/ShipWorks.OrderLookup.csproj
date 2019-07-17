@@ -337,13 +337,18 @@
     <Compile Include="ScanPack\Packed\PackedControl.xaml.cs">
       <DependentUpon>PackedControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScanPack\ScanPackControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ScanPack\ScanPackControlHost.Designer.cs">
+      <DependentUpon>ScanPackControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml.cs">
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\ScanPack\ScanPackControl.xaml.cs">
       <DependentUpon>ScanPackControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScanPack\ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\Scan\ScanControl.xaml.cs">
       <DependentUpon>ScanControl.xaml</DependentUpon>
     </Compile>

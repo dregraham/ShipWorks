@@ -8,7 +8,7 @@
              xmlns:itemsToScan="clr-namespace:ShipWorks.OrderLookup.ScanPack.ItemsToScan"
              xmlns:scan="clr-namespace:ShipWorks.OrderLookup.ScanPack.Scan"
              xmlns:packed="clr-namespace:ShipWorks.OrderLookup.ScanPack.Packed"
-             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack.ScanPack"
+             xmlns:scanPack="clr-namespace:ShipWorks.SingleScan.ScanPack;assembly=ShipWorks.SingleScan"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              x:Name="ScanPack"
