@@ -37,6 +37,7 @@ namespace ShipWorks.OrderLookup
         private readonly ISingleScanOrderShortcut singleScanOrderShortcut;
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
+        private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -59,10 +60,10 @@ namespace ShipWorks.OrderLookup
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
             IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel,
-            ISingleScanOrderShortcut singleScanOrderShortcut,
             Func<Type, ILog> createLogger,
             IOrderLookupConfirmationService orderLookupConfirmationService,
-            Func<string, ITrackedDurationEvent> telemetryFactory)
+            Func<string, ITrackedDurationEvent> telemetryFactory,
+            IOrderLookupOrderIDRetriever orderIDRetriever)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -74,6 +75,7 @@ namespace ShipWorks.OrderLookup
             this.singleScanOrderShortcut = singleScanOrderShortcut;
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             this.telemetryFactory = telemetryFactory;
+            this.orderIDRetriever = orderIDRetriever;
             log = createLogger(GetType());
         }
 
@@ -121,7 +123,8 @@ namespace ShipWorks.OrderLookup
                     telemetryEvent.AddProperty(InputSourceTelemetryPropertyName, "Barcode");
                     telemetryEvent.AddProperty(InputTextTelemetryPropertyName, message.ScannedText);
 
-                    TelemetricResult<long?> orderLookupTelemetricResult = await GetOrderID(message.ScannedText).ConfigureAwait(true);
+                    TelemetricResult<long?> orderLookupTelemetricResult = await orderIDRetriever
+                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(true);
                     orderLookupTelemetricResult.WriteTo(telemetryEvent);
 
                     long? orderId = orderLookupTelemetricResult.Value;
@@ -183,52 +186,6 @@ namespace ShipWorks.OrderLookup
             {
                 processingScan = false;
             }
-        }
-
-        /// <summary>
-        /// Get OrderID based on scanned text
-        /// </summary>
-        /// <param name="scannedText"></param>
-        /// <returns></returns>
-        public async Task<TelemetricResult<long?>> GetOrderID(string scannedText)
-        {
-            TelemetricResult<long?> telemetricResult = new TelemetricResult<long?>("Order");
-
-            // If it was a Single Scan Order Shortcut we know the order has already been downloaded and
-            // the scanned barcode is not one that we should try to download again.
-            if (singleScanOrderShortcut.AppliesTo(scannedText))
-            {
-                telemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, () =>
-                {
-                    // We're looking up by order ID, there will be at most 1 record
-                    telemetricResult.SetValue(singleScanOrderShortcut.GetOrderID(scannedText));
-                    telemetricResult.AddEntry(OrderCountTelemetryPropertyName, telemetricResult.Value.HasValue ? 1 : 0);
-                });
-            }
-            else
-            {
-                // There's the potential to get multiple orders back in this code path
-                List<long> orderIds = new List<long>();
-
-                // Track the time it took to load the order
-                await telemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
-                {
-                    await Task.Run(() => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText)).ConfigureAwait(true);
-                    orderIds = orderRepository.GetOrderIDs(scannedText);
-
-                    // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
-                    telemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
-                });
-
-                // Track the time it takes to confirm user input from the confirmation service
-                long? selectedOrderId = await telemetricResult.RunTimedEventAsync(
-                        UserInputTelemetryTimeSliceName,
-                        () => orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds))
-                    .ConfigureAwait(false);
-                telemetricResult.SetValue(selectedOrderId);
-            }
-
-            return telemetricResult;
         }
 
         /// <summary>

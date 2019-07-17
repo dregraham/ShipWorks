@@ -1128,6 +1128,7 @@ namespace ShipWorks
             }
 
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+            scanPack = orderLookupLifetimeScope.Resolve<IScanPack>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
