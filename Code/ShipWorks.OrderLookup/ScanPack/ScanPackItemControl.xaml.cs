@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace ShipWorks.OrderLookup.ScanPack.ScanPackItem
+namespace ShipWorks.OrderLookup.ScanPack
 {
     public partial class ScanPackItemControl : UserControl
     {

@@ -333,11 +333,17 @@
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupOrderIDRetriever.cs" />
-    <Compile Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml.cs">
+    <Compile Include="ScanPack\ItemsToScanControl.xaml.cs">
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScanPack\Packed\PackedControl.xaml.cs">
+    <Compile Include="ScanPack\PackedControl.xaml.cs">
       <DependentUpon>PackedControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\ScanControl.xaml.cs">
+      <DependentUpon>ScanControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\ScanPackControl.xaml.cs">
+      <DependentUpon>ScanPackControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\ScanPackControlHost.cs">
       <SubType>UserControl</SubType>
@@ -345,14 +351,8 @@
     <Compile Include="ScanPack\ScanPackControlHost.Designer.cs">
       <DependentUpon>ScanPackControlHost.cs</DependentUpon>
     </Compile>
-    <Compile Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml.cs">
+    <Compile Include="ScanPack\ScanPackItemControl.xaml.cs">
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ScanPack\ScanPack\ScanPackControl.xaml.cs">
-      <DependentUpon>ScanPackControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ScanPack\Scan\ScanControl.xaml.cs">
-      <DependentUpon>ScanControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
@@ -622,11 +622,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml" />
-    <Page Include="ScanPack\Packed\PackedControl.xaml" />
-    <Page Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml" />
-    <Page Include="ScanPack\ScanPack\ScanPackControl.xaml" />
-    <Page Include="ScanPack\Scan\ScanControl.xaml" />
+    <Page Include="ScanPack\ItemsToScanControl.xaml" />
+    <Page Include="ScanPack\PackedControl.xaml" />
+    <Page Include="ScanPack\ScanControl.xaml" />
+    <Page Include="ScanPack\ScanPackControl.xaml" />
+    <Page Include="ScanPack\ScanPackItemControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RobotoFontLicense.txt">

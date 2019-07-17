@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace ShipWorks.OrderLookup.ScanPack.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     public partial class ScanPackControl : UserControl
     {
