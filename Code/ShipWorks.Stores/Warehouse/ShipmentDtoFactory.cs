@@ -48,6 +48,9 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipmentEntity.ShipmentTypeCode);
+            shipmentType.LoadShipmentData(shipmentEntity, false);
+
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
 
             InsuranceProvider insuranceType = (InsuranceProvider) shipmentEntity.InsuranceProvider;
@@ -142,15 +145,9 @@ namespace ShipWorks.Stores.Warehouse
         {
             ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
-            if (shipmentTypeCode == ShipmentTypeCode.Other)
-            {
-                ShipmentType shipmentType = shipmentTypeManager.Get(shipmentTypeCode);
-
-                shipmentType.LoadShipmentData(shipment, false);
-                return shipment.Other.Carrier;
-            }
-
-            return EnumHelper.GetDescription(shipmentTypeCode);
+            return shipmentTypeCode == ShipmentTypeCode.Other ?
+                shipment.Other.Carrier :
+                EnumHelper.GetDescription(shipmentTypeCode);
         }
     }
 }
