@@ -1732,7 +1732,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override async Task DownloadWarehouseOrders(Guid batchId)
         {
-            base.DownloadWarehouseOrders(batchId);
+            await base.DownloadWarehouseOrders(batchId);
 
             DownloadFeedback();
         }
