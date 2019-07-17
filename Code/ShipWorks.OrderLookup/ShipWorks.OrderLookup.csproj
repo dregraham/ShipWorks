@@ -340,6 +340,10 @@
     <Compile Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml.cs">
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScanPack\ScanPack\ScanPackControl.xaml.cs">
+      <DependentUpon>ScanPackControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\Scan\ScanControl.xaml.cs">
       <DependentUpon>ScanControl.xaml</DependentUpon>
     </Compile>
@@ -614,6 +618,7 @@
     <Page Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml" />
     <Page Include="ScanPack\Packed\PackedControl.xaml" />
     <Page Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml" />
+    <Page Include="ScanPack\ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\Scan\ScanControl.xaml" />
   </ItemGroup>
   <ItemGroup>
