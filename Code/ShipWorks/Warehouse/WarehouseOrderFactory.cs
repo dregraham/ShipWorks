@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -71,14 +72,17 @@ namespace ShipWorks.Warehouse
                 {
                 	LoadItems(orderEntity, warehouseOrder.Items);
 
-                LoadCharges(orderEntity, warehouseOrder);
+                    LoadCharges(orderEntity, warehouseOrder);
 
-                LoadPaymentDetails(orderEntity, warehouseOrder);
-            }
+                    LoadPaymentDetails(orderEntity, warehouseOrder);
+                }
 
                 await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
                 LoadStoreOrderDetails(orderEntity, warehouseOrder);
+
+                Debug.Assert(orderEntity.OrderNumber != 0,
+                             "Ensure order number was set by the store specific order factory");
 
                 return orderEntity;
             }

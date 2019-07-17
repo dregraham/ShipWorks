@@ -99,5 +99,13 @@ namespace ShipWorks.Data.Import
         {
             return InstantiateOrderPaymentDetail(order, label, value);
         }
+
+        /// <summary>
+        /// Get the next order number to use
+        /// </summary>
+        async Task<long> IOrderElementFactory.GetNextOrderNumberAsync()
+        {
+            return await GetNextOrderNumberAsync().ConfigureAwait(false);
+        }
     }
 }

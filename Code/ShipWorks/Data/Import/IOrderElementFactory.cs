@@ -61,5 +61,10 @@ namespace ShipWorks.Data.Import
         /// Creates the payment detail.
         /// </summary>
         OrderPaymentDetailEntity CreatePaymentDetail(OrderEntity order, string label, string value);
+
+        /// <summary>
+        /// Get the next order number to use
+        /// </summary>
+        Task<long> GetNextOrderNumberAsync();
     }
 }
