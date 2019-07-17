@@ -150,6 +150,7 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
+        private IScanPack scanPack;
         private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -1148,6 +1149,7 @@ namespace ShipWorks
             if (orderLookupLifetimeScope != null)
             {
                 panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                panelDockingArea.Controls.Remove(scanPack.Control);
                 orderLookupControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
@@ -1188,14 +1190,19 @@ namespace ShipWorks
         /// </summary>
         private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
         {
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            if(ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
             {
-                ToggleVisiblePanel(orderLookupControl?.Control, shipmentHistory?.Control);
+                ToggleVisiblePanel(scanPack?.Control);
+                shipmentHistory?.Deactivate();
+            }
+            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            {
+                ToggleVisiblePanel(orderLookupControl?.Control);
                 shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory?.Control, orderLookupControl?.Control);
+                ToggleVisiblePanel(shipmentHistory?.Control);
                 shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
 
@@ -1213,12 +1220,12 @@ namespace ShipWorks
         /// <summary>
         /// Toggle which control is visible in the panel docking area
         /// </summary>
-        private void ToggleVisiblePanel(Control toAdd, Control toRemove)
+        private void ToggleVisiblePanel(Control toAdd)
         {
-            if (toRemove != null)
-            {
-                panelDockingArea.Controls.Remove(toRemove);
-            }
+            // first remove everything
+            panelDockingArea.Controls.Remove(shipmentHistory?.Control);
+            panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            panelDockingArea.Controls.Remove(scanPack?.Control);
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
