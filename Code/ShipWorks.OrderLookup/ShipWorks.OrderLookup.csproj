@@ -331,6 +331,18 @@
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
+    <Compile Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml.cs">
+      <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\Packed\PackedControl.xaml.cs">
+      <DependentUpon>PackedControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml.cs">
+      <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanPack\Scan\ScanControl.xaml.cs">
+      <DependentUpon>ScanControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
@@ -599,6 +611,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ScanPack\ItemsToScan\ItemsToScanControl.xaml" />
+    <Page Include="ScanPack\Packed\PackedControl.xaml" />
+    <Page Include="ScanPack\ScanPackItem\ScanPackItemControl.xaml" />
+    <Page Include="ScanPack\Scan\ScanControl.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RobotoFontLicense.txt">
