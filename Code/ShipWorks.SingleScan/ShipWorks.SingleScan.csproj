@@ -143,6 +143,7 @@
     <Compile Include="MainGridControlShortcutPipeline.cs" />
     <Compile Include="ScanPack\IScanPackViewModel.cs" />
     <Compile Include="ScanPack\IScanPackItemFactory.cs" />
+    <Compile Include="ScanPack\SacnPackPipeline.cs" />
     <Compile Include="ScanPack\ScanPackItem.cs" />
     <Compile Include="ScanPack\ScanPackItemFactory.cs" />
     <Compile Include="ToggleAutoPrintPipeline.cs" />
