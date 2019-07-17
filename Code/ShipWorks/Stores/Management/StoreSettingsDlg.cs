@@ -392,10 +392,7 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                if (result)
-                {
-                    result = storeSettingsControl.SaveToEntity(store);
-                }
+                result = storeSettingsControl.SaveToEntity(store);
 
                 if (result && store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
                 {
