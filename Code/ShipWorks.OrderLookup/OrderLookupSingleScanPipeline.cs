@@ -34,7 +34,6 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
-        private readonly ISingleScanOrderShortcut singleScanOrderShortcut;
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
@@ -72,7 +71,6 @@ namespace ShipWorks.OrderLookup
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
-            this.singleScanOrderShortcut = singleScanOrderShortcut;
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             this.telemetryFactory = telemetryFactory;
             this.orderIDRetriever = orderIDRetriever;
