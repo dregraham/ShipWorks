@@ -186,6 +186,7 @@ namespace ShipWorks
                 { ribbonTabGridViewHome, x => x == UIMode.Batch },
                 { ribbonTabGridViewCreate, x => x == UIMode.Batch },
                 { ribbonTabView, x => x == UIMode.Batch },
+                { ribbonTabOrderLookupViewScanPack, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
                 { ribbonTabAdmin, x => x == UIMode.Batch || x == UIMode.OrderLookup },
