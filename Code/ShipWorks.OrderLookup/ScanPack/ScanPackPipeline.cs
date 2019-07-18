@@ -43,14 +43,12 @@ namespace ShipWorks.OrderLookup.ScanPack
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
-                .Do(_ => processingScan = true)
                 .Do(x => OnSingleScanMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
-                .Do(_ => processingScan = true)
                 .Do(x => OnOrderLookupSearchMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
@@ -70,8 +68,21 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
-            scanPackViewModel.Load(message.SearchText);
-            processingScan = false;
+            if (processingScan)
+            {
+                return;
+            }
+
+            processingScan = true;
+
+            try
+            {
+                scanPackViewModel.Load(message.SearchText);
+            }
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>
@@ -79,8 +90,21 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void OnSingleScanMessage(SingleScanMessage message)
         {
-            scanPackViewModel.Load(message.ScannedText);
-            processingScan = false;
+            if (processingScan)
+            {
+                return;
+            }
+
+            processingScan = true;
+
+            try
+            {
+                scanPackViewModel.Load(message.ScannedText);
+            }
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>
