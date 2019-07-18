@@ -10,6 +10,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Load an order
         /// </summary>
-        Task Load(string orderNumber);
+        Task Load(string scannedText);
     }
 }

@@ -3,12 +3,14 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -21,24 +23,43 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
+        private readonly IMessenger messenger;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> scannedItems;
         private string scanHeader;
         private string scanImageUrl;
         private string scanFooter;
         private bool scanningItems = false;
+        private string orderNumber;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackViewModel(IOrderLookupOrderIDRetriever orderIDRetriever, IOrderLoader orderLoader, IScanPackItemFactory scanPackItemFactory)
+        public ScanPackViewModel(IOrderLookupOrderIDRetriever orderIDRetriever, IOrderLoader orderLoader,
+                                 IScanPackItemFactory scanPackItemFactory, IMessenger messenger)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
+            this.messenger = messenger;
 
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             ScannedItems = new ObservableCollection<ScanPackItem>();
+
+            GetOrderCommand = new RelayCommand(GetOrder);
+            ResetCommand = new RelayCommand(Reset);
+
+            Update();
+        }
+
+        /// <summary>
+        /// Order number for order being packed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string OrderNumber
+        {
+            get => orderNumber;
+            set => Set(ref orderNumber, value);
         }
 
         /// <summary>
@@ -92,14 +113,34 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Don't show the Create Label button in the search control
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowCreateLabel => false;
+
+        /// <summary>
+        /// Command for getting orders
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand GetOrderCommand { get; set; }
+
+        /// <summary>
+        /// Command for resetting the order
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ResetCommand { get; set; }
+
+        /// <summary>
         /// Load an order from an order number
         /// </summary>
-        public async Task Load(string orderNumber)
+        public async Task Load(string scannedText)
         {
             if (!scanningItems)
             {
+                OrderNumber = scannedText;
+
                 TelemetricResult<long?> orderID = await orderIDRetriever
-                    .GetOrderID(orderNumber, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
+                    .GetOrderID(scannedText, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
 
                 ShipmentsLoadedEventArgs loadedOrders = await orderLoader
                     .LoadAsync(new[] {orderID.Value.Value}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
@@ -116,6 +157,29 @@ namespace ShipWorks.OrderLookup.ScanPack
                 Update();
             }
         }
+
+        /// <summary>
+        /// Get the order with the current order number
+        /// </summary>
+        private void GetOrder()
+        {
+            messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
+        }
+
+        /// <summary>
+        /// Reset the order
+        /// </summary>
+        private void Reset()
+        {
+            OrderNumber = string.Empty;
+
+            ItemsToScan.Clear();
+            ScannedItems.Clear();
+
+            scanningItems = false;
+
+            Update();
+        }
         
         /// <summary>
         /// Update properties
@@ -128,7 +192,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (totalItemCount == 0)
             {
                 ScanHeader = "Ready to Scan and Pack";
-                ScanFooter = "Scan an Order to Begin";
+                ScanFooter = "Scan an Order Barcode to Begin";
             }
             else
             {

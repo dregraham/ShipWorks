@@ -15,6 +15,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type scanPack:ScanPackControl}">
+                <Setter Property="Background" Value="{StaticResource OrderLookupBackgroundColor}" />
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -25,7 +28,8 @@
 
         <orderLookupSearchControl:OrderLookupSearchControl
             Grid.Row="0"
-            Margin="10" />
+            Margin="10"
+            DataContext="{Binding .}"/>
         <ScrollViewer
             Grid.Row="1"
             HorizontalScrollBarVisibility="Disabled"
