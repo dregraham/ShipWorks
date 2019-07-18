@@ -31,6 +31,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string scanFooter;
         private string orderNumber;
         private ScanPackState state;
+        private bool error;
 
         /// <summary>
         /// Constructor
@@ -123,6 +124,17 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Whether or not an error occured during the Scan and Pack process
+        /// </summary>
+        public bool Error
+        {
+            get => error;
+            set => Set(ref error, value);
+        }
+
+        #region SearchControl Properties
+
+        /// <summary>
         /// Don't show the Create Label button in the search control
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -141,22 +153,34 @@ namespace ShipWorks.OrderLookup.ScanPack
         public ICommand ResetCommand { get; set; }
 
         /// <summary>
+        /// False so that search control doesn't leave a space for error message.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SearchError => false;
+
+        #endregion
+
+
+        /// <summary>
         /// Load an order from an order number
         /// </summary>
         public async Task Load(string scannedText)
         {
+            Error = false;
+
             if (State == ScanPackState.ListeningForOrderScan)
             {
-                OrderNumber = scannedText;
+                OrderEntity order = await GetOrder(scannedText).ConfigureAwait(true);
 
-                TelemetricResult<long?> orderID = await orderIDRetriever
-                    .GetOrderID(scannedText, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
+                if (order == null)
+                {
+                    ScanHeader = "No matching orders were found.";
+                    Error = true;
+                    ScanFooter = string.Empty;
+                    OrderNumber = string.Empty;
 
-                ShipmentsLoadedEventArgs loadedOrders = await orderLoader
-                    .LoadAsync(new[] {orderID.Value.Value}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
-                    .ConfigureAwait(true);
-
-                OrderEntity order = loadedOrders.Shipments.FirstOrDefault().Order;
+                    return;
+                }
 
                 ItemsToScan.Clear();
 
@@ -166,6 +190,31 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 Update();
             }
+        }
+
+        /// <summary>
+        /// Get an order with an order number matching the scanned text
+        /// </summary>
+        private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
+        {
+            OrderNumber = scannedOrderNumber;
+            ScanHeader = "Loading Order...";
+            ScanFooter = string.Empty;
+
+            TelemetricResult<long?> orderID = await orderIDRetriever
+                .GetOrderID(scannedOrderNumber, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
+
+            OrderEntity order = null;
+            if (orderID.Value.HasValue)
+            {
+                ShipmentsLoadedEventArgs loadedOrders = await orderLoader
+                    .LoadAsync(new[] {orderID.Value.Value}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
+                    .ConfigureAwait(true);
+
+                order = loadedOrders?.Shipments?.FirstOrDefault()?.Order;
+            }
+
+            return order;
         }
 
         /// <summary>

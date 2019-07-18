@@ -23,7 +23,6 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis" Invert="False"/>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVisHidden" Invert="False" False="Hidden"/>
-            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="true" FalseVisibility="Hidden"/>
 
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center" />

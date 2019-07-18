@@ -17,6 +17,8 @@
                 <Setter Property="FontSize" Value="20"/>
             </Style>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <ui:BooleanToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -39,7 +41,8 @@
                            Margin="0 40 0 50"
                            TextWrapping="Wrap"/>
                 <Viewbox Grid.Row="1"
-                    Width="360" Height="360" >
+                    Width="360" Height="360"
+                    Visibility="{Binding Error, Converter={StaticResource InverseBoolToVis}}">
                     <Canvas Width="24" Height="24" >
                         <Path
                             Style="{StaticResource Barcode}"
@@ -51,6 +54,13 @@
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
                                         ConverterParameter={x:Static scanPack:ScanPackState.ListeningForItemScan}}"/>
+                    </Canvas>
+                </Viewbox>
+                <Viewbox Grid.Row="1"
+                         Width="360" Height="360"
+                         Visibility="{Binding Error, Converter={StaticResource BoolToVis}}">
+                    <Canvas Width="24" Height="24" >
+                        <Path Style="{StaticResource Alert}"/>
                     </Canvas>
                 </Viewbox>
                 <TextBlock Grid.Row="2"
