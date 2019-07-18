@@ -47,7 +47,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScannedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(Reset);
+            ResetCommand = new RelayCommand(() => Reset(true));
 
             Update();
         }
@@ -173,15 +173,20 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void GetOrder()
         {
+            Reset(false);
+
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
 
         /// <summary>
         /// Reset the order
         /// </summary>
-        private void Reset()
+        private void Reset(bool resetOrderNumber)
         {
-            OrderNumber = string.Empty;
+            if (resetOrderNumber)
+            {
+                OrderNumber = string.Empty;
+            }
 
             ItemsToScan.Clear();
             ScannedItems.Clear();
@@ -196,10 +201,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void Update()
         {
-            int totalItemCount = ItemsToScan.Count + ScannedItems.Count;
+            double scannedItemCount = ScannedItems.Select(x => x.Quantity).Sum();
+            double totalItemCount = ItemsToScan.Select(x => x.Quantity).Sum() + scannedItemCount;
             
             // No order scanned yet
-            if (totalItemCount == 0)
+            if (totalItemCount.IsEquivalentTo(0))
             {
                 ScanHeader = "Ready to Scan and Pack";
                 ScanFooter = "Scan an Order Barcode to Begin";
@@ -210,7 +216,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 if (ItemsToScan.Any())
                 {
                     ScanHeader = "Scan an Item to Pack";
-                    ScanFooter = $"{ScannedItems.Count} of {totalItemCount} items have been scanned";
+                    ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
                 }
                 else
                 {
