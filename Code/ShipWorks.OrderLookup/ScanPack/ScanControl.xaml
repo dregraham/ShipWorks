@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:scanPack="clr-namespace:ShipWorks.SingleScan.ScanPack;assembly=ShipWorks.SingleScan"
+             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              d:DesignHeight="800" d:DesignWidth="500">

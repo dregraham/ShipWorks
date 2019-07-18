@@ -333,6 +333,8 @@
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupOrderIDRetriever.cs" />
+    <Compile Include="ScanPack\IScanPackItemFactory.cs" />
+    <Compile Include="ScanPack\IScanPackViewModel.cs" />
     <Compile Include="ScanPack\ItemsToScanControl.xaml.cs">
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
@@ -351,9 +353,13 @@
     <Compile Include="ScanPack\ScanPackControlHost.Designer.cs">
       <DependentUpon>ScanPackControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScanPack\ScanPackItem.cs" />
     <Compile Include="ScanPack\ScanPackItemControl.xaml.cs">
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScanPack\ScanPackItemFactory.cs" />
+    <Compile Include="ScanPack\ScanPackPipeline.cs" />
+    <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />

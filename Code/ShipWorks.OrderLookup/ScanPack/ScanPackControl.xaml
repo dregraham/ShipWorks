@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:dd="urn:gong-wpf-dragdrop"
-             xmlns:scanPack="clr-namespace:ShipWorks.SingleScan.ScanPack;assembly=ShipWorks.SingleScan"
-             xmlns:scanPackUI="clr-namespace:ShipWorks.OrderLookup.ScanPack"
+             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              x:Name="ScanPack"
@@ -67,14 +66,14 @@
                     </Style>
                 </Grid.Resources>
 
-                <scanPackUI:ItemsToScanControl
+                <scanPack:ItemsToScanControl
                     Grid.Column="0"
                     Margin="4,0,0,0"
-                    DataContext="{Binding}"/>
-                <scanPackUI:ScanControl
+                    DataContext="{Binding .}"/>
+                <scanPack:ScanControl
                     Grid.Column="2"
-                    DataContext="{Binding}"/>
-                <scanPackUI:PackedControl
+                    DataContext="{Binding .}"/>
+                <scanPack:PackedControl
                     Grid.Column="4"
                     Margin="0,0,4,0"/>
 

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace ShipWorks.SingleScan.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// Viewmodel for ScanPackView
@@ -14,6 +10,6 @@ namespace ShipWorks.SingleScan.ScanPack
         /// <summary>
         /// Load an order
         /// </summary>
-        void Load(string orderNumber);
+        Task Load(string orderNumber);
     }
 }

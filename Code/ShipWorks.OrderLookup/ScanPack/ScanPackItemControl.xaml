@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ui="http://schemas.shipworks.com/ui"
-             xmlns:scanPack="clr-namespace:ShipWorks.SingleScan.ScanPack;assembly=ShipWorks.SingleScan"
+             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
              mc:Ignorable="d"
              Height="120"
              d:DesignWidth="300"

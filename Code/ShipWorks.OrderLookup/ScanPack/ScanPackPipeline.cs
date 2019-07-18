@@ -5,10 +5,9 @@ using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
-using ShipWorks.OrderLookup;
 using ShipWorks.Settings;
 
-namespace ShipWorks.SingleScan.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// Pipeline for Scan and Pack

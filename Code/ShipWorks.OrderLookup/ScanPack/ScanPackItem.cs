@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.SingleScan.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// Represents an item to be scan and packed

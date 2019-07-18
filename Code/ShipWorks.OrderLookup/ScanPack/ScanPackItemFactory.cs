@@ -4,7 +4,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products;
 
-namespace ShipWorks.SingleScan.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// ScanPackItem Factory
@@ -48,14 +48,14 @@ namespace ShipWorks.SingleScan.ScanPack
         /// </summary>
         private ScanPackItem CreateItem(ProductVariantEntity product, OrderItemEntity item)
         {
-            string imageUrl = string.IsNullOrWhiteSpace(product.ImageUrl) ? item.Image : product.ImageUrl;
+            string imageUrl = string.IsNullOrWhiteSpace(product?.ImageUrl) ? item.Image : product.ImageUrl;
 
             if (string.IsNullOrWhiteSpace(imageUrl))
             {
                 imageUrl = item.Thumbnail;
             }
 
-            string name = string.IsNullOrWhiteSpace(product.Name) ? item.Name : product.Name;
+            string name = string.IsNullOrWhiteSpace(product?.Name) ? item.Name : product.Name;
 
             return new ScanPackItem(name, imageUrl, item.Quantity);
         }

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.SingleScan.ScanPack
+namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// Represents a factory for creating scan pack items
     /// </summary>
-    interface IScanPackItemFactory
+    public interface IScanPackItemFactory
     {
         /// <summary>
         /// Create a collection of ScanPackItems based on an order

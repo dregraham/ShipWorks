@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.SingleScan.ScanPack;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.OrderLookup.ScanPack

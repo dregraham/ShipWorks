@@ -67,7 +67,7 @@ namespace ShipWorks.OrderLookup
 
                     // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
                     telemetricResult.AddEntry(orderCountTelemetryPropertyName, orderIds.Count);
-                });
+                }).ConfigureAwait(true);
 
                 // Track the time it takes to confirm user input from the confirmation service
                 long? selectedOrderId = await telemetricResult.RunTimedEventAsync(

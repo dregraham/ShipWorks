@@ -3,8 +3,8 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Products;
-using ShipWorks.SingleScan.ScanPack;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
