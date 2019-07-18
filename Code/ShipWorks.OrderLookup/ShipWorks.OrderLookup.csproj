@@ -359,6 +359,7 @@
     </Compile>
     <Compile Include="ScanPack\ScanPackItemFactory.cs" />
     <Compile Include="ScanPack\ScanPackPipeline.cs" />
+    <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />

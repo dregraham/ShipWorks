@@ -29,8 +29,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string scanHeader;
         private string scanImageUrl;
         private string scanFooter;
-        private bool scanningItems = false;
         private string orderNumber;
+        private ScanPackState state;
 
         /// <summary>
         /// Constructor
@@ -113,6 +113,16 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Footer for the scan panel
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ScanPackState State
+        {
+            get => state;
+            set => Set(ref state, value);
+        }
+
+        /// <summary>
         /// Don't show the Create Label button in the search control
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -135,7 +145,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public async Task Load(string scannedText)
         {
-            if (!scanningItems)
+            if (State == ScanPackState.ListeningForOrderScan)
             {
                 OrderNumber = scannedText;
 
@@ -152,7 +162,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
 
-                scanningItems = true;
+                State = ScanPackState.ListeningForItemScan;
 
                 Update();
             }
@@ -176,7 +186,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ItemsToScan.Clear();
             ScannedItems.Clear();
 
-            scanningItems = false;
+            State = ScanPackState.ListeningForOrderScan;
 
             Update();
         }

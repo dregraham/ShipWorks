@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              d:DesignHeight="800" d:DesignWidth="500">
@@ -15,6 +16,7 @@
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
             </Style>
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -37,10 +39,18 @@
                            Margin="0 40 0 50"
                            TextWrapping="Wrap"/>
                 <Viewbox Grid.Row="1"
-                    Width="384" Height="384" >
+                    Width="360" Height="360" >
                     <Canvas Width="24" Height="24" >
                         <Path
-                            Style="{StaticResource OpenBox}"/>
+                            Style="{StaticResource Barcode}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForOrderScan}}"/>
+                        <Path
+                            Style="{StaticResource OpenBox}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForItemScan}}"/>
                     </Canvas>
                 </Viewbox>
                 <TextBlock Grid.Row="2"
