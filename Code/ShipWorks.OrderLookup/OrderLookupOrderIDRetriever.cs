@@ -11,7 +11,7 @@ namespace ShipWorks.OrderLookup
     /// Utility for retrieving an orderid from an order
     /// </summary>
     /// <remarks>
-    /// handles on demand downloads and confirming the correct order
+    /// Handles on demand downloads and confirming the correct order
     /// when there are multiple matching results
     /// </remarks>
     [Component]
@@ -22,6 +22,9 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupOrderRepository orderRepository;
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OrderLookupOrderIDRetriever(ISingleScanOrderShortcut singleScanOrderShortcut,
             IOnDemandDownloaderFactory onDemandDownloaderFactory,
             IOrderLookupOrderRepository orderRepository,

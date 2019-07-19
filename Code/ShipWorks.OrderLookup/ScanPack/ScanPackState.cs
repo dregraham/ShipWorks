@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
+    /// <summary>
+    /// State of the Scan Pack view
+    /// </summary>
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum ScanPackState
     {

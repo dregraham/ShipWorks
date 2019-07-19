@@ -87,7 +87,7 @@ namespace ShipWorks.OrderLookup
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive() && !mainForm.IsScanPackActive())
+                .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnSingleScanMessage(x).Forget())
@@ -95,7 +95,7 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive() && !mainForm.IsScanPackActive())
+                .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnOrderLookupSearchMessage(x).Forget())
@@ -110,6 +110,16 @@ namespace ShipWorks.OrderLookup
                 .Subscribe()
             );
         }
+
+        /// <summary>
+        /// Can we process an order search message from the scanner or searchbar
+        /// </summary>
+        private bool CanProcessSearchMessage() =>
+            !processingScan &&
+            !mainForm.AdditionalFormsOpen() &&
+            mainForm.UIMode == UIMode.OrderLookup &&
+            !mainForm.IsShipmentHistoryActive() &&
+            !mainForm.IsScanPackActive();
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.

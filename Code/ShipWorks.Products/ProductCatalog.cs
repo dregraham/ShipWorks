@@ -202,6 +202,18 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
+        /// Fetch product variants based on a collection of skus
+        /// </summary>
+        public async Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus)
+        {
+            QueryFactory factory = new QueryFactory();
+            var query = factory.ProductAttribute.Where(ProductVariantAliasFields.Sku.In(skus));
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<ProductVariantEntity>().Select(v => v);
+        }
+
+        /// <summary>
         /// Get the available attributes for a variant
         /// </summary>
         public async Task<IEnumerable<IProductAttributeEntity>> GetAvailableAttributesFor(ISqlAdapter sqlAdapter, ProductVariantEntity variant)

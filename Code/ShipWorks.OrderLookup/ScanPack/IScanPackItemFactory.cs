@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -11,6 +12,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Create a collection of ScanPackItems based on an order
         /// </summary>
-        List<ScanPackItem> Create(OrderEntity order);
+        Task<List<ScanPackItem>> Create(OrderEntity order);
     }
 }
