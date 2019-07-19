@@ -566,6 +566,16 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 postRequest.Variables.Add("action", "logshipmentvoided");
                 postRequest.Variables.Add("swshipmentid", shipment.ShipmentID.ToString());
+
+                // There are some cases when we might log a shipment twice. In these instances, we don't know
+                // what the tango OnlineShipmentID is so we set the OnlineShipmentID with SWSet_ShipmentID. Tango
+                // won't know what to do with this, so no reason to send it. This may result in shipments being
+                // voided for another customer's warehouse.
+                if (!shipment.OnlineShipmentID.StartsWith("SWSet_", StringComparison.OrdinalIgnoreCase))
+                {
+                    postRequest.Variables.Add("tangoshipmentid", shipment.OnlineShipmentID);
+                }
+
                 postRequest.Variables.Add("license", license.Key);
 
                 ProcessXmlRequest(postRequest, "LogShipmentVoided", false);
