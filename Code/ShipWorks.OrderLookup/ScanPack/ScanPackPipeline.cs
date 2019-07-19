@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
@@ -43,19 +45,22 @@ namespace ShipWorks.OrderLookup.ScanPack
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Do(x => processingScan = true)
                 .Do(x => OnSingleScanMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupSearchMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsScanPackActive())
-                .Do(x => OnOrderLookupLoadOrderMessage(x))
+                .Do(x => processingScan = true)
+                .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
             );
@@ -72,18 +77,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle search
         /// </summary>
-        public void OnOrderLookupLoadOrderMessage(OrderLookupLoadOrderMessage message)
+        public async Task OnOrderLookupLoadOrderMessage(OrderLookupLoadOrderMessage message)
         {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
             try
             {
-                scanPackViewModel.Load(message.Order);
+                await scanPackViewModel.Load(message.Order);
             }
             finally
             {
@@ -94,15 +92,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle search
         /// </summary>
-        public void OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
+        public async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
             try
             {
                 scanPackViewModel.Load(message.SearchText);
@@ -116,15 +107,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle barcode scans
         /// </summary>
-        public void OnSingleScanMessage(SingleScanMessage message)
+        public async Task OnSingleScanMessage(SingleScanMessage message)
         {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
             try
             {
                 scanPackViewModel.Load(message.ScannedText);

@@ -189,15 +189,17 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Load the given order
         /// </summary>
-        public void Load(OrderEntity order)
+        public async Task Load(OrderEntity order)
         {
             ItemsToScan.Clear();
 
-            scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
+            (await scanPackItemFactory.Create(order)).ForEach(ItemsToScan.Add);
 
             State = ScanPackState.ListeningForItemScan;
 
             Update();
+
+            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
         }
 
         /// <summary>

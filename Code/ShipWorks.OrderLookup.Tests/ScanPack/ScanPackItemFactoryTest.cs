@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
@@ -28,14 +29,14 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrder()
+        public async Task Create_ReturnsScanPackItemsForOrder()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "bar", Quantity = 3.3 };
 
             order.OrderItems.Add(item);
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, item.Name);
@@ -43,7 +44,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrderWithProductInfo()
+        public async Task Create_ReturnsScanPackItemsForOrderWithProductInfo()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "bar", Quantity = 3.3, SKU = "TheSku" };
@@ -53,7 +54,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
                 .Returns(product);
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, product.Name);
@@ -61,7 +62,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrderWithThumbnail_WhenProductImageAndItemImageAreBlank()
+        public async Task Create_ReturnsScanPackItemsForOrderWithThumbnail_WhenProductImageAndItemImageAreBlank()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "", Quantity = 3.3, SKU = "TheSku", Thumbnail = "thumbnail" };
@@ -71,7 +72,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
                 .Returns(product);
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, product.Name);
@@ -79,7 +80,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrder_WhenthereAreMultipleItems()
+        public async Task Create_ReturnsScanPackItemsForOrder_WhenthereAreMultipleItems()
         {
             var order = new OrderEntity();
             var itemOne = new OrderItemEntity() { Name = "foo", Image = "1", Quantity = 3.3, SKU = "TheSku", Thumbnail = "thumbnail" };
@@ -90,7 +91,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             order.OrderItems.AddRange(new[] { itemOne, itemTwo, itemThree, itemThree, itemFour, itemFive });
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.Count, order.OrderItems.Count);
         }
