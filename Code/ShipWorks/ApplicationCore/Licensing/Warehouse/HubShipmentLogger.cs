@@ -138,6 +138,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public async Task LogVoidedShipment(ShipmentEntity shipmentToLog, ISqlAdapter sqlAdapter)
         {
+            // Not a hub shipment
+            if (!shipmentToLog.Order.HubOrderID.HasValue)
+            {
+                return;
+            }
+
             Result uploadResult = await warehouseOrderClient.UploadVoid(
                 shipmentToLog.ShipmentID, shipmentToLog.Order.HubOrderID.Value,
                 shipmentToLog.OnlineShipmentID).ConfigureAwait(false);
