@@ -1352,6 +1352,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />
