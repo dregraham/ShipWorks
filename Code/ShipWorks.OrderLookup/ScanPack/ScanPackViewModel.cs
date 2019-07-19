@@ -126,6 +126,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Whether or not an error occured during the Scan and Pack process
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool Error
         {
             get => error;
