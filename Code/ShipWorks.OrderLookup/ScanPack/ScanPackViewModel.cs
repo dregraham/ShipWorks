@@ -182,7 +182,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                Load(order);
+                await Load(order).ConfigureAwait(true);
             }
         }
 
@@ -193,7 +193,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             ItemsToScan.Clear();
 
-            (await scanPackItemFactory.Create(order)).ForEach(ItemsToScan.Add);
+            (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
             State = ScanPackState.ListeningForItemScan;
 

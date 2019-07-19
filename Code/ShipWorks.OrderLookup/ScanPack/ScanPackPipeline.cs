@@ -46,14 +46,14 @@ namespace ShipWorks.OrderLookup.ScanPack
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
                 .Do(x => processingScan = true)
-                .Do(x => OnSingleScanMessage(x))
+                .Do(x => OnOrderLookupSearch(x.ScannedText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
                 .Do(x => processingScan = true)
-                .Do(x => OnOrderLookupSearchMessage(x))
+                .Do(x => OnOrderLookupSearch(x.SearchText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
@@ -81,7 +81,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             try
             {
-                await scanPackViewModel.Load(message.Order);
+                await scanPackViewModel.Load(message.Order).ConfigureAwait(true);
             }
             finally
             {
@@ -92,26 +92,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle search
         /// </summary>
-        public async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
+        public async Task OnOrderLookupSearch(string searchText)
         {
             try
             {
-                scanPackViewModel.Load(message.SearchText);
-            }
-            finally
-            {
-                processingScan = false;
-            }
-        }
-
-        /// <summary>
-        /// Handle barcode scans
-        /// </summary>
-        public async Task OnSingleScanMessage(SingleScanMessage message)
-        {
-            try
-            {
-                scanPackViewModel.Load(message.ScannedText);
+                await scanPackViewModel.Load(searchText).ConfigureAwait(true);
             }
             finally
             {
