@@ -4,6 +4,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Products;
 using ShipWorks.Tests.Shared;
@@ -48,11 +49,13 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "bar", Quantity = 3.3, SKU = "TheSku" };
-            var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "newBar"};
+            var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "newBar" };
+            product.Aliases.Add(new ProductVariantAliasEntity() { Sku = item.SKU });
+
             order.OrderItems.Add(item);
 
-            productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
-                .Returns(product);
+            productCatalog.Setup(c => c.FetchProductVariantEntities(It.IsAny<ISqlAdapter>(), new[] { item.SKU }))
+                .ReturnsAsync(new[] { product });
 
             var result = await testObject.Create(order);
 
@@ -67,10 +70,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "", Quantity = 3.3, SKU = "TheSku", Thumbnail = "thumbnail" };
             var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "" };
+            product.Aliases.Add(new ProductVariantAliasEntity() { Sku = item.SKU });
             order.OrderItems.Add(item);
 
-            productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
-                .Returns(product);
+            productCatalog.Setup(c => c.FetchProductVariantEntities(It.IsAny<ISqlAdapter>(), new[] { item.SKU }))
+                .ReturnsAsync(new[] { product });
 
             var result = await testObject.Create(order);
 
