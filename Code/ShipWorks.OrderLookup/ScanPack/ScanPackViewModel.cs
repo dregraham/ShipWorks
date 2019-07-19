@@ -182,14 +182,22 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                ItemsToScan.Clear();
-
-                scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
-
-                State = ScanPackState.ListeningForItemScan;
-
-                Update();
+                Load(order);
             }
+        }
+
+        /// <summary>
+        /// Load the given order
+        /// </summary>
+        public void Load(OrderEntity order)
+        {
+            ItemsToScan.Clear();
+
+            scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
+
+            State = ScanPackState.ListeningForItemScan;
+
+            Update();
         }
 
         /// <summary>
@@ -244,7 +252,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             Update();
         }
-        
+
         /// <summary>
         /// Update properties
         /// </summary>
@@ -252,7 +260,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             double scannedItemCount = ScannedItems.Select(x => x.Quantity).Sum();
             double totalItemCount = ItemsToScan.Select(x => x.Quantity).Sum() + scannedItemCount;
-            
+
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
             {

@@ -1220,6 +1220,14 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// True if scan pack control is active
+        /// </summary>
+        public bool IsScanPackActive()
+        {
+            return scanPack != null && panelDockingArea.Controls.Contains(scanPack.Control);
+        }
+
+        /// <summary>
         /// Toggle which control is visible in the panel docking area
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd)

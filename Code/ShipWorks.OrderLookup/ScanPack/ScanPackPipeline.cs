@@ -42,14 +42,20 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
                 .Do(x => OnSingleScanMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
                 .Do(x => OnOrderLookupSearchMessage(x))
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupLoadOrderMessage>()
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsScanPackActive())
+                .Do(x => OnOrderLookupLoadOrderMessage(x))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
             );
@@ -61,6 +67,28 @@ namespace ShipWorks.OrderLookup.ScanPack
         private void HandleException(Exception ex)
         {
             throw ex;
+        }
+
+        /// <summary>
+        /// Handle search
+        /// </summary>
+        public void OnOrderLookupLoadOrderMessage(OrderLookupLoadOrderMessage message)
+        {
+            if (processingScan)
+            {
+                return;
+            }
+
+            processingScan = true;
+
+            try
+            {
+                scanPackViewModel.Load(message.Order);
+            }
+            finally
+            {
+                processingScan = false;
+            }
         }
 
         /// <summary>

@@ -40,6 +40,7 @@ namespace ShipWorks.OrderLookup
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
+        private object loadingOrderLock = new object();
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -86,7 +87,7 @@ namespace ShipWorks.OrderLookup
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive() && !mainForm.IsScanPackActive())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnSingleScanMessage(x).Forget())
@@ -94,10 +95,17 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive() && !mainForm.IsScanPackActive())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnOrderLookupSearchMessage(x).Forget())
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupLoadOrderMessage>()
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
+                .Do(x => LoadOrder(x.Order))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
             );
@@ -159,6 +167,7 @@ namespace ShipWorks.OrderLookup
                                 }
 
                                 shipmentModel.LoadOrder(order);
+                                messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                             }
 
                             if (!loadOrder)
@@ -182,6 +191,26 @@ namespace ShipWorks.OrderLookup
             }
             finally
             {
+                processingScan = false;
+            }
+        }
+
+        /// <summary>
+        /// Load the order
+        /// </summary>
+        public void LoadOrder(OrderEntity order)
+        {
+            lock (loadingOrderLock)
+            {
+                if (processingScan)
+                {
+                    return;
+                }
+
+                processingScan = true;
+
+                shipmentModel.LoadOrder(order);
+
                 processingScan = false;
             }
         }
@@ -236,6 +265,7 @@ namespace ShipWorks.OrderLookup
                         }
 
                         shipmentModel.LoadOrder(order);
+                        messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                     }).ConfigureAwait(true);
 
                     // Record the shipment data to the telemetry event

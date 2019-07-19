@@ -1104,6 +1104,7 @@
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="OrderLookup\OrderClearReason.cs" />
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupLoadOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Products\Export\IProductExcelWriter.cs" />

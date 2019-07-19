@@ -366,7 +366,6 @@ namespace ShipWorks.OrderLookup
             RaisePropertyChanged(nameof(ShipmentTypeCode));
 
             SelectedOrder = order;
-
             if (ShipmentAdapter != null)
             {
                 ShipmentLoaded?.Invoke(this, EventArgs.Empty);

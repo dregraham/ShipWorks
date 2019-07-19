@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -11,5 +12,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Load an order
         /// </summary>
         Task Load(string scannedText);
+
+        /// <summary>
+        /// Load an order
+        /// </summary>
+        void Load(OrderEntity order);
     }
 }
