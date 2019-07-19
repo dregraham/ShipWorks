@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -26,6 +28,8 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Source for the image to display
         /// </summary>
+        [Bindable(true)]
+        [Obfuscation(Exclude = true)]
         public ImageSource Source
         {
             get
