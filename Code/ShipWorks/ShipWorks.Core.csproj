@@ -798,7 +798,10 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Shipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
@@ -1351,12 +1354,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\XamlNamespaces.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />    
+    <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
