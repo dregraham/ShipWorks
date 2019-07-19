@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -184,8 +185,41 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 Load(order);
             }
+			else if(State == ScanPackState.ListeningForItemScan)
+            {
+                ScanPackItem itemScanned = ItemsToScan.FirstOrDefault(x => x.Sku == scannedText);
+
+                if (itemScanned != null)
+                {
+                    if (itemScanned.Quantity > 1)
+                    {
+                        itemScanned.Quantity--;
+                    }
+                    else
+                    {
+                        ItemsToScan.Remove(itemScanned);
+                    }
+
+                    ScanPackItem scannedItem = ScannedItems.FirstOrDefault(x => x.Sku == scannedText);
+
+                    if (scannedItem != null)
+                    {
+                        scannedItem.Quantity++;
+                    }
+                    else
+                    {
+                        ScanPackItem newItemScanned = new ScanPackItem(itemScanned.Name, itemScanned.ImageUrl,
+                                                                       1, itemScanned.Sku);
+
+                        ScannedItems.Add(newItemScanned);
+                    }
+
+                    Update();
+                }
+            }
         }
 
+        
         /// <summary>
         /// Load the given order
         /// </summary>
