@@ -58,9 +58,6 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             EbayOrderEntity ebayOrderEntity = (EbayOrderEntity) orderEntity;
             var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
 
-            // Update the order number to match the warehouse order number
-            ebayOrderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
-
             ebayOrderEntity.EbayBuyerID = ebayWarehouseOrder.EbayBuyerID;
             ebayOrderEntity.SelectedShippingMethod = ebayWarehouseOrder.SelectedShippingMethod;
             ebayOrderEntity.SellingManagerRecord = ebayWarehouseOrder.SellingManagerRecord;
