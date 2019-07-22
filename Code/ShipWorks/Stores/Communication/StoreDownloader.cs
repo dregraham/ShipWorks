@@ -1442,6 +1442,13 @@ namespace ShipWorks.Stores.Communication
         /// </summary>
         OrderPaymentDetailEntity IOrderElementFactory.CreatePaymentDetail(OrderEntity order, string label, string value) =>
             InstantiateOrderPaymentDetail(order, label, value);
+
+        /// <summary>
+        /// Get the next order number to use
+        /// </summary>
+        async Task<long> IOrderElementFactory.GetNextOrderNumberAsync() =>
+            await GetNextOrderNumberAsync().ConfigureAwait(false);
+
         #endregion
     }
 }

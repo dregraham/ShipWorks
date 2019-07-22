@@ -22,8 +22,6 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
         private const string MagentoEntryKey = "magento";
         private readonly ILog log;
 
-        //private readonly MagentoDownloader magentoDownloader;
-
         /// <summary>
         /// Constructor
         /// </summary>

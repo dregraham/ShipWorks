@@ -1093,6 +1093,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ApplyReturnProfile", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ReturnProfileID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("LoggedShippedToHub", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("LoggedVoidToHub", fieldHashtable);
 		}
 		#endregion
 
@@ -2473,6 +2477,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShipmentFieldIndex.ReturnProfileID, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.ReturnProfileID, value); }
+		}
+
+		/// <summary> The LoggedShippedToHub property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."LoggedShippedToHub"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> LoggedShippedToHub
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)ShipmentFieldIndex.LoggedShippedToHub, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.LoggedShippedToHub, value); }
+		}
+
+		/// <summary> The LoggedVoidToHub property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."LoggedVoidToHub"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> LoggedVoidToHub
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)ShipmentFieldIndex.LoggedVoidToHub, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.LoggedVoidToHub, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

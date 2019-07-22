@@ -14,6 +14,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -33,8 +34,11 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private const string AppLockName = "TangoLogShipmentProcessorRunning";
         private static readonly ILog log = LogManager.GetLogger(typeof(TangoLogShipmentProcessor));
-        private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog;
-        private static readonly int runInterval = 1 * 60 * 1000;
+
+        private static readonly BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)> shipmentsToLog =
+            new BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)>();
+
+        private const int RunInterval = 60 * 1000;
         private static readonly object collectionLock = new object();
         private readonly ISqlSession sqlSession;
         private readonly IShippingManager shippingManager;
@@ -42,18 +46,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly ITangoLogShipmentRequest tangoLogShipmentRequest;
         private readonly ISqlAppLock sqlAppLock;
-        private readonly IWarehouseOrderClient warehouseOrderClient;
+        private readonly IHubShipmentLogger hubShipmentLogger;
         private CancellationTokenSource cancellationTokenSource;
         private CancellationToken cancellationToken;
         private TaskCompletionSource<Unit> delayTaskCompletionSource = new TaskCompletionSource<Unit>();
-
-        /// <summary>
-        /// Static constructor
-        /// </summary>
-        static TangoLogShipmentProcessor()
-        {
-            shipmentsToLog = new BlockingCollection<(StoreEntity Store, ShipmentEntity Shipment)>();
-        }
 
         /// <summary>
         /// Constructor
@@ -66,7 +62,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             IStoreManager storeManager,
             ISqlAdapterFactory sqlAdapterFactory,
             ISqlAppLock sqlAppLock,
-            IWarehouseOrderClient warehouseOrderClient)
+            IHubShipmentLogger hubShipmentLogger)
         {
             this.sqlAppLock = sqlAppLock;
             this.sqlSession = sqlSession;
@@ -74,7 +70,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             this.storeManager = storeManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.tangoLogShipmentRequest = tangoLogShipmentRequest;
-            this.warehouseOrderClient = warehouseOrderClient;
+            this.hubShipmentLogger = hubShipmentLogger;
         }
 
         /// <summary>
@@ -116,17 +112,10 @@ namespace ShipWorks.ApplicationCore.Licensing
                 }
 
                 delayTaskCompletionSource = new TaskCompletionSource<Unit>();
-                await Task.WhenAny(Task.Delay(runInterval, cancellationToken), delayTaskCompletionSource.Task).ConfigureAwait(false);
+                await Task.WhenAny(Task.Delay(RunInterval, cancellationToken), delayTaskCompletionSource.Task)
+                    .ConfigureAwait(false);
                 delayTaskCompletionSource = null;
             }
-        }
-
-        /// <summary>
-        /// Skip the delay and run now
-        /// </summary>
-        public void RunNow()
-        {
-            delayTaskCompletionSource?.SetResult(Unit.Default);
         }
 
         /// <summary>
@@ -152,12 +141,20 @@ namespace ShipWorks.ApplicationCore.Licensing
                     {
                         do
                         {
-                            await LogShipmentsToTango(connection);
+                            await LogShipmentsToTango(connection).ConfigureAwait(false);
 
                             // Get the next page
                             await AddFailedShipments(connection).ConfigureAwait(false);
 
                         } while (shipmentsToLog.Any() && !cancellationToken.IsCancellationRequested);
+
+                        if (!cancellationToken.IsCancellationRequested)
+                        {
+                            await hubShipmentLogger.LogProcessedShipments(connection, cancellationToken)
+                                .ConfigureAwait(false);
+                            await hubShipmentLogger.LogVoidedShipments(connection, cancellationToken)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -172,20 +169,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void Add(StoreEntity store, ShipmentEntity shipment)
         {
-            Add((store, shipment));
-        }
-
-        /// <summary>
-        /// Add a log shipment task to the queue to process
-        /// </summary>
-        private static void Add((StoreEntity Store, ShipmentEntity Shipment) shipmentToLog)
-        {
             // Add the shipment to the list.  If it fails, we'll process it during recovery.
             lock (collectionLock)
             {
-                if (shipmentsToLog.None(s => s.Shipment.ShipmentID == shipmentToLog.Shipment.ShipmentID))
+                if (shipmentsToLog.None(s => s.Shipment.ShipmentID == shipment.ShipmentID))
                 {
-                    shipmentsToLog.TryAdd(shipmentToLog);
+                    shipmentsToLog.TryAdd((store, shipment));
                 }
             }
         }
@@ -216,17 +205,29 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 ShipmentEntity shipment = shipmentToLog.Shipment;
 
-                GenericResult<string> result = tangoLogShipmentRequest.LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
+                GenericResult<string> result = tangoLogShipmentRequest
+                    .LogShipment(connection, shipmentToLog.Store, shipmentToLog.Shipment)
                     .Do(_ => log.InfoFormat("Logged shipment {0}", shipment.ShipmentID))
                     .OnFailure(ex => LogException(ex, shipment.ShipmentID));
 
-                if (shipment.Order.HubOrderID.HasValue)
+                if (result.Failure)
                 {
-                    await warehouseOrderClient.UploadShipment(shipment, shipment.Order.HubOrderID.Value, result.Value)
-                        .ConfigureAwait(false);
+                    return;
+                }
+
+                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create(connection))
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    
+                    await hubShipmentLogger.LogProcessedShipment(shipment, result.Value, sqlAdapter).ConfigureAwait(false);
                 }
             }
         }
+
+
 
         /// <summary>
         /// Log an exception raised while processing
@@ -260,7 +261,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 EntityCollection<ShipmentEntity> shipmentCollection = new EntityCollection<ShipmentEntity>();
 
-                await sqlAdapter.FetchQueryAsync(query, shipmentCollection).ConfigureAwait(false);
+                await sqlAdapter.FetchQueryAsync(query, shipmentCollection, cancellationToken).ConfigureAwait(false);
 
                 foreach (ShipmentEntity shipment in shipmentCollection)
                 {

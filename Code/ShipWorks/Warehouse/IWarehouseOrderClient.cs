@@ -17,12 +17,17 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Get orders for the given warehouse store ID from the ShipWorks Warehouse app
         /// </summary>
-        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mustRecentSequence,
+        Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence,
                                                     StoreTypeCode storeType, Guid batchId);
 
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        Task UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID);
+        Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID);
+
+        /// <summary>
+        /// Send void to the hub
+        /// </summary>
+        Task<Result> UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID);
     }
 }

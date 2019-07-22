@@ -1,2 +1,2 @@
-﻿PRINT N'Iterate version'
+﻿﻿PRINT N'Iterate version'
 GO

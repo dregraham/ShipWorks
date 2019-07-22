@@ -10518,6 +10518,10 @@ namespace ShipWorks.Data.Model
 		ApplyReturnProfile,
 		///<summary>ReturnProfileID. </summary>
 		ReturnProfileID,
+		///<summary>LoggedShippedToHub. </summary>
+		LoggedShippedToHub,
+		///<summary>LoggedVoidToHub. </summary>
+		LoggedVoidToHub,
 		/// <summary></summary>
 		AmountOfFields
 	}
