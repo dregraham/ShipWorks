@@ -194,13 +194,21 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             ItemsToScan.Clear();
 
-            (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
+            if (order.OrderItems.Any())
+            {
+                (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
-            State = ScanPackState.ListeningForItemScan;
+                State = ScanPackState.ListeningForItemScan;
 
-            Update();
+                Update();
 
-            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
+                messenger.Send(new OrderLookupLoadOrderMessage(this, order));
+            }
+            else
+            {
+                ScanHeader = "The order does not contain any items";
+                ScanFooter = "Scan another order to continue";
+            }
         }
 
         /// <summary>
