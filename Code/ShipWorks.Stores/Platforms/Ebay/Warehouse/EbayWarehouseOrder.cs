@@ -10,6 +10,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
     public class EbayWarehouseOrder
     {
         /// <summary>
+        /// The EbayOrderID of the EbayOrder
+        /// </summary>
+        [JsonProperty("ebayOrderId")]
+        public string EbayOrderID { get; set; }
+
+        /// <summary>
         /// The EbayBuyerID of the EbayOrder
         /// </summary>
         [JsonProperty("ebayBuyerId")]

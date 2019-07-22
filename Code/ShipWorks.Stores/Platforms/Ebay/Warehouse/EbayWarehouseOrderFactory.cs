@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -34,7 +35,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            var identifier = new EbayOrderIdentifier(warehouseOrder.OrderNumber);
+            var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
+            var identifier = new EbayOrderIdentifier(ebayWarehouseOrder.EbayOrderID);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
@@ -56,6 +58,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             EbayOrderEntity ebayOrderEntity = (EbayOrderEntity) orderEntity;
             var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
 
+            // Update the order number to match the warehouse order number
+            ebayOrderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
+
             ebayOrderEntity.EbayBuyerID = ebayWarehouseOrder.EbayBuyerID;
             ebayOrderEntity.SelectedShippingMethod = ebayWarehouseOrder.SelectedShippingMethod;
             ebayOrderEntity.SellingManagerRecord = ebayWarehouseOrder.SellingManagerRecord;
@@ -70,6 +75,16 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             ebayOrderEntity.GspCountryCode = ebayWarehouseOrder.GspCountryCode;
             ebayOrderEntity.GspReferenceID = ebayWarehouseOrder.GspReferenceID;
             ebayOrderEntity.GuaranteedDelivery = ebayWarehouseOrder.GuaranteedDelivery;
+
+            // If all items are shipped set the local status to shipped
+            if (warehouseOrder.Items.All(item =>
+            {
+                var ebayItem = item.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();
+                return ebayItem.MyEbayShipped;
+            }))
+            {
+                ebayOrderEntity.LocalStatus = "Shipped";
+            }
         }
 
         /// <summary>
