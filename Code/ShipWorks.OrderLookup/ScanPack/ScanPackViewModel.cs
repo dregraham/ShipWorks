@@ -261,6 +261,8 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             State = ScanPackState.ListeningForOrderScan;
 
+            Error = false;
+
             Update();
         }
 
