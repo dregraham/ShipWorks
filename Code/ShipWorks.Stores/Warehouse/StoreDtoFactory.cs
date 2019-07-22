@@ -141,7 +141,6 @@ namespace ShipWorks.Stores.Warehouse
             store.UseSandbox = !EbayUrlUtilities.UseLiveServer;
 
             return store;
-
         }
 
         /// <summary>
