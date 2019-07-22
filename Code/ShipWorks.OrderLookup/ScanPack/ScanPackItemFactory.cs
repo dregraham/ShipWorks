@@ -37,11 +37,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
                 IEnumerable<ProductVariantEntity> products = await productCatalog
-                    .FetchProductVariantEntities(adapter, order.OrderItems.Select(i => i.SKU));
+                    .FetchProductVariantEntities(adapter, order.OrderItems.Select(i => i.SKU)).ConfigureAwait(true);
 
                 foreach (OrderItemEntity item in order.OrderItems)
                 {
-                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Where(a => a.Sku == item.SKU).Any());
+                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku == item.SKU));
                     result.Add(CreateItem(product, item));
                 }
             }
