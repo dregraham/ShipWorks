@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -239,11 +238,8 @@ namespace ShipWorks.Warehouse
         {
             foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
             {
-                if (!orderEntity.Notes.Any(x => x.Text.Equals(warehouseOrderNote.Text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    await orderElementFactory.CreateNote(orderEntity, warehouseOrderNote.Text, warehouseOrderNote.Edited,
+                await orderElementFactory.CreateNote(orderEntity, warehouseOrderNote.Text, warehouseOrderNote.Edited,
                                                (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
-                }
             }
         }
     }
