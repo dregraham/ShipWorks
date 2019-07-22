@@ -20,13 +20,27 @@ namespace ShipWorks.Stores.Warehouse
     public class ShipmentDtoFactory
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShipmentTypeManager shipmentTypeManager)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.shipmentTypeManager = shipmentTypeManager;
+        }
+
+        /// <summary>
+        /// Get a void shipment object
+        /// </summary>
+        public VoidShipment CreateVoidShipment(long shipmentID, string tangoShipmentID)
+        {
+            return new VoidShipment()
+            {
+                ShipworksShipmentId = shipmentID,
+                TangoShipmentId = GetTangoShipmentIDFromString(tangoShipmentID)
+            };
         }
 
         /// <summary>
@@ -34,6 +48,9 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipmentEntity.ShipmentTypeCode);
+            shipmentType.LoadShipmentData(shipmentEntity, false);
+
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
 
             InsuranceProvider insuranceType = (InsuranceProvider) shipmentEntity.InsuranceProvider;
@@ -49,7 +66,7 @@ namespace ShipWorks.Stores.Warehouse
 
             Shipment shipment = new Shipment
             {
-                TangoShipmentId = Convert.ToInt64(tangoShipmentID),
+                TangoShipmentId = GetTangoShipmentIDFromString(tangoShipmentID),
                 ShipworksShipmentId = shipmentEntity.ShipmentID,
                 ShippingProviderId = shipmentEntity.ShipmentType,
                 Carrier = GetCarrierName(shipmentEntity),
@@ -83,6 +100,20 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// Gets the shipment id. If shipmentID notnumeric, return 0
+        /// </summary>
+        private static long GetTangoShipmentIDFromString(string tangoShipmentID)
+        {
+            long? parsedTangoShipmentID = null;
+            if (long.TryParse(tangoShipmentID, out long parsedID))
+            {
+                parsedTangoShipmentID = parsedID;
+            }
+
+            return parsedTangoShipmentID ?? default(long);
+        }
+
+        /// <summary>
         /// Gets the label format
         /// </summary>
         private static string GetLabelFormat(ShipmentEntity shipmentEntity)
@@ -112,11 +143,11 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         private string GetCarrierName(ShipmentEntity shipment)
         {
-            ShipmentTypeCode shipmentType = shipment.ShipmentTypeCode;
+            ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
-            return shipmentType == ShipmentTypeCode.Other ?
+            return shipmentTypeCode == ShipmentTypeCode.Other ?
                 shipment.Other.Carrier :
-                EnumHelper.GetDescription(shipmentType);
+                EnumHelper.GetDescription(shipmentTypeCode);
         }
     }
 }

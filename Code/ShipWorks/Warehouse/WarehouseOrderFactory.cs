@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
@@ -43,34 +44,26 @@ namespace ShipWorks.Warehouse
                 }
 
                 OrderEntity orderEntity = result.Value;
+                LoadOrderData(warehouseOrder, orderEntity);
 
-                // todo: orderid, storeid, warehousecustomerid
-                // todo: figure out what should and shouldn't be downloaded when new
-                orderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
-                orderEntity.OrderDate = warehouseOrder.OrderDate;
-                orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
-                orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
-                orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
-                orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
-                orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
-                orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
-                orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
-                orderEntity.ShipByDate = warehouseOrder.ShipByDate;
-                orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
-                orderEntity.HubSequence = warehouseOrder.HubSequence;
+                LoadCustoms(warehouseOrder, orderEntity);
 
                 LoadAddress(orderEntity.BillPerson, warehouseOrder.BillAddress);
                 LoadAddress(orderEntity.ShipPerson, warehouseOrder.ShipAddress);
 
-                LoadItems(orderEntity, warehouseOrder.Items);
-
-                LoadCharges(orderEntity, warehouseOrder);
-
-                LoadPaymentDetails(orderEntity, warehouseOrder);
+                if (orderEntity.IsNew)
+                {
+                    LoadItems(orderEntity, warehouseOrder.Items);
+                    LoadCharges(orderEntity, warehouseOrder);
+                    LoadPaymentDetails(orderEntity, warehouseOrder);
+                }
 
                 await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
                 LoadStoreOrderDetails(orderEntity, warehouseOrder);
+
+                Debug.Assert(orderEntity.OrderNumber != 0,
+                             "Ensure order number was set by the store specific order factory");
 
                 return orderEntity;
             }
@@ -84,6 +77,41 @@ namespace ShipWorks.Warehouse
             }
         }
 
+        /// <summary>
+        /// Load order data
+        /// </summary>
+        private static void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
+        {
+            // todo: orderid, storeid, warehousecustomerid
+            // todo: figure out what should and shouldn't be downloaded when new
+            orderEntity.OrderDate = warehouseOrder.OrderDate;
+            orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
+            orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
+            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
+            orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
+            orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
+            orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
+            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
+            orderEntity.ShipByDate = warehouseOrder.ShipByDate;
+            orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
+            orderEntity.HubSequence = warehouseOrder.HubSequence;
+        }
+
+        /// <summary>
+        /// Load customs info
+        /// </summary>
+        private static void LoadCustoms(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
+        {
+            orderEntity.Custom1 = warehouseOrder.Custom1;
+            orderEntity.Custom2 = warehouseOrder.Custom2;
+            orderEntity.Custom3 = warehouseOrder.Custom3;
+            orderEntity.Custom4 = warehouseOrder.Custom4;
+            orderEntity.Custom5 = warehouseOrder.Custom5;
+        }
+
+        /// <summary>
+        /// Load Address
+        /// </summary>
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
         {
             // todo: parse names if needed
@@ -211,7 +239,7 @@ namespace ShipWorks.Warehouse
             foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
             {
                 await orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
-                                               (NoteVisibility) warehouseOrderCharge.Visibility).ConfigureAwait(false);
+                                               (NoteVisibility) warehouseOrderCharge.Visibility, true).ConfigureAwait(false);
             }
         }
     }

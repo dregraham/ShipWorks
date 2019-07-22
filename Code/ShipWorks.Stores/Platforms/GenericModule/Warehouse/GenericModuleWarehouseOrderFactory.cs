@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
 
             genericModuleOrderEntity.AmazonOrderID = genericModuleWarehouseOrder.AmazonOrderID;
             genericModuleOrderEntity.IsFBA = genericModuleWarehouseOrder.IsFBA;
-            genericModuleOrderEntity.IsPrime = (AmazonIsPrime) genericModuleWarehouseOrder.IsPrime;
+            genericModuleOrderEntity.IsPrime = genericModuleWarehouseOrder.IsPrime == 1 ? AmazonIsPrime.Yes : AmazonIsPrime.No;
             genericModuleOrderEntity.IsSameDay = genericModuleWarehouseOrder.IsSameDay;
         }
 

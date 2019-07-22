@@ -24567,6 +24567,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.ReturnProfileID);}
 		}
+		/// <summary>Creates a new ShipmentEntity.LoggedShippedToHub field instance</summary>
+		public static EntityField2 LoggedShippedToHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.LoggedShippedToHub);}
+		}
+		/// <summary>Creates a new ShipmentEntity.LoggedVoidToHub field instance</summary>
+		public static EntityField2 LoggedVoidToHub
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.LoggedVoidToHub);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipmentCustomsItemEntity</summary>

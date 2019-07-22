@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing.Warehouse
+﻿using System;
+using RestSharp;
+
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Warehouse endpoints
@@ -15,6 +18,7 @@
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
+        private const string voidShipment = "api/orders/{0}/void";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -36,5 +40,10 @@
         /// Create ship order endpoint with given warehouseOrderID
         /// </summary>
         public static string ShipOrder(string warehouseOrderID) => string.Format(shipOrder, warehouseOrderID);
+
+        /// <summary>
+        /// Create void order endpoint with given warehouseOrderid
+        /// </summary>
+        public static string VoidShipment(string warehouseOrderID) => string.Format(voidShipment, warehouseOrderID);
     }
 }

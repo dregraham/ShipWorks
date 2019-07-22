@@ -392,22 +392,24 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                if (store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
+                result = storeSettingsControl.SaveToEntity(store);
+
+                if (result && store?.WarehouseStoreID != null && store.IsDirty && WarehouseStoreTypes.IsSupported(store.StoreTypeCode))
                 {
                     using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                     {
-                        Result warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
+                        Result warehouseResult;
+                        using (scope.Resolve<IMessageHelper>().ShowProgressDialog("Updating store information...", "Updating store information..."))
+                        {
+                            warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
+                        }
+                         
                         if (warehouseResult.Failure)
                         {
                             MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
                             result = false;
                         }
                     }
-                }
-
-                if (result)
-                {
-                    result = storeSettingsControl.SaveToEntity(store);
                 }
             }
 
