@@ -1153,6 +1153,7 @@ namespace ShipWorks
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
                 panelDockingArea.Controls.Remove(scanPackControl?.Control);
                 orderLookupControl.Unload();
+                scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }

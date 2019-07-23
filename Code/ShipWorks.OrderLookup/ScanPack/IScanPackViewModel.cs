@@ -17,5 +17,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Load an order
         /// </summary>
         Task Load(OrderEntity order);
+
+        /// <summary>
+        /// Reset the control
+        /// </summary>
+        void Reset();
     }
 }

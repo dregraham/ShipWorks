@@ -212,6 +212,14 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Reset the view model
+        /// </summary>
+        public void Reset()
+        {
+            Reset(true);
+        }
+
+        /// <summary>
         /// Get an order with an order number matching the scanned text
         /// </summary>
         private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
