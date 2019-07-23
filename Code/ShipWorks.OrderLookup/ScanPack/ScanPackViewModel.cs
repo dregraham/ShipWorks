@@ -171,8 +171,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             Error = false;
 
-            if (State == ScanPackState.ListeningForOrderScan)
+            if (State == ScanPackState.ListeningForOrderScan || State == ScanPackState.OrderVerified)
             {
+                ItemsToScan.Clear();
+                ScannedItems.Clear();
+
                 OrderEntity order = await GetOrder(scannedText).ConfigureAwait(true);
 
                 if (order == null)
@@ -187,7 +190,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 Load(order);
             }
-			else if(State == ScanPackState.ListeningForItemScan)
+			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
                 ScanPackItem itemScanned = ItemsToScan.FirstOrDefault(x => x.Sku == scannedText);
 
@@ -195,9 +198,14 @@ namespace ShipWorks.OrderLookup.ScanPack
                 {
                     ProcessItemScan(itemScanned, ItemsToScan, ScannedItems);
                 }
+                else
+                {
+                    Error = true;
+
+                    ScanHeader = "Last scan did not match. Scan another item to continue.";
+                }
             }
         }
-
         
         /// <summary>
         /// Load the given order
@@ -208,7 +216,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
 
-            State = ScanPackState.ListeningForItemScan;
+            State = ScanPackState.OrderLoaded;
 
             Update();
         }
@@ -350,12 +358,16 @@ namespace ShipWorks.OrderLookup.ScanPack
                 {
                     ScanHeader = "Scan an Item to Pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
+
+                    State = scannedItemCount > 0 ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
                 }
                 else
                 {
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";
                     ScanFooter = "Scan a new order to continue";
+
+                    State = ScanPackState.OrderVerified;
                 }
             }
         }

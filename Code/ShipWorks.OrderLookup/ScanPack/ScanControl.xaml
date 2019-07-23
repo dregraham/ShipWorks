@@ -53,7 +53,17 @@
                             Style="{StaticResource OpenBox}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForItemScan}}"/>
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderLoaded}}"/>
+                        <Path
+                            Style="{StaticResource CheckboxCircle}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ScanningItems}}"/>
+                        <Path
+                            Style="{StaticResource CheckboxDecagram}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderVerified}}"/>
                     </Canvas>
                 </Viewbox>
                 <Viewbox Grid.Row="1"

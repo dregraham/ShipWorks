@@ -8,10 +8,7 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public class ScanPackItem : ViewModelBase
     {
-        private string name;
-        private string imageUrl;
         private double quantity;
-        private string sku;
 
         /// <summary>
         /// Constructor
@@ -28,21 +25,13 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// The Items Name
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Name
-        {
-            get => name;
-            set => name = value;
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// The Items Image Url
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ImageUrl
-        {
-            get => imageUrl;
-            set => imageUrl = value;
-        }
+        public string ImageUrl { get; set; }
 
         /// <summary>
         /// The Items Quantity
@@ -58,10 +47,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// The Item's SKU
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Sku
-        {
-            get => sku;
-            set => sku = value;
-        }
+        public string Sku { get; set; }
     }
 }
