@@ -74,5 +74,14 @@ namespace HubOrderPerformance.Steps
             alert = _driver.SwitchTo().Alert();
             alert.Dismiss();
         }
+        public void WaitUntilVisible(string CompareText, IWebElement element)
+        {
+            string text = null;
+            while (text != CompareText)
+            {
+                System.Threading.Thread.Sleep(250);
+                text = GetText(element);
+            }            
+        }
     }
 }

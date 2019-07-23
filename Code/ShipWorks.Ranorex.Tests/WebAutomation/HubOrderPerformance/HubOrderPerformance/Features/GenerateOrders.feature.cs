@@ -80,8 +80,9 @@ namespace HubOrderPerformance.Features
         [Xunit.TraitAttribute("FeatureTitle", "GenerateOrders")]
         [Xunit.TraitAttribute("Description", "Login to the Fake Stores site and generate orders")]
         [Xunit.TraitAttribute("Category", "Chrome")]
-        [Xunit.InlineDataAttribute("Chrome", "gdeblois", "bar7458", "5", "http://localhost:4004/ui/stores/10/julysecond-1/generate", new string[0])]
-        public virtual void LoginToTheFakeStoresSiteAndGenerateOrders(string browser, string username, string password, string number, string storeURL, string[] exampleTags)
+        [Xunit.InlineDataAttribute("Chrome", "gdeblois", "bar7458", "834", "16", "https://master.fake-stores.warehouseapp.link/ui/stores/28/garrettgm9-admin-admin/" +
+            "generate", new string[0])]
+        public virtual void LoginToTheFakeStoresSiteAndGenerateOrders(string browser, string username, string password, string batchSize, string batchIteration, string storeURL, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "Chrome"};
@@ -99,7 +100,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.Then(string.Format("the user navigates to the generate page at \'{0}\'", storeURL), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 7
- testRunner.Then(string.Format("the user generates \'{0}\' of orders", number), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then(string.Format("the user generates \'{0}\' number of orders for \'{1}\' number of batches", batchSize, batchIteration), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

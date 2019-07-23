@@ -19,6 +19,7 @@
   <ItemGroup>
     <PackageReference Include="Gherkin" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="74.0.0" />
     <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
     <PackageReference Include="SpecFlow" Version="3.0.225" />

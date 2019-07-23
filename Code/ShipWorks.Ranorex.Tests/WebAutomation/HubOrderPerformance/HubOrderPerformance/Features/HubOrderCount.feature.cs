@@ -80,7 +80,7 @@ namespace HubOrderPerformance.Features
         [Xunit.TraitAttribute("FeatureTitle", "HubOrderCount")]
         [Xunit.TraitAttribute("Description", "Login to Hub and check number of Orders")]
         [Xunit.TraitAttribute("Category", "Chrome")]
-        [Xunit.InlineDataAttribute("Chrome", "user-2@example.com", "password1", new string[0])]
+        [Xunit.InlineDataAttribute("Chrome", "user-210@example.com", "password1", new string[0])]
         public virtual void LoginToHubAndCheckNumberOfOrders(string browser, string username, string password, string[] exampleTags)
         {
             string[] @__tags = new string[] {

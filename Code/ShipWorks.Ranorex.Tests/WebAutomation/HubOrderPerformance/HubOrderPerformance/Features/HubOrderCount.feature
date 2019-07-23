@@ -7,5 +7,5 @@ Scenario Outline: Login to Hub and check number of Orders
 	Then the user gets the number of orders
 
 	Examples: 
-	| Browser | Username           | Password  |
-	| Chrome  | user-2@example.com | password1 |
+	| Browser | Username             | Password  |
+	| Chrome  | user-210@example.com | password1 |
