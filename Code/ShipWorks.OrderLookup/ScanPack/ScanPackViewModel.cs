@@ -194,7 +194,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         public async Task Load(OrderEntity order)
         {
             ItemsToScan.Clear();
-            OrderNumber = order.OrderNumberComplete ;
+            OrderNumber = order.OrderNumberComplete;
 
             if (order.OrderItems.Any())
             {
@@ -218,7 +218,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
         {
-            OrderNumber = scannedOrderNumber;
             ScanHeader = "Loading order...";
             ScanFooter = string.Empty;
 
