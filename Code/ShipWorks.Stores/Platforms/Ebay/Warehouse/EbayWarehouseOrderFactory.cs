@@ -36,7 +36,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
             var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
-            var identifier = new EbayOrderIdentifier(ebayWarehouseOrder.EbayOrderID);
+
+            string orderID = ebayWarehouseOrder.EbayOrderID == null ? warehouseOrder.OrderNumber : ebayWarehouseOrder.EbayOrderID;
+
+            var identifier = new EbayOrderIdentifier(orderID);
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
