@@ -41,7 +41,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 foreach (OrderItemEntity item in order.OrderItems)
                 {
-                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku == item.SKU));
+                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCultureIgnoreCase)));
                     result.Add(CreateItem(product, item));
                 }
             }
