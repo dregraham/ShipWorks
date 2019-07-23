@@ -62,8 +62,24 @@ namespace ShipWorks.OrderLookup.ScanPack
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe()
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupClearOrderMessage>()
+                    .Do(OnOrderLookupClearOrderMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe()
             );
+        }
+
+        /// <summary>
+        /// Handle clear message
+        /// </summary>
+        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
+        {
+            if (message.Reason == OrderClearReason.Reset)
+            {
+                scanPackViewModel.Reset();
+            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -48,7 +49,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScannedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(() => Reset(true));
+            ResetCommand = new RelayCommand(() => ResetClicked());
 
             Update();
         }
@@ -212,14 +213,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// Reset the view model
-        /// </summary>
-        public void Reset()
-        {
-            Reset(true);
-        }
-
-        /// <summary>
         /// Get an order with an order number matching the scanned text
         /// </summary>
         private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
@@ -253,6 +246,19 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
         }
+
+        /// <summary>
+        /// Clear the order as the user clicked reset
+        /// </summary>
+        private void ResetClicked()
+        {
+            messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
+        }
+
+        /// <summary>
+        /// Reset the view model
+        /// </summary>
+        public void Reset() => Reset(true);
 
         /// <summary>
         /// Reset the order
