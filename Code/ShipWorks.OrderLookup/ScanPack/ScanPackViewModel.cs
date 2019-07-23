@@ -203,14 +203,14 @@ namespace ShipWorks.OrderLookup.ScanPack
                 State = ScanPackState.ListeningForItemScan;
 
                 Update();
-
-                messenger.Send(new OrderLookupLoadOrderMessage(this, order));
             }
             else
             {
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
+
+            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
         }
 
         /// <summary>
