@@ -78,10 +78,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
 
+                string previousLink = String.Empty;
+
                 Progress.Detail = $"Downloading orders...";
 
                 while (ordersResult?.Orders?.Any() ?? false)
                 {
+                    // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
+                    // the same "next link" causing ShipWorks to download forever
+                    if (ordersResult.OdataNextLink == previousLink)
+                    {
+                        break;
+                    }
+
+                    previousLink = ordersResult.OdataNextLink;
+
                     foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
                     {
                         // Check if it has been canceled
