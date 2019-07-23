@@ -194,6 +194,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         public async Task Load(OrderEntity order)
         {
             ItemsToScan.Clear();
+            OrderNumber = order.OrderNumberComplete ;
 
             if (order.OrderItems.Any())
             {
