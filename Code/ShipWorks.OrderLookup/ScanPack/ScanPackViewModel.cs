@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
@@ -19,7 +22,7 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// View model for the ScanPackControl
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ScanPackViewModel : ViewModelBase, IScanPackViewModel
+    public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
@@ -161,7 +164,6 @@ namespace ShipWorks.OrderLookup.ScanPack
 
         #endregion
 
-
         /// <summary>
         /// Load an order from an order number
         /// </summary>
@@ -191,30 +193,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 if (itemScanned != null)
                 {
-                    if (itemScanned.Quantity > 1)
-                    {
-                        itemScanned.Quantity--;
-                    }
-                    else
-                    {
-                        ItemsToScan.Remove(itemScanned);
-                    }
-
-                    ScanPackItem scannedItem = ScannedItems.FirstOrDefault(x => x.Sku == scannedText);
-
-                    if (scannedItem != null)
-                    {
-                        scannedItem.Quantity++;
-                    }
-                    else
-                    {
-                        ScanPackItem newItemScanned = new ScanPackItem(itemScanned.Name, itemScanned.ImageUrl,
-                                                                       1, itemScanned.Sku);
-
-                        ScannedItems.Add(newItemScanned);
-                    }
-
-                    Update();
+                    ProcessItemScan(itemScanned, ItemsToScan, ScannedItems);
                 }
             }
         }
@@ -232,6 +211,40 @@ namespace ShipWorks.OrderLookup.ScanPack
             State = ScanPackState.ListeningForItemScan;
 
             Update();
+        }
+
+        /// <summary>
+        /// Handler for drag over events
+        /// </summary>
+        public void DragOver(IDropInfo dropInfo)
+        {
+            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
+            IEnumerable<ScanPackItem> targetItems = dropInfo.TargetCollection as IEnumerable<ScanPackItem>;
+
+            if (sourceItem != null && targetItems != null)
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        /// <summary>
+        /// Handler for drop events
+        /// </summary>
+        public void Drop(IDropInfo dropInfo)
+        {
+            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
+            ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
+            ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
+
+            if (sourceItem != null && sourceItems != null && targetItems != null)
+            {
+                // Don't do anything if dropped onto the same list
+                if (!sourceItems.Equals(targetItems))
+                {
+                    ProcessItemScan(sourceItem, sourceItems, targetItems);
+                }
+            }
         }
 
         /// <summary>
@@ -283,6 +296,35 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScannedItems.Clear();
 
             State = ScanPackState.ListeningForOrderScan;
+
+            Update();
+        }
+
+        /// <summary>
+        /// Check both lists for scanned item and update quantities accordingly
+        /// </summary>
+        private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems, ObservableCollection<ScanPackItem> targetItems)
+        {
+            // Update source list
+            if (sourceItem.Quantity > 1)
+            {
+                sourceItem.Quantity--;
+            }
+            else
+            {
+                sourceItems.Remove(sourceItem);
+            }
+
+            // Update target list
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.Sku == sourceItem.Sku);
+            if (matchingTargetItem == null)
+            {
+                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, 1, sourceItem.Sku));
+            }
+            else
+            {
+                matchingTargetItem.Quantity++;
+            }
 
             Update();
         }

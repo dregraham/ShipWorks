@@ -79,7 +79,8 @@
                     DataContext="{Binding .}"/>
                 <scanPack:PackedControl
                     Grid.Column="4"
-                    Margin="0,0,4,0"/>
+                    Margin="0,0,4,0"
+                    DataContext="{Binding .}"/>
 
                 <GridSplitter Grid.Column="1" DragCompleted="OnGridSplitterDragComplete" />
                 <GridSplitter Grid.Column="3" DragCompleted="OnGridSplitterDragComplete" />
