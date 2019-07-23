@@ -80,8 +80,8 @@ namespace HubOrderPerformance.Features
         [Xunit.TraitAttribute("FeatureTitle", "GenerateOrders")]
         [Xunit.TraitAttribute("Description", "Login to the Fake Stores site and generate orders")]
         [Xunit.TraitAttribute("Category", "Chrome")]
-        [Xunit.InlineDataAttribute("Chrome", "gdeblois", "bar7458", "834", "16", "https://master.fake-stores.warehouseapp.link/ui/stores/28/garrettgm9-admin-admin/" +
-            "generate", new string[0])]
+        [Xunit.InlineDataAttribute("Chrome", "gdeblois", "bar7458", "834", "8", "https://master.fake-stores.warehouseapp.link/ui/stores/28/garrettgm11-admin-admin" +
+            "/generate", new string[0])]
         public virtual void LoginToTheFakeStoresSiteAndGenerateOrders(string browser, string username, string password, string batchSize, string batchIteration, string storeURL, string[] exampleTags)
         {
             string[] @__tags = new string[] {

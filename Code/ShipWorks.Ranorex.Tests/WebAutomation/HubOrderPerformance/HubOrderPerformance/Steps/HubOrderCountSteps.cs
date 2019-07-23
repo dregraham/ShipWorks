@@ -5,12 +5,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using TechTalk.SpecFlow;
 using Xunit;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace HubOrderPerformance.Steps
 {
@@ -61,9 +59,9 @@ namespace HubOrderPerformance.Steps
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            while (stopWatch.Elapsed <= TimeSpan.FromSeconds(60) /*|| getOrderCountParsed <= 12500*/)
+            while (true)
             {
-                Thread.Sleep(5000);
+                Thread.Sleep(60000);
 
                 getOrderCount = Regex.Match(_driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/table/tfoot/tr/td/div/div[3]/span[3]")).Text, @"^\S*\s+(\S+)+\s(\S+)");
 
@@ -76,6 +74,10 @@ namespace HubOrderPerformance.Steps
                     stopWatch.Stop();
                     _driver.Navigate().Refresh();
                     stopWatch.Start();
+                    if (stopWatch.Elapsed >= TimeSpan.FromMinutes(15) || getOrderCountParsed >= 6000)
+                    {
+                        break;
+                    }
                 }
                 else
                 {

@@ -8,4 +8,4 @@ Scenario Outline: Login to Hub and check number of Orders
 
 	Examples: 
 	| Browser | Username             | Password  |
-	| Chrome  | user-210@example.com | password1 |
+	| Chrome  | user-212@example.com | password1 |

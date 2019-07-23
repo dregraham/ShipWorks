@@ -7,5 +7,5 @@ Scenario Outline: Login to the Fake Stores site and generate orders
 	Then the user generates '<BatchSize>' number of orders for '<BatchIteration>' number of batches
 
 	Examples:
-		| Browser | Username | Password | BatchSize | BatchIteration | StoreURL                                                                                  |
-		| Chrome  | gdeblois | bar7458  | 834       | 16             | https://master.fake-stores.warehouseapp.link/ui/stores/28/garrettgm9-admin-admin/generate |
+		| Browser | Username | Password | BatchSize | BatchIteration | StoreURL                                                                                   |
+		| Chrome  | gdeblois | bar7458  | 834       | 16              | https://master.fake-stores.warehouseapp.link/ui/stores/28/garrettgm11-admin-admin/generate |
