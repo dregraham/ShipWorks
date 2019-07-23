@@ -108,5 +108,13 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// End the session
         /// </summary>
         public void EndSession() => subscriptions?.Dispose();
+
+        /// <summary>
+        /// End the session
+        /// </summary>
+        public void Dispose()
+        {
+            EndSession();
+        }
     }
 }
