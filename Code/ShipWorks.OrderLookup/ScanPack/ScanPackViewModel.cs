@@ -208,7 +208,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
-                ScanHeader = "The order does not contain any items";
+                ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
         }
@@ -219,7 +219,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
         {
             OrderNumber = scannedOrderNumber;
-            ScanHeader = "Loading Order...";
+            ScanHeader = "Loading order...";
             ScanFooter = string.Empty;
 
             TelemetricResult<long?> orderID = await orderIDRetriever
@@ -292,15 +292,15 @@ namespace ShipWorks.OrderLookup.ScanPack
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
             {
-                ScanHeader = "Ready to Scan and Pack";
-                ScanFooter = "Scan an Order Barcode to Begin";
+                ScanHeader = "Ready to scan and pack";
+                ScanFooter = "Scan an order barcode to begin";
             }
             else
             {
                 // Order has been scanned, still items left to scan
                 if (ItemsToScan.Any())
                 {
-                    ScanHeader = "Scan an Item to Pack";
+                    ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
                 }
                 else
