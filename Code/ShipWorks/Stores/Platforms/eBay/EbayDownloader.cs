@@ -1742,6 +1742,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 throw new DownloadException(ex.Message, ex);
             }
+            catch (SqlForeignKeyException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
         }
     }
 }
