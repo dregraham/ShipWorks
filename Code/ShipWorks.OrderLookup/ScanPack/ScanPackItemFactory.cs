@@ -62,10 +62,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             string name = string.IsNullOrWhiteSpace(product?.Name) ? item.Name : product.Name;
-
+            string upc = string.IsNullOrWhiteSpace(product?.UPC) ? item.UPC : product.UPC;
             string sku = string.IsNullOrWhiteSpace(product?.DefaultSku) ? item.SKU : product.DefaultSku;
 
-            return new ScanPackItem(name, imageUrl, item.Quantity, sku);
+            return new ScanPackItem(name, imageUrl, item.Quantity, upc, sku);
         }
     }
 }

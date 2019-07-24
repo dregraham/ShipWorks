@@ -30,7 +30,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IMessenger messenger;
         private ObservableCollection<ScanPackItem> itemsToScan;
-        private ObservableCollection<ScanPackItem> scannedItems;
+        private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
         private string scanImageUrl;
         private string scanFooter;
@@ -50,10 +50,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             this.messenger = messenger;
 
             ItemsToScan = new ObservableCollection<ScanPackItem>();
-            ScannedItems = new ObservableCollection<ScanPackItem>();
+            PackedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(() => ResetClicked());
+            ResetCommand = new RelayCommand(ResetClicked);
 
             Update();
         }
@@ -82,10 +82,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Items that have been scanned
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ScanPackItem> ScannedItems
+        public ObservableCollection<ScanPackItem> PackedItems
         {
-            get => scannedItems;
-            set => Set(ref scannedItems, value);
+            get => packedItems;
+            set => Set(ref packedItems, value);
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (State == ScanPackState.ListeningForOrderScan || State == ScanPackState.OrderVerified)
             {
                 ItemsToScan.Clear();
-                ScannedItems.Clear();
+                PackedItems.Clear();
 
                 OrderEntity order = await GetOrder(scannedText).ConfigureAwait(true);
 
@@ -194,17 +194,21 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
-                ScanPackItem itemScanned = ItemsToScan.FirstOrDefault(x => x.Sku == scannedText);
+                ScanPackItem itemScanned = GetScanPackItem(scannedText, ItemsToScan);
 
                 if (itemScanned != null)
                 {
-                    ProcessItemScan(itemScanned, ItemsToScan, ScannedItems);
+                    ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
                 }
                 else
                 {
-                    Error = true;
+                    ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
-                    ScanHeader = "Last scan did not match. Scan another item to continue.";
+                    ScanHeader = packedItem == null ?
+                        "Last scan did not match. Scan another item to continue." :
+                        "Item has already been packed";
+
+                    Error = true;
                 }
             }
         }
@@ -328,7 +332,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             ItemsToScan.Clear();
-            ScannedItems.Clear();
+            PackedItems.Clear();
 
             State = ScanPackState.ListeningForOrderScan;
 
@@ -353,10 +357,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.Sku == sourceItem.Sku);
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.Upc == sourceItem.Upc && x.Sku == sourceItem.Sku);
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, 1, sourceItem.Sku));
+                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, 1, sourceItem.Upc, sourceItem.Sku));
             }
             else
             {
@@ -371,7 +375,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void Update()
         {
-            double scannedItemCount = ScannedItems.Select(x => x.Quantity).Sum();
+            double scannedItemCount = PackedItems.Select(x => x.Quantity).Sum();
             double totalItemCount = ItemsToScan.Select(x => x.Quantity).Sum() + scannedItemCount;
 
             // No order scanned yet
@@ -400,5 +404,13 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
             }
         }
+ 
+        /// <summary>
+        /// Search the items in the given list for a upc matching the scanned text first, if none found, search the items
+        /// again for a sku matching the scanned text
+        /// </summary>
+        private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
+            listToSearch.FirstOrDefault(x => x.Upc == scannedText) ??
+            listToSearch.FirstOrDefault(x => x.Sku == scannedText);
     }
 }

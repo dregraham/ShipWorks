@@ -26,7 +26,7 @@
                   FontSize="16"
                   Background="{x:Static SystemColors.ControlBrush}">
             <ItemsControl
-                ItemsSource="{Binding ScannedItems}"
+                ItemsSource="{Binding PackedItems}"
                 ItemTemplate="{StaticResource ItemsToScanTemplate}"
                 Background="{x:Static SystemColors.ControlBrush}"
                 Margin="5"/>

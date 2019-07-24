@@ -13,11 +13,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackItem(string name, string imageUrl, double quantity, string sku)
+        public ScanPackItem(string name, string imageUrl, double quantity, string upc, string sku)
         {
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
+            Upc = upc;
             Sku = sku;
         }
 
@@ -42,6 +43,12 @@ namespace ShipWorks.OrderLookup.ScanPack
             get => quantity;
             set => Set(ref quantity, value);
         }
+
+        /// <summary>
+        /// The Item's UPC
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Upc { get; set; }
 
         /// <summary>
         /// The Item's SKU
