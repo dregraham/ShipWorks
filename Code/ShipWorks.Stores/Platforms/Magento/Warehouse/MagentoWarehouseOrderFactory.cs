@@ -1,38 +1,38 @@
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.GenericModule.Warehouse;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
-namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
+namespace ShipWorks.Stores.Platforms.Magento.Warehouse
 {
     /// <summary>
-    /// Generic Module warehouse order factory
+    /// Magento warehouse order factory
     /// </summary>
-    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GenericModule)]
-    [Component(RegistrationType.Self)]
-    public class GenericModuleWarehouseOrderFactory : WarehouseOrderFactory
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Magento)]
+    public class MagentoWarehouseOrderFactory : GenericModuleWarehouseOrderFactory
     {
-        private const string genericModuleEntryKey = "genericModule";
+        private const string MagentoEntryKey = "magento";
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericModuleWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) :
-            base(orderElementFactory)
+        public MagentoWarehouseOrderFactory(IOrderElementFactory orderElementFactory, Func<Type, ILog> logFactory) :
+            base(orderElementFactory, logFactory)
         {
-            log = logFactory(typeof(GenericModuleWarehouseOrderFactory));
+            log = logFactory(typeof(MagentoWarehouseOrderFactory));
         }
 
         /// <summary>
-        /// Create an order entity with an Amazon identifier
+        /// Create an order entity with an Magento identifier
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
@@ -62,24 +62,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         /// </summary>
         protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            var genericModuleOrderEntity = (GenericModuleOrderEntity) orderEntity;
-            var genericModuleWarehouseOrder = warehouseOrder.AdditionalData[genericModuleEntryKey].ToObject<GenericModuleWarehouseOrder>();
+            base.LoadStoreOrderDetails(orderEntity, warehouseOrder);
 
-            genericModuleOrderEntity.AmazonOrderID = genericModuleWarehouseOrder.AmazonOrderID;
-            genericModuleOrderEntity.IsFBA = genericModuleWarehouseOrder.IsFBA;
-            genericModuleOrderEntity.IsPrime = genericModuleWarehouseOrder.IsPrime == 1 ? AmazonIsPrime.Yes : AmazonIsPrime.No;
-            genericModuleOrderEntity.IsSameDay = genericModuleWarehouseOrder.IsSameDay;
-        }
+            var magentoOrderEntity = (MagentoOrderEntity) orderEntity;
+            var magentoWarehouseOrder = warehouseOrder.AdditionalData[MagentoEntryKey].ToObject<MagentoWarehouseOrder>();
 
-        /// <summary>
-        /// Load store specific item details
-        /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
-        {
-            var genericModuleItemEntity = (GenericModuleOrderItemEntity) itemEntity;
-            var genericModuleWarehouseItem = warehouseItem.AdditionalData[genericModuleEntryKey].ToObject<GenericcModuleWarehouseItem>();
-
-            genericModuleItemEntity.AmazonOrderItemCode = genericModuleWarehouseItem.AmazonOrderItemCode;
+            magentoOrderEntity.MagentoOrderID = magentoWarehouseOrder.MagentoOrderID;
         }
     }
 }

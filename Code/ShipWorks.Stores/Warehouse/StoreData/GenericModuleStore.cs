@@ -28,5 +28,10 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// How far back to start importing
         /// </summary>
         public ulong? ImportStartDetails { get; set; }
+
+        /// <summary>
+        /// Store code
+        /// </summary>
+        public string OnlineStoreCode { get; set; }
     }
 }
