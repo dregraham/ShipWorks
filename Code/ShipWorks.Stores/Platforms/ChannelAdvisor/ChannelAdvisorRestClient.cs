@@ -256,6 +256,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private ChannelAdvisorOrderResult SubmitGetOrders(IHttpVariableRequestSubmitter getOrdersRequestSubmitter, string refreshToken)
         {
+            // Increase timeout due to filtering a large number of orders taking a long time
+            getOrdersRequestSubmitter.Timeout = TimeSpan.FromSeconds(300);
+
             return Functional
                 .Retry(() => ProcessRequest<ChannelAdvisorOrderResult>(getOrdersRequestSubmitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
