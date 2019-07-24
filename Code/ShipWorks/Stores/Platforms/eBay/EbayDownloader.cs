@@ -1734,7 +1734,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             await base.DownloadWarehouseOrders(batchId);
 
-            DownloadFeedback();
+            try
+            {
+                DownloadFeedback();
+            }
+            catch (EbayException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
         }
     }
 }
