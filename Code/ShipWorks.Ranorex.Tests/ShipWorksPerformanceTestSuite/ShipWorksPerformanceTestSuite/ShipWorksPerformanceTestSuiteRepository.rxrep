@@ -2143,14 +2143,14 @@ XrLp0EM2aG+RntUiB+ZT6fxfIsRPbYnQgbXhGFYAAAAASUVORK5CYII=
 				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//text[@controlname='DirEdit']/rawtext[@rawtext='C:\Program Files\ShipWorks Installs\ShipWorks_6_5_0_12803']
 			</item>
 			<item
-			addcaps="unknown,rawtext"
-			capname="rawtext"
-			id="6652577f-7fe1-4244-aa0d-63731d18a76c"
+			addcaps="checkbox,accessible,accessibletreeitem"
+			capname="checkbox"
+			id="4ae0cd64-f317-49d5-ac71-6ef01733fbd1"
 			name="CreateADesktopIcon1"
-			refimgid="9d75bdca-2667-43aa-bd69-3e1c14ca89b9"
-			refpath="/form[@controlname='WizardForm']/element[@controlname='OuterNotebook']/element/element/element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]"
+			refimgid="d5310eec-50db-4585-88eb-d7b910d56244"
+			refpath="/form[@title='Setup - ShipWorks®']/element[@class='TNewNotebook']/element/element/element[@class='TNewNotebookPage' and @instance='0']/element[@class='TNewCheckListBox']/tree/checkbox[@accessiblename='Create a &amp;Desktop icon']"
 			searchtimeout="30000ms">
-				/form[@title='Setup - ShipWorks&#174;']/element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]
+				/form[@title='Setup - ShipWorks&#174;']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\ the\ additional\ tas']/checkbox[@accessiblename='Create a &amp;Desktop icon']
 			</item>
 			<basepath>
 				/form[@title='Setup - ShipWorks&#174;']

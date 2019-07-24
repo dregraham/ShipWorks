@@ -4428,7 +4428,7 @@ namespace ShipWorksPerformanceTestSuite
                 _iaccepttheagreement1Info = new RepoItemInfo(this, "IAcceptTheAgreement1", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/element[3]/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "305b1191-e8b6-433d-971f-1f891c9219e6");
                 _installothercomponentsInfo = new RepoItemInfo(this, "InstallOtherComponents", "element[@controlname='OuterNotebook']/?/?/container[@controlname='MainPanel']/?/?/text[@accessiblename='Install other components']", 30000, null, "39537646-5490-4ee2-9695-06b2d7ff02c2");
                 _cprogramfilesshipworksinstallsshipInfo = new RepoItemInfo(this, "CProgramFilesShipWorksInstallsShip", "element[@controlname='OuterNotebook']//text[@controlname='DirEdit']/rawtext[@rawtext='C:\\Program Files\\ShipWorks Installs\\ShipWorks_6_5_0_12803']", 30000, null, "064d9bca-bd8c-4be5-876a-9bb1229aec3c");
-                _createadesktopicon1Info = new RepoItemInfo(this, "CreateADesktopIcon1", "element[@controlname='OuterNotebook']//element[@controlname='SelectTasksPage']/element[@controlname='TasksList']/rawtext[1]", 30000, null, "6652577f-7fe1-4244-aa0d-63731d18a76c");
+                _createadesktopicon1Info = new RepoItemInfo(this, "CreateADesktopIcon1", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/tree[@accessiblename~'^Select\\ the\\ additional\\ tas']/checkbox[@accessiblename='Create a &Desktop icon']", 30000, null, "4ae0cd64-f317-49d5-ac71-6ef01733fbd1");
             }
 
             /// <summary>
@@ -5298,19 +5298,19 @@ namespace ShipWorksPerformanceTestSuite
             /// <summary>
             /// The CreateADesktopIcon1 item.
             /// </summary>
-            [RepositoryItem("6652577f-7fe1-4244-aa0d-63731d18a76c")]
-            public virtual Ranorex.RawText CreateADesktopIcon1
+            [RepositoryItem("4ae0cd64-f317-49d5-ac71-6ef01733fbd1")]
+            public virtual Ranorex.CheckBox CreateADesktopIcon1
             {
                 get
                 {
-                    return _createadesktopicon1Info.CreateAdapter<Ranorex.RawText>(true);
+                    return _createadesktopicon1Info.CreateAdapter<Ranorex.CheckBox>(true);
                 }
             }
 
             /// <summary>
             /// The CreateADesktopIcon1 item info.
             /// </summary>
-            [RepositoryItemInfo("6652577f-7fe1-4244-aa0d-63731d18a76c")]
+            [RepositoryItemInfo("4ae0cd64-f317-49d5-ac71-6ef01733fbd1")]
             public virtual RepoItemInfo CreateADesktopIcon1Info
             {
                 get
