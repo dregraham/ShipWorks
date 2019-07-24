@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -228,7 +226,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             State = ScanPackState.OrderLoaded;
 
                 Update();
-        }
+            }
             else
             {
                 ScanHeader = "This order does not contain any items";
