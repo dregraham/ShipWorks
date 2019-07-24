@@ -70,8 +70,8 @@
                             VerticalAlignment="Top">
                             <TextBlock Text="{Binding Street}" />
                             <TextBlock>
-                                <Run Text="{Binding City}" />
-                                ,<Run Text="{Binding State}" /> <Run Text="{Binding Zip}" />
+                                <Run Text="{Binding City}" />,
+                                <Run Text="{Binding State}" /> <Run Text="{Binding Zip}" />
                             </TextBlock>
                         </StackPanel>
 
