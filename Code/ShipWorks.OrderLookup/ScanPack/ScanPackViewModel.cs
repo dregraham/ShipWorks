@@ -223,7 +223,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             {
                 (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
-            State = ScanPackState.OrderLoaded;
+                State = ScanPackState.OrderLoaded;
 
                 Update();
             }
