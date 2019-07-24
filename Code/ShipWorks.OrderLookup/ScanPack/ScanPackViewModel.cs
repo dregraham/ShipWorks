@@ -254,6 +254,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void Drop(IDropInfo dropInfo)
         {
+            Error = false;
+
             ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
             ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
             ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
