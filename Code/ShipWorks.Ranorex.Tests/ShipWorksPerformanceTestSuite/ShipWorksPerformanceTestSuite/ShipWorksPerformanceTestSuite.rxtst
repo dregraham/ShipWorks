@@ -4,7 +4,6 @@ rxversion="8.1">
 	<testsuiteentryhierarchy>
 		<flatlistofchildren>
 			<testmodule
-			enabled="False"
 			id="01dcb695-b5d8-44e3-82e9-cfb99b808586"
 			name="LoopNumber"
 			ref="4d233eca-93e5-4260-9280-bc5314c223fb"
@@ -29,7 +28,6 @@ rxversion="8.1">
 			showinvisiblechars="True">
 			</testsuite>
 			<testmodule
-			enabled="False"
 			id="0f5394fe-a2a7-46f5-921a-baf517bd3567"
 			name="EnterOrder"
 			ref="e739ee77-ca31-4989-93fc-194882657b8c"
@@ -46,7 +44,6 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			enabled="False"
 			id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
 			name="VoidLabel"
 			ref="cdff00af-93c5-4627-ac76-cc066dea4b0a"
@@ -61,7 +58,6 @@ rxversion="8.1">
 			name="ProcessShipment">
 			</smartfoldernode>
 			<testmodule
-			enabled="False"
 			id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
 			name="InstallShipWorks"
 			ref="48cccffa-1273-486f-9f8c-ad0e793f6d83"
@@ -74,7 +70,6 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			enabled="False"
 			id="36aeee87-6ff4-4839-890b-833e428ddf62"
 			name="SwitchToOLM"
 			ref="ec58d36e-ff45-4564-9346-918d685ea8fd"
@@ -158,7 +153,6 @@ rxversion="8.1">
 			name="eCommerceBaseline_I">
 			</smartfoldernode>
 			<testmodule
-			enabled="False"
 			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
 			name="CloseShipWorks"
 			ref="82d40b1a-c4fc-4ba1-962a-81cc793c1f7e"
@@ -171,14 +165,12 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			enabled="False"
 			id="a155f844-d2da-4f0f-b402-dea470086a25"
 			name="ApplyProfile"
 			ref="649b55a9-8a28-4ae7-92ae-504376e9e041"
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			enabled="False"
 			id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 			name="CopyStagingHosts"
 			ref="a008879e-2cde-4625-83db-df20be2f6541"
@@ -189,7 +181,6 @@ rxversion="8.1">
 			name="teardown">
 			</teardown>
 			<testmodule
-			enabled="False"
 			id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
 			name="PrintLabel"
 			ref="805f6ba8-7a3d-4130-a711-ba21bf1703e6"
@@ -202,7 +193,6 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			enabled="False"
 			id="d494c876-3c73-453b-b5fb-8e56a838508d"
 			name="CreateLabel"
 			ref="4c843ee3-6e4f-4b5e-9656-8abe6789a336"
@@ -213,7 +203,6 @@ rxversion="8.1">
 			name="setup">
 			</setup>
 			<testmodule
-			enabled="False"
 			id="e093264e-3968-4418-a383-8ff80321fd74"
 			name="RestoreDatabase"
 			ref="17a4d054-f29c-4977-9e00-c9788508e533"
@@ -427,7 +416,13 @@ rxversion="8.1">
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b">
 			</testcontainer>
 			<testcontainer
+			id="10548d00-b2e1-47d3-bcb3-fa8f658269ad">
+			</testcontainer>
+			<testcontainer
 			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742">
+			</testcontainer>
+			<testcontainer
+			id="16a24b29-3c87-44ca-9878-4abaff33a75f">
 			</testcontainer>
 			<testcontainer
 			id="44cac686-339b-4902-8a46-560e623779f5">
