@@ -261,6 +261,7 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Shopify\Warehouse\ShopifyStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
@@ -924,7 +925,8 @@
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
-    <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
+    <Compile Include="Warehouse\StoreData\ChannelAdvisorStore.cs" />
+    <Compile Include="Warehouse\StoreData\ShopifyStore.cs" />
     <Compile Include="Warehouse\StoreDtoHelpers.cs" />
     <Compile Include="Warehouse\WarehouseModule.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />
