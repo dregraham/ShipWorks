@@ -22,7 +22,7 @@ namespace HubOrderPerformance.Steps
         public void GivenTheFollowingUserWithAndWantsToNavigateToTheHubLoginPageUsing(string Username, string Password, string Browser)
         {
             File.Delete(@"HubPerformanceResults.csv");
-            
+
             _driver = SetWebDriver(Browser);
             wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
             _driver.Navigate().GoToUrl("https://s2.www.s2hub.link/login");
@@ -74,7 +74,7 @@ namespace HubOrderPerformance.Steps
                     stopWatch.Stop();
                     _driver.Navigate().Refresh();
                     stopWatch.Start();
-                    if (stopWatch.Elapsed >= TimeSpan.FromMinutes(15) || getOrderCountParsed >= 6000)
+                    if (stopWatch.Elapsed >= TimeSpan.FromMinutes(60) || getOrderCountParsed >= 12500)
                     {
                         break;
                     }
@@ -89,7 +89,7 @@ namespace HubOrderPerformance.Steps
             WaitUntilVisible("50 rows", _driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/table/tfoot/tr/td/div/div[2]"))); //using this to wait for elements on the page
             finalOrderCount = Regex.Match(_driver.FindElement(By.XPath("//*[@id='root']/div/div[2]/div/article/div/table/tfoot/tr/td/div/div[3]/span[3]")).Text, @"^\S*\s+(\S+)+\s(\S+)");
             finalOrderCountParsed = Convert.ToDouble(finalOrderCount.Groups[2].Value);
-            ordersPerMinute = Math.Round(average.Sum() / average.Count,2);
+            ordersPerMinute = Math.Round(average.Sum() / average.Count, 2);
             ordersPerHour = ordersPerMinute * 60;
             recordList[1] = recordList[1] + $",{ordersPerMinute},{ordersPerHour}";
 
