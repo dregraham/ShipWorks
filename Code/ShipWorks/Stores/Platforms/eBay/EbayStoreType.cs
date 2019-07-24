@@ -694,5 +694,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }
