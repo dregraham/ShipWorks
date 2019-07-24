@@ -37,7 +37,7 @@ namespace ShipWorks.ApplicationCore
         bool IsShipmentHistoryActive();
 
         /// <summary>
-        /// True if shipping history control is active
+        /// True if scan and pack control is active
         /// </summary>
         bool IsScanPackActive();
 

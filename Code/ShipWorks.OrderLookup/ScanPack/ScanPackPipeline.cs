@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.Settings;
@@ -43,22 +45,41 @@ namespace ShipWorks.OrderLookup.ScanPack
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
-                .Do(x => OnSingleScanMessage(x))
+                .Do(x => processingScan = true)
+                .Do(x => OnOrderLookupSearch(x.ScannedText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
-                .Do(x => OnOrderLookupSearchMessage(x))
+                .Do(x => processingScan = true)
+                .Do(x => OnOrderLookupSearch(x.SearchText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
                 .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsScanPackActive())
-                .Do(x => OnOrderLookupLoadOrderMessage(x))
+                .Do(x => processingScan = true)
+                .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe()
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupClearOrderMessage>()
+                    .Do(OnOrderLookupClearOrderMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe()
             );
+        }
+
+        /// <summary>
+        /// Handle clear message
+        /// </summary>
+        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
+        {
+            if (message.Reason == OrderClearReason.Reset)
+            {
+                scanPackViewModel.Reset();
+            }
         }
 
         /// <summary>
@@ -72,18 +93,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle search
         /// </summary>
-        public void OnOrderLookupLoadOrderMessage(OrderLookupLoadOrderMessage message)
+        public async Task OnOrderLookupLoadOrderMessage(OrderLookupLoadOrderMessage message)
         {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
             try
             {
-                scanPackViewModel.Load(message.Order);
+                await scanPackViewModel.Load(message.Order).ConfigureAwait(true);
             }
             finally
             {
@@ -94,40 +108,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle search
         /// </summary>
-        public void OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
+        public async Task OnOrderLookupSearch(string searchText)
         {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
             try
             {
-                scanPackViewModel.Load(message.SearchText);
-            }
-            finally
-            {
-                processingScan = false;
-            }
-        }
-
-        /// <summary>
-        /// Handle barcode scans
-        /// </summary>
-        public void OnSingleScanMessage(SingleScanMessage message)
-        {
-            if (processingScan)
-            {
-                return;
-            }
-
-            processingScan = true;
-
-            try
-            {
-                scanPackViewModel.Load(message.ScannedText);
+                await scanPackViewModel.Load(searchText).ConfigureAwait(true);
             }
             finally
             {
@@ -139,5 +124,13 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// End the session
         /// </summary>
         public void EndSession() => subscriptions?.Dispose();
+
+        /// <summary>
+        /// End the session
+        /// </summary>
+        public void Dispose()
+        {
+            EndSession();
+        }
     }
 }

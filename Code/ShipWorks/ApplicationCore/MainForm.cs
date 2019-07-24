@@ -150,7 +150,7 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-        private IScanPack scanPack;
+        private IScanPack scanPackControl;
         private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -1129,7 +1129,7 @@ namespace ShipWorks
             }
 
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
-            scanPack = orderLookupLifetimeScope.Resolve<IScanPack>();
+            scanPackControl = orderLookupLifetimeScope.Resolve<IScanPack>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
@@ -1151,8 +1151,9 @@ namespace ShipWorks
             if (orderLookupLifetimeScope != null)
             {
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-                panelDockingArea.Controls.Remove(scanPack?.Control);
+                panelDockingArea.Controls.Remove(scanPackControl?.Control);
                 orderLookupControl.Unload();
+                scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }
@@ -1192,9 +1193,9 @@ namespace ShipWorks
         /// </summary>
         private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
         {
-            if(ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
             {
-                ToggleVisiblePanel(scanPack?.Control);
+                ToggleVisiblePanel(scanPackControl?.Control);
                 shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
@@ -1224,7 +1225,7 @@ namespace ShipWorks
         /// </summary>
         public bool IsScanPackActive()
         {
-            return scanPack != null && panelDockingArea.Controls.Contains(scanPack.Control);
+            return scanPackControl != null && panelDockingArea.Controls.Contains(scanPackControl.Control);
         }
 
         /// <summary>
@@ -1235,7 +1236,7 @@ namespace ShipWorks
             // first remove everything
             panelDockingArea.Controls.Remove(shipmentHistory?.Control);
             panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-            panelDockingArea.Controls.Remove(scanPack?.Control);
+            panelDockingArea.Controls.Remove(scanPackControl?.Control);
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {

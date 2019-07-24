@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.OrderLookup
 {
@@ -6,7 +7,7 @@ namespace ShipWorks.OrderLookup
     /// Interface for initializing order lookup pipelines under a top level lifetime scope
     /// </summary>
     [Service]
-    public interface IOrderLookupPipeline
+    public interface IOrderLookupPipeline : IDisposable
     {
         /// <summary>
         /// Initialize the pipeline under the current scope

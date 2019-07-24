@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Products;
 using ShipWorks.Tests.Shared;
@@ -28,14 +30,14 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrder()
+        public async Task Create_ReturnsScanPackItemsForOrder()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "bar", Quantity = 3.3 };
 
             order.OrderItems.Add(item);
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, item.Name);
@@ -43,17 +45,19 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrderWithProductInfo()
+        public async Task Create_ReturnsScanPackItemsForOrderWithProductInfo()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "bar", Quantity = 3.3, SKU = "TheSku" };
-            var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "newBar"};
+            var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "newBar" };
+            product.Aliases.Add(new ProductVariantAliasEntity() { Sku = item.SKU });
+
             order.OrderItems.Add(item);
 
-            productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
-                .Returns(product);
+            productCatalog.Setup(c => c.FetchProductVariantEntities(It.IsAny<ISqlAdapter>(), new[] { item.SKU }))
+                .ReturnsAsync(new[] { product });
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, product.Name);
@@ -61,17 +65,18 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrderWithThumbnail_WhenProductImageAndItemImageAreBlank()
+        public async Task Create_ReturnsScanPackItemsForOrderWithThumbnail_WhenProductImageAndItemImageAreBlank()
         {
             var order = new OrderEntity();
             var item = new OrderItemEntity() { Name = "foo", Image = "", Quantity = 3.3, SKU = "TheSku", Thumbnail = "thumbnail" };
             var product = new ProductVariantEntity() { Name = "newFoo", ImageUrl = "" };
+            product.Aliases.Add(new ProductVariantAliasEntity() { Sku = item.SKU });
             order.OrderItems.Add(item);
 
-            productCatalog.Setup(c => c.FetchProductVariantEntity(It.IsAny<ISqlAdapter>(), item.SKU))
-                .Returns(product);
+            productCatalog.Setup(c => c.FetchProductVariantEntities(It.IsAny<ISqlAdapter>(), new[] { item.SKU }))
+                .ReturnsAsync(new[] { product });
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.First().Quantity, item.Quantity);
             Assert.Equal(result.First().Name, product.Name);
@@ -79,7 +84,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void Create_ReturnsScanPackItemsForOrder_WhenthereAreMultipleItems()
+        public async Task Create_ReturnsScanPackItemsForOrder_WhenthereAreMultipleItems()
         {
             var order = new OrderEntity();
             var itemOne = new OrderItemEntity() { Name = "foo", Image = "1", Quantity = 3.3, SKU = "TheSku", Thumbnail = "thumbnail" };
@@ -90,7 +95,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             order.OrderItems.AddRange(new[] { itemOne, itemTwo, itemThree, itemThree, itemFour, itemFive });
 
-            var result = testObject.Create(order);
+            var result = await testObject.Create(order);
 
             Assert.Equal(result.Count, order.OrderItems.Count);
         }

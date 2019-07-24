@@ -122,7 +122,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Log an IRestRequest
         /// </summary>
-        public void LogRequest(IRestRequest request)
+        public void LogRequest(IRestRequest request, string extension)
         {
             var requestToLog = new
             {
@@ -138,13 +138,13 @@ namespace ShipWorks.ApplicationCore.Logging
 
             string toLog = JsonConvert.SerializeObject(requestToLog);
 
-            WriteLog(toLog, ApiLogCategory.Request);
+            WriteLog(toLog, extension, ApiLogCategory.Request, null);
         }
 
         /// <summary>
         /// Log an IRestResponse
         /// </summary>
-        public void LogResponse(IRestResponse response)
+        public void LogResponse(IRestResponse response, string extension)
         {
             var responseToLog = new
             {
@@ -156,7 +156,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
             string toLog = JsonConvert.SerializeObject(responseToLog);
 
-            WriteLog(toLog, ApiLogCategory.Response);
+            WriteLog(toLog, extension, ApiLogCategory.Response, null);
         }
 
         /// <summary>

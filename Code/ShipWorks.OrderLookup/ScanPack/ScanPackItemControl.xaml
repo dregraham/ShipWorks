@@ -35,7 +35,9 @@
             VerticalAlignment="Center"
             Text="{Binding Name}"
             Margin="10 0 10 0"
-            FontSize="20"/>
+            FontSize="20"
+            TextWrapping="Wrap"
+            TextTrimming="CharacterEllipsis"/>
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Right"

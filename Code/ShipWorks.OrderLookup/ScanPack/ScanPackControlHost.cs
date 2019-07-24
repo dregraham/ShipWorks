@@ -51,5 +51,13 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             Controls.Add(host);
         }
+
+        /// <summary>
+        /// Unload the order
+        /// </summary>
+        public void Unload()
+        {
+            scanPackViewModel.Reset();
+        }
     }
 }

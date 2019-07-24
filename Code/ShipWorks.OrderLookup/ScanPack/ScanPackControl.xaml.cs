@@ -4,8 +4,14 @@ using System.Windows.Controls;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
+    /// <summary>
+    /// The main ScanPack control
+    /// </summary>
     public partial class ScanPackControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ScanPackControl()
         {
             InitializeComponent();

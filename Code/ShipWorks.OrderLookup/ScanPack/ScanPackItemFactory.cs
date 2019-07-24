@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,15 +30,18 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Create ScanPackItems for the given order
         /// </summary>
-        public List<ScanPackItem> Create(OrderEntity order)
+        public async Task<List<ScanPackItem>> Create(OrderEntity order)
         {
             List<ScanPackItem> result = new List<ScanPackItem>();
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
+                IEnumerable<ProductVariantEntity> products = await productCatalog
+                    .FetchProductVariantEntities(adapter, order.OrderItems.Select(i => i.SKU)).ConfigureAwait(true);
+
                 foreach (OrderItemEntity item in order.OrderItems)
                 {
-                    ProductVariantEntity product = productCatalog.FetchProductVariantEntity(adapter, item.SKU);
+                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCultureIgnoreCase)));
                     result.Add(CreateItem(product, item));
                 }
             }

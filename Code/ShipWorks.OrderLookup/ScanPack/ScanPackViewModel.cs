@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -52,7 +53,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScannedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(() => Reset(true));
+            ResetCommand = new RelayCommand(() => ResetClicked());
 
             Update();
         }
@@ -130,6 +131,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Whether or not an error occured during the Scan and Pack process
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool Error
         {
             get => error;
@@ -188,7 +190,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                Load(order);
+                await Load(order).ConfigureAwait(true);
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
@@ -210,15 +212,26 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Load the given order
         /// </summary>
-        public void Load(OrderEntity order)
+        public async Task Load(OrderEntity order)
         {
             ItemsToScan.Clear();
+            OrderNumber = order.OrderNumberComplete;
 
-            scanPackItemFactory.Create(order).ForEach(ItemsToScan.Add);
+            if (order.OrderItems.Any())
+            {
+                (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
             State = ScanPackState.OrderLoaded;
 
-            Update();
+                Update();
+        }
+            else
+            {
+                ScanHeader = "This order does not contain any items";
+                ScanFooter = "Scan another order to continue";
+            }
+
+            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
         }
 
         /// <summary>
@@ -260,8 +273,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
         {
-            OrderNumber = scannedOrderNumber;
-            ScanHeader = "Loading Order...";
+            ScanHeader = "Loading order...";
             ScanFooter = string.Empty;
 
             TelemetricResult<long?> orderID = await orderIDRetriever
@@ -291,6 +303,19 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Clear the order as the user clicked reset
+        /// </summary>
+        private void ResetClicked()
+        {
+            messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
+        }
+
+        /// <summary>
+        /// Reset the view model
+        /// </summary>
+        public void Reset() => Reset(true);
+
+        /// <summary>
         /// Reset the order
         /// </summary>
         private void Reset(bool resetOrderNumber)
@@ -304,6 +329,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScannedItems.Clear();
 
             State = ScanPackState.ListeningForOrderScan;
+
+            Error = false;
 
             Update();
         }
@@ -348,15 +375,15 @@ namespace ShipWorks.OrderLookup.ScanPack
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
             {
-                ScanHeader = "Ready to Scan and Pack";
-                ScanFooter = "Scan an Order Barcode to Begin";
+                ScanHeader = "Ready to scan and pack";
+                ScanFooter = "Scan an order barcode to begin";
             }
             else
             {
                 // Order has been scanned, still items left to scan
                 if (ItemsToScan.Any())
                 {
-                    ScanHeader = "Scan an Item to Pack";
+                    ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
 
                     State = scannedItemCount > 0 ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;

@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -7,6 +8,7 @@ namespace ShipWorks.UI.Controls
     /// <summary>
     /// Interaction logic for ImageWithPlaceholder.xaml
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public partial class ImageWithPlaceholder : UserControl
     {
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(ImageWithPlaceholder), new PropertyMetadata(default(ImageSource)));
@@ -28,24 +30,8 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public ImageSource Source
         {
-            get
-            {
-                ImageSource imageSource = (ImageSource) GetValue(SourceProperty);
-
-                ShowPlaceholder = imageSource == null;
-
-                return imageSource;
-            }
+            get => (ImageSource) GetValue(SourceProperty);
             set => SetValue(SourceProperty, value);
-        }
-
-        /// <summary>
-        /// Whether or not to show the placeholder image
-        /// </summary>
-        public bool ShowPlaceholder
-        {
-            get => (bool) GetValue(ShowPlaceholderProperty);
-            set => SetValue(ShowPlaceholderProperty, value);
         }
     }
 }

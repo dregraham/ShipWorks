@@ -113,6 +113,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             IncludeReturn = source.IncludeReturn;
             ApplyReturnProfile = source.ApplyReturnProfile;
             ReturnProfileID = source.ReturnProfileID;
+            LoggedShippedToHub = source.LoggedShippedToHub;
+            LoggedVoidToHub = source.LoggedVoidToHub;
             
             AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
             AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
@@ -602,6 +604,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 ReturnProfileID { get; }
+        /// <summary> The LoggedShippedToHub property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."LoggedShippedToHub"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> LoggedShippedToHub { get; }
+        /// <summary> The LoggedVoidToHub property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."LoggedVoidToHub"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> LoggedVoidToHub { get; }
         
         public IAmazonSFPShipmentEntity AmazonSFP { get; }
         

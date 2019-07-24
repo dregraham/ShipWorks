@@ -62,12 +62,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, "RemoteLoginWithToken");
-            logEntry.LogRequest(restRequest);
+            logEntry.LogRequest(restRequest, "json");
             
             IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
                 .ConfigureAwait(false);
 
-            logEntry.LogResponse(restResponse);
+            logEntry.LogResponse(restResponse, "json");
 
             if (!restResponse.IsSuccessful)
             {

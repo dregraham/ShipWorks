@@ -1271,7 +1271,9 @@ CREATE TABLE [dbo].[Shipment]
 [ProcessedWithUiMode] [int] NULL,
 [IncludeReturn] [bit] NOT NULL CONSTRAINT [DF_Shipment_IncludeReturns] DEFAULT ((0)),
 [ApplyReturnProfile] [bit] NOT NULL CONSTRAINT [DF_Shipment_ApplyReturnProfile] DEFAULT ((0)),
-[ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1))
+[ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1)),
+[LoggedShippedToHub] [bit] NULL,
+[LoggedVoidToHub] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
