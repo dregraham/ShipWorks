@@ -2141,6 +2141,8 @@ namespace ShipWorksPerformanceTestSuite
             RepoItemInfo _partcontenthost2Info;
             RepoItemInfo _partcontenthost3Info;
             RepoItemInfo _partcontenthost4Info;
+            RepoItemInfo _text100ordersInfo;
+            RepoItemInfo _text100orderssrInfo;
 
             /// <summary>
             /// Creates a new PanelDockingArea  folder.
@@ -2162,6 +2164,8 @@ namespace ShipWorksPerformanceTestSuite
                 _partcontenthost2Info = new RepoItemInfo(this, "PARTContentHost2", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\\ Glen\\ Woodard\\ \\(Domestic']/container[@name~'^To\\ Glen\\ Woodard\\ \\(Domestic']/?/?/element/text[5]/container[@automationid='PART_ContentHost']", 30000, null, "fa363767-4b48-4404-8013-33376718ed06");
                 _partcontenthost3Info = new RepoItemInfo(this, "PARTContentHost3", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^From\\ Account:\\ \\(None\\),\\ Oth']/container[@name~'^From\\ Account:\\ \\(None\\),\\ Oth']/?/?/element/text[5]/container[@automationid='PART_ContentHost']", 30000, null, "61b4659c-c17a-4998-ab4b-d2a10ebacfc4");
                 _partcontenthost4Info = new RepoItemInfo(this, "PARTContentHost4", ".//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\\ Cheryl\\ Briggs\\ \\(Domesti']/container[@name~'^To\\ Cheryl\\ Briggs\\ \\(Domesti']/?/?/element/text[5]/container[@automationid='PART_ContentHost']", 30000, null, "1018b857-0e1a-46d4-9da2-9cd194534388");
+                _text100ordersInfo = new RepoItemInfo(this, "Text100Orders", "container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='100Orders']", 30000, null, "7d62310e-9b6f-4bee-92d5-85b6c2355ab8");
+                _text100orderssrInfo = new RepoItemInfo(this, "Text100OrdersSR", "container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='100OrdersSR']", 30000, null, "161a05fe-96e0-4572-bd0f-8c4a2fb1554c");
             }
 
             /// <summary>
@@ -2556,6 +2560,54 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _partcontenthost4Info;
+                }
+            }
+
+            /// <summary>
+            /// The Text100Orders item.
+            /// </summary>
+            [RepositoryItem("7d62310e-9b6f-4bee-92d5-85b6c2355ab8")]
+            public virtual Ranorex.Text Text100Orders
+            {
+                get
+                {
+                    return _text100ordersInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Text100Orders item info.
+            /// </summary>
+            [RepositoryItemInfo("7d62310e-9b6f-4bee-92d5-85b6c2355ab8")]
+            public virtual RepoItemInfo Text100OrdersInfo
+            {
+                get
+                {
+                    return _text100ordersInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Text100OrdersSR item.
+            /// </summary>
+            [RepositoryItem("161a05fe-96e0-4572-bd0f-8c4a2fb1554c")]
+            public virtual Ranorex.Text Text100OrdersSR
+            {
+                get
+                {
+                    return _text100orderssrInfo.CreateAdapter<Ranorex.Text>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Text100OrdersSR item info.
+            /// </summary>
+            [RepositoryItemInfo("161a05fe-96e0-4572-bd0f-8c4a2fb1554c")]
+            public virtual RepoItemInfo Text100OrdersSRInfo
+            {
+                get
+                {
+                    return _text100orderssrInfo;
                 }
             }
         }

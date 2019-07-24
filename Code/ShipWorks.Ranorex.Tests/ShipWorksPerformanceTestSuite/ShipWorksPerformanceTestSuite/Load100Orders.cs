@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -15,6 +16,7 @@ namespace ShipWorksPerformanceTestSuite
     [TestModule("A2144E13-7E55-455D-9FA5-CFC2CD6D585E", ModuleType.UserCode, 1)]
     public class Load100Orders : ITestModule
     {
+    	Stopwatch load100Time = new Stopwatch();
     	public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		Select100Orders selectOrders = new Select100Orders();
 		SelectShippingRuleFilter selectfilter = new SelectShippingRuleFilter();
@@ -32,45 +34,52 @@ namespace ShipWorksPerformanceTestSuite
             
             try {
 				
+            	load100Time.Start();
+            	
 				LoadOrders();
                	Validate100OrdersLoaded();
+               	
+               	load100Time.Stop();
                	
 			} 
 			catch (Exception) {
 				
-				RetryAction.RetryOnFailure(3,1,() => {
+				RetryAction.RetryOnFailure(2,1,() => {
 				       
+                   	load100Time.Stop();
+            	                           	
                    	selectfilter.SelectFilter();
                    	selectOrders.SelectOrders();
 	               	selectOrders.SelectOrders();
+	               	
+	               	load100Time.Start();
+	               	
 	               	LoadOrders();
 	               	Validate100OrdersLoaded();
 	               	
+               		load100Time.Stop();
 	           	});	
 			}
+            
+            Timing.totalLoad100Time = load100Time.ElapsedMilliseconds;
         }
         
         public void LoadOrders()
 		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.FedExGround' at Center.", repo.MainForm.PanelDockingArea.FedExGroundInfo, new RecordItemIndex(0));
             repo.MainForm.PanelDockingArea.FedExGround.MoveTo();
-            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.FedExGround' at Center.", repo.MainForm.PanelDockingArea.FedExGroundInfo, new RecordItemIndex(0));
             repo.MainForm.PanelDockingArea.FedExGround.Click(System.Windows.Forms.MouseButtons.Right);
-            Delay.Milliseconds(0);
-			
+            
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ContextMenuOrderGrid.ShipOrders' at Center.", repo.ContextMenuOrderGrid.ShipOrdersInfo, new RecordItemIndex(9));
 			repo.ContextMenuOrderGrid.ShipOrders.Click();
-			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='True') on item 'ShippingDlg.ApplyProfile'.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(11));
 			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Enabled", "True");
-			Delay.Milliseconds(100);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'ShippingDlg.ApplyProfile'.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(12));
-			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Visible", "True");
-			Delay.Milliseconds(100);
+			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Visible", "True");			
 		}
 		
 		public void Validate100OrdersLoaded(){

@@ -126,6 +126,9 @@
     <Compile Include="ApplyProfileTo100Orders.cs">
       <id>e9e1d283-3f7c-4994-8c30-7b3a599716de</id>
     </Compile>
+    <Compile Include="ApplyProfileTo100SROrders.cs">
+      <id>26bce1ca-9821-4ebb-9bb1-d4ff152d11de</id>
+    </Compile>
     <Compile Include="ApplyProfileTo500Orders.cs">
       <id>7b6d4893-8790-46dc-a2a6-180ef2735e1a</id>
     </Compile>
@@ -164,6 +167,12 @@
     </Compile>
     <Compile Include="PrintLabel.cs">
       <id>f29b43d8-2501-46ee-b274-c1931124fe77</id>
+    </Compile>
+    <Compile Include="Process100Orders.cs">
+      <id>a9c81702-c18c-4ede-9032-9824ffbb771a</id>
+    </Compile>
+    <Compile Include="Process100SROrders.cs">
+      <id>f902f72d-6170-4500-8340-88bddf0575b6</id>
     </Compile>
     <Compile Include="ProcessOrders.cs">
       <id>f9de5849-db2b-4acb-9206-ec39b51374d2</id>

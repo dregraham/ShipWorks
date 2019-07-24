@@ -848,6 +848,26 @@ HyK5OmDIo8YYAAAAAElFTkSuQmCC
 				searchtimeout="30000ms">
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']//container[@classname='Pane']/?/?/element[@automationid='a']/?/?/element[@name~'^To\ Cheryl\ Briggs\ \(Domesti']/container[@name~'^To\ Cheryl\ Briggs\ \(Domesti']/?/?/element/text[5]/container[@automationid='PART_ContentHost']
 				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="7d62310e-9b6f-4bee-92d5-85b6c2355ab8"
+				name="Text100Orders"
+				refimgid="8dfa3073-6ca3-4613-b0d0-f7943b928962"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/element[@controlname='headerHost']/container/element/element/text[@name='100Orders']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='100Orders']
+				</item>
+				<item
+				addcaps="text,uiautomation"
+				capname="text"
+				id="161a05fe-96e0-4572-bd0f-8c4a2fb1554c"
+				name="Text100OrdersSR"
+				refimgid="835e9351-1267-4966-bf16-a6d62e6a24b0"
+				refpath="/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/element[@controlname='headerHost']/container/element/element/text[@name='100OrdersSR']"
+				searchtimeout="30000ms">
+					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']/container[@controlname='gridControl']/?/?/container[@classname='Pane']//text[@name='100OrdersSR']
+				</item>
 				<basepath>
 					/form[@controlname='MainForm']/container[@controlname='panelDockingArea']
 				</basepath>

@@ -1,12 +1,4 @@
-﻿/*
- * Created by Ranorex
- * User: SMadke
- * Date: 6/11/2019
- * Time: 1:49 PM
- * 
- * To change this template use Tools > Options > Coding > Edit standard headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -32,7 +24,7 @@ namespace ShipWorksPerformanceTestSuite
 		ApplyProfileTo500Orders applyprofile = new ApplyProfileTo500Orders();
 		Select500OrdersFilter select500filter = new Select500OrdersFilter();
 		static int retryMax = 2;
-		static int retryCount = 0;
+		static int retryCount = 0;		
 		
 		public Void500Shipments()
 		{
@@ -47,20 +39,28 @@ namespace ShipWorksPerformanceTestSuite
 			
 			try {
 				
-				VoidShipments();
-				voidTime.Start();
-
-				ConfirmVoidShipmentStarted();
-				ConfirmVoidShipmentEnded();
-				ConfirmAllVoided();
+				if(CheckIfVoid())
+				{
+					CloseShipOrdersDialog();	
+				}
+				else
+				{
+					VoidShipments();
+					voidTime.Start();
+	
+					ConfirmVoidShipmentStarted();
+					ConfirmVoidShipmentEnded();
+					ConfirmAllVoided();
+					
+					voidTime.Stop();
+					
+					CloseShipOrdersDialog();
+				}
 				
-				voidTime.Stop();
-				
-				CloseShipOrdersDialog();
 			}
 			catch (Exception) {
 				
-				RetryAction.RetryOnFailure(3,1,() => {
+				RetryAction.RetryOnFailure(2,1,() => {
 				       
                		RetryVoidShipment();
 	           	});					
@@ -69,35 +69,27 @@ namespace ShipWorksPerformanceTestSuite
 			Timing.totalVoid500Time = voidTime.ElapsedMilliseconds;
 		}
 		
-		void VoidShipments()
+		bool CheckIfVoid()
 		{
+			if (repo.ShippingDlg.VoidSelected.Enabled == false)
+			{
+				return true;
+			}
+			else
+			{
+				return false;				
+			}
+		}
+		
+		void VoidShipments()
+		{	
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.VoidSelected' at Center.", repo.ShippingDlg.VoidSelectedInfo, new RecordItemIndex(0));
+			repo.ShippingDlg.VoidSelected.Click();				
 			
-			try {
-				
-				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.VoidSelected' at Center.", repo.ShippingDlg.VoidSelectedInfo, new RecordItemIndex(0));
-				repo.ShippingDlg.VoidSelected.Click();
-				Delay.Milliseconds(0);
-				
-				repo.ShipmentVoidConfirmDlg.ButtonOkInfo.WaitForExists(5000);
-				
-				Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipmentVoidConfirmDlg.ButtonOk' at Center.", repo.ShipmentVoidConfirmDlg.ButtonOkInfo, new RecordItemIndex(1));
-				repo.ShipmentVoidConfirmDlg.ButtonOk.Click();
-				Delay.Milliseconds(0);
-				
-			}
-			catch (Exception) {
-				
-				RetryAction.RetryOnFailure(3,0,() => {
-				                           	
-                   	repo.ShippingDlg.VoidSelected.Click();
-                   	
-                   	repo.ShipmentVoidConfirmDlg.ButtonOkInfo.WaitForExists(5000);
-                   	
-                   	Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipmentVoidConfirmDlg.ButtonOk' at Center.", repo.ShipmentVoidConfirmDlg.ButtonOkInfo, new RecordItemIndex(1));
-                   	repo.ShipmentVoidConfirmDlg.ButtonOk.Click();
-                   	Delay.Milliseconds(0);
-               	});
-			}
+			repo.ShipmentVoidConfirmDlg.ButtonOk.MoveTo();
+			
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShipmentVoidConfirmDlg.ButtonOk' at Center.", repo.ShipmentVoidConfirmDlg.ButtonOkInfo, new RecordItemIndex(1));
+			repo.ShipmentVoidConfirmDlg.ButtonOk.Click();				
 		}
 		
 		void ConfirmVoidShipmentStarted()
@@ -137,8 +129,7 @@ namespace ShipWorksPerformanceTestSuite
 			try {
 				
 				Report.Log(ReportLevel.Info, "Validation", "RetryCount: " + retryCount, repo.ShippingDlg.VoidSelectedInfo, new RecordItemIndex(2));
-				repo.ShippingDlg.VoidSelectedInfo.WaitForAttributeEqual(5000, "Enabled", "False");
-				Delay.Milliseconds(0);
+				repo.ShippingDlg.VoidSelectedInfo.WaitForAttributeEqual(5000, "Enabled", "False");				
 				
 			} catch (Exception) {
 				
@@ -157,28 +148,37 @@ namespace ShipWorksPerformanceTestSuite
 		{
 			voidTime.Stop();
 			
-			RetryAction.EscapeFromScreen(3);
-			
+			RetryAction.EscapeFromScreen(3);			
 			select500filter.SelectFilter();
 			selectOrders.SelectOrders();
 			loadOrders.LoadOrders();
 			applyprofile.SelectAllShipments();
 			
-			VoidShipments();			
-			voidTime.Start();
-			
-			ConfirmVoidShipmentStarted();
-			ConfirmVoidShipmentEnded();
-			ConfirmAllVoided();
-			
-			voidTime.Stop();
+			if (CheckIfVoid())
+			{
+				CloseShipOrdersDialog();
+			}
+			else
+			{
+				VoidShipments();			
+				voidTime.Start();
+				
+				ConfirmVoidShipmentStarted();
+				ConfirmVoidShipmentEnded();
+				ConfirmAllVoided();
+				
+				voidTime.Stop();
+				
+				CloseShipOrdersDialog();				
+			}
 		}
 		
 		void CloseShipOrdersDialog()
-		{
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(7));
-			repo.ShippingDlg.Close.Click();
-			Delay.Milliseconds(0);
+		{	
+			repo.ShippingDlg.Close.MoveTo(1000);
+			
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.Close' at Center.", repo.ShippingDlg.CloseInfo, new RecordItemIndex(0));
+            repo.ShippingDlg.Close.Click(1000);
 		}
 	}
 }

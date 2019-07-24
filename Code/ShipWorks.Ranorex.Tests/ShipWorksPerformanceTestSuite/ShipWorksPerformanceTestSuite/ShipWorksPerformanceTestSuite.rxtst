@@ -10,12 +10,6 @@ rxversion="8.1">
 			ref="4d233eca-93e5-4260-9280-bc5314c223fb"
 			type="UserCode">
 			</testmodule>
-			<testmodule
-			id="044977bc-3d9a-40ac-80b1-ba948ad57331"
-			name="ProcessOrders"
-			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
-			type="UserCode">
-			</testmodule>
 			<smartfoldernode
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b"
 			name="BatchGrid">
@@ -109,12 +103,6 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			id="625192bf-1eef-44a9-ba6a-973bcedde162"
-			name="ProcessOrders"
-			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
-			type="UserCode">
-			</testmodule>
-			<testmodule
 			id="654938d6-a804-47ec-a043-46c12595f1c6"
 			name="Select100OrdersFilter"
 			ref="ab495b19-c723-47f7-8d39-651b9b20a704"
@@ -124,12 +112,6 @@ rxversion="8.1">
 			id="6663757e-de8f-4a9d-8df4-487dbf92655d"
 			name="SelectAllOrders"
 			ref="15feb502-a74d-4e42-a249-2dba9b26f18b"
-			type="UserCode">
-			</testmodule>
-			<testmodule
-			id="6af85d79-8e1f-4cfe-bb96-1e971749ea18"
-			name="ApplyProfileTo100Orders"
-			ref="4833ecee-b4ac-4eaf-9fa5-25ddf1d28f38"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -154,6 +136,12 @@ rxversion="8.1">
 			name="HighVolumeBaseline">
 			</smartfoldernode>
 			<testmodule
+			id="8baf9b40-48de-48ef-8b72-192c9c37e493"
+			name="Process100Orders"
+			ref="08421a6a-1bf3-42dd-a978-3c096f1b150c"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="8c589431-d14a-4813-9fef-50c340f0ee4d"
 			name="Select100Orders"
 			ref="440ab339-88de-4864-8957-4752d24b3890"
@@ -174,6 +162,12 @@ rxversion="8.1">
 			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
 			name="CloseShipWorks"
 			ref="82d40b1a-c4fc-4ba1-962a-81cc793c1f7e"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
+			name="ApplyProfileTo100SROrders"
+			ref="3c300656-9cf2-48f0-a275-1582a2fb14c4"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -229,6 +223,12 @@ rxversion="8.1">
 			id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
 			name="ProcessOrders"
 			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
+			name="Process100SROrders"
+			ref="c40c66ff-b6d0-4956-8c78-ea8d5f87a5d0"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -360,12 +360,12 @@ rxversion="8.1">
 							name="Load100SROrders">
 							</testmodule>
 							<testmodule
-							id="6af85d79-8e1f-4cfe-bb96-1e971749ea18"
-							name="ApplyProfileTo100Orders">
+							id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
+							name="ApplyProfileTo100SROrders">
 							</testmodule>
 							<testmodule
-							id="625192bf-1eef-44a9-ba6a-973bcedde162"
-							name="ProcessOrders">
+							id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
+							name="Process100SROrders">
 							</testmodule>
 							<testmodule
 							id="ff94c415-ac5f-447e-8787-6f57b41f9245"
@@ -392,8 +392,8 @@ rxversion="8.1">
 							name="ApplyProfileTo100Orders">
 							</testmodule>
 							<testmodule
-							id="044977bc-3d9a-40ac-80b1-ba948ad57331"
-							name="ProcessOrders">
+							id="8baf9b40-48de-48ef-8b72-192c9c37e493"
+							name="Process100Orders">
 							</testmodule>
 							<testmodule
 							id="40d6b389-7df9-43e8-81cb-76b0f3eec967"
@@ -427,6 +427,9 @@ rxversion="8.1">
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b">
 			</testcontainer>
 			<testcontainer
+			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742">
+			</testcontainer>
+			<testcontainer
 			id="44cac686-339b-4902-8a46-560e623779f5">
 			</testcontainer>
 			<testcontainer
@@ -434,6 +437,9 @@ rxversion="8.1">
 			</testcontainer>
 			<testcontainer
 			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9">
+			</testcontainer>
+			<testcontainer
+			id="986dca5a-95fa-4260-90e8-75119798108c">
 			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>

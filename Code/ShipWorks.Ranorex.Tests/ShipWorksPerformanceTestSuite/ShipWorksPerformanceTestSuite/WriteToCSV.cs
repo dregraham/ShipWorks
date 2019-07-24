@@ -29,10 +29,13 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
-			currentDir = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(),@"..\..\"));
-			currentDir = currentDir + @"PerformanceGraphData\";			
+			currentDir = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(),@"..\..\"));			
+			currentDir = currentDir + @"PerformanceGraphData\";		
 			
 			WriteHighVolumeBatchGrid();
+			WriteECommerceIBatchGrid();
+			WriteECommerceIIBatchGrid();
+			
 		}
 		
 		void WriteHighVolumeBatchGrid()
@@ -42,7 +45,29 @@ namespace ShipWorksPerformanceTestSuite
 			using (StreamWriter sw = new StreamWriter(currentFile,false))
 			{
 				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
-				sw.WriteLine($"{Timing.totalLoad500Time},{Timing.totalApplyProfile500Time},{Timing.totalProcess500Time},{Timing.totalVoid500Time}");
+				sw.WriteLine($"{Timing.totalLoad500Time},{Timing.totalApplyProfile500Time},{Timing.totalProcessTime},{Timing.totalVoid500Time}");
+			}
+		}
+		
+		void WriteECommerceIBatchGrid()
+		{
+			currentFile = currentDir + "ECommerceIBatchGrid.csv";
+			
+			using (StreamWriter sw = new StreamWriter(currentFile,false))
+			{
+				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
+				sw.WriteLine($"{Timing.totalLoad100SRTime},{Timing.totalApplyProfile100SRTime},{Timing.totalProcess100SRTime},{Timing.totalVoid100SRTime}");
+			}
+		}
+		
+		void WriteECommerceIIBatchGrid()
+		{				
+			currentFile = currentDir + "ECommerceIIBatchGrid.csv";
+			
+			using (StreamWriter sw = new StreamWriter(currentFile,false))
+			{
+				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
+				sw.WriteLine($"{Timing.totalLoad100Time},{Timing.totalApplyProfile100Time},{Timing.totalProcess100Time},{Timing.totalVoid100Time}");
 			}
 		}
 	}

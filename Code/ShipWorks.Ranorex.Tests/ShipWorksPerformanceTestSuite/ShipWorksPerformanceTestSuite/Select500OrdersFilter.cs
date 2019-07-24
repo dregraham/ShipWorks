@@ -29,22 +29,32 @@ namespace ShipWorksPerformanceTestSuite
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.0;
             
-            SelectFilter();
+            try {
+            	
+            	SelectFilter();
+            	
+            } catch (Exception) {
+            	
+            	RetryAction.RetryOnFailure(2,1,() => {
+				       
+               		SelectFilter();
+	           	});
+            }
         }
         
         public void SelectFilter()
         {
         	Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.RawText500Orders' at Center.", repo.MainForm.PanelDockingArea.RawText500OrdersInfo, new RecordItemIndex(0));
-			repo.MainForm.PanelDockingArea.RawText500Orders.Click();
-			Delay.Milliseconds(0);
+			repo.MainForm.PanelDockingArea.RawText500Orders.Click();			
 			
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.Text500Orders' at 36;8.", repo.MainForm.PanelDockingArea.Text500OrdersInfo, new RecordItemIndex(2));
+			repo.MainForm.PanelDockingArea.Text500Orders.MoveTo();
+            
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'MainForm.PanelDockingArea.Text500Orders'.", repo.MainForm.PanelDockingArea.Text500OrdersInfo, new RecordItemIndex(4));
 			Validate.AttributeEqual(repo.MainForm.PanelDockingArea.Text500OrdersInfo, "Visible", "True");
-			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Text='500Orders') on item 'MainForm.PanelDockingArea.Text500Orders'.", repo.MainForm.PanelDockingArea.Text500OrdersInfo, new RecordItemIndex(5));
-			Validate.AttributeEqual(repo.MainForm.PanelDockingArea.Text500OrdersInfo, "Text", "500Orders");
-			Delay.Milliseconds(0);
+			Validate.AttributeEqual(repo.MainForm.PanelDockingArea.Text500OrdersInfo, "Text", "500Orders");			
         }
     }
 }

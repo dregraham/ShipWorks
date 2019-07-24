@@ -44,22 +44,27 @@ namespace ShipWorksPerformanceTestSuite
 			try {
 				
 				loadTime.Start();
+				
 				LoadOrders();
                	Validate500OrdersLoaded();
+               	
                	loadTime.Stop();
                	
 			} 
 			catch (Exception) {
 				
-				RetryAction.RetryOnFailure(3,1,() => {
+				RetryAction.RetryOnFailure(2,1,() => {
 				       
 				    loadTime.Stop();
+				    
                    	select500filter.SelectFilter();
 	               	selectOrders.SelectOrders();
 	               	
 	               	loadTime.Start();
+	               	
 	               	LoadOrders();
 	               	Validate500OrdersLoaded();
+	               	
 	               	loadTime.Stop();
 	           	});	
 			}
@@ -71,23 +76,18 @@ namespace ShipWorksPerformanceTestSuite
 		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.FedExGround' at Center.", repo.MainForm.PanelDockingArea.FedExGroundInfo, new RecordItemIndex(0));
             repo.MainForm.PanelDockingArea.FedExGround.MoveTo();
-            Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.FedExGround' at Center.", repo.MainForm.PanelDockingArea.FedExGroundInfo, new RecordItemIndex(0));
             repo.MainForm.PanelDockingArea.FedExGround.Click(System.Windows.Forms.MouseButtons.Right);
-            Delay.Milliseconds(0);
-			
+            
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ContextMenuOrderGrid.ShipOrders' at Center.", repo.ContextMenuOrderGrid.ShipOrdersInfo, new RecordItemIndex(9));
 			repo.ContextMenuOrderGrid.ShipOrders.Click();
-			Delay.Milliseconds(0);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Enabled='True') on item 'ShippingDlg.ApplyProfile'.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(11));
 			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Enabled", "True");
-			Delay.Milliseconds(100);
 			
 			Report.Log(ReportLevel.Info, "Validation", "Validating AttributeEqual (Visible='True') on item 'ShippingDlg.ApplyProfile'.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(12));
-			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Visible", "True");
-			Delay.Milliseconds(100);
+			Validate.AttributeEqual(repo.ShippingDlg.ShippingServicesInfo, "Visible", "True");			
 		}
 		
 		public void Validate500OrdersLoaded(){

@@ -28,14 +28,26 @@ namespace ShipWorksPerformanceTestSuite
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.0;
             
-            SelectFilter();
+            try {
+            	
+            	SelectFilter();
+            	
+            } catch (Exception) {
+            	
+            	RetryAction.RetryOnFailure(2,1,() => {
+				       
+               		SelectFilter();
+	           	});
+            }
         }
         
         public void SelectFilter()
         {
         	Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.RawText100Orders' at Center.", repo.MainForm.PanelDockingArea.RawText100OrdersInfo, new RecordItemIndex(8));
             repo.MainForm.PanelDockingArea.RawText100Orders.Click();
-            Delay.Milliseconds(0);        	
+            
+			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.Text100Orders' at 8;10.", repo.MainForm.PanelDockingArea.Text100OrdersInfo, new RecordItemIndex(0));
+			repo.MainForm.PanelDockingArea.Text100Orders.MoveTo();                        
         }
     }
 }

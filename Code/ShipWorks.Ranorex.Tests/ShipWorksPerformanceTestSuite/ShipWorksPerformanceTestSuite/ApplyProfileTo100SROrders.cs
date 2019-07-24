@@ -12,19 +12,18 @@ using Ranorex.Core;
 using Ranorex.Core.Testing;
 
 namespace ShipWorksPerformanceTestSuite
-{
-
-    [TestModule("4833ECEE-B4AC-4EAF-9FA5-25DDF1D28F38", ModuleType.UserCode, 1)]
-    public class ApplyProfileTo100Orders : ITestModule
+{    
+    [TestModule("3C300656-9CF2-48F0-A275-1582A2FB14C4", ModuleType.UserCode, 1)]
+    public class ApplyProfileTo100SROrders : ITestModule
     {
-    	Stopwatch applyProfile100Time = new Stopwatch();
+        Stopwatch applyProfile100SRTime = new Stopwatch();
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
-		
-        public ApplyProfileTo100Orders()
+ 
+		public ApplyProfileTo100SROrders()
         {
             // Do not delete - a parameterless constructor is required!
         }
-
+        
         void ITestModule.Run()
         {
             Mouse.DefaultMoveTime = 300;
@@ -34,9 +33,9 @@ namespace ShipWorksPerformanceTestSuite
             SelectAllShipments();            
             ApplyBestRateProfile();
             
-            applyProfile100Time.Stop();
+            applyProfile100SRTime.Stop();
             
-            Timing.totalApplyProfile100Time = applyProfile100Time.ElapsedMilliseconds;
+            Timing.totalApplyProfile100SRTime = applyProfile100SRTime.ElapsedMilliseconds;
         }
         
         public void SelectAllShipments()
@@ -56,17 +55,17 @@ namespace ShipWorksPerformanceTestSuite
 		}
 		
 		void ApplyBestRateProfile()
-		{	
+		{			
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.SplitContainer.ComboShipmentType' at Center.", repo.ShippingDlg.SplitContainer.ComboShipmentTypeInfo, new RecordItemIndex(0));
 			repo.ShippingDlg.SplitContainer.ComboShipmentType.MoveTo();
-			
+						
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ShippingDlg.ApplyProfile' at Center.", repo.ShippingDlg.ApplyProfileInfo, new RecordItemIndex(4));
 			repo.ShippingDlg.ApplyProfile.Click();
-			
+						
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'ContextMenuPrint.BestRateProfile' at Center.", repo.ContextMenuPrint.BestRateProfileInfo, new RecordItemIndex(0));
 			repo.ContextMenuPrint.BestRateProfile.Click();
-			
-			applyProfile100Time.Start();
+						
+			applyProfile100SRTime.Start();
 			
 			Report.Log(ReportLevel.Info, "Wait", "Waiting 2m to not exist. Associated repository item: 'ProgressDlg.PreparingShipments'", repo.ProgressDlg.PreparingShipmentsInfo, new ActionTimeout(120000), new RecordItemIndex(1));
 			repo.ProgressDlg.PreparingShipmentsInfo.WaitForExists(120000);
