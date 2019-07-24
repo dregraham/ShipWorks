@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -344,13 +345,17 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems, ObservableCollection<ScanPackItem> targetItems)
         {
+            // If someone has a product of qty of 1.3, the first scan will move 1 to packed and leave .3, the second scan qill pack .3
+            double quantityPacked;
             // Update source list
             if (sourceItem.Quantity > 1)
             {
                 sourceItem.Quantity--;
+                quantityPacked = 1;
             }
             else
             {
+                quantityPacked = sourceItem.Quantity;
                 sourceItems.Remove(sourceItem);
             }
 
@@ -358,11 +363,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.Upc == sourceItem.Upc && x.Sku == sourceItem.Sku);
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, 1, sourceItem.Upc, sourceItem.Sku));
+                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.Upc, sourceItem.Sku));
             }
             else
             {
-                matchingTargetItem.Quantity++;
+                matchingTargetItem.Quantity += quantityPacked;
             }
 
             Update();
@@ -373,8 +378,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void Update()
         {
-            double scannedItemCount = PackedItems.Select(x => x.Quantity).Sum();
-            double totalItemCount = ItemsToScan.Select(x => x.Quantity).Sum() + scannedItemCount;
+            double scannedItemCount = PackedItems.Select(GetUnitCount).Sum();
+            double totalItemCount = ItemsToScan.Select(GetUnitCount).Sum() + scannedItemCount;
 
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
@@ -390,7 +395,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
 
-                    State = scannedItemCount > 0 ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
+                    State = PackedItems.Any() ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
                 }
                 else
                 {
@@ -402,7 +407,15 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
             }
         }
- 
+
+        /// <summary>
+        /// Given a value less than 1, return 1. Given a decimal number, round up.
+        /// </summary>
+        private static double GetUnitCount(ScanPackItem x)
+        {
+            return Math.Ceiling(Math.Max(x.Quantity, 1));
+        }
+
         /// <summary>
         /// Search the items in the given list for a upc matching the scanned text first, if none found, search the items
         /// again for a sku matching the scanned text
