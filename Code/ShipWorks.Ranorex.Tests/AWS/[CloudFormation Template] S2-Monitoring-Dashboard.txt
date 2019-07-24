@@ -1,0 +1,114 @@
+{
+    "Resources": {
+        "MyDashboard": {
+            "Type": "AWS::CloudWatch::Dashboard",
+            "Properties": {
+                "DashboardName": "S2-Monitoring-Dashboard",
+                "DashboardBody": "{
+    \"widgets\": [
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 0,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Throttles\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Most Throttles\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Throttles\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Throttles\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", { \"period\": 2592000, \"id\": \"m1\", \"stat\": \"Average\" } ],
+                    [ \".\", \".\", \".\", \"s2-RouteOrderHandler\", \"Resource\", \"s2-RouteOrderHandler\", { \"period\": 2592000, \"id\": \"m2\" } ],
+                    [ \".\", \".\", \".\", \"swh-api-s2-readModelOrderDownloadView\", { \"period\": 2592000, \"id\": \"m3\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"period\": 2592000, \"id\": \"m4\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"period\": 2592000, \"id\": \"m5\" } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"period\": 2592000, \"id\": \"m6\" } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"period\": 2592000, \"id\": \"m7\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Average Lambda Throttling\",
+                \"period\": 300
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 6,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Errors\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Most Errors\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Errors\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Errors\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", \"Resource\", \"s2-ProcessStoreQueueHandler\", { \"period\": 2592000, \"id\": \"m1\" } ],
+                    [ \"...\", \"s2-RouteOrderHandler\", \".\", \"s2-RouteOrderHandler\", { \"period\": 2592000, \"id\": \"m2\" } ],
+                    [ \".\", \".\", \".\", \"swh-api-s2-readModelOrderDownloadView\", { \"period\": 2592000, \"id\": \"m3\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"period\": 2592000, \"id\": \"m4\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"period\": 2592000, \"id\": \"m5\" } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"period\": 2592000, \"id\": \"m6\" } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"period\": 2592000, \"id\": \"m7\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Average Lambda Errors\",
+                \"period\": 300
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 12,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Invocations\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Most Invocations\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Invocations\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Invocations\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", \"Resource\", \"s2-ProcessStoreQueueHandler\", { \"period\": 2592000, \"id\": \"m1\" } ],
+                    [ \"...\", \"s2-RouteOrderHandler\", \".\", \"s2-RouteOrderHandler\", { \"period\": 2592000, \"id\": \"m2\" } ],
+                    [ \".\", \".\", \".\", \"swh-api-s2-readModelOrderDownloadView\", { \"period\": 2592000, \"id\": \"m3\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"period\": 2592000, \"id\": \"m4\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"period\": 2592000, \"id\": \"m5\" } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"period\": 2592000, \"id\": \"m6\" } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"period\": 2592000, \"id\": \"m7\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Average Lambda Invocations\",
+                \"period\": 300
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 18,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Concurrent Execution\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Most Concurrent Execution\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Concurrent Execution\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"ConcurrentExecutions\", \"FunctionName\", \"swh-api-s2-readModelOrderDownloadView\", \"Resource\", \"swh-api-s2-readModelOrderDownloadView\", { \"period\": 2592000, \"id\": \"m1\" } ],
+                    [ \".\", \".\", \".\", \"swh-api-s2-readModelOrderListView\", { \"period\": 2592000, \"id\": \"m2\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"period\": 2592000, \"id\": \"m3\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Average Lambda Concurrent Execution\",
+                \"period\": 300
+            }
+        }
+    ]
+}"
+            }
+        }
+    }
+}
