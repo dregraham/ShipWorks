@@ -16,3 +16,9 @@ BEGIN
     CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_Verified] ON [dbo].[Order] ([Verified])
 END
 GO
+
+IF NOT EXISTS (SELECT NULL FROM SYS.EXTENDED_PROPERTIES WHERE [major_id] = OBJECT_ID('Order') AND [name] = N'AuditName' AND [minor_id] = (SELECT [column_id] FROM SYS.COLUMNS WHERE [name] = 'Verified' AND [object_id] = OBJECT_ID('Order')))
+BEGIN
+EXEC sp_addextendedproperty N'AuditName', N'Verified', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'Verified'
+END
+GO

@@ -7612,6 +7612,8 @@ EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'O
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Store', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
 GO
+EXEC sp_addextendedproperty N'AuditName', N'Verified', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'Verified'
+GO
 EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderCharge', 'COLUMN', N'Amount'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderItem', 'COLUMN', N'UnitCost'
