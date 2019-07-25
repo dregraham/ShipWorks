@@ -217,7 +217,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                         if (packedItem == null)
                         {
                             trackedEvent.AddProperty("Reason", "NotPacked");
-                            ScanHeader = "Last scan did not match. Scan another item to continue." :
+                            ScanHeader = "Last scan did not match. Scan another item to continue.";
                         }
                         else
                         {
