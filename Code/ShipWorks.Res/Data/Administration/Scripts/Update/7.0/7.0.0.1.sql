@@ -2,3 +2,4 @@
 GO
 
 ALTER TABLE [dbo].[ChannelAdvisorStore] DROP COLUMN [DownloadModifiedNumberOfDaysBack]
+GO
