@@ -258,6 +258,8 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStore.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStoreDtoFactory.cs" />
+    <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
+    <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
