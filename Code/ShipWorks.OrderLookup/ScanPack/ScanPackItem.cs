@@ -50,6 +50,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string ItemUpc { get; set; }
+
+        /// <summary>
+        /// The Product's UPC
+        /// </summary>
+        [Obfuscation(Exclude = true)]
         public string ProductUpc { get; }
 
         /// <summary>
