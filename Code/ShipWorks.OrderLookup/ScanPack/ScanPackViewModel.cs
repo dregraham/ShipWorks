@@ -360,11 +360,12 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.Upc.Equals(sourceItem.Upc, StringComparison.InvariantCultureIgnoreCase) &&
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                                                                              x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
                                                                               x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.Upc, sourceItem.Sku));
+                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ProductUpc, sourceItem.Sku));
             }
             else
             {
@@ -422,7 +423,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// again for a sku matching the scanned text
         /// </summary>
         private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
-            listToSearch.FirstOrDefault(x => x.Upc.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase)) ??
-            listToSearch.FirstOrDefault(x => x.Sku.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase));
+            listToSearch.FirstOrDefault(x => x.ProductUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
+            listToSearch.FirstOrDefault(x => x.ItemUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
+            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false);
     }
 }
