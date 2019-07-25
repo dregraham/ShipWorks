@@ -526,7 +526,10 @@ CREATE TABLE [dbo].[Order]
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
 [Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT (''),
 [HubOrderID] [uniqueidentifier] NULL,
-[HubSequence] [bigint] NULL
+[HubSequence] [bigint] NULL,
+[Verified] [bit] NOT NULL CONSTRAINT [DF_Order_Verified] DEFAULT (0),
+[VerifiedBy] [bigint] NULL,
+[VerifiedDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
