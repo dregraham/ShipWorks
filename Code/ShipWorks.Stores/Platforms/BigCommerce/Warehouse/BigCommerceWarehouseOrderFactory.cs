@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
@@ -60,7 +61,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Warehouse
         /// <summary>
         /// Load BigCommerce item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             BigCommerceOrderItemEntity bigCommerceItemEntity = (BigCommerceOrderItemEntity) itemEntity;
             var bigCommerceWarehouseItem = warehouseItem.AdditionalData[bigCommerceEntryKey].ToObject<BigCommerceWarehouseItem>();
@@ -71,6 +72,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Warehouse
             bigCommerceItemEntity.IsDigitalItem = bigCommerceWarehouseItem.IsDigitalItem;
             bigCommerceItemEntity.EventDate = bigCommerceWarehouseItem.EventDate;
             bigCommerceItemEntity.EventName = bigCommerceWarehouseItem.EventName;
+
+            BigCommerceStoreEntity bigCommerceStore = (BigCommerceStoreEntity) store;
+
+            // Convert weights from store units to pounds
+            itemEntity.Weight = WeightUtility.Convert(
+                (WeightUnitOfMeasure) bigCommerceStore.WeightUnitOfMeasure,
+                WeightUnitOfMeasure.Pounds,
+                warehouseItem.Weight);
         }
     }
 }

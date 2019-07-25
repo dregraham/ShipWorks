@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Load ChannelAdvisor item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             ChannelAdvisorOrderItemEntity channelAdvisorItemEntity = (ChannelAdvisorOrderItemEntity) itemEntity;
             var channelAdvisorWarehouseItem = warehouseItem.AdditionalData[channelAdvisorEntryKey].ToObject<ChannelAdvisorWarehouseItem>();
