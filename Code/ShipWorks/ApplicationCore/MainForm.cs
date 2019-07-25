@@ -1618,6 +1618,24 @@ namespace ShipWorks
                 tab.SendToBack();
             }
 
+            if (UIMode == UIMode.OrderLookup)
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                    if (restrictionLevel != EditionRestrictionLevel.None)
+                    {
+                        // This is not a warehouse user, disable the scan and pack tab and bring the shipping tab forward
+                        scanPackControl.Control.Enabled = false;
+                        ribbonTabOrderLookupViewScanPack.Enabled = false;
+
+                        ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+                    }
+                }
+            }
+
             ribbonSecurityProvider.UpdateSecurityUI();
         }
 

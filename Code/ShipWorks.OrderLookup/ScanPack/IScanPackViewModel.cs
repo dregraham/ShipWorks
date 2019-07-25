@@ -9,6 +9,11 @@ namespace ShipWorks.OrderLookup.ScanPack
     public interface IScanPackViewModel
     {
         /// <summary>
+        /// Is the view enabled
+        /// </summary>
+        bool Enabled { get; set; }
+
+        /// <summary>
         /// Load an order
         /// </summary>
         Task Load(string scannedText);

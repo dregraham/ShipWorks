@@ -36,6 +36,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string orderNumber;
         private ScanPackState state;
         private bool error;
+        private bool enabled;
 
         /// <summary>
         /// Constructor
@@ -163,6 +164,16 @@ namespace ShipWorks.OrderLookup.ScanPack
         [Obfuscation(Exclude = true)]
         public bool SearchError => false;
 
+        /// <summary>
+        /// Is Scan Pack enabled
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Enabled
+        {
+            get => enabled;
+            set => Set(ref enabled, value);
+        }
+
         #endregion
 
         /// <summary>
@@ -211,7 +222,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
             }
         }
-        
+
         /// <summary>
         /// Load the given order
         /// </summary>
