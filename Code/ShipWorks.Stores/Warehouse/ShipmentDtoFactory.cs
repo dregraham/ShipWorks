@@ -10,6 +10,7 @@ using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Warehouse
 {
@@ -58,6 +59,13 @@ namespace ShipWorks.Stores.Warehouse
             int shipworksInsured = 0;
             int carrierInsured = 0;
 
+            string userName = string.Empty;
+            long? verifiedBy = shipmentEntity.Order.VerifiedBy;
+            if (verifiedBy != null)
+            {
+                userName = UserManager.GetUser(verifiedBy.Value).Username;
+            }
+
             if (shipmentEntity.Insurance)
             {
                 shipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks);
@@ -93,7 +101,10 @@ namespace ShipWorks.Stores.Warehouse
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
                 ShippingAccount = shipmentAdapter.AccountId.ToString(),
                 LabelFormat = GetLabelFormat(shipmentEntity),
-                Packages = CreatePackages(shipmentAdapter.GetPackageAdapters())
+                Packages = CreatePackages(shipmentAdapter.GetPackageAdapters()),
+                Verified = shipmentEntity.Order.Verified,
+                VerifiedBy = userName,
+                VerifiedDate = shipmentEntity.Order.VerifiedDate                
             };
 
             return shipment;

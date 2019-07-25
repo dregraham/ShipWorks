@@ -2345,6 +2345,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom5, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "HubOrderID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)OrderFieldIndex.HubOrderID, 0, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "HubSequence", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.HubSequence, 0, 0, 19);
+			this.AddElementFieldInfo("OrderEntity", "Verified", typeof(System.Boolean), false, false, false, false,  (int)OrderFieldIndex.Verified, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "VerifiedBy", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.VerifiedBy, 0, 0, 19);
+			this.AddElementFieldInfo("OrderEntity", "VerifiedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.VerifiedDate, 0, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
