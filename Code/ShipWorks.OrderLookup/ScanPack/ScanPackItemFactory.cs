@@ -67,9 +67,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             string name = string.IsNullOrWhiteSpace(product?.Name) ? item.Name : product.Name;
-            string itemUpc = item.UPC;
-            string productUpc = product?.UPC;
-            string sku = item.SKU;
+            string itemUpc = item.UPC ?? string.Empty;
+            string productUpc = product?.UPC ?? string.Empty;
+            string sku = item.SKU ?? string.Empty;
 
             return new ScanPackItem(name, imageUrl, item.Quantity, itemUpc, productUpc, sku);
         }
