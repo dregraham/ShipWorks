@@ -1,6 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders;
+using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -11,13 +13,15 @@ namespace ShipWorks.OrderLookup.ScanPack
     public class VerifiedOrderService : IVerifiedOrderService
     {
         private readonly IOrderRepository orderRepository;
+        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public VerifiedOrderService(IOrderRepository orderRepository)
+        public VerifiedOrderService(IOrderRepository orderRepository, IUserSession userSession)
         {
             this.orderRepository = orderRepository;
+            this.userSession = userSession;
         }
 
         /// <summary>
@@ -25,6 +29,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public void Save(OrderEntity order)
         {
+            order.Verified = true;
+            order.VerifiedBy = userSession.User.UserID;
+            order.VerifiedDate = DateTime.UtcNow;
+
             orderRepository.Save(order);
         }
     }

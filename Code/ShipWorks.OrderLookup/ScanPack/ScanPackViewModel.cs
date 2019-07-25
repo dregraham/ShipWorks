@@ -39,6 +39,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string orderNumber;
         private ScanPackState state;
         private bool error;
+        private OrderEntity orderBeingPacked;
 
         /// <summary>
         /// Constructor
@@ -236,12 +237,14 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public async Task Load(OrderEntity order)
         {
-            ItemsToScan.Clear();
-            OrderNumber = order.OrderNumberComplete;
+            orderBeingPacked = order;
 
-            if (order.OrderItems.Any())
+            ItemsToScan.Clear();
+            OrderNumber = orderBeingPacked.OrderNumberComplete;
+
+            if (orderBeingPacked.OrderItems.Any())
             {
-                (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
+                (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
                 State = ScanPackState.OrderLoaded;
 
@@ -249,13 +252,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
-                verifiedOrderService.Save(order);
-
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
 
-            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
+            messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
         }
 
         /// <summary>
@@ -266,7 +267,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
             IEnumerable<ScanPackItem> targetItems = dropInfo.TargetCollection as IEnumerable<ScanPackItem>;
 
-            if (sourceItem != null && targetItems != null)
+            if (State != ScanPackState.OrderVerified && sourceItem != null && targetItems != null)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -284,13 +285,14 @@ namespace ShipWorks.OrderLookup.ScanPack
             ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
             ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
 
-            if (sourceItem != null && sourceItems != null && targetItems != null)
+            // Don't do anything if order is already verified or item is dropped onto the same list
+            if (State != ScanPackState.OrderVerified &&
+                sourceItem != null &&
+                sourceItems != null &&
+                targetItems != null &&
+                !sourceItems.Equals(targetItems))
             {
-                // Don't do anything if dropped onto the same list
-                if (!sourceItems.Equals(targetItems))
-                {
-                    ProcessItemScan(sourceItem, sourceItems, targetItems);
-                }
+                ProcessItemScan(sourceItem, sourceItems, targetItems);
             }
         }
 
@@ -353,6 +355,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 OrderNumber = string.Empty;
             }
 
+            orderBeingPacked = null;
             ItemsToScan.Clear();
             PackedItems.Clear();
 
@@ -432,6 +435,8 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
+                    verifiedOrderService.Save(orderBeingPacked);
+
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";
                     ScanFooter = "Scan a new order to continue";
