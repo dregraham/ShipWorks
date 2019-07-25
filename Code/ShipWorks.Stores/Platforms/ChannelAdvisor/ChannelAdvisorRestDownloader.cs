@@ -74,12 +74,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                DateTime start = await GetChannelAdvisorOrderDateStartingPoint();
-
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(refreshToken);
 
                 string previousLink = String.Empty;
-                var oldestDownload = DateTime.UtcNow.AddDays(-Store.InitialDownloadDays ?? -30);
+                double daysback = 30;
+
+                if (Store.InitialDownloadDays.HasValue && Store.InitialDownloadDays > 30)
+                {
+                    daysback = Store.InitialDownloadDays ?? 30;
+                }
+
+                var oldestDownload = DateTime.UtcNow.AddDays(-daysback);
 
                 Progress.Detail = $"Downloading orders...";
 
@@ -168,25 +173,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
                     .Where(p => p != null).ToList();
             return caProducts;
-        }
-
-        /// <summary>
-        /// Gets the start date for ChannelAdvisor downloads
-        /// </summary>
-        private async Task<DateTime> GetChannelAdvisorOrderDateStartingPoint()
-        {
-            DateTime? startDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
-
-            if (startDate.HasValue)
-            {
-                startDate = startDate.Value.AddDays(-1 * caStore.DownloadModifiedNumberOfDaysBack);
-            }
-            else
-            {
-                startDate = DateTime.UtcNow.AddDays(-30);
-            }
-
-            return startDate.Value;
         }
 
         /// <summary>

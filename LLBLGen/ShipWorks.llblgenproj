@@ -583,7 +583,6 @@
           <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
-          <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
           <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
@@ -4557,7 +4556,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-17T15:30:13.4856613Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-25T19:38:50.5542981Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4983,10 +4982,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -5107,7 +5106,6 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
-                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="10" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -6893,8 +6891,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7564,9 +7562,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
@@ -7686,9 +7684,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -11297,7 +11295,6 @@
             <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
-            <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
             <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />

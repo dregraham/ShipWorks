@@ -171,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
+        public ChannelAdvisorOrderResult GetOrders(string refreshToken)
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
