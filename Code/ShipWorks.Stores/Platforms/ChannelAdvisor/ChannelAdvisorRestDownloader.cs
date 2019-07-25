@@ -79,6 +79,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
 
                 string previousLink = String.Empty;
+                var oldestDownload = DateTime.UtcNow.AddDays(-Store.InitialDownloadDays ?? -30);
 
                 Progress.Detail = $"Downloading orders...";
 
@@ -106,9 +107,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+
+                        // If the order has already been shipped, mark it as exported so we don't re-download it
+                        if (caOrder.ShippingStatus.Equals("Shipped", StringComparison.OrdinalIgnoreCase))
+                        {
+                            restClient.MarkOrderExported(caOrder.ID, refreshToken);
+                        }
                     }
 
-                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink)
+                    // Don't download orders older than oldestDownload so we don't have to mark all orders in the store as exported
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) || ordersResult.Orders.FirstOrDefault()?.CreatedDateUtc < oldestDownload
                         ? null
                         : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }

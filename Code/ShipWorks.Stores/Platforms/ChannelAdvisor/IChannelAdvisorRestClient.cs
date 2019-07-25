@@ -45,6 +45,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         ChannelAdvisorProduct GetProduct(int productID, string refreshToken);
 
         /// <summary>
+        /// Mark an order as Exported
+        /// </summary>
+        void MarkOrderExported(long orderID, string refreshToken);
+
+        /// <summary>
         /// Uploads the shipment details.
         /// </summary>
         void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment, string refreshToken, string channelAdvisorOrderID);
