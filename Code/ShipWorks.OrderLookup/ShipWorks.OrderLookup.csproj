@@ -338,6 +338,7 @@
     <Compile Include="ScanPack\ItemsToScanControl.xaml.cs">
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ScanPack\IVerifiedOrderService.cs" />
     <Compile Include="ScanPack\PackedControl.xaml.cs">
       <DependentUpon>PackedControl.xaml</DependentUpon>
     </Compile>
