@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
 
                         // If the order has already been shipped, mark it as exported so we don't re-download it
-                        if (caOrder.ShippingStatus.Equals("Shipped", StringComparison.OrdinalIgnoreCase))
+                        if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
                         {
                             restClient.MarkOrderExported(caOrder.ID, refreshToken);
                         }
