@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -207,6 +208,8 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
+                    SystemSounds.Asterisk.Play();
+
                     ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
                     using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
