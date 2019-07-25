@@ -394,10 +394,18 @@ namespace ShipWorks.OrderLookup.ScanPack
                 // Order has been scanned, still items left to scan
                 if (ItemsToScan.Any())
                 {
-                    ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
 
-                    State = PackedItems.Any() ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
+                    if (PackedItems.Any())
+                    {
+                        ScanHeader = "Verified! Scan another item to continue.";
+                        State = ScanPackState.ScanningItems;
+                    }
+                    else
+                    {
+                        ScanHeader = "Scan an item to pack";
+                        State = ScanPackState.OrderLoaded;
+                    }
                 }
                 else
                 {
