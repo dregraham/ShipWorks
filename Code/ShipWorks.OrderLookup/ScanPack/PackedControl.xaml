@@ -25,11 +25,13 @@
                   BorderThickness="2"
                   FontSize="16"
                   Background="{x:Static SystemColors.ControlBrush}">
-            <ItemsControl
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl
                 ItemsSource="{Binding PackedItems}"
                 ItemTemplate="{StaticResource ItemsToScanTemplate}"
                 Background="{x:Static SystemColors.ControlBrush}"
                 Margin="5"/>
+            </ScrollViewer>
         </GroupBox>
     </Grid>
 </UserControl>
