@@ -576,6 +576,10 @@ PRINT N'Creating index [IX_SWDefault_Order_StoreIdOnlineStatus] on [dbo].[Order]
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
 GO
+PRINT N'Creating index [IX_SWDefault_Order_Verified] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_Verified] ON [dbo].[Order] ([Verified])
+GO
 PRINT N'Creating index [IX_SWDefault_RequestedShipping] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
