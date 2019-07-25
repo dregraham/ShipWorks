@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -208,9 +209,19 @@ namespace ShipWorks.OrderLookup.ScanPack
                 {
                     ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
-                    ScanHeader = packedItem == null ?
-                        "Last scan did not match. Scan another item to continue." :
-                        "Item has already been packed";
+                    using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
+                    {
+                        if (packedItem == null)
+                        {
+                            trackedEvent.AddProperty("Reason", "NotPacked");
+                            ScanHeader = "Last scan did not match. Scan another item to continue." :
+                        }
+                        else
+                        {
+                            trackedEvent.AddProperty("Reason", "AlreadyPacked");
+                            ScanHeader = "Item has already been packed";
+                        }
+                    }                
 
                     Error = true;
                 }
@@ -319,6 +330,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void ResetClicked()
         {
+            new TrackedEvent("PickAndPack.ResetClicked").Dispose();
+
             messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
         }
 
