@@ -1,20 +1,26 @@
 ﻿using System.Reflection;
+using GalaSoft.MvvmLight;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
     /// <summary>
     /// Represents an item to be scan and packed
     /// </summary>
-    public class ScanPackItem
+    public class ScanPackItem : ViewModelBase
     {
+        private double quantity;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackItem(string name, string imageUrl, double quantity)
+        public ScanPackItem(string name, string imageUrl, double quantity, string itemUpc, string productUpc, string sku)
         {
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
+            ItemUpc = itemUpc;
+            ProductUpc = productUpc;
+            Sku = sku;
         }
 
         /// <summary>
@@ -33,6 +39,23 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// The Items Quantity
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public double Quantity { get; set; }
+        public double Quantity
+        {
+            get => quantity;
+            set => Set(ref quantity, value);
+        }
+
+        /// <summary>
+        /// The Item's UPC
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ItemUpc { get; set; }
+        public string ProductUpc { get; }
+
+        /// <summary>
+        /// The Item's SKU
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string Sku { get; set; }
     }
 }

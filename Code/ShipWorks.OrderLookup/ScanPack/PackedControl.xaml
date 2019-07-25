@@ -3,8 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="ItemsToScanTemplate">
+                <scanPack:ScanPackItemControl Margin="0 0 0 2"/>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <GroupBox Header="Packed"
                   BorderBrush="Black"
@@ -12,9 +25,13 @@
                   BorderThickness="2"
                   FontSize="16"
                   Background="{x:Static SystemColors.ControlBrush}">
-            <ItemsControl
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl
+                ItemsSource="{Binding PackedItems}"
+                ItemTemplate="{StaticResource ItemsToScanTemplate}"
                 Background="{x:Static SystemColors.ControlBrush}"
                 Margin="5"/>
+            </ScrollViewer>
         </GroupBox>
     </Grid>
 </UserControl>

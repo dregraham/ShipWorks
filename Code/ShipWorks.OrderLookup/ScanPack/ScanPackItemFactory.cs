@@ -36,12 +36,17 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
+                var skusInOrder = order.OrderItems.Select(i => i.SKU).Where(s => !string.IsNullOrEmpty(s));
                 IEnumerable<ProductVariantEntity> products = await productCatalog
-                    .FetchProductVariantEntities(adapter, order.OrderItems.Select(i => i.SKU)).ConfigureAwait(true);
+                    .FetchProductVariantEntities(adapter, skusInOrder).ConfigureAwait(true);
 
                 foreach (OrderItemEntity item in order.OrderItems)
                 {
-                    ProductVariantEntity product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCultureIgnoreCase)));
+                    ProductVariantEntity product = null;
+                    if (!string.IsNullOrWhiteSpace(item.SKU))
+                    {
+                        product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCultureIgnoreCase)));
+                    }
                     result.Add(CreateItem(product, item));
                 }
             }
@@ -62,8 +67,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             string name = string.IsNullOrWhiteSpace(product?.Name) ? item.Name : product.Name;
+            string itemUpc = item.UPC ?? string.Empty;
+            string productUpc = product?.UPC ?? string.Empty;
+            string sku = item.SKU ?? string.Empty;
 
-            return new ScanPackItem(name, imageUrl, item.Quantity);
+            return new ScanPackItem(name, imageUrl, item.Quantity, itemUpc, productUpc, sku);
         }
     }
 }

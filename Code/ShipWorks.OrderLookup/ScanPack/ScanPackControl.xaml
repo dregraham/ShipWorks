@@ -9,7 +9,8 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
              x:Name="ScanPack"
-             SizeChanged="OnControlSizeChanged">
+             SizeChanged="OnControlSizeChanged"
+             d:DesignHeight="800" d:DesignWidth="1500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,7 +34,7 @@
         <ScrollViewer
             Grid.Row="1"
             HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Auto">
+            VerticalScrollBarVisibility="Disabled">
             <Grid x:Name="ColumnGrid" SizeChanged="OnGridControlSizeChanged"
                   MaxWidth="{Binding ElementName=ScanPack, Path=ActualWidth}">
                 <Grid.ColumnDefinitions>
@@ -79,7 +80,8 @@
                     DataContext="{Binding .}"/>
                 <scanPack:PackedControl
                     Grid.Column="4"
-                    Margin="0,0,4,0"/>
+                    Margin="0,0,4,0"
+                    DataContext="{Binding .}"/>
 
                 <GridSplitter Grid.Column="1" DragCompleted="OnGridSplitterDragComplete" />
                 <GridSplitter Grid.Column="3" DragCompleted="OnGridSplitterDragComplete" />

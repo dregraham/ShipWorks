@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
@@ -19,14 +22,14 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// View model for the ScanPackControl
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ScanPackViewModel : ViewModelBase, IScanPackViewModel
+    public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IMessenger messenger;
         private ObservableCollection<ScanPackItem> itemsToScan;
-        private ObservableCollection<ScanPackItem> scannedItems;
+        private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
         private string scanImageUrl;
         private string scanFooter;
@@ -46,10 +49,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             this.messenger = messenger;
 
             ItemsToScan = new ObservableCollection<ScanPackItem>();
-            ScannedItems = new ObservableCollection<ScanPackItem>();
+            PackedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(() => ResetClicked());
+            ResetCommand = new RelayCommand(ResetClicked);
 
             Update();
         }
@@ -78,10 +81,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Items that have been scanned
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ObservableCollection<ScanPackItem> ScannedItems
+        public ObservableCollection<ScanPackItem> PackedItems
         {
-            get => scannedItems;
-            set => Set(ref scannedItems, value);
+            get => packedItems;
+            set => Set(ref packedItems, value);
         }
 
         /// <summary>
@@ -162,7 +165,6 @@ namespace ShipWorks.OrderLookup.ScanPack
 
         #endregion
 
-
         /// <summary>
         /// Load an order from an order number
         /// </summary>
@@ -170,8 +172,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             Error = false;
 
-            if (State == ScanPackState.ListeningForOrderScan)
+            if (State == ScanPackState.ListeningForOrderScan || State == ScanPackState.OrderVerified)
             {
+                ItemsToScan.Clear();
+                PackedItems.Clear();
+
                 OrderEntity order = await GetOrder(scannedText).ConfigureAwait(true);
 
                 if (order == null)
@@ -186,8 +191,27 @@ namespace ShipWorks.OrderLookup.ScanPack
 
                 await Load(order).ConfigureAwait(true);
             }
-        }
+			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
+            {
+                ScanPackItem itemScanned = GetScanPackItem(scannedText, ItemsToScan);
 
+                if (itemScanned != null)
+                {
+                    ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
+                }
+                else
+                {
+                    ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
+
+                    ScanHeader = packedItem == null ?
+                        "Last scan did not match. Scan another item to continue." :
+                        "Item has already been packed";
+
+                    Error = true;
+                }
+            }
+        }
+        
         /// <summary>
         /// Load the given order
         /// </summary>
@@ -200,7 +224,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             {
                 (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
-                State = ScanPackState.ListeningForItemScan;
+                State = ScanPackState.OrderLoaded;
 
                 Update();
             }
@@ -211,6 +235,42 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             messenger.Send(new OrderLookupLoadOrderMessage(this, order));
+        }
+
+        /// <summary>
+        /// Handler for drag over events
+        /// </summary>
+        public void DragOver(IDropInfo dropInfo)
+        {
+            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
+            IEnumerable<ScanPackItem> targetItems = dropInfo.TargetCollection as IEnumerable<ScanPackItem>;
+
+            if (sourceItem != null && targetItems != null)
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        /// <summary>
+        /// Handler for drop events
+        /// </summary>
+        public void Drop(IDropInfo dropInfo)
+        {
+            Error = false;
+
+            ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
+            ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
+            ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
+
+            if (sourceItem != null && sourceItems != null && targetItems != null)
+            {
+                // Don't do anything if dropped onto the same list
+                if (!sourceItems.Equals(targetItems))
+                {
+                    ProcessItemScan(sourceItem, sourceItems, targetItems);
+                }
+            }
         }
 
         /// <summary>
@@ -271,7 +331,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             ItemsToScan.Clear();
-            ScannedItems.Clear();
+            PackedItems.Clear();
 
             State = ScanPackState.ListeningForOrderScan;
 
@@ -281,12 +341,47 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Check both lists for scanned item and update quantities accordingly
+        /// </summary>
+        private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems, ObservableCollection<ScanPackItem> targetItems)
+        {
+            // If someone has a product of qty of 1.3, the first scan will move 1 to packed and leave .3, the second scan qill pack .3
+            double quantityPacked;
+            // Update source list
+            if (sourceItem.Quantity > 1)
+            {
+                sourceItem.Quantity--;
+                quantityPacked = 1;
+            }
+            else
+            {
+                quantityPacked = sourceItem.Quantity;
+                sourceItems.Remove(sourceItem);
+            }
+
+            // Update target list
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                                                                              x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                                                                              x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+            if (matchingTargetItem == null)
+            {
+                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ProductUpc, sourceItem.Sku));
+            }
+            else
+            {
+                matchingTargetItem.Quantity += quantityPacked;
+            }
+
+            Update();
+        }
+
+        /// <summary>
         /// Update properties
         /// </summary>
         private void Update()
         {
-            double scannedItemCount = ScannedItems.Select(x => x.Quantity).Sum();
-            double totalItemCount = ItemsToScan.Select(x => x.Quantity).Sum() + scannedItemCount;
+            double scannedItemCount = PackedItems.Select(GetUnitCount).Sum();
+            double totalItemCount = ItemsToScan.Select(GetUnitCount).Sum() + scannedItemCount;
 
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
@@ -301,14 +396,35 @@ namespace ShipWorks.OrderLookup.ScanPack
                 {
                     ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
+
+                    State = PackedItems.Any() ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
                 }
                 else
                 {
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";
                     ScanFooter = "Scan a new order to continue";
+
+                    State = ScanPackState.OrderVerified;
                 }
             }
         }
+
+        /// <summary>
+        /// Given a value less than 1, return 1. Given a decimal number, round up.
+        /// </summary>
+        private static double GetUnitCount(ScanPackItem x)
+        {
+            return Math.Ceiling(Math.Max(x.Quantity, 1));
+        }
+
+        /// <summary>
+        /// Search the items in the given list for a upc matching the scanned text first, if none found, search the items
+        /// again for a sku matching the scanned text
+        /// </summary>
+        private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
+            listToSearch.FirstOrDefault(x => x.ProductUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
+            listToSearch.FirstOrDefault(x => x.ItemUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
+            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false);
     }
 }

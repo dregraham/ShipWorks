@@ -12,10 +12,13 @@ namespace ShipWorks.OrderLookup.ScanPack
         [Description("ListeningForOrderScan")]
         ListeningForOrderScan = 0,
 
-        [Description("ListeningForItemScan")]
-        ListeningForItemScan = 1,
+        [Description("OrderLoaded")]
+        OrderLoaded = 1,
+
+        [Description("ScanningItems")]
+        ScanningItems = 2,
 
         [Description("OrderVerified")]
-        OrderVerified = 2,
+        OrderVerified = 3,
     }
 }

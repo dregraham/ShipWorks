@@ -45,4 +45,14 @@
         <Setter Property="Fill" Value="Red"/>
     </Style>
 
+    <Style x:Key="CheckboxCircle" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
+        <Setter Property="Fill" Value="Green"/>
+    </Style>
+
+    <Style x:Key="CheckboxDecagram" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/>
+        <Setter Property="Fill" Value="DarkBlue"/>
+    </Style>
+
 </ResourceDictionary>

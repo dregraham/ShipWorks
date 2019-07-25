@@ -209,6 +209,11 @@ namespace ShipWorks.Products
         /// </remarks>
         public async Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus)
         {
+            if (skus.None())
+            {
+                return Enumerable.Empty<ProductVariantEntity>();
+            }
+
             QueryFactory factory = new QueryFactory();
 
             InnerOuterJoin from = factory.ProductVariant
