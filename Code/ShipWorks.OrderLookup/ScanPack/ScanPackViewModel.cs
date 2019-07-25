@@ -28,6 +28,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IMessenger messenger;
+        private readonly IVerifiedOrderService verifiedOrderService;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
@@ -40,14 +41,18 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackViewModel(IOrderLookupOrderIDRetriever orderIDRetriever, IOrderLoader orderLoader,
-                                 IScanPackItemFactory scanPackItemFactory, IMessenger messenger)
+        public ScanPackViewModel(
+            IOrderLookupOrderIDRetriever orderIDRetriever,
+            IOrderLoader orderLoader,
+            IScanPackItemFactory scanPackItemFactory,
+            IMessenger messenger,
+            IVerifiedOrderService verifiedOrderService)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
             this.messenger = messenger;
-
+            this.verifiedOrderService = verifiedOrderService;
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             PackedItems = new ObservableCollection<ScanPackItem>();
 
@@ -211,7 +216,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
             }
         }
-        
+
         /// <summary>
         /// Load the given order
         /// </summary>
@@ -230,6 +235,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
             else
             {
+                verifiedOrderService.Save(order);
+
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
