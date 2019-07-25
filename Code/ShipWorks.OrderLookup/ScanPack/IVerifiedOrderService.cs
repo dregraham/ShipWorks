@@ -1,3 +1,4 @@
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -5,6 +6,7 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// <summary>
     /// Service for interacting with verified orders
     /// </summary>
+    [Service]
     public interface IVerifiedOrderService
     {
         /// <summary>

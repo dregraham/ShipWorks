@@ -1628,7 +1628,6 @@ namespace ShipWorks
                     if (restrictionLevel != EditionRestrictionLevel.None)
                     {
                         // This is not a warehouse user, disable the scan and pack tab and bring the shipping tab forward
-                        scanPackControl.Control.Enabled = false;
                         ribbonTabOrderLookupViewScanPack.Enabled = false;
 
                         ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;

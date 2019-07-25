@@ -114,6 +114,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Learn More
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri DisabledLearnMoreUri => new Uri("https://www.shipworks.com/pricing-plans/");
+
+        /// <summary>
         /// Footer for the scan panel
         /// </summary>
         [Obfuscation(Exclude = true)]

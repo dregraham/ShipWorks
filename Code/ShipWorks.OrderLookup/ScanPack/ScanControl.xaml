@@ -16,6 +16,13 @@
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
             </Style>
+            <Style TargetType="Canvas">
+                <Style.Triggers>
+                    <Trigger Property="Control.IsEnabled" Value="false">
+                        <Setter Property="Control.Opacity" Value="0.2" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
             <ui:BooleanToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
