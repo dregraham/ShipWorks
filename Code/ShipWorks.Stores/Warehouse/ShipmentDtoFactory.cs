@@ -62,18 +62,17 @@ namespace ShipWorks.Stores.Warehouse
 
             int shipworksInsured = 0;
             int carrierInsured = 0;
+            if (shipmentEntity.Insurance)
+            {
+                shipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks);
+                carrierInsured = Convert.ToInt32(insuranceType == InsuranceProvider.Carrier);
+            }
 
             string userName = string.Empty;
             long? verifiedBy = shipmentEntity.Order.VerifiedBy;
             if (verifiedBy != null)
             {
                 userName = userManager.GetUser(verifiedBy.Value).Username;
-            }
-
-            if (shipmentEntity.Insurance)
-            {
-                shipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks);
-                carrierInsured = Convert.ToInt32(insuranceType == InsuranceProvider.Carrier);
             }
 
             Shipment shipment = new Shipment
