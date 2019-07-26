@@ -111,7 +111,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         [JsonProperty("packages")]
         public IEnumerable<Package> Packages { get; set; }
 
-        [JsonProperty("Verified")]
+        [JsonProperty("verified")]
         public bool Verified { get; set; }
 
         [JsonProperty("verifiedBy")]
