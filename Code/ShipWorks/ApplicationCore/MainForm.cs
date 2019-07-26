@@ -1627,10 +1627,11 @@ namespace ShipWorks
 
                     if (restrictionLevel != EditionRestrictionLevel.None)
                     {
-                        // This is not a warehouse user, disable the scan and pack tab and bring the shipping tab forward
-                        ribbonTabOrderLookupViewScanPack.Enabled = false;
-
                         ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+                    }
+                    else
+                    {
+                        ribbonTabOrderLookupViewScanPack.Enabled = true;
                     }
                 }
             }

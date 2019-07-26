@@ -6,7 +6,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// <summary>
     /// Service for interacting with verified orders
     /// </summary>
-    [Service]
     public interface IVerifiedOrderService
     {
         /// <summary>
