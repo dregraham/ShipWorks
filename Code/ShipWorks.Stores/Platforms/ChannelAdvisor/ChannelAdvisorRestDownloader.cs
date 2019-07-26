@@ -99,28 +99,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     previousLink = ordersResult.OdataNextLink;
 
-                    foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
+                    if (!await ProcessOrders(ordersResult, previousLink).ConfigureAwait(false))
                     {
-                        // Check if it has been canceled
-                        if (Progress.IsCancelRequested)
-                        {
-                            return;
-                        }
-
-                        DownloadOtherLineItems(caOrder);
-
-                        List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
-
-                        await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
-
-                        // If the order has already been shipped, mark it as exported so we don't re-download it
-                        if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
-                        {
-                            restClient.MarkOrderExported(caOrder.ID, refreshToken);
-                        }
+                        break;
                     }
 
-                    // Don't download orders older than oldestDownload so we don't have to mark all orders in the store as exported
+                    // Don't download orders older than oldestDownload. With each download, we will be marking one page of old shipped orders
+                    // as exported, so eventually all of the orders will be marked
                     ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) || ordersResult.Orders.FirstOrDefault()?.CreatedDateUtc < oldestDownload
                         ? null
                         : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
@@ -137,6 +122,32 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
+        }
+
+        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult, string previousLink)
+        {
+            foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
+            {
+                // Check if it has been canceled
+                if (Progress.IsCancelRequested)
+                {
+                    return false;
+                }
+
+                DownloadOtherLineItems(caOrder);
+
+                List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
+
+                await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+
+                // If the order has already been shipped, mark it as exported so we don't re-download it
+                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
+                {
+                    restClient.MarkOrderExported(caOrder.ID, refreshToken);
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
