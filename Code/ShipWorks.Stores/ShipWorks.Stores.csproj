@@ -260,6 +260,7 @@
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceStoreDtoFactory.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
@@ -393,6 +394,9 @@
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdater.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\UserInteraction.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseItem.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrder.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
@@ -920,6 +924,7 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\EbayStore.cs" />
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />

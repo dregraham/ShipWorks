@@ -114,14 +114,11 @@ namespace ShipWorks.Warehouse
         /// </summary>
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
         {
-            PersonName parsedName = warehouseOrderAddress.UnparsedName.IsNullOrWhiteSpace() ? 
-                new PersonName(warehouseOrderAddress.FirstName, warehouseOrderAddress.MiddleName, warehouseOrderAddress.LastName) : 
-                PersonName.Parse(warehouseOrderAddress.UnparsedName);
-
-            localAddress.UnparsedName = parsedName.UnparsedName;
-            localAddress.FirstName = parsedName.First;
-            localAddress.MiddleName = parsedName.Middle;
-            localAddress.LastName = parsedName.Last;
+            // todo: parse names if needed
+            localAddress.UnparsedName = warehouseOrderAddress.UnparsedName;
+            localAddress.FirstName = warehouseOrderAddress.FirstName;
+            localAddress.MiddleName = warehouseOrderAddress.MiddleName;
+            localAddress.LastName = warehouseOrderAddress.LastName;
             localAddress.Company = warehouseOrderAddress.Company;
             localAddress.Street1 = warehouseOrderAddress.Street1;
             localAddress.Street2 = warehouseOrderAddress.Street2;
@@ -239,10 +236,10 @@ namespace ShipWorks.Warehouse
         /// </summary>
         private async Task LoadNotes(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            foreach (WarehouseOrderNote warehouseOrderCharge in warehouseOrder.Notes)
+            foreach (WarehouseOrderNote warehouseOrderNote in warehouseOrder.Notes)
             {
-                await orderElementFactory.CreateNote(orderEntity, warehouseOrderCharge.Text, warehouseOrderCharge.Edited,
-                                               (NoteVisibility) warehouseOrderCharge.Visibility, true).ConfigureAwait(false);
+                await orderElementFactory.CreateNote(orderEntity, warehouseOrderNote.Text, warehouseOrderNote.Edited,
+                                               (NoteVisibility) warehouseOrderNote.Visibility, true).ConfigureAwait(false);
             }
         }
     }

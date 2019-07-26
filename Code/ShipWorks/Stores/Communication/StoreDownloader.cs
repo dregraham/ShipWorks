@@ -1336,7 +1336,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Download orders for this store from the ShipWorks Warehouse app
         /// </summary>
-        private async Task DownloadWarehouseOrders(Guid batchId)
+        protected virtual async Task DownloadWarehouseOrders(Guid batchId)
         {
             if (string.IsNullOrEmpty(config.WarehouseID))
             {
