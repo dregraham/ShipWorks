@@ -1,11 +1,16 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Threading;
 using Microsoft.Reactive.Testing;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
+using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.OrderLookup.ScanPack;
+using ShipWorks.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -18,6 +23,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         private readonly TestMessenger testMessenger;
         private readonly Mock<ILicenseService> licenseService;
         private readonly Mock<IScanPackViewModel> scanPackViewModel;
+        private readonly Mock<IMainForm> mainForm;
         private readonly ScanPackPipeline testObject;
 
         public ScanPackPipelineTest()
@@ -31,13 +37,19 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             licenseService = mock.Mock<ILicenseService>();
             scanPackViewModel = mock.Mock<IScanPackViewModel>();
 
+            mainForm = mock.Mock<IMainForm>();
+            mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+            mainForm.SetupGet(m => m.UIMode).Returns(UIMode.OrderLookup);
+
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
 
             testObject = mock.Create<ScanPackPipeline>();
+            testObject.InitializeForCurrentScope();
         }
-
-        [Fact]
+		
+		[Fact]
         public void InitializeForCurrentScope_DisablesScanPack_WhenFeatureRestricted()
         {
             licenseService
@@ -59,6 +71,108 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             testObject.InitializeForCurrentScope();
 
             scanPackViewModel.Verify(s => s.Enabled == true);
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesSingleScanMessage_WhenScanPackIsNotActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load("foobar"), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesSingleScanMessage_WhenScanPackIsActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load("foobar"));
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesOrderLookupSearchMessage_WhenScanPackIsNotActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+
+            testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load("blah"), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesOrderLookupSearchMessage_WhenScanPackIsActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+
+            testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load("blah"));
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+
+            var order = new OrderEntity()
+            {
+                OrderNumber = 123
+            };
+
+            testMessenger.Send(new OrderLookupLoadOrderMessage(this, order));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load(order));
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_DoesNotHandlesOrderLookupLoadOrderMessage_WhenScanPackIsActive()
+        {
+            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+
+            var order = new OrderEntity()
+            {
+                OrderNumber = 123
+            };
+
+            testMessenger.Send(new OrderLookupLoadOrderMessage(this, order));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Load(order), Times.Never);
+        }
+        
+        [Fact]
+        public void InitializeForCurrenScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
+        {
+            testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Reset());
+        }
+
+        [Fact]
+        public void InitializeForCurrenScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsNotReset()
+        {
+            testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.OrderNotFound));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Reset(), Times.Never);
         }
     }
 }
