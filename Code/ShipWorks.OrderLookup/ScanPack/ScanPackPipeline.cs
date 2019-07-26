@@ -111,7 +111,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             try
             {
-                await scanPackViewModel.Load(message.Order).ConfigureAwait(true);
+                await scanPackViewModel.LoadOrder(message.Order).ConfigureAwait(true);
             }
             finally
             {
@@ -126,7 +126,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             try
             {
-                await scanPackViewModel.Load(searchText).ConfigureAwait(true);
+                await scanPackViewModel.ProcessScan(searchText).ConfigureAwait(true);
             }
             finally
             {

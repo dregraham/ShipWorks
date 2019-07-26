@@ -191,9 +191,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         #endregion
 
         /// <summary>
-        /// Load an order from an order number
+        /// Process the scanned text based on the current state
         /// </summary>
-        public async Task Load(string scannedText)
+        public async Task ProcessScan(string scannedText)
         {
             Error = false;
 
@@ -214,7 +214,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                await Load(order).ConfigureAwait(true);
+                await LoadOrder(order).ConfigureAwait(true);
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
@@ -252,11 +252,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Load the given order
         /// </summary>
-        public async Task Load(OrderEntity order)
+        public async Task LoadOrder(OrderEntity order)
         {
             orderBeingPacked = order;
-
             ItemsToScan.Clear();
+            PackedItems.Clear();
             OrderNumber = orderBeingPacked.OrderNumberComplete;
 
             if (orderBeingPacked.OrderItems.Any())
@@ -403,9 +403,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                              x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                              x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(
+                x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                     x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                     x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+
             if (matchingTargetItem == null)
             {
                 targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ProductUpc, sourceItem.Sku));

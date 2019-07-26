@@ -74,7 +74,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesSingleScanMessage_WhenScanPackIsNotActive()
+        public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsNotActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
 
@@ -82,11 +82,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load("foobar"), Times.Never);
+            scanPackViewModel.Verify(s => s.ProcessScan("foobar"), Times.Never);
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesSingleScanMessage_WhenScanPackIsActive()
+        public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
 
@@ -94,11 +94,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load("foobar"));
+            scanPackViewModel.Verify(s => s.ProcessScan("foobar"));
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesOrderLookupSearchMessage_WhenScanPackIsNotActive()
+        public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsNotActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
 
@@ -106,11 +106,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load("blah"), Times.Never);
+            scanPackViewModel.Verify(s => s.ProcessScan("blah"), Times.Never);
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesOrderLookupSearchMessage_WhenScanPackIsActive()
+        public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
 
@@ -118,11 +118,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load("blah"));
+            scanPackViewModel.Verify(s => s.ProcessScan("blah"));
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive()
+        public void InitializeForCurrentScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
 
@@ -135,11 +135,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load(order));
+            scanPackViewModel.Verify(s => s.LoadOrder(order));
         }
 
         [Fact]
-        public void InitializeForCurrenScope_DoesNotHandlesOrderLookupLoadOrderMessage_WhenScanPackIsActive()
+        public void InitializeForCurrentScope_DoesNotHandlesOrderLookupLoadOrderMessage_WhenScanPackIsActive()
         {
             mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
 
@@ -152,11 +152,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Load(order), Times.Never);
+            scanPackViewModel.Verify(s => s.LoadOrder(order), Times.Never);
         }
         
         [Fact]
-        public void InitializeForCurrenScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
+        public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
         {
             testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
 
@@ -166,7 +166,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         }
 
         [Fact]
-        public void InitializeForCurrenScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsNotReset()
+        public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsNotReset()
         {
             testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.OrderNotFound));
 

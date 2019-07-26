@@ -16,12 +16,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Load an order
         /// </summary>
-        Task Load(string scannedText);
+        Task ProcessScan(string scannedText);
 
         /// <summary>
         /// Load an order
         /// </summary>
-        Task Load(OrderEntity order);
+        Task LoadOrder(OrderEntity order);
 
         /// <summary>
         /// Reset the control
