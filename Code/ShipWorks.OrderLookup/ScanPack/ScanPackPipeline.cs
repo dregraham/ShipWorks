@@ -44,43 +44,43 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && mainForm.IsScanPackActive())
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupSearch(x.ScannedText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && mainForm.IsScanPackActive())
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupSearch(x.SearchText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && !mainForm.IsScanPackActive())
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupClearOrderMessage>()
-                    .Do(OnOrderLookupClearOrderMessage)
-                    .CatchAndContinue((Exception ex) => HandleException(ex))
-                    .Subscribe()
+                .Where(x => ShouldProcessScan())
+                .Where(x => x.Reason == OrderClearReason.Reset)
+                .Do(x => scanPackViewModel.Reset())
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe()
             );
         }
 
         /// <summary>
-        /// Handle clear message
+        /// Should we process scans
         /// </summary>
-        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
-        {
-            if (message.Reason == OrderClearReason.Reset)
-            {
-                scanPackViewModel.Reset();
-            }
-        }
+        /// <returns></returns>
+        private bool ShouldProcessScan() =>
+            !processingScan && 
+            !mainForm.AdditionalFormsOpen() && 
+            mainForm.UIMode == UIMode.OrderLookup;
 
         /// <summary>
         /// Handle Exceptions
