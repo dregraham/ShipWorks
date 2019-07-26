@@ -1358,6 +1358,8 @@
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
+    <Compile Include="Users\IUserManager.cs" />
+    <Compile Include="Users\UserManagerWrapper.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />

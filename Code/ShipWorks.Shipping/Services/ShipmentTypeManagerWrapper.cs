@@ -132,5 +132,14 @@ namespace ShipWorks.Shipping.Services
         private ShippingProviderRuleEntity GetLastApplicableRule(ShipmentEntity shipment) =>
             shippingProviderRuleManager.GetRules()
                 .FirstOrDefault(x => filterHelper.IsObjectInFilterContent(shipment.OrderID, x));
+
+        /// <summary>
+        /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
+        /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
+        /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
+        /// had been deleted.
+        /// </summary>
+        public void LoadShipmentData(ShipmentEntity shipmentEntity, bool refreshIfPresent) =>
+            Get(shipmentEntity.ShipmentTypeCode).LoadShipmentData(shipmentEntity, refreshIfPresent);
     }
 }
