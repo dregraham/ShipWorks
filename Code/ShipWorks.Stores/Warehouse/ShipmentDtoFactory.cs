@@ -22,14 +22,19 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IUserManager userManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShipmentTypeManager shipmentTypeManager)
+        public ShipmentDtoFactory(
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory, 
+            IShipmentTypeManager shipmentTypeManager,
+            IUserManager userManager)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.userManager = userManager;
         }
 
         /// <summary>
@@ -49,8 +54,7 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
-            ShipmentType shipmentType = shipmentTypeManager.Get(shipmentEntity.ShipmentTypeCode);
-            shipmentType.LoadShipmentData(shipmentEntity, false);
+            shipmentTypeManager.LoadShipmentData(shipmentEntity, false);
 
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
 
@@ -63,7 +67,7 @@ namespace ShipWorks.Stores.Warehouse
             long? verifiedBy = shipmentEntity.Order.VerifiedBy;
             if (verifiedBy != null)
             {
-                userName = UserManager.GetUser(verifiedBy.Value).Username;
+                userName = userManager.GetUser(verifiedBy.Value).Username;
             }
 
             if (shipmentEntity.Insurance)
