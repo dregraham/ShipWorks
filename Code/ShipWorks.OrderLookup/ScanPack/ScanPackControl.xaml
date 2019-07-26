@@ -74,19 +74,28 @@
                     </Style>
                 </Grid.Resources>
 
-                <TextBlock
+                <Border
                     Panel.ZIndex="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="5"
+                    CornerRadius="8"
+                    Opacity=".9"
+                    Background="LightGray"
+                    Padding="6"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="32"
-                    Opacity=".7"
-                    FontWeight="Bold"
-                    Visibility="{Binding Enabled, Converter={StaticResource BooleanToVisibilityNegated}}">
-                    Scan and pack is available on warehouse plans.
-                    <Hyperlink NavigateUri="{Binding DisabledLearnMoreUri}" attachedProperties:Link.OpenInBrowser="true">Learn more.</Hyperlink>
-                </TextBlock>
+                    VerticalAlignment="Center">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="32"
+                        Opacity=".9"
+                        FontWeight="Bold"
+                        Visibility="{Binding Enabled, Converter={StaticResource BooleanToVisibilityNegated}}"
+                        Background="LightGray">
+                        Scan and pack is available on warehouse plans.
+                        <Hyperlink NavigateUri="{Binding DisabledLearnMoreUri}" attachedProperties:Link.OpenInBrowser="true">Learn more.</Hyperlink>
+                    </TextBlock>
+                </Border>
 
                 <scanPack:ItemsToScanControl
                     Grid.Column="0"
