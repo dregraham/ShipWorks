@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// <summary>
         /// Load Ebay item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             EbayOrderItemEntity ebayItemEntity = (EbayOrderItemEntity) itemEntity;
             var ebayWarehouseItem = warehouseItem.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();

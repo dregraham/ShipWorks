@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.DTO.Orders;
