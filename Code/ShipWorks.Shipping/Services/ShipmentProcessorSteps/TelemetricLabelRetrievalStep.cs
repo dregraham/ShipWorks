@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
             if (verifiedDate.HasValue)
             {
-                int elapsedTime = DateTime.UtcNow.Subtract(verifiedDate.Value).Seconds;
+                double elapsedTime = DateTime.UtcNow.Subtract(verifiedDate.Value).TotalSeconds;
                 telemetryEvent.AddMetric("Label.Creation.ElapsedTimeSinceVerifiedInSeconds", elapsedTime);
             }
         }
