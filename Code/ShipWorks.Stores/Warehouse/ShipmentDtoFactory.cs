@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Warehouse
         /// Constructor
         /// </summary>
         public ShipmentDtoFactory(
-            ICarrierShipmentAdapterFactory shipmentAdapterFactory, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory,
             IShipmentTypeManager shipmentTypeManager,
             IUserManager userManager)
         {
@@ -106,8 +106,8 @@ namespace ShipWorks.Stores.Warehouse
                 LabelFormat = GetLabelFormat(shipmentEntity),
                 Packages = CreatePackages(shipmentAdapter.GetPackageAdapters()),
                 Verified = shipmentEntity.Order.Verified,
-                VerifiedBy = userName,
-                VerifiedDate = shipmentEntity.Order.VerifiedDate                
+                VerifiedByUser = userName,
+                VerifiedDate = shipmentEntity.Order.VerifiedDate
             };
 
             return shipment;

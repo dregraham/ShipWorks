@@ -114,8 +114,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         [JsonProperty("verified")]
         public bool Verified { get; set; }
 
-        [JsonProperty("verifiedBy")]
-        public string VerifiedBy { get; set; }
+        [JsonProperty("verifiedByUser")]
+        public string VerifiedByUser { get; set; }
 
         [JsonProperty("verifiedDate")]
         public DateTime? VerifiedDate { get; set; }
