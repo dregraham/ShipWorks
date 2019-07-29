@@ -1726,5 +1726,26 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         #endregion
+
+        /// <summary>
+        /// Download orders for this store from the ShipWorks Warehouse app
+        /// </summary>
+        protected override async Task DownloadWarehouseOrders(Guid batchId)
+        {
+            await base.DownloadWarehouseOrders(batchId);
+
+            try
+            {
+                DownloadFeedback();
+            }
+            catch (EbayException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (SqlForeignKeyException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+        }
     }
 }

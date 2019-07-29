@@ -539,5 +539,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
 
             return editable;
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }

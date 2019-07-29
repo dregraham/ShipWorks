@@ -255,6 +255,13 @@
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseItem.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrder.cs" />
     <Compile Include="Platforms\Amazon\Warehouse\AmazonWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Amazon\Warehouse\AmazonStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
+    <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
     <Compile Include="Platforms\Amosoft\CoreExtensions\Filters\Orders\AmosoftAmazonOrderIDCondition.cs" />
@@ -350,6 +357,7 @@
     <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseItem.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrder.cs" />
     <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\Warehouse\ChannelAdvisorStoreDtoFactory.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsFBACondition.cs" />
     <Compile Include="Platforms\ChannelSale\CoreExtensions\Filters\Orders\ChannelSaleIsPrimeCondition.cs" />
@@ -382,6 +390,9 @@
     <Compile Include="Platforms\Ebay\OnlineUpdating\EbayOnlineUpdater.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\IUserInteraction.cs" />
     <Compile Include="Platforms\Ebay\OnlineUpdating\UserInteraction.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseItem.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrder.cs" />
+    <Compile Include="Platforms\Ebay\Warehouse\EbayWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyOnlineUpdater.cs" />
     <Compile Include="Platforms\Etsy\OnlineUpdating\EtsyUserInteraction.cs" />
@@ -445,6 +456,7 @@
     <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseItem.cs" />
     <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseOrder.cs" />
     <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\GenericModule\Warehouse\GenericModuleStoreDtoFactory.cs" />
     <Compile Include="Platforms\Groupon\Content\GrouponQuickSearchSql.cs" />
     <Compile Include="Platforms\InfiPlex\CoreExtensions\Filters\Orders\InfiPlexAmazonOrderIDCondition.cs" />
     <Compile Include="Platforms\InfiPlex\CoreExtensions\Filters\Orders\InfiPlexIsFBACondition.cs" />
@@ -907,11 +919,13 @@
     <Compile Include="Warehouse\Encryption\IWarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
+    <Compile Include="Warehouse\IStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\EbayStore.cs" />
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
     <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
-    <Compile Include="Warehouse\StoreDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreDtoHelpers.cs" />
     <Compile Include="Warehouse\WarehouseModule.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />
     <Compile Include="Warehouse\WarehouseStoreClient.cs" />
@@ -972,6 +986,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

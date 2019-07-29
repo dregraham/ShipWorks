@@ -1,0 +1,92 @@
+{
+    "Resources": {
+        "MyDashboard": {
+            "Type": "AWS::CloudWatch::Dashboard",
+            "Properties": {
+                "DashboardName": "S2-Performance-Metrics",
+                "DashboardBody": "{
+    \"widgets\": [
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 12,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Slowest Lambda Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Lambda Runtime\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Duration\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", { \"id\": \"m1\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"s2-RouteOrderHandler\", { \"id\": \"m2\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderDownloadView\", { \"id\": \"m3\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"id\": \"m4\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"id\": \"m5\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"id\": \"m6\", \"period\": 2592000, \"stat\": \"Maximum\" } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"id\": \"m7\", \"period\": 2592000, \"stat\": \"Maximum\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Lambda Slowest Runtimes\",
+                \"period\": 300
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 0,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Slowest Lambda Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Lambda Runtime\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Duration\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", { \"id\": \"m1\", \"period\": 2592000 } ],
+                    [ \"...\", \"s2-RouteOrderHandler\", { \"id\": \"m2\", \"period\": 2592000 } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderDownloadView\", { \"id\": \"m3\", \"period\": 2592000 } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"id\": \"m4\", \"period\": 2592000 } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"id\": \"m5\", \"period\": 2592000 } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"id\": \"m6\", \"period\": 2592000 } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"id\": \"m7\", \"period\": 2592000 } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Lambda Average Runtimes\",
+                \"period\": 300
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 6,
+            \"width\": 24,
+            \"height\": 6,
+            \"properties\": {
+                \"metrics\": [
+                    [ { \"expression\": \"SUM(METRICS())\", \"id\": \"e1\", \"label\": \"Total Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"MAX(METRICS())\", \"id\": \"e2\", \"label\": \"Slowest Lambda Runtime\", \"period\": 2592000 } ],
+                    [ { \"expression\": \"AVG(METRICS())\", \"id\": \"e3\", \"label\": \"Average Lambda Runtime\", \"period\": 2592000 } ],
+                    [ \"AWS/Lambda\", \"Duration\", \"FunctionName\", \"s2-ProcessStoreQueueHandler\", { \"id\": \"m1\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"s2-RouteOrderHandler\", { \"id\": \"m2\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderDownloadView\", { \"id\": \"m3\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"swh-api-s2-readModelOrderListView\", { \"id\": \"m4\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"swh-api-s2-readModelWarehouseListView\", { \"id\": \"m5\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"swh-domain-s2-orderAddOrder\", { \"id\": \"m6\", \"period\": 2592000, \"stat\": \"p95\" } ],
+                    [ \"...\", \"swh-domain-s2-orderRouteOrder\", { \"id\": \"m7\", \"period\": 2592000, \"stat\": \"p95\" } ]
+                ],
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"region\": \"us-east-1\",
+                \"title\": \"S2 Lambda 95th Percentile Runtimes\",
+                \"period\": 300
+            }
+        }
+    ]
+}"
+            }
+        }
+    }
+}
