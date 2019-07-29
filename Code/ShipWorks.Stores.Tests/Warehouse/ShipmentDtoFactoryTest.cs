@@ -92,8 +92,8 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var hubShipment = testObject.CreateHubShipment(shipmentEntity, tangoID);
 
             Assert.True(hubShipment.Verified);
-            Assert.Equal(username, hubShipment.VerifiedBy);
-            Assert.Equal(verifiedDate, hubShipment.VerifiedDate);            
+            Assert.Equal(username, hubShipment.VerifiedByUser);
+            Assert.Equal(verifiedDate, hubShipment.VerifiedDate);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var hubShipment = testObject.CreateHubShipment(shipmentEntity, tangoID);
 
             Assert.False(hubShipment.Verified);
-            Assert.Empty(hubShipment.VerifiedBy);
+            Assert.Empty(hubShipment.VerifiedByUser);
         }
 
         [Fact]
