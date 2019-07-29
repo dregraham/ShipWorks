@@ -257,11 +257,20 @@ namespace ShipWorks.OrderLookup.ScanPack
             orderBeingPacked = order;
             ItemsToScan.Clear();
             PackedItems.Clear();
-            OrderNumber = orderBeingPacked.OrderNumberComplete;
 
+            OrderNumber = orderBeingPacked.OrderNumberComplete;
+            
             if (orderBeingPacked.OrderItems.Any())
             {
-                (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
+                var items = (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true));
+                if (order.Verified)
+                {
+                    items.ForEach(PackedItems.Add);
+                }
+                else
+                {
+                    items.ForEach(ItemsToScan.Add);
+                }                    
 
                 State = ScanPackState.OrderLoaded;
 
