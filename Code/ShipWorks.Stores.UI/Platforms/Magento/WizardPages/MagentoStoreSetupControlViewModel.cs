@@ -1,19 +1,19 @@
-﻿using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Stores.Platforms.Magento;
-using ShipWorks.Stores.Platforms.Magento.Enums;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using Interapptive.Shared.Security;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.Magento;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
 {
@@ -105,7 +105,6 @@ namespace ShipWorks.Stores.UI.Platforms.Magento.WizardPages
         /// <param name="store"></param>
         public GenericResult<MagentoStoreEntity> Save(MagentoStoreEntity store)
         {
-
             string validationErrorMessage = GetValidationErrorMessage();
             if (!string.IsNullOrEmpty(validationErrorMessage))
             {

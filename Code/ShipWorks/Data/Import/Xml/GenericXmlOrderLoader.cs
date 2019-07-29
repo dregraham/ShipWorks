@@ -10,7 +10,7 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Data.Import.Xml
 {
     /// <summary>
-    /// Public core utlity class for downloading generic xml files
+    /// Public core utility class for downloading generic xml files
     /// </summary>
     public static class GenericXmlOrderLoader
     {
@@ -301,7 +301,7 @@ namespace ShipWorks.Data.Import.Xml
         }
 
         /// <summary>
-        /// Loads the Billing or Shipping address detail into the order entity, depending on the 
+        /// Loads the Billing or Shipping address detail into the order entity, depending on the
         /// prefix specified by the caller.
         /// </summary>
         private static void LoadAddress(OrderEntity order, XPathNavigator xpath, string dbPrefix, string xmlPrefix)

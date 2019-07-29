@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using Interapptive.Shared.Collections;
@@ -12,8 +13,6 @@ using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Magento.DTO.MagnetoTwoRestOrder;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -37,7 +36,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         private const string CancelEndpoint = "rest/V1/orders/{0}/cancel";
         private const string CommentEndpoint = "rest/V1/orders/{0}/comments";
         private const string InvoiceEndpoint = "rest/V1/order/{0}/invoice";
-        private const string BundleProductEndpoint = "rest/V1/bundle-products";
         private const int PageSize = 50;
 
         private string token;
@@ -279,19 +277,6 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// <summary>
         /// Gets the product for the specified SKU
         /// </summary>
-        public IEnumerable<ProductOptionDetail> GetBundleProductOptionsBySku(string sku)
-        {
-            HttpJsonVariableRequestSubmitter request = GetRequestSubmitter(HttpVerb.Get,
-                new Uri($"{storeUri.AbsoluteUri}/{BundleProductEndpoint}/{sku}/options/all"));
-
-            string response = ProcessRequest("GetBundleProductOptions", request);
-
-            return DeserializeResponse<IEnumerable<ProductOptionDetail>>(response);
-        }
-
-        /// <summary>
-        /// Gets the product for the specified SKU
-        /// </summary>
         public Product GetProductById(int productId)
         {
             LruCache<int, Product> productCache = magentoProductCache.GetStoreProductByIdCache(store.StoreID);
@@ -302,7 +287,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 return productCache[productId];
             }
 
-            HttpJsonVariableRequestSubmitter request = 
+            HttpJsonVariableRequestSubmitter request =
                 GetRequestSubmitter(HttpVerb.Get, new Uri($"{storeUri.AbsoluteUri}/{ProductEndpoint}"));
 
             AddProductSearchCriteria(request, productId);
@@ -324,7 +309,7 @@ namespace ShipWorks.Stores.Platforms.Magento
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][condition_type]", "eq", false));
             request.Variables.Add(new HttpVariable("searchCriteria[filter_groups][0][filters][0][value]", productId.ToString(), false));
         }
-        
+
         /// <summary>
         /// Create a request submitter with the given parameters
         /// </summary>

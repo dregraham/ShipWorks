@@ -3,6 +3,16 @@
 rxversion="8.1">
 	<testsuiteentryhierarchy>
 		<flatlistofchildren>
+			<testmodule
+			id="01dcb695-b5d8-44e3-82e9-cfb99b808586"
+			name="LoopNumber"
+			ref="4d233eca-93e5-4260-9280-bc5314c223fb"
+			type="UserCode">
+			</testmodule>
+			<smartfoldernode
+			id="0a9541f2-0668-433c-9d03-1cf101138b9b"
+			name="BatchGrid">
+			</smartfoldernode>
 			<testsuite
 			ReportTime="RelativeToTestSuiteStartTime"
 			TracingScreenshotMode="Foreground"
@@ -18,24 +28,146 @@ rxversion="8.1">
 			showinvisiblechars="True">
 			</testsuite>
 			<testmodule
+			id="0f5394fe-a2a7-46f5-921a-baf517bd3567"
+			name="EnterOrder"
+			ref="e739ee77-ca31-4989-93fc-194882657b8c"
+			type="UserCode">
+			</testmodule>
+			<smartfoldernode
+			id="10548d00-b2e1-47d3-bcb3-fa8f658269ad"
+			name="OrderLookupMode">
+			</smartfoldernode>
+			<testmodule
+			id="12fede29-aacf-4ec3-b89e-d554377c74d9"
+			name="Select500OrdersFilter"
+			ref="f1962406-94ae-46ac-becf-f04035c3bd15"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
+			name="VoidLabel"
+			ref="cdff00af-93c5-4627-ac76-cc066dea4b0a"
+			type="UserCode">
+			</testmodule>
+			<smartfoldernode
+			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742"
+			name="eCommerceBaseline_II">
+			</smartfoldernode>
+			<smartfoldernode
+			id="16a24b29-3c87-44ca-9878-4abaff33a75f"
+			name="ProcessShipment">
+			</smartfoldernode>
+			<testmodule
 			id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
 			name="InstallShipWorks"
 			ref="48cccffa-1273-486f-9f8c-ad0e793f6d83"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="2fd80ddb-0f79-49ec-9ee8-d447041c909d"
+			name="ApplyProfileTo100Orders"
+			ref="4833ecee-b4ac-4eaf-9fa5-25ddf1d28f38"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="36aeee87-6ff4-4839-890b-833e428ddf62"
+			name="SwitchToOLM"
+			ref="ec58d36e-ff45-4564-9346-918d685ea8fd"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="40d6b389-7df9-43e8-81cb-76b0f3eec967"
+			name="Void100Shipments"
+			ref="89cc9d0a-4e47-454a-a813-9c9ce320e774"
 			type="UserCode">
 			</testmodule>
 			<testcase
 			id="44cac686-339b-4902-8a46-560e623779f5"
 			name="TestCase">
 			</testcase>
+			<testmodule
+			id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
+			name="WriteToCSV"
+			ref="59fd8557-4c46-4e5c-beeb-2241d5a4cb2e"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="4c63608d-79ce-4884-a433-c03a544f09db"
+			name="Load100Orders"
+			ref="a2144e13-7e55-455d-9fa5-cfc2cd6d585e"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="654938d6-a804-47ec-a043-46c12595f1c6"
+			name="Select100OrdersFilter"
+			ref="ab495b19-c723-47f7-8d39-651b9b20a704"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="6663757e-de8f-4a9d-8df4-487dbf92655d"
+			name="SelectAllOrders"
+			ref="15feb502-a74d-4e42-a249-2dba9b26f18b"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
+			name="Load500Orders"
+			ref="73a28c83-6dd2-4863-9261-44853da1ac68"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
+			name="ApplyProfileTo500Orders"
+			ref="f12f721a-a36e-4a5a-88c3-a0c6e7a74a56"
+			type="UserCode">
+			</testmodule>
 			<testcase
 			id="7809f0e4-23f0-43cf-b9df-07386c0239b9"
 			name="ShipWorksPerformanceTestSuite"
 			reportlevel="Info;20">
 			</testcase>
+			<smartfoldernode
+			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
+			name="HighVolumeBaseline">
+			</smartfoldernode>
+			<testmodule
+			id="8baf9b40-48de-48ef-8b72-192c9c37e493"
+			name="Process100Orders"
+			ref="08421a6a-1bf3-42dd-a978-3c096f1b150c"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="8c589431-d14a-4813-9fef-50c340f0ee4d"
+			name="Select100Orders"
+			ref="440ab339-88de-4864-8957-4752d24b3890"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="95e6ae11-c1ab-4da3-be79-d551405fb9b7"
+			name="SelectShippingRuleFilter"
+			ref="201a8525-ca1d-476e-bb44-0d6959897fad"
+			type="UserCode">
+			</testmodule>
+			<smartfoldernode
+			id="986dca5a-95fa-4260-90e8-75119798108c"
+			name="eCommerceBaseline_I">
+			</smartfoldernode>
 			<testmodule
 			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
 			name="CloseShipWorks"
 			ref="82d40b1a-c4fc-4ba1-962a-81cc793c1f7e"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
+			name="ApplyProfileTo100SROrders"
+			ref="3c300656-9cf2-48f0-a275-1582a2fb14c4"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="a155f844-d2da-4f0f-b402-dea470086a25"
+			name="ApplyProfile"
+			ref="649b55a9-8a28-4ae7-92ae-504376e9e041"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -48,6 +180,24 @@ rxversion="8.1">
 			id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
 			name="teardown">
 			</teardown>
+			<testmodule
+			id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
+			name="PrintLabel"
+			ref="805f6ba8-7a3d-4130-a711-ba21bf1703e6"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="b5e51417-9041-49cd-ad86-b401078bc02e"
+			name="Load100SROrders"
+			ref="9f07305b-b8fd-43c1-af4b-a4372f345ee7"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="d494c876-3c73-453b-b5fb-8e56a838508d"
+			name="CreateLabel"
+			ref="4c843ee3-6e4f-4b5e-9656-8abe6789a336"
+			type="UserCode">
+			</testmodule>
 			<setup
 			id="db46a630-9dda-4933-8bfc-a7e326045751"
 			name="setup">
@@ -56,6 +206,36 @@ rxversion="8.1">
 			id="e093264e-3968-4418-a383-8ff80321fd74"
 			name="RestoreDatabase"
 			ref="17a4d054-f29c-4977-9e00-c9788508e533"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
+			name="ProcessOrders"
+			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
+			name="Process100SROrders"
+			ref="c40c66ff-b6d0-4956-8c78-ea8d5f87a5d0"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="f52f2f1a-1d82-4084-b179-fe128b761113"
+			name="Select100Orders"
+			ref="440ab339-88de-4864-8957-4752d24b3890"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
+			name="Void500Shipments"
+			ref="cf731ceb-4065-4afa-85c0-a45fc3aa463a"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="ff94c415-ac5f-447e-8787-6f57b41f9245"
+			name="Void100SRShipments"
+			ref="da7c4f4f-6da0-42f2-975f-4a1838ce9682"
 			type="UserCode">
 			</testmodule>
 		</flatlistofchildren>
@@ -85,12 +265,140 @@ rxversion="8.1">
 							name="RestoreDatabase">
 							</testmodule>
 						</setup>
+						<smartfoldernode
+						id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
+						name="HighVolumeBaseline">
+							<smartfoldernode
+							id="0a9541f2-0668-433c-9d03-1cf101138b9b"
+							name="BatchGrid">
+								<testmodule
+								id="12fede29-aacf-4ec3-b89e-d554377c74d9"
+								name="Select500OrdersFilter">
+								</testmodule>
+								<testmodule
+								id="6663757e-de8f-4a9d-8df4-487dbf92655d"
+								name="SelectAllOrders">
+								</testmodule>
+								<testmodule
+								id="6ca53a36-dd4f-4108-a8c4-ed60dcd3e6cc"
+								name="Load500Orders">
+								</testmodule>
+								<testmodule
+								id="76cf1296-e3cb-4ab3-b744-88fedfa38a28"
+								name="ApplyProfileTo500Orders">
+								</testmodule>
+								<testmodule
+								id="e1a012e0-78ec-4f1b-b521-0ba953cd1002"
+								name="ProcessOrders">
+								</testmodule>
+								<testmodule
+								id="fc33c31f-f57b-40e8-a1ef-10ea8e3ef31e"
+								name="Void500Shipments">
+								</testmodule>
+							</smartfoldernode>
+							<smartfoldernode
+							id="10548d00-b2e1-47d3-bcb3-fa8f658269ad"
+							name="OrderLookupMode">
+								<testmodule
+								id="36aeee87-6ff4-4839-890b-833e428ddf62"
+								name="SwitchToOLM">
+								</testmodule>
+								<smartfoldernode
+								id="16a24b29-3c87-44ca-9878-4abaff33a75f"
+								name="ProcessShipment">
+									<testmodule
+									id="01dcb695-b5d8-44e3-82e9-cfb99b808586"
+									name="LoopNumber">
+									</testmodule>
+									<testmodule
+									id="0f5394fe-a2a7-46f5-921a-baf517bd3567"
+									name="EnterOrder">
+									</testmodule>
+									<testmodule
+									id="a155f844-d2da-4f0f-b402-dea470086a25"
+									name="ApplyProfile">
+									</testmodule>
+									<testmodule
+									id="d494c876-3c73-453b-b5fb-8e56a838508d"
+									name="CreateLabel">
+									</testmodule>
+									<testmodule
+									id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
+									name="PrintLabel">
+									</testmodule>
+									<testmodule
+									id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
+									name="VoidLabel">
+									</testmodule>
+								</smartfoldernode>
+							</smartfoldernode>
+						</smartfoldernode>
+						<smartfoldernode
+						id="986dca5a-95fa-4260-90e8-75119798108c"
+						name="eCommerceBaseline_I">
+							<testmodule
+							id="95e6ae11-c1ab-4da3-be79-d551405fb9b7"
+							name="SelectShippingRuleFilter">
+							</testmodule>
+							<testmodule
+							id="8c589431-d14a-4813-9fef-50c340f0ee4d"
+							name="Select100Orders">
+							</testmodule>
+							<testmodule
+							id="b5e51417-9041-49cd-ad86-b401078bc02e"
+							name="Load100SROrders">
+							</testmodule>
+							<testmodule
+							id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
+							name="ApplyProfileTo100SROrders">
+							</testmodule>
+							<testmodule
+							id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
+							name="Process100SROrders">
+							</testmodule>
+							<testmodule
+							id="ff94c415-ac5f-447e-8787-6f57b41f9245"
+							name="Void100SRShipments">
+							</testmodule>
+						</smartfoldernode>
+						<smartfoldernode
+						id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742"
+						name="eCommerceBaseline_II">
+							<testmodule
+							id="654938d6-a804-47ec-a043-46c12595f1c6"
+							name="Select100OrdersFilter">
+							</testmodule>
+							<testmodule
+							id="f52f2f1a-1d82-4084-b179-fe128b761113"
+							name="Select100Orders">
+							</testmodule>
+							<testmodule
+							id="4c63608d-79ce-4884-a433-c03a544f09db"
+							name="Load100Orders">
+							</testmodule>
+							<testmodule
+							id="2fd80ddb-0f79-49ec-9ee8-d447041c909d"
+							name="ApplyProfileTo100Orders">
+							</testmodule>
+							<testmodule
+							id="8baf9b40-48de-48ef-8b72-192c9c37e493"
+							name="Process100Orders">
+							</testmodule>
+							<testmodule
+							id="40d6b389-7df9-43e8-81cb-76b0f3eec967"
+							name="Void100Shipments">
+							</testmodule>
+						</smartfoldernode>
 						<teardown
 						id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
 						name="teardown">
 							<testmodule
 							id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
 							name="CloseShipWorks">
+							</testmodule>
+							<testmodule
+							id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
+							name="WriteToCSV">
 							</testmodule>
 						</teardown>
 					</testcase>
@@ -105,13 +413,31 @@ rxversion="8.1">
 		<testconfiguration
 		name="TestRun">
 			<testcontainer
+			id="0a9541f2-0668-433c-9d03-1cf101138b9b">
+			</testcontainer>
+			<testcontainer
+			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742">
+			</testcontainer>
+			<testcontainer
 			id="44cac686-339b-4902-8a46-560e623779f5">
 			</testcontainer>
 			<testcontainer
 			id="7809f0e4-23f0-43cf-b9df-07386c0239b9">
 			</testcontainer>
+			<testcontainer
+			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9">
+			</testcontainer>
+			<testcontainer
+			id="986dca5a-95fa-4260-90e8-75119798108c">
+			</testcontainer>
 		</testconfiguration>
 	</testconfigurations>
 	<references>
+		<reference>
+			C:\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
+		</reference>
+		<reference>
+			SikuliModule.dll
+		</reference>
 	</references>
 </testsuitedoc>
