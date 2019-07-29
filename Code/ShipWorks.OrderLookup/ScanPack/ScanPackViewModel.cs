@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,6 +30,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IMessenger messenger;
+        private readonly IVerifiedOrderService verifiedOrderService;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
@@ -36,18 +39,24 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string orderNumber;
         private ScanPackState state;
         private bool error;
+        private bool enabled;	
+        private OrderEntity orderBeingPacked;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackViewModel(IOrderLookupOrderIDRetriever orderIDRetriever, IOrderLoader orderLoader,
-                                 IScanPackItemFactory scanPackItemFactory, IMessenger messenger)
+        public ScanPackViewModel(
+            IOrderLookupOrderIDRetriever orderIDRetriever,
+            IOrderLoader orderLoader,
+            IScanPackItemFactory scanPackItemFactory,
+            IMessenger messenger,
+            IVerifiedOrderService verifiedOrderService)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
             this.messenger = messenger;
-
+            this.verifiedOrderService = verifiedOrderService;
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             PackedItems = new ObservableCollection<ScanPackItem>();
 
@@ -108,6 +117,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
+        /// Learn More
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri DisabledLearnMoreUri => new Uri("https://www.shipworks.com/pricing-plans/");
+
+        /// <summary>
         /// Footer for the scan panel
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -163,12 +178,22 @@ namespace ShipWorks.OrderLookup.ScanPack
         [Obfuscation(Exclude = true)]
         public bool SearchError => false;
 
+        /// <summary>
+        /// Is Scan Pack enabled
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool Enabled
+        {
+            get => enabled;
+            set => Set(ref enabled, value);
+        }
+
         #endregion
 
         /// <summary>
-        /// Load an order from an order number
+        /// Process the scanned text based on the current state
         /// </summary>
-        public async Task Load(string scannedText)
+        public async Task ProcessScan(string scannedText)
         {
             Error = false;
 
@@ -189,7 +214,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                await Load(order).ConfigureAwait(true);
+                await LoadOrder(order).ConfigureAwait(true);
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
@@ -201,28 +226,42 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
+                    SystemSounds.Asterisk.Play();
+
                     ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
-                    ScanHeader = packedItem == null ?
-                        "Last scan did not match. Scan another item to continue." :
-                        "Item has already been packed";
+                    using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
+                    {
+                        if (packedItem == null)
+                        {
+                            trackedEvent.AddProperty("Reason", "NotPacked");
+                            ScanHeader = "Last scan did not match. Scan another item to continue.";
+                        }
+                        else
+                        {
+                            trackedEvent.AddProperty("Reason", "AlreadyPacked");
+                            ScanHeader = "Item has already been packed";
+                        }
+                    }                
 
                     Error = true;
                 }
             }
         }
-        
+
         /// <summary>
         /// Load the given order
         /// </summary>
-        public async Task Load(OrderEntity order)
+        public async Task LoadOrder(OrderEntity order)
         {
+            orderBeingPacked = order;
             ItemsToScan.Clear();
-            OrderNumber = order.OrderNumberComplete;
+            PackedItems.Clear();
+            OrderNumber = orderBeingPacked.OrderNumberComplete;
 
-            if (order.OrderItems.Any())
+            if (orderBeingPacked.OrderItems.Any())
             {
-                (await scanPackItemFactory.Create(order).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
+                (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true)).ForEach(ItemsToScan.Add);
 
                 State = ScanPackState.OrderLoaded;
 
@@ -234,7 +273,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanFooter = "Scan another order to continue";
             }
 
-            messenger.Send(new OrderLookupLoadOrderMessage(this, order));
+            messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
         }
 
         /// <summary>
@@ -245,7 +284,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             ScanPackItem sourceItem = dropInfo.Data as ScanPackItem;
             IEnumerable<ScanPackItem> targetItems = dropInfo.TargetCollection as IEnumerable<ScanPackItem>;
 
-            if (sourceItem != null && targetItems != null)
+            if (State != ScanPackState.OrderVerified && sourceItem != null && targetItems != null)
             {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
                 dropInfo.Effects = DragDropEffects.Copy;
@@ -263,13 +302,14 @@ namespace ShipWorks.OrderLookup.ScanPack
             ObservableCollection<ScanPackItem> sourceItems = dropInfo.DragInfo.SourceCollection as ObservableCollection<ScanPackItem>;
             ObservableCollection<ScanPackItem> targetItems = dropInfo.TargetCollection as ObservableCollection<ScanPackItem>;
 
-            if (sourceItem != null && sourceItems != null && targetItems != null)
+            // Don't do anything if order is already verified or item is dropped onto the same list
+            if (State != ScanPackState.OrderVerified &&
+                sourceItem != null &&
+                sourceItems != null &&
+                targetItems != null &&
+                !sourceItems.Equals(targetItems))
             {
-                // Don't do anything if dropped onto the same list
-                if (!sourceItems.Equals(targetItems))
-                {
-                    ProcessItemScan(sourceItem, sourceItems, targetItems);
-                }
+                ProcessItemScan(sourceItem, sourceItems, targetItems);
             }
         }
 
@@ -312,6 +352,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         private void ResetClicked()
         {
+            new TrackedEvent("PickAndPack.ResetClicked").Dispose();
+
             messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
         }
 
@@ -330,6 +372,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 OrderNumber = string.Empty;
             }
 
+            orderBeingPacked = null;
             ItemsToScan.Clear();
             PackedItems.Clear();
 
@@ -360,9 +403,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                              x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                                                                              x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(
+                x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                     x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
+                     x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+
             if (matchingTargetItem == null)
             {
                 targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ProductUpc, sourceItem.Sku));
@@ -394,13 +439,23 @@ namespace ShipWorks.OrderLookup.ScanPack
                 // Order has been scanned, still items left to scan
                 if (ItemsToScan.Any())
                 {
-                    ScanHeader = "Scan an item to pack";
                     ScanFooter = $"{scannedItemCount} of {totalItemCount} items have been scanned";
 
-                    State = PackedItems.Any() ? ScanPackState.ScanningItems : ScanPackState.OrderLoaded;
+                    if (PackedItems.Any())
+                    {
+                        ScanHeader = "Verified! Scan another item to continue.";
+                        State = ScanPackState.ScanningItems;
+                    }
+                    else
+                    {
+                        ScanHeader = "Scan an item to pack";
+                        State = ScanPackState.OrderLoaded;
+                    }
                 }
                 else
                 {
+                    verifiedOrderService.Save(orderBeingPacked);
+
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";
                     ScanFooter = "Scan a new order to continue";

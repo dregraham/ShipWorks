@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Metrics;
@@ -63,6 +64,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             SetPackageTelemetryProperties(telemetryEvent, shipmentAdapter.GetPackageAdapters());
             telemetryEvent.AddProperty("StoreType", EnumHelper.GetDescription(shipmentAdapter.Store.StoreTypeCode));
             telemetryEvent.AddProperty("Label.IsReturn", shipment.ReturnShipment.ToString());
+
+            DateTime? verifiedDate = shipment.Order?.VerifiedDate;
+
+            if (verifiedDate.HasValue)
+            {
+                int elapsedTime = DateTime.UtcNow.Subtract(verifiedDate.Value).Seconds;
+                telemetryEvent.AddMetric("Label.Creation.ElapsedTimeSinceVerifiedInSeconds", elapsedTime);
+            }
         }
 
         /// <summary>

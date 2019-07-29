@@ -815,7 +815,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "Custom Field 4", "Custom Field 4", OrderFields.Custom4),
 
                     new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}",
-                        new GridTextDisplayType(), "Custom Field 5", "Custom Field 5", OrderFields.Custom5)
+                        new GridTextDisplayType(), "Custom Field 5", "Custom Field 5", OrderFields.Custom5),
+
+                    new GridColumnDefinition("{386E5954-AEA6-4227-81C6-23767C72C31D}",
+                        new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" },
+                        "Verified", "No", OrderFields.Verified)
                 };
 
             return definitions;

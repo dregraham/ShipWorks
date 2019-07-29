@@ -16,6 +16,13 @@
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
             </Style>
+            <Style TargetType="Canvas">
+                <Style.Triggers>
+                    <Trigger Property="Control.IsEnabled" Value="false">
+                        <Setter Property="Control.Opacity" Value="0.2" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
             <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
             <ui:BooleanToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
@@ -41,7 +48,7 @@
                            Margin="0 40 0 50"
                            TextWrapping="Wrap"/>
                 <Viewbox Grid.Row="1"
-                    Width="360" Height="360"
+                    MaxWidth="360" MaxHeight="360"
                     Visibility="{Binding Error, Converter={StaticResource InverseBoolToVis}}">
                     <Canvas Width="24" Height="24" >
                         <Path
@@ -67,7 +74,7 @@
                     </Canvas>
                 </Viewbox>
                 <Viewbox Grid.Row="1"
-                         Width="360" Height="360"
+                         MaxWidth="360" MaxHeight="360"
                          Visibility="{Binding Error, Converter={StaticResource BoolToVis}}">
                     <Canvas Width="24" Height="24" >
                         <Path Style="{StaticResource Alert}"/>

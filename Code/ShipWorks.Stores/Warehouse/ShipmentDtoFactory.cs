@@ -10,6 +10,7 @@ using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
+using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Warehouse
 {
@@ -21,14 +22,19 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IUserManager userManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentDtoFactory(ICarrierShipmentAdapterFactory shipmentAdapterFactory, IShipmentTypeManager shipmentTypeManager)
+        public ShipmentDtoFactory(
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory, 
+            IShipmentTypeManager shipmentTypeManager,
+            IUserManager userManager)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.userManager = userManager;
         }
 
         /// <summary>
@@ -48,8 +54,7 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
-            ShipmentType shipmentType = shipmentTypeManager.Get(shipmentEntity.ShipmentTypeCode);
-            shipmentType.LoadShipmentData(shipmentEntity, false);
+            shipmentTypeManager.LoadShipmentData(shipmentEntity, false);
 
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
 
@@ -57,11 +62,17 @@ namespace ShipWorks.Stores.Warehouse
 
             int shipworksInsured = 0;
             int carrierInsured = 0;
-
             if (shipmentEntity.Insurance)
             {
                 shipworksInsured = Convert.ToInt32(insuranceType == InsuranceProvider.ShipWorks);
                 carrierInsured = Convert.ToInt32(insuranceType == InsuranceProvider.Carrier);
+            }
+
+            string userName = string.Empty;
+            long? verifiedBy = shipmentEntity.Order.VerifiedBy;
+            if (verifiedBy != null)
+            {
+                userName = userManager.GetUser(verifiedBy.Value).Username;
             }
 
             Shipment shipment = new Shipment
@@ -93,7 +104,10 @@ namespace ShipWorks.Stores.Warehouse
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
                 ShippingAccount = shipmentAdapter.AccountId.ToString(),
                 LabelFormat = GetLabelFormat(shipmentEntity),
-                Packages = CreatePackages(shipmentAdapter.GetPackageAdapters())
+                Packages = CreatePackages(shipmentAdapter.GetPackageAdapters()),
+                Verified = shipmentEntity.Order.Verified,
+                VerifiedBy = userName,
+                VerifiedDate = shipmentEntity.Order.VerifiedDate                
             };
 
             return shipment;

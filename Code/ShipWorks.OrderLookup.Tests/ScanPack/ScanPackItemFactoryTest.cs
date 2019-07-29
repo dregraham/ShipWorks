@@ -1,10 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Products;
 using ShipWorks.Tests.Shared;
@@ -12,7 +12,7 @@ using Xunit;
 
 namespace ShipWorks.OrderLookup.Tests.ScanPack
 {
-    public class ScanPackItemFactoryTest
+    public class ScanPackItemFactoryTest : IDisposable
     {
         private readonly AutoMock mock;
         private readonly ScanPackItemFactory testObject;
@@ -98,6 +98,11 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             var result = await testObject.Create(order);
 
             Assert.Equal(result.Count, order.OrderItems.Count);
+        }
+
+        public void Dispose()
+        {
+            mock.Dispose();
         }
     }
 }

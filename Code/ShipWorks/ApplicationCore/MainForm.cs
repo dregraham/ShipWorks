@@ -1618,6 +1618,24 @@ namespace ShipWorks
                 tab.SendToBack();
             }
 
+            if (UIMode == UIMode.OrderLookup)
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                    if (restrictionLevel != EditionRestrictionLevel.None)
+                    {
+                        ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+                    }
+                    else
+                    {
+                        ribbonTabOrderLookupViewScanPack.Enabled = true;
+                    }
+                }
+            }
+
             ribbonSecurityProvider.UpdateSecurityUI();
         }
 

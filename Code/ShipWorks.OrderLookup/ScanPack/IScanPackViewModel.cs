@@ -9,14 +9,19 @@ namespace ShipWorks.OrderLookup.ScanPack
     public interface IScanPackViewModel
     {
         /// <summary>
-        /// Load an order
+        /// Is the view enabled
         /// </summary>
-        Task Load(string scannedText);
+        bool Enabled { get; set; }
 
         /// <summary>
         /// Load an order
         /// </summary>
-        Task Load(OrderEntity order);
+        Task ProcessScan(string scannedText);
+
+        /// <summary>
+        /// Load an order
+        /// </summary>
+        Task LoadOrder(OrderEntity order);
 
         /// <summary>
         /// Reset the control

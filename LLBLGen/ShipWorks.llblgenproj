@@ -2042,6 +2042,9 @@
           <Field Name="ShipUSTerritory" Type="int" FieldIndex="57" />
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="51" />
           <Field Name="StoreID" Type="long" IsAutoCreated="true" FieldIndex="2" />
+          <Field Name="Verified" Type="bool" FieldIndex="84" />
+          <Field Name="VerifiedBy" Type="long" IsOptional="true" Precision="19" FieldIndex="85" />
+          <Field Name="VerifiedDate" Type="datetime" IsOptional="true" FieldIndex="86" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderCharge" ObjectID="f5c8100f-dede-4054-831c-7857fd7f8817">
@@ -4558,7 +4561,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-02T19:43:16.805074Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-25T18:00:03.2260348Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7515,6 +7518,9 @@
                     <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="HubOrderID" Ordinal="83" IsOptional="true" DbType="25" />
                     <Field Name="HubSequence" Ordinal="84" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Verified" Ordinal="85" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -12791,6 +12797,9 @@
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="ShipWebsite" TargetFieldName="ShipWebsite" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="Verified" TargetFieldName="Verified" />
+            <FieldMapping FieldName="VerifiedBy" TargetFieldName="VerifiedBy" />
+            <FieldMapping FieldName="VerifiedDate" TargetFieldName="VerifiedDate" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OrderCharge" TargetName="ShipWorksLocal:dbo:OrderCharge">
