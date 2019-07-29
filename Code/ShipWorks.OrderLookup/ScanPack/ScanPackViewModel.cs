@@ -17,6 +17,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -39,7 +40,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private string orderNumber;
         private ScanPackState state;
         private bool error;
-        private bool enabled;	
+        private bool enabled;
         private OrderEntity orderBeingPacked;
 
         /// <summary>
@@ -226,7 +227,12 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
-                    SystemSounds.Asterisk.Play();
+                    // only play the sound if a user is logged in
+                    // this will ensure that the sound does not play during unit tests
+                    if (UserSession.IsLoggedOn)
+                    {
+                        SystemSounds.Asterisk.Play();
+                    }
 
                     ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
 
@@ -242,7 +248,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                             trackedEvent.AddProperty("Reason", "AlreadyPacked");
                             ScanHeader = "Item has already been packed";
                         }
-                    }                
+                    }
 
                     Error = true;
                 }
@@ -259,7 +265,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             PackedItems.Clear();
 
             OrderNumber = orderBeingPacked.OrderNumberComplete;
-            
+
             if (orderBeingPacked.OrderItems.Any())
             {
                 var items = (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true));
@@ -270,7 +276,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 else
                 {
                     items.ForEach(ItemsToScan.Add);
-                }                    
+                }
 
                 State = ScanPackState.OrderLoaded;
 

@@ -48,7 +48,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             testObject = mock.Create<ScanPackPipeline>();
             testObject.InitializeForCurrentScope();
         }
-		
+
 		[Fact]
         public void InitializeForCurrentScope_DisablesScanPack_WhenFeatureRestricted()
         {
@@ -58,7 +58,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.InitializeForCurrentScope();
 
-            scanPackViewModel.Verify(s => s.Enabled == false);
+            scanPackViewModel.VerifySet(s => s.Enabled = false);
         }
 
         [Fact]
@@ -70,7 +70,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.InitializeForCurrentScope();
 
-            scanPackViewModel.Verify(s => s.Enabled == true);
+            scanPackViewModel.VerifySet(s => s.Enabled = true);
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             scanPackViewModel.Verify(s => s.LoadOrder(order), Times.Never);
         }
-        
+
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
         {
