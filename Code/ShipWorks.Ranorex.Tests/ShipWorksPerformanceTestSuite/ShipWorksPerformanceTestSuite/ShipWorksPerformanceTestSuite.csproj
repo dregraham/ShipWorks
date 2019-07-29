@@ -35,6 +35,10 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\Ionic.Zip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Ranorex.Bootstrapper">
       <Private>False</Private>
     </Reference>
@@ -95,6 +99,9 @@
     <Reference Include="Ranorex.Plugin.Wpf">
       <Private>False</Private>
     </Reference>
+    <Reference Include="SikuliModule">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\SikuliModule.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -103,7 +110,9 @@
     <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing">
+      <HintPath>..\packages\SikuliIntegrator.1.1.0\lib\System.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
@@ -111,6 +120,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplyProfile.cs">
+      <id>b9134f0a-4023-4db4-b629-27be05844aeb</id>
+    </Compile>
+    <Compile Include="ApplyProfileTo100Orders.cs">
+      <id>e9e1d283-3f7c-4994-8c30-7b3a599716de</id>
+    </Compile>
+    <Compile Include="ApplyProfileTo100SROrders.cs">
+      <id>26bce1ca-9821-4ebb-9bb1-d4ff152d11de</id>
+    </Compile>
+    <Compile Include="ApplyProfileTo500Orders.cs">
+      <id>7b6d4893-8790-46dc-a2a6-180ef2735e1a</id>
+    </Compile>
     <Compile Include="AssemblyInfo.cs">
       <id>f3a7aa6b-6a87-463b-9e15-1d4d3cb39acc</id>
     </Compile>
@@ -120,11 +141,41 @@
     <Compile Include="CopyStagingHosts.cs">
       <id>66101e65-b729-4748-8ad1-d88160f96704</id>
     </Compile>
+    <Compile Include="CreateLabel.cs">
+      <id>fa41df68-db05-4fef-8b13-3cffaf268376</id>
+    </Compile>
+    <Compile Include="EnterOrder.cs">
+      <id>f285ff07-1df6-42e3-9d93-3b217f6bbc14</id>
+    </Compile>
     <Compile Include="ExtraMethods.cs">
       <id>a2c1dc32-9bf2-4ee7-85cf-4b2673d78fb8</id>
     </Compile>
     <Compile Include="InstallShipWorks.cs">
       <id>919b01c7-fd83-4b45-b496-d84dc6bbd430</id>
+    </Compile>
+    <Compile Include="Load100Orders.cs">
+      <id>c75ec2fc-49b9-4e92-8e99-a1f4130635ec</id>
+    </Compile>
+    <Compile Include="Load100SROrders.cs">
+      <id>5fdd4420-7c5d-468c-9816-0217fbda0886</id>
+    </Compile>
+    <Compile Include="Load500Orders.cs">
+      <id>92fddb98-f683-404b-b60f-1900317a1b24</id>
+    </Compile>
+    <Compile Include="LoopNumber.cs">
+      <id>97d09e6e-bfaa-4916-abd8-ec7bf612f06a</id>
+    </Compile>
+    <Compile Include="PrintLabel.cs">
+      <id>f29b43d8-2501-46ee-b274-c1931124fe77</id>
+    </Compile>
+    <Compile Include="Process100Orders.cs">
+      <id>a9c81702-c18c-4ede-9032-9824ffbb771a</id>
+    </Compile>
+    <Compile Include="Process100SROrders.cs">
+      <id>f902f72d-6170-4500-8340-88bddf0575b6</id>
+    </Compile>
+    <Compile Include="ProcessOrders.cs">
+      <id>f9de5849-db2b-4acb-9206-ec39b51374d2</id>
     </Compile>
     <Compile Include="Program.cs">
       <id>eec7bf1b-84cb-450c-bd85-3ebf5f20d6d3</id>
@@ -132,28 +183,55 @@
     <Compile Include="RestoreDatabase.cs">
       <id>1d2315c3-ba1a-4e4a-b93b-706f6915e157</id>
     </Compile>
+    <Compile Include="Select100Orders.cs">
+      <id>8a90d4ec-efd6-4855-951f-a9457a088677</id>
+    </Compile>
+    <Compile Include="Select100OrdersFilter.cs">
+      <id>f20bb6f0-3d9c-463e-902c-cab676603a91</id>
+    </Compile>
+    <Compile Include="Select500OrdersFilter.cs">
+      <id>d19f3bea-d3f8-48b6-9b34-ba0889146c6c</id>
+    </Compile>
+    <Compile Include="SelectAllOrders.cs">
+      <id>c4c46165-4f7f-4393-85a0-616211dc02d0</id>
+    </Compile>
+    <Compile Include="SelectShippingRuleFilter.cs">
+      <id>071ebaed-83ad-402a-be59-982edf8c1013</id>
+    </Compile>
     <Compile Include="ShipWorksPerformanceTestSuiteRepository.cs">
       <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
       <DependentUpon>ShipWorksPerformanceTestSuiteRepository.rxrep</DependentUpon>
       <RepositoryCode>true</RepositoryCode>
       <id>8046bedc-5d9e-4b49-aa0e-00587b18d34a</id>
     </Compile>
-    <Compile Include="TestRecording.cs">
-      <BoundTo>62628395-c73a-443c-b1bd-b6527981b94e</BoundTo>
-      <DependentUpon>TestRecording.rxrec</DependentUpon>
-      <RecorderCode>true</RecorderCode>
-      <id>6eb6a8c1-87a0-4cdf-af2a-b51c94ed5987</id>
+    <Compile Include="SwitchToOLM.cs">
+      <id>3982c5ef-35a8-4199-9e6a-070b0878b6d2</id>
     </Compile>
-    <Compile Include="TestRecording.UserCode.cs">
-      <BoundTo>62628395-c73a-443c-b1bd-b6527981b94e</BoundTo>
-      <DependentUpon>TestRecording.rxrec</DependentUpon>
-      <UserCode>true</UserCode>
-      <id>3fb1d7f9-4420-44cc-a665-20cda84c8e0e</id>
+    <Compile Include="Void100Shipments.cs">
+      <id>cb218048-3981-4104-b172-7a1c203c5379</id>
+    </Compile>
+    <Compile Include="Void100SRShipments.cs">
+      <id>bd851679-71af-4ffb-8ec1-6db74c4b4faa</id>
+    </Compile>
+    <Compile Include="Void500Shipments.cs">
+      <id>adf1e739-589e-4914-b5c5-286ee9956b93</id>
+    </Compile>
+    <Compile Include="VoidLabel.cs">
+      <id>89a3da4d-5630-4d18-98b5-581ce8e4acdb</id>
+    </Compile>
+    <Compile Include="WriteToCSV.cs">
+      <id>8761fe8c-bc98-4e4c-81dc-9bfc122dc84d</id>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <id>bff5bfd0-e215-480e-8a26-38ccce0d7d35</id>
+    </None>
+    <None Include="JSikuliModule.jar">
+      <id>3cd7aae0-8bcd-41bb-8f73-dd057812fdac</id>
+    </None>
+    <None Include="packages.config">
+      <id>cf7365e3-7d75-4c7a-b46e-3786c4db8c4c</id>
     </None>
     <None Include="ShipWorksPerformanceTestSuiteRepository.rximg">
       <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
@@ -165,11 +243,6 @@
       <id>3b68fc90-8037-4fdc-8275-4f7d991469c4</id>
       <repoid>7e065f7a-a759-472e-9183-5eb5699d7833</repoid>
       <reporootid>0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1</reporootid>
-    </None>
-    <None Include="TestRecording.rxrec">
-      <id>62628395-c73a-443c-b1bd-b6527981b94e</id>
-      <recordtableid>4d2ac770-c85a-44dc-8013-20fb31fae1ed</recordtableid>
-      <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
     </None>
   </ItemGroup>
   <ItemGroup>
