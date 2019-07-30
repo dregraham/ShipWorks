@@ -403,6 +403,7 @@
     <Compile Include="Profiles\ProfilePopupService.cs" />
     <Compile Include="Services\AutoReturnShipmentService.cs" />
     <Compile Include="Services\IAutoReturnShipmentService.cs" />
+    <Compile Include="Services\IScanPackOrderValidator.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
