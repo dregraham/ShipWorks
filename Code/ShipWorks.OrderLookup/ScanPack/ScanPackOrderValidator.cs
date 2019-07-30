@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Settings;
 using ShipWorks.Shipping.Services;
+using ShipWorks.SingleScan;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
@@ -17,14 +18,19 @@ namespace ShipWorks.OrderLookup.ScanPack
     {
         private readonly ILicenseService licenseService;
         private readonly IMainForm mainForm;
+        private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackOrderValidator(ILicenseService licenseService, IMainForm mainForm)
+        public ScanPackOrderValidator(
+            ILicenseService licenseService,
+            IMainForm mainForm,
+            ISingleScanAutomationSettings singleScanAutomationSettings)
         {
             this.licenseService = licenseService;
             this.mainForm = mainForm;
+            this.singleScanAutomationSettings = singleScanAutomationSettings;
         }
 
         /// <summary>
@@ -36,6 +42,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             if (restrictionLevel == EditionRestrictionLevel.None &&
                 mainForm.UIMode == UIMode.OrderLookup &&
+                singleScanAutomationSettings.AutoPrintScanPackRequireValidation &&
                 !order.Verified)
             {
                 return Result.FromError("This order must be scanned and packed before a label can be printed.");
