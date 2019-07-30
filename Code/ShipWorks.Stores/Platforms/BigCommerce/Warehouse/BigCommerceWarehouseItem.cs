@@ -11,19 +11,19 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Warehouse
     public class BigCommerceWarehouseItem
     {
         /// <summary>
-        /// The OrderAddressID of the BigCommerceOrderItem
+        /// The OrderAddressId of the BigCommerceOrderItem
         /// </summary>
-        public long OrderAddressID { get; set; }
+        public long OrderAddressId { get; set; }
 
         /// <summary>
-        /// The OrderProductID of the BigCommerceOrderItem
+        /// The OrderProductId of the BigCommerceOrderItem
         /// </summary>
-        public long OrderProductID { get; set; }
+        public long OrderProductId { get; set; }
 
         /// <summary>
-        /// The ParentOrderProductID of the BigCommerceOrderItem
+        /// The ParentOrderProductId of the BigCommerceOrderItem
         /// </summary>
-        public long ParentOrderProductID { get; set; }
+        public long ParentOrderProductId { get; set; }
 
         /// <summary>
         /// The IsDigitalItem of the BigCommerceOrderItem

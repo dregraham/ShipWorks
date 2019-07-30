@@ -66,11 +66,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Warehouse
             BigCommerceOrderItemEntity bigCommerceItemEntity = (BigCommerceOrderItemEntity) itemEntity;
             var bigCommerceWarehouseItem = warehouseItem.AdditionalData[bigCommerceEntryKey].ToObject<BigCommerceWarehouseItem>();
 
-            bigCommerceItemEntity.OrderAddressID = bigCommerceWarehouseItem.OrderAddressID;
-            bigCommerceItemEntity.OrderProductID = bigCommerceWarehouseItem.OrderProductID;
-            bigCommerceItemEntity.ParentOrderProductID = bigCommerceWarehouseItem.ParentOrderProductID;
+            bigCommerceItemEntity.OrderAddressID = bigCommerceWarehouseItem.OrderAddressId == 0 ? -1 : bigCommerceWarehouseItem.OrderAddressId;
+            bigCommerceItemEntity.OrderProductID = bigCommerceWarehouseItem.OrderProductId;
+            bigCommerceItemEntity.ParentOrderProductID = bigCommerceWarehouseItem.ParentOrderProductId == 0 ? (long?) null : bigCommerceWarehouseItem.ParentOrderProductId;
             bigCommerceItemEntity.IsDigitalItem = bigCommerceWarehouseItem.IsDigitalItem;
-            bigCommerceItemEntity.EventDate = bigCommerceWarehouseItem.EventDate;
+            bigCommerceItemEntity.EventDate = bigCommerceWarehouseItem.EventDate == DateTime.MinValue ? (DateTime?) null : bigCommerceWarehouseItem.EventDate;
             bigCommerceItemEntity.EventName = bigCommerceWarehouseItem.EventName;
 
             BigCommerceStoreEntity bigCommerceStore = (BigCommerceStoreEntity) store;
