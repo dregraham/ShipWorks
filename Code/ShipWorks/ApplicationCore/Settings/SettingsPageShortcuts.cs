@@ -129,19 +129,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
 
-                // If the user is on a warehouse plan, enable the require validation for auto print checkbox. If not,
-                // disable the checkbox and set its value to false.
-                if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
-                {
-                    requireVerificationForAutoPrint.Enabled = true;
-                    infoTipRequireVerification.Visible = false;
-                }
-                else
-                {
-                    requireVerificationForAutoPrint.Enabled = false;
-                    settings.AutoPrintRequireValidation = false;
-                    infoTipRequireVerification.Visible = true;
-                }
+                LoadRequireVerificationSetting();
 
                 requireVerificationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
 
@@ -160,6 +148,26 @@ namespace ShipWorks.ApplicationCore.Settings
                 label.AutoSize = true;
                 label.Font = new Font(Font, FontStyle.Bold);
                 Controls.Add(label);
+            }
+        }
+
+        /// <summary>
+        /// Load the require verification before auto print setting
+        /// </summary>
+        private void LoadRequireVerificationSetting()
+        {
+            // If the user is on a warehouse plan, enable the require validation for auto print checkbox. If not,
+            // disable the checkbox and set its value to false.
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+            {
+                requireVerificationForAutoPrint.Enabled = true;
+                infoTipRequireVerification.Visible = false;
+            }
+            else
+            {
+                requireVerificationForAutoPrint.Enabled = false;
+                settings.AutoPrintRequireValidation = false;
+                infoTipRequireVerification.Visible = true;
             }
         }
 
@@ -218,6 +226,18 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
                 autoWeigh.Enabled = true;
+                requireVerificationForAutoPrint.Enabled = true;
+            }
+
+            // Only allow require verification when auto print is checked
+            if (autoPrint.Checked)
+            {
+                requireVerificationForAutoPrint.Enabled = true;
+            }
+            else
+            {
+                requireVerificationForAutoPrint.Checked = false;
+                requireVerificationForAutoPrint.Enabled = false;
             }
         }
 

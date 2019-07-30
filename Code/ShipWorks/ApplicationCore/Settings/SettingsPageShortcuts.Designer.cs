@@ -199,6 +199,7 @@
             this.requireVerificationForAutoPrint.TabIndex = 47;
             this.requireVerificationForAutoPrint.Text = "Require orders to be verified before auto printing";
             this.requireVerificationForAutoPrint.UseVisualStyleBackColor = true;
+            this.requireVerificationForAutoPrint.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
             // 
             // infoTipRequireVerification
             // 
