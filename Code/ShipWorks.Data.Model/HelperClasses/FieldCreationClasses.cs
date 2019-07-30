@@ -29492,6 +29492,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastReleaseNotesSeen);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.AutoPrintRequireValidation field instance</summary>
+		public static EntityField2 AutoPrintRequireValidation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

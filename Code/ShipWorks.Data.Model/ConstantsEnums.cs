@@ -12668,6 +12668,8 @@ namespace ShipWorks.Data.Model
 		OrderLookupLayout,
 		///<summary>LastReleaseNotesSeen. </summary>
 		LastReleaseNotesSeen,
+		///<summary>AutoPrintRequireValidation. </summary>
+		AutoPrintRequireValidation,
 		/// <summary></summary>
 		AmountOfFields
 	}
