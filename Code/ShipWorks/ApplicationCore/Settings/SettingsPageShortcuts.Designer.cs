@@ -43,7 +43,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.requireValidationForAutoPrint = new System.Windows.Forms.CheckBox();
+            this.requireVerificationForAutoPrint = new System.Windows.Forms.CheckBox();
+            this.infoTipRequireVerification = new ShipWorks.UI.Controls.InfoTip();
             this.SuspendLayout();
             // 
             // infoTipSingleScan
@@ -190,19 +191,30 @@
             // 
             // requireValidationForAutoPrint
             // 
-            this.requireValidationForAutoPrint.AutoSize = true;
-            this.requireValidationForAutoPrint.Location = new System.Drawing.Point(58, 176);
-            this.requireValidationForAutoPrint.Name = "requireValidationForAutoPrint";
-            this.requireValidationForAutoPrint.Size = new System.Drawing.Size(253, 17);
-            this.requireValidationForAutoPrint.TabIndex = 47;
-            this.requireValidationForAutoPrint.Text = "Require orders to be verified before auto printing";
-            this.requireValidationForAutoPrint.UseVisualStyleBackColor = true;
+            this.requireVerificationForAutoPrint.AutoSize = true;
+            this.requireVerificationForAutoPrint.Enabled = false;
+            this.requireVerificationForAutoPrint.Location = new System.Drawing.Point(58, 176);
+            this.requireVerificationForAutoPrint.Name = "requireVerificationForAutoPrint";
+            this.requireVerificationForAutoPrint.Size = new System.Drawing.Size(253, 17);
+            this.requireVerificationForAutoPrint.TabIndex = 47;
+            this.requireVerificationForAutoPrint.Text = "Require orders to be verified before auto printing";
+            this.requireVerificationForAutoPrint.UseVisualStyleBackColor = true;
+            // 
+            // infoTipRequireVerification
+            // 
+            this.infoTipRequireVerification.Caption = "";
+            this.infoTipRequireVerification.Location = new System.Drawing.Point(313, 178);
+            this.infoTipRequireVerification.Name = "infoTipRequireVerification";
+            this.infoTipRequireVerification.Size = new System.Drawing.Size(12, 12);
+            this.infoTipRequireVerification.TabIndex = 48;
+            this.infoTipRequireVerification.Title = "This feature is only available on warehouse plans";
             // 
             // SettingsPageShortcuts
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.requireValidationForAutoPrint);
+            this.Controls.Add(this.infoTipRequireVerification);
+            this.Controls.Add(this.requireVerificationForAutoPrint);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
@@ -241,6 +253,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox requireValidationForAutoPrint;
+        private System.Windows.Forms.CheckBox requireVerificationForAutoPrint;
+        private UI.Controls.InfoTip infoTipRequireVerification;
     }
 }

@@ -93,7 +93,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
 
                 settings.AutoWeigh = autoWeigh.Checked;
-                settings.AutoPrintRequireValidation = requireValidationForAutoPrint.Checked;
+                settings.AutoPrintRequireValidation = requireVerificationForAutoPrint.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -133,15 +133,17 @@ namespace ShipWorks.ApplicationCore.Settings
                 // disable the checkbox and set its value to false.
                 if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
                 {
-                    requireValidationForAutoPrint.Enabled = true;
+                    requireVerificationForAutoPrint.Enabled = true;
+                    infoTipRequireVerification.Visible = false;
                 }
                 else
                 {
-                    requireValidationForAutoPrint.Enabled = false;
+                    requireVerificationForAutoPrint.Enabled = false;
                     settings.AutoPrintRequireValidation = false;
+                    infoTipRequireVerification.Visible = true;
                 }
 
-                requireValidationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
+                requireVerificationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
 
                 UpdateSingleScanSettingsUI();
 
