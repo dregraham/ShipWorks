@@ -359,6 +359,7 @@
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\ScanPackItemFactory.cs" />
+    <Compile Include="ScanPack\ScanPackOrderValidator.cs" />
     <Compile Include="ScanPack\ScanPackPipeline.cs" />
     <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />

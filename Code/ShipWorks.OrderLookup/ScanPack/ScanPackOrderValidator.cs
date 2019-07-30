@@ -18,6 +18,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly ILicenseService licenseService;
         private readonly IMainForm mainForm;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ScanPackOrderValidator(ILicenseService licenseService, IMainForm mainForm)
         {
             this.licenseService = licenseService;
@@ -36,7 +39,6 @@ namespace ShipWorks.OrderLookup.ScanPack
                 !order.Verified)
             {
                 return Result.FromError("This order must be scanned and packed before a label can be printed.");
-
             }
 
             return Result.FromSuccess();
