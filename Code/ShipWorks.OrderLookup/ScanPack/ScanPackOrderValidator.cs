@@ -43,7 +43,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (restrictionLevel == EditionRestrictionLevel.None &&
                 mainForm.UIMode == UIMode.OrderLookup &&
                 singleScanAutomationSettings.AutoPrintScanPackRequireValidation &&
-                !order.Verified)
+                !order.Verified
+                )
             {
                 return Result.FromError("This order must be scanned and packed before a label can be printed.");
             }
