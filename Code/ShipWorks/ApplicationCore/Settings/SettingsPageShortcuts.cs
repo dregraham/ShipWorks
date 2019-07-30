@@ -9,6 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -16,6 +17,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
@@ -40,6 +42,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private SingleScanSettings singleScanSettingsOnLoad;
         private IPrintJobFactory printJobFactory;
         private IDisposable singleScanShortcutMessage;
+        private ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
@@ -54,6 +57,7 @@ namespace ShipWorks.ApplicationCore.Settings
             messenger = scope.Resolve<IMessenger>();
             printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
+            licenseService = scope.Resolve<ILicenseService>();
             settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
@@ -89,6 +93,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
 
                 settings.AutoWeigh = autoWeigh.Checked;
+                settings.AutoPrintRequireValidation = requireValidationForAutoPrint.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -123,6 +128,21 @@ namespace ShipWorks.ApplicationCore.Settings
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
+
+                // If the user is on a warehouse plan, enable the require validation for auto print checkbox. If not,
+                // disable the checkbox and set its value to false.
+                if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+                {
+                    requireValidationForAutoPrint.Enabled = true;
+                }
+                else
+                {
+                    requireValidationForAutoPrint.Enabled = false;
+                    settings.AutoPrintRequireValidation = false;
+                }
+
+                requireValidationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
+
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
