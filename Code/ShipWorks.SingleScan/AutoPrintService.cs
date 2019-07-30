@@ -8,7 +8,6 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {
@@ -43,10 +42,10 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        public bool AllowAutoPrint(SingleScanMessage scanMessage)
+        public bool AllowAutoPrint(string scanText)
         {
             // they scanned a barcode
-            return !scanMessage.ScannedText.IsNullOrWhiteSpace() && singleScanAutomationSettings.IsAutoPrintEnabled();
+            return !scanText.IsNullOrWhiteSpace() && singleScanAutomationSettings.IsAutoPrintEnabled();
         }
 
         /// <summary>

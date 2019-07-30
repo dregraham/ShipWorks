@@ -32,6 +32,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IMessenger messenger;
         private readonly IVerifiedOrderService verifiedOrderService;
+        private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
@@ -51,13 +52,15 @@ namespace ShipWorks.OrderLookup.ScanPack
             IOrderLoader orderLoader,
             IScanPackItemFactory scanPackItemFactory,
             IMessenger messenger,
-            IVerifiedOrderService verifiedOrderService)
+            IVerifiedOrderService verifiedOrderService,
+            IOrderLookupAutoPrintService orderLookupAutoPrintService)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
             this.messenger = messenger;
             this.verifiedOrderService = verifiedOrderService;
+            this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             PackedItems = new ObservableCollection<ScanPackItem>();
 
@@ -470,6 +473,8 @@ namespace ShipWorks.OrderLookup.ScanPack
                 else
                 {
                     verifiedOrderService.Save(orderBeingPacked);
+
+                    orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
 
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";

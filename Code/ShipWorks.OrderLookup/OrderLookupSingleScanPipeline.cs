@@ -168,7 +168,7 @@ namespace ShipWorks.OrderLookup
                         TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
                         order = await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
                         {
-                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(false);
+                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message.ScannedText).ConfigureAwait(false);
                             return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
                         }).ConfigureAwait(true);
 
