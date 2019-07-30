@@ -38,13 +38,14 @@ namespace ShipWorksPerformanceTestSuite
 		public string GetFolderName()
 		{
 			string folderName = System.DateTime.Now.ToString("MMddyyyyHHmmss");
-			string folderPrefix = "SWPerformanceTest_";
+			string folderPrefix = "SWPerformanceTest_";			
 			return(folderPrefix + folderName);
 		}
 	}
 	
 	public static class RetryAction
 	{
+		public static string CurrentInstallDir = "";
 		
 		public static void RetryOnFailure(int maxAttempts, int pressEscape, Action action)
 		{

@@ -55,6 +55,8 @@ namespace ShipWorksPerformanceTestSuite
         ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder _explorer;
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder _shipworks2;
         ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder _saveprintoutputas;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder _shipworksruninstall;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder _formiu14d2n;
 
         /// <summary>
         /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
@@ -99,6 +101,8 @@ namespace ShipWorksPerformanceTestSuite
             _explorer = new ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder(this);
             _shipworks2 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder(this);
             _saveprintoutputas = new ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder(this);
+            _shipworksruninstall = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder(this);
+            _formiu14d2n = new ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder(this);
         }
 
 #region Variables
@@ -367,6 +371,24 @@ namespace ShipWorksPerformanceTestSuite
         public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder SavePrintOutputAs
         {
             get { return _saveprintoutputas; }
+        }
+
+        /// <summary>
+        /// The ShipWorksRUninstall folder.
+        /// </summary>
+        [RepositoryFolder("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder ShipWorksRUninstall
+        {
+            get { return _shipworksruninstall; }
+        }
+
+        /// <summary>
+        /// The FormIu14D2N folder.
+        /// </summary>
+        [RepositoryFolder("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder FormIu14D2N
+        {
+            get { return _formiu14d2n; }
         }
     }
 
@@ -7363,6 +7385,190 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _combobox1148Info;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ShipWorksRUninstallAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+        public partial class ShipWorksRUninstallAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _shipworksruninstallInfo;
+            RepoItemInfo _buttonyesInfo;
+            RepoItemInfo _buttonokInfo;
+
+            /// <summary>
+            /// Creates a new ShipWorksRUninstall  folder.
+            /// </summary>
+            public ShipWorksRUninstallAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShipWorksRUninstall", "/form[@title='ShipWorks® Uninstall']", parentFolder, 30000, null, true, "dbbd9333-9cf3-46b8-8336-44a8e898d036", "")
+            {
+                _shipworksruninstallInfo = new RepoItemInfo(this, "ShipWorksRUninstall", "titlebar[@accessiblerole='TitleBar']", 30000, null, "691db1ab-829f-4662-8044-7abb000cffca");
+                _buttonyesInfo = new RepoItemInfo(this, "ButtonYes", "button[@text='&Yes']", 30000, null, "5eced323-5f18-4f7b-952f-2e4800faec96");
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "button[@text='OK']", 30000, null, "3cded2ef-d6f9-44c3-9d63-e74d4d7c789b");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksRUninstall item.
+            /// </summary>
+            [RepositoryItem("691db1ab-829f-4662-8044-7abb000cffca")]
+            public virtual Ranorex.TitleBar ShipWorksRUninstall
+            {
+                get
+                {
+                    return _shipworksruninstallInfo.CreateAdapter<Ranorex.TitleBar>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksRUninstall item info.
+            /// </summary>
+            [RepositoryItemInfo("691db1ab-829f-4662-8044-7abb000cffca")]
+            public virtual RepoItemInfo ShipWorksRUninstallInfo
+            {
+                get
+                {
+                    return _shipworksruninstallInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item.
+            /// </summary>
+            [RepositoryItem("5eced323-5f18-4f7b-952f-2e4800faec96")]
+            public virtual Ranorex.Button ButtonYes
+            {
+                get
+                {
+                    return _buttonyesInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item info.
+            /// </summary>
+            [RepositoryItemInfo("5eced323-5f18-4f7b-952f-2e4800faec96")]
+            public virtual RepoItemInfo ButtonYesInfo
+            {
+                get
+                {
+                    return _buttonyesInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("3cded2ef-d6f9-44c3-9d63-e74d4d7c789b")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("3cded2ef-d6f9-44c3-9d63-e74d4d7c789b")]
+            public virtual RepoItemInfo ButtonOKInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The FormIu14D2NAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+        public partial class FormIu14D2NAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _tnewnotebookInfo;
+
+            /// <summary>
+            /// Creates a new FormIu14D2N  folder.
+            /// </summary>
+            public FormIu14D2NAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("FormIu14D2N", "/form[@class='TUninstallProgressForm']", parentFolder, 30000, null, true, "c63ab86d-6761-4fbc-88cd-29d39085a74b", "")
+            {
+                _tnewnotebookInfo = new RepoItemInfo(this, "TNewNotebook", "element[@class='TNewNotebook']", 30000, null, "22d79b70-5dea-4fa3-887f-5905974580b8");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The TNewNotebook item.
+            /// </summary>
+            [RepositoryItem("22d79b70-5dea-4fa3-887f-5905974580b8")]
+            public virtual Ranorex.Unknown TNewNotebook
+            {
+                get
+                {
+                    return _tnewnotebookInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TNewNotebook item info.
+            /// </summary>
+            [RepositoryItemInfo("22d79b70-5dea-4fa3-887f-5905974580b8")]
+            public virtual RepoItemInfo TNewNotebookInfo
+            {
+                get
+                {
+                    return _tnewnotebookInfo;
                 }
             }
         }

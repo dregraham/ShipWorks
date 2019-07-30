@@ -3035,6 +3035,94 @@ MHdZYMNSEnWlYYiywnBMUW5EFQ2hqbX8JxjMX98gcbKv7XB0gNiRDbEDG10uHEZgN00JIuhfmR5O
 MccVydhgafzKwmo3c6RCyF+QF9ssNPjvRAAAAABJRU5ErkJggg==
 			</icon>
 		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="dbbd9333-9cf3-46b8-8336-44a8e898d036"
+		isrooted="True"
+		name="ShipWorksRUninstall"
+		refpath="/form[@title='ShipWorks® Uninstall']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="titlebar,accessible"
+			capname="titlebar"
+			id="691db1ab-829f-4662-8044-7abb000cffca"
+			name="ShipWorksRUninstall"
+			refimgid="5ebc8b96-49eb-4751-bd02-95e0be36284f"
+			refpath="/form[@title='ShipWorks® Uninstall']/titlebar[@accessiblerole='TitleBar']"
+			searchtimeout="30000ms">
+				/form[@title='ShipWorks&#174; Uninstall']/titlebar[@accessiblerole='TitleBar']
+			</item>
+			<item
+			addcaps="button,nativewindow"
+			capname="button"
+			id="5eced323-5f18-4f7b-952f-2e4800faec96"
+			name="ButtonYes"
+			refimgid="bba030b1-0ae3-40ba-b9e6-fac9e519f22e"
+			refpath="/form[@title='ShipWorks® Uninstall']/button[@text='&amp;Yes']"
+			searchtimeout="30000ms">
+				/form[@title='ShipWorks&#174; Uninstall']/button[@text='&amp;Yes']
+			</item>
+			<item
+			addcaps="button,nativewindow"
+			capname="button"
+			id="3cded2ef-d6f9-44c3-9d63-e74d4d7c789b"
+			name="ButtonOK"
+			refimgid="6d5059b9-53b7-4e73-b207-4ebf5360368f"
+			refpath="/form[@title='ShipWorks® Uninstall']/button[@text='OK']"
+			searchtimeout="30000ms">
+				/form[@title='ShipWorks&#174; Uninstall']/button[@text='OK']
+			</item>
+			<basepath>
+				/form[@title='ShipWorks&#174; Uninstall']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAADASURBVDhPjZDtEYQgDETpyZ4sxR6uGwq4/5Sj
+vIRgyIHnOuuQj30yppWO4zhLKUszr2t4Lhb2/XtuE6PXAPb3GhDX8/b5A2BgFkAIpycATdMAcOGN
+RpvXiAIovHPONyCEf/4BB5OFDWDnmTvA34CGX3gyOwMAeUAbDn4NoE7U2pU3snn4yAiwsCxoV94h
+dIeRv5KdDUAPB8CoFaAH5NG7SB21AiDp18d67EjIywMwtUlBIHTG/kw9LJXK9+KsKaULnNkBnU0T
+XiwAAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="c63ab86d-6761-4fbc-88cd-29d39085a74b"
+		isrooted="True"
+		name="FormIu14D2N"
+		refpath="/form[@processname='_iu14D2N' and @class='TUninstallProgressForm']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="unknown,nativewindow"
+			capname="unknown"
+			id="22d79b70-5dea-4fa3-887f-5905974580b8"
+			name="TNewNotebook"
+			refpath="/form[@processname='_iu14D2N' and @class='TUninstallProgressForm']/element[@class='TNewNotebook']"
+			searchtimeout="30000ms">
+				/form[@class='TUninstallProgressForm']/element[@class='TNewNotebook']
+			</item>
+			<basepath>
+				/form[@class='TUninstallProgressForm']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAAAlFJREFUOE+lk+tLk2EYh/eX9CGipCIyCKLo4HHlzA8SVoR9KogkkKDM
+CKRCCwQtKUjtIJSdrKggqQ+CFZmHHGlzzrU552HqNnWbO7zHXT3bBLXQoG74fXvv63c9z8tj+O9p
+aDFz55WDmuYBqpp+cLnRzJnqTk5UdlNc8YWic60Ulr6koOTJshw8/RjjkXIMdc9tNLVrNLZp3GqV
+qX4dofJZkIpHs5Q3+Tl710fJ7UlO1o5zvNrN0SoXh644yS8zsyZtB4baZjN1bwLcfBvm4oMpTt1w
+U3zdybFrDg5ftVNYYaPg0iCmcisHLgxgLLOQe95CRmk369KNGGoaXuAPxAhHNeZFQhGVYFghIDIb
+SsUbUPDMyLi9Mg6PhHVMosvqYePW7QJQ38JqE4+DokJEijMX0ZkKaoz6VSwuLxs2b8Nw/+n7hU//
+HE0HSYkzH9OZmdeYnNNw+xR+Tir0DP0FoItmWSwnm8M606J5TDQ7pxSs4zKd1tUACW1NLMtxglEd
+X0hjYlbD5VWwTSj0j8h8tgjAphUAi+pxZsRySl3FLtQtozK9wxLtfSsAkupqQl1PqQdS6o6kusJ3
+l0yXQ6LNnACkLwckb1yDqDh3YKn6dEq9zy3R45TosMX40PsbQOyiLqiHhLo/eesqIwl1z6L6V3uM
+T9Yo73q8rE8A7i0xEOVI4p+HYggATMyByxdnyKPRP6rxbVilw67wcVBOAtambRFvof4hufvzyTGa
+yBbJEskUycg1sS/HxN7sPPaI7M7KY1dmKjszUsnJL2LhTf7rGAy/AP7X5rYY5FLEAAAAAElFTkSu
+QmCC
+			</icon>
+		</appfolder>
 		<basepath>
 		</basepath>
 	</rootfolder>

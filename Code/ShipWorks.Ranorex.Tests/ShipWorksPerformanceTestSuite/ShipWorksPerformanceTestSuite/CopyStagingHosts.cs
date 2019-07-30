@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
 using System.Threading;
+using System.Linq;
 using WinForms = System.Windows.Forms;
 
 using Ranorex;
@@ -35,7 +36,7 @@ namespace ShipWorksPerformanceTestSuite
         {
             // Do not delete - a parameterless constructor is required!
         }
-
+        
         /// <summary>
         /// Performs the playback of actions in this module.
         /// </summary>
@@ -47,11 +48,19 @@ namespace ShipWorksPerformanceTestSuite
             Mouse.DefaultMoveTime = 300;
             Keyboard.DefaultKeyPressTime = 100;
             Delay.SpeedFactor = 1.0;
-                                          
             
 			string newPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), @"..\..\"));
-		            
-			File.Copy(newPath+@"references\staging\hosts", @"C:\Windows\System32\drivers\etc\hosts", true);			
+			
+			string env = File.ReadLines(newPath + "env.txt").First();
+			
+			if(env=="QASC")
+			{
+				File.Copy(newPath+@"references\qasc\hosts", @"C:\Windows\System32\drivers\etc\hosts", true);			
+			}
+			else
+			{
+				File.Copy(newPath+@"references\staging\hosts", @"C:\Windows\System32\drivers\etc\hosts", true);				
+			}
         }
     }
 }

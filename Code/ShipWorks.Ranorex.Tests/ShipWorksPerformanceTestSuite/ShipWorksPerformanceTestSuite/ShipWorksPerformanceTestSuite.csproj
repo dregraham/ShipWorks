@@ -207,6 +207,9 @@
     <Compile Include="SwitchToOLM.cs">
       <id>3982c5ef-35a8-4199-9e6a-070b0878b6d2</id>
     </Compile>
+    <Compile Include="UninstallShipWorks.cs">
+      <id>e33eadfe-cd11-44ee-b587-92df8e22f69e</id>
+    </Compile>
     <Compile Include="Void100Shipments.cs">
       <id>cb218048-3981-4104-b172-7a1c203c5379</id>
     </Compile>
@@ -254,6 +257,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <id>98924f3e-a20f-437e-a08e-13edcad284af</id>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Scripts">
+      <id>49543db0-61fe-4889-91ae-416d578db41b</id>
+    </Folder>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RanorexTargetsPath)" Condition="Exists('$(RanorexTargetsPath)')" />

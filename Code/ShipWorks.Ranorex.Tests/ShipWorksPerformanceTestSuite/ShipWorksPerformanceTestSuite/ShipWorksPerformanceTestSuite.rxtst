@@ -9,6 +9,12 @@ rxversion="8.1">
 			ref="4d233eca-93e5-4260-9280-bc5314c223fb"
 			type="UserCode">
 			</testmodule>
+			<testmodule
+			id="037d1c49-14df-45dc-83f7-157b162dff8e"
+			name="UninstallShipWorks"
+			ref="aad56913-9930-4392-ab92-f706699e4ba4"
+			type="UserCode">
+			</testmodule>
 			<smartfoldernode
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b"
 			name="BatchGrid">
@@ -400,6 +406,10 @@ rxversion="8.1">
 							id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
 							name="WriteToCSV">
 							</testmodule>
+							<testmodule
+							id="037d1c49-14df-45dc-83f7-157b162dff8e"
+							name="UninstallShipWorks">
+							</testmodule>
 						</teardown>
 					</testcase>
 				</testcase>
@@ -416,7 +426,13 @@ rxversion="8.1">
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b">
 			</testcontainer>
 			<testcontainer
+			id="10548d00-b2e1-47d3-bcb3-fa8f658269ad">
+			</testcontainer>
+			<testcontainer
 			id="1638e2bc-c8c9-4e7c-bba8-c7e6dd7e6742">
+			</testcontainer>
+			<testcontainer
+			id="16a24b29-3c87-44ca-9878-4abaff33a75f">
 			</testcontainer>
 			<testcontainer
 			id="44cac686-339b-4902-8a46-560e623779f5">

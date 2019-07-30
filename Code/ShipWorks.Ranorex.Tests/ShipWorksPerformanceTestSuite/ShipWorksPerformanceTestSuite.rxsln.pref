@@ -8,6 +8,6 @@
       <string>60513a05-eab7-41e7-8c10-e51c735edc2e</string>
     </ArrayOfString>
   </SerializedValue>
-  <ProjectBrowserState value="[Solution ShipWorksPerformanceTestSuite[ShipWorksPerformanceTestSuite[]]]&#xD;&#xA;Solution ShipWorksPerformanceTestSuite\ShipWorksPerformanceTestSuite\RestoreDatabase.cs&#xD;&#xA;Solution ShipWorksPerformanceTestSuite\ShipWorksPerformanceTestSuite\References" />
+  <ProjectBrowserState value="[Solution ShipWorksPerformanceTestSuite[ShipWorksPerformanceTestSuite[]]]&#xD;&#xA;Solution ShipWorksPerformanceTestSuite\ShipWorksPerformanceTestSuite\ShipWorksPerformanceTestSuite.rxtst&#xD;&#xA;Solution ShipWorksPerformanceTestSuite\ShipWorksPerformanceTestSuite\Reports" />
   <StartupProject value="{A80E45C5-CC0B-4F95-81EC-C769DCDDB436}" />
 </Properties>
