@@ -43,6 +43,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private IPrintJobFactory printJobFactory;
         private IDisposable singleScanShortcutMessage;
         private ILicenseService licenseService;
+        bool warehouseEnabled;
 
         /// <summary>
         /// Constructor
@@ -61,6 +62,8 @@ namespace ShipWorks.ApplicationCore.Settings
             settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
+
+            warehouseEnabled = licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
         }
 
         /// <summary>
@@ -158,14 +161,12 @@ namespace ShipWorks.ApplicationCore.Settings
         {
             // If the user is on a warehouse plan, enable the require validation for auto print checkbox. If not,
             // disable the checkbox and set its value to false.
-            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+            if (warehouseEnabled)
             {
-                requireVerificationForAutoPrint.Enabled = true;
                 infoTipRequireVerification.Visible = false;
             }
             else
             {
-                requireVerificationForAutoPrint.Enabled = false;
                 settings.AutoPrintRequireValidation = false;
                 infoTipRequireVerification.Visible = true;
             }
@@ -226,11 +227,10 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
                 autoWeigh.Enabled = true;
-                requireVerificationForAutoPrint.Enabled = true;
             }
 
             // Only allow require verification when auto print is checked
-            if (autoPrint.Checked)
+            if (autoPrint.Checked && warehouseEnabled)
             {
                 requireVerificationForAutoPrint.Enabled = true;
             }

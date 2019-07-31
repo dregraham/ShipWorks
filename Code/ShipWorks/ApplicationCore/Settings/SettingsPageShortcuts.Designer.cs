@@ -189,7 +189,7 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.OnClickPrintShortcuts);
             // 
-            // requireValidationForAutoPrint
+            // requireVerificationForAutoPrint
             // 
             this.requireVerificationForAutoPrint.AutoSize = true;
             this.requireVerificationForAutoPrint.Enabled = false;
@@ -204,11 +204,12 @@
             // infoTipRequireVerification
             // 
             this.infoTipRequireVerification.Caption = "";
-            this.infoTipRequireVerification.Location = new System.Drawing.Point(313, 178);
+            this.infoTipRequireVerification.Location = new System.Drawing.Point(320, 178);
             this.infoTipRequireVerification.Name = "infoTipRequireVerification";
             this.infoTipRequireVerification.Size = new System.Drawing.Size(12, 12);
             this.infoTipRequireVerification.TabIndex = 48;
-            this.infoTipRequireVerification.Title = "This feature is only available on warehouse plans";
+            this.infoTipRequireVerification.Title = "Require Verification";
+            this.infoTipRequireVerification.Caption = "This feature is only available on warehouse plans";
             // 
             // SettingsPageShortcuts
             // 
