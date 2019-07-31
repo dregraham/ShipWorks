@@ -134,6 +134,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return false;
                 }
 
+                // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
+                // because filtering slows down the download significantly
+                if (!caOrder.PaymentStatus.Equals("Cleared", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 DownloadOtherLineItems(caOrder);
 
                 List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
@@ -143,7 +150,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // If the order has already been shipped, mark it as exported so we don't re-download it
                 if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
                 {
-                    restClient.MarkOrderExported(caOrder.ID, refreshToken);
+                    // Fire and forget
+                    Task.Run(() => restClient.MarkOrderExported(caOrder.ID, refreshToken));
                 }
             }
 
