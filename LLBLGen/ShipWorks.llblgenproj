@@ -4552,12 +4552,8 @@
       <ConnectionElements>
         <ConnectionElement Name="ServerName" Value="(local)\Development" />
         <ConnectionElement Name="CatalogName" Value="master" />
-<<<<<<< Updated upstream
-        <ConnectionElement Name="UserID" Value="sa" />
-=======
         <ConnectionElement Name="UseWindowsAuthentication" Value="true" />
         <ConnectionElement Name="UserID" Value="" />
->>>>>>> Stashed changes
         <ConnectionElement Name="Password" Value="" />
       </ConnectionElements>
       <SystemSequences>
@@ -4567,11 +4563,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-<<<<<<< Updated upstream
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-25T18:00:03.2260348Z">
-=======
             <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-30T21:14:31.8460707Z">
->>>>>>> Stashed changes
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
