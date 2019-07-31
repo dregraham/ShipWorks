@@ -1,10 +1,5 @@
-using System;
-using System.Reactive.Subjects;
 using System.Threading.Tasks;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Messaging.Messages.SingleScan;
 
 namespace ShipWorks.SingleScan
 {
@@ -16,7 +11,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Determines if the auto print message should be sent
         /// </summary>
-        bool AllowAutoPrint(SingleScanMessage scanMessage);
+        bool AllowAutoPrint(string scanText);
 
         /// <summary>
         /// Handles the request for auto printing an order.

@@ -3291,6 +3291,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
+          <Field Name="AutoPrintRequireValidation" Type="bool" FieldIndex="21" />
           <Field Name="AutoWeigh" Type="bool" FieldIndex="16" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
@@ -7520,7 +7521,11 @@
                     <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="HubOrderID" Ordinal="83" IsOptional="true" DbType="25" />
                     <Field Name="HubSequence" Ordinal="84" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="Verified" Ordinal="85" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="Verified" Ordinal="85" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditName" Value="Verified" />
+                      </CustomProperties>
+                    </Field>
                     <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
                   </Fields>
@@ -9258,6 +9263,7 @@
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
+                    <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -14064,6 +14070,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UserSettings" TargetName="ShipWorksLocal:dbo:UserSettings">
           <FieldMappings>
+            <FieldMapping FieldName="AutoPrintRequireValidation" TargetFieldName="AutoPrintRequireValidation" />
             <FieldMapping FieldName="AutoWeigh" TargetFieldName="AutoWeigh" />
             <FieldMapping FieldName="CustomerFilterExpandedFolders" TargetFieldName="CustomerFilterExpandedFolders" />
             <FieldMapping FieldName="CustomerFilterLastActive" TargetFieldName="CustomerFilterLastActive" />

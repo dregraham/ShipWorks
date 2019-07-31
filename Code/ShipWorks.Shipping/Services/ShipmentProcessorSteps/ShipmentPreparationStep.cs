@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         private readonly IStoreManager storeManager;
         private readonly IShippingManager shippingManager;
         private readonly IShipmentPreProcessorFactory shipmentPreProcessorFactory;
+        private readonly IScanPackOrderValidator scanPackOrderValidator;
         private readonly IResourceLockFactory resourceLockFactory;
 
         /// <summary>
@@ -32,6 +34,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             IShippingManager shippingManager,
             IResourceLockFactory resourceLockFactory,
             IShipmentPreProcessorFactory shipmentPreProcessorFactory,
+            IScanPackOrderValidator scanPackOrderValidator,
             Func<Type, ILog> getLogger)
         {
             this.resourceLockFactory = resourceLockFactory;
@@ -39,6 +42,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             this.securityContext = securityContext;
             this.shippingManager = shippingManager;
             this.shipmentPreProcessorFactory = shipmentPreProcessorFactory;
+            this.scanPackOrderValidator = scanPackOrderValidator;
             log = getLogger(GetType());
         }
 
@@ -164,6 +168,12 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             if (error != null)
             {
                 return new ShippingException(error.Message, error);
+            }
+
+            Result canProcess = scanPackOrderValidator.CanProcessShipment(shipment.Order);
+            if (canProcess.Failure)
+            {
+                return new ShippingException(canProcess.Message);
             }
 
             return null;

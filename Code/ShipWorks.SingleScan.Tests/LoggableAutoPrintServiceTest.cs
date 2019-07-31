@@ -30,9 +30,9 @@ namespace ShipWorks.SingleScan.Tests
         public void AllowAutoPrint_DelegatesToAutoPrintService_AllowAutoPrint()
         {
             SingleScanMessage scanMessage = new SingleScanMessage();
-            testObject.AllowAutoPrint(scanMessage);
+            testObject.AllowAutoPrint(scanMessage.ScannedText);
 
-            autoPrintService.Verify(a => a.AllowAutoPrint(scanMessage));
+            autoPrintService.Verify(a => a.AllowAutoPrint(scanMessage.ScannedText));
         }
 
         [Fact]

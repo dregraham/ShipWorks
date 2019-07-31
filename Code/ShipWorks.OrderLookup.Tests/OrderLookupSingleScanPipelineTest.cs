@@ -66,7 +66,7 @@ namespace ShipWorks.OrderLookup.Tests
             var printResult = new AutoPrintCompletionResult(123, new List<ProcessShipmentResult> { processShipmentResult });
             autoPrintService = mock.Mock<IOrderLookupAutoPrintService>();
             autoPrintService
-                .Setup(p => p.AutoPrintShipment(AnyLong, It.IsAny<SingleScanMessage>()))
+                .Setup(p => p.AutoPrintShipment(AnyLong, It.IsAny<string>()))
                 .ReturnsAsync(printResult);
 
             orderIdRetriever = mock.Mock<IOrderLookupOrderIDRetriever>();
@@ -131,7 +131,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             await testObject.OnSingleScanMessage(singleScanMessage);
 
-            autoPrintService.Verify(a => a.AutoPrintShipment(123, singleScanMessage));
+            autoPrintService.Verify(a => a.AutoPrintShipment(123, singleScanMessage.ScannedText));
         }
 
         [Fact]
@@ -144,7 +144,7 @@ namespace ShipWorks.OrderLookup.Tests
             OrderLookupSearchMessage message = new OrderLookupSearchMessage(this, "Foo");
             testMessenger.Send(message);
 
-            RetryAssertion(() => autoPrintService.Verify(a => a.AutoPrintShipment(It.IsAny<long>(), It.IsAny<SingleScanMessage>()), Times.Never));
+            RetryAssertion(() => autoPrintService.Verify(a => a.AutoPrintShipment(It.IsAny<long>(), It.IsAny<string>()), Times.Never));
         }
 
         [Fact]

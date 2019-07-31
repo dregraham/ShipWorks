@@ -13,7 +13,6 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.SingleScan;
 
 namespace ShipWorks.OrderLookup
@@ -52,7 +51,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Auto print shipments for the given orderid
         /// </summary>
-        public async Task<AutoPrintCompletionResult> AutoPrintShipment(long orderId, SingleScanMessage message)
+        public async Task<AutoPrintCompletionResult> AutoPrintShipment(long orderId, string message)
         {
             if (!autoPrintService.AllowAutoPrint(message))
             {
@@ -65,7 +64,7 @@ namespace ShipWorks.OrderLookup
                     {
                         OrderID = orderId,
                         MatchedOrderCount = 1,
-                        ScannedBarcode = message.ScannedText
+                        ScannedBarcode = message
                     }).ConfigureAwait(false);
 
             AutoPrintCompletionResult result = await WaitForShipmentsProcessedMessage(autoPrintResult).ConfigureAwait(false);

@@ -24,6 +24,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         private readonly Mock<IScanPackItemFactory> itemFactory;
         private readonly Mock<IMessenger> messenger;
         private readonly Mock<IVerifiedOrderService> verifiedOrderService;
+        private readonly Mock<IOrderLookupAutoPrintService> autoPrintService;
 
         public ScanPackViewModelTest()
         {
@@ -34,6 +35,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             itemFactory = mock.Mock<IScanPackItemFactory>();
             messenger = mock.Mock<IMessenger>();
             verifiedOrderService = mock.Mock<IVerifiedOrderService>();
+            autoPrintService = mock.Mock<IOrderLookupAutoPrintService>();
 
             testObject = mock.Create<ScanPackViewModel>();
         }
@@ -305,6 +307,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
 
             testObject.State = state;
+            await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
             testObject.ItemsToScan.Add(item);
 
             await testObject.ProcessScan("itemUpc").ConfigureAwait(false);
@@ -320,6 +323,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
 
             testObject.State = state;
+            await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
             testObject.ItemsToScan.Add(item);
 
             await testObject.ProcessScan("itemUpc").ConfigureAwait(false);
@@ -330,11 +334,30 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Theory]
         [InlineData(ScanPackState.OrderLoaded)]
         [InlineData(ScanPackState.ScanningItems)]
+        public async Task ProcessScan_DelegatesToAutoPrintService_WhenItemsToScanIsEmptyAndPackedItemsIsNotEmpty(ScanPackState state)
+        {
+            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+
+            testObject.State = state;
+            var order = new OrderEntity() { OrderID = 3 };
+            order.ChangeOrderNumber("abcd111");
+            await testObject.LoadOrder(order);
+            testObject.ItemsToScan.Add(item);
+
+            await testObject.ProcessScan("itemUpc").ConfigureAwait(false);
+
+            autoPrintService.Verify(a => a.AutoPrintShipment(order.OrderID, order.OrderNumberComplete));
+        }
+
+        [Theory]
+        [InlineData(ScanPackState.OrderLoaded)]
+        [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_ProcessesItemScan_WhenScannedTextMatchesProductUpcInItemsToScan(ScanPackState state)
         {
             ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
 
             testObject.State = state;
+            await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
             testObject.ItemsToScan.Add(item);
 
             await testObject.ProcessScan("productUpc").ConfigureAwait(false);
@@ -350,6 +373,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
 
             testObject.State = state;
+            await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
             testObject.ItemsToScan.Add(item);
 
             await testObject.ProcessScan("itemUpc").ConfigureAwait(false);
@@ -365,6 +389,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
 
             testObject.State = state;
+            await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
             testObject.ItemsToScan.Add(item);
 
             await testObject.ProcessScan("sku").ConfigureAwait(false);

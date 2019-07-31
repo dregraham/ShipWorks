@@ -220,6 +220,7 @@ namespace ShipWorks.Users
                 AutoWeigh = false,
                 UIMode = UIMode.Batch,
                 LastReleaseNotesSeenVersion = SqlSchemaUpdater.GetBuildVersion(),
+                AutoPrintRequireValidation = false
             };
 
             adapter.SaveAndRefetch(settings);
