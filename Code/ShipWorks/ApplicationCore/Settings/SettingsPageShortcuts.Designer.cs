@@ -209,7 +209,7 @@
             this.infoTipRequireVerification.Size = new System.Drawing.Size(12, 12);
             this.infoTipRequireVerification.TabIndex = 48;
             this.infoTipRequireVerification.Title = "Require Verification";
-            this.infoTipRequireVerification.Caption = "This feature is only available on warehouse plans";
+            this.infoTipRequireVerification.Caption = "This feature is only available on warehouse plans.";
             // 
             // SettingsPageShortcuts
             // 
