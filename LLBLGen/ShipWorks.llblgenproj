@@ -2334,6 +2334,7 @@
           <Field Name="ShipUSTerritory" Type="int" Precision="10" FieldIndex="25" />
           <Field Name="TotalWeight" Type="double" IsReadOnly="true" FieldIndex="12" />
           <Field Name="TrackingNumber" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="13" />
+          <Field Name="Verified" Type="bool" FieldIndex="29" />
           <Field Name="Voided" Type="bool" IsReadOnly="true" FieldIndex="8" />
           <Field Name="VoidedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="11" />
           <Field Name="VoidedDate" Type="datetime" IsReadOnly="true" IsOptional="true" FieldIndex="9" />
@@ -4551,7 +4552,8 @@
       <ConnectionElements>
         <ConnectionElement Name="ServerName" Value="(local)\Development" />
         <ConnectionElement Name="CatalogName" Value="master" />
-        <ConnectionElement Name="UserID" Value="sa" />
+        <ConnectionElement Name="UseWindowsAuthentication" Value="true" />
+        <ConnectionElement Name="UserID" Value="" />
         <ConnectionElement Name="Password" Value="" />
       </ConnectionElements>
       <SystemSequences>
@@ -4561,7 +4563,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-25T18:00:03.2260348Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-07-30T21:14:31.8460707Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9658,6 +9660,7 @@
                     <Field Name="OrderNumberComplete" Ordinal="27" DbType="12" Length="50" />
                     <Field Name="CombineSplitStatus" Ordinal="28" DbType="8" Precision="10" />
                     <Field Name="Service" Ordinal="29" IsOptional="true" DbType="12" Length="101" />
+                    <Field Name="Verified" Ordinal="30" DbType="2" />
                   </Fields>
                 </View>
                 <View Name="ProductListView">
@@ -13096,6 +13099,7 @@
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="Verified" TargetFieldName="Verified" />
             <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
             <FieldMapping FieldName="VoidedDate" TargetFieldName="VoidedDate" />

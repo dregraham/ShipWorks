@@ -9536,6 +9536,8 @@ namespace ShipWorks.Data.Model
 		CombineSplitStatus,
 		///<summary>ReturnShipment. </summary>
 		ReturnShipment,
+		///<summary>Verified. </summary>
+		Verified,
 		/// <summary></summary>
 		AmountOfFields
 	}
