@@ -74,30 +74,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                DateTime start = await GetChannelAdvisorOrderDateStartingPoint();
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(refreshToken);
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(start.AddSeconds(-2), refreshToken);
+                string previousLink = String.Empty;
+                double daysback = 30;
+
+                if (Store.InitialDownloadDays.HasValue && Store.InitialDownloadDays > 30)
+                {
+                    daysback = Store.InitialDownloadDays ?? 30;
+                }
+
+                var oldestDownload = DateTime.UtcNow.AddDays(-daysback);
 
                 Progress.Detail = $"Downloading orders...";
 
                 while (ordersResult?.Orders?.Any() ?? false)
                 {
-                    foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
+                    // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
+                    // the same "next link" causing ShipWorks to download forever
+                    if (ordersResult.OdataNextLink == previousLink)
                     {
-                        // Check if it has been canceled
-                        if (Progress.IsCancelRequested)
-                        {
-                            return;
-                        }
-
-                        DownloadOtherLineItems(caOrder);
-
-                        List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
-
-                        await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+                        break;
                     }
 
-                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink)
+                    previousLink = ordersResult.OdataNextLink;
+
+                    if (!await ProcessOrders(ordersResult, previousLink).ConfigureAwait(false))
+                    {
+                        break;
+                    }
+
+                    // Don't download orders older than oldestDownload. With each download, we will be marking one page of old shipped orders
+                    // as exported, so eventually all of the orders will be marked
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) || ordersResult.Orders.FirstOrDefault()?.CreatedDateUtc < oldestDownload
                         ? null
                         : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
@@ -113,6 +122,39 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
+        }
+
+        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult, string previousLink)
+        {
+            foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
+            {
+                // Check if it has been canceled
+                if (Progress.IsCancelRequested)
+                {
+                    return false;
+                }
+
+                // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
+                // because filtering slows down the download significantly
+                if (!caOrder.PaymentStatus.Equals("Cleared", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                DownloadOtherLineItems(caOrder);
+
+                List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
+
+                await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+
+                // If the order has already been shipped, mark it as exported so we don't re-download it
+                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
+                {
+                    restClient.MarkOrderExported(caOrder.ID, refreshToken);
+                }
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -149,25 +191,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
                     .Where(p => p != null).ToList();
             return caProducts;
-        }
-
-        /// <summary>
-        /// Gets the start date for ChannelAdvisor downloads
-        /// </summary>
-        private async Task<DateTime> GetChannelAdvisorOrderDateStartingPoint()
-        {
-            DateTime? startDate = await GetOrderDateStartingPoint().ConfigureAwait(false);
-
-            if (startDate.HasValue)
-            {
-                startDate = startDate.Value.AddDays(-1 * caStore.DownloadModifiedNumberOfDaysBack);
-            }
-            else
-            {
-                startDate = DateTime.UtcNow.AddDays(-30);
-            }
-
-            return startDate.Value;
         }
 
         /// <summary>
