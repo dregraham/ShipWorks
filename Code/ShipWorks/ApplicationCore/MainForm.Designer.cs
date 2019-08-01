@@ -2553,7 +2553,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewScanPack.Name = "ribbonTabOrderLookupViewScanPack";
             this.ribbonTabOrderLookupViewScanPack.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabOrderLookupViewScanPack.TabIndex = 0;
-            this.ribbonTabOrderLookupViewScanPack.Text = "Pack";
+            this.ribbonTabOrderLookupViewScanPack.Text = "&Pack";
             this.ribbonTabOrderLookupViewScanPack.Enabled = false;
             //
             // ribbonTabOrderLookupViewShipping
