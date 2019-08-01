@@ -38,9 +38,22 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;					
 						
+			
+				 try {
+            	
+            	VoidLabelMethod();
+            	
+            } catch (Exception) {
+            	
+            	RetryAction.RetryOnFailure(2,1,() => {
+				VoidLabelMethod();
+	           	});
+            }
+		}
+		public void VoidLabelMethod()
+		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.Void' at Center.", repo.MainForm.VoidInfo, new RecordItemIndex(0));
-			repo.MainForm.Void.Click();
-			Delay.Milliseconds(0);			
+			repo.MainForm.Void.Click();		
 			
 			SikuliAction.Click(@"..\..\Sikuli_Images\OkButton.png");
 			SikuliAction.Click(@"..\..\Sikuli_Images\ClearButton.png");

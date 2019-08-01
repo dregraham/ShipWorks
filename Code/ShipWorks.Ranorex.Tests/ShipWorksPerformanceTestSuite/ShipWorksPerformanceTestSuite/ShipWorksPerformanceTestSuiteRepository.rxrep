@@ -3123,6 +3123,235 @@ yBbJEskUycg1sS/HxN7sPPaI7M7KY1dmKjszUsnJL2LhTf7rGAy/AP7X5rYY5FLEAAAAAElFTkSu
 QmCC
 			</icon>
 		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="10e93aef-84f5-4725-9880-9adf44607d6b"
+		isrooted="True"
+		name="SetupBullzipPDFPrinter"
+		refpath="/form[@title='Setup - Bullzip PDF Printer']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="radiobutton,accessible"
+			capname="radiobutton"
+			id="b70c6bee-8e8d-4037-a660-ffb0d5134c17"
+			name="IAcceptTheAgreement"
+			refimgid="17a68b5e-eb96-4033-b383-a9669798bc49"
+			refpath="/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/element[@class='TNewNotebook']/element/element/element[@class='TNewNotebookPage' and @instance='0']/element[@class='TNewRadioButton' and @instance='0']/radiobutton[@accessiblename='I accept the agreement']"
+			searchtimeout="30000ms">
+				/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/radiobutton[@accessiblename='I accept the agreement']
+			</item>
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="7d1646b6-9a39-411e-ac21-763a3db5a9c9"
+			name="Next"
+			refimgid="494cec08-9761-4272-8f3f-e3fc998bc1d7"
+			refpath="/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/element[@class='TNewButton' and @instance='0']/button[@accessiblename='Next >']"
+			searchtimeout="30000ms">
+				/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/?/?/button[@accessiblename='Next &gt;']
+			</item>
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="e336fa92-06b1-4fb8-8cf9-8493287db986"
+			name="Finish"
+			refimgid="f7636db1-8dbe-4d6e-aa5e-9e2e3e0b8ba6"
+			refpath="/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/element[@class='TNewButton' and @instance='0']/button[@accessiblename='Finish']"
+			searchtimeout="30000ms">
+				/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']/?/?/button[@accessiblename='Finish']
+			</item>
+			<basepath>
+				/form[@title~'^Setup\ -\ Bullzip\ PDF\ Print']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAKkSURBVDhPrZLLTxNRFMZn5calLo0rVibGpTHR
+v0EjwYULEsUUfCABkQgSqUAVQxBCaYY20TKCQCnlFV5C5NEB5NEKWnkUaUHE1kLFKVOawtj7eSiT
+EBLZ+UvO3OTe833n3DOX++8M9vYmNDa8rRl0umMzEtDn+hFRj45GEIRWobYOy+sy/DuAexP4tAHM
+rANN8wrqp/ysvq37TVdX61nG2EuKAlW6j8ViiQW2gdUtYE0GxO8K0jslpHZIMEzQAfHes4PE+g0k
+VopQZQfwPH95L+lK7Rq71hBAVreE8rEIDJNRPOqL4GGPjCcDIRSJIejyc7yq7DAKGVD3ccJRhibX
+NnhHFG0eQFhk0FYM47lDQfFRBnvCXqpka/ZhSPSj3QvwdZ/xQvcOBXmtKOTHUeQACnOz/23AyMDl
+YpCiwJI/Eq+sLeyEdQUwu4FI5hnYLRMYGQr9cUzuZqiyAyS6gxwDPkxtgtc7YSWD+fZKoOgERitL
+QPMlGIL0JU90WKdXVek+VBQ+GvhamP4GrYavlJV3GrG8BIik/hmXAwGKZo+MO/1B2Gzjp1Q5xy1T
+kjdE7VMs0gPSzVJm2knoq2zI7g9gPswgiiJGRkSktPtx3rQCc7VNr8o5bjaoYI4e0CyF6zeQ4ySD
+qxxS9YO4aKKJKuRMLCws4NXHLVwwfYOhXDCqco5zbCiYpspOMnDQRTMHwsgaBzKemXHJ6IVHYrDb
+7Vhyu1H9JYR7A1vg+cZzqpzjRN8uhodkdLb40GhdhKZnE1ptB3KfVkA3GYJT3gU1hr136aMoKTUy
+VbpPfm7OcJlR2BmVWUykDq63BJH2egyPs+/bi8sM+EUimnOcKlMNkpKajqnSw5SWPjh+V5Nizrit
+aVa34ty6qSlOTr4xptGkZ6lbBMf9BcyEO7CC9SDWAAAAAElFTkSuQmCC
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="1274bc9c-da1e-4d4d-ba12-171836a806f3"
+		isrooted="True"
+		name="BullzipPDFPrinterOptions"
+		refpath="/form[@title='Bullzip PDF Printer - Options']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="29063ac8-a891-478f-9538-df90ec790cb7"
+			name="Apply"
+			refimgid="c46a36a9-0b6d-435e-b64c-2902d226c9d7"
+			refpath="/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/element[@controlid='142024056']/button[@accessiblename='Apply']"
+			searchtimeout="30000ms">
+				/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/?/?/button[@accessiblename='Apply']
+			</item>
+			<item
+			addcaps="button,accessible"
+			capname="button"
+			id="a1e0c366-0a5a-431f-8fc9-19dfab9a2fd2"
+			name="ButtonOK"
+			refimgid="73a3c796-e081-4586-9640-b7a51ce54f77"
+			refpath="/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/element[@controlid='142018856']/button[@accessiblename='OK']"
+			searchtimeout="30000ms">
+				/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/?/?/button[@accessiblename='OK']
+			</item>
+			<item
+			addcaps="titlebar,accessible"
+			capname="titlebar"
+			id="58cc7c2f-34ed-4946-b6ea-1b2eec4aa496"
+			name="BullzipPDFPrinterOptions"
+			refimgid="4cccfb90-d0de-4b64-9774-1105cde77269"
+			refpath="/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/titlebar[@accessiblerole='TitleBar']"
+			searchtimeout="30000ms">
+				/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']/titlebar[@accessiblerole='TitleBar']
+			</item>
+			<basepath>
+				/form[@title~'^Bullzip\ PDF\ Printer\ -\ Opt']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAH5SURBVDhPhZLPS9tgHMZzEE/evIrHHj2JoHjw
+L/A/cIguhwk9VKZQKY4yOlqkoEihSikFCVhcDg5W6CGDCZVVSaEMhSIdi12lEWuTQax1s4/v9zVJ
+221lD3zIj36fz/vmpUK/XE1OojY1xbkcH8fF2Bi+ejz4MjoKZXgYh0ND2B8chD3+d6zpaTRnZvBw
+cIDm+jqsvT3U5+fxc2MDjZ0dFAYG8FkQOgJJktAdbWSE82gY+F2p8Ku+tIQ7VYXGRDlWVroFlHg8
+jvtfgNEEt9PQQ6PhXu9rNZinp/jInmWGxLCrnVxbbHUT8LMfiVUbH8PLeMUQGQs2dq0TSc7gXAfU
+KnDyAzjWgE+M8Hai/4F1JxgMIl8Bjr4/F7PfgDeRbYiiCNM0EQgE/i3a2txEtVrF2dk51oJhvJib
+QzQahSzLyOdPeJkwbg1OjyibzaJcLqNUKqFYLMKyLOi63lOo39Q5id0EZtUJFNRCr4BW1zTNFRFU
+IJGzs1wuB5o9fP8BqVQKtGsuoG3SEBW6RU4pk8kgnU7zErG6sgI6K1dAQ61Wi2+dZM6q9N4p+Xw+
+hEIh0H9FfLnIy3RGroDSbre5hCDB29A7hCMRxGIxeL1eXiQRvevZAYVsThyRoihc8nr5uUT3JLAr
+/UMHRXEEfr8fyWTy/8U/435j3wjCEx4aFwfFboqzAAAAAElFTkSuQmCC
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411"
+		isrooted="True"
+		name="PDFPrinter"
+		refpath="/form[@title='PDF Printer']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="button,nativewindow"
+			capname="button"
+			id="911701df-900d-46b2-90d1-1f0fbb2e76aa"
+			name="ButtonOK"
+			refimgid="eac453da-a19a-43b9-b315-21fe2e8814f7"
+			refpath="/form[@title='PDF Printer']/button[@text='OK']"
+			searchtimeout="30000ms">
+				/form[@title='PDF Printer']/button[@text='OK']
+			</item>
+			<basepath>
+				/form[@title='PDF Printer']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJbSURBVDhPtZHfS1phGMcPdRFEN911F3TR3f6S
+Xe0v2Giordz8ESPxR/4gQyy8ENaFOlAnk4m2zW7EBg0V25ZBrYjNY2pacypzKzlsDj3fPed4RsJo
+u9qX8+Hwnuf9ft/nfQ5znT4wDEpEmWCJQ2KXSBFbRJx4Rkjbr6TTPZQ7nY41wfBzagq96Wlwk5P4
+MjGBs/FxsKOj2B8aQprq/sGAUCgUbTYa+K1NKuZpc2FsTEQwHo+M4GB4GG+oJnSxOhggKBB4UhfM
+rR/AChW1hIZQEfeJOWKWkBEz0luy9mW32xYO2HNUL4F8Ezj6DBy3AF8k8eddr5PH/7SXbwP7dJsc
+hex+A8LZM8ju3qGZ/UMu15p8QWe63KkBjzffweBYh3zuAZT35NiIxZDNZuF2u08dDsdtydIXDTBB
+wtHhIR8M+Pn5WRlWHSvYSiZwWi6D4zh0u12Ank/nNcTjcd6oNxokO8OEw2Gu1WqhVCqBZVm+Vqvx
+JHQ6HbTbbVxcXKDZbOLjexY3X9+AMaeF3WJvSnaGCQaDdAiHBv3GarWKQqEgUq/XcXJyglwuh2Qy
+iRcbLxELPccj1zo0Ki0n2cUrfC9Tq3t7e6JROE0wb29vIxqNIhAIwOl0wmQyQa/Xw2q1YnFx8Sog
+EonQn++rUqkgk8kgnU4LAxMNRqNRNKvVaigUCnGt1Q504PF4XqVSKb7X60kxfXm9XjFAqVQKJ8Js
+NsNgMHR0Ol2c1rck+5WWl5fdNI+vxWJRDPD5fLBYLAI8tb2ztLQ0L239u1Qq1YzNZntLbbMajcYi
+ff4fYphfXqzU2wwPhE4AAAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="ef192399-f5b7-4634-a5ff-96a49ae3367b"
+		isrooted="True"
+		name="MasterPublicInstallerJenkinsGoog"
+		refpath="/form[@title='master-public-installer [Jenkins] - Google Chrome']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="container,accessible"
+			capname="container"
+			id="3349481b-df9d-4161-b02c-fd45b4a4b531"
+			name="Pane"
+			refimgid="d0ff55c5-f529-4a81-8746-9b8024010a38"
+			refpath="/form[@title~'^master-public-installer\ \[']/container/container/container[1]"
+			searchtimeout="30000ms">
+				/form[@title~'^master-public-installer\ \[']/container[@accessiblename~'^master-public-installer\ \[']/container/container[1]
+			</item>
+			<basepath>
+				/form[@title~'^master-public-installer\ \[']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJMSURBVDhPrZJLTxNhFIbnD8CmgqDiJbKQlUsT
+pbTTaaWt9EYVlaGUFht0ISsT117QqGw06o5eMYArSNSNxHgtKIylBMXYmWkxxii40WkkKp3X+YYZ
+sVFX+ibP7nvec07yUf89H1l7pdjmOC+22WdFv0MSfM2S6LNmea+tb8m9u0J79ufkD7ns+bZ9bwR/
+M4TWvRB8NggeBrybBt9iBu+iFwSXxaY9Lw/nsTLCAYcs7rdDLSCy16oUWFYLXKTEBN5hlHl7I6Np
+q6m/c7yyr9f7dk4R1AJteo71loQT/rzQY+KFSBMvRsw5MWIkpMvOqR86em7XtcDKXece5DxKSfgg
+hAcTuPlEwvBjCfmXaSze8uDz7UYsj5vw/X4TSpPMWU2nqK03ume3DUZw5KQHzxxGiA8n0Hm9CFd/
+ES2XimCvFvEuPwk8t2kwkDk6o+lKwWC3tCXVjR0DIQwHWjCiTNVl58VVhh5JKGVaFdkKcKTAImk6
+RdUlQ9LmVBgEtj+oFvwqOy7oBX5VBmchG6wVbEp2ZTcmukCoS4Tk9PzrJbK2Lh++UsSr/PwHfbpW
+sHZCbSp4ZkMiCEKtws7hXoy9yKhTCaNZDu+n2K+6DI5GiaNPaTpFGUbDFTWx4EJNvBOE9fGASsPQ
+MTQke3B5zPtzsipPWwryvLv8V1YnAtbqeEBWAKEq1oF1MRbbB9qxPGWTdVnmzLI8Q1s0rTyGGMtU
+RQMFQ5SFzvg957e1yebCX2U95BxDvOO0Ido+Q4+0L355ynxamTZnyM2/rf3voagf2nKwO/rr1QsA
+AAAASUVORK5CYII=
+			</icon>
+		</appfolder>
+		<appfolder
+		addcaps="form,nativewindow"
+		capname="form"
+		id="666265f2-ac22-4dca-8046-a6e16ef401b0"
+		isrooted="True"
+		name="InAGitMergeConflictWhatAreTheBA"
+		refpath="/form[@title='In a git merge conflict, what are the BACKUP, BASE, LOCAL, and REMOTE files that are generated? - Stack Overflow - Google Chrome']"
+		searchtimeout="30000ms"
+		usecache="True">
+			<item
+			addcaps="container,accessible"
+			capname="container"
+			id="06a38f26-3c89-4331-8db9-71603c74de6f"
+			name="Pane"
+			refimgid="6ff0efb6-e5ad-40ac-97a1-5e26beb5f2ee"
+			refpath="/form[@title~'^In\ a\ git\ merge\ conflict,\ ']/container/container/container[2]/container[1]/container[2]/container[1]/container[2]"
+			searchtimeout="30000ms">
+				/form[@title~'^In\ a\ git\ merge\ conflict,\ ']/container[@accessiblename~'^In\ a\ git\ merge\ conflict,\ ']/container[@accessiblename='Google Chrome']/container[2]/container[1]/container[2]/container[1]/container[2]
+			</item>
+			<basepath>
+				/form[@title~'^In\ a\ git\ merge\ conflict,\ ']
+			</basepath>
+			<icon>
+				iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
+jwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAJMSURBVDhPrZJLTxNhFIbnD8CmgqDiJbKQlUsT
+pbTTaaWt9EYVlaGUFht0ISsT117QqGw06o5eMYArSNSNxHgtKIylBMXYmWkxxii40WkkKp3X+YYZ
+sVFX+ibP7nvec07yUf89H1l7pdjmOC+22WdFv0MSfM2S6LNmea+tb8m9u0J79ufkD7ns+bZ9bwR/
+M4TWvRB8NggeBrybBt9iBu+iFwSXxaY9Lw/nsTLCAYcs7rdDLSCy16oUWFYLXKTEBN5hlHl7I6Np
+q6m/c7yyr9f7dk4R1AJteo71loQT/rzQY+KFSBMvRsw5MWIkpMvOqR86em7XtcDKXece5DxKSfgg
+hAcTuPlEwvBjCfmXaSze8uDz7UYsj5vw/X4TSpPMWU2nqK03ume3DUZw5KQHzxxGiA8n0Hm9CFd/
+ES2XimCvFvEuPwk8t2kwkDk6o+lKwWC3tCXVjR0DIQwHWjCiTNVl58VVhh5JKGVaFdkKcKTAImk6
+RdUlQ9LmVBgEtj+oFvwqOy7oBX5VBmchG6wVbEp2ZTcmukCoS4Tk9PzrJbK2Lh++UsSr/PwHfbpW
+sHZCbSp4ZkMiCEKtws7hXoy9yKhTCaNZDu+n2K+6DI5GiaNPaTpFGUbDFTWx4EJNvBOE9fGASsPQ
+MTQke3B5zPtzsipPWwryvLv8V1YnAtbqeEBWAKEq1oF1MRbbB9qxPGWTdVnmzLI8Q1s0rTyGGMtU
+RQMFQ5SFzvg957e1yebCX2U95BxDvOO0Ido+Q4+0L355ynxamTZnyM2/rf3voagf2nKwO/rr1QsA
+AAAASUVORK5CYII=
+			</icon>
+		</appfolder>
 		<basepath>
 		</basepath>
 	</rootfolder>

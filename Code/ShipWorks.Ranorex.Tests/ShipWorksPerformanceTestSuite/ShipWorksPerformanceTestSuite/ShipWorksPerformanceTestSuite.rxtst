@@ -15,6 +15,18 @@ rxversion="8.1">
 			ref="aad56913-9930-4392-ab92-f706699e4ba4"
 			type="UserCode">
 			</testmodule>
+			<testmodule
+			id="044977bc-3d9a-40ac-80b1-ba948ad57331"
+			name="ProcessOrders"
+			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="069303f5-5287-4acf-bd4b-76030de9c82d"
+			name="SetBullZipDefaultPrinter"
+			ref="bd475ca5-3e9d-4f65-a3e4-31551917ebce"
+			type="UserCode">
+			</testmodule>
 			<smartfoldernode
 			id="0a9541f2-0668-433c-9d03-1cf101138b9b"
 			name="BatchGrid">
@@ -92,6 +104,12 @@ rxversion="8.1">
 			name="TestCase">
 			</testcase>
 			<testmodule
+			id="49638b19-4ecd-4aa2-b040-53b25e6bc974"
+			name="SingleScanTime"
+			ref="f8be65f7-a99b-4462-88db-7c96270826b7"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
 			name="WriteToCSV"
 			ref="59fd8557-4c46-4e5c-beeb-2241d5a4cb2e"
@@ -104,6 +122,12 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
+			id="625192bf-1eef-44a9-ba6a-973bcedde162"
+			name="ProcessOrders"
+			ref="c7feaad9-b5ed-4097-9a55-e8ed71d09bbe"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="654938d6-a804-47ec-a043-46c12595f1c6"
 			name="Select100OrdersFilter"
 			ref="ab495b19-c723-47f7-8d39-651b9b20a704"
@@ -113,6 +137,12 @@ rxversion="8.1">
 			id="6663757e-de8f-4a9d-8df4-487dbf92655d"
 			name="SelectAllOrders"
 			ref="15feb502-a74d-4e42-a249-2dba9b26f18b"
+			type="UserCode">
+			</testmodule>
+			<testmodule
+			id="6af85d79-8e1f-4cfe-bb96-1e971749ea18"
+			name="ApplyProfileTo100Orders"
+			ref="4833ecee-b4ac-4eaf-9fa5-25ddf1d28f38"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -132,16 +162,16 @@ rxversion="8.1">
 			name="ShipWorksPerformanceTestSuite"
 			reportlevel="Info;20">
 			</testcase>
+			<testmodule
+			id="80d08811-5f00-4e2a-a8c5-f93cd1b46b1c"
+			name="DownloadMaster"
+			ref="fcdacb56-60a8-43fd-9f37-f624231402b0"
+			type="UserCode">
+			</testmodule>
 			<smartfoldernode
 			id="86a90bb7-cb81-4c02-86e1-b81ac5b114f9"
 			name="HighVolumeBaseline">
 			</smartfoldernode>
-			<testmodule
-			id="8baf9b40-48de-48ef-8b72-192c9c37e493"
-			name="Process100Orders"
-			ref="08421a6a-1bf3-42dd-a978-3c096f1b150c"
-			type="UserCode">
-			</testmodule>
 			<testmodule
 			id="8c589431-d14a-4813-9fef-50c340f0ee4d"
 			name="Select100Orders"
@@ -158,18 +188,6 @@ rxversion="8.1">
 			id="986dca5a-95fa-4260-90e8-75119798108c"
 			name="eCommerceBaseline_I">
 			</smartfoldernode>
-			<testmodule
-			id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
-			name="CloseShipWorks"
-			ref="82d40b1a-c4fc-4ba1-962a-81cc793c1f7e"
-			type="UserCode">
-			</testmodule>
-			<testmodule
-			id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
-			name="ApplyProfileTo100SROrders"
-			ref="3c300656-9cf2-48f0-a275-1582a2fb14c4"
-			type="UserCode">
-			</testmodule>
 			<testmodule
 			id="a155f844-d2da-4f0f-b402-dea470086a25"
 			name="ApplyProfile"
@@ -221,9 +239,9 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
-			id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
-			name="Process100SROrders"
-			ref="c40c66ff-b6d0-4956-8c78-ea8d5f87a5d0"
+			id="f27355e3-55cf-4092-a68b-55eaaadb9a6a"
+			name="PrintLabel"
+			ref="52bc6767-83c3-4550-a54d-959e707a3905"
 			type="UserCode">
 			</testmodule>
 			<testmodule
@@ -261,6 +279,14 @@ rxversion="8.1">
 							<testmodule
 							id="a256a268-03c1-46bc-952b-e84f2a8f8910"
 							name="CopyStagingHosts">
+							</testmodule>
+							<testmodule
+							id="80d08811-5f00-4e2a-a8c5-f93cd1b46b1c"
+							name="DownloadMaster">
+							</testmodule>
+							<testmodule
+							id="069303f5-5287-4acf-bd4b-76030de9c82d"
+							name="SetBullZipDefaultPrinter">
 							</testmodule>
 							<testmodule
 							id="27507515-bcb7-4c7d-ac95-baf4cc972d1a"
@@ -309,6 +335,10 @@ rxversion="8.1">
 								id="36aeee87-6ff4-4839-890b-833e428ddf62"
 								name="SwitchToOLM">
 								</testmodule>
+								<testmodule
+								id="49638b19-4ecd-4aa2-b040-53b25e6bc974"
+								name="SingleScanTime">
+								</testmodule>
 								<smartfoldernode
 								id="16a24b29-3c87-44ca-9878-4abaff33a75f"
 								name="ProcessShipment">
@@ -329,12 +359,12 @@ rxversion="8.1">
 									name="CreateLabel">
 									</testmodule>
 									<testmodule
-									id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
-									name="PrintLabel">
-									</testmodule>
-									<testmodule
 									id="15eb84e7-b66b-4c64-8e16-3705cacdb6d0"
 									name="VoidLabel">
+									</testmodule>
+									<testmodule
+									id="f27355e3-55cf-4092-a68b-55eaaadb9a6a"
+									name="PrintLabel">
 									</testmodule>
 								</smartfoldernode>
 							</smartfoldernode>
@@ -355,12 +385,12 @@ rxversion="8.1">
 							name="Load100SROrders">
 							</testmodule>
 							<testmodule
-							id="9d9dcc07-8a42-4908-b1c1-8914550cf757"
-							name="ApplyProfileTo100SROrders">
+							id="6af85d79-8e1f-4cfe-bb96-1e971749ea18"
+							name="ApplyProfileTo100Orders">
 							</testmodule>
 							<testmodule
-							id="f3768a76-01a1-4c4f-a171-d0938451d1c0"
-							name="Process100SROrders">
+							id="625192bf-1eef-44a9-ba6a-973bcedde162"
+							name="ProcessOrders">
 							</testmodule>
 							<testmodule
 							id="ff94c415-ac5f-447e-8787-6f57b41f9245"
@@ -387,8 +417,8 @@ rxversion="8.1">
 							name="ApplyProfileTo100Orders">
 							</testmodule>
 							<testmodule
-							id="8baf9b40-48de-48ef-8b72-192c9c37e493"
-							name="Process100Orders">
+							id="044977bc-3d9a-40ac-80b1-ba948ad57331"
+							name="ProcessOrders">
 							</testmodule>
 							<testmodule
 							id="40d6b389-7df9-43e8-81cb-76b0f3eec967"
@@ -398,10 +428,6 @@ rxversion="8.1">
 						<teardown
 						id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
 						name="teardown">
-							<testmodule
-							id="9b111332-8df8-4e26-8f41-d3426ed9ee25"
-							name="CloseShipWorks">
-							</testmodule>
 							<testmodule
 							id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
 							name="WriteToCSV">
@@ -450,7 +476,7 @@ rxversion="8.1">
 	</testconfigurations>
 	<references>
 		<reference>
-			C:\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
+			..\..\..\..\..\..\..\..\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
 		</reference>
 		<reference>
 			SikuliModule.dll
