@@ -13,15 +13,23 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackItem(string name, string imageUrl, double quantity, string itemUpc, string productUpc, string sku)
+        public ScanPackItem(long orderItemID, string name, string imageUrl, double quantity, string itemUpc, string itemCode, string productUpc, string sku)
         {
+            OrderItemID = orderItemID;
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
             ItemUpc = itemUpc;
+            ItemCode = itemCode;
             ProductUpc = productUpc;
             Sku = sku;
         }
+
+        /// <summary>
+        /// Order Item ID
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public long OrderItemID { get; }
 
         /// <summary>
         /// The Items Name
@@ -50,6 +58,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string ItemUpc { get; set; }
+
+        /// <summary>
+        /// The Item's code
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ItemCode { get; }
 
         /// <summary>
         /// The Product's UPC

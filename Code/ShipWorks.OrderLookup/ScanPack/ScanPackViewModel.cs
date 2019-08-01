@@ -421,14 +421,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             // Update target list
-            ScanPackItem matchingTargetItem = targetItems.FirstOrDefault(
-                x => x.ItemUpc.Equals(sourceItem.ItemUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                     x.ProductUpc.Equals(sourceItem.ProductUpc, StringComparison.InvariantCultureIgnoreCase) &&
-                     x.Sku.Equals(sourceItem.Sku, StringComparison.InvariantCultureIgnoreCase));
+            ScanPackItem matchingTargetItem = targetItems.SingleOrDefault(x => x.OrderItemID == sourceItem.OrderItemID);
 
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ProductUpc, sourceItem.Sku));
+                targetItems.Add(new ScanPackItem(sourceItem.OrderItemID, sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ItemCode, sourceItem.ProductUpc, sourceItem.Sku));
             }
             else
             {
@@ -500,6 +497,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
             listToSearch.FirstOrDefault(x => x.ProductUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
             listToSearch.FirstOrDefault(x => x.ItemUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false);
+            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
+            listToSearch.FirstOrDefault(x => x.ItemCode?.Equals(scannedText, StringComparison.InvariantCulture) ?? false);
     }
 }

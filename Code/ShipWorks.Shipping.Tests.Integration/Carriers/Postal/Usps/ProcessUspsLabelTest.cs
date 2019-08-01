@@ -7,6 +7,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 builder.RegisterMock<IActionDispatcher>(mock);
                 builder.RegisterMock<ITangoWebClient>(mock);
                 builder.RegisterMock<IMessageHelper>(mock);
+                builder.RegisterMock<IMainForm>(mock);
             });
 
             Modify.Store(context.Store)
