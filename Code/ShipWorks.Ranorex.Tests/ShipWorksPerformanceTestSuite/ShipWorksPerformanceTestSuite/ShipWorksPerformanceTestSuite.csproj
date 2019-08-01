@@ -144,11 +144,17 @@
     <Compile Include="CreateLabel.cs">
       <id>fa41df68-db05-4fef-8b13-3cffaf268376</id>
     </Compile>
+    <Compile Include="DownloadMaster.cs">
+      <id>adae6046-af9a-4810-8db3-61bd8673cd18</id>
+    </Compile>
     <Compile Include="EnterOrder.cs">
       <id>f285ff07-1df6-42e3-9d93-3b217f6bbc14</id>
     </Compile>
     <Compile Include="ExtraMethods.cs">
       <id>a2c1dc32-9bf2-4ee7-85cf-4b2673d78fb8</id>
+    </Compile>
+    <Compile Include="FileName.cs">
+      <id>f1face23-0e1a-46a7-ad81-bb0ad744790f</id>
     </Compile>
     <Compile Include="InstallShipWorks.cs">
       <id>919b01c7-fd83-4b45-b496-d84dc6bbd430</id>
@@ -166,6 +172,9 @@
       <id>97d09e6e-bfaa-4916-abd8-ec7bf612f06a</id>
     </Compile>
     <Compile Include="PrintLabel.cs">
+      <id>227237b5-f1f0-4c34-8e14-58c2c87aacc8</id>
+    </Compile>
+    <Compile Include="PrintLabel_OLD.cs">
       <id>f29b43d8-2501-46ee-b274-c1931124fe77</id>
     </Compile>
     <Compile Include="Process100Orders.cs">
@@ -179,6 +188,18 @@
     </Compile>
     <Compile Include="Program.cs">
       <id>eec7bf1b-84cb-450c-bd85-3ebf5f20d6d3</id>
+    </Compile>
+    <Compile Include="Recording1.cs">
+      <BoundTo>9c2016dd-c565-4e0d-b0b4-e210beb6dcc8</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <RecorderCode>true</RecorderCode>
+      <id>9b6439e1-3a9f-46e3-9c77-1f50be54b63c</id>
+    </Compile>
+    <Compile Include="Recording1.UserCode.cs">
+      <BoundTo>9c2016dd-c565-4e0d-b0b4-e210beb6dcc8</BoundTo>
+      <DependentUpon>Recording1.rxrec</DependentUpon>
+      <UserCode>true</UserCode>
+      <id>14b5ee66-d7af-4530-ab3a-34a1febae494</id>
     </Compile>
     <Compile Include="RestoreDatabase.cs">
       <id>1d2315c3-ba1a-4e4a-b93b-706f6915e157</id>
@@ -198,11 +219,35 @@
     <Compile Include="SelectShippingRuleFilter.cs">
       <id>071ebaed-83ad-402a-be59-982edf8c1013</id>
     </Compile>
+    <Compile Include="SetBullZipDefaultPrinter.cs">
+      <id>7cafb397-4878-4430-941f-a4df110e591f</id>
+    </Compile>
+    <Compile Include="SetDefaultPrinterBullZip.cs">
+      <DependentUpon>SetDefaultPrinterBullZip.rxrec</DependentUpon>
+      <id>dc637511-ca5b-480d-97c4-c5fdef42df79</id>
+      <BoundTo>a0ca1486-fb58-4f0b-ab33-77310860a0f8</BoundTo>
+      <RecorderCode>true</RecorderCode>
+    </Compile>
+    <Compile Include="SetDefaultPrinterBullZip.UserCode.cs">
+      <DependentUpon>SetDefaultPrinterBullZip.rxrec</DependentUpon>
+      <id>5f3e1f26-c682-449b-aa83-c3dc117cb308</id>
+      <BoundTo>a0ca1486-fb58-4f0b-ab33-77310860a0f8</BoundTo>
+      <UserCode>true</UserCode>
+    </Compile>
     <Compile Include="ShipWorksPerformanceTestSuiteRepository.cs">
       <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
       <DependentUpon>ShipWorksPerformanceTestSuiteRepository.rxrep</DependentUpon>
       <RepositoryCode>true</RepositoryCode>
       <id>8046bedc-5d9e-4b49-aa0e-00587b18d34a</id>
+    </Compile>
+    <Compile Include="SingleScanTime.cs">
+      <id>0b1a80c1-d598-4a2c-951f-e871de4083da</id>
+    </Compile>
+    <Compile Include="SmokeTestRepository.cs">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>3da35f2c-63e7-4bc4-9ef0-2a853ec7b580</id>
+      <BoundTo>e82e808c-e6fc-4c2d-ad30-d9f637256263</BoundTo>
+      <RepositoryCode>true</RepositoryCode>
     </Compile>
     <Compile Include="SwitchToOLM.cs">
       <id>3982c5ef-35a8-4199-9e6a-070b0878b6d2</id>
@@ -227,11 +272,27 @@
     <None Include="app.config">
       <id>bff5bfd0-e215-480e-8a26-38ccce0d7d35</id>
     </None>
+    <None Include="BatchFile\auto_print.ini">
+      <id>5d7331da-5965-44e3-a625-4c9b19806d04</id>
+    </None>
+    <None Include="BatchFile\SetDefaultPrinterBullZip.bat">
+      <id>e4728ee5-2b6f-4715-b4af-de67b41e4eba</id>
+    </None>
     <None Include="JSikuliModule.jar">
       <id>3cd7aae0-8bcd-41bb-8f73-dd057812fdac</id>
     </None>
     <None Include="packages.config">
       <id>cf7365e3-7d75-4c7a-b46e-3786c4db8c4c</id>
+    </None>
+    <None Include="Recording1.rxrec">
+      <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
+      <id>9c2016dd-c565-4e0d-b0b4-e210beb6dcc8</id>
+      <recordtableid>c72dbb21-283a-4b9d-8e88-bfd5bbbedbe6</recordtableid>
+    </None>
+    <None Include="SetDefaultPrinterBullZip.rxrec">
+      <id>a0ca1486-fb58-4f0b-ab33-77310860a0f8</id>
+      <BoundTo>e82e808c-e6fc-4c2d-ad30-d9f637256263</BoundTo>
+      <recordtableid>86e8d95f-35f5-4272-8844-950150007ade</recordtableid>
     </None>
     <None Include="ShipWorksPerformanceTestSuiteRepository.rximg">
       <BoundTo>3b68fc90-8037-4fdc-8275-4f7d991469c4</BoundTo>
@@ -244,6 +305,17 @@
       <repoid>7e065f7a-a759-472e-9183-5eb5699d7833</repoid>
       <reporootid>0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1</reporootid>
     </None>
+    <None Include="SmokeTestRepository.rximg">
+      <DependentUpon>SmokeTestRepository.rxrep</DependentUpon>
+      <id>8d779f15-6228-4b55-9819-cadef82594de</id>
+      <BoundTo>e82e808c-e6fc-4c2d-ad30-d9f637256263</BoundTo>
+      <imageblob>true</imageblob>
+    </None>
+    <None Include="SmokeTestRepository.rxrep">
+      <id>e82e808c-e6fc-4c2d-ad30-d9f637256263</id>
+      <repoid>cd6632f9-96a5-4c7a-aab9-b49d97e203b3</repoid>
+      <reporootid>4aacfef1-6402-4ba7-b3c9-270ac9a4db4a</reporootid>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ShipWorksPerformanceTestSuite.rxtmg">
@@ -254,6 +326,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <id>98924f3e-a20f-437e-a08e-13edcad284af</id>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BatchFile">
+      <id>274190e5-2804-4f89-b532-931ad4f3d714</id>
+    </Folder>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(RanorexTargetsPath)" Condition="Exists('$(RanorexTargetsPath)')" />

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<recordtable
+embeddedrepository="False"
+id="c72dbb21-283a-4b9d-8e88-bfd5bbbedbe6"
+mode="Global"
+rxversion="8.1">
+	<name>
+		Recording1
+	</name>
+	<repeatcount>
+		1
+	</repeatcount>
+	<turbomode>
+		False
+	</turbomode>
+	<genreport>
+		True
+	</genreport>
+	<speedfactor>
+		1
+	</speedfactor>
+	<useDefaultItemLogging>
+		True
+	</useDefaultItemLogging>
+	<codegen
+	classname="Recording1"
+	namespace="ShipWorksPerformanceTestSuite">
+	</codegen>
+	<variables>
+	</variables>
+	<recorditems>
+	</recorditems>
+	<repository
+	id="7e065f7a-a759-472e-9183-5eb5699d7833"
+	name="ShipWorksPerformanceTestSuiteRepository"
+	relativepath="ShipWorksPerformanceTestSuiteRepository.rxrep"
+	rxversion="8.1">
+		<codegen
+		classname="ShipWorksPerformanceTestSuiteRepository"
+		namespace="ShipWorksPerformanceTestSuite">
+		</codegen>
+		<rootfolder
+		id="0dd6cfa7-ba04-43ea-9088-05ef7ddaa3f1"
+		name="_rootdummy_">
+		</rootfolder>
+	</repository>
+	<usercodefile
+	lang="CSharp">
+		Recording1.UserCode.cs
+	</usercodefile>
+	<references>
+	</references>
+</recordtable>

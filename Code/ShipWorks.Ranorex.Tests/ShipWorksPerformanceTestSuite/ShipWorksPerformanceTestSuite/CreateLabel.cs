@@ -38,9 +38,23 @@ namespace ShipWorksPerformanceTestSuite
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
+			
+				 try {
+            	
+            	CreateLabelMethod();
+            	
+            } catch (Exception) {
+            	
+            	RetryAction.RetryOnFailure(2,1,() => {
+			 	CreateLabelMethod();
+	           	});
+            }
+		}
+		
+		public void CreateLabelMethod()
+		{
 			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.CreateLabel' at Center.", repo.MainForm.PanelDockingArea.CreateLabelInfo, new RecordItemIndex(1));
 			repo.MainForm.PanelDockingArea.CreateLabel.Click();
-			Delay.Milliseconds(0);
 		}
 	}
 }
