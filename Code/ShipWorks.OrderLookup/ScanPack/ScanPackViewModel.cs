@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Media;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,15 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Threading;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Users;
 
@@ -33,6 +40,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IMessenger messenger;
         private readonly IVerifiedOrderService verifiedOrderService;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
+        private readonly ISchedulerProvider schedulerProvider;
+        private readonly IShortcutManager shortcutManager;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
@@ -53,7 +62,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             IScanPackItemFactory scanPackItemFactory,
             IMessenger messenger,
             IVerifiedOrderService verifiedOrderService,
-            IOrderLookupAutoPrintService orderLookupAutoPrintService)
+            IOrderLookupAutoPrintService orderLookupAutoPrintService,
+            ISchedulerProvider schedulerProvider,
+            IShortcutManager shortcutManager)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
@@ -61,6 +72,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             this.messenger = messenger;
             this.verifiedOrderService = verifiedOrderService;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
+            this.schedulerProvider = schedulerProvider;
+            this.shortcutManager = shortcutManager;
+
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             PackedItems = new ObservableCollection<ScanPackItem>();
 
@@ -68,6 +82,13 @@ namespace ShipWorks.OrderLookup.ScanPack
             ResetCommand = new RelayCommand(ResetClicked);
 
             Update();
+
+            messenger.OfType<ShortcutMessage>()
+                .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
+                .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Do(_ => ResetClicked())
+                .Do(shortcutManager.ShowShortcutIndicator)
+                .Subscribe();
         }
 
         /// <summary>

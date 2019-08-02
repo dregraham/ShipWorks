@@ -89,16 +89,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
 
         /// <summary>
-        /// Save the order if it is dirty
+        /// Save the order
         /// </summary>
-        public void Save()
-        {
-            if ((orderLookupViewModel.ShipmentModel?.SelectedOrder?.IsDirty ?? false) ||
-                (orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.IsDirty ?? false))
-            {
-                orderLookupViewModel.ShipmentModel.SaveToDatabase();
-            }
-        }
+        public void Save() => orderLookupViewModel.ShipmentModel.SaveToDatabase();
 
         /// <summary>
         /// Allow the creation of a label

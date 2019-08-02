@@ -8,6 +8,7 @@ using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ShipmentModelPipelines
@@ -19,8 +20,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
     {
         private readonly IMessenger messenger;
         private readonly ISchedulerProvider schedulerProvider;
-        private readonly ICurrentUserSettings currentUserSettings;
-        private readonly IMessageHelper messageHelper;
+        private readonly IShortcutManager shortcutManager;
 
         /// <summary>
         /// Constructor
@@ -28,12 +28,10 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
         public ClearSearchPipeline(
             IMessenger messenger,
             ISchedulerProvider schedulerProvider,
-            ICurrentUserSettings currentUserSettings,
-            IMessageHelper messageHelper)
+            IShortcutManager shortcutManager)
         {
-            this.messageHelper = messageHelper;
-            this.currentUserSettings = currentUserSettings;
             this.schedulerProvider = schedulerProvider;
+            this.shortcutManager = shortcutManager;
             this.messenger = messenger;
         }
 
@@ -46,27 +44,7 @@ namespace ShipWorks.OrderLookup.ShipmentModelPipelines
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Where(_ => model.CanAcceptFocus())
                 .Do(_ => model.Unload())
-                .Do(ShowShortcutIndicator)
+                .Do(shortcutManager.ShowShortcutIndicator)
                 .Subscribe();
-
-        /// <summary>
-        /// Show shortcut indicator
-        /// </summary>
-        private void ShowShortcutIndicator(ShortcutMessage shortcutMessage)
-        {
-            if (currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
-            {
-                string actionName = EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
-
-                if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
-                {
-                    messageHelper.ShowKeyboardPopup($"{shortcutMessage.Value}: {actionName}");
-                }
-                else
-                {
-                    messageHelper.ShowBarcodePopup($"Barcode: {actionName}");
-                }
-            }
-        }
     }
 }
