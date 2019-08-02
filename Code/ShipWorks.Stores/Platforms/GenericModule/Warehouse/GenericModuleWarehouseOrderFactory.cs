@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         /// <summary>
         /// Load store specific item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             var genericModuleItemEntity = (GenericModuleOrderItemEntity) itemEntity;
             var genericModuleWarehouseItem = warehouseItem.AdditionalData[genericModuleEntryKey].ToObject<GenericcModuleWarehouseItem>();

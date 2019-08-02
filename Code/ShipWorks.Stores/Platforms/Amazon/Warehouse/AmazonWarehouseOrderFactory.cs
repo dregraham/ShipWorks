@@ -69,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Load Amazon item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             AmazonOrderItemEntity amazonItemEntity = (AmazonOrderItemEntity) itemEntity;
             AmazonWarehouseItem amazonWarehouseItem = warehouseItem.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseItem>();

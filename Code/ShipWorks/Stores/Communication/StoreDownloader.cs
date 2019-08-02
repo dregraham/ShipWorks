@@ -1238,7 +1238,7 @@ namespace ShipWorks.Stores.Communication
             {
                 decimal total = OrderUtility.CalculateTotal(order);
 
-                Debug.Assert(total == order.OrderTotal,
+                Debug.Assert(Math.Abs(total - order.OrderTotal) <= 0.01m,
                     $"Order total does not match calculated total \r\n Calculated Total {total}\r\n should equal Order Total {order.OrderTotal} for order {order.OrderNumber}.");
             }
             else if (order.IsNew)
@@ -1349,6 +1349,7 @@ namespace ShipWorks.Stores.Communication
                 IWarehouseOrderFactory orderFactory = lifetimeScope
                     .ResolveKeyed<IWarehouseOrderFactory>(StoreType.TypeCode, TypedParameter.From<IOrderElementFactory>(this));
 
+                string importError = "";
                 bool shouldContinue = false;
                 var count = 1;
 
@@ -1357,11 +1358,11 @@ namespace ShipWorks.Stores.Communication
                     long downloadStartPoint = await GetHubSequenceStartingPoint().ConfigureAwait(false);
 
                     // get orders for this store and warehouse
-                    IEnumerable<WarehouseOrder> orders = await webClient
+                    WarehouseGetOrdersResponse orderResponse = await webClient
                         .GetOrders(config.WarehouseID, Store.WarehouseStoreID.ToString(), downloadStartPoint, StoreType.TypeCode, batchId)
                         .ConfigureAwait(false);
 
-                    foreach (WarehouseOrder warehouseOrder in orders)
+                    foreach (WarehouseOrder warehouseOrder in orderResponse.Orders)
                     {
                         if (Progress.IsCancelRequested)
                         {
@@ -1375,8 +1376,16 @@ namespace ShipWorks.Stores.Communication
                         await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
                     }
 
-                    shouldContinue = orders.Any();
+                    // We only care about the last request because if there was an error initially but that got cleared during
+                    // download, we don't need to alarm the customer
+                    importError = orderResponse.ImportDetails?.ErrorMessage;
+                    shouldContinue = orderResponse.Orders.Any();
                 } while (shouldContinue);
+
+                if (!string.IsNullOrWhiteSpace(importError))
+                {
+                    throw new DownloadException("ShipWorks Hub is not able to import orders from the store: " + importError);
+                }
             }
         }
 
