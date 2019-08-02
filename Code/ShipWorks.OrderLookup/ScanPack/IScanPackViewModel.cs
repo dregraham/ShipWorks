@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -12,6 +13,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Is the view enabled
         /// </summary>
         bool Enabled { get; set; }
+
+        /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        Func<bool> CanAcceptFocus { get; set; }
 
         /// <summary>
         /// Load an order

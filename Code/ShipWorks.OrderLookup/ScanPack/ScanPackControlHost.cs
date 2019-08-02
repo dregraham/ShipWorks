@@ -22,6 +22,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             InitializeComponent();
             this.scanPackViewModel = scanPackViewModel;
+            scanPackViewModel.CanAcceptFocus = () => Visible && CanFocus;
         }
 
         /// <summary>

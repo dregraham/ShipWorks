@@ -86,6 +86,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
+                .Where(_ => CanAcceptFocus())
                 .Do(_ => ResetClicked())
                 .Do(shortcutManager.ShowShortcutIndicator)
                 .Subscribe();
@@ -212,6 +213,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             get => enabled;
             set => Set(ref enabled, value);
         }
+
+        /// <summary>
+        /// Can the view accept focus
+        /// </summary>
+        public Func<bool> CanAcceptFocus { get; set; }
 
         #endregion
 
