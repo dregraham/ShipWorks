@@ -48,8 +48,8 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             SetupOrderNumberNotFound();
 
             testObject.State = state;
-            testObject.ItemsToScan.Add(new ScanPackItem("a", "b", 1, "c", "d", "e"));
-            testObject.PackedItems.Add(new ScanPackItem("1", "2", 3, "4", "5", "6"));
+            testObject.ItemsToScan.Add(new ScanPackItem(1, "a", "b", 1, "c", "d", "e", "f"));
+            testObject.PackedItems.Add(new ScanPackItem(2, "1", "2", 3, "4", "5", "6", "7"));
 
             await testObject.ProcessScan("foo").ConfigureAwait(false);
 
@@ -65,8 +65,8 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             SetupOrderNumberNotFound();
 
             testObject.State = state;
-            testObject.ItemsToScan.Add(new ScanPackItem("a", "b", 1, "c", "d", "e"));
-            testObject.PackedItems.Add(new ScanPackItem("1", "2", 3, "4", "5", "6"));
+            testObject.ItemsToScan.Add(new ScanPackItem(1, "a", "b", 1, "c", "d", "e", "f"));
+            testObject.PackedItems.Add(new ScanPackItem(2, "1", "2", 3, "4", "5", "6", "7"));
 
             await testObject.ProcessScan("foo").ConfigureAwait(false);
 
@@ -107,7 +107,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_MovesItemToPackedItems_WhenScannedTextMatchesItemInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 2, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             testObject.ItemsToScan.Add(item);
@@ -125,7 +125,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SetsError_WhenListeningForItemsAndScannedTextDoesNotMatchItemInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 2, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             testObject.ItemsToScan.Add(item);
@@ -141,8 +141,8 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SetsError_WhenScannedTextDoesNotMatchItemInItemsToScanButMatchesItemInPackedItems(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 2, "itemUpc", "productUpc", "sku");
-            ScanPackItem packedItem = new ScanPackItem("packedName", "packedImage", 2, "packedItemUpc", "packedProductUpc", "packedSku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
+            ScanPackItem packedItem = new ScanPackItem(2, "packedName", "packedImage", 2, "packedItemUpc","packedItemCode", "packedProductUpc", "packedSku");
 
             testObject.State = state;
             testObject.ItemsToScan.Add(item);
@@ -254,7 +254,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void Reset_ClearsItemLists()
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 2, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
             testObject.ItemsToScan.Add(item);
             testObject.PackedItems.Add(item);
 
@@ -289,7 +289,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SetsStateToScanningItems_WhenPackedItemsIsNotEmpty(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 2, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             testObject.ItemsToScan.Add(item);
@@ -304,7 +304,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SetsStateToOrderVerified_WhenItemsToScanIsEmptyAndPackedItemsIsNotEmpty(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 1, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
@@ -320,7 +320,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SavesVerifiedOrder_WhenItemsToScanIsEmptyAndPackedItemsIsNotEmpty(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 1, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
@@ -336,10 +336,10 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_DelegatesToAutoPrintService_WhenItemsToScanIsEmptyAndPackedItemsIsNotEmpty(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(3, "name", "image", 1, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
-            var order = new OrderEntity() { OrderID = 3 };
+            var order = new OrderEntity() { OrderID = 1 };
             order.ChangeOrderNumber("abcd111");
             await testObject.LoadOrder(order);
             testObject.ItemsToScan.Add(item);
@@ -354,7 +354,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_ProcessesItemScan_WhenScannedTextMatchesProductUpcInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
@@ -370,7 +370,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_ProcessesItemScan_WhenScannedTextMatchesItemUpcInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
@@ -386,7 +386,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_ProcessesItemScan_WhenScannedTextMatchesSkuInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             await testObject.LoadOrder(new OrderEntity() { OrderID = 4 });
@@ -402,7 +402,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [InlineData(ScanPackState.ScanningItems)]
         public async Task ProcessScan_SetsError_WhenListeningForItemsAndScannedTextDoesNotMatchesProductUpcItemUpcOrSkuInItemsToScan(ScanPackState state)
         {
-            ScanPackItem item = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem item = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             testObject.State = state;
             testObject.ItemsToScan.Add(item);
@@ -441,7 +441,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             ShipmentsLoadedEventArgs loadedShipment =
                 new ShipmentsLoadedEventArgs(null, false, null, new List<ShipmentEntity> {shipment});
 
-            ScanPackItem scanPackItem = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem scanPackItem = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             orderIdRetriever.Setup(x => x.GetOrderID("foo", string.Empty, string.Empty, string.Empty))
                 .ReturnsAsync(result);
@@ -469,7 +469,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
                 }
             };
 
-            ScanPackItem scanPackItem = new ScanPackItem("name", "image", 1, "itemUpc", "productUpc", "sku");
+            ScanPackItem scanPackItem = new ScanPackItem(1, "name", "image", 2, "itemUpc", "itemCode", "productUpc", "sku");
 
             itemFactory.Setup(x => x.Create(order)).ReturnsAsync(new List<ScanPackItem> {scanPackItem});
 
