@@ -142,6 +142,15 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 new GridColumnDefinition("{628D74DD-B10A-4E04-A929-F524E0CC3096}", false,
                     new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Actual Label Format", ThermalLanguage.None,
                     ProcessedShipmentFields.ActualLabelFormat)  { DefaultWidth = 60 },
+
+                new GridColumnDefinition("{DE840528-74A0-4F6F-AACB-1D30DECC49B7}", true,
+                    new GridBooleanDisplayType()
+                    {
+                        TrueText = "Yes",
+                        FalseText = "No"
+                    },
+                    "Verified", "Yes",
+                    ProcessedShipmentFields.Verified),
             };
         }
     }

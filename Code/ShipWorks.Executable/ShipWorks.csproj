@@ -316,6 +316,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Content Include="MaterialDesignIconLicense.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="SingleScanPanels.swe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

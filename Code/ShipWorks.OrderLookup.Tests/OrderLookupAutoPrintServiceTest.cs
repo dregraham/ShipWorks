@@ -31,18 +31,18 @@ namespace ShipWorks.OrderLookup.Tests
         {
             var message = new SingleScanMessage(this, new ScanMessage(this, "123", IntPtr.Zero));
 
-            await testObject.AutoPrintShipment(123, message);
+            await testObject.AutoPrintShipment(123, message.ScannedText);
 
-            autoPrintService.Verify(a => a.AllowAutoPrint(message));
+            autoPrintService.Verify(a => a.AllowAutoPrint(message.ScannedText));
         }
 
         [Fact]
         public async Task AutoPrintShipment_DelegatesToAutoPrintServicePrint()
         {
             SingleScanMessage message = new SingleScanMessage(this, new ScanMessage(this, "123", IntPtr.Zero));
-            autoPrintService.Setup(a => a.AllowAutoPrint(message)).Returns(true);
+            autoPrintService.Setup(a => a.AllowAutoPrint(message.ScannedText)).Returns(true);
 
-            await testObject.AutoPrintShipment(123, message);
+            await testObject.AutoPrintShipment(123, message.ScannedText);
 
             autoPrintService.Verify(a => a.Print(new AutoPrintServiceDto() { OrderID = 123, MatchedOrderCount = 1, ScannedBarcode = message.ScannedText}));
         }
@@ -51,9 +51,9 @@ namespace ShipWorks.OrderLookup.Tests
         public async Task AutoPrintShipment_ReturnsEmptyAutoPrintCompletionResult_WhenAutoPrintIsDisabled()
         {
             SingleScanMessage message = new SingleScanMessage(this, new ScanMessage(this, "123", IntPtr.Zero));
-            autoPrintService.Setup(a => a.AllowAutoPrint(message)).Returns(false);
+            autoPrintService.Setup(a => a.AllowAutoPrint(message.ScannedText)).Returns(false);
 
-            AutoPrintCompletionResult result = await testObject.AutoPrintShipment(123, message);
+            AutoPrintCompletionResult result = await testObject.AutoPrintShipment(123, message.ScannedText);
 
             Assert.Empty(result.ProcessShipmentResults);
         }

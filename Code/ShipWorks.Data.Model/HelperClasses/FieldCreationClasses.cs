@@ -812,6 +812,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new AmazonOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new AmazonOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -3477,6 +3492,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new ChannelAdvisorOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new ChannelAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -4407,6 +4437,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new ClickCartProOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new ClickCartProOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ClickCartProOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new ClickCartProOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -4866,6 +4911,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new CommerceInterfaceOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(CommerceInterfaceOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new CommerceInterfaceOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -6086,6 +6146,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new EbayOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new EbayOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -7716,6 +7791,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new EtsyOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new EtsyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -10727,6 +10817,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new GenericModuleOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new GenericModuleOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new GenericModuleOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -11736,6 +11841,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new GrouponOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new GrouponOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -13282,6 +13402,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new JetOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new JetOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new JetOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(JetOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new JetOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -14172,6 +14307,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new LemonStandOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new LemonStandOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new LemonStandOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -15002,6 +15152,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new MagentoOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new MagentoOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new MagentoOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID_GenericModuleOrder
 		{
@@ -15801,6 +15966,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -16872,6 +17052,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new NetworkSolutionsOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new NetworkSolutionsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -17531,6 +17726,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new NeweggOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new NeweggOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -18972,6 +19182,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new OrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new OrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new OrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.VerifiedDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderChargeEntity</summary>
@@ -19626,6 +19851,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new OrderMotionOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new OrderMotionOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -20406,6 +20646,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new OverstockOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new OverstockOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -21287,6 +21542,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new PayPalOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new PayPalOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new PayPalOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -22047,6 +22317,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.ReturnShipment);}
 		}
+		/// <summary>Creates a new ProcessedShipmentEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProcessedShipmentFieldIndex.Verified);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductEntity</summary>
@@ -22741,6 +23016,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new ProStoresOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new ProStoresOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -23561,6 +23851,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new SearsOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(SearsOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new SearsOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -25687,6 +25992,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new ShopifyOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new ShopifyOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new ShopifyOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -27522,6 +27842,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.HubSequence);}
 		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new ThreeDCartOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartOrderFieldIndex.VerifiedDate);}
+		}
 		/// <summary>Creates a new ThreeDCartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
 		{
@@ -29157,6 +29492,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastReleaseNotesSeen);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.AutoPrintRequireValidation field instance</summary>
+		public static EntityField2 AutoPrintRequireValidation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
@@ -30176,6 +30516,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new WalmartOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new WalmartOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID
@@ -31751,6 +32106,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HubSequence
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new YahooOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(YahooOrderFieldIndex.VerifiedDate);}
 		}
 		/// <summary>Creates a new YahooOrderEntity.OrderID field instance</summary>
 		public static EntityField2 OrderID

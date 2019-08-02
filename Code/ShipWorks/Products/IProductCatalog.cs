@@ -30,6 +30,11 @@ namespace ShipWorks.Products
         ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, string sku);
 
         /// <summary>
+        /// Fetch product variants based on a collection of skus
+        /// </summary>
+        Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus);
+
+        /// <summary>
         /// Fetch a products siblings
         /// </summary>
         Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter);

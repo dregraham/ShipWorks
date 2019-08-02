@@ -34,12 +34,13 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private readonly IAutoWeighService autoWeighService;
         private readonly IOrderLookupShipmentModel shipmentModel;
-        private readonly ISingleScanOrderShortcut singleScanOrderShortcut;
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
+        private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
+        private object loadingOrderLock = new object();
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -59,10 +60,10 @@ namespace ShipWorks.OrderLookup
             IOrderLookupAutoPrintService orderLookupAutoPrintService,
             IAutoWeighService autoWeighService,
             IOrderLookupShipmentModel shipmentModel,
-            ISingleScanOrderShortcut singleScanOrderShortcut,
             Func<Type, ILog> createLogger,
             IOrderLookupConfirmationService orderLookupConfirmationService,
-            Func<string, ITrackedDurationEvent> telemetryFactory)
+            Func<string, ITrackedDurationEvent> telemetryFactory,
+            IOrderLookupOrderIDRetriever orderIDRetriever)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -71,9 +72,9 @@ namespace ShipWorks.OrderLookup
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
             this.autoWeighService = autoWeighService;
             this.shipmentModel = shipmentModel;
-            this.singleScanOrderShortcut = singleScanOrderShortcut;
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             this.telemetryFactory = telemetryFactory;
+            this.orderIDRetriever = orderIDRetriever;
             log = createLogger(GetType());
         }
 
@@ -86,7 +87,7 @@ namespace ShipWorks.OrderLookup
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnSingleScanMessage(x).Forget())
@@ -94,14 +95,47 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => !processingScan && !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && !mainForm.IsShipmentHistoryActive())
+                .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnOrderLookupSearchMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupLoadOrderMessage>()
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
+                .Do(x => LoadOrder(x.Order))
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
+
+                messenger.OfType<OrderLookupClearOrderMessage>()
+                .Do(OnOrderLookupClearOrderMessage)
+                .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
             );
         }
+
+        /// <summary>
+        /// Handle clear message
+        /// </summary>
+        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
+        {
+            if (message.Reason == OrderClearReason.Reset)
+            {
+                LoadOrder(null);
+            }
+        }
+
+        /// <summary>
+        /// Can we process an order search message from the scanner or searchbar
+        /// </summary>
+        private bool CanProcessSearchMessage() =>
+            !processingScan &&
+            !mainForm.AdditionalFormsOpen() &&
+            mainForm.UIMode == UIMode.OrderLookup &&
+            !mainForm.IsShipmentHistoryActive() &&
+            !mainForm.IsScanPackActive();
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.
@@ -121,7 +155,8 @@ namespace ShipWorks.OrderLookup
                     telemetryEvent.AddProperty(InputSourceTelemetryPropertyName, "Barcode");
                     telemetryEvent.AddProperty(InputTextTelemetryPropertyName, message.ScannedText);
 
-                    TelemetricResult<long?> orderLookupTelemetricResult = await GetOrderID(message.ScannedText).ConfigureAwait(true);
+                    TelemetricResult<long?> orderLookupTelemetricResult = await orderIDRetriever
+                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(true);
                     orderLookupTelemetricResult.WriteTo(telemetryEvent);
 
                     long? orderId = orderLookupTelemetricResult.Value;
@@ -133,7 +168,7 @@ namespace ShipWorks.OrderLookup
                         TelemetricResult<bool> shipmentLoadTelemetricResult = new TelemetricResult<bool>("Shipment");
                         order = await shipmentLoadTelemetricResult.RunTimedEventAsync(AutoPrintTelemetryTimeSliceName, async () =>
                         {
-                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message).ConfigureAwait(false);
+                            AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message.ScannedText).ConfigureAwait(false);
                             return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
                         }).ConfigureAwait(true);
 
@@ -158,6 +193,7 @@ namespace ShipWorks.OrderLookup
                                 }
 
                                 shipmentModel.LoadOrder(order);
+                                messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                             }
 
                             if (!loadOrder)
@@ -186,49 +222,23 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Get OrderID based on scanned text
+        /// Load the order
         /// </summary>
-        /// <param name="scannedText"></param>
-        /// <returns></returns>
-        public async Task<TelemetricResult<long?>> GetOrderID(string scannedText)
+        public void LoadOrder(OrderEntity order)
         {
-            TelemetricResult<long?> telemetricResult = new TelemetricResult<long?>("Order");
-
-            // If it was a Single Scan Order Shortcut we know the order has already been downloaded and
-            // the scanned barcode is not one that we should try to download again.
-            if (singleScanOrderShortcut.AppliesTo(scannedText))
+            lock (loadingOrderLock)
             {
-                telemetricResult.RunTimedEvent(DataLoadingTelemetryTimeSliceName, () =>
+                if (processingScan)
                 {
-                    // We're looking up by order ID, there will be at most 1 record
-                    telemetricResult.SetValue(singleScanOrderShortcut.GetOrderID(scannedText));
-                    telemetricResult.AddEntry(OrderCountTelemetryPropertyName, telemetricResult.Value.HasValue ? 1 : 0);
-                });
+                    return;
+                }
+
+                processingScan = true;
+
+                shipmentModel.LoadOrder(order);
+
+                processingScan = false;
             }
-            else
-            {
-                // There's the potential to get multiple orders back in this code path
-                List<long> orderIds = new List<long>();
-
-                // Track the time it took to load the order
-                await telemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
-                {
-                    await Task.Run(() => onDemandDownloaderFactory.CreateOnDemandDownloader().Download(scannedText)).ConfigureAwait(true);
-                    orderIds = orderRepository.GetOrderIDs(scannedText);
-
-                    // Make a note of how many orders were found, so we can marry this up with the confirmation telemetry
-                    telemetricResult.AddEntry(OrderCountTelemetryPropertyName, orderIds.Count);
-                });
-
-                // Track the time it takes to confirm user input from the confirmation service
-                long? selectedOrderId = await telemetricResult.RunTimedEventAsync(
-                        UserInputTelemetryTimeSliceName,
-                        () => orderLookupConfirmationService.ConfirmOrder(scannedText, orderIds))
-                    .ConfigureAwait(false);
-                telemetricResult.SetValue(selectedOrderId);
-            }
-
-            return telemetricResult;
         }
 
         /// <summary>
@@ -281,6 +291,7 @@ namespace ShipWorks.OrderLookup
                         }
 
                         shipmentModel.LoadOrder(order);
+                        messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                     }).ConfigureAwait(true);
 
                     // Record the shipment data to the telemetry event

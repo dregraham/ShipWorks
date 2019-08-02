@@ -65,6 +65,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ProcessedWithUiMode = source.ProcessedWithUiMode;
             CombineSplitStatus = source.CombineSplitStatus;
             ReturnShipment = source.ReturnShipment;
+            Verified = source.Verified;
             
             
             
@@ -247,6 +248,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ReturnShipment { get; }
+        /// <summary> The Verified property of the Entity ProcessedShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on view field: "ProcessedShipmentsView"."Verified"<br/>
+        /// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean Verified { get; }
         
         
         

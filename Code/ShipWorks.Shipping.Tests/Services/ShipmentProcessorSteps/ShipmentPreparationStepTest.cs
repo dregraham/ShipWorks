@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared;
@@ -21,6 +23,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         readonly AutoMock mock;
         readonly ShipmentPreparationStep testObject;
         private ProcessShipmentState defaultInput;
+        private readonly Mock<IScanPackOrderValidator> scanPackOrderValidator;
 
         public ShipmentPreparationStepTest()
         {
@@ -32,6 +35,20 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             mock.Mock<IShippingManager>()
                 .Setup(x => x.ValidateLicense(It.IsAny<StoreEntity>(), It.IsAny<IDictionary<long, Exception>>()))
                 .Returns<Exception>(null);
+
+            scanPackOrderValidator = mock.Mock<IScanPackOrderValidator>();
+            scanPackOrderValidator.Setup(v => v.CanProcessShipment(It.IsAny<OrderEntity>()))
+                .Returns(Result.FromSuccess());
+        }
+
+        [Fact]
+        public void PrepareShipment_DelegatesToScanPackOrderValidatorWithShipmentsOrder()
+        {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
+            var result = testObject.PrepareShipment(defaultInput);
+            scanPackOrderValidator.Verify(s => s.CanProcessShipment(defaultInput.OriginalShipment.Order));
         }
 
         [Fact]

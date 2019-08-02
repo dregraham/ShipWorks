@@ -866,6 +866,7 @@
     <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
     <Compile Include="Common\Threading\ProgressFactory.cs" />
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
@@ -1107,6 +1108,7 @@
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="OrderLookup\OrderClearReason.cs" />
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupLoadOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
@@ -1355,8 +1357,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="UI\Controls\IScanPack.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
+    <Compile Include="Users\IUserManager.cs" />
+    <Compile Include="Users\UserManagerWrapper.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />

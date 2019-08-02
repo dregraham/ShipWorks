@@ -61,6 +61,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private Mock<IMessenger> messenger;
         private Mock<IDateTimeProvider> dateTimeProvider;
         private Mock<IUserSession> userSession;
+        private Mock<IMainForm> mainForm;
 
         public ShipmentProcessorTest(DatabaseFixture db)
         {
@@ -73,6 +74,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                     builder.RegisterMock<IActionDispatcher>(mock);
                     builder.RegisterMock<ITangoWebClient>(mock);
                     userSession = builder.RegisterMock<IUserSession>(mock);
+                    mainForm = builder.RegisterMock<IMainForm>(mock);
                 });
 
             dateTimeProvider.Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
@@ -94,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             shipment = Create.Shipment(context.Order)
                 .AsOther()
-                .Save();
+                .Save();            
         }
 
         [Fact]

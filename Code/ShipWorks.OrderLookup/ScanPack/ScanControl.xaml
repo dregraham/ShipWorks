@@ -1,0 +1,92 @@
+<UserControl x:Class="ShipWorks.OrderLookup.ScanPack.ScanControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
+             d:DesignHeight="800" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style TargetType="Canvas">
+                <Style.Triggers>
+                    <Trigger Property="Control.IsEnabled" Value="false">
+                        <Setter Property="Control.Opacity" Value="0.2" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+            <ui:BooleanToVisibilityConverter x:Key="InverseBoolToVis" Invert="True"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <GroupBox Header="Scan"
+                  BorderBrush="Black"
+                  FontFamily="Tahoma"
+                  BorderThickness="2"
+                  FontSize="16"
+                  Background="{x:Static SystemColors.ControlBrush}">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="{Binding ScanHeader}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0 40 0 50"
+                           TextWrapping="Wrap"/>
+                <Viewbox Grid.Row="1"
+                    MaxWidth="360" MaxHeight="360"
+                    Visibility="{Binding Error, Converter={StaticResource InverseBoolToVis}}">
+                    <Canvas Width="24" Height="24" >
+                        <Path
+                            Style="{StaticResource Barcode}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForOrderScan}}"/>
+                        <Path
+                            Style="{StaticResource OpenBox}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderLoaded}}"/>
+                        <Path
+                            Style="{StaticResource CheckboxCircle}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ScanningItems}}"/>
+                        <Path
+                            Style="{StaticResource CheckboxDecagram}"
+                            Visibility="{Binding State,
+                                        Converter={StaticResource VisibleWhenEqualToParameter},
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderVerified}}"/>
+                    </Canvas>
+                </Viewbox>
+                <Viewbox Grid.Row="1"
+                         MaxWidth="360" MaxHeight="360"
+                         Visibility="{Binding Error, Converter={StaticResource BoolToVis}}">
+                    <Canvas Width="24" Height="24" >
+                        <Path Style="{StaticResource Alert}"/>
+                    </Canvas>
+                </Viewbox>
+                <TextBlock Grid.Row="2"
+                           Text="{Binding ScanFooter}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Margin="0 50 0 40"
+                           TextWrapping="Wrap"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

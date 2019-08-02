@@ -2382,7 +2382,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OrderEntity's mappings</summary>
 		private void InitOrderEntityMappings()
 		{
-			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 84, 0);
+			this.AddElementMapping("OrderEntity", @"ShipWorksLocal", @"dbo", "Order", 87, 0);
 			this.AddElementFieldMapping("OrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OrderEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OrderEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -2467,6 +2467,9 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "Custom5", "Custom5", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 81);
 			this.AddElementFieldMapping("OrderEntity", "HubOrderID", "HubOrderID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 82);
 			this.AddElementFieldMapping("OrderEntity", "HubSequence", "HubSequence", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 83);
+			this.AddElementFieldMapping("OrderEntity", "Verified", "Verified", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 84);
+			this.AddElementFieldMapping("OrderEntity", "VerifiedBy", "VerifiedBy", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 85);
+			this.AddElementFieldMapping("OrderEntity", "VerifiedDate", "VerifiedDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 86);
 		}
 
 		/// <summary>Inits OrderChargeEntity's mappings</summary>
@@ -2783,7 +2786,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ProcessedShipmentEntity's mappings</summary>
 		private void InitProcessedShipmentEntityMappings()
 		{
-			this.AddElementMapping("ProcessedShipmentEntity", @"ShipWorksLocal", @"dbo", "ProcessedShipmentsView", 29, 4);
+			this.AddElementMapping("ProcessedShipmentEntity", @"ShipWorksLocal", @"dbo", "ProcessedShipmentsView", 30, 4);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipmentType", "ShipmentType", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ShipDate", "ShipDate", false, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 2);
@@ -2813,6 +2816,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ProcessedWithUiMode", "ProcessedWithUiMode", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 26);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "CombineSplitStatus", "CombineSplitStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
 			this.AddElementFieldMapping("ProcessedShipmentEntity", "ReturnShipment", "ReturnShipment", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 28);
+			this.AddElementFieldMapping("ProcessedShipmentEntity", "Verified", "Verified", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 29);
 		}
 
 		/// <summary>Inits ProductEntity's mappings</summary>
@@ -3904,7 +3908,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 21, 0);
+			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 22, 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -3926,6 +3930,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "UIMode", "UIMode", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 18);
 			this.AddElementFieldMapping("UserSettingsEntity", "OrderLookupLayout", "OrderLookupLayout", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 19);
 			this.AddElementFieldMapping("UserSettingsEntity", "LastReleaseNotesSeen", "LastReleaseNotesSeen", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("UserSettingsEntity", "AutoPrintRequireValidation", "AutoPrintRequireValidation", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

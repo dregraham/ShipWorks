@@ -526,7 +526,10 @@ CREATE TABLE [dbo].[Order]
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
 [Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT (''),
 [HubOrderID] [uniqueidentifier] NULL,
-[HubSequence] [bigint] NULL
+[HubSequence] [bigint] NULL,
+[Verified] [bit] NOT NULL CONSTRAINT [DF_Order_Verified] DEFAULT (0),
+[VerifiedBy] [bigint] NULL,
+[VerifiedDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -572,6 +575,10 @@ GO
 PRINT N'Creating index [IX_SWDefault_Order_StoreIdOnlineStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
+GO
+PRINT N'Creating index [IX_SWDefault_Order_Verified] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Order_Verified] ON [dbo].[Order] ([Verified])
 GO
 PRINT N'Creating index [IX_SWDefault_RequestedShipping] on [dbo].[Order]'
 GO
@@ -4284,7 +4291,8 @@ CREATE TABLE [dbo].[UserSettings]
 [DialogSettings] [xml] NULL,
 [UIMode] [int] NOT NULL,
 [OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS,
-[LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0'
+[LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0',
+[AutoPrintRequireValidation] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
@@ -7603,6 +7611,8 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Store', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'StoreID'
+GO
+EXEC sp_addextendedproperty N'AuditName', N'Verified', 'SCHEMA', N'dbo', 'TABLE', N'Order', 'COLUMN', N'Verified'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'OrderCharge', 'COLUMN', N'Amount'
 GO
