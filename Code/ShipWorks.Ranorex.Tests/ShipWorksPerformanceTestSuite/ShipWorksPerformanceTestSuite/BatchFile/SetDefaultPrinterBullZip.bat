@@ -1,0 +1,1 @@
+wmic printer where name='Bullzip PDF Printer' call setdefaultprinter

@@ -38,13 +38,14 @@ namespace ShipWorksPerformanceTestSuite
 		public string GetFolderName()
 		{
 			string folderName = System.DateTime.Now.ToString("MMddyyyyHHmmss");
-			string folderPrefix = "SWPerformanceTest_";
+			string folderPrefix = "SWPerformanceTest_";			
 			return(folderPrefix + folderName);
 		}
 	}
 	
 	public static class RetryAction
 	{
+		public static string CurrentInstallDir = "";
 		
 		public static void RetryOnFailure(int maxAttempts, int pressEscape, Action action)
 		{
@@ -87,7 +88,8 @@ namespace ShipWorksPerformanceTestSuite
 		public static long totalLoad500Time = 0;
 		public static long totalApplyProfile500Time = 0;
 		public static long totalProcessTime = 0;
-		public static long totalVoid500Time = 0;		
+		public static long totalVoid500Time = 0;	
+		public static long singleScanTime = 0;
 		
 		public static long totalLoad100SRTime = 0;
 		public static long totalApplyProfile100SRTime = 0;		

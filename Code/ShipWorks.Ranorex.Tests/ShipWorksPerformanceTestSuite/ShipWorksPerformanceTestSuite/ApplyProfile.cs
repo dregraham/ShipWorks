@@ -17,7 +17,9 @@ using WinForms = System.Windows.Forms;
 using Ranorex;
 using Ranorex.Core;
 using Ranorex.Core.Testing;
+using Ranorex.Core.Repository;
 using SikuliModule;
+
 
 namespace ShipWorksPerformanceTestSuite
 {
@@ -28,19 +30,33 @@ namespace ShipWorksPerformanceTestSuite
 		
 		public static ShipWorksPerformanceTestSuiteRepository repo = ShipWorksPerformanceTestSuiteRepository.Instance;
 		
-		public ApplyProfile()
-		{
-			// Do not delete - a parameterless constructor is required!
-		}
-		
 		void ITestModule.Run()
 		{
 			Mouse.DefaultMoveTime = 300;
 			Keyboard.DefaultKeyPressTime = 100;
 			Delay.SpeedFactor = 1.0;
 			
+			
+			try {
+				
+				ApplyProfileMethod();
+				
+			} catch (Exception) {
+				
+				RetryAction.RetryOnFailure(2,1,() => {
+				ApplyProfileMethod();
+		  		});
+			}
+		}
+		
+		public void ApplyProfileMethod()
+		{
+			Random RNG = new Random();
+			
 			SikuliAction.Click(@"..\..\Sikuli_Images\ApplyButton.png");
-			SikuliAction.Click(@"..\..\Sikuli_Images\FedexProfile.png");
+			SikuliAction.Click(@"..\..\Sikuli_Images\USPSProfile.png");
+			SikuliAction.Click(@"..\..\Sikuli_Images\PostalCodeField.png");
+			Keyboard.Press(RNG.Next(10000, 99999).ToString()); // random zipcode generation
 		}
 	}
 }
