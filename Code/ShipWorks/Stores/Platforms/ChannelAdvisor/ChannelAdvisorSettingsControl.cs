@@ -47,7 +47,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             attributes.LoadStore(caStore);
             consolidator.LoadStore(caStore);
             amazon.LoadStore(caStore);
-            daysBack.LoadStore(caStore);
         }
 
         /// <summary>
@@ -66,7 +65,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 attributes.SaveToEntity(caStore);
                 consolidator.SaveToEntity(caStore);
                 amazon.SaveToEntity(caStore);
-                daysBack.SaveToEntity(caStore);
             }
             catch (Exception ex) when (ex.GetType() == typeof(ChannelAdvisorException) || ex.GetType() == typeof(AmazonSFPShippingException))
             {
@@ -83,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OnAttributesResize(object sender, EventArgs e)
         {
-            Height = attributes.Height + consolidator.Height + daysBack.Height + 30;
+            Height = attributes.Height + consolidator.Height + 30;
 
             // Adjust height if the Amazon control is visible
             if (showAmazonSettings)

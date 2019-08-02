@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             };
 
             client = mock.Mock<IChannelAdvisorRestClient>();
-            client.Setup(c => c.GetOrders(It.Is<DateTime>(x => x < DateTime.UtcNow.AddDays(-29)), It.IsAny<string>()))
+            client.Setup(c => c.GetOrders(It.IsAny<string>()))
                 .Returns(() => firstBatch);
             client.Setup(c => c.GetDistributionCenters(It.IsAny<string>()))
                 .Returns(new ChannelAdvisorDistributionCenterResponse() { DistributionCenters = distributionCenters });
@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             firstBatch = new ChannelAdvisorOrderResult()
             {
                 OdataContext = "",
-                OdataNextLink = "",
+                OdataNextLink = "something",
                 Orders = new List<ChannelAdvisorOrder>() { order }
             };
 
@@ -178,7 +178,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             firstBatch = new ChannelAdvisorOrderResult
             {
                 OdataContext = "",
-                OdataNextLink = "",
+                OdataNextLink = "something",
                 Orders = new List<ChannelAdvisorOrder> { order }
             };
 
