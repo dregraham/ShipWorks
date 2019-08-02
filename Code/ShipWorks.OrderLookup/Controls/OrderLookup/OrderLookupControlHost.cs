@@ -81,6 +81,38 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public Task CreateLabel() =>
             orderLookupViewModel.ShipmentModel.CreateLabel();
 
+
+        /// <summary>
+        /// Register the profile handler
+        /// </summary>
+        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
+            orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
+
+        /// <summary>
+        /// Save the order if it is dirty
+        /// </summary>
+        public void Save()
+        {
+            if ((orderLookupViewModel.ShipmentModel?.SelectedOrder?.IsDirty ?? false) ||
+                (orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.IsDirty ?? false))
+            {
+                orderLookupViewModel.ShipmentModel.SaveToDatabase();
+            }
+        }
+
+        /// <summary>
+        /// Allow the creation of a label
+        /// </summary>
+        public bool CreateLabelAllowed()
+        {
+            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        }
+
+        /// <summary>
+        /// Expose the Control
+        /// </summary>
+        public UserControl Control => this;
+
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
@@ -100,25 +132,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                 })
                 .FirstAsync();
         }
-
-        /// <summary>
-        /// Register the profile handler
-        /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
-            orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
-
-        /// <summary>
-        /// Allow the creation of a label
-        /// </summary>
-        public bool CreateLabelAllowed()
-        {
-            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
-        }
-
-        /// <summary>
-        /// Expose the Control
-        /// </summary>
-        public UserControl Control => this;
 
         /// <summary>
         /// Is the object an input element that does not hold keyboard focus

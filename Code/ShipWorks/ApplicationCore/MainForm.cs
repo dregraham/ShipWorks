@@ -1195,6 +1195,8 @@ namespace ShipWorks
         {
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
             {
+                // Save the order in case changes were made before switching to this tab
+                orderLookupControl?.Save();
                 ToggleVisiblePanel(scanPackControl?.Control);
                 shipmentHistory?.Deactivate();
             }
@@ -1205,6 +1207,8 @@ namespace ShipWorks
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
+                // Save the order in case changes were made before switching to this tab
+                orderLookupControl?.Save();
                 ToggleVisiblePanel(shipmentHistory?.Control);
                 shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
