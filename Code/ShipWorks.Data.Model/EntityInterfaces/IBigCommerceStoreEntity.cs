@@ -78,7 +78,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The Identifier property of the Entity BigCommerceStore<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "BigCommerceStore"."Identifier"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 110<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1024<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Identifier { get; }
         
