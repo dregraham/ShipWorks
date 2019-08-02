@@ -1744,8 +1744,6 @@ namespace ShipWorks.Data.Model
 		AmazonApiRegion,
 		///<summary>RefreshToken. </summary>
 		RefreshToken,
-		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
-		DownloadModifiedNumberOfDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsRequestVerbToGet()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders("token");
 
             variableRequestSubmitter.VerifySet(r => r.Verb = HttpVerb.Get);
         }
@@ -159,27 +159,26 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsUriToOrdersEndPoint()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders("token");
 
             variableRequestSubmitter.VerifySet(r => r.Uri = new Uri("https://api.channeladvisor.com/v1/Orders"));
         }
 
         [Fact]
-        public void GetOrders_SetsFilterVariable()
+        public void GetOrders_SetsExportedVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            var start = DateTime.UtcNow;
 
-            testObject.GetOrders(start, "token");
+            testObject.GetOrders("token");
 
-            variableRequestSubmitter.Verify(s => s.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'} and PaymentStatus eq 'Cleared'"));
+            variableRequestSubmitter.Verify(s => s.Variables.Add("exported", "false"));
         }
 
         [Fact]
         public void GetOrders_SetsExpandVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders("token");
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)"));
         }
@@ -188,7 +187,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsAccesstokenVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders("token");
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("access_token", "atoken"));
         }
@@ -197,8 +196,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_UsesCachedAccessToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(DateTime.UtcNow, "token");
-            testObject.GetOrders(DateTime.UtcNow, "token");
+            testObject.GetOrders("token");
+            testObject.GetOrders("token");
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
         }

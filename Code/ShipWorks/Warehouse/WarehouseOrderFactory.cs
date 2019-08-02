@@ -53,7 +53,7 @@ namespace ShipWorks.Warehouse
 
                 if (orderEntity.IsNew)
                 {
-                    LoadItems(orderEntity, warehouseOrder.Items);
+                    LoadItems(store, orderEntity, warehouseOrder.Items);
                     LoadCharges(orderEntity, warehouseOrder);
                     LoadPaymentDetails(orderEntity, warehouseOrder);
                 }
@@ -146,24 +146,24 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load store specific item details
         /// </summary>
-        protected abstract void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
+        protected abstract void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
 
         /// <summary>
         /// Load items from the warehouse order into the order entity
         /// </summary>
-        private void LoadItems(OrderEntity orderEntity, IEnumerable<WarehouseOrderItem> warehouseOrderItems)
+        private void LoadItems(IStoreEntity store, OrderEntity orderEntity, IEnumerable<WarehouseOrderItem> warehouseOrderItems)
         {
             foreach (WarehouseOrderItem warehouseOrderItem in warehouseOrderItems)
             {
                 OrderItemEntity itemEntity = orderElementFactory.CreateItem(orderEntity);
-                LoadItem(itemEntity, warehouseOrderItem);
+                LoadItem(store, itemEntity, warehouseOrderItem);
             }
         }
 
         /// <summary>
         /// Load the item details from the warehouse item into the item entity
         /// </summary>
-        private void LoadItem(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        private void LoadItem(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             itemEntity.Name = warehouseItem.Name;
             itemEntity.Code = warehouseItem.Code;
@@ -187,7 +187,7 @@ namespace ShipWorks.Warehouse
 
             LoadItemAttributes(itemEntity, warehouseItem);
 
-            LoadStoreItemDetails(itemEntity, warehouseItem);
+            LoadStoreItemDetails(store, itemEntity, warehouseItem);
         }
 
         /// <summary>

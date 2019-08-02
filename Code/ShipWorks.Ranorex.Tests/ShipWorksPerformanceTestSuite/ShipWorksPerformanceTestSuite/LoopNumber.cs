@@ -38,16 +38,16 @@ namespace ShipWorksPerformanceTestSuite
 			var createLabel = new CreateLabel();
 			var printLabel = new PrintLabel();
 			var voidLabel = new VoidLabel();
-
 			
-			Mouse.DefaultMoveTime = 300;
-			Keyboard.DefaultKeyPressTime = 100;
-			Delay.SpeedFactor = 1.0;
 			
-			for (counter = 8; counter < 10; counter++)
+//			Mouse.DefaultMoveTime = 300;
+//			Keyboard.DefaultKeyPressTime = 100;
+//			Delay.SpeedFactor = 1.0;
+			
+			for (counter = 478; counter < 480; counter++)
 			{
 				TestModuleRunner.Run(enterOrder);
-				TestModuleRunner.Run(applyProfile);
+				TestModuleRunner.Run(applyProfile);				
 				TestModuleRunner.Run(createLabel);
 				TestModuleRunner.Run(printLabel);
 				TestModuleRunner.Run(voidLabel);

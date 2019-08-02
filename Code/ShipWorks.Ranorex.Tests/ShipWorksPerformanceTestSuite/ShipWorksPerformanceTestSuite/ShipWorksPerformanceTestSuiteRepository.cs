@@ -55,6 +55,13 @@ namespace ShipWorksPerformanceTestSuite
         ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder _explorer;
         ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder _shipworks2;
         ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder _saveprintoutputas;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder _shipworksruninstall;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder _formiu14d2n;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.SetupBullzipPDFPrinterAppFolder _setupbullzippdfprinter;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.BullzipPDFPrinterOptionsAppFolder _bullzippdfprinteroptions;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.PDFPrinterAppFolder _pdfprinter;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.MasterPublicInstallerJenkinsGoogAppFolder _masterpublicinstallerjenkinsgoog;
+        ShipWorksPerformanceTestSuiteRepositoryFolders.InAGitMergeConflictWhatAreTheBAAppFolder _inagitmergeconflictwhataretheba;
 
         /// <summary>
         /// Gets the singleton class instance representing the ShipWorksPerformanceTestSuiteRepository element repository.
@@ -99,6 +106,13 @@ namespace ShipWorksPerformanceTestSuite
             _explorer = new ShipWorksPerformanceTestSuiteRepositoryFolders.ExplorerAppFolder(this);
             _shipworks2 = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorks2AppFolder(this);
             _saveprintoutputas = new ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder(this);
+            _shipworksruninstall = new ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder(this);
+            _formiu14d2n = new ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder(this);
+            _setupbullzippdfprinter = new ShipWorksPerformanceTestSuiteRepositoryFolders.SetupBullzipPDFPrinterAppFolder(this);
+            _bullzippdfprinteroptions = new ShipWorksPerformanceTestSuiteRepositoryFolders.BullzipPDFPrinterOptionsAppFolder(this);
+            _pdfprinter = new ShipWorksPerformanceTestSuiteRepositoryFolders.PDFPrinterAppFolder(this);
+            _masterpublicinstallerjenkinsgoog = new ShipWorksPerformanceTestSuiteRepositoryFolders.MasterPublicInstallerJenkinsGoogAppFolder(this);
+            _inagitmergeconflictwhataretheba = new ShipWorksPerformanceTestSuiteRepositoryFolders.InAGitMergeConflictWhatAreTheBAAppFolder(this);
         }
 
 #region Variables
@@ -367,6 +381,69 @@ namespace ShipWorksPerformanceTestSuite
         public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SavePrintOutputAsAppFolder SavePrintOutputAs
         {
             get { return _saveprintoutputas; }
+        }
+
+        /// <summary>
+        /// The ShipWorksRUninstall folder.
+        /// </summary>
+        [RepositoryFolder("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.ShipWorksRUninstallAppFolder ShipWorksRUninstall
+        {
+            get { return _shipworksruninstall; }
+        }
+
+        /// <summary>
+        /// The FormIu14D2N folder.
+        /// </summary>
+        [RepositoryFolder("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.FormIu14D2NAppFolder FormIu14D2N
+        {
+            get { return _formiu14d2n; }
+        }
+
+        /// <summary>
+        /// The SetupBullzipPDFPrinter folder.
+        /// </summary>
+        [RepositoryFolder("10e93aef-84f5-4725-9880-9adf44607d6b")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.SetupBullzipPDFPrinterAppFolder SetupBullzipPDFPrinter
+        {
+            get { return _setupbullzippdfprinter; }
+        }
+
+        /// <summary>
+        /// The BullzipPDFPrinterOptions folder.
+        /// </summary>
+        [RepositoryFolder("1274bc9c-da1e-4d4d-ba12-171836a806f3")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.BullzipPDFPrinterOptionsAppFolder BullzipPDFPrinterOptions
+        {
+            get { return _bullzippdfprinteroptions; }
+        }
+
+        /// <summary>
+        /// The PDFPrinter folder.
+        /// </summary>
+        [RepositoryFolder("1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.PDFPrinterAppFolder PDFPrinter
+        {
+            get { return _pdfprinter; }
+        }
+
+        /// <summary>
+        /// The MasterPublicInstallerJenkinsGoog folder.
+        /// </summary>
+        [RepositoryFolder("ef192399-f5b7-4634-a5ff-96a49ae3367b")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.MasterPublicInstallerJenkinsGoogAppFolder MasterPublicInstallerJenkinsGoog
+        {
+            get { return _masterpublicinstallerjenkinsgoog; }
+        }
+
+        /// <summary>
+        /// The InAGitMergeConflictWhatAreTheBA folder.
+        /// </summary>
+        [RepositoryFolder("666265f2-ac22-4dca-8046-a6e16ef401b0")]
+        public virtual ShipWorksPerformanceTestSuiteRepositoryFolders.InAGitMergeConflictWhatAreTheBAAppFolder InAGitMergeConflictWhatAreTheBA
+        {
+            get { return _inagitmergeconflictwhataretheba; }
         }
     }
 
@@ -7363,6 +7440,624 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _combobox1148Info;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The ShipWorksRUninstallAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+        public partial class ShipWorksRUninstallAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _shipworksruninstallInfo;
+            RepoItemInfo _buttonyesInfo;
+            RepoItemInfo _buttonokInfo;
+
+            /// <summary>
+            /// Creates a new ShipWorksRUninstall  folder.
+            /// </summary>
+            public ShipWorksRUninstallAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("ShipWorksRUninstall", "/form[@title='ShipWorks® Uninstall']", parentFolder, 30000, null, true, "dbbd9333-9cf3-46b8-8336-44a8e898d036", "")
+            {
+                _shipworksruninstallInfo = new RepoItemInfo(this, "ShipWorksRUninstall", "titlebar[@accessiblerole='TitleBar']", 30000, null, "691db1ab-829f-4662-8044-7abb000cffca");
+                _buttonyesInfo = new RepoItemInfo(this, "ButtonYes", "button[@text='&Yes']", 30000, null, "5eced323-5f18-4f7b-952f-2e4800faec96");
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "button[@text='OK']", 30000, null, "3cded2ef-d6f9-44c3-9d63-e74d4d7c789b");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("dbbd9333-9cf3-46b8-8336-44a8e898d036")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksRUninstall item.
+            /// </summary>
+            [RepositoryItem("691db1ab-829f-4662-8044-7abb000cffca")]
+            public virtual Ranorex.TitleBar ShipWorksRUninstall
+            {
+                get
+                {
+                    return _shipworksruninstallInfo.CreateAdapter<Ranorex.TitleBar>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ShipWorksRUninstall item info.
+            /// </summary>
+            [RepositoryItemInfo("691db1ab-829f-4662-8044-7abb000cffca")]
+            public virtual RepoItemInfo ShipWorksRUninstallInfo
+            {
+                get
+                {
+                    return _shipworksruninstallInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item.
+            /// </summary>
+            [RepositoryItem("5eced323-5f18-4f7b-952f-2e4800faec96")]
+            public virtual Ranorex.Button ButtonYes
+            {
+                get
+                {
+                    return _buttonyesInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonYes item info.
+            /// </summary>
+            [RepositoryItemInfo("5eced323-5f18-4f7b-952f-2e4800faec96")]
+            public virtual RepoItemInfo ButtonYesInfo
+            {
+                get
+                {
+                    return _buttonyesInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("3cded2ef-d6f9-44c3-9d63-e74d4d7c789b")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("3cded2ef-d6f9-44c3-9d63-e74d4d7c789b")]
+            public virtual RepoItemInfo ButtonOKInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The FormIu14D2NAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+        public partial class FormIu14D2NAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _tnewnotebookInfo;
+
+            /// <summary>
+            /// Creates a new FormIu14D2N  folder.
+            /// </summary>
+            public FormIu14D2NAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("FormIu14D2N", "/form[@class='TUninstallProgressForm']", parentFolder, 30000, null, true, "c63ab86d-6761-4fbc-88cd-29d39085a74b", "")
+            {
+                _tnewnotebookInfo = new RepoItemInfo(this, "TNewNotebook", "element[@class='TNewNotebook']", 30000, null, "22d79b70-5dea-4fa3-887f-5905974580b8");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("c63ab86d-6761-4fbc-88cd-29d39085a74b")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The TNewNotebook item.
+            /// </summary>
+            [RepositoryItem("22d79b70-5dea-4fa3-887f-5905974580b8")]
+            public virtual Ranorex.Unknown TNewNotebook
+            {
+                get
+                {
+                    return _tnewnotebookInfo.CreateAdapter<Ranorex.Unknown>(true);
+                }
+            }
+
+            /// <summary>
+            /// The TNewNotebook item info.
+            /// </summary>
+            [RepositoryItemInfo("22d79b70-5dea-4fa3-887f-5905974580b8")]
+            public virtual RepoItemInfo TNewNotebookInfo
+            {
+                get
+                {
+                    return _tnewnotebookInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The SetupBullzipPDFPrinterAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("10e93aef-84f5-4725-9880-9adf44607d6b")]
+        public partial class SetupBullzipPDFPrinterAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _iaccepttheagreementInfo;
+            RepoItemInfo _nextInfo;
+            RepoItemInfo _finishInfo;
+
+            /// <summary>
+            /// Creates a new SetupBullzipPDFPrinter  folder.
+            /// </summary>
+            public SetupBullzipPDFPrinterAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("SetupBullzipPDFPrinter", "/form[@title~'^Setup\\ -\\ Bullzip\\ PDF\\ Print']", parentFolder, 30000, null, true, "10e93aef-84f5-4725-9880-9adf44607d6b", "")
+            {
+                _iaccepttheagreementInfo = new RepoItemInfo(this, "IAcceptTheAgreement", "element[@class='TNewNotebook']/?/?/element[@class='TNewNotebook']/element[@instance='0']/?/?/radiobutton[@accessiblename='I accept the agreement']", 30000, null, "b70c6bee-8e8d-4037-a660-ffb0d5134c17");
+                _nextInfo = new RepoItemInfo(this, "Next", "?/?/button[@accessiblename='Next >']", 30000, null, "7d1646b6-9a39-411e-ac21-763a3db5a9c9");
+                _finishInfo = new RepoItemInfo(this, "Finish", "?/?/button[@accessiblename='Finish']", 30000, null, "e336fa92-06b1-4fb8-8cf9-8493287db986");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("10e93aef-84f5-4725-9880-9adf44607d6b")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("10e93aef-84f5-4725-9880-9adf44607d6b")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The IAcceptTheAgreement item.
+            /// </summary>
+            [RepositoryItem("b70c6bee-8e8d-4037-a660-ffb0d5134c17")]
+            public virtual Ranorex.RadioButton IAcceptTheAgreement
+            {
+                get
+                {
+                    return _iaccepttheagreementInfo.CreateAdapter<Ranorex.RadioButton>(true);
+                }
+            }
+
+            /// <summary>
+            /// The IAcceptTheAgreement item info.
+            /// </summary>
+            [RepositoryItemInfo("b70c6bee-8e8d-4037-a660-ffb0d5134c17")]
+            public virtual RepoItemInfo IAcceptTheAgreementInfo
+            {
+                get
+                {
+                    return _iaccepttheagreementInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Next item.
+            /// </summary>
+            [RepositoryItem("7d1646b6-9a39-411e-ac21-763a3db5a9c9")]
+            public virtual Ranorex.Button Next
+            {
+                get
+                {
+                    return _nextInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Next item info.
+            /// </summary>
+            [RepositoryItemInfo("7d1646b6-9a39-411e-ac21-763a3db5a9c9")]
+            public virtual RepoItemInfo NextInfo
+            {
+                get
+                {
+                    return _nextInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Finish item.
+            /// </summary>
+            [RepositoryItem("e336fa92-06b1-4fb8-8cf9-8493287db986")]
+            public virtual Ranorex.Button Finish
+            {
+                get
+                {
+                    return _finishInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Finish item info.
+            /// </summary>
+            [RepositoryItemInfo("e336fa92-06b1-4fb8-8cf9-8493287db986")]
+            public virtual RepoItemInfo FinishInfo
+            {
+                get
+                {
+                    return _finishInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The BullzipPDFPrinterOptionsAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("1274bc9c-da1e-4d4d-ba12-171836a806f3")]
+        public partial class BullzipPDFPrinterOptionsAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _applyInfo;
+            RepoItemInfo _buttonokInfo;
+            RepoItemInfo _bullzippdfprinteroptionsInfo;
+
+            /// <summary>
+            /// Creates a new BullzipPDFPrinterOptions  folder.
+            /// </summary>
+            public BullzipPDFPrinterOptionsAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("BullzipPDFPrinterOptions", "/form[@title~'^Bullzip\\ PDF\\ Printer\\ -\\ Opt']", parentFolder, 30000, null, true, "1274bc9c-da1e-4d4d-ba12-171836a806f3", "")
+            {
+                _applyInfo = new RepoItemInfo(this, "Apply", "?/?/button[@accessiblename='Apply']", 30000, null, "29063ac8-a891-478f-9538-df90ec790cb7");
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "?/?/button[@accessiblename='OK']", 30000, null, "a1e0c366-0a5a-431f-8fc9-19dfab9a2fd2");
+                _bullzippdfprinteroptionsInfo = new RepoItemInfo(this, "BullzipPDFPrinterOptions", "titlebar[@accessiblerole='TitleBar']", 30000, null, "58cc7c2f-34ed-4946-b6ea-1b2eec4aa496");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("1274bc9c-da1e-4d4d-ba12-171836a806f3")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("1274bc9c-da1e-4d4d-ba12-171836a806f3")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Apply item.
+            /// </summary>
+            [RepositoryItem("29063ac8-a891-478f-9538-df90ec790cb7")]
+            public virtual Ranorex.Button Apply
+            {
+                get
+                {
+                    return _applyInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Apply item info.
+            /// </summary>
+            [RepositoryItemInfo("29063ac8-a891-478f-9538-df90ec790cb7")]
+            public virtual RepoItemInfo ApplyInfo
+            {
+                get
+                {
+                    return _applyInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("a1e0c366-0a5a-431f-8fc9-19dfab9a2fd2")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("a1e0c366-0a5a-431f-8fc9-19dfab9a2fd2")]
+            public virtual RepoItemInfo ButtonOKInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
+                }
+            }
+
+            /// <summary>
+            /// The BullzipPDFPrinterOptions item.
+            /// </summary>
+            [RepositoryItem("58cc7c2f-34ed-4946-b6ea-1b2eec4aa496")]
+            public virtual Ranorex.TitleBar BullzipPDFPrinterOptions
+            {
+                get
+                {
+                    return _bullzippdfprinteroptionsInfo.CreateAdapter<Ranorex.TitleBar>(true);
+                }
+            }
+
+            /// <summary>
+            /// The BullzipPDFPrinterOptions item info.
+            /// </summary>
+            [RepositoryItemInfo("58cc7c2f-34ed-4946-b6ea-1b2eec4aa496")]
+            public virtual RepoItemInfo BullzipPDFPrinterOptionsInfo
+            {
+                get
+                {
+                    return _bullzippdfprinteroptionsInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The PDFPrinterAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411")]
+        public partial class PDFPrinterAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _buttonokInfo;
+
+            /// <summary>
+            /// Creates a new PDFPrinter  folder.
+            /// </summary>
+            public PDFPrinterAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("PDFPrinter", "/form[@title='PDF Printer']", parentFolder, 30000, null, true, "1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411", "")
+            {
+                _buttonokInfo = new RepoItemInfo(this, "ButtonOK", "button[@text='OK']", 30000, null, "911701df-900d-46b2-90d1-1f0fbb2e76aa");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("1e5ae8ce-cc9e-4c52-9ed6-93f11b1af411")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item.
+            /// </summary>
+            [RepositoryItem("911701df-900d-46b2-90d1-1f0fbb2e76aa")]
+            public virtual Ranorex.Button ButtonOK
+            {
+                get
+                {
+                    return _buttonokInfo.CreateAdapter<Ranorex.Button>(true);
+                }
+            }
+
+            /// <summary>
+            /// The ButtonOK item info.
+            /// </summary>
+            [RepositoryItemInfo("911701df-900d-46b2-90d1-1f0fbb2e76aa")]
+            public virtual RepoItemInfo ButtonOKInfo
+            {
+                get
+                {
+                    return _buttonokInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The MasterPublicInstallerJenkinsGoogAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("ef192399-f5b7-4634-a5ff-96a49ae3367b")]
+        public partial class MasterPublicInstallerJenkinsGoogAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _paneInfo;
+
+            /// <summary>
+            /// Creates a new MasterPublicInstallerJenkinsGoog  folder.
+            /// </summary>
+            public MasterPublicInstallerJenkinsGoogAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("MasterPublicInstallerJenkinsGoog", "/form[@title~'^master-public-installer\\ \\[']", parentFolder, 30000, null, true, "ef192399-f5b7-4634-a5ff-96a49ae3367b", "")
+            {
+                _paneInfo = new RepoItemInfo(this, "Pane", "container[@accessiblename~'^master-public-installer\\ \\[']/container/container[1]", 30000, null, "3349481b-df9d-4161-b02c-fd45b4a4b531");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("ef192399-f5b7-4634-a5ff-96a49ae3367b")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("ef192399-f5b7-4634-a5ff-96a49ae3367b")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Pane item.
+            /// </summary>
+            [RepositoryItem("3349481b-df9d-4161-b02c-fd45b4a4b531")]
+            public virtual Ranorex.Container Pane
+            {
+                get
+                {
+                    return _paneInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Pane item info.
+            /// </summary>
+            [RepositoryItemInfo("3349481b-df9d-4161-b02c-fd45b4a4b531")]
+            public virtual RepoItemInfo PaneInfo
+            {
+                get
+                {
+                    return _paneInfo;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The InAGitMergeConflictWhatAreTheBAAppFolder folder.
+        /// </summary>
+        [RepositoryFolder("666265f2-ac22-4dca-8046-a6e16ef401b0")]
+        public partial class InAGitMergeConflictWhatAreTheBAAppFolder : RepoGenBaseFolder
+        {
+            RepoItemInfo _paneInfo;
+
+            /// <summary>
+            /// Creates a new InAGitMergeConflictWhatAreTheBA  folder.
+            /// </summary>
+            public InAGitMergeConflictWhatAreTheBAAppFolder(RepoGenBaseFolder parentFolder) :
+                    base("InAGitMergeConflictWhatAreTheBA", "/form[@title~'^In\\ a\\ git\\ merge\\ conflict,\\ ']", parentFolder, 30000, null, true, "666265f2-ac22-4dca-8046-a6e16ef401b0", "")
+            {
+                _paneInfo = new RepoItemInfo(this, "Pane", "container[@accessiblename~'^In\\ a\\ git\\ merge\\ conflict,\\ ']/container[@accessiblename='Google Chrome']/container[2]/container[1]/container[2]/container[1]/container[2]", 30000, null, "06a38f26-3c89-4331-8db9-71603c74de6f");
+            }
+
+            /// <summary>
+            /// The Self item.
+            /// </summary>
+            [RepositoryItem("666265f2-ac22-4dca-8046-a6e16ef401b0")]
+            public virtual Ranorex.Form Self
+            {
+                get
+                {
+                    return _selfInfo.CreateAdapter<Ranorex.Form>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Self item info.
+            /// </summary>
+            [RepositoryItemInfo("666265f2-ac22-4dca-8046-a6e16ef401b0")]
+            public virtual RepoItemInfo SelfInfo
+            {
+                get
+                {
+                    return _selfInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Pane item.
+            /// </summary>
+            [RepositoryItem("06a38f26-3c89-4331-8db9-71603c74de6f")]
+            public virtual Ranorex.Container Pane
+            {
+                get
+                {
+                    return _paneInfo.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Pane item info.
+            /// </summary>
+            [RepositoryItemInfo("06a38f26-3c89-4331-8db9-71603c74de6f")]
+            public virtual RepoItemInfo PaneInfo
+            {
+                get
+                {
+                    return _paneInfo;
                 }
             }
         }

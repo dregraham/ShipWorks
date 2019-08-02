@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -44,15 +43,15 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
+        public async Task<WarehouseGetOrdersResponse> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET);
-
-                request.AddQueryParameter("storeId", warehouseStoreID);
-                request.AddQueryParameter("lastSequence", mostRecentSequence.ToString());
-                request.AddQueryParameter("batchId", batchId.ToString());
+                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET)
+                    .AddHeader("Version", "2")
+                    .AddQueryParameter("storeId", warehouseStoreID)
+                    .AddQueryParameter("lastSequence", mostRecentSequence.ToString())
+                    .AddQueryParameter("batchId", batchId.ToString());
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get Orders")
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores.Warehouse
                     throw new DownloadException(response.Message, response.Exception);
                 }
 
-                IEnumerable<WarehouseOrder> orders = JsonConvert.DeserializeObject<IEnumerable<WarehouseOrder>>(
+                var orderResponse = JsonConvert.DeserializeObject<WarehouseGetOrdersResponse>(
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
@@ -76,7 +75,7 @@ namespace ShipWorks.Stores.Warehouse
                         },
                     });
 
-                return orders;
+                return orderResponse;
             }
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {

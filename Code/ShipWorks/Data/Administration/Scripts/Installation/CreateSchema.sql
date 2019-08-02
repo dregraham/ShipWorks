@@ -1393,7 +1393,7 @@ CREATE TABLE [dbo].[BigCommerceStore]
 [BigCommerceAuthentication] [int] NOT NULL,
 [OauthClientId] [nvarchar](100) NOT NULL,
 [OauthToken] [nvarchar](100) NOT NULL,
-[Identifier] [nvarchar] (110) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Identifier] [nvarchar] (1024) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_BigCommerceStore] on [dbo].[BigCommerceStore]'
@@ -1516,8 +1516,7 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadModifiedNumberOfDaysBack] [int] NOT NULL
+[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
