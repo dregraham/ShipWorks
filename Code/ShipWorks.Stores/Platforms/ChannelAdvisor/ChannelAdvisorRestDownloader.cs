@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
                 // because filtering slows down the download significantly
-                if (!caOrder.PaymentStatus.Equals("Cleared", StringComparison.OrdinalIgnoreCase))
+                if (!caOrder.PaymentStatus?.Equals("Cleared", StringComparison.OrdinalIgnoreCase) ?? false)
                 {
                     continue;
                 }
