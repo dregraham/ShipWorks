@@ -7937,6 +7937,7 @@ namespace ShipWorksPerformanceTestSuite
         public partial class MasterPublicInstallerJenkinsGoogAppFolder : RepoGenBaseFolder
         {
             RepoItemInfo _paneInfo;
+            RepoItemInfo _pane1Info;
 
             /// <summary>
             /// Creates a new MasterPublicInstallerJenkinsGoog  folder.
@@ -7945,6 +7946,7 @@ namespace ShipWorksPerformanceTestSuite
                     base("MasterPublicInstallerJenkinsGoog", "/form[@title~'^master-public-installer\\ \\[']", parentFolder, 30000, null, true, "ef192399-f5b7-4634-a5ff-96a49ae3367b", "")
             {
                 _paneInfo = new RepoItemInfo(this, "Pane", "container[@accessiblename~'^master-public-installer\\ \\[']/container/container[1]", 30000, null, "3349481b-df9d-4161-b02c-fd45b4a4b531");
+                _pane1Info = new RepoItemInfo(this, "Pane1", "container[@accessiblename~'^master-public-installer\\ \\[']/container/container[2]/container[1]", 30000, null, "59c418b5-5a82-4ef8-8014-6c71ced3fdf5");
             }
 
             /// <summary>
@@ -7992,6 +7994,30 @@ namespace ShipWorksPerformanceTestSuite
                 get
                 {
                     return _paneInfo;
+                }
+            }
+
+            /// <summary>
+            /// The Pane1 item.
+            /// </summary>
+            [RepositoryItem("59c418b5-5a82-4ef8-8014-6c71ced3fdf5")]
+            public virtual Ranorex.Container Pane1
+            {
+                get
+                {
+                    return _pane1Info.CreateAdapter<Ranorex.Container>(true);
+                }
+            }
+
+            /// <summary>
+            /// The Pane1 item info.
+            /// </summary>
+            [RepositoryItemInfo("59c418b5-5a82-4ef8-8014-6c71ced3fdf5")]
+            public virtual RepoItemInfo Pane1Info
+            {
+                get
+                {
+                    return _pane1Info;
                 }
             }
         }
