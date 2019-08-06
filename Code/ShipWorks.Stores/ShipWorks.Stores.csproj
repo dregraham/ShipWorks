@@ -265,6 +265,7 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
@@ -990,7 +991,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
