@@ -33,7 +33,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         /// <summary>
         /// Constructor
         /// </summary>
-        protected WarehouseOrder()
+        public WarehouseOrder()
         {
             Charges = new List<WarehouseOrderCharge>();
             PaymentDetails = new List<WarehouseOrderPaymentDetail>();
@@ -43,18 +43,11 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public long HubSequence { get; set; }
         public string HubOrderId { get; set; }
 
-        public string OrderID { get; set; }
-
         public string StoreID { get; set; }
 
-        public long WarehouseCustomerID { get; set; }
-
         public int StoreType { get; set; }
-
+    
         public string Warehouse { get; set; }
-
-        public int Zone { get; set; }
-
         public string OrderNumber { get; set; }
         public string OrderNumberPrefix { get; set; }
         public string OrderNumberPostfix { get; set; }
@@ -67,6 +60,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public string OnlineCustomerID { get; set; }
         public string OnlineStatus { get; set; }
         public string OnlineStatusCode { get; set; }
+        public string LocalStatus { get; set; }
         public string RequestedShipping { get; set; }
 
         public WarehouseOrderAddress BillAddress { get; set; }
