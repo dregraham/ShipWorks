@@ -180,5 +180,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Gets the online store's order identifier
         /// </summary>
         public virtual string GetOnlineOrderIdentifier(OrderEntity order) => order.OrderNumberComplete;
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }
