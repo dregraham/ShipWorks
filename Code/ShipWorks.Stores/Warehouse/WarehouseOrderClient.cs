@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.Warehouse;
@@ -92,7 +93,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order)
+        public async Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order, IStoreEntity store)
         {
             try
             {
@@ -100,7 +101,7 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    WarehouseOrder warehouseOrder = odbcWarehouseOrderDtoFactory.Create(order);
+                    WarehouseOrder warehouseOrder = odbcWarehouseOrderDtoFactory.Create(order, store);
 
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.UploadOrder, Method.PUT);

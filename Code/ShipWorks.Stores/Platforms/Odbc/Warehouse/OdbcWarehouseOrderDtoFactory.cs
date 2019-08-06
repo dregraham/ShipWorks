@@ -3,6 +3,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
@@ -25,14 +26,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         /// <summary>
         /// Create a WarehouseOrder from a OrderEntity
         /// </summary>
-        public WarehouseOrder Create(OrderEntity order)
+        public WarehouseOrder Create(OrderEntity order, IStoreEntity store)
         {
-            if (order.Store == null)
-            {
-                throw new ShipWorksOdbcException("order.Store is null.");
-            }
-
-            var warehouseStoreID = order.Store.WarehouseStoreID;
+            var warehouseStoreID = store?.WarehouseStoreID;
             if (warehouseStoreID == null)
             {
                 throw new ShipWorksOdbcException("Cannot create a warehouse order for a store that doesn't have a warehouse store id.");

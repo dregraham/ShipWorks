@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -21,7 +22,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order);
+        Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order, IStoreEntity store);
         
         /// <summary>
         /// Send a shipment to the hub

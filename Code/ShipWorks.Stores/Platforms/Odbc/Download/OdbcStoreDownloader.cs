@@ -17,6 +17,8 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -29,6 +31,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcDownloadCommandFactory downloadCommandFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
+        private readonly IWarehouseOrderClient warehouseOrderClient;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
@@ -51,11 +54,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader,
-            IOdbcDownloaderExtraDependencies extras) : base(store, extras.GetStoreType(store))
+            IOdbcDownloaderExtraDependencies extras, 
+            IWarehouseOrderClient warehouseOrderClient) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
+            this.warehouseOrderClient = warehouseOrderClient;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
@@ -248,6 +253,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 if (downloadedOrder.Success)
                 {
+                    await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
+                    
                     try
                     {
                         await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
@@ -259,6 +266,24 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 }
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
+            }
+        }
+
+        /// <summary>
+        /// Upload the order to the hub (if required)
+        /// </summary>
+        private async Task UploadOrderToHub(OrderEntity downloadedOrder)
+        {
+            if (store.WarehouseStoreID.HasValue)
+            {
+                GenericResult<WarehouseUploadOrderResponse> result = await warehouseOrderClient.UploadOrder(downloadedOrder, store).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    throw new DownloadException(result.Message);
+                }
+
+                downloadedOrder.HubOrderID = Guid.Parse(result.Value.HubOrderID);
+                downloadedOrder.HubSequence = result.Value.HubSequence;
             }
         }
 
