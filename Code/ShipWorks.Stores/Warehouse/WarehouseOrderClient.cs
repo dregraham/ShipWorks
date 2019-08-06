@@ -29,20 +29,20 @@ namespace ShipWorks.Stores.Warehouse
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
-        private readonly OdbcWarehouseOrderDtoFactory odbcWarehouseOrderDtoFactory;
+        private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService,
-            ShipmentDtoFactory shipmentDtoFactory, OdbcWarehouseOrderDtoFactory odbcWarehouseOrderDtoFactory,
+            ShipmentDtoFactory shipmentDtoFactory, IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
             Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.licenseService = licenseService;
             this.shipmentDtoFactory = shipmentDtoFactory;
-            this.odbcWarehouseOrderDtoFactory = odbcWarehouseOrderDtoFactory;
+            this.warehouseOrderDtoFactory = warehouseOrderDtoFactory;
             log = logFactory(typeof(WarehouseOrderClient));
         }
 
@@ -101,7 +101,7 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    WarehouseOrder warehouseOrder = odbcWarehouseOrderDtoFactory.Create(order, store);
+                    WarehouseOrder warehouseOrder = warehouseOrderDtoFactory.Create(order, store);
 
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.UploadOrder, Method.PUT);

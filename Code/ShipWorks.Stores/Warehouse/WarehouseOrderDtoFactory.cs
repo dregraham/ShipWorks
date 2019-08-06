@@ -1,24 +1,27 @@
 using System;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Warehouse.DTO.Orders;
 
-namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
+namespace ShipWorks.Stores.Warehouse
 {
     /// <summary>
-    /// OdbcWarehouseOrderDtoFactory
+    /// Warehouse Order DTO Factory
     /// </summary>
-    public class OdbcWarehouseOrderDtoFactory
+    [Component]
+    public class WarehouseOrderDtoFactory : IWarehouseOrderDtoFactory
     {
         readonly Lazy<string> warehouseID;
         
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcWarehouseOrderDtoFactory(IConfigurationData configurationData)
+        public WarehouseOrderDtoFactory(IConfigurationData configurationData)
         {
             warehouseID = new Lazy<string>(() => configurationData.FetchReadOnly().WarehouseID);
         }
