@@ -19,6 +19,11 @@ namespace ShipWorks.Warehouse
                                                     StoreTypeCode storeType, Guid batchId);
 
         /// <summary>
+        /// Upload a order to the hub
+        /// </summary>
+        Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order);
+        
+        /// <summary>
         /// Send a shipment to the hub
         /// </summary>
         Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID);
