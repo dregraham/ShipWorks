@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Warehouse
                 throw new ShipWorksOdbcException("Cannot create a warehouse order for a store that doesn't have a warehouse store id.");
             }
 
+
             return new WarehouseOrder
             {
                 StoreId = warehouseStoreID.Value.ToString(),
@@ -50,7 +51,7 @@ namespace ShipWorks.Stores.Warehouse
                 OrderNumber = order.OrderNumberComplete,
                 OrderDate = order.OrderDate,
                 OrderTotal = order.OrderTotal,
-                OnlineLastModified = order.OnlineLastModified,
+                OnlineLastModified = order.OnlineLastModified > order.OrderDate ? order.OnlineLastModified : order.OrderDate,
                 OnlineCustomerId = order.OnlineCustomerID?.ToString() ?? string.Empty,
                 OnlineStatus = order.OnlineStatus,
                 OnlineStatusCode = order.OnlineStatusCode?.ToString() ?? string.Empty,
