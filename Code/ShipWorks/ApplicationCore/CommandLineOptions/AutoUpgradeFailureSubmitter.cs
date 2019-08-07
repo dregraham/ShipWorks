@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using Common.Logging;
+using Interapptive.Shared.Data;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
@@ -18,70 +19,77 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// <summary>
     /// Class responsible for sending auto upgrade failures to the Azure queue
     /// </summary>
-    public static class AutoUpgradeFailureSubmitter
+    public class AutoUpgradeFailureSubmitter
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
+        private static readonly Version version = Assembly.GetExecutingAssembly().GetName().Version;
+        private (string CustomerEmail, string FirstAndLastName) customerInfo = (string.Empty, string.Empty);
+        private string licenseKeys = string.Empty;
+        private string dbId = string.Empty;
+
+        public void Initialize()
+        {
+            if (SqlSession.IsConfigured && SqlSession.Current?.CanConnect() == true)
+            {
+                ConfigurationData.InitializeForCurrentDatabase();
+
+                string storeLicense = string.Empty;
+                string customerKey = string.Empty;
+                dbId = new DatabaseIdentifier().Get().ToString("N");
+
+                using (ISqlAdapter adapter = SqlAdapter.Default)
+                {
+                    StoreCollection stores = new StoreCollection();
+                    adapter.FetchEntityCollection(stores, null, (IRelationPredicateBucket) null);
+                    storeLicense = stores.FirstOrDefault()?.License;
+                    licenseKeys = String.Join($"{Environment.NewLine}", stores?.Select(s => s.License));
+
+                    // Get customer key
+                    ConfigurationEntity config = new ConfigurationEntity(false);
+                    adapter.FetchEntity(config);
+
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        ICustomerLicenseReader customerLicenseReader = scope.Resolve<ICustomerLicenseReader>();
+                        customerKey = customerLicenseReader.Read();
+                    }
+
+                    log.Debug($"Attempting GetCustomerEmail({storeLicense}, {customerKey})");
+                    customerInfo = TangoWebClient.GetCustomerEmail(storeLicense, customerKey);
+                    log.Debug($"Results of GetCustomerEmail: {customerInfo.CustomerEmail}, {customerInfo.FirstAndLastName}");
+                }
+            }
+        }
 
         /// <summary>
         /// Submit the failure to the queue
         /// </summary>
-        public static void Submit(string versionThatFailed, string failureReason)
+        public void Submit(string versionThatFailed, Exception ex)
         {
             try
             {
-                Version version = Assembly.GetExecutingAssembly().GetName().Version;
-
-                if (SqlSession.IsConfigured && SqlSession.Current != null)
+                if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
                 {
-                    ConfigurationData.InitializeForCurrentDatabase();
-
-                    string storeLicense = string.Empty;
-                    string licenseKeys = string.Empty;
-                    string customerKey = string.Empty;
-                    (string CustomerEmail, string FirstAndLastName) customerInfo = (string.Empty, string.Empty);
-
-                    using (ISqlAdapter adapter = SqlAdapter.Default)
+                    UpgradeFailureDto details = new UpgradeFailureDto
                     {
-                        StoreCollection stores = new StoreCollection();
-                        adapter.FetchEntityCollection(stores, null, (IRelationPredicateBucket) null);
-                        storeLicense = stores.FirstOrDefault()?.License;
-                        licenseKeys = String.Join($"{Environment.NewLine}", stores?.Select(s => s.License));
+                        CustomerName = customerInfo.FirstAndLastName,
+                        CustomerEmail = customerInfo.CustomerEmail,
+                        Version = versionThatFailed,
+                        DbID = dbId,
+                        FailureReason = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        InnerFailureReason = ex.InnerException?.Message,
+                        InnerStackTrace = ex.InnerException?.StackTrace,
+                        StoreKeys = licenseKeys,
+                    };
 
-                        // Get customer key
-                        ConfigurationEntity config = new ConfigurationEntity(false);
-                        adapter.FetchEntity(config);
-
-                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                        {
-                            ICustomerLicenseReader customerLicenseReader = scope.Resolve<ICustomerLicenseReader>();
-                            customerKey = customerLicenseReader.Read();
-                        }
-
-                        log.Debug($"Attempting GetCustomerEmail({storeLicense}, {customerKey})");
-                        customerInfo = TangoWebClient.GetCustomerEmail(storeLicense, customerKey);
-                        log.Debug($"Results of GetCustomerEmail: {customerInfo.CustomerEmail}, {customerInfo.FirstAndLastName}");
-                    }
-
-                    if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
-                    {
-                        UpgradeFailureDto details = new UpgradeFailureDto
-                        {
-                            CustomerName = customerInfo.FirstAndLastName,
-                            CustomerEmail = customerInfo.CustomerEmail,
-                            Version = versionThatFailed,
-                            DbID = new DatabaseIdentifier().Get().ToString("N"),
-                            FailureReason = failureReason,
-                            StoreKeys = licenseKeys,
-                        };
-
-                        LogToQueue(storageAccount, details);
-                    }
+                    LogToQueue(storageAccount, details);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
                 // Just log and carry on
-                log.Error(ex);
+                log.Error(ex1);
             }
         }
 
@@ -136,6 +144,21 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             /// The failure reason
             /// </summary>
             public string FailureReason { get; set; }
+
+            /// <summary>
+            /// The exception stack trace
+            /// </summary>
+            public string StackTrace { get; set; }
+
+            /// <summary>
+            /// The inner exception failure reason
+            /// </summary>
+            public string InnerFailureReason { get; set; }
+
+            /// <summary>
+            /// The inner exception stack trace
+            /// </summary>
+            public string InnerStackTrace { get; set; }
 
             /// <summary>
             /// The store license keys
