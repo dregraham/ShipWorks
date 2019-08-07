@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {
@@ -9,6 +10,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
     /// </summary>
     public class ShopifyEndpoints
     {
+        private InterapptiveOnlyWrapper interapptiveOnly;
+
         private const string ApiAuthorizeUrlFormat = "{0}oauth/authorize?client_id={1}&scope={2}&redirect_uri={3}";
         private const string ApiAccessTokenUrlFormat = "{0}oauth/access_token?client_id={1}&client_secret={2}&code={3}";
 
@@ -57,6 +60,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             this.shopUrlName = shopUrlName;
 
+            interapptiveOnly = new InterapptiveOnlyWrapper();
+
             // See if we can make a valid URI out of it.  This will throw if it's not valid
             Uri uri = new Uri(ApiBaseUrl);
         }
@@ -68,6 +73,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             get
             {
+                if (UseFakeApi)
+                {
+                    var endpointOverride = interapptiveOnly.Registry.GetValue("ShopifyEndpoint", string.Empty);
+                    if (!string.IsNullOrWhiteSpace(endpointOverride))
+                    {
+                        return endpointOverride;
+                    }
+                }
+
                 return string.Format("https://{0}.myshopify.com/admin/", shopUrlName);
             }
         }
@@ -201,5 +215,11 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             return string.Format(ApiGetProductFormat, ApiBaseUrl, shopifyProductId);
         }
+
+        /// <summary>
+        /// Should the client use the fake api
+        /// </summary>
+        private bool UseFakeApi =>
+            interapptiveOnly.IsInterapptiveUser && !interapptiveOnly.Registry.GetValue("ShopifyLive", true);
     }
 }

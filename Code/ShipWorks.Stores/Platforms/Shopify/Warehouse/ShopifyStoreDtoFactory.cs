@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
 
             store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
             store.ShopifyToken = await helpers.EncryptSecret(storeEntity.ShopifyAccessToken).ConfigureAwait(false);
+            store.ShopifyShopUrlName = storeEntity.ShopifyShopUrlName;
 
             return store;
         }

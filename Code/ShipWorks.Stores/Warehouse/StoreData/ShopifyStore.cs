@@ -18,5 +18,10 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// The auth token this store
         /// </summary>
         public string ShopifyToken { get; set; }
+
+        /// <summary>
+        /// The store name in the url
+        /// </summary>
+        public string ShopifyShopUrlName { get; set; }
     }
 }
