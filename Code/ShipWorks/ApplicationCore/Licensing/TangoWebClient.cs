@@ -160,7 +160,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 StoreEntity store = getStore();
 
-                if (store == null)
+                if (store == null && SqlSession.Current?.CanConnect() == true)
                 {
                     ((IInitializeForCurrentDatabase) new SystemData()).InitializeForCurrentDatabase(Program.ExecutionMode);
                     DataProvider.InitializeForApplication(Program.ExecutionMode);
