@@ -1056,7 +1056,7 @@ namespace ShipWorks.Stores.Management
                         this,
                         $"An error occurred saving the store to ShipWorks.");
                     e.Skip = true;
-                    e.SkipToPage = wizardPageSettings;
+                    e.SkipToPage = wizardPageContactInfo;
                     BackEnabled = true;
                 }
                 return result;
