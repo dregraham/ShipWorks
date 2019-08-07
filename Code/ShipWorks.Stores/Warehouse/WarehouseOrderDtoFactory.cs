@@ -31,6 +31,11 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public WarehouseOrder Create(OrderEntity order, IStoreEntity store)
         {
+            if (string.IsNullOrEmpty(warehouseID.Value))
+            {
+                throw new InvalidOperationException("Could not download orders because this ShipWorks database is not currently linked to a warehouse in ShipWorks Hub");
+            }
+
             var warehouseStoreID = store?.WarehouseStoreID;
             if (warehouseStoreID == null)
             {
