@@ -12,19 +12,23 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
     [KeyedComponent(typeof(IStoreDtoFactory), StoreTypeCode.Odbc)]
     public class OdbcStoreDtoFactory : IStoreDtoFactory
     {
+        private readonly IStoreDtoHelpers helpers;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="helpers"></param>
+        public OdbcStoreDtoFactory(IStoreDtoHelpers helpers)
+        {
+            this.helpers = helpers;
+        }
+
         /// <summary>
         /// Create a StoreDto from the given store entity
         /// </summary>
         public Task<Store> Create(StoreEntity baseStoreEntity)
         {
-            var storeEntity = baseStoreEntity as OdbcStoreEntity;
-            var store = new Store()
-            {
-                Name = storeEntity.StoreName,
-                StoreType = (int) storeEntity.StoreTypeCode
-            };
-            
-            return Task.FromResult(store);
+            return Task.FromResult(helpers.PopulateCommonData(baseStoreEntity, new Store()));
         }
     }
 }
