@@ -18,6 +18,7 @@ using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -30,6 +31,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Stores;
+using ShipWorks.Users.Security;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -146,13 +148,27 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public static string GetTangoCustomerId()
         {
-            StoreEntity store = StoreManager.GetEnabledStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
-                                StoreManager.GetAllStores()
-                                    .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
-
             try
             {
+                Func<StoreEntity> getStore = () =>
+                {
+                    return StoreManager.GetEnabledStores()
+                               .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false) ??
+                           StoreManager.GetAllStores()
+                               .FirstOrDefault(s => new ShipWorksLicense(s.License).IsTrial == false);
+                };
+
+                StoreEntity store = getStore();
+
+                if (store == null)
+                {
+                    ((IInitializeForCurrentDatabase) new SystemData()).InitializeForCurrentDatabase(Program.ExecutionMode);
+                    DataProvider.InitializeForApplication(Program.ExecutionMode);
+                    StoreManager.InitializeForCurrentSession(new SecurityContext(SuperUser.Instance));
+
+                    store = getStore();
+                }
+
                 return store != null ? GetLicenseStatus(store.License, store, false).TangoCustomerID : string.Empty;
             }
             catch (TangoException ex)
