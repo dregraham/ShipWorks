@@ -87,11 +87,11 @@ namespace ShipWorks.Warehouse
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
-            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
+            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerId;
             orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
             orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
-            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
+            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderId;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
             orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
             orderEntity.HubSequence = warehouseOrder.HubSequence;

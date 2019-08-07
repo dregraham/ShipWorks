@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Warehouse
     public class WarehouseOrderDtoFactory : IWarehouseOrderDtoFactory
     {
         readonly Lazy<string> warehouseID;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             warehouseID = new Lazy<string>(() => configurationData.FetchReadOnly().WarehouseID);
         }
-        
+
         /// <summary>
         /// Create a WarehouseOrder from a OrderEntity
         /// </summary>
@@ -36,17 +36,17 @@ namespace ShipWorks.Stores.Warehouse
             {
                 throw new ShipWorksOdbcException("Cannot create a warehouse order for a store that doesn't have a warehouse store id.");
             }
-            
+
             return new WarehouseOrder
             {
-                StoreID = warehouseStoreID.Value.ToString(),
+                StoreId = warehouseStoreID.Value.ToString(),
                 StoreType = (int) StoreTypeCode.Odbc,
                 Warehouse = warehouseID.Value,
                 OrderNumber = order.OrderNumberComplete,
                 OrderDate = order.OrderDate,
                 OrderTotal = order.OrderTotal,
                 OnlineLastModified = order.OnlineLastModified,
-                OnlineCustomerID = order.OnlineCustomerID?.ToString() ?? string.Empty,
+                OnlineCustomerId = order.OnlineCustomerID?.ToString() ?? string.Empty,
                 OnlineStatus = order.OnlineStatus,
                 OnlineStatusCode = order.OnlineStatusCode?.ToString() ?? string.Empty,
                 LocalStatus = order.LocalStatus,
@@ -65,7 +65,7 @@ namespace ShipWorks.Stores.Warehouse
                 Items = order.OrderItems.Select(CreateOrderItem).ToList()
             };
         }
-        
+
         /// <summary>
         /// Create a WarehouseOrderAddress from a PersonAdapter
         /// </summary>
@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.Warehouse
                 Website = order.Website
             };
         }
-        
+
         /// <summary>
         /// Create a WarehouseOrderCharge from a OrderChargeEntity
         /// </summary>
@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Warehouse
                 Label = paymentDetail.Label,
                 Value = paymentDetail.Value
             };
-        }        
+        }
 
         /// <summary>
         /// Create a WarehouseOrderNote from a NoteEntity
