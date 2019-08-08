@@ -141,7 +141,7 @@ namespace ShipWorks.OrderLookup
         /// Logs the exception and reconnect pipeline.
         /// </summary>
         private void HandleException(Exception ex) =>
-            log.Error("Error occurred while handling scan message.", ex);
+            log.Error("Error occurred while handling scan message in OrderLookupSingleScanPipeline.", ex);
 
         /// <summary>
         /// Download order, auto print if needed, send order message

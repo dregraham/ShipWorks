@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.KeyboardShortcuts;
@@ -28,6 +29,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly ILicenseService licenseService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IShortcutManager shortcutManager;
+        private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
 
@@ -40,7 +42,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             IScanPackViewModel scanPackViewModel,
             ILicenseService licenseService,
             ISchedulerProvider schedulerProvider,
-            IShortcutManager shortcutManager)
+            IShortcutManager shortcutManager,
+            Func<Type, ILog> createLogger)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -48,6 +51,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             this.licenseService = licenseService;
             this.schedulerProvider = schedulerProvider;
             this.shortcutManager = shortcutManager;
+            this.log = createLogger(GetType());
         }
 
         /// <summary>
@@ -118,10 +122,8 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Handle Exceptions
         /// </summary>
-        private void HandleException(Exception ex)
-        {
-            throw ex;
-        }
+        private void HandleException(Exception ex) => 
+            log.Error("Error occurred while handling scan message in ScanPackPipeline.", ex);
 
         /// <summary>
         /// Handle search
