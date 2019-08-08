@@ -1,26 +1,39 @@
 using System.Threading.Tasks;
+using Autofac.Extras.Moq;
+using Moq;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Warehouse;
+using ShipWorks.Stores.Warehouse;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.Warehouse
 {
     public class OdbcStoreDtoFactoryTest
     {
+        private readonly AutoMock mock;
+        private readonly Mock<IStoreDtoHelpers> storeDtoHelper;
+        private readonly OdbcStoreDtoFactory testObject;
+
+        public OdbcStoreDtoFactoryTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            storeDtoHelper = mock.Mock<IStoreDtoHelpers>();
+            testObject = mock.Create<OdbcStoreDtoFactory>();
+        }
+
         [Fact]
         public async Task Create_SetsNameAndStoreType()
         {
-            var testObject = new OdbcStoreDtoFactory();
-            string storeName = "foo";
-            int storeType = (int) StoreTypeCode.Odbc;
+            OdbcStoreEntity store = new OdbcStoreEntity() { StoreName = "foo", StoreTypeCode = StoreTypeCode.Odbc };
 
-            var result = await testObject
-                .Create(new OdbcStoreEntity() {StoreName = storeName, StoreTypeCode = StoreTypeCode.Odbc})
+            await testObject
+                .Create(store)
                 .ConfigureAwait(false);
-            
-            Assert.Equal(storeName, result.Name);
-            Assert.Equal(storeType, result.StoreType);
+
+            storeDtoHelper.Verify(s => s.PopulateCommonData(store, It.IsAny<Store>()));
         }
-        
     }
 }
