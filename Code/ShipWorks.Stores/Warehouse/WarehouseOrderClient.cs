@@ -101,8 +101,6 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    WarehouseOrder warehouseOrder = warehouseOrderDtoFactory.Create(order, store);
-
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.UploadOrder, Method.PUT);
 
@@ -118,7 +116,8 @@ namespace ShipWorks.Stores.Warehouse
                     });
                     request.RequestFormat = DataFormat.Json;
 
-                    request.AddJsonBody(warehouseOrder);
+                    UploadOrderRequest requestData = new UploadOrderRequest(Guid.NewGuid(), warehouseOrderDtoFactory.Create(order, store));
+                    request.AddJsonBody(requestData);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
                         .MakeRequest(request, "Upload Store")
