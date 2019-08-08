@@ -29,5 +29,7 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         [JsonProperty("order")]
         public WarehouseOrder Order { get; }
+
+        
     }
 }

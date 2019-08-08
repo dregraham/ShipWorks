@@ -6,6 +6,7 @@ using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using RestSharp.Serializers;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
@@ -102,18 +103,10 @@ namespace ShipWorks.Stores.Warehouse
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     IRestRequest request =
-                        new RestRequest(WarehouseEndpoints.UploadOrder, Method.PUT);
+                        new RestRequest(WarehouseEndpoints.UploadOrder, Method.POST);
 
-                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
-                    {
-                        ContractResolver = new DefaultContractResolver
-                        {
-                            NamingStrategy = new CamelCaseNamingStrategy
-                            {
-                                OverrideSpecifiedNames = false
-                            }
-                        },
-                    });
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
+
                     request.RequestFormat = DataFormat.Json;
 
                     UploadOrderRequest requestData = new UploadOrderRequest(Guid.NewGuid(), warehouseOrderDtoFactory.Create(order, store));
@@ -129,17 +122,7 @@ namespace ShipWorks.Stores.Warehouse
                     }
 
                     var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponse>(
-                        response.Value.Content,
-                        new JsonSerializerSettings
-                        {
-                            ContractResolver = new DefaultContractResolver
-                            {
-                                NamingStrategy = new CamelCaseNamingStrategy
-                                {
-                                    OverrideSpecifiedNames = false
-                                }
-                            },
-                        });
+                        response.Value.Content, GetJsonSerializerSettings());
 
                     return orderResponse;
                 }
@@ -156,6 +139,23 @@ namespace ShipWorks.Stores.Warehouse
                 log.Error($"Failed to upload shipment {order.OrderID} to hub.", ex);
                 return GenericResult.FromError<WarehouseUploadOrderResponse>(ex);
             }
+        }
+
+        /// <summary>
+        /// Gets json serializer settings
+        /// </summary>
+        private JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy
+                    {
+                        OverrideSpecifiedNames = false
+                    }
+                },
+            };
         }
 
         /// <summary>

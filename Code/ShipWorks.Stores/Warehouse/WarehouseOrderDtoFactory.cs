@@ -42,7 +42,6 @@ namespace ShipWorks.Stores.Warehouse
                 throw new ShipWorksOdbcException("Cannot create a warehouse order for a store that doesn't have a warehouse store id.");
             }
 
-
             return new WarehouseOrder
             {
                 StoreId = warehouseStoreID.Value.ToString(),
