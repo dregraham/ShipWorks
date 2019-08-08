@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
@@ -55,6 +56,8 @@ namespace ShipWorks.Stores.Warehouse
         public Shipment CreateHubShipment(ShipmentEntity shipmentEntity, string tangoShipmentID)
         {
             shipmentTypeManager.LoadShipmentData(shipmentEntity, false);
+            ShipmentType shipmentType = shipmentTypeManager.Get(shipmentEntity);
+            ShipmentCommonDetail commonDetail = shipmentType.GetShipmentCommonDetail(shipmentEntity);
 
             ICarrierShipmentAdapter shipmentAdapter = shipmentAdapterFactory.Get(shipmentEntity);
 
@@ -102,7 +105,7 @@ namespace ShipWorks.Stores.Warehouse
                 },
                 OriginPostalCode = shipmentEntity.OriginPostalCode,
                 OriginCountryCode = shipmentEntity.OriginCountryCode,
-                ShippingAccount = shipmentAdapter.AccountId.ToString(),
+                ShippingAccount = commonDetail.OriginAccount,
                 LabelFormat = GetLabelFormat(shipmentEntity),
                 Packages = CreatePackages(shipmentAdapter.GetPackageAdapters()),
                 Verified = shipmentEntity.Order.Verified,
