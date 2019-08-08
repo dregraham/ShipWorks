@@ -18,7 +18,7 @@ namespace ShipWorks.OrderLookup
     [Component]
     public class OrderLookupOrderRepository : IOrderLookupOrderRepository
     {
-        private readonly ISqlSession sqlSession;
+        private readonly Func<ISqlSession> sqlSession;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderLoader orderLoader;
 
@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup
         /// Constructor
         /// </summary>
         public OrderLookupOrderRepository(
-            ISqlSession sqlSession,
+            Func<ISqlSession> sqlSession,
             ISqlAdapterFactory sqlAdapterFactory,
             IOrderLoader orderLoader)
         {
@@ -40,7 +40,7 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public List<long> GetOrderIDs(string orderNumberComplete)
         {
-            using (DbConnection conn = sqlSession.OpenConnection())
+            using (DbConnection conn = sqlSession().OpenConnection())
             {
                 using (DbCommand cmd = conn.CreateCommand())
                 {
