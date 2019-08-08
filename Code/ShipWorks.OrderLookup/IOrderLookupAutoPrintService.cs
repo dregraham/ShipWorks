@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.SingleScan;
 
 namespace ShipWorks.OrderLookup
@@ -12,6 +11,6 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Print shipments for the orderid
         /// </summary>
-        Task<AutoPrintCompletionResult> AutoPrintShipment(long orderID, SingleScanMessage message);
+        Task<AutoPrintCompletionResult> AutoPrintShipment(long orderID, string message);
     }
 }

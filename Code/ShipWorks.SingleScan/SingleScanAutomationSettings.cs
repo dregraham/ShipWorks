@@ -32,6 +32,11 @@ namespace ShipWorks.SingleScan
         public bool IsAutoWeighEnabled => userSession.Settings?.AutoWeigh ?? false;
 
         /// <summary>
+        /// Whether or not to require orders to be scan pack validated
+        /// </summary>
+        public bool AutoPrintScanPackRequireValidation => userSession.Settings?.AutoPrintRequireValidation ?? false;
+
+        /// <summary>
         /// Should shipments be auto created
         /// </summary>
         public bool AutoCreateShipments => shippingSettings.AutoCreateShipments;

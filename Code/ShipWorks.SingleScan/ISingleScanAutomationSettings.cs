@@ -16,6 +16,11 @@
         bool AutoCreateShipments { get; }
 
         /// <summary>
+        /// Whether or not to require orders to be scan pack validated
+        /// </summary>
+        bool AutoPrintScanPackRequireValidation { get; }
+
+        /// <summary>
         /// Whether or not auto print is permitted in the current state
         /// </summary>
         bool IsAutoPrintEnabled();

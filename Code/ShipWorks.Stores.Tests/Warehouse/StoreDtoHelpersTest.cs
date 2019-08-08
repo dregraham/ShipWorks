@@ -14,17 +14,17 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Warehouse
 {
-    public class StoreDtoFactoryTest : IDisposable
+    public class StoreDtoHelpersTest : IDisposable
     {
         private readonly AutoMock mock;
 
-        public StoreDtoFactoryTest()
+        public StoreDtoHelpersTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
         }
 
         [Fact]
-        public async Task Create_CreatesStoreDataFromStoreEntity()
+        public void Create_CreatesStoreDataFromStoreEntity()
         {
             AmazonStoreEntity amazonStoreEntity = new AmazonStoreEntity();
             amazonStoreEntity.AuthToken = "authtoken";
@@ -39,12 +39,12 @@ namespace ShipWorks.Stores.Tests.Warehouse
             var downloadStartingPoint = mock.Mock<IDownloadStartingPoint>();
             downloadStartingPoint.Setup(x => x.OnlineLastModified(amazonStoreEntity)).ReturnsAsync(DateTime.Now);
 
-            var testObject = mock.Create<StoreDtoFactory>();
+            var testObject = mock.Create<StoreDtoHelpers>();
             mock.Mock<IStoreTypeManager>()
                 .Setup(x => x.GetType(AnyStore))
                 .Returns(mock.Create<AmazonStoreType>(TypedParameter.From<StoreEntity>(amazonStoreEntity)));
 
-            var storeDto = await testObject.Create(amazonStoreEntity);
+            var storeDto = testObject.PopulateCommonData(amazonStoreEntity, new AmazonStore());
 
             Assert.Equal((int) StoreTypeCode.Amazon, storeDto.StoreType);
             Assert.IsAssignableFrom<AmazonStore>(storeDto);

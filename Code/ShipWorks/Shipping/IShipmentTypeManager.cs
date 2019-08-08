@@ -51,6 +51,14 @@ namespace ShipWorks.Shipping
         ShipmentType Get(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
+        /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
+        /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
+        /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment
+        /// had been deleted.
+        /// </summary>
+        void LoadShipmentData(ShipmentEntity shipmentEntity, bool v);
+
+        /// <summary>
         /// Get the provider for the specified shipment
         /// </summary>
         ShipmentType Get(IShipmentEntity shipment);

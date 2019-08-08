@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Create an order entity with a ChannelAdvisor identifier
         /// </summary>
-        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
             long channelAdvisorOrderID = long.Parse(warehouseOrder.OrderNumber);
 
@@ -71,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Warehouse
         /// <summary>
         /// Load ChannelAdvisor item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             ChannelAdvisorOrderItemEntity channelAdvisorItemEntity = (ChannelAdvisorOrderItemEntity) itemEntity;
             var channelAdvisorWarehouseItem = warehouseItem.AdditionalData[channelAdvisorEntryKey].ToObject<ChannelAdvisorWarehouseItem>();

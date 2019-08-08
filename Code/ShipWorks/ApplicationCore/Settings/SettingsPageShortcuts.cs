@@ -9,6 +9,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -16,6 +17,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Editions;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
@@ -40,6 +42,8 @@ namespace ShipWorks.ApplicationCore.Settings
         private SingleScanSettings singleScanSettingsOnLoad;
         private IPrintJobFactory printJobFactory;
         private IDisposable singleScanShortcutMessage;
+        private ILicenseService licenseService;
+        bool warehouseEnabled;
 
         /// <summary>
         /// Constructor
@@ -54,9 +58,12 @@ namespace ShipWorks.ApplicationCore.Settings
             messenger = scope.Resolve<IMessenger>();
             printJobFactory = scope.Resolve<IPrintJobFactory>();
             currentUserSettings = scope.Resolve<ICurrentUserSettings>();
+            licenseService = scope.Resolve<ILicenseService>();
             settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
+
+            warehouseEnabled = licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
         }
 
         /// <summary>
@@ -89,6 +96,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
 
                 settings.AutoWeigh = autoWeigh.Checked;
+                settings.AutoPrintRequireValidation = requireVerificationForAutoPrint.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -123,6 +131,11 @@ namespace ShipWorks.ApplicationCore.Settings
                 singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
+
+                LoadRequireVerificationSetting();
+
+                requireVerificationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
+
                 UpdateSingleScanSettingsUI();
 
                 singleScanSettingsOnLoad = (SingleScanSettings) settings.SingleScanSettings;
@@ -138,6 +151,24 @@ namespace ShipWorks.ApplicationCore.Settings
                 label.AutoSize = true;
                 label.Font = new Font(Font, FontStyle.Bold);
                 Controls.Add(label);
+            }
+        }
+
+        /// <summary>
+        /// Load the require verification before auto print setting
+        /// </summary>
+        private void LoadRequireVerificationSetting()
+        {
+            // If the user is on a warehouse plan, enable the require validation for auto print checkbox. If not,
+            // disable the checkbox and set its value to false.
+            if (warehouseEnabled)
+            {
+                infoTipRequireVerification.Visible = false;
+            }
+            else
+            {
+                settings.AutoPrintRequireValidation = false;
+                infoTipRequireVerification.Visible = true;
             }
         }
 
@@ -196,6 +227,17 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
                 autoWeigh.Enabled = true;
+            }
+
+            // Only allow require verification when auto print is checked
+            if (autoPrint.Checked && warehouseEnabled)
+            {
+                requireVerificationForAutoPrint.Enabled = true;
+            }
+            else
+            {
+                requireVerificationForAutoPrint.Checked = false;
+                requireVerificationForAutoPrint.Enabled = false;
             }
         }
 

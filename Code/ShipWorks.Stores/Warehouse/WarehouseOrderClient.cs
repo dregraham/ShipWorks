@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -44,15 +43,15 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<IEnumerable<WarehouseOrder>> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
+        public async Task<WarehouseGetOrdersResponse> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET);
-
-                request.AddQueryParameter("storeId", warehouseStoreID);
-                request.AddQueryParameter("lastSequence", mostRecentSequence.ToString());
-                request.AddQueryParameter("batchId", batchId.ToString());
+                IRestRequest request = new RestRequest(WarehouseEndpoints.Orders(warehouseID), Method.GET)
+                    .AddHeader("Version", "2")
+                    .AddQueryParameter("storeId", warehouseStoreID)
+                    .AddQueryParameter("lastSequence", mostRecentSequence.ToString())
+                    .AddQueryParameter("batchId", batchId.ToString());
 
                 GenericResult<IRestResponse> response = await warehouseRequestClient
                     .MakeRequest(request, "Get Orders")
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores.Warehouse
                     throw new DownloadException(response.Message, response.Exception);
                 }
 
-                IEnumerable<WarehouseOrder> orders = JsonConvert.DeserializeObject<IEnumerable<WarehouseOrder>>(
+                var orderResponse = JsonConvert.DeserializeObject<WarehouseGetOrdersResponse>(
                     response.Value.Content,
                     new JsonSerializerSettings
                     {
@@ -76,7 +75,7 @@ namespace ShipWorks.Stores.Warehouse
                         },
                     });
 
-                return orders;
+                return orderResponse;
             }
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {
@@ -87,7 +86,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Send a shipment to the hub
         /// </summary>
-        public async Task UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
+        public async Task<Result> UploadShipment(ShipmentEntity shipmentEntity, Guid hubOrderID, string tangoShipmentID)
         {
             try
             {
@@ -110,12 +109,64 @@ namespace ShipWorks.Stores.Warehouse
                     {
                         log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub. {response.Message}",
                                   response.Exception);
+                        return Result.FromError(response.Exception);
                     }
+
+                    return Result.FromSuccess();
                 }
+
+                string restrictedErrorMessage = "Attempted to upload shipment to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                return Result.FromError(restrictedErrorMessage);
             }
             catch (Exception ex)
             {
                 log.Error($"Failed to upload shipment {shipmentEntity.ShipmentID} to hub.", ex);
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
+        /// Send void to the hub
+        /// </summary>
+        public async Task<Result> UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel =
+                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    IRestRequest request =
+                        new RestRequest(WarehouseEndpoints.VoidShipment(hubOrderID.ToString("N")), Method.PUT);
+
+                    VoidShipment voidShipment = shipmentDtoFactory.CreateVoidShipment(shipmentID, tangoShipmentID);
+                    request.AddJsonBody(JsonConvert.SerializeObject(voidShipment));
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Void Order")
+                        .ConfigureAwait(false);
+
+                    if (response.Failure)
+                    {
+                        log.Error($"Failed to upload shipment {shipmentID} to hub. {response.Message}",
+                                  response.Exception);
+                        return Result.FromError(response.Exception);
+                    }
+
+                    return Result.FromSuccess();
+                }
+
+                string restrictedErrorMessage = "Attempted to upload voided shipment to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                return Result.FromError(restrictedErrorMessage);
+
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to upload shipment {shipmentID} to hub.", ex);
+                return Result.FromError(ex);
             }
         }
     }

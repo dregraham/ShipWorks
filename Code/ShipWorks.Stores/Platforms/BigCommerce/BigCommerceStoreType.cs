@@ -21,11 +21,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
     [KeyedComponent(typeof(StoreType), StoreTypeCode.BigCommerce)]
     public class BigCommerceStoreType : StoreType
     {
-        readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
-        readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
-        readonly IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex;
-        readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
-        readonly IBigCommerceIdentifier identifier;
+        private readonly Func<BigCommerceStoreEntity, IBigCommerceStatusCodeProvider> createStatusCodeProvider;
+        private readonly IIndex<StoreTypeCode, StoreSettingsControlBase> storeSettingsControlIndex;
+        private readonly IIndex<StoreTypeCode, OnlineUpdateActionControlBase> updateActionIndex;
+        private readonly IIndex<StoreTypeCode, AccountSettingsControlBase> accountSettingsControlIndex;
+        private readonly IBigCommerceIdentifier identifier;
 
         /// <summary>
         /// Constructor
@@ -188,5 +188,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
 
             return base.GridOnlineColumnSupported(column);
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) =>
+            (store as IBigCommerceStoreEntity)?.BigCommerceAuthentication == BigCommerceAuthenticationType.Oauth;
     }
 }

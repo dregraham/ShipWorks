@@ -517,7 +517,7 @@
           <Field Name="ApiUserName" Type="string" MaxLength="65" FieldIndex="1" />
           <Field Name="BigCommerceAuthentication" Type="BigCommerceAuthenticationType" FieldIndex="6" />
           <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" FieldIndex="5" />
-          <Field Name="Identifier" Type="string" MaxLength="110" FieldIndex="9" />
+          <Field Name="Identifier" Type="string" MaxLength="1024" FieldIndex="9" />
           <Field Name="OauthClientId" Type="string" MaxLength="100" FieldIndex="7" />
           <Field Name="OauthToken" Type="string" MaxLength="100" FieldIndex="8" />
           <Field Name="StatusCodes" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="3" />
@@ -583,7 +583,6 @@
           <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
-          <Field Name="DownloadModifiedNumberOfDaysBack" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
           <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
@@ -2042,6 +2041,9 @@
           <Field Name="ShipUSTerritory" Type="int" FieldIndex="57" />
           <Field Name="ShipWebsite" Type="string" MaxLength="50" FieldIndex="51" />
           <Field Name="StoreID" Type="long" IsAutoCreated="true" FieldIndex="2" />
+          <Field Name="Verified" Type="bool" FieldIndex="84" />
+          <Field Name="VerifiedBy" Type="long" IsOptional="true" Precision="19" FieldIndex="85" />
+          <Field Name="VerifiedDate" Type="datetime" IsOptional="true" FieldIndex="86" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderCharge" ObjectID="f5c8100f-dede-4054-831c-7857fd7f8817">
@@ -2331,6 +2333,7 @@
           <Field Name="ShipUSTerritory" Type="int" Precision="10" FieldIndex="25" />
           <Field Name="TotalWeight" Type="double" IsReadOnly="true" FieldIndex="12" />
           <Field Name="TrackingNumber" Type="string" IsReadOnly="true" MaxLength="50" FieldIndex="13" />
+          <Field Name="Verified" Type="bool" FieldIndex="29" />
           <Field Name="Voided" Type="bool" IsReadOnly="true" FieldIndex="8" />
           <Field Name="VoidedComputerID" Type="long" IsReadOnly="true" IsOptional="true" Precision="19" FieldIndex="11" />
           <Field Name="VoidedDate" Type="datetime" IsReadOnly="true" IsOptional="true" FieldIndex="9" />
@@ -2570,6 +2573,8 @@
           <Field Name="IncludeReturn" Type="bool" FieldIndex="74" />
           <Field Name="Insurance" Type="bool" FieldIndex="60" />
           <Field Name="InsuranceProvider" Type="int" FieldIndex="61" />
+          <Field Name="LoggedShippedToHub" Type="bool" IsOptional="true" FieldIndex="77" />
+          <Field Name="LoggedVoidToHub" Type="bool" IsOptional="true" FieldIndex="78" />
           <Field Name="OnlineShipmentID" Type="string" MaxLength="128" FieldIndex="70" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="OriginCity" Type="string" MaxLength="50" FieldIndex="51" />
@@ -3285,6 +3290,7 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
+          <Field Name="AutoPrintRequireValidation" Type="bool" FieldIndex="21" />
           <Field Name="AutoWeigh" Type="bool" FieldIndex="16" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
@@ -4557,7 +4563,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-06-17T15:30:13.4856613Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-02T13:55:18.0622271Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4983,10 +4989,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -5032,7 +5038,7 @@
                         <CustomProperty Name="AuditName" Value="OAuth Token" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="Identifier" Ordinal="11" DbType="12" Length="110" />
+                    <Field Name="Identifier" Ordinal="11" DbType="12" Length="1024" />
                   </Fields>
                 </Table>
                 <Table Name="BuyDotComOrderItem">
@@ -5107,7 +5113,6 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
-                    <Field Name="DownloadModifiedNumberOfDaysBack" Ordinal="10" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -6893,8 +6898,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7514,6 +7519,13 @@
                     <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="HubOrderID" Ordinal="83" IsOptional="true" DbType="25" />
                     <Field Name="HubSequence" Ordinal="84" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Verified" Ordinal="85" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
+                      <CustomProperties>
+                        <CustomProperty Name="AuditName" Value="Verified" />
+                      </CustomProperties>
+                    </Field>
+                    <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7564,9 +7576,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
-                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
+                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
+                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
@@ -7686,9 +7698,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -8380,6 +8392,8 @@
                     <Field Name="IncludeReturn" Ordinal="75" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ApplyReturnProfile" Ordinal="76" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ReturnProfileID" Ordinal="77" HasDefaultValue="true" DefaultValue="(-1)" DbType="0" Precision="19" />
+                    <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
+                    <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -9247,6 +9261,7 @@
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
+                    <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -9649,6 +9664,7 @@
                     <Field Name="OrderNumberComplete" Ordinal="27" DbType="12" Length="50" />
                     <Field Name="CombineSplitStatus" Ordinal="28" DbType="8" Precision="10" />
                     <Field Name="Service" Ordinal="29" IsOptional="true" DbType="12" Length="101" />
+                    <Field Name="Verified" Ordinal="30" DbType="2" />
                   </Fields>
                 </View>
                 <View Name="ProductListView">
@@ -11297,7 +11313,6 @@
             <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
-            <FieldMapping FieldName="DownloadModifiedNumberOfDaysBack" TargetFieldName="DownloadModifiedNumberOfDaysBack" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
             <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
@@ -12788,6 +12803,9 @@
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="ShipWebsite" TargetFieldName="ShipWebsite" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
+            <FieldMapping FieldName="Verified" TargetFieldName="Verified" />
+            <FieldMapping FieldName="VerifiedBy" TargetFieldName="VerifiedBy" />
+            <FieldMapping FieldName="VerifiedDate" TargetFieldName="VerifiedDate" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OrderCharge" TargetName="ShipWorksLocal:dbo:OrderCharge">
@@ -13084,6 +13102,7 @@
             <FieldMapping FieldName="ShipUSTerritory" TargetFieldName="ShipUSTerritory" />
             <FieldMapping FieldName="TotalWeight" TargetFieldName="TotalWeight" TypeConverterToUse="SD.LLBLGen.Pro.TypeConverters.DoubleDecimalConverter" />
             <FieldMapping FieldName="TrackingNumber" TargetFieldName="TrackingNumber" />
+            <FieldMapping FieldName="Verified" TargetFieldName="Verified" />
             <FieldMapping FieldName="Voided" TargetFieldName="Voided" />
             <FieldMapping FieldName="VoidedComputerID" TargetFieldName="VoidedComputerID" />
             <FieldMapping FieldName="VoidedDate" TargetFieldName="VoidedDate" />
@@ -13322,6 +13341,8 @@
             <FieldMapping FieldName="IncludeReturn" TargetFieldName="IncludeReturn" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="InsuranceProvider" TargetFieldName="InsuranceProvider" />
+            <FieldMapping FieldName="LoggedShippedToHub" TargetFieldName="LoggedShippedToHub" />
+            <FieldMapping FieldName="LoggedVoidToHub" TargetFieldName="LoggedVoidToHub" />
             <FieldMapping FieldName="OnlineShipmentID" TargetFieldName="OnlineShipmentID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginCity" TargetFieldName="OriginCity" />
@@ -14046,6 +14067,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":UserSettings" TargetName="ShipWorksLocal:dbo:UserSettings">
           <FieldMappings>
+            <FieldMapping FieldName="AutoPrintRequireValidation" TargetFieldName="AutoPrintRequireValidation" />
             <FieldMapping FieldName="AutoWeigh" TargetFieldName="AutoWeigh" />
             <FieldMapping FieldName="CustomerFilterExpandedFolders" TargetFieldName="CustomerFilterExpandedFolders" />
             <FieldMapping FieldName="CustomerFilterLastActive" TargetFieldName="CustomerFilterLastActive" />

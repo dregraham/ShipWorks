@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     public class GenericModuleStoreType : StoreType, IGenericModuleStoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(GenericModuleStoreType));
         private readonly IMessageHelper messageHelper;
         private readonly IOrderManager orderManager;
 
@@ -598,5 +598,10 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 AmazonOrderItemCode = string.Empty
             };
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => store.StoreTypeCode == StoreTypeCode.GenericModule;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Win32.Native;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -57,5 +58,10 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         /// Gets the title and description for the CreateLabel tool tip
         /// </summary>
         (string Title, string Description) GetCreateLabelToolTipText();
+
+        /// <summary>
+        /// Show the shortcut indicator based on user settings
+        /// </summary>
+        void ShowShortcutIndicator(ShortcutMessage shortcutMessage);
     }
 }

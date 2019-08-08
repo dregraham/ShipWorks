@@ -512,7 +512,7 @@ namespace ShipWorks.Stores
         {
 
         }
-        
+
         /// <summary>
         /// This is used as a safe and friendly internal code for storing information.  For instance,
         /// registry key values and template exclusion names.
@@ -664,5 +664,10 @@ namespace ShipWorks.Stores
         {
             return true;
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public virtual bool ShouldUseHub(IStoreEntity store) => false;
     }
 }

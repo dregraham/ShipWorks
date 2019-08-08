@@ -150,6 +150,7 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
+        private IScanPack scanPackControl;
         private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -185,6 +186,7 @@ namespace ShipWorks
                 { ribbonTabGridViewHome, x => x == UIMode.Batch },
                 { ribbonTabGridViewCreate, x => x == UIMode.Batch },
                 { ribbonTabView, x => x == UIMode.Batch },
+                { ribbonTabOrderLookupViewScanPack, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
                 { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
                 { ribbonTabAdmin, x => x == UIMode.Batch || x == UIMode.OrderLookup },
@@ -1127,6 +1129,7 @@ namespace ShipWorks
             }
 
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
+            scanPackControl = orderLookupLifetimeScope.Resolve<IScanPack>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
@@ -1147,8 +1150,10 @@ namespace ShipWorks
         {
             if (orderLookupLifetimeScope != null)
             {
-                panelDockingArea.Controls.Remove(orderLookupControl.Control);
+                panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+                panelDockingArea.Controls.Remove(scanPackControl?.Control);
                 orderLookupControl.Unload();
+                scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }
@@ -1188,14 +1193,23 @@ namespace ShipWorks
         /// </summary>
         private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
         {
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
             {
-                ToggleVisiblePanel(orderLookupControl?.Control, shipmentHistory?.Control);
+                // Save the order in case changes were made before switching to this tab
+                orderLookupControl?.Save();
+                ToggleVisiblePanel(scanPackControl?.Control);
+                shipmentHistory?.Deactivate();
+            }
+            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            {
+                ToggleVisiblePanel(orderLookupControl?.Control);
                 shipmentHistory?.Deactivate();
             }
             else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
             {
-                ToggleVisiblePanel(shipmentHistory?.Control, orderLookupControl?.Control);
+                // Save the order in case changes were made before switching to this tab
+                orderLookupControl?.Save();
+                ToggleVisiblePanel(shipmentHistory?.Control);
                 shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
 
@@ -1211,14 +1225,22 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// True if scan pack control is active
+        /// </summary>
+        public bool IsScanPackActive()
+        {
+            return scanPackControl != null && panelDockingArea.Controls.Contains(scanPackControl.Control);
+        }
+
+        /// <summary>
         /// Toggle which control is visible in the panel docking area
         /// </summary>
-        private void ToggleVisiblePanel(Control toAdd, Control toRemove)
+        private void ToggleVisiblePanel(Control toAdd)
         {
-            if (toRemove != null)
-            {
-                panelDockingArea.Controls.Remove(toRemove);
-            }
+            // first remove everything
+            panelDockingArea.Controls.Remove(shipmentHistory?.Control);
+            panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            panelDockingArea.Controls.Remove(scanPackControl?.Control);
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
@@ -1598,6 +1620,24 @@ namespace ShipWorks
 
                 // Preserve order
                 tab.SendToBack();
+            }
+
+            if (UIMode == UIMode.OrderLookup)
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
+                    EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                    if (restrictionLevel != EditionRestrictionLevel.None)
+                    {
+                        ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+                    }
+                    else
+                    {
+                        ribbonTabOrderLookupViewScanPack.Enabled = true;
+                    }
+                }
             }
 
             ribbonSecurityProvider.UpdateSecurityUI();

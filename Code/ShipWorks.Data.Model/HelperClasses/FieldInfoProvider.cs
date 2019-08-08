@@ -688,7 +688,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "BigCommerceAuthentication", typeof(Interapptive.Shared.Enums.BigCommerceAuthenticationType), false, false, false, false,  (int)BigCommerceStoreFieldIndex.BigCommerceAuthentication, 0, 0, 10);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthClientId", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthClientId, 100, 0, 0);
 			this.AddElementFieldInfo("BigCommerceStoreEntity", "OauthToken", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.OauthToken, 100, 0, 0);
-			this.AddElementFieldInfo("BigCommerceStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.Identifier, 110, 0, 0);
+			this.AddElementFieldInfo("BigCommerceStoreEntity", "Identifier", typeof(System.String), false, false, false, false,  (int)BigCommerceStoreFieldIndex.Identifier, 1024, 0, 0);
 		}
 		/// <summary>Inits BuyDotComOrderItemEntity's FieldInfo objects</summary>
 		private void InitBuyDotComOrderItemEntityInfos()
@@ -763,7 +763,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
-			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadModifiedNumberOfDaysBack", typeof(System.Int32), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadModifiedNumberOfDaysBack, 0, 0, 10);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -2345,6 +2344,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom5, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "HubOrderID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)OrderFieldIndex.HubOrderID, 0, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "HubSequence", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.HubSequence, 0, 0, 19);
+			this.AddElementFieldInfo("OrderEntity", "Verified", typeof(System.Boolean), false, false, false, false,  (int)OrderFieldIndex.Verified, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "VerifiedBy", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.VerifiedBy, 0, 0, 19);
+			this.AddElementFieldInfo("OrderEntity", "VerifiedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.VerifiedDate, 0, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2668,6 +2670,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ProcessedWithUiMode", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "CombineSplitStatus", typeof(System.Int32), false, false, false, false,  (int)ProcessedShipmentFieldIndex.CombineSplitStatus, 0, 0, 10);
 			this.AddElementFieldInfo("ProcessedShipmentEntity", "ReturnShipment", typeof(System.Boolean), false, false, false, false,  (int)ProcessedShipmentFieldIndex.ReturnShipment, 0, 0, 0);
+			this.AddElementFieldInfo("ProcessedShipmentEntity", "Verified", typeof(System.Boolean), false, false, false, false,  (int)ProcessedShipmentFieldIndex.Verified, 0, 0, 0);
 		}
 		/// <summary>Inits ProductEntity's FieldInfo objects</summary>
 		private void InitProductEntityInfos()
@@ -2989,6 +2992,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "IncludeReturn", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.IncludeReturn, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ApplyReturnProfile", typeof(System.Boolean), false, false, false, false,  (int)ShipmentFieldIndex.ApplyReturnProfile, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ReturnProfileID", typeof(System.Int64), false, false, false, false,  (int)ShipmentFieldIndex.ReturnProfileID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()
@@ -3713,6 +3718,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "LastReleaseNotesSeen", typeof(System.String), false, false, false, false,  (int)UserSettingsFieldIndex.LastReleaseNotesSeen, 25, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "AutoPrintRequireValidation", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoPrintRequireValidation, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

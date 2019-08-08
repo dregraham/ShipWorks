@@ -92,7 +92,7 @@
             this.printActionBox.Name = "printActionBox";
             this.printActionBox.Size = new System.Drawing.Size(230, 17);
             this.printActionBox.TabIndex = 3;
-            this.printActionBox.Text = "Automatically print standard labels after processing.";
+            this.printActionBox.Text = "Automatically print outbound labels after processing.";
             this.printActionBox.UseVisualStyleBackColor = true;
             // 
             // printReturnBox
