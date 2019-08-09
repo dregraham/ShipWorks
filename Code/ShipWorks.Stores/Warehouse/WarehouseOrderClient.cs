@@ -113,7 +113,7 @@ namespace ShipWorks.Stores.Warehouse
                     request.AddJsonBody(requestData);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
-                        .MakeRequest(request, "Upload Store")
+                        .MakeRequest(request, "Upload Order")
                         .ConfigureAwait(true);
 
                     if (response.Failure)
@@ -129,14 +129,14 @@ namespace ShipWorks.Stores.Warehouse
                 else
                 {
 
-                    string restrictedErrorMessage = "Attempted to upload shipment to hub for a non warehouse customer";
+                    string restrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
                     log.Error(restrictedErrorMessage);
                     return GenericResult.FromError<WarehouseUploadOrderResponse>(restrictedErrorMessage);
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Failed to upload shipment {order.OrderID} to hub.", ex);
+                log.Error($"Failed to upload order {order.OrderID} to hub.", ex);
                 return GenericResult.FromError<WarehouseUploadOrderResponse>(ex);
             }
         }
