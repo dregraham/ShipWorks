@@ -1,8 +1,8 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Data;
 using Interapptive.Shared.Security;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -11,20 +11,21 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// </summary>
     public class CustomerLicenseReader : ICustomerLicenseReader
     {
-        private readonly IConfigurationData configurationData;
         private readonly IDatabaseIdentifier databaseIdentifier;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CustomerLicenseReader(IEncryptionProviderFactory encryptionProviderFactory,
-            IConfigurationData configurationData,
-            IDatabaseIdentifier databaseIdentifier)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IDatabaseIdentifier databaseIdentifier
+        )
         {
-            this.configurationData = configurationData;
             this.databaseIdentifier = databaseIdentifier;
             this.encryptionProviderFactory = encryptionProviderFactory;
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -33,18 +34,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         public string Read()
         {
             IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
-            IConfigurationEntity config = configurationData.FetchReadOnly();
+            string customerKey = string.Empty;
+
+            ResultsetFields resultFields = new ResultsetFields(1);
+            resultFields.DefineField(ConfigurationFields.CustomerKey, 0, "CustomerKey", "");
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                IDataReader reader = adapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0, null, true);
+                while (reader.Read())
+                {
+                    customerKey = reader.GetString(0);
+                }
+            }
 
             // try to decrypt the key, if we get an ExcryptionException try setting the cached database identifier
             // and try again. This happens when switching between databases or restoring a database with a different database identifier
             try
             {
-                return encryptionProvider.Decrypt(config.CustomerKey);
+                return encryptionProvider.Decrypt(customerKey);
             }
             catch (EncryptionException)
             {
                 databaseIdentifier.Reset();
-                return encryptionProvider.Decrypt(config.CustomerKey);
+                return encryptionProvider.Decrypt(customerKey);
             }
         }
     }

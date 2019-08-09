@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Linq;
+using System.Data.Common;
 using System.Reflection;
 using Autofac;
 using Common.Logging;
+using Interapptive.Shared.Data;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.Custom;
-using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
 {
@@ -33,34 +30,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 if (SqlSession.IsConfigured && SqlSession.Current != null)
                 {
-                    ConfigurationData.InitializeForCurrentDatabase();
-
-                    string storeLicense = string.Empty;
-                    string licenseKeys = string.Empty;
-                    string customerKey = string.Empty;
-                    (string CustomerEmail, string FirstAndLastName) customerInfo = (string.Empty, string.Empty);
-
-                    using (ISqlAdapter adapter = SqlAdapter.Default)
-                    {
-                        StoreCollection stores = new StoreCollection();
-                        adapter.FetchEntityCollection(stores, null, (IRelationPredicateBucket) null);
-                        storeLicense = stores.FirstOrDefault()?.License;
-                        licenseKeys = String.Join($"{Environment.NewLine}", stores?.Select(s => s.License));
-
-                        // Get customer key
-                        ConfigurationEntity config = new ConfigurationEntity(false);
-                        adapter.FetchEntity(config);
-
-                        using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                        {
-                            ICustomerLicenseReader customerLicenseReader = scope.Resolve<ICustomerLicenseReader>();
-                            customerKey = customerLicenseReader.Read();
-                        }
-
-                        log.Debug($"Attempting GetCustomerEmail({storeLicense}, {customerKey})");
-                        customerInfo = TangoWebClient.GetCustomerEmail(storeLicense, customerKey);
-                        log.Debug($"Results of GetCustomerEmail: {customerInfo.CustomerEmail}, {customerInfo.FirstAndLastName}");
-                    }
+                    var customerInfo = GetCustomerInfo();
 
                     if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
                     {
@@ -71,7 +41,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             Version = versionThatFailed,
                             DbID = new DatabaseIdentifier().Get().ToString("N"),
                             FailureReason = failureReason,
-                            StoreKeys = licenseKeys,
+                            StoreKeys = customerInfo.LicenseKeys,
+                            MachineName = Environment.MachineName,
                         };
 
                         LogToQueue(storageAccount, details);
@@ -83,6 +54,55 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 // Just log and carry on
                 log.Error(ex);
             }
+        }
+
+        /// <summary>
+        /// Get customer info
+        /// </summary>
+        private static (string CustomerEmail, string FirstAndLastName, string LicenseKeys) GetCustomerInfo()
+        {
+            (string CustomerEmail, string FirstAndLastName, string LicenseKeys) customerInfo = (string.Empty, string.Empty, string.Empty);
+            string customerKey = string.Empty;
+            string storeLicense = string.Empty;
+
+            try
+            {
+                // Don't use ConfigurationEntity because its schema may have changed and LLBLGen may throw when hydrating the object.
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    using (var reader = DbCommandProvider.ExecuteReader(con, "SELECT License FROM [Store]"))
+                    {
+                        while (reader.Read())
+                        {
+                            storeLicense = reader["License"].ToString();
+                            customerInfo.LicenseKeys += storeLicense + Environment.NewLine;
+                        }
+                    }
+                }
+
+                // Get customer key
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ICustomerLicenseReader customerLicenseReader = scope.Resolve<ICustomerLicenseReader>();
+                    customerKey = customerLicenseReader.Read();
+                }
+
+                log.Debug($"Attempting GetCustomerEmail({storeLicense}, {customerKey})");
+
+                var response = TangoWebClient.GetCustomerEmail(storeLicense, customerKey);
+                customerInfo.CustomerEmail = response.Email;
+                customerInfo.FirstAndLastName = response.FirstAndLastName;
+
+                log.Debug($"Results of GetCustomerEmail: {customerInfo.CustomerEmail}, {customerInfo.FirstAndLastName}");
+
+            }
+            catch (Exception ex)
+            {
+                // Just log and return with what we were able to get.
+                log.Error("An error occurred getting customer info.", ex);
+            }
+
+            return customerInfo;
         }
 
         /// <summary>
@@ -141,6 +161,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             /// The store license keys
             /// </summary>
             public string StoreKeys { get; set; }
+
+            /// <summary>
+            /// The machine name on which the upgrade was attempted
+            /// </summary>
+            public string MachineName { get; set; }
         }
     }
 }
