@@ -102,8 +102,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             {
                 if (CreateNew)
                 {
-                    //todo: clear store in case they select a store, then come back and do create new
-
+                    ClearStoreEntity(storeEntity);
                     return Result.FromSuccess();
                 }
 
@@ -151,6 +150,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         }
 
         /// <summary>
+        /// Clear the ODBC store entity details
+        /// </summary>
+        private void ClearStoreEntity(OdbcStoreEntity storeEntity)
+        {
+            storeEntity.WarehouseStoreID = null;
+            storeEntity.StoreName = null;
+
+            storeEntity.ImportMap = string.Empty;
+            storeEntity.ImportStrategy = 0;
+            storeEntity.ImportColumnSourceType = 0;
+            storeEntity.ImportColumnSource = string.Empty;
+            storeEntity.ImportOrderItemStrategy = 0;
+
+            storeEntity.UploadMap = string.Empty;
+            storeEntity.UploadStrategy = 0;
+            storeEntity.UploadColumnSourceType = 0;
+            storeEntity.UploadColumnSource = string.Empty;
+        }
+
+        /// <summary>
         /// Load the list of stores from the hub
         /// </summary>
         private async Task LoadStoresFromHub()
@@ -165,7 +184,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
                 if (!Stores.Any())
                 {
-                    Message = "No existing ODBC stores were found in the hub. Please select \"Create a new ODBC store\" and click next.";
+                    Message = "No existing ODBC stores were found in the Hub. Please select \"Create a new ODBC store\" and click next.";
                 }
 
                 LoadingStores = false;
