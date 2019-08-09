@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
@@ -11,6 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
     /// <summary>
     /// Client for interacting with Odbc Stores and the hub
     /// </summary>
+    [Component]
     public class OdbcStoreClient : IOdbcStoreClient
     {
         /// <summary>

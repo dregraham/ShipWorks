@@ -31,10 +31,33 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.elementHost = new System.Windows.Forms.Integration.ElementHost();
+            this.odbcHubControl = new ShipWorks.Stores.UI.Platforms.Odbc.Controls.OdbcHubControl();
+            this.SuspendLayout();
+            // 
+            // elementHost
+            // 
+            this.elementHost.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.elementHost.Location = new System.Drawing.Point(0, 0);
+            this.elementHost.Name = "elementHost";
+            this.elementHost.Size = new System.Drawing.Size(150, 150);
+            this.elementHost.TabIndex = 0;
+            this.elementHost.Text = "elementHost1";
+            this.elementHost.Child = this.odbcHubControl;
+            // 
+            // OdbcHubPage
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.elementHost);
+            this.Name = "OdbcHubPage";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Integration.ElementHost elementHost;
+        private Controls.OdbcHubControl odbcHubControl;
     }
 }

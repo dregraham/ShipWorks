@@ -85,12 +85,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         }
 
         /// <summary>
+        /// Stepping into the map settings page
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private void OnSteppingInto(object sender, EventArgs eventArgs)
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             store = GetStore<OdbcStoreEntity>();
+
+            if (store.WarehouseStoreID.HasValue)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
 
             IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
 

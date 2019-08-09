@@ -41,6 +41,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         {
             store = GetStore<OdbcStoreEntity>();
 
+            if (store.WarehouseStoreID.HasValue)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
+
             viewModel = viewModelFactory();
             viewModel.Load(store);
 

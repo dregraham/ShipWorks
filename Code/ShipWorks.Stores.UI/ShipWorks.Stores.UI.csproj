@@ -707,6 +707,9 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.resx">
       <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcHubPage.resx">
+      <DependentUpon>OdbcHubPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.resx">
       <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
     </EmbeddedResource>
