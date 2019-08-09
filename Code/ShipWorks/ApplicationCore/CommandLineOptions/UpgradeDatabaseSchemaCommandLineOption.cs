@@ -136,6 +136,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
             {
                 telementryEvent.AddProperty("Mode", "CommandLine");
+                telementryEvent.AddProperty("MachineName", Environment.MachineName);
                 databaseUpdateResult.WriteTo(telementryEvent);
                 backupResult?.WriteTo(telementryEvent);
             }
