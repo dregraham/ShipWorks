@@ -928,6 +928,7 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="Warehouse\UploadOrderRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />

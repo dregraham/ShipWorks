@@ -1,5 +1,8 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -13,16 +16,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private OdbcHubViewModel viewModel;
         private OdbcStoreEntity store;
         private readonly Func<OdbcHubViewModel> viewModelFactory;
+        private readonly IMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcHubPage(Func<OdbcHubViewModel> viewModelFactory)
+        public OdbcHubPage(Func<OdbcHubViewModel> viewModelFactory, IMessageHelper messageHelper)
         {
             this.viewModelFactory = viewModelFactory;
+            this.messageHelper = messageHelper;
             InitializeComponent();
             SteppingInto += OnSteppingInto;
-            StepNext += OnNext;
+            StepNextAsync += OnNext;
         }
 
         /// <summary>
@@ -38,31 +43,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             store = GetStore<OdbcStoreEntity>();
 
             viewModel = viewModelFactory();
-            viewModel.NewStoreAction = () => { };
-            viewModel.Load();
-
-            if (viewModel.Stores.Any())
-            {
-                odbcHubControl.DataContext = viewModel;
-            }
-            else
-            {
-                e.Skip = true;
-                e.RaiseStepEventWhenSkipping = false;
-            }
+            odbcHubControl.DataContext = viewModel;
         }
 
         /// <summary>
         /// When stepping next, save the store
         /// </summary>
-        private void OnNext(object sender, WizardStepEventArgs e)
+        private async Task OnNext(object sender, WizardStepEventArgs e)
         {
-            if (viewModel.SelectedStore != null)
+            Result result = await viewModel.Save(store).ConfigureAwait(true);
+
+            if (result.Failure)
             {
-                viewModel.Save(store);
-            }
-            else
-            {
+                messageHelper.ShowError(result.Message);
                 e.NextPage = this;
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -13,11 +14,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         /// <summary>
         /// Get the warehouse customers odbc stores where key is the warehouse store id
         /// </summary>
-        IDictionary<Guid, Store> GetStores();
+        Task<Dictionary<Guid, Store>> GetStores();
 
         /// <summary>
         /// Get the given warehouseStoreIds OdbcStore
         /// </summary>
-        OdbcStore GetStore(Guid warehouseStoreId);
+        Task<OdbcStore> GetStore(Guid warehouseStoreId);
     }
 }

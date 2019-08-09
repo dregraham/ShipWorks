@@ -12,5 +12,12 @@ namespace ShipWorks.Stores.Warehouse.StoreData
     {
         public IOdbcFieldMap ImportMap { get; set; }
         public IOdbcFieldMap UploadMap { get; set; }
+        public int ImportStrategy { get; set; }
+        public int ImportColumnSourceType { get; set; }
+        public string ImportColumnSource { get; set; }
+        public int ImportOrderItemStrategy { get; set; }
+        public int UploadStrategy { get; set; }
+        public int UploadColumnSourceType { get; set; }
+        public string UploadColumnSource { get; set; }
     }
 }
