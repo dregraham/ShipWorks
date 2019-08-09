@@ -56,6 +56,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.Warehouse
             var walmartOrderEntity = (WalmartOrderEntity) orderEntity;
             var walmartWarehouseOrder = warehouseOrder.AdditionalData[walmartEntryKey].ToObject<WalmartWarehouseOrder>();
 
+            walmartOrderEntity.OrderNumber = long.Parse(walmartWarehouseOrder.PurchaseOrderId);
             walmartOrderEntity.PurchaseOrderID = walmartWarehouseOrder.PurchaseOrderId;
             walmartOrderEntity.CustomerOrderID = walmartWarehouseOrder.CustomerOrderId;
             walmartOrderEntity.EstimatedDeliveryDate = walmartWarehouseOrder.EstimatedDeliveryDate;
