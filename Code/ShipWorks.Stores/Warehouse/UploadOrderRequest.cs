@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Stores.Warehouse
     /// <summary>
     /// Request to upload order to the hub
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class UploadOrderRequest
     {
         /// <summary>
@@ -30,6 +32,6 @@ namespace ShipWorks.Stores.Warehouse
         [JsonProperty("order")]
         public WarehouseOrder Order { get; }
 
-        
+
     }
 }
