@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
         private readonly bool reloadEntireOrder;
-		
+
         // not including decimal, money, numeric, real and float because that would be stupid
         // included names for integers from sql, mysql, oracle, and db2
         private readonly string[] numericSqlDataTypes =
@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader,
-            IOdbcDownloaderExtraDependencies extras, 
+            IOdbcDownloaderExtraDependencies extras,
             IWarehouseOrderClient warehouseOrderClient) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             // if datatype is a primary key it will be called something like "bigint identity"
             // so, grab the first word.
-            // Also, mySql includes lengths of fields within parenthesis. 
+            // Also, mySql includes lengths of fields within parenthesis.
             string dataType = GetOrderNumberFieldMapEntry().ExternalField?.Column?.DataType?.Split(' ', '(')[0];
 
             // I don't think this should ever happen...
@@ -125,7 +125,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private bool IsCastException(ShipWorksOdbcException shipWorksOdbcException)
         {
             OdbcException odbcException = shipWorksOdbcException.GetBaseException() as OdbcException;
-            
+
             return odbcException?.Errors.Cast<OdbcError>().None(error => error.SQLState == "22018") ?? true;
         }
 
@@ -155,6 +155,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 throw new DownloadException(ex.Message, ex);
             }
+        }
+
+        /// <summary>
+        /// Only download from warehouse if we are not using ondemand
+        /// </summary>
+        protected override async Task DownloadWarehouseOrders(Guid batchId)
+        {
+            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
+                                            "To automatically download orders, change this store's order import settings.");
+            }
+
+            base.DownloadWarehouseOrders(batchId);
         }
 
         /// <summary>
@@ -254,7 +268,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 if (downloadedOrder.Success)
                 {
                     await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
-                    
+
                     try
                     {
                         await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
@@ -367,7 +381,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             return odbcFieldMapEntry;
         }
-		
+
 		/// <summary>
         /// Removes order items from the order
         /// </summary>
