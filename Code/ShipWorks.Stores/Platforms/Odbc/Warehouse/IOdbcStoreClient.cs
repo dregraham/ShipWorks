@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
 {
@@ -16,13 +16,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         IDictionary<Guid, Store> GetStores();
 
         /// <summary>
-        /// Get the given warehouseStoreIds import map
+        /// Get the given warehouseStoreIds OdbcStore
         /// </summary>
-        IOdbcFieldMap GetImportMap(Guid warehouseStoreId);
-
-        /// <summary>
-        /// Get the given warehouseStoreIds upload map
-        /// </summary>
-        IOdbcFieldMap GetUploadMap(Guid warehouseStoreId);
+        OdbcStore GetStore(Guid warehouseStoreId);
     }
 }
