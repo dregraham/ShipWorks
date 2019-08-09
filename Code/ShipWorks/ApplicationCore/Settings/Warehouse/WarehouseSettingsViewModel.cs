@@ -11,6 +11,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Users;
+using Cursor = System.Windows.Forms.Cursor;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.ApplicationCore.Settings.Warehouse
 {
@@ -142,11 +144,15 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             WarehouseViewModel warehouse = warehouseList.ChooseWarehouse();
             if (warehouse != null)
             {
+                CanLinkWarehouse = false;
+
                 Result associationResponse;
                 using (messageHelper.ShowProgressDialog("Linking warehouse...", "Linking warehouse..."))
                 {
                     associationResponse = await warehouseSettingsApi.Link(warehouse.Id).ConfigureAwait(true);
                 }
+
+                Cursor.Current = Cursors.WaitCursor;
 
                 if (associationResponse.Success)
                 {
@@ -157,12 +163,12 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                     });
 
                     WarehouseName = warehouse.Name;
-                    CanLinkWarehouse = false;
                     CanUploadSKUs = isAdmin;
                 }
                 else
                 {
                     messageHelper.ShowError("Could not link this ShipWorks database with the warehouse.");
+                    CanLinkWarehouse = true;
                 }
             }
         }

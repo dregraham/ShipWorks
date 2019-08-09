@@ -16,7 +16,7 @@ create view ProcessedShipmentsView as
 			ProcessedWithUiMode, Voided, VoidedDate, VoidedUserID, VoidedComputerID, TotalWeight, TrackingNumber, ShipmentCost,
 			ShipSenseStatus, Shipment.ShipAddressValidationStatus, Shipment.ShipResidentialStatus, Shipment.ShipPOBox,
 			Shipment.ShipMilitaryAddress, Shipment.ShipUSTerritory, RequestedLabelFormat, ActualLabelFormat, ReturnShipment,
-			[Order].OrderID, [Order].OrderNumberComplete, [Order].CombineSplitStatus
+			[Order].OrderID, [Order].OrderNumberComplete, [Order].CombineSplitStatus, [Order].Verified
 		FROM Shipment
 			INNER JOIN [Order] ON Shipment.OrderID = [Order].OrderID
         WHERE Processed = 1
@@ -27,7 +27,7 @@ create view ProcessedShipmentsView as
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
 			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
-			s.CombineSplitStatus, CONVERT(NVARCHAR(50), carrierService.[Service]) AS [Service]
+			s.CombineSplitStatus, CONVERT(NVARCHAR(50), carrierService.[Service]) AS [Service], Verified
         FROM ProcessedShipments s
         CROSS APPLY
         (
@@ -50,7 +50,7 @@ create view ProcessedShipmentsView as
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
 			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
-			s.CombineSplitStatus, c.ShippingServiceID
+			s.CombineSplitStatus, c.ShippingServiceID, Verified
 		FROM AmazonSFPShipment c, ProcessedShipments s WHERE c.ShipmentID = s.ShipmentID  AND s.ShipmentType = 16
     ),
     OtherShipments as
@@ -59,7 +59,7 @@ create view ProcessedShipmentsView as
 			s.ProcessedComputerID, s.ProcessedWithUiMode, s.Voided, s.VoidedDate, s.VoidedUserID, s.VoidedComputerID, s.TotalWeight,
 			s.TrackingNumber, s.ShipmentCost, s.ShipSenseStatus, s.ShipAddressValidationStatus, s.ShipResidentialStatus, s.ShipPOBox,
 			s.ShipMilitaryAddress, s.ShipUSTerritory, s.RequestedLabelFormat, s.ActualLabelFormat, s.ReturnShipment, s.OrderID, s.OrderNumberComplete,
-			s.CombineSplitStatus, c.[Carrier] + ' ' + c.[Service] AS [Service]
+			s.CombineSplitStatus, c.[Carrier] + ' ' + c.[Service] AS [Service], Verified
 		FROM OtherShipment c, ProcessedShipments s WHERE c.ShipmentID = s.ShipmentID AND s.ShipmentType = 5
     )
     SELECT * FROM RegularShipments

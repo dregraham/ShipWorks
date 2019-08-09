@@ -1,0 +1,82 @@
+{
+    "Resources": {
+        "MyDashboard": {
+            "Type": "AWS::CloudWatch::Dashboard",
+            "Properties": {
+                "DashboardName": "S2-Aurora-Metrics",
+                "DashboardBody":"{
+    \"widgets\": [
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 0,
+            \"width\": 12,
+            \"height\": 6,
+            \"properties\": {
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"metrics\": [
+                    [ \"AWS/RDS\", \"CPUUtilization\", \"EngineName\", \"aurora\" ]
+                ],
+                \"region\": \"us-east-1\",
+                \"title\": \"Averaged Aurora DB CPU Utilization\"
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 12,
+            \"y\": 0,
+            \"width\": 12,
+            \"height\": 6,
+            \"properties\": {
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"metrics\": [
+                    [ \"AWS/RDS\", \"CPUUtilization\", \"DBClusterIdentifier\", \"domain-service-cluster-s2\" ],
+                    [ \"...\", \"product-database-cluster-s2\" ],
+                    [ \"...\", \"web-orders-cluster-s2\" ]
+                ],
+                \"region\": \"us-east-1\",
+                \"title\": \"Individual Aurora DB Instance CPU Utilization\"
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 0,
+            \"y\": 6,
+            \"width\": 12,
+            \"height\": 6,
+            \"properties\": {
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"metrics\": [
+                    [ \"AWS/RDS\", \"FreeableMemory\", \"EngineName\", \"aurora\" ]
+                ],
+                \"region\": \"us-east-1\",
+                \"title\": \"Averaged Aurora DB Freeable Memory\"
+            }
+        },
+        {
+            \"type\": \"metric\",
+            \"x\": 12,
+            \"y\": 6,
+            \"width\": 12,
+            \"height\": 6,
+            \"properties\": {
+                \"view\": \"timeSeries\",
+                \"stacked\": false,
+                \"metrics\": [
+                    [ \"AWS/RDS\", \"FreeableMemory\", \"DBClusterIdentifier\", \"domain-service-cluster-s2\" ],
+                    [ \"...\", \"product-database-cluster-s2\" ],
+                    [ \"...\", \"web-orders-cluster-s2\" ]
+                ],
+                \"region\": \"us-east-1\",
+                \"title\": \"Individual Aurora DB Instance Freeable Memory\"
+            }
+        }
+    ]
+}" 
+            }
+        }
+    }
+}

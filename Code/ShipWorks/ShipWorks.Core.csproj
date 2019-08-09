@@ -798,7 +798,10 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Shipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
@@ -863,6 +866,7 @@
     <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
     <Compile Include="Common\Threading\ProgressFactory.cs" />
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
@@ -1104,6 +1108,7 @@
     <Compile Include="Filters\Search\ISearchDefinitionProviderFactory.cs" />
     <Compile Include="OrderLookup\OrderClearReason.cs" />
     <Compile Include="OrderLookup\OrderLookupClearOrderMessage.cs" />
+    <Compile Include="OrderLookup\OrderLookupLoadOrderMessage.cs" />
     <Compile Include="OrderLookup\OrderLookupSearchMessage.cs" />
     <Compile Include="OrderLookup\ShipmentModelPipelines\IOrderLookupShipmentModelPipeline.cs" />
     <Compile Include="Products\Export\IProductExcelWriter.cs" />
@@ -1351,17 +1356,21 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\XamlNamespaces.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />    
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />    
+    <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="UI\Controls\IScanPack.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
+    <Compile Include="Users\IUserManager.cs" />
+    <Compile Include="Users\UserManagerWrapper.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
-    <Compile Include="Warehouse\WarehouseStoreTypes.cs" />
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -2139,9 +2148,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorDownloadModifiedDaysBackControl.cs">
-      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -4778,12 +4784,6 @@
     <Compile Include="Stores\Platforms\Infopia\WizardPages\InfopiaOnlineUpdateActionControl.Designer.cs">
       <DependentUpon>InfopiaOnlineUpdateActionControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.Designer.cs">
-      <DependentUpon>MagentoAccountSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Stores\Platforms\Magento\MagentoDownloader.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.cs">
@@ -4791,12 +4791,6 @@
     </Compile>
     <Compile Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.Designer.cs">
       <DependentUpon>MagentoStoreSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.Designer.cs">
-      <DependentUpon>MagentoAccountPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Magento\WizardPages\MagentoOnlineUpdateActionControl.cs">
       <SubType>UserControl</SubType>
@@ -9329,14 +9323,8 @@
     <EmbeddedResource Include="Stores\Platforms\Magento\CoreExtensions\Actions\MagentoShipmentUploadTaskEditor.resx">
       <DependentUpon>MagentoShipmentUploadTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Magento\MagentoAccountSettingsControl.resx">
-      <DependentUpon>MagentoAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Magento\MagentoStoreSettingsControl.resx">
       <DependentUpon>MagentoStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\Magento\WizardPages\MagentoAccountPage.resx">
-      <DependentUpon>MagentoAccountPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Magento\WizardPages\MagentoOnlineUpdateActionControl.resx">
       <DependentUpon>MagentoOnlineUpdateActionControl.cs</DependentUpon>

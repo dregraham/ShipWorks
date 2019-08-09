@@ -341,26 +341,43 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // pull out the order number
             string orderNumber = XPathUtility.Evaluate(orderXPath, "OrderNumber", "");
 
+            // pull in pre/postfix options
+            string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
+            string postfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
+
+            return CreateOrderIdentifier(
+                (GenericStoreDownloadStrategy) GenericModuleStoreEntity.ModuleDownloadStrategy,
+                storeType,
+                orderNumber,
+                prefix,
+                postfix);
+        }
+
+        /// <summary>
+        /// Create the order identifier based on incoming xml
+        /// </summary>
+        public static OrderIdentifier CreateOrderIdentifier(
+            GenericStoreDownloadStrategy strategy,
+            GenericModuleStoreType storeType,
+            string orderNumber,
+            string orderNumberPrefix,
+            string orderNumberPostfix)
+        {
             // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
             // so in that case, we leave a single 0.
             orderNumber = orderNumber.All(n => n == '0') ? "0" : orderNumber.TrimStart('0');
 
-            if (GenericModuleStoreEntity.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
+            if (strategy == GenericStoreDownloadStrategy.ByOrderNumber)
             {
-                long parsedOrderNumber;
-                if (!long.TryParse(orderNumber, out parsedOrderNumber))
+                if (!long.TryParse(orderNumber, out long parsedOrderNumber))
                 {
                     throw new DownloadException("When downloading by order number, all order numbers must be a number.\r\n\r\n" +
                                                 $"Non-numeric order number found: {orderNumber}");
                 }
             }
 
-            // pull in pre/postfix options
-            string prefix = XPathUtility.Evaluate(orderXPath, "OrderNumberPrefix", "");
-            string postfix = XPathUtility.Evaluate(orderXPath, "OrderNumberPostfix", "");
-
             // create the identifier
-            return storeType.CreateOrderIdentifier(orderNumber, prefix, postfix);
+            return storeType.CreateOrderIdentifier(orderNumber, orderNumberPrefix, orderNumberPostfix);
         }
 
         /// <summary>
@@ -421,7 +438,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 try
                 {
                     object statusCode = GenericModuleStoreEntity.ModuleOnlineStatusDataType == (int) GenericVariantDataType.Numeric ?
-                        (object) XPathUtility.Evaluate(xpath, "StatusCode", 0) :
+                         XPathUtility.Evaluate(xpath, "StatusCode", 0) :
                         (object) XPathUtility.Evaluate(xpath, "StatusCode", "");
 
                     order.OnlineStatusCode = statusCode;

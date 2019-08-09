@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Management;
 
@@ -24,17 +26,17 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly ILicenseService licenseService;
         private readonly WarehouseRequestClient warehouseRequestClient;
-        private readonly StoreDtoFactory storeDtoFactory;
+        private readonly IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WarehouseStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient,
-                                    StoreDtoFactory storeDtoFactory)
+                                    IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories)
         {
             this.licenseService = licenseService;
             this.warehouseRequestClient = warehouseRequestClient;
-            this.storeDtoFactory = storeDtoFactory;
+            this.storeDtoFactories = storeDtoFactories;
         }
 
         /// <summary>
@@ -49,10 +51,19 @@ namespace ShipWorks.Stores.Warehouse
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.UpdateStoreCredentials(store.WarehouseStoreID?.ToString("D")), Method.POST);
-                    request.JsonSerializer = new RestSharpJsonNetSerializer();
+                    request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+                    {
+                        ContractResolver = new DefaultContractResolver
+                        {
+                            NamingStrategy = new CamelCaseNamingStrategy
+                            {
+                                OverrideSpecifiedNames = false
+                            }
+                        },
+                    });
                     request.RequestFormat = DataFormat.Json;
 
-                    Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
+                    Store storeDto = await GetStoreDtoFactory(store).Create(store).ConfigureAwait(false);
                     request.AddJsonBody(storeDto);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
@@ -97,7 +108,7 @@ namespace ShipWorks.Stores.Warehouse
                     });
                     request.RequestFormat = DataFormat.Json;
 
-                    Store storeDto = await storeDtoFactory.Create(store).ConfigureAwait(false);
+                    Store storeDto = await GetStoreDtoFactory(store).Create(store).ConfigureAwait(false);
                     request.AddJsonBody(storeDto);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
@@ -126,5 +137,13 @@ namespace ShipWorks.Stores.Warehouse
                 return Result.FromError(ex);
             }
         }
+
+        /// <summary>
+        /// Get the DtoFactory for the given store
+        /// </summary>
+        private IStoreDtoFactory GetStoreDtoFactory(IStoreEntity store) =>
+            storeDtoFactories.TryGetValue(store.StoreTypeCode, out IStoreDtoFactory storeDtoFactory) ?
+                storeDtoFactory :
+                throw new NotSupportedException($"The StoreType {EnumHelper.GetDescription(store.StoreTypeCode)} is not supported for ShipWorks Warehouse mode.");
     }
 }

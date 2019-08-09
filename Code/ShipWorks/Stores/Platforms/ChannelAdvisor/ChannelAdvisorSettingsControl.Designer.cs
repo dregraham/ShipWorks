@@ -1,6 +1,4 @@
 ﻿using ShipWorks.Shipping.Carriers.Amazon.SFP;
-using ShipWorks.UI.Controls;
-using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -35,10 +33,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
             this.amazon = new ShipWorks.Shipping.Carriers.Amazon.SFP.AmazonSFPShippingSettingsControl();
-            this.daysBack = new ChannelAdvisorDownloadModifiedDaysBackControl();
-            this.daysBackTitle = new ShipWorks.UI.Controls.SectionTitle();
-            this.daysBackPanel = new System.Windows.Forms.Panel();
-            this.daysBackPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // consolidator
@@ -51,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             // 
             // attributes
             // 
-            this.attributes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.attributes.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.attributes.AutoSize = true;
             this.attributes.Font = new System.Drawing.Font("Tahoma", 8.25F);
@@ -70,34 +64,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.amazon.Size = new System.Drawing.Size(582, 129);
             this.amazon.TabIndex = 2;
             // 
-            // daysBack
-            // 
-            this.daysBack.AutoSize = true;
-            this.daysBack.Location = new System.Drawing.Point(0, 24);
-            this.daysBack.Name = "daysBack";
-            this.daysBack.Size = new System.Drawing.Size(582, 73);
-            this.daysBack.TabIndex = 3;
-            // 
-            // daysBackTitle
-            // 
-            this.daysBackTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.daysBackTitle.Location = new System.Drawing.Point(0, 0);
-            this.daysBackTitle.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
-            this.daysBackTitle.Name = "daysBackTitle";
-            this.daysBackTitle.Size = new System.Drawing.Size(582, 22);
-            this.daysBackTitle.TabIndex = 0;
-            this.daysBackTitle.Text = "Download Criteria";
-            // 
-            // daysBackPanel
-            // 
-            this.daysBackPanel.Controls.Add(this.daysBackTitle);
-            this.daysBackPanel.Controls.Add(this.daysBack);
-            this.daysBackPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.daysBackPanel.Location = new System.Drawing.Point(0, 300);
-            this.daysBackPanel.Name = "daysBackPanel";
-            this.daysBackPanel.Size = new System.Drawing.Size(582, 100);
-            this.daysBackPanel.TabIndex = 3;
-            // 
             // ChannelAdvisorSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,12 +71,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.AutoSize = true;
             this.Controls.Add(this.amazon);
             this.Controls.Add(this.consolidator);
-            this.Controls.Add(this.daysBackPanel);
             this.Controls.Add(this.attributes);
             this.Name = "ChannelAdvisorSettingsControl";
             this.Size = new System.Drawing.Size(582, 500);
-            this.daysBackPanel.ResumeLayout(false);
-            this.daysBackPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,8 +84,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private ChannelAdvisorAttributesSettingsControl attributes;
         private ChannelAdvisorConsolidatorSettingsControl consolidator;
         private AmazonSFPShippingSettingsControl amazon;
-        private Panel daysBackPanel;
-        private ChannelAdvisorDownloadModifiedDaysBackControl daysBack;
-        private SectionTitle daysBackTitle;
     }
 }

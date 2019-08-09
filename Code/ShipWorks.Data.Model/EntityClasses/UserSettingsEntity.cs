@@ -391,6 +391,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderLookupLayout", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("LastReleaseNotesSeen", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("AutoPrintRequireValidation", fieldHashtable);
 		}
 		#endregion
 
@@ -697,6 +699,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, value); }
+		}
+
+		/// <summary> The AutoPrintRequireValidation property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."AutoPrintRequireValidation"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean AutoPrintRequireValidation
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

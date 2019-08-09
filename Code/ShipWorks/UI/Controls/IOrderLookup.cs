@@ -35,5 +35,10 @@ namespace ShipWorks.UI.Controls
         /// Register the profile handler
         /// </summary>
         void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
+
+        /// <summary>
+        /// Save the order
+        /// </summary>
+        void Save();
     }
 }

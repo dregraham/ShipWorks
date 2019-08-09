@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Magento
     public class MagentoStoreType : GenericModuleStoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(MagentoStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(MagentoStoreType));
         private readonly IMagentoOnlineUpdaterFactory onlineUpdaterFactory;
         private readonly IMagentoModuleWebClientFactory webClientFactory;
 
@@ -195,5 +195,14 @@ namespace ShipWorks.Stores.Platforms.Magento
 
             return base.GridOnlineColumnSupported(column);
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) =>
+            store is IMagentoStoreEntity magentoStore &&
+            (
+                magentoStore.MagentoVersion == (int) MagentoVersion.MagentoTwoREST ||
+                magentoStore.MagentoVersion == (int) MagentoVersion.PhpFile);
     }
 }

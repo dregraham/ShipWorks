@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using Autofac;
 using Interapptive.Shared;
@@ -15,6 +16,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Core.Messaging;
@@ -42,6 +44,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Shipping
 {
@@ -251,6 +254,9 @@ namespace ShipWorks.Shipping
                 shipment.ShipSenseStatus = entry.Matches(shipment) ? (int) ShipSenseStatus.Applied : (int) ShipSenseStatus.Overwritten;
             }
 
+            shipment.LoggedShippedToHub = false;
+            shipment.LoggedVoidToHub = false;
+
             // Explicitly save the shipment here to delete any entities in the Removed buckets of the
             // entity collections; after applying ShipSense (where customs items are first loaded in
             // this path), and entities were removed, they were still being persisted to the database.
@@ -359,6 +365,8 @@ namespace ShipWorks.Shipping
             clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
+            clonedShipment.LoggedShippedToHub = false;
+            clonedShipment.LoggedVoidToHub = false;
 
             // Clear out post-processed data on a per shipment-type basis.
             ShipmentTypeManager.ShipmentTypes.ForEach(st => st.ClearDataForCopiedShipment(clonedShipment));
@@ -826,11 +834,17 @@ namespace ShipWorks.Shipping
                         }
                     }
 
-                    // Void the shipment in tango
+                    // Void the shipment in tango and the hub
                     using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                     {
                         ITangoWebClient tangoWebClient = lifetimeScope.Resolve<ITangoWebClientFactory>().CreateWebClient();
                         tangoWebClient.VoidShipment(store, shipment);
+
+                        using (SqlAdapter adapter = new SqlAdapter())
+                        {
+                            var hubShipmentLogger = lifetimeScope.Resolve<IHubShipmentLogger>();
+                            hubShipmentLogger.LogVoidedShipment(shipment, adapter).Wait();
+                        }
                     }
 
                     // Re-throw the insurance exception if there was one

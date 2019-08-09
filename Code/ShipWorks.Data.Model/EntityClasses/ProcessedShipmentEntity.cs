@@ -378,6 +378,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("CombineSplitStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ReturnShipment", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Verified", fieldHashtable);
 		}
 		#endregion
 
@@ -724,6 +726,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.ReturnShipment, true); }
 			set	{ SetValue((int)ProcessedShipmentFieldIndex.ReturnShipment, value); }
+		}
+
+		/// <summary> The Verified property of the Entity ProcessedShipment<br/><br/></summary>
+		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."Verified"<br/>
+		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Verified
+		{
+			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.Verified, true); }
+			set	{ SetValue((int)ProcessedShipmentFieldIndex.Verified, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

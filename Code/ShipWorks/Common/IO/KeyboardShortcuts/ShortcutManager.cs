@@ -7,15 +7,19 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32.Native;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Utility;
 using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Users;
 
 namespace ShipWorks.Common.IO.KeyboardShortcuts
 {
@@ -29,6 +33,8 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
         private TableSynchronizer<ShortcutEntity> tableSynchronizer;
         private bool needCheckForChanges;
         private ReadOnlyCollection<IShortcutEntity> readOnlyEntities;
+        private readonly Func<ICurrentUserSettings> currentUserSettingsFactory;
+        private readonly IMessageHelper messageHelper;
 
         // Shortcuts reserved for future use
         private readonly KeyboardShortcutData[] reservedShortcuts =
@@ -42,6 +48,15 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
             new KeyboardShortcutData(null, VirtualKeys.V, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null),
             new KeyboardShortcutData(null, VirtualKeys.W, KeyboardShortcutModifiers.Ctrl | KeyboardShortcutModifiers.Shift, null)
         };
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShortcutManager(Func<ICurrentUserSettings> currentUserSettingsFactory, IMessageHelper messageHelper)
+        {
+            this.currentUserSettingsFactory = currentUserSettingsFactory;
+            this.messageHelper = messageHelper;
+        }
 
         /// <summary>
         /// Initializes the object
@@ -233,6 +248,26 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
                                 s.Action == KeyboardShortcutCommand.CreateLabel))?.ShortcutText ?? "No Shortcut Defined";
 
             return ($"Create Label ({hotKey})", "Create a shipping label for the selected order.");
+        }
+
+        /// <summary>
+        /// Show shortcut indicator
+        /// </summary>
+        public void ShowShortcutIndicator(ShortcutMessage shortcutMessage)
+        {
+            if (currentUserSettingsFactory().ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator))
+            {
+                string actionName = EnumHelper.GetDescription(shortcutMessage.Shortcut.Action);
+
+                if (shortcutMessage.Trigger == ShortcutTriggerType.Hotkey)
+                {
+                    messageHelper.ShowKeyboardPopup($"{shortcutMessage.Value}: {actionName}");
+                }
+                else
+                {
+                    messageHelper.ShowBarcodePopup($"Barcode: {actionName}");
+                }
+            }
         }
     }
 }

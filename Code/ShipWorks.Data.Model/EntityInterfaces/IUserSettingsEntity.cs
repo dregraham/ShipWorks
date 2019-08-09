@@ -147,6 +147,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String LastReleaseNotesSeen { get; }
+        /// <summary> The AutoPrintRequireValidation property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."AutoPrintRequireValidation"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean AutoPrintRequireValidation { get; }
         
         IUserEntity User { get; }
         

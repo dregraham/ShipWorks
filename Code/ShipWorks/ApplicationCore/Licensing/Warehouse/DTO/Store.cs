@@ -1,5 +1,4 @@
 using System.Reflection;
-using Newtonsoft.Json;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {

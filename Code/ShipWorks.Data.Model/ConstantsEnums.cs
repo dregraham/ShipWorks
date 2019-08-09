@@ -360,6 +360,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -1518,6 +1524,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1732,8 +1744,6 @@ namespace ShipWorks.Data.Model
 		AmazonApiRegion,
 		///<summary>RefreshToken. </summary>
 		RefreshToken,
-		///<summary>DownloadModifiedNumberOfDaysBack. </summary>
-		DownloadModifiedNumberOfDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1908,6 +1918,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -2100,6 +2116,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -2640,6 +2662,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -3336,6 +3364,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -4620,6 +4654,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -5048,6 +5088,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -5710,6 +5756,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MerchantOrderId. </summary>
@@ -6086,6 +6138,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -6434,6 +6492,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. Inherited from GenericModuleOrder</summary>
 		OrderID_GenericModuleOrder,
 		///<summary>AmazonOrderID. Inherited from GenericModuleOrder</summary>
@@ -6766,6 +6830,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -7214,6 +7284,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -7490,6 +7566,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -8106,6 +8188,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. </summary>
 		HubSequence,
+		///<summary>Verified. </summary>
+		Verified,
+		///<summary>VerifiedBy. </summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. </summary>
+		VerifiedDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8384,6 +8472,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -8724,6 +8818,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WarehouseCode. </summary>
@@ -9096,6 +9196,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -9428,6 +9534,8 @@ namespace ShipWorks.Data.Model
 		CombineSplitStatus,
 		///<summary>ReturnShipment. </summary>
 		ReturnShipment,
+		///<summary>Verified. </summary>
+		Verified,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9738,6 +9846,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -10090,6 +10204,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -10518,6 +10638,10 @@ namespace ShipWorks.Data.Model
 		ApplyReturnProfile,
 		///<summary>ReturnProfileID. </summary>
 		ReturnProfileID,
+		///<summary>LoggedShippedToHub. </summary>
+		LoggedShippedToHub,
+		///<summary>LoggedVoidToHub. </summary>
+		LoggedVoidToHub,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11008,6 +11132,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -11802,6 +11932,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
@@ -12532,6 +12668,8 @@ namespace ShipWorks.Data.Model
 		OrderLookupLayout,
 		///<summary>LastReleaseNotesSeen. </summary>
 		LastReleaseNotesSeen,
+		///<summary>AutoPrintRequireValidation. </summary>
+		AutoPrintRequireValidation,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12972,6 +13110,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
@@ -13634,6 +13778,12 @@ namespace ShipWorks.Data.Model
 		HubOrderID,
 		///<summary>HubSequence. Inherited from Order</summary>
 		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>

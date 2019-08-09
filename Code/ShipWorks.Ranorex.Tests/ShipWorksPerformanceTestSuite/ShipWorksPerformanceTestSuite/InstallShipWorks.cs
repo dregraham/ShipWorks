@@ -80,7 +80,8 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);      
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'C Drive' with focus on 'SomeForm.DirEdit'.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
-            repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}C:\\" + extra.GetFolderName());
+            RetryAction.CurrentInstallDir = @"C:\" + extra.GetFolderName();
+            repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}" + RetryAction.CurrentInstallDir);
             Delay.Milliseconds(0);           
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(7));
@@ -112,11 +113,11 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(14));
-            repo.SomeForm.CreateADesktopIcon.MoveTo();
+            repo.SomeForm.CreateADesktopIcon1.MoveTo();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'SomeForm.CreateADesktopIcon' at Center.", repo.SomeForm.CreateADesktopIconInfo, new RecordItemIndex(15));
-            repo.SomeForm.CreateADesktopIcon.Click();
+            repo.SomeForm.CreateADesktopIcon1.Click();
             Delay.Milliseconds(0);
             
             Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Move item 'SomeForm.Next' at Center.", repo.SomeForm.NextInfo, new RecordItemIndex(16));

@@ -206,6 +206,9 @@
     </Compile>
     <Compile Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationViewModel.cs" />
     <Compile Include="Controls\FieldLayoutRowDefinition.cs" />
+    <Compile Include="Controls\ImageWithPlaceholder.xaml.cs">
+      <DependentUpon>ImageWithPlaceholder.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\KeyboardShortcutDisplay.cs" />
     <Compile Include="Controls\MainGrid\BooleanToColorMultiValueConverter.cs" />
     <Compile Include="Controls\MainGrid\MainGridHeader.xaml.cs">
@@ -397,6 +400,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ImageWithPlaceholder.xaml" />
     <Page Include="Controls\MainGrid\MainGridHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

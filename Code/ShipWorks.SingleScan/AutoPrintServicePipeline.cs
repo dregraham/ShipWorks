@@ -83,7 +83,7 @@ namespace ShipWorks.SingleScan
             // All exit points of the pipeline need to call ReconnectPipeline()
             filterCompletedMessageSubscription = scanMessages
                 .Where(_ => currentUserSettings.GetUIMode() == UIMode.Batch)
-                .Where(x => autoPrintService.AllowAutoPrint(x))
+                .Where(x => autoPrintService.AllowAutoPrint(x.ScannedText))
                 .Do(x => EndScanMessagesObservation())
                 .ContinueAfter(messenger.OfType<SingleScanFilterUpdateCompleteMessage>(),
                     TimeSpan.FromSeconds(FilterCountsUpdatedMessageTimeoutInSeconds),

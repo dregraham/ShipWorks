@@ -171,15 +171,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(DateTime start, string refreshToken)
+        public ChannelAdvisorOrderResult GetOrders(string refreshToken)
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-
-            // Manually formate the date because the Universal Sortable Date Time format does not include milliseconds but CA does include milliseconds
-            getOrdersRequestSubmitter.Variables.Add("$filter", $"PaymentDateUtc gt {start:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'} and PaymentStatus eq 'Cleared'");
-            getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc");
+            getOrdersRequestSubmitter.Variables.Add("exported", "false");
+            getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
             return SubmitGetOrders(getOrdersRequestSubmitter, refreshToken);
@@ -244,6 +242,53 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         }
 
         /// <summary>
+        /// Mark an order as Exported
+        /// </summary>
+        public void MarkOrderExported(long orderID, string refreshToken) =>
+            MarkOrderExported(orderID, refreshToken, false);
+
+        /// <summary>
+        /// Mark an order as Exported
+        /// </summary>
+        private void MarkOrderExported(long orderID, string refreshToken, bool isRetry)
+        {
+            string endpoint = $"{ordersEndpoint}({orderID})/Export?access_token={GetAccessToken(refreshToken, isRetry)}";
+
+            IHttpResponseReader httpResponseReader = null;
+            string result = String.Empty;
+            string unknownError = "Error communicating with ChannelAdvisor REST API";
+            IHttpVariableRequestSubmitter submitter = CreateRequest(endpoint, HttpVerb.Post);
+
+            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
+            submitter.ContentType = "application/json";
+
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, "Export");
+            apiLogEntry.LogRequest(submitter);
+
+            try
+            {
+                httpResponseReader = submitter.GetResponse();
+                result = httpResponseReader.ReadResult();
+                apiLogEntry.LogResponse(result);
+            }
+            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && !isRetry)
+            {
+                apiLogEntry.LogResponse(ex);
+                MarkOrderExported(orderID, refreshToken, true);
+            }
+            catch (Exception ex)
+            {
+                apiLogEntry.LogResponse(ex);
+                throw new ChannelAdvisorException(unknownError, ex);
+            }
+
+            if (httpResponseReader?.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
+            }
+        }
+
+        /// <summary>
         /// Uploads the shipment details.
         /// </summary>
         public void UploadShipmentDetails(ChannelAdvisorShipment channelAdvisorShipment,
@@ -256,6 +301,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private ChannelAdvisorOrderResult SubmitGetOrders(IHttpVariableRequestSubmitter getOrdersRequestSubmitter, string refreshToken)
         {
+            // Increase timeout due to filtering a large number of orders taking a long time
+            getOrdersRequestSubmitter.Timeout = TimeSpan.FromSeconds(300);
+
             return Functional
                 .Retry(() => ProcessRequest<ChannelAdvisorOrderResult>(getOrdersRequestSubmitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
@@ -328,6 +376,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
             }
+
+            // Mark shipped order as exported
+            MarkOrderExported(Int64.Parse(channelAdvisorOrderID), refreshToken);
         }
 
         /// <summary>

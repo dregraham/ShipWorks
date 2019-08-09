@@ -831,6 +831,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HubOrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubSequence", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Verified", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("VerifiedBy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("VerifiedDate", fieldHashtable);
 		}
 		#endregion
 
@@ -1869,6 +1875,36 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)OrderFieldIndex.HubSequence, false); }
 			set	{ SetValue((int)OrderFieldIndex.HubSequence, value); }
+		}
+
+		/// <summary> The Verified property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Verified"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean Verified
+		{
+			get { return (System.Boolean)GetValue((int)OrderFieldIndex.Verified, true); }
+			set	{ SetValue((int)OrderFieldIndex.Verified, value); }
+		}
+
+		/// <summary> The VerifiedBy property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."VerifiedBy"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> VerifiedBy
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)OrderFieldIndex.VerifiedBy, false); }
+			set	{ SetValue((int)OrderFieldIndex.VerifiedBy, value); }
+		}
+
+		/// <summary> The VerifiedDate property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."VerifiedDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> VerifiedDate
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.VerifiedDate, false); }
+			set	{ SetValue((int)OrderFieldIndex.VerifiedDate, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

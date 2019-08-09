@@ -58,7 +58,7 @@ namespace ShipWorks.SingleScan.Tests
 
             Assert.True(testObject.IsListeningForScans);
         }
-        
+
         [Fact]
         public void IsListeningForScans_ReturnsFalse_WhenScanReceivedAndAutoPrintIsOn()
         {
@@ -130,7 +130,7 @@ namespace ShipWorks.SingleScan.Tests
 
         private void SetupAutoPrintService(string scannedBarcode, int orderID, string errorMessage, bool success)
         {
-            var result = success ? 
+            var result = success ?
                 GenericResult.FromSuccess(new AutoPrintResult(scannedBarcode, orderID)) :
                 GenericResult.FromError(errorMessage, new AutoPrintResult(scannedBarcode, orderID));
 
@@ -172,7 +172,7 @@ namespace ShipWorks.SingleScan.Tests
             SetupAutoPrintService("foo", 42, string.Empty, true);
 
             testObject.InitializeForCurrentSession();
-            
+
             messenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foo", IntPtr.Zero)));
             messenger.Send(singleScanFilterUpdateCompleteMessage);
 
@@ -238,7 +238,7 @@ namespace ShipWorks.SingleScan.Tests
         private void SetAllowAutoPrint(bool allow)
         {
             mock.Mock<IAutoPrintService>()
-                .Setup(s => s.AllowAutoPrint(It.IsAny<SingleScanMessage>()))
+                .Setup(s => s.AllowAutoPrint(It.IsAny<string>()))
                 .Returns(allow);
         }
 

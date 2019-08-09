@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -31,13 +32,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Create an order entity with an Amazon identifier
         /// </summary>
-        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(WarehouseOrder warehouseOrder)
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
             string amazonOrderID = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseOrder>().AmazonOrderID;
 
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
+
+            result.Value.OrderNumber = await orderElementFactory.GetNextOrderNumberAsync().ConfigureAwait(false);
 
             if (result.Failure)
             {
@@ -66,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Load Amazon item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             AmazonOrderItemEntity amazonItemEntity = (AmazonOrderItemEntity) itemEntity;
             AmazonWarehouseItem amazonWarehouseItem = warehouseItem.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseItem>();

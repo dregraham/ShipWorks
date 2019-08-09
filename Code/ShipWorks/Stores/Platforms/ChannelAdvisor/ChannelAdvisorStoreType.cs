@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
     public class ChannelAdvisorStoreType : StoreType, IChannelAdvisorStoreType
     {
         // Logger
-        static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof(ChannelAdvisorStoreType));
         public readonly string RedirectUrl = WebUtility.UrlEncode("https://www.interapptive.com/channeladvisor/subscribe.php");
         public const string ApplicationID = "wx76dgzjcwlfy1ck3nb8oke7ql2ukv05";
 
@@ -87,7 +87,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonApiRegion = string.Empty;
             caStore.AmazonAuthToken = string.Empty;
             caStore.AmazonMerchantID = string.Empty;
-            caStore.DownloadModifiedNumberOfDaysBack = 1;
 
             return caStore;
         }
@@ -387,5 +386,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             return editable;
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }

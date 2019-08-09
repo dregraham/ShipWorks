@@ -483,6 +483,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Int64 ReturnProfileID { get; }
+        /// <summary> The LoggedShippedToHub property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."LoggedShippedToHub"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> LoggedShippedToHub { get; }
+        /// <summary> The LoggedVoidToHub property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."LoggedVoidToHub"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> LoggedVoidToHub { get; }
         
         IAmazonSFPShipmentEntity AmazonSFP { get; }
         IAmazonSWAShipmentEntity AmazonSWA { get; }
