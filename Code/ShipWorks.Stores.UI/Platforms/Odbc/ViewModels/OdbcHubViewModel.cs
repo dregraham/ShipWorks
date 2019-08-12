@@ -114,16 +114,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
 
                 if (SelectedStore != null)
                 {
-                    Guid warehouseStoreId = odbcStoresFromHub.SingleOrDefault(x => x.Value == SelectedStore).Key;
+                    var baseStore = odbcStoresFromHub.SingleOrDefault(x => x.Value == SelectedStore);
 
-                    var odbcStoreResult = await odbcStoreClient.GetStore(warehouseStoreId).ConfigureAwait(true);
+                    var odbcStoreResult = await odbcStoreClient.GetStore(baseStore.Key, baseStore.Value).ConfigureAwait(true);
 
                     if (odbcStoreResult.Failure)
                     {
                         return Result.FromError(odbcStoreResult.Message);
                     }
 
-                    SaveStoreEntity(storeEntity, warehouseStoreId, odbcStoreResult.Value);
+                    SaveStoreEntity(storeEntity, baseStore.Key, odbcStoreResult.Value);
                 }
 
                 return Result.FromSuccess();

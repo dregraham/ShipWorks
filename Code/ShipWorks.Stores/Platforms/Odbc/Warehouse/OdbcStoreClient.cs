@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing;
@@ -60,7 +61,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
 
                         foreach (JToken item in storesResponse.SelectToken("stores"))
                         {
-
                             Guid storeId = Guid.Parse(item["id"].ToString());
                             Store store = new Store()
                             {
@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         /// <summary>
         /// Get the given odbc store
         /// </summary>
-        public async Task<GenericResult<OdbcStore>> GetStore(Guid warehouseStoreId)
+        public async Task<GenericResult<OdbcStore>> GetStore(Guid warehouseStoreId, Store baseStore)
         {
             try
             {
@@ -107,10 +107,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
                     }
                     else
                     {
-                        var result = new OdbcStore();
+                        OdbcStore result = JsonConvert.DeserializeObject<OdbcStore>(response.Value.Content);
+                        result.Name = baseStore.Name;
+                        result.StoreType = baseStore.StoreType;
+                        result.UniqueIdentifier = baseStore.UniqueIdentifier;
 
-
-                        return result;
+                        GenericResult.FromSuccess<OdbcStore>(result);
                     }
                 }
             }
@@ -119,9 +121,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
                 return GenericResult.FromError<OdbcStore>(ex);
             }
 
-
             return GenericResult.FromError<OdbcStore>("Not a warehouse user.");
         }
     }
-
 }

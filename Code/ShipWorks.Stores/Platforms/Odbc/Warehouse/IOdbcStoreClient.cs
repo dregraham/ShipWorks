@@ -20,6 +20,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         /// <summary>
         /// Get the given warehouseStoreIds OdbcStore
         /// </summary>
-        Task<GenericResult<OdbcStore>> GetStore(Guid warehouseStoreId);
+        Task<GenericResult<OdbcStore>> GetStore(Guid warehouseStoreId, Store baseStore);
     }
 }
