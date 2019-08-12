@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
@@ -142,13 +143,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             storeEntity.WarehouseStoreID = warehouseStoreId;
             storeEntity.StoreName = odbcStore.Name;
 
-            storeEntity.ImportMap = odbcStore.ImportMap;
+            storeEntity.ImportMap = GZipUtility.Decompress(odbcStore.ImportMap);
             storeEntity.ImportStrategy = odbcStore.ImportStrategy;
             storeEntity.ImportColumnSourceType = odbcStore.ImportColumnSourceType;
             storeEntity.ImportColumnSource = odbcStore.ImportColumnSource;
             storeEntity.ImportOrderItemStrategy = odbcStore.ImportOrderItemStrategy;
 
-            storeEntity.UploadMap = odbcStore.UploadMap;
+            storeEntity.UploadMap = GZipUtility.Decompress(odbcStore.UploadMap);
             storeEntity.UploadStrategy = odbcStore.UploadStrategy;
             storeEntity.UploadColumnSourceType = odbcStore.UploadColumnSourceType;
             storeEntity.UploadColumnSource = odbcStore.UploadColumnSource;

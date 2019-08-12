@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.IO.Zip;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Warehouse;
@@ -32,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
             OdbcStore store = helpers.PopulateCommonData(baseStoreEntity, new OdbcStore());
             OdbcStoreEntity storeEntity = baseStoreEntity as OdbcStoreEntity;
 
-            store.ImportMap = storeEntity.ImportMap;
-            store.UploadMap = storeEntity.UploadMap;
+            store.ImportMap = GZipUtility.Compress(storeEntity.ImportMap);
+            store.UploadMap = GZipUtility.Compress(storeEntity.UploadMap);
             store.ImportStrategy = storeEntity.ImportStrategy;
             store.ImportColumnSourceType = storeEntity.ImportColumnSourceType;
             store.ImportColumnSource = storeEntity.ImportColumnSource;
