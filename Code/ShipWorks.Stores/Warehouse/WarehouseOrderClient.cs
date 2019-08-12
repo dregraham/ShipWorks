@@ -30,20 +30,24 @@ namespace ShipWorks.Stores.Warehouse
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
-        private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
+        private readonly Func<IUploadOrderRequest> uploadOrderRequestCreator;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService,
-            ShipmentDtoFactory shipmentDtoFactory, IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
+        public WarehouseOrderClient(
+            WarehouseRequestClient warehouseRequestClient, 
+            ILicenseService licenseService,
+            ShipmentDtoFactory shipmentDtoFactory, 
+            IWarehouseOrderDtoFactory warehouseOrderDtoFactory, 
+            Func<IUploadOrderRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.licenseService = licenseService;
             this.shipmentDtoFactory = shipmentDtoFactory;
-            this.warehouseOrderDtoFactory = warehouseOrderDtoFactory;
+            this.uploadOrderRequestCreator = uploadOrderRequestCreator;
             log = logFactory(typeof(WarehouseOrderClient));
         }
 
@@ -102,35 +106,13 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    IRestRequest request =
-                        new RestRequest(WarehouseEndpoints.UploadOrder, Method.POST);
-
-                    request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
-
-                    request.RequestFormat = DataFormat.Json;
-
-                    UploadOrderRequest requestData = new UploadOrderRequest(Guid.NewGuid(), warehouseOrderDtoFactory.Create(order, store));
-                    request.AddJsonBody(requestData);
-
-                    GenericResult<IRestResponse> response = await warehouseRequestClient
-                        .MakeRequest(request, "Upload Order")
-                        .ConfigureAwait(true);
-
-                    if (response.Failure)
-                    {
-                        return GenericResult.FromError<WarehouseUploadOrderResponse>(response.Message);
-                    }
-
-                    var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponse>(
-                        response.Value.Content, GetJsonSerializerSettings());
-
-                    return orderResponse;
+                    return await uploadOrderRequestCreator().Submit(order, store);
                 }
                 else
                 {
-
                     string restrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
                     log.Error(restrictedErrorMessage);
+
                     return GenericResult.FromError<WarehouseUploadOrderResponse>(restrictedErrorMessage);
                 }
             }
@@ -139,23 +121,6 @@ namespace ShipWorks.Stores.Warehouse
                 log.Error($"Failed to upload order {order.OrderID} to hub.", ex);
                 return GenericResult.FromError<WarehouseUploadOrderResponse>(ex);
             }
-        }
-
-        /// <summary>
-        /// Gets json serializer settings
-        /// </summary>
-        private JsonSerializerSettings GetJsonSerializerSettings()
-        {
-            return new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy
-                    {
-                        OverrideSpecifiedNames = false
-                    }
-                },
-            };
         }
 
         /// <summary>

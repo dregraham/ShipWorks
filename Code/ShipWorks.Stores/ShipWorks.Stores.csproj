@@ -926,6 +926,7 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\IUploadOrderRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\UploadOrderRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
