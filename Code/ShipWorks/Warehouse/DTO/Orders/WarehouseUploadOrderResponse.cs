@@ -11,6 +11,17 @@ namespace ShipWorks.Warehouse.DTO.Orders
     public class WarehouseUploadOrderResponse
     {
         /// <summary>
+        /// OrderNumberComplete
+        /// </summary>
+        public string OrderNumberComplete { get; set; }
+
+        /// <summary>
+        /// StoreID of added order
+        /// </summary>
+        [JsonProperty("StoreId")]
+        public string StoreId { get; set; }
+
+        /// <summary>
         /// The sequence number of the order's most recent event log entry
         /// </summary>
         [JsonProperty("sequence")]
