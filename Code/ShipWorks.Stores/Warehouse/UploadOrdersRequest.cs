@@ -77,6 +77,9 @@ namespace ShipWorks.Stores.Warehouse
             return orderResponse;
         }
 
+        /// <summary>
+        /// Given a collection of orderEntities, return a colleciton of WarehouseOrders.
+        /// </summary>
         private IEnumerable<WarehouseOrder> ConvertWarehouseOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             var warehouseOrders = new List<WarehouseOrder>();

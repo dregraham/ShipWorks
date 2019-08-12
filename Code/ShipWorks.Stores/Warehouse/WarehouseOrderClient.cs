@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -98,7 +100,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order, IStoreEntity store)
+        public async Task<GenericResult<WarehouseUploadOrderResponses>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             try
             {
@@ -106,20 +108,20 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    return await uploadOrderRequestCreator().Submit(order, store);
+                    return await uploadOrderRequestCreator().Submit(orders, store);
                 }
                 else
                 {
                     string restrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
                     log.Error(restrictedErrorMessage);
 
-                    return GenericResult.FromError<WarehouseUploadOrderResponse>(restrictedErrorMessage);
+                    return GenericResult.FromError<WarehouseUploadOrderResponses>(restrictedErrorMessage);
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Failed to upload order {order.OrderID} to hub.", ex);
-                return GenericResult.FromError<WarehouseUploadOrderResponse>(ex);
+                log.Error($"Failed to upload order to hub. First Order ID was {orders.FirstOrDefault()?.OrderID.ToString() ?? "???"}", ex);
+                return GenericResult.FromError<WarehouseUploadOrderResponses>(ex);
             }
         }
 
