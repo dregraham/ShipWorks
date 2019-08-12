@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Warehouse
         public async Task<GenericResult<WarehouseUploadOrderResponses>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             IRestRequest request =
-                new RestRequest(WarehouseEndpoints.UploadOrder, Method.POST);
+                new RestRequest(WarehouseEndpoints.UploadOrders, Method.POST);
 
             request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
 

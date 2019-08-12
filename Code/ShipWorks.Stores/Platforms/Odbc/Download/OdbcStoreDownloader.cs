@@ -290,14 +290,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<WarehouseUploadOrderResponse> result = await warehouseOrderClient.UploadOrder(downloadedOrder, store).ConfigureAwait(false);
+                GenericResult<WarehouseUploadOrderResponses> result = await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     throw new DownloadException(result.Message);
                 }
 
-                downloadedOrder.HubOrderID = Guid.Parse(result.Value.HubOrderID);
-                downloadedOrder.HubSequence = result.Value.HubSequence;
+                WarehouseUploadOrderResponse orderResponse = result.Value.OrderResponses.Single();
+
+                downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
+                downloadedOrder.HubSequence = orderResponse.HubSequence;
             }
         }
 

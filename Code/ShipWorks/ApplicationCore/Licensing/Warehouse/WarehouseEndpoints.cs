@@ -14,7 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string UploadSkus = "api/skus/import";
         public const string GenerateDataKey = "api/store/generateDataKey";
         public const string Stores = "api/stores";
-        public const string UploadOrder = "api/order";
+        public const string UploadOrders = "api/orders";
         
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
