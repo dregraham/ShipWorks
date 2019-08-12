@@ -115,9 +115,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 {
                     Guid warehouseStoreId = odbcStoresFromHub.SingleOrDefault(x => x.Value == SelectedStore).Key;
 
-                    OdbcStore odbcStore = await odbcStoreClient.GetStore(warehouseStoreId).ConfigureAwait(true);
+                    var odbcStoreResult = await odbcStoreClient.GetStore(warehouseStoreId).ConfigureAwait(true);
 
-                    SaveStoreEntity(storeEntity, warehouseStoreId, odbcStore);
+                    if (odbcStoreResult.Failure)
+                    {
+                        return Result.FromError(odbcStoreResult.Message);
+                    }
+
+                    SaveStoreEntity(storeEntity, warehouseStoreId, odbcStoreResult.Value);
                 }
 
                 return Result.FromSuccess();
@@ -137,13 +142,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             storeEntity.WarehouseStoreID = warehouseStoreId;
             storeEntity.StoreName = odbcStore.Name;
 
-            storeEntity.ImportMap = odbcStore.ImportMap.Serialize();
+            storeEntity.ImportMap = odbcStore.ImportMap;
             storeEntity.ImportStrategy = odbcStore.ImportStrategy;
             storeEntity.ImportColumnSourceType = odbcStore.ImportColumnSourceType;
             storeEntity.ImportColumnSource = odbcStore.ImportColumnSource;
             storeEntity.ImportOrderItemStrategy = odbcStore.ImportOrderItemStrategy;
 
-            storeEntity.UploadMap = odbcStore.UploadMap.Serialize();
+            storeEntity.UploadMap = odbcStore.UploadMap;
             storeEntity.UploadStrategy = odbcStore.UploadStrategy;
             storeEntity.UploadColumnSourceType = odbcStore.UploadColumnSourceType;
             storeEntity.UploadColumnSource = odbcStore.UploadColumnSource;
@@ -179,7 +184,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
                 Message = null;
                 LoadingStores = true;
 
-                odbcStoresFromHub = await odbcStoreClient.GetStores().ConfigureAwait(true);
+                var result = await odbcStoreClient.GetStores().ConfigureAwait(true);
+
+                if (result.Failure)
+                {
+                    loadingStores = false;
+                    Message = result.Message;
+                }
+
+                odbcStoresFromHub = result.Value;
                 Stores = new ObservableCollection<Store>(odbcStoresFromHub.Values);
 
                 if (!Stores.Any())

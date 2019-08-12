@@ -3,6 +3,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Warehouse;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
 {
@@ -28,7 +29,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         /// </summary>
         public Task<Store> Create(StoreEntity baseStoreEntity)
         {
-            return Task.FromResult(helpers.PopulateCommonData(baseStoreEntity, new Store()));
+            OdbcStore store = helpers.PopulateCommonData(baseStoreEntity, new OdbcStore());
+            OdbcStoreEntity storeEntity = baseStoreEntity as OdbcStoreEntity;
+
+            store.ImportMap = storeEntity.ImportMap;
+            store.UploadMap = storeEntity.UploadMap;
+            store.ImportStrategy = storeEntity.ImportStrategy;
+            store.ImportColumnSourceType = storeEntity.ImportColumnSourceType;
+            store.ImportColumnSource = storeEntity.ImportColumnSource;
+            store.ImportOrderItemStrategy = storeEntity.ImportOrderItemStrategy;
+            store.UploadStrategy = storeEntity.UploadStrategy;
+            store.UploadColumnSourceType = storeEntity.UploadColumnSourceType;
+            store.UploadColumnSource = storeEntity.UploadColumnSource;
+
+            return Task.FromResult<Store>(store);
         }
     }
 }
