@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Warehouse
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     [Component]
-    public class UploadOrderRequest : IUploadOrderRequest
+    public class UploadOrderRequest : IUploadOrdersRequest
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;

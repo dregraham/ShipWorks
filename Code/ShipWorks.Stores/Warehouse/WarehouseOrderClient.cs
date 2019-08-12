@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Warehouse
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
-        private readonly Func<IUploadOrderRequest> uploadOrderRequestCreator;
+        private readonly Func<IUploadOrdersRequest> uploadOrderRequestCreator;
         private readonly ILog log;
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Warehouse
             ILicenseService licenseService,
             ShipmentDtoFactory shipmentDtoFactory, 
             IWarehouseOrderDtoFactory warehouseOrderDtoFactory, 
-            Func<IUploadOrderRequest> uploadOrderRequestCreator,
+            Func<IUploadOrdersRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;

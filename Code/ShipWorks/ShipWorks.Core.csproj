@@ -1369,6 +1369,7 @@
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponse.cs" />
+    <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponses.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
