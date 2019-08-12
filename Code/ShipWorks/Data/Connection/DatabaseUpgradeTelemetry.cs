@@ -22,9 +22,12 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public static void RecordDatabaseTelemetry(TelemetricResult<Unit> telemetricResult)
         {
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            if (SqlSession.Current.CanConnect())
             {
-                SqlUtility.RecordDatabaseTelemetry(con, telemetricResult);
+                using (DbConnection con = SqlSession.Current.OpenConnection())
+                {
+                    SqlUtility.RecordDatabaseTelemetry(con, telemetricResult);
+                }
             }
 
             telemetricResult.AddProperty("IsWindowsAuth", SqlSession.Current.Configuration.WindowsAuth.ToString());

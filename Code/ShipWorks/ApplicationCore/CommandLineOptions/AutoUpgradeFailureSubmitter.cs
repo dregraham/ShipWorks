@@ -17,19 +17,20 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class AutoUpgradeFailureSubmitter
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
-        private static readonly Version version = Assembly.GetExecutingAssembly().GetName().Version;
-        private (string CustomerEmail, string FirstAndLastName) customerInfo = (string.Empty, string.Empty);
-        private string licenseKeys = string.Empty;
+        private readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
+        private (string CustomerEmail, string FirstAndLastName, string LicenseKeys) customerInfo;
         private string dbId = string.Empty;
+        private readonly Version version = Assembly.GetExecutingAssembly().GetName().Version;
 
+        /// <summary>
+        /// Initialize with data to send
+        /// </summary>
         public void Initialize()
         {
             if (SqlSession.IsConfigured && SqlSession.Current?.CanConnect() == true)
             {
-                    var customerInfo = GetCustomerInfo();
-                    (string CustomerEmail, string FirstAndLastName) customerInfo = (string.Empty, string.Empty);
-                        // Get customer key
+                dbId = new DatabaseIdentifier().Get().ToString("N");
+                customerInfo = GetCustomerInfo();
             }
         }
 
@@ -52,8 +53,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                         StackTrace = ex.StackTrace,
                         InnerFailureReason = ex.InnerException?.Message,
                         InnerStackTrace = ex.InnerException?.StackTrace,
-                            StoreKeys = customerInfo.LicenseKeys,
-                            MachineName = Environment.MachineName,
+                        StoreKeys = customerInfo.LicenseKeys,
+                        MachineName = Environment.MachineName,
                     };
 
                     LogToQueue(storageAccount, details);
@@ -69,7 +70,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Get customer info
         /// </summary>
-        private static (string CustomerEmail, string FirstAndLastName, string LicenseKeys) GetCustomerInfo()
+        private (string CustomerEmail, string FirstAndLastName, string LicenseKeys) GetCustomerInfo()
         {
             (string CustomerEmail, string FirstAndLastName, string LicenseKeys) customerInfo = (string.Empty, string.Empty, string.Empty);
             string customerKey = string.Empty;
@@ -118,7 +119,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Get the storage connection string
         /// </summary>
-        private static string GetConnectionString(Version version)
+        private string GetConnectionString(Version version)
         {
             return version.Major > 0 ?
                 "DefaultEndpointsProtocol=https;AccountName=shipworkscrashes;AccountKey=sd1Ozm5Q81N+7Jy1Y5TXuuS06hfmqNAAOUTG3lb0QjiJxZN+QCHTqQTKB6mHRxbuAsJ1FSHC1hdnwM3BXiexWQ==" :
@@ -128,7 +129,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Log the auto upgrade failure to the storage queue
         /// </summary>
-        private static void LogToQueue(CloudStorageAccount storageAccount, UpgradeFailureDto upgradeFailureDto)
+        private void LogToQueue(CloudStorageAccount storageAccount, UpgradeFailureDto upgradeFailureDto)
         {
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             CloudQueue queue = queueClient.GetQueueReference("upgradefailures");
