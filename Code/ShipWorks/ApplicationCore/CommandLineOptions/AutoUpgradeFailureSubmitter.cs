@@ -15,51 +15,63 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// <summary>
     /// Class responsible for sending auto upgrade failures to the Azure queue
     /// </summary>
-    public static class AutoUpgradeFailureSubmitter
+    public class AutoUpgradeFailureSubmitter
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
+        private readonly ILog log = LogManager.GetLogger(typeof(AutoUpgradeFailureSubmitter));
+        private (string CustomerEmail, string FirstAndLastName, string LicenseKeys) customerInfo;
+        private string dbId = string.Empty;
+
+        /// <summary>
+        /// Initialize with data to send
+        /// </summary>
+        public void Initialize()
+        {
+            if (SqlSession.IsConfigured && SqlSession.Current?.CanConnect() == true)
+            {
+                dbId = new DatabaseIdentifier().Get().ToString("N");
+                customerInfo = GetCustomerInfo();
+            }
+        }
 
         /// <summary>
         /// Submit the failure to the queue
         /// </summary>
-        public static void Submit(string versionThatFailed, string failureReason)
+        public void Submit(string versionThatFailed, Exception ex)
         {
             try
             {
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
 
-                if (SqlSession.IsConfigured && SqlSession.Current != null)
+                if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
                 {
-                    var customerInfo = GetCustomerInfo();
-
-                    if (CloudStorageAccount.TryParse(GetConnectionString(version), out CloudStorageAccount storageAccount))
+                    UpgradeFailureDto details = new UpgradeFailureDto
                     {
-                        UpgradeFailureDto details = new UpgradeFailureDto
-                        {
-                            CustomerName = customerInfo.FirstAndLastName,
-                            CustomerEmail = customerInfo.CustomerEmail,
-                            Version = versionThatFailed,
-                            DbID = new DatabaseIdentifier().Get().ToString("N"),
-                            FailureReason = failureReason,
-                            StoreKeys = customerInfo.LicenseKeys,
-                            MachineName = Environment.MachineName,
-                        };
+                        CustomerName = customerInfo.FirstAndLastName,
+                        CustomerEmail = customerInfo.CustomerEmail,
+                        Version = versionThatFailed,
+                        DbID = dbId,
+                        FailureReason = ex.Message,
+                        StackTrace = ex.StackTrace,
+                        InnerFailureReason = ex.InnerException?.Message,
+                        InnerStackTrace = ex.InnerException?.StackTrace,
+                        StoreKeys = customerInfo.LicenseKeys,
+                        MachineName = Environment.MachineName,
+                    };
 
-                        LogToQueue(storageAccount, details);
-                    }
+                    LogToQueue(storageAccount, details);
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex1)
             {
                 // Just log and carry on
-                log.Error(ex);
+                log.Error(ex1);
             }
         }
 
         /// <summary>
         /// Get customer info
         /// </summary>
-        private static (string CustomerEmail, string FirstAndLastName, string LicenseKeys) GetCustomerInfo()
+        private (string CustomerEmail, string FirstAndLastName, string LicenseKeys) GetCustomerInfo()
         {
             (string CustomerEmail, string FirstAndLastName, string LicenseKeys) customerInfo = (string.Empty, string.Empty, string.Empty);
             string customerKey = string.Empty;
@@ -108,7 +120,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Get the storage connection string
         /// </summary>
-        private static string GetConnectionString(Version version)
+        private string GetConnectionString(Version version)
         {
             return version.Major > 0 ?
                 "DefaultEndpointsProtocol=https;AccountName=shipworkscrashes;AccountKey=sd1Ozm5Q81N+7Jy1Y5TXuuS06hfmqNAAOUTG3lb0QjiJxZN+QCHTqQTKB6mHRxbuAsJ1FSHC1hdnwM3BXiexWQ==" :
@@ -118,7 +130,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Log the auto upgrade failure to the storage queue
         /// </summary>
-        private static void LogToQueue(CloudStorageAccount storageAccount, UpgradeFailureDto upgradeFailureDto)
+        private void LogToQueue(CloudStorageAccount storageAccount, UpgradeFailureDto upgradeFailureDto)
         {
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
             CloudQueue queue = queueClient.GetQueueReference("upgradefailures");
@@ -156,6 +168,21 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             /// The failure reason
             /// </summary>
             public string FailureReason { get; set; }
+
+            /// <summary>
+            /// The exception stack trace
+            /// </summary>
+            public string StackTrace { get; set; }
+
+            /// <summary>
+            /// The inner exception failure reason
+            /// </summary>
+            public string InnerFailureReason { get; set; }
+
+            /// <summary>
+            /// The inner exception stack trace
+            /// </summary>
+            public string InnerStackTrace { get; set; }
 
             /// <summary>
             /// The store license keys
