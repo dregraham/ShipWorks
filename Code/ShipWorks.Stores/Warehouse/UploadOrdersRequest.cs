@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -19,12 +20,12 @@ namespace ShipWorks.Stores.Warehouse
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     [Component]
-    public class UploadOrderRequest : IUploadOrdersRequest
+    public class UploadOrdersRequest : IUploadOrdersRequest
     {
         private readonly WarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
 
-        public UploadOrderRequest(
+        public UploadOrdersRequest(
             WarehouseRequestClient warehouseRequestClient, 
             IWarehouseOrderDtoFactory warehouseOrderDtoFactory)
         {
@@ -41,13 +42,13 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// The order
         /// </summary>
-        [JsonProperty("order")]
-        public WarehouseOrder Order { get; private set; }
+        [JsonProperty("orders")]
+        public IEnumerable<WarehouseOrder> Orders { get; private set; }
 
         /// <summary>
         /// Submit this UploadOrderRequest to the hub and return the response
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponse>> Submit(OrderEntity order, IStoreEntity store)
+        public async Task<GenericResult<WarehouseUploadOrderResponses>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             IRestRequest request =
                 new RestRequest(WarehouseEndpoints.UploadOrder, Method.POST);
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Warehouse
             request.RequestFormat = DataFormat.Json;
 
             Batch = Guid.NewGuid();
-            Order = warehouseOrderDtoFactory.Create(order, store);
+            Orders = ConvertWarehouseOrders(orders, store);
 
             request.AddJsonBody(this);
 
@@ -67,13 +68,23 @@ namespace ShipWorks.Stores.Warehouse
 
             if (response.Failure)
             {
-                return GenericResult.FromError<WarehouseUploadOrderResponse>(response.Message);
+                return GenericResult.FromError<WarehouseUploadOrderResponses>(response.Message);
             }
 
-            var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponse>(
+            var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponses>(
                 response.Value.Content, GetJsonSerializerSettings());
 
             return orderResponse;
+        }
+
+        private IEnumerable<WarehouseOrder> ConvertWarehouseOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
+        {
+            var warehouseOrders = new List<WarehouseOrder>();
+            foreach (var order in orders)
+            {
+                warehouseOrders.Add(warehouseOrderDtoFactory.Create(order, store));
+            }
+            return warehouseOrders;
         }
 
         /// <summary>
