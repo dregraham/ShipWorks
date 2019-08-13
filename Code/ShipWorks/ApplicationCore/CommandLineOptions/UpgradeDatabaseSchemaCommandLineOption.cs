@@ -35,6 +35,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
+            log.Info("Execute starting.");
+
             Version versionRequired = new Version();
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
             TelemetricResult<Result> backupResult = null;
@@ -54,13 +56,16 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 // is lost, we can still track the customer id.
                 string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
                 Telemetry.GetCustomerID = () => tangoCustomerId;
+                log.Info($"TangoCustomerId: {tangoCustomerId}.");
 
                 autoUpgradeFailureSubmitter.Initialize();
 
                 versionRequired = SqlSchemaUpdater.GetRequiredSchemaVersion();
+                log.Info($"RequiredSchemaVersion: {versionRequired}.");
 
                 if (SqlSchemaUpdater.IsUpgradeRequired())
                 {
+                    log.Info("IsUpgradeRequired: true.");
                     DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
                     autoUpdateStatusProvider.UpdateStatus("Creating Backup");
 
@@ -78,18 +83,23 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                         autoUpdateStatusProvider.UpdateStatus("Upgrading Database");
                         TryDatabaseUpgrade(backupManager, databaseUpdateResult);
                     }
+                    else
+                    {
+                        log.Error($"Backup failed.  {backupResult.Value.Message}");
+                    }
                 }
 
                 // If we can't connect now, try to set back to multi-user
                 if (!SqlSession.Current.CanConnect())
                 {
+                    log.Info("Unable to connect to db, so trying to set to multi user.");
                     SqlUtility.SetMultiUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName);
                 }
             }
             catch (Exception ex)
             {
                 DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
-                log.Error("Failed to upgrade database schema", ex);
+                log.Error("Failed to upgrade database.", ex);
 
                 if (ex is SqlException sqlEx)
                 {
@@ -118,8 +128,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
                     () => SqlSchemaUpdater.UpdateDatabase(new ProgressProvider(), databaseUpdateResult));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("TryDatabaseUpgrade had an exception.", ex);
                 autoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
                 // Upgrading the schema failed, restore
                 databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
