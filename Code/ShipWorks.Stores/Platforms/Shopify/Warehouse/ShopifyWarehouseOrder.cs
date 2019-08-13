@@ -18,12 +18,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
         /// <summary>
         /// The fulfilment status code of the order
         /// </summary>
-        public int FulfillmentStatusCode { get; set; }
+        public string FulfillmentStatus { get; set; }
 
         /// <summary>
         /// The payment status code of the order
         /// </summary>
-        public int PaymentStatusCode { get; set; }
+        public string PaymentStatus { get; set; }
 
         /// <summary>
         /// The requested shipping code

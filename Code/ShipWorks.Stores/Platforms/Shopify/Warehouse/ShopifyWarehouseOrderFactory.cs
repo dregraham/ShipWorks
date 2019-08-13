@@ -60,8 +60,8 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
             var shopifyWarehouseOrder = warehouseOrder.AdditionalData[shopifyEntryKey].ToObject<ShopifyWarehouseOrder>();
 
             shopifyOrderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
-            shopifyOrderEntity.FulfillmentStatusCode = shopifyWarehouseOrder.FulfillmentStatusCode;
-            shopifyOrderEntity.PaymentStatusCode = shopifyWarehouseOrder.PaymentStatusCode;
+            shopifyOrderEntity.FulfillmentStatusCode = (int) EnumHelper.GetEnumByApiValue<ShopifyFulfillmentStatus>(shopifyWarehouseOrder.FulfillmentStatus);
+            shopifyOrderEntity.PaymentStatusCode = (int) EnumHelper.GetEnumByApiValue<ShopifyPaymentStatus>(shopifyWarehouseOrder.PaymentStatus);
 
             var shopifyStore = (IShopifyStoreEntity) store;
 
