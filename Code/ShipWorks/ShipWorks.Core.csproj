@@ -807,7 +807,8 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseAuthenticatedRequest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRequestClient.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRequestClient.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseEndpoints.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseLink.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\UploadSkusToWarehouse.cs" />

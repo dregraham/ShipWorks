@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Warehouse
     [Component]
     public class WarehouseOrderClient : IWarehouseOrderClient
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
         private readonly Func<IUploadOrdersRequest> uploadOrderRequestCreator;
@@ -39,10 +39,10 @@ namespace ShipWorks.Stores.Warehouse
         /// Constructor
         /// </summary>
         public WarehouseOrderClient(
-            WarehouseRequestClient warehouseRequestClient, 
+            IWarehouseRequestClient warehouseRequestClient,
             ILicenseService licenseService,
-            ShipmentDtoFactory shipmentDtoFactory, 
-            IWarehouseOrderDtoFactory warehouseOrderDtoFactory, 
+            ShipmentDtoFactory shipmentDtoFactory,
+            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
             Func<IUploadOrdersRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {

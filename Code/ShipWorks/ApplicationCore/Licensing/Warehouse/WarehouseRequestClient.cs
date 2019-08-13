@@ -12,8 +12,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// <summary>
     /// Makes requests to the warehouse and handles authentication token management
     /// </summary>
-    [Component(RegistrationType.Self, SingleInstance = true)]
-    public class WarehouseRequestClient : IInitializeForCurrentUISession
+    [Component(RegistrationType.SpecificService, Service = typeof(IWarehouseRequestClient), SingleInstance = true)]
+    public class WarehouseRequestClient : IInitializeForCurrentUISession, IWarehouseRequestClient
     {
         private readonly IWarehouseRemoteLoginWithToken warehouseRemoteLoginWithToken;
         private readonly IWarehouseRefreshToken warehouseRefreshToken;

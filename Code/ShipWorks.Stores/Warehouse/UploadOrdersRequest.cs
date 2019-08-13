@@ -22,11 +22,11 @@ namespace ShipWorks.Stores.Warehouse
     [Component]
     public class UploadOrdersRequest : IUploadOrdersRequest
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
 
         public UploadOrdersRequest(
-            WarehouseRequestClient warehouseRequestClient, 
+            IWarehouseRequestClient warehouseRequestClient,
             IWarehouseOrderDtoFactory warehouseOrderDtoFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
