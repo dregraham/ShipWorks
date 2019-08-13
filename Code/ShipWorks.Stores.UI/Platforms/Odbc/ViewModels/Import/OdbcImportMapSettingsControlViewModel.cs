@@ -176,7 +176,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         {
             if (IsWarehouseAllowed && ImportStrategy != OdbcImportStrategy.OnDemand)
             {
-                messageHelper.ShowError("Warehouse customers must choose: On order serach only");
+                messageHelper.ShowError("Warehouse customers must choose: On order search only");
                 return false;
             }
 
