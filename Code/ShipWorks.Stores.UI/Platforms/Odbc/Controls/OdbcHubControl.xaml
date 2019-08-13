@@ -14,7 +14,6 @@
              >
     <UserControl.Resources>
         <ResourceDictionary>
-            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue"/>
             <ui:BooleanToVisibilityConverter x:Key="ShowWhenFalse" Invert="True" />
             <ui:VisibleWhenEqualToParameterConverter x:Key="ShowWhenNotEqual" Invert="True"/>
             <ui:RadioButtonCheckedConverter x:Key="RadioButtonCheckedConverter"/>
@@ -82,10 +81,6 @@
                 VerticalAlignment="Center"
                 TextWrapping="Wrap"
                 Visibility="{Binding Message, Converter={StaticResource ShowWhenNotEqual}, ConverterParameter={x:Null}}" />
-            <ui:WaitSpinner Grid.Row="1"
-                            Visibility="{Binding LoadingStores, Converter={StaticResource ShowWhenTrue}}"
-                            BorderThickness="0"/>
-
         </Grid>
     </Grid>
 </UserControl>

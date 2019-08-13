@@ -28,7 +28,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         private IDictionary<Guid, Store> odbcStoresFromHub;
         private bool createNew;
         private string message;
-        private bool loadingStores;
 
         /// <summary>
         /// Constructor
@@ -38,7 +37,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             this.odbcStoreClient = odbcStoreClient;
 
             Stores = new ObservableCollection<Store>();
-            createNew = true;
         }
 
         /// <summary>
@@ -65,15 +63,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         public bool CreateNew
         {
             get => createNew;
-            set
-            {
-                Set(ref createNew, value);
-
-                if (!createNew)
-                {
-                    Task.Run(async () => await LoadStoresFromHub().ConfigureAwait(true));
-                }
-            }
+            set => Set(ref createNew, value);
         }
 
         /// <summary>
@@ -83,15 +73,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         {
             get => message;
             set => Set(ref message, value);
-        }
-
-        /// <summary>
-        /// Whether or not we are currently loading stores
-        /// </summary>
-        public bool LoadingStores
-        {
-            get => loadingStores;
-            set => Set(ref loadingStores, value);
         }
 
         /// <summary>
@@ -178,34 +159,33 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Load the list of stores from the hub
         /// </summary>
-        private async Task LoadStoresFromHub()
+        public async Task LoadStoresFromHub()
         {
             try
             {
                 Message = null;
-                LoadingStores = true;
 
                 var result = await odbcStoreClient.GetStores().ConfigureAwait(true);
 
                 if (result.Failure)
                 {
-                    loadingStores = false;
                     Message = result.Message;
                 }
 
                 odbcStoresFromHub = result.Value;
                 Stores = new ObservableCollection<Store>(odbcStoresFromHub.Values);
 
-                if (!Stores.Any())
+                if (Stores.Any())
+                {
+                    SelectedStore = Stores.FirstOrDefault();
+                }
+                else
                 {
                     Message = "No existing ODBC stores were found in the Hub. Please select \"Create a new ODBC store\" and click next.";
                 }
-
-                LoadingStores = false;
             }
             catch (Exception e)
             {
-                LoadingStores = false;
                 Message = $"Failed to load existing ODBC stores from the Hub.{Environment.NewLine}{Environment.NewLine}{e.Message}";
             }
         }

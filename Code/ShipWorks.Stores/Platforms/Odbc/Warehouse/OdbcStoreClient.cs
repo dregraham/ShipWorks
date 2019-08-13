@@ -21,12 +21,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
     public class OdbcStoreClient : IOdbcStoreClient
     {
         private readonly ILicenseService licenseService;
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient)
+        public OdbcStoreClient(ILicenseService licenseService, IWarehouseRequestClient warehouseRequestClient)
         {
             this.licenseService = licenseService;
             this.warehouseRequestClient = warehouseRequestClient;

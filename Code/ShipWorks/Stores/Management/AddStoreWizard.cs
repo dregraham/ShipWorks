@@ -418,6 +418,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             StoreType storeType = SelectedStoreType;
 
             if (storeType == null)

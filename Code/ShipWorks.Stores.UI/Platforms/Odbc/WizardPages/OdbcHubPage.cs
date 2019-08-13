@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels;
@@ -17,16 +20,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         private OdbcStoreEntity store;
         private readonly Func<OdbcHubViewModel> viewModelFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly ILicenseService licenseService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcHubPage(Func<OdbcHubViewModel> viewModelFactory, IMessageHelper messageHelper)
+        public OdbcHubPage(Func<OdbcHubViewModel> viewModelFactory, IMessageHelper messageHelper, ILicenseService licenseService)
         {
             this.viewModelFactory = viewModelFactory;
             this.messageHelper = messageHelper;
+            this.licenseService = licenseService;
             InitializeComponent();
-            SteppingInto += OnSteppingInto;
+            SteppingIntoAsync += OnSteppingInto;
             StepNextAsync += OnNext;
         }
 
@@ -38,12 +43,32 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
         /// <summary>
         /// When stepping into, load and set the controls view model
         /// </summary>
-        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        private async Task OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            store = GetStore<OdbcStoreEntity>();
+            Cursor.Current = Cursors.WaitCursor;
 
-            viewModel = viewModelFactory();
-            odbcHubControl.DataContext = viewModel;
+            EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+            if (restrictionLevel == EditionRestrictionLevel.None)
+            {
+                store = GetStore<OdbcStoreEntity>();
+
+                viewModel = viewModelFactory();
+                odbcHubControl.DataContext = viewModel;
+
+                await viewModel.LoadStoresFromHub();
+
+                if (!viewModel.Stores.Any())
+                {
+                    e.Skip = true;
+                    e.RaiseStepEventWhenSkipping = false;
+                }
+            }
+            else
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+            }
         }
 
         /// <summary>
