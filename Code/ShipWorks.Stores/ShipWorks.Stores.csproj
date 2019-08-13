@@ -265,6 +265,7 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
@@ -927,9 +928,10 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\OdbcStore.cs" />
-    <Compile Include="Warehouse\UploadOrderRequest.cs" />
+    <Compile Include="Warehouse\UploadOrdersRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />

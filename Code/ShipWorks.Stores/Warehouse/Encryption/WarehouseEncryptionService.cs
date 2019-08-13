@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
     [Component]
     public class WarehouseEncryptionService : IWarehouseEncryptionService
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILog log;
 
         // Encryption Parameters
@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Warehouse.Encryption
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseEncryptionService(WarehouseRequestClient warehouseRequestClient, Func<Type, ILog> logFactory)
+        public WarehouseEncryptionService(IWarehouseRequestClient warehouseRequestClient, Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             log = logFactory(typeof(WarehouseEncryptionService));

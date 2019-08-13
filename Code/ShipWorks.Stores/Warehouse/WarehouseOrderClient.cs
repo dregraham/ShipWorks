@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -27,23 +29,27 @@ namespace ShipWorks.Stores.Warehouse
     [Component]
     public class WarehouseOrderClient : IWarehouseOrderClient
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
-        private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
+        private readonly Func<IUploadOrdersRequest> uploadOrderRequestCreator;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService,
-            ShipmentDtoFactory shipmentDtoFactory, IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
+        public WarehouseOrderClient(
+            IWarehouseRequestClient warehouseRequestClient,
+            ILicenseService licenseService,
+            ShipmentDtoFactory shipmentDtoFactory,
+            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
+            Func<IUploadOrdersRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.licenseService = licenseService;
             this.shipmentDtoFactory = shipmentDtoFactory;
-            this.warehouseOrderDtoFactory = warehouseOrderDtoFactory;
+            this.uploadOrderRequestCreator = uploadOrderRequestCreator;
             log = logFactory(typeof(WarehouseOrderClient));
         }
 
@@ -94,7 +100,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponse>> UploadOrder(OrderEntity order, IStoreEntity store)
+        public async Task<GenericResult<WarehouseUploadOrderResponses>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             try
             {
@@ -102,60 +108,21 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    IRestRequest request =
-                        new RestRequest(WarehouseEndpoints.UploadOrder, Method.POST);
-
-                    request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
-
-                    request.RequestFormat = DataFormat.Json;
-
-                    UploadOrderRequest requestData = new UploadOrderRequest(Guid.NewGuid(), warehouseOrderDtoFactory.Create(order, store));
-                    request.AddJsonBody(requestData);
-
-                    GenericResult<IRestResponse> response = await warehouseRequestClient
-                        .MakeRequest(request, "Upload Store")
-                        .ConfigureAwait(true);
-
-                    if (response.Failure)
-                    {
-                        return GenericResult.FromError<WarehouseUploadOrderResponse>(response.Message);
-                    }
-
-                    var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponse>(
-                        response.Value.Content, GetJsonSerializerSettings());
-
-                    return orderResponse;
+                    return await uploadOrderRequestCreator().Submit(orders, store);
                 }
                 else
                 {
-
-                    string restrictedErrorMessage = "Attempted to upload shipment to hub for a non warehouse customer";
+                    string restrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
                     log.Error(restrictedErrorMessage);
-                    return GenericResult.FromError<WarehouseUploadOrderResponse>(restrictedErrorMessage);
+
+                    return GenericResult.FromError<WarehouseUploadOrderResponses>(restrictedErrorMessage);
                 }
             }
             catch (Exception ex)
             {
-                log.Error($"Failed to upload shipment {order.OrderID} to hub.", ex);
-                return GenericResult.FromError<WarehouseUploadOrderResponse>(ex);
+                log.Error($"Failed to upload order to hub. First Order ID was {orders.FirstOrDefault()?.OrderID.ToString() ?? "???"}", ex);
+                return GenericResult.FromError<WarehouseUploadOrderResponses>(ex);
             }
-        }
-
-        /// <summary>
-        /// Gets json serializer settings
-        /// </summary>
-        private JsonSerializerSettings GetJsonSerializerSettings()
-        {
-            return new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy
-                    {
-                        OverrideSpecifiedNames = false
-                    }
-                },
-            };
         }
 
         /// <summary>

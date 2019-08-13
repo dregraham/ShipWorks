@@ -206,7 +206,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             catch (Exception e)
             {
                 LoadingStores = false;
-                Message = "Failed to load existing ODBC stores from the Hub";
+                Message = $"Failed to load existing ODBC stores from the Hub.{Environment.NewLine}{Environment.NewLine}{e.Message}";
             }
         }
     }
