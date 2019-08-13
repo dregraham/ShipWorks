@@ -1000,7 +1000,8 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                if (SelectedStoreType.ShouldUseHub(store) &&
+                if (store.WarehouseStoreID == null &&
+                    SelectedStoreType.ShouldUseHub(store) &&
                     (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
