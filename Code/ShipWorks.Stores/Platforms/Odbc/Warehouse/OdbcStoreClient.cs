@@ -53,27 +53,28 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
                     {
                         return GenericResult.FromError<Dictionary<Guid, Store>>(response.Message);
                     }
-                    else
+
+                    Dictionary<Guid, Store> result = new Dictionary<Guid, Store>();
+                    JObject storesResponse = JObject.Parse(response.Value.Content);
+
+                    foreach (JToken item in storesResponse.SelectToken("stores"))
                     {
-                        Dictionary<Guid, Store> result = new Dictionary<Guid, Store>();
-
-                        JObject storesResponse = JObject.Parse(response.Value.Content);
-
-                        foreach (JToken item in storesResponse.SelectToken("stores"))
+                        int storeType = Convert.ToInt32(item["details"]["type"]);
+                        if (storeType == (int) StoreTypeCode.Odbc)
                         {
                             Guid storeId = Guid.Parse(item["id"].ToString());
-                            Store store = new Store()
+                            Store store = new Store
                             {
                                 UniqueIdentifier = item["details"]["uniqueIdentifier"].ToString(),
                                 Name = item["details"]["name"].ToString(),
-                                StoreType = Convert.ToInt32(item["details"]["type"])
+                                StoreType = storeType
                             };
 
                             result.Add(storeId, store);
                         }
-
-                        return result;
                     }
+
+                    return result;
                 }
             }
             catch (Exception ex)
