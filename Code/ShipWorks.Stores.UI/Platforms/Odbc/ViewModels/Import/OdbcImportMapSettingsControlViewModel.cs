@@ -8,7 +8,9 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
@@ -29,6 +31,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
+        private readonly ILicenseService licenseService;
         private bool parameterizedQueryAllowed;
 
         /// <summary>
@@ -38,12 +41,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             Func<string, IOdbcColumnSource> columnSourceFactory,
             IOdbcFieldMap fieldMap,
             Func<IOpenFileDialog> openFileDialogFactory,
-            IOdbcImportSettingsFile importSettingsFile) :
+            IOdbcImportSettingsFile importSettingsFile,
+            ILicenseService licenseService) :
                 base(messageHelper, columnSourceFactory)
         {
             this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
+            this.licenseService = licenseService;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
         }
 
@@ -165,6 +170,20 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         }
 
         /// <summary>
+        /// Validate warehoue customer sets store up to be on demand and perform base validation.
+        /// </summary>
+        public override bool ValidateRequiredMapSettings()
+        {
+            if (IsWarehouseAllowed && ImportStrategy != OdbcImportStrategy.OnDemand)
+            {
+                messageHelper.ShowError("Warehouse customers must choose: On order serach only");
+                return false;
+            }
+
+            return base.ValidateRequiredMapSettings();
+        }
+
+        /// <summary>
         /// Saves the map settings.
         /// </summary>
         public override void SaveMapSettings(OdbcStoreEntity store)
@@ -209,5 +228,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// The column source name to use for custom query
         /// </summary>
         public override string CustomQueryColumnSourceName => "Custom Import";
+
+        /// <summary>
+        /// Indicates if warehouse is allowed
+        /// </summary>
+        private bool IsWarehouseAllowed
+        {
+            get
+            {
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                // If warehouse is not allowed, return false
+                return restrictionLevel == EditionRestrictionLevel.None;
+            }
+        }
     }
 }
