@@ -112,6 +112,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
                         result.StoreType = baseStore.StoreType;
                         result.UniqueIdentifier = baseStore.UniqueIdentifier;
 
+                        // Dynamodb does not let you store empty strings so the string values that
+                        // are empty get stored as null, when deserializing we need to fix the null
+                        // values and make them empty strings again
+                        result.ImportMap = result.ImportMap ?? string.Empty;
+                        result.UploadMap = result.UploadMap ?? string.Empty;
+                        result.ImportColumnSource = result.ImportColumnSource ?? string.Empty;
+                        result.UploadColumnSource = result.UploadColumnSource ?? string.Empty;
+
                         return GenericResult.FromSuccess<OdbcStore>(result);
                     }
                 }

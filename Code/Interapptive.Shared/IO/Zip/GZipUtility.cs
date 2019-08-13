@@ -41,7 +41,7 @@ namespace Interapptive.Shared.IO.Zip
         /// </summary>
         public static string Decompress(string input)
         {
-            var bytes = Encoding.UTF8.GetBytes(input);
+            var bytes = Convert.FromBase64String(input);
             return Encoding.UTF8.GetString(Decompress(bytes));
         }
 
