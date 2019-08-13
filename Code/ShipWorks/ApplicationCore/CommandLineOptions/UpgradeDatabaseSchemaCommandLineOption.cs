@@ -10,6 +10,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -48,6 +49,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 {
                     throw new Exception("Cannot connect to SQL Server. Not running upgrade.");
                 }
+
+                // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
+                // is lost, we can still track the customer id.
+                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+                Telemetry.GetCustomerID = () => tangoCustomerId;
 
                 autoUpgradeFailureSubmitter.Initialize();
 
