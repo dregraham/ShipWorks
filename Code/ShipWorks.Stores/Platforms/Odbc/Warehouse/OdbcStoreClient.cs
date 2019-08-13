@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
                         result.StoreType = baseStore.StoreType;
                         result.UniqueIdentifier = baseStore.UniqueIdentifier;
 
-                        GenericResult.FromSuccess<OdbcStore>(result);
+                        return GenericResult.FromSuccess<OdbcStore>(result);
                     }
                 }
             }
