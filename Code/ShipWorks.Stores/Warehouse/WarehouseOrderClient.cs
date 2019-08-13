@@ -35,6 +35,8 @@ namespace ShipWorks.Stores.Warehouse
         private readonly Func<IUploadOrdersRequest> uploadOrderRequestCreator;
         private readonly ILog log;
 
+        public const string RestrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -112,10 +114,8 @@ namespace ShipWorks.Stores.Warehouse
                 }
                 else
                 {
-                    string restrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
-                    log.Error(restrictedErrorMessage);
-
-                    return GenericResult.FromError<WarehouseUploadOrderResponses>(restrictedErrorMessage);
+                    log.Error(RestrictedErrorMessage);
+                    return GenericResult.FromError<WarehouseUploadOrderResponses>(RestrictedErrorMessage);
                 }
             }
             catch (Exception ex)
