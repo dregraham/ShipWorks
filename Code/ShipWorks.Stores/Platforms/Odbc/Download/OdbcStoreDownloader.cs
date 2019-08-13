@@ -160,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Only download from warehouse if we are not using ondemand
         /// </summary>
-        protected override async Task DownloadWarehouseOrders(Guid batchId)
+        protected override Task DownloadWarehouseOrders(Guid batchId)
         {
             if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                                             "To automatically download orders, change this store's order import settings.");
             }
 
-            await base.DownloadWarehouseOrders(batchId);
+            return base.DownloadWarehouseOrders(batchId);
         }
 
         /// <summary>
