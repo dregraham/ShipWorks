@@ -31,8 +31,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
             this.messageHelper = messageHelper;
             this.licenseService = licenseService;
             InitializeComponent();
-            SteppingIntoAsync += OnSteppingInto;
-            StepNextAsync += OnNext;
+            SteppingIntoAsync = OnSteppingInto;
+            StepNextAsync = OnNext;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages
                 viewModel = viewModelFactory();
                 odbcHubControl.DataContext = viewModel;
 
-                await viewModel.LoadStoresFromHub();
+                await viewModel.LoadStoresFromHub().ConfigureAwait(true);
 
                 if (!viewModel.Stores.Any())
                 {
