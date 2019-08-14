@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Zip;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -42,6 +41,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// List of existing odbc stores from the hub
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ObservableCollection<Store> Stores
         {
             get => stores;
@@ -51,6 +51,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// The currently selected store in the list
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public Store SelectedStore
         {
             get => selectedStore;
@@ -60,6 +61,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Whether or not to create a new store
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool CreateNew
         {
             get => createNew;
@@ -69,6 +71,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
         /// <summary>
         /// Message to show the user
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Message
         {
             get => message;
