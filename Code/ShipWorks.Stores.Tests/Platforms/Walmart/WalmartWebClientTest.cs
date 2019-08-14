@@ -29,6 +29,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Walmart
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             acknowledgeMock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            mock.Mock<IWalmartWebClientSettings>().SetupGet(x => x.Endpoint).Returns("https://marketplace.walmartapis.com");
+
             SetupAcknowledgeOrderResponse();
         }
 
