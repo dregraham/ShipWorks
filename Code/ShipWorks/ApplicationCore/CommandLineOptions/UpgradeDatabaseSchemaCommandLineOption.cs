@@ -67,16 +67,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 {
                     log.Info("IsUpgradeRequired: true.");
                     DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
-                    autoUpdateStatusProvider.UpdateStatus("Creating Backup");
-
-                    if (SqlServerInfo.HasCustomTriggers())
-                    {
-                        throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
-                    }
-
-                    autoUpdateStatusProvider.UpdateStatus("Creating Backup");
-                    // If an upgrade is required create a backup first
-                    backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
+                    backupResult = BackupDatabase(backupManager);
 
                     if (backupResult.Value.Success)
                     {
@@ -89,12 +80,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     }
                 }
 
-                // If we can't connect now, try to set back to multi-user
-                if (!SqlSession.Current.CanConnect())
-                {
-                    log.Info("Unable to connect to db, so trying to set to multi user.");
-                    SqlUtility.SetMultiUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName);
-                }
+                SetMultiUserIfNeeded();
             }
             catch (Exception ex)
             {
@@ -106,6 +92,37 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Set the db to multi user if needed
+        /// </summary>
+        private static void SetMultiUserIfNeeded()
+        {
+            // If we can't connect now, try to set back to multi-user
+            if (!SqlSession.Current.CanConnect())
+            {
+                log.Info("Unable to connect to db, so trying to set to multi user.");
+                SqlUtility.SetMultiUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName);
+            }
+        }
+
+        /// <summary>
+        /// Backup the database
+        /// </summary>
+        private TelemetricResult<Result> BackupDatabase(DatabaseUpgradeBackupManager backupManager)
+        {
+            autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+
+            if (SqlServerInfo.HasCustomTriggers())
+            {
+                throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
+            }
+
+            autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+
+            // If an upgrade is required create a backup first
+            return backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
         }
 
         /// <summary>
