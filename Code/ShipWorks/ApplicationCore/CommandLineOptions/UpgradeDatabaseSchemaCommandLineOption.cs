@@ -98,17 +98,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
             catch (Exception ex)
             {
-                DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
-                log.Error("Failed to upgrade database.", ex);
-
-                if (ex is SqlException sqlEx)
-                {
-                    Environment.ExitCode = sqlEx.Number;
-                }
-
-                Environment.ExitCode = -1;
-
-                autoUpgradeFailureSubmitter.Submit(versionRequired.ToString(), ex);
+                HandleException(databaseUpdateResult, ex, autoUpgradeFailureSubmitter, versionRequired);
             }
             finally
             {
@@ -116,6 +106,24 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Handle an exception
+        /// </summary>
+        private static void HandleException(TelemetricResult<Unit> databaseUpdateResult, Exception ex, AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter, Version versionRequired)
+        {
+            DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
+            log.Error("Failed to upgrade database.", ex);
+
+            if (ex is SqlException sqlEx)
+            {
+                Environment.ExitCode = sqlEx.Number;
+            }
+
+            Environment.ExitCode = -1;
+
+            autoUpgradeFailureSubmitter.Submit(versionRequired.ToString(), ex);
         }
 
         /// <summary>
