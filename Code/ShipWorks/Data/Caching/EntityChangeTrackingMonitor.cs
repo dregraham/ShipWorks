@@ -240,6 +240,10 @@ namespace ShipWorks.Data.Caching
                     }
                 }
             }
+            else
+            {
+                log.Info("SqlSession.Current.CanConnect was false...");
+            }
 
             return dataSet;
         }
