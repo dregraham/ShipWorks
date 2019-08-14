@@ -24,13 +24,16 @@ namespace ShipWorks.Stores.Warehouse
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseOrderDtoFactory warehouseOrderDtoFactory;
+        private readonly Func<string, Method, IRestRequest> createRateRequest;
 
         public UploadOrdersRequest(
             IWarehouseRequestClient warehouseRequestClient,
-            IWarehouseOrderDtoFactory warehouseOrderDtoFactory)
+            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
+            Func<string, Method, IRestRequest> createRateRequest)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.warehouseOrderDtoFactory = warehouseOrderDtoFactory;
+            this.createRateRequest = createRateRequest;
         }
 
         /// <summary>
@@ -50,8 +53,7 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public async Task<GenericResult<WarehouseUploadOrderResponses>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
-            IRestRequest request =
-                new RestRequest(WarehouseEndpoints.UploadOrders, Method.POST);
+            IRestRequest request = createRateRequest(WarehouseEndpoints.UploadOrders, Method.POST);
 
             request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
 
