@@ -16,6 +16,11 @@ namespace Interapptive.Shared.IO.Zip
         /// </summary>
         public static string Compress(string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
             var bytes = Encoding.UTF8.GetBytes(input);
             return Convert.ToBase64String(Compress(bytes));
         }
@@ -41,6 +46,11 @@ namespace Interapptive.Shared.IO.Zip
         /// </summary>
         public static string Decompress(string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
             var bytes = Convert.FromBase64String(input);
             return Encoding.UTF8.GetString(Decompress(bytes));
         }

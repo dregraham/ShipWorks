@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Stores.Warehouse;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Warehouse
                 .Create(store)
                 .ConfigureAwait(false);
 
-            storeDtoHelper.Verify(s => s.PopulateCommonData(store, It.IsAny<Store>()));
+            storeDtoHelper.Verify(s => s.PopulateCommonData(store, It.IsAny<OdbcStore>()));
         }
     }
 }
