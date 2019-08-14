@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Odbc;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
@@ -50,6 +51,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public OdbcStoreDownloader(StoreEntity store,
             IOdbcDownloadCommandFactory downloadCommandFactory,
             IOdbcFieldMap fieldMap,
