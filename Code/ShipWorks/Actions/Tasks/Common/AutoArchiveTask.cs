@@ -4,10 +4,19 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Orders.Archive;
 
 namespace ShipWorks.Actions.Tasks.Common
@@ -17,17 +26,20 @@ namespace ShipWorks.Actions.Tasks.Common
     /// </summary>
     [ActionTask("Auto archive database", "AutoArchiveTask", ActionTaskCategory.Administration, true)]
     [Component]
-    public class AutoArchiveTask : ActionTask
+    public class AutoArchiveTask : ActionTask, ISingleDispatchAction
     {
         private readonly IOrderArchiver orderArchiver;
         private readonly ILog log;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoArchiveTask" /> class.
         /// </summary>
-        public AutoArchiveTask(IDateTimeProvider dateTimeProvider, IOrderArchiver orderArchiver)
+        public AutoArchiveTask(IDateTimeProvider dateTimeProvider, 
+            IOrderArchiver orderArchiver, ISqlAdapterFactory sqlAdapterFactory)
         {
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderArchiver = orderArchiver;
             log = LogManager.GetLogger(typeof(AutoArchiveTask));
             this.dateTimeProvider = dateTimeProvider;
@@ -93,13 +105,45 @@ namespace ShipWorks.Actions.Tasks.Common
         public override bool IsAsync => true;
 
         /// <summary>
+        /// See if there are any archive tasks already in the queue.
+        /// Return false if there are any existing.
+        /// </summary>
+        private bool RunAllowed(IActionStepContext context)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            {
+                long queueId = context.Queue.ActionID;
+
+                ActionQueueCollection queueEntries = new ActionQueueCollection();
+                RelationPredicateBucket bucket = new RelationPredicateBucket(
+                    ActionQueueFields.ActionID == queueId &
+                    ActionQueueFields.ActionQueueID != context.Queue.ActionQueueID &
+                    ActionQueueFields.Status != 3);
+
+                adapter.FetchEntityCollection(queueEntries, bucket);
+
+                return queueEntries.None();
+            }
+        }
+
+        /// <summary>
         /// Auto archive the database.
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
             try
             {
+                if (!RunAllowed(context))
+                {
+                    return;
+                }
+
                 DateTime cutoffDate = dateTimeProvider.UtcNow.AddDays(-1 * NumberOfDaysToKeep);
+
+                // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
+                // is lost, we can still track the customer id.
+                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+                Telemetry.GetCustomerID = () => tangoCustomerId;
 
                 ScheduledTrigger scheduledTrigger = new ScheduledTrigger(context.Step.TaskSettings);
                 TimeSpan startTimeOfDay = scheduledTrigger.Schedule.StartDateTimeInUtc.TimeOfDay;

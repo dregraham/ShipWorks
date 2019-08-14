@@ -22,7 +22,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// Task for deleting/purging old data.
     /// </summary>
     [ActionTask("Delete old data", "PurgeDatabase", ActionTaskCategory.Administration)]
-    public class PurgeDatabaseTask : ActionTask
+    public class PurgeDatabaseTask : ActionTask, ISingleDispatchAction
     {
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(PurgeDatabaseTask));

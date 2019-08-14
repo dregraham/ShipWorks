@@ -171,7 +171,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 return store != null ? GetLicenseStatus(store.License, store, false).TangoCustomerID : string.Empty;
             }
-            catch (Exception ex)
+            catch (TangoException ex)
             {
                 log.Error(ex);
                 return string.Empty;

@@ -7,6 +7,7 @@ using log4net;
 using Quartz;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -92,7 +93,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet
                         using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             List<ActionTask> tasks = ActionManager.LoadTasks(lifetimeScope, action);
-                            if (tasks.Any(t => t.Entity.TaskIdentifier.ToUpperInvariant() == "PurgeDatabase".ToUpperInvariant()))
+                            if (tasks.Any(t => t is ISingleDispatchAction))
                             {
                                 log.ErrorFormat("ActionID is already in the queue for job with Key: {0}.  Skipping adding this instance.", context.JobDetail.Key);
                                 return;

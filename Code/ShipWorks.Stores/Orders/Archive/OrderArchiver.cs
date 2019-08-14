@@ -13,6 +13,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -78,10 +79,9 @@ namespace ShipWorks.Stores.Orders.Archive
                     }
 
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(async result =>
+                        .Do(result =>
                         {
                             AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value);
-                            await orderArchiveDataAccess.Audit(isManualArchive).ConfigureAwait(false);
                         })
                         .Map(result => (IResult) result);
                 });
@@ -132,18 +132,37 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Recover(ex =>
                             {
                                 exception = ex;
-                                return TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress });
+                                return TerminateNonStartedTasks(ex, new[] {prepareProgress, archiveProgress, syncProgress, filterProgress});
                             })
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? GenericResult.FromError(exception, OrderArchiveResult.Failed) : OrderArchiveResult.Succeeded;
+                        // Make sure we can connect before trying to audit
+                        if (SqlSession.Current.CanConnect())
+                        {
+                            await orderArchiveDataAccess.Audit(manualArchive, !progressProvider.HasErrors).ConfigureAwait(false);
+                        }
+
+                        return OrderArchiveResult.Succeeded;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                log.Error("An error occurred while archiving.", ex);
+				// On failure, we want the archive task to leave the action queue, so always return success.
+                return OrderArchiveResult.Succeeded;
+            }
             finally
             {
-                userLoginWorkflow.Logon(loggedInUser);
+                try
+                {
+                    userLoginWorkflow.Logon(loggedInUser);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
