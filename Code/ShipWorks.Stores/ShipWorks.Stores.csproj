@@ -265,6 +265,13 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
+    <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
+    <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
+    <Compile Include="Platforms\Walmart\Warehouse\WalmartStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseItem.cs" />
+    <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseOrder.cs" />
+    <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
