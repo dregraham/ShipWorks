@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private readonly Func<ISaveFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly IOdbcSettingsFile uploadSettingsFile;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
         private OdbcStoreEntity store;
 
         /// <summary>
@@ -36,12 +37,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             IOdbcFieldMapFactory odbcFieldMapFactory,
             Func<ISaveFileDialog> fileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
-            IOdbcSettingsFile uploadSettingsFile)
+            IOdbcSettingsFile uploadSettingsFile,
+            IOdbcStoreRepository odbcStoreRepository)
         {
             this.odbcFieldMapFactory = odbcFieldMapFactory;
             this.fileDialogFactory = fileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             this.uploadSettingsFile = uploadSettingsFile;
+            this.odbcStoreRepository = odbcStoreRepository;
             InitializeComponent();
         }
 
@@ -126,7 +129,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private void OnSaveImportMapClick(object sender, EventArgs e)
         {
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            fieldMap.Load(store.ImportMap);
+            fieldMap.Load(odbcStoreRepository.GetStore(store).ImportMap);
 
             ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
@@ -156,7 +159,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private void OnSaveUploadMapClick(object sender, EventArgs e)
         {
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            fieldMap.Load(store.UploadMap);
+            fieldMap.Load(odbcStoreRepository.GetStore(store).UploadMap);
 
             ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = uploadSettingsFile.Extension;
@@ -171,8 +174,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             using (Stream streamToSave = fileDialog.CreateFileStream())
             using (TextWriter writer = new StreamWriter(streamToSave))
             {
-                uploadSettingsFile.ColumnSourceType = (OdbcColumnSourceType)store.UploadColumnSourceType;
-                uploadSettingsFile.ColumnSource = store.UploadColumnSource;
+                uploadSettingsFile.ColumnSourceType = (OdbcColumnSourceType) odbcStoreRepository.GetStore(store).UploadColumnSourceType;
+                uploadSettingsFile.ColumnSource = odbcStoreRepository.GetStore(store).UploadColumnSource;
                 uploadSettingsFile.OdbcFieldMap = fieldMap;
                 uploadSettingsFile.Save(writer);
             }

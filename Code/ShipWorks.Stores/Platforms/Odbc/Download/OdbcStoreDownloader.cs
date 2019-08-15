@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcFieldMap fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly IWarehouseOrderClient warehouseOrderClient;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
@@ -57,18 +58,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader,
             IOdbcDownloaderExtraDependencies extras,
-            IWarehouseOrderClient warehouseOrderClient) : base(store, extras.GetStoreType(store))
+            IWarehouseOrderClient warehouseOrderClient,
+            IOdbcStoreRepository odbcStoreRepository) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
+            this.odbcStoreRepository = odbcStoreRepository;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
-            fieldMap.Load(this.store.ImportMap);
-            reloadEntireOrder = this.store.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+            fieldMap.Load(odbcStoreRepository.GetStore(this.store).ImportMap);
+            reloadEntireOrder = odbcStoreRepository.GetStore(this.store).ImportStrategy == (int) OdbcImportStrategy.OnDemand;
         }
 
         /// <summary>
@@ -139,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
@@ -164,7 +167,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         protected override Task DownloadWarehouseOrders(Guid batchId)
         {
-            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
@@ -179,7 +182,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private void AddTelemetryData(TrackedDurationEvent trackedDurationEvent, IOdbcCommand downloadCommand)
         {
             trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
-            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) store.ImportStrategy));
+            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStoreRepository.GetStore(store).ImportStrategy));
         }
 
         /// <summary>
@@ -208,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
-            if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
