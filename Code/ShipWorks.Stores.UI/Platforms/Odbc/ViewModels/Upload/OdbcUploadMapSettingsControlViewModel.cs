@@ -24,7 +24,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcSettingsFile uploadSettingsFile;
-        private readonly IOdbcFieldMapService odbcFieldMapService;
         private string customQuery;
 
         private const string InitialQueryComment =
@@ -51,14 +50,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             Func<string, IDialog> dialogFactory,
             IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
+            IOdbcFieldMap fieldMap,
             Func<IOpenFileDialog> openFileDialogFactory,
-            IOdbcSettingsFile uploadSettingsFile,
-            IOdbcFieldMapService odbcFieldMapService) : base(messageHelper, columnSourceFactory)
+            IOdbcSettingsFile uploadSettingsFile) : base(messageHelper, columnSourceFactory)
         {
             this.dialogFactory = dialogFactory;
+            this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.uploadSettingsFile = uploadSettingsFile;
-            this.odbcFieldMapService = odbcFieldMapService;
             CustomQuery = InitialQueryComment;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
         }
@@ -84,7 +83,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
             }
         }
-
+        
         /// <summary>
         /// the custom query
         /// </summary>
@@ -123,14 +122,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 if (openResult.Success)
                 {
                     ColumnSourceIsTable = uploadSettingsFile.ColumnSourceType == OdbcColumnSourceType.Table;
-
-
+                    
+                    
                     LoadAndSetColumnSource(uploadSettingsFile.ColumnSource);
                     if (!string.IsNullOrWhiteSpace(uploadSettingsFile.ColumnSource))
                     {
                         CustomQuery = uploadSettingsFile.ColumnSource;
                     }
-
+                    
                     MapName = uploadSettingsFile.OdbcFieldMap.Name;
 
                     fieldMap = uploadSettingsFile.OdbcFieldMap;
@@ -165,13 +164,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            odbcFieldMapService.GetImportMap(store);
-
+            fieldMap.Load(store.UploadMap);
             MapName = fieldMap.Name;
 
             ColumnSourceIsTable = store.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
         }
-
+        
         /// <summary>
         /// Validates the required map settings.
         /// </summary>

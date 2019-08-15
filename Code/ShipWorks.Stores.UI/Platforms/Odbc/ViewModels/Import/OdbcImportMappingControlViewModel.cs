@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly Func<string, IOdbcColumnSource> columnSourceFactory;
         private readonly IOdbcDataSourceService dataSourceService;
-        private readonly IOdbcFieldMapService odbcFieldMapService;
+
         private const string EmptyColumnName = "(None)";
         private const string CustomQueryColumnSourceName = "Custom Import";
 
@@ -49,14 +49,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         public OdbcImportMappingControlViewModel(IOdbcFieldMapFactory fieldMapFactory,
             IMessageHelper messageHelper,
             Func<string, IOdbcColumnSource> columnSourceFactory,
-            IOdbcDataSourceService dataSourceService,
-            IOdbcFieldMapService odbcFieldMapService)
+            IOdbcDataSourceService dataSourceService)
         {
             this.fieldMapFactory = fieldMapFactory;
             this.messageHelper = messageHelper;
             this.columnSourceFactory = columnSourceFactory;
             this.dataSourceService = dataSourceService;
-            this.odbcFieldMapService = odbcFieldMapService;
+
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             NumbersUpTo25 = Enumerable.Range(0, 26).ToList();
@@ -247,7 +246,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         private void LoadMap(OdbcStoreEntity store)
         {
-            IOdbcFieldMap storeFieldMap = odbcFieldMapService.GetImportMap(store);
+            IOdbcFieldMap storeFieldMap = fieldMapFactory.CreateFieldMapFrom(store.ImportMap);
             loadedMapName = storeFieldMap.Name;
 
             EnsureExternalFieldsExistInColumnSource(storeFieldMap);
@@ -370,7 +369,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         private void LoadColumnSource(OdbcStoreEntity store)
         {
             IOdbcDataSource selectedDataSource = dataSourceService.GetImportDataSource(store);
-
+            
             string columnSourceName = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table ?
                 store.ImportColumnSource :
                 CustomQueryColumnSourceName;
@@ -378,7 +377,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IOdbcColumnSource columnSource = columnSourceFactory(columnSourceName);
 
             string source;
-
+            
             if (store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomParameterizedQuery)
             {
                 string testParameter = store.ImportStrategy == (int) OdbcImportStrategy.OnDemand ? "'0'" : "'1/1/2019'";

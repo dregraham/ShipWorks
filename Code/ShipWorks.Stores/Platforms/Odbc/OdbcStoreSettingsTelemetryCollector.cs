@@ -16,15 +16,15 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreSettingsTelemetryCollector : IStoreSettingsTelemetryCollector
     {
         private readonly IOdbcDataSourceService dataSourceService;
-        private readonly IOdbcFieldMapService odbcFieldMapService;
+        private readonly IOdbcFieldMapFactory odbcFieldMapFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreSettingsTelemetryCollector"/> class.
         /// </summary>
-        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapService odbcFieldMapService)
+        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapFactory odbcFieldMapFactory)
         {
             this.dataSourceService = dataSourceService;
-            this.odbcFieldMapService = odbcFieldMapService;
+            this.odbcFieldMapFactory = odbcFieldMapFactory;
         }
 
         /// <summary>
@@ -91,7 +91,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return "None";
             }
 
-            IOdbcFieldMap importMap = odbcFieldMapService.GetImportMap(odbcStore);
+            IOdbcFieldMap importMap = odbcFieldMapFactory.CreateEmptyFieldMap();
+            importMap.Load(odbcStore.ImportMap);
 
             IOdbcFieldMapEntry orderNumberEntry = importMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
