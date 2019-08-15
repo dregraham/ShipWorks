@@ -54,20 +54,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         [NDependIgnoreTooManyParamsAttribute]
         public OdbcStoreDownloader(StoreEntity store,
             IOdbcDownloadCommandFactory downloadCommandFactory,
-            IOdbcFieldMap fieldMap,
             IOdbcOrderLoader orderLoader,
             IOdbcDownloaderExtraDependencies extras,
-            IWarehouseOrderClient warehouseOrderClient) : base(store, extras.GetStoreType(store))
+            IWarehouseOrderClient warehouseOrderClient,
+            IOdbcFieldMapService odbcFieldMapService) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
-            this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
-            fieldMap.Load(this.store.ImportMap);
+            fieldMap = odbcFieldMapService.GetImportMap(this.store);
             reloadEntireOrder = this.store.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
         }
 

@@ -20,20 +20,26 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     {
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
-        private readonly IOdbcFieldMap fieldMap;
+        private IOdbcFieldMap fieldMap;
         private readonly ITemplateTokenProcessor templateTokenProcessor;
         private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers;
+        private readonly IOdbcFieldMapService odbcFieldMapService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
-        public OdbcUploadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, ITemplateTokenProcessor templateTokenProcessor, IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers)
+        public OdbcUploadCommandFactory(
+            IOdbcDataSource dataSource,
+            IShipWorksDbProviderFactory dbProviderFactory,
+            ITemplateTokenProcessor templateTokenProcessor,
+            IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers,
+            IOdbcFieldMapService odbcFieldMapService)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
-            this.fieldMap = fieldMap;
             this.templateTokenProcessor = templateTokenProcessor;
             this.odbcFieldValueResolvers = odbcFieldValueResolvers;
+            this.odbcFieldMapService = odbcFieldMapService;
         }
 
         /// <summary>
@@ -93,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private IOdbcQuery CreateTableUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
         {
-            fieldMap.Load(store.UploadMap);
+            fieldMap = odbcFieldMapService.GetUploadMap(store);
             fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order }, odbcFieldValueResolvers);
 
             return new OdbcTableUploadQuery(fieldMap, store, dbProviderFactory, dataSource);
