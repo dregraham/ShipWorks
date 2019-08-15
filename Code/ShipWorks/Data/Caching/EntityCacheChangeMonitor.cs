@@ -151,7 +151,7 @@ namespace ShipWorks.Data.Caching
         private ApplicationBusyToken GetCheckForChangesOperationToken()
         {
             if (ConnectionSensitiveScope.IsActive ||
-                SqlSession.Current?.CanConnect() == false ||
+                SqlSession.Current?.CanConnect() != true ||
                 !UserSession.IsLoggedOn ||
                 ConnectionMonitor.Status != ConnectionMonitorStatus.Normal)
             {

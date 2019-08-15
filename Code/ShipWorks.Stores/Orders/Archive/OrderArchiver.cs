@@ -137,11 +137,7 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        // Make sure we can connect before trying to audit
-                        if (SqlSession.Current.CanConnect())
-                        {
-                            await orderArchiveDataAccess.Audit(manualArchive, !progressProvider.HasErrors).ConfigureAwait(false);
-                        }
+                        await orderArchiveDataAccess.Audit(manualArchive, !progressProvider.HasErrors).ConfigureAwait(false);
 
                         return OrderArchiveResult.Succeeded;
                     }
