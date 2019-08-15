@@ -90,7 +90,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     return GenericResult.FromSuccess(restResponse);
                 }
 
-                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request. StatusCode: {restResponse.StatusCode}");
+                string error = string.IsNullOrWhiteSpace(restResponse.Content) ? restResponse.StatusCode.ToString() : restResponse.Content;
+
+                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request.{Environment.NewLine}{error}");
             }
             catch (Exception e)
             {
