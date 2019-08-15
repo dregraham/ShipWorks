@@ -266,6 +266,7 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\OdbcWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
     <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
