@@ -12,6 +12,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.UI.Wizard;
 
@@ -185,5 +186,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Should the Hub be used for this store?
         /// </summary>
         public override bool ShouldUseHub(IStoreEntity store) => true;
+
+        /// <summary>
+        /// Reset the store cache
+        /// </summary>
+        public override void StoreAdded(StoreEntity store, ILifetimeScope scope)
+        {
+            if (store is OdbcStoreEntity)
+            {
+                scope.Resolve<IOdbcStoreRepository>().UpdateStoreCache((OdbcStoreEntity) store);
+            }
+        }
     }
 }

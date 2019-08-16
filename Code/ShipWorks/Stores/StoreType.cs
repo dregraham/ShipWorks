@@ -669,5 +669,12 @@ namespace ShipWorks.Stores
         /// Should the Hub be used for this store?
         /// </summary>
         public virtual bool ShouldUseHub(IStoreEntity store) => false;
+
+        /// <summary>
+        /// Hook called after a store is saved to the ShipWorks database
+        /// </summary>
+        public virtual void StoreAdded(StoreEntity store, ILifetimeScope scope)
+        {
+        }
     }
 }

@@ -1358,6 +1358,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
+    <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
