@@ -136,7 +136,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (OdbcStoreEntity odbcStore in odbcStores)
             {
-                GetStore(odbcStore);
+                try
+                {
+                    GetStore(odbcStore);
+                }
+                catch (ShipWorksOdbcException ex)
+                {
+                    // Just logging and eating the error. They will try again when
+                    // downloading or uploading and that is an easier time to handle the error
+                    log.Error(ex);
+                }
             }
         }
     }
