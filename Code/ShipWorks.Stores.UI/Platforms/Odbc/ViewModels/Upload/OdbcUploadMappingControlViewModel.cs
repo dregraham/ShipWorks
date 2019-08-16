@@ -173,7 +173,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             }
         }
 
-
         /// <summary>
         /// Build a single ODBC Field Map from the Order Address and Item Field Maps
         /// </summary>

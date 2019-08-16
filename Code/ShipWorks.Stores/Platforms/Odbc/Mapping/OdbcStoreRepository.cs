@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         public OdbcStore GetStore(OdbcStoreEntity store)
         {
-            return WarehouseUser ?
+            return WarehouseUser && store.WarehouseStoreID.HasValue ?
                 storeCache[store] :
                 storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
         }
