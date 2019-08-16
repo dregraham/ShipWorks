@@ -16,6 +16,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -216,15 +217,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            fieldMap.Load(odbcStoreRepository.GetStore(store).ImportMap);
+            OdbcStore odbcStore;
+            try
+            {
+                odbcStore = odbcStoreRepository.GetStore(store);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                messageHelper.ShowError("Failed to load import map");
+                return;
+            }
+
+            fieldMap.Load(odbcStore.ImportMap);
             MapName = fieldMap.Name;
 
-            ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
+            ImportStrategy = (OdbcImportStrategy) odbcStore.ImportStrategy;
 
-            ColumnSourceIsTable = odbcStoreRepository.GetStore(store).ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
-            IsSubquery = odbcStoreRepository.GetStore(store).ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
+            ColumnSourceIsTable = odbcStore.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
+            IsSubquery = odbcStore.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
 
-            importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
+            importOrderItemStrategy = (OdbcImportOrderItemStrategy) odbcStore.ImportOrderItemStrategy;
         }
 
         /// <summary>

@@ -9,8 +9,10 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
 {
@@ -167,10 +169,21 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            fieldMap.Load(odbcStoreRepository.GetStore(store).UploadMap);
+            OdbcStore odbcStore;
+            try
+            {
+                odbcStore = odbcStoreRepository.GetStore(store);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                messageHelper.ShowError("Failed to load upload map");
+                return;
+            }
+
+            fieldMap.Load(odbcStore.UploadMap);
             MapName = fieldMap.Name;
 
-            ColumnSourceIsTable = odbcStoreRepository.GetStore(store).UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
+            ColumnSourceIsTable = odbcStore.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
         }
 
         /// <summary>
