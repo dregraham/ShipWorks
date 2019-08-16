@@ -75,13 +75,35 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                     return storeFromHub;
                 }
 
-                // If we got here, we were unable to get a store from the cache or the hub. Use local store instead.
-                log.Error("Failed to retrieve odbc store data from the hub. Continuing with local store");
-                return storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
+                // If we got here, we were unable to get a store from the cache or the hub.
+                log.Error("Failed to retrieve odbc store data from the hub.");
+
+                throw new ShipWorksOdbcException("Failed to retrieve store from the hub.");
             }
 
             // If not a warehouse user, just return the local odbc store data
             return storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
+        }
+
+        /// <summary>
+        /// Update the cached odbc store data for the given store
+        /// </summary>
+        public async Task UpdateStoreCache(OdbcStoreEntity store)
+        {
+            if (WarehouseUser && store.WarehouseStoreID.HasValue)
+            {
+                OdbcStore storeDto = storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
+
+                // Get the old store, if there is one
+                RefreshingOdbcStore oldStore;
+                storeCache.TryGetValue(store, out oldStore);
+
+                // Add or overwrite the value of store
+                storeCache[store] = new RefreshingOdbcStore(storeDto, store, GetStoreFromHub, refreshInterval);
+
+                // delete the old store, if found.
+                oldStore?.Dispose();
+            }
         }
 
         /// <summary>

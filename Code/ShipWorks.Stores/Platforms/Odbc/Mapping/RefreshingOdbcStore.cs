@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// An ODBC store container that holds a store and refreshes it based on the specified timeframe.
     /// </summary>
-    public class RefreshingOdbcStore
+    public class RefreshingOdbcStore : IDisposable
     {
         private readonly OdbcStoreEntity storeEntity;
         private readonly Func<OdbcStoreEntity, Task<OdbcStore>> refreshAction;
@@ -55,6 +55,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                     Monitor.Exit(lockObject);
                 }
             }
+        }
+
+        /// <summary>
+        /// Dispose of the timer.
+        /// </summary>
+        public void Dispose()
+        {
+            timer.Dispose();
         }
     }
 }
