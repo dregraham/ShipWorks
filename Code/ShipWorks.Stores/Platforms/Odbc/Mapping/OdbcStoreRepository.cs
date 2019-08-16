@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,12 +21,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// Repository for odbc stores
     /// </summary>
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     [Component(RegisterAs = RegistrationType.ImplementedInterfaces, SingleInstance = true)]
-    public class OdbcStoreRepository : IOdbcStoreRepository
+    public class OdbcStoreRepository : IOdbcStoreRepository, IInitializeForCurrentSession
     {
         private readonly ILicenseService licenseService;
         private readonly IOdbcStoreClient odbcStoreClient;
         private readonly IStoreDtoHelpers storeDtoHelpers;
+        private readonly IStoreManager storeManager;
         private readonly ILog log;
 
         private readonly LruCache<OdbcStoreEntity, OdbcStore> storeCache =
@@ -31,11 +37,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcStoreRepository(ILicenseService licenseService, IOdbcStoreClient odbcStoreClient, IStoreDtoHelpers storeDtoHelpers, Func<Type, ILog> logFactory)
+        public OdbcStoreRepository(ILicenseService licenseService, IOdbcStoreClient odbcStoreClient,
+                                   IStoreDtoHelpers storeDtoHelpers, IStoreManager storeManager,
+                                   Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
             this.odbcStoreClient = odbcStoreClient;
             this.storeDtoHelpers = storeDtoHelpers;
+            this.storeManager = storeManager;
             log = logFactory(typeof(OdbcStoreRepository));
 
             storeCache.CacheItemRemoved += async (sender, args) => await UpdateStoreCache(args.Key);
@@ -114,5 +123,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Whether or not the user is a warehouse customer
         /// </summary>
         private bool WarehouseUser => licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
+
+        /// <summary>
+        /// Initialize for current session
+        /// </summary>
+        public void InitializeForCurrentSession()
+        {
+            IEnumerable<OdbcStoreEntity> odbcStores = storeManager.GetEnabledStores()
+                .Where(x => x.StoreTypeCode == StoreTypeCode.Odbc).Cast<OdbcStoreEntity>();
+
+            foreach (OdbcStoreEntity odbcStore in odbcStores)
+            {
+                Task.Run(async () => await UpdateStoreCache(odbcStore));
+            }
+        }
     }
 }
