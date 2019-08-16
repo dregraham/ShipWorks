@@ -71,6 +71,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     wizard.ShowDialog(this);
                 }
             }
+            
+            odbcStoreRepository.UpdateStoreCache(store);
         }
 
         /// <summary>
@@ -98,6 +100,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     }
                 }
             }
+
+            odbcStoreRepository.UpdateStoreCache(store);
         }
 
         /// <summary>
