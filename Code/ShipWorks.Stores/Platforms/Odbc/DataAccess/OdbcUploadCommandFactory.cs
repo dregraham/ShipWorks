@@ -52,17 +52,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            switch (odbcStoreRepository.GetStore(store).UploadStrategy)
+            OdbcShipmentUploadStrategy uploadStrategy = (OdbcShipmentUploadStrategy) odbcStoreRepository.GetStore(store).UploadStrategy;
+            switch (uploadStrategy)
             {
-                case (int) OdbcShipmentUploadStrategy.UseImportDataSource:
+                case OdbcShipmentUploadStrategy.UseImportDataSource:
                     dataSource.Restore(store.ImportConnectionString);
                     break;
-                case (int) OdbcShipmentUploadStrategy.UseShipmentDataSource:
+                case OdbcShipmentUploadStrategy.UseShipmentDataSource:
                     dataSource.Restore(store.UploadConnectionString);
                     break;
                 default:
-                    string uploadStrategy = EnumHelper.GetDescription((OdbcShipmentUploadStrategy) odbcStoreRepository.GetStore(store).UploadStrategy);
-                    throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload strategy is '{uploadStrategy}'.");
+                    string uploadStrategyName = EnumHelper.GetDescription(uploadStrategy);
+                    throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload strategy is '{uploadStrategyName}'.");
             }
 
             IOdbcQuery uploadQuery = CreateUploadQuery(store, shipment);
@@ -75,16 +76,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// </summary>
         private IOdbcQuery CreateUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
         {
-            switch (odbcStoreRepository.GetStore(store).UploadColumnSourceType)
+            OdbcColumnSourceType uploadColumnSourceType = 
+                (OdbcColumnSourceType) odbcStoreRepository.GetStore(store).UploadColumnSourceType;
+
+            switch (uploadColumnSourceType)
             {
-                case (int) OdbcColumnSourceType.Table:
+                case OdbcColumnSourceType.Table:
                     return CreateTableUploadQuery(store, shipment);
-                case (int) OdbcColumnSourceType.CustomQuery:
-                case (int) OdbcColumnSourceType.CustomParameterizedQuery:
+                case OdbcColumnSourceType.CustomQuery:
+                case OdbcColumnSourceType.CustomParameterizedQuery:
                     return CreateCustomUploadQuery(store, shipment);
                 default:
-                    string columnSource = EnumHelper.GetDescription((OdbcColumnSourceType) odbcStoreRepository.GetStore(store).UploadColumnSourceType);
-                    throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload source is '{columnSource}'.");
+                    string columnSourceType = EnumHelper.GetDescription(uploadColumnSourceType);
+                    throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload source is '{columnSourceType}'.");
             }
         }
 
