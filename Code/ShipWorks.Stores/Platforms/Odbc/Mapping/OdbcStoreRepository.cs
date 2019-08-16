@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,10 +31,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly IStoreDtoHelpers storeDtoHelpers;
         private readonly IStoreManager storeManager;
         private readonly ILog log;
+        private readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(15);
 
-        private readonly LruCache<OdbcStoreEntity, OdbcStore> storeCache =
-            new LruCache<OdbcStoreEntity, OdbcStore>(1000, TimeSpan.FromMinutes(15));
-
+        private readonly ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore> storeCache;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -47,7 +47,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             this.storeManager = storeManager;
             log = logFactory(typeof(OdbcStoreRepository));
 
-            storeCache.CacheItemRemoved += async (sender, args) => await UpdateStoreCache(args.Key);
+            LambdaComparer<OdbcStoreEntity> storeComparer = new LambdaComparer<OdbcStoreEntity>((a, b) => a.StoreID == b.StoreID);
+            storeCache = new ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore>(storeComparer);
         }
 
         /// <summary>
@@ -57,21 +58,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             if (WarehouseUser && store.WarehouseStoreID.HasValue)
             {
-                OdbcStore cachedStore = storeCache[store];
-                if (cachedStore != null)
+                if(storeCache.TryGetValue(store, out RefreshingOdbcStore refreshingOdbcStore))
                 {
                     // If there was a store in the cache return it
-                    return cachedStore;
-                }
+                    return refreshingOdbcStore.Store;
+                }                
 
                 // Since there was no store in the cache, get one from the hub
                 OdbcStore storeFromHub = Task.Run(
                     async () => await GetStoreFromHub(store).ConfigureAwait(true)).Result;
-
+ 
                 if (storeFromHub != null)
                 {
                     // Save the store to the cache and return it
-                    storeCache[store] = storeFromHub;
+                    storeCache[store] = new RefreshingOdbcStore(storeFromHub, store, GetStoreFromHub, refreshInterval);
                     return storeFromHub;
                 }
 
@@ -82,26 +82,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             // If not a warehouse user, just return the local odbc store data
             return storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
-        }
-
-        /// <summary>
-        /// Update the cached odbc store data for the given store
-        /// </summary>
-        public async Task UpdateStoreCache(OdbcStoreEntity store)
-        {
-            if (WarehouseUser && store.WarehouseStoreID.HasValue)
-            {
-                OdbcStore storeFromHub = await GetStoreFromHub(store);
-
-                if (storeFromHub == null)
-                {
-                    log.Error("Failed to update ODBC store data cache. Store data could not be retrieved from the hub");
-                }
-                else
-                {
-                    storeCache[store] = storeFromHub;
-                }
-            }
         }
 
         /// <summary>
@@ -134,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
             foreach (OdbcStoreEntity odbcStore in odbcStores)
             {
-                Task.Run(async () => await UpdateStoreCache(odbcStore));
+                GetStore(odbcStore);
             }
         }
     }
