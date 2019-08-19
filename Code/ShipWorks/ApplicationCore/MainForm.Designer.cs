@@ -788,7 +788,7 @@ namespace ShipWorks
             this.mainMenuItemOrderLookup.Guid = new System.Guid("072bf177-36c3-4809-9297-1c1e62a92e4b");
             this.mainMenuItemOrderLookup.Image = global::ShipWorks.Properties.Resources.box_view32;
             this.mainMenuItemOrderLookup.QuickAccessKey = "O";
-            this.mainMenuItemOrderLookup.Text = "Order Lookup";
+            this.mainMenuItemOrderLookup.Text = "Scan-to-Ship";
             this.mainMenuItemOrderLookup.Activate += new System.EventHandler(this.OnShowOrderLookupView);
             //
             // mainMenuItemBatchGrid
@@ -797,7 +797,7 @@ namespace ShipWorks
             this.mainMenuItemBatchGrid.Guid = new System.Guid("138732e5-e3fe-4ae6-ae4b-edd7f28590ee");
             this.mainMenuItemBatchGrid.Image = global::ShipWorks.Properties.Resources.table_sql32;
             this.mainMenuItemBatchGrid.QuickAccessKey = "B";
-            this.mainMenuItemBatchGrid.Text = "Batch Grid";
+            this.mainMenuItemBatchGrid.Text = "Classic";
             this.mainMenuItemBatchGrid.Activate += new System.EventHandler(this.OnShowBatchView);
             //
             // mainMenuItemProducts
@@ -2315,7 +2315,7 @@ namespace ShipWorks
             this.mainMenuItemViewMode.Image = global::ShipWorks.Properties.Resources.windows;
             this.mainMenuItemViewMode.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.uiModeMenu});
-            this.mainMenuItemViewMode.Text = "View Mode";
+            this.mainMenuItemViewMode.Text = "Shipping View";
             //
             // mainMenuLogon
             //
