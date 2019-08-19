@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
             set => CompressedImportMap = GZipUtility.Compress(value);
         }
 
-        [JsonProperty("ImportMap")]
+        [JsonProperty("importMap")]
         public string CompressedImportMap { get; set; } = string.Empty;
 
         [JsonIgnore]
@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
             set => CompressedUploadMap = GZipUtility.Compress(value);
         }
 
-        [JsonProperty("UploadMap")]
+        [JsonProperty("uploadMap")]
         public string CompressedUploadMap { get; set; } = string.Empty;
 
         public int ImportStrategy { get; set; }
