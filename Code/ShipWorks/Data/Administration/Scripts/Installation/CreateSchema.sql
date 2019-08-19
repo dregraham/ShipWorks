@@ -3801,7 +3801,8 @@ CREATE TABLE [dbo].[ShopifyStore]
 [ShopifyRequestedShippingOption] [int] NOT NULL,
 [ApiKey] [nvarchar](100) NOT NULL,
 [Password] [nvarchar](100) NOT NULL,
-[ShopifyNotifyCustomer] [bit] NOT NULL
+[ShopifyNotifyCustomer] [bit] NOT NULL,
+[ShopifyFulfillmentLocation] [bigint] NOT NULL CONSTRAINT [DF_ShopifyStore_ShopifyFulfillmentLocation] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyStore] on [dbo].[ShopifyStore]'
