@@ -156,12 +156,12 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
 
             var orderSearchEntities = await orderSearchProvider.GetOrderIdentifiers(shipment.Order).ConfigureAwait(false);
             var webClient = createWebClient(store, null);
-            var primaryLocationID = locationService.GetPrimaryLocationID(store, webClient);
+            var locationID = locationService.GetLocationID(store, webClient);
 
             var items = new Lazy<IEnumerable<IShopifyOrderItemEntity>>(() => orderManager.GetItems(order).OfType<IShopifyOrderItemEntity>());
 
             orderSearchEntities
-                .Select(x => PerformUpload(webClient, x, new ShopifyFulfillment(trackingNumber, carrier, carrierTrackingUrl, primaryLocationID, store), items, true))
+                .Select(x => PerformUpload(webClient, x, new ShopifyFulfillment(trackingNumber, carrier, carrierTrackingUrl, locationID, store), items, true))
                 .ThrowFailures((msg, ex) => new ShopifyException(msg, ex));
         }
 
@@ -198,6 +198,13 @@ namespace ShipWorks.Stores.Platforms.Shopify.OnlineUpdating
             catch (ShopifyUnprocessableEntityException ex)
             {
                 log.Warn(ex.Message);
+            }
+            catch (ShopifyException ex) when (ex.Message.Contains("(404) Not Found", StringComparison.OrdinalIgnoreCase))
+            {
+                var wrappedException = new ShopifyException("Shopify returned the following error: (404) Not Found. " +
+                    "Please verify that the fulfillment location in the store settings is correct.", ex);
+
+                return Result.FromError(wrappedException);
             }
 
             return Result.FromSuccess();
