@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using Interapptive.Shared.IO.Zip;
+using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Warehouse.StoreData
@@ -6,8 +8,26 @@ namespace ShipWorks.Stores.Warehouse.StoreData
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class OdbcStore : Store
     {
-        public string ImportMap { get; set; }
-        public string UploadMap { get; set; }
+        [JsonIgnore]
+        public string ImportMap
+        {
+            get => GZipUtility.Decompress(CompressedImportMap);
+            set => CompressedImportMap = GZipUtility.Compress(value);
+        }
+
+        [JsonProperty("ImportMap")]
+        public string CompressedImportMap { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public string UploadMap
+        {
+            get => GZipUtility.Decompress(CompressedUploadMap);
+            set => CompressedUploadMap = GZipUtility.Compress(value);
+        }
+
+        [JsonProperty("CompressedUploadMap")]
+        public string CompressedUploadMap { get; set; } = string.Empty;
+
         public int ImportStrategy { get; set; }
         public int ImportColumnSourceType { get; set; }
         public string ImportColumnSource { get; set; }

@@ -33,8 +33,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
             OdbcStore store = helpers.PopulateCommonData(baseStoreEntity, new OdbcStore());
             OdbcStoreEntity storeEntity = baseStoreEntity as OdbcStoreEntity;
 
-            store.ImportMap = GZipUtility.Compress(storeEntity.ImportMap);
-            store.UploadMap = GZipUtility.Compress(storeEntity.UploadMap);
+            store.ImportMap = storeEntity.ImportMap;
+            store.UploadMap = storeEntity.UploadMap;
             store.ImportStrategy = storeEntity.ImportStrategy;
             store.ImportColumnSourceType = storeEntity.ImportColumnSourceType;
             store.ImportColumnSource = storeEntity.ImportColumnSource;

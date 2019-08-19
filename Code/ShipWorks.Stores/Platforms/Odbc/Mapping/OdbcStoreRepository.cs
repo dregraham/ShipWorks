@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
@@ -28,9 +29,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     {
         private readonly ILicenseService licenseService;
         private readonly IOdbcStoreClient odbcStoreClient;
-        private readonly IStoreDtoHelpers storeDtoHelpers;
         private readonly IStoreManager storeManager;
         private readonly ILog log;
+        private readonly IStoreDtoFactory odbcStoreDtoFactory;
         private readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(15);
 
         private readonly ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore> storeCache;
@@ -38,14 +39,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// Constructor
         /// </summary>
         public OdbcStoreRepository(ILicenseService licenseService, IOdbcStoreClient odbcStoreClient,
-                                   IStoreDtoHelpers storeDtoHelpers, IStoreManager storeManager,
+                                   IStoreManager storeManager,
+                                   IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories,
                                    Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
             this.odbcStoreClient = odbcStoreClient;
-            this.storeDtoHelpers = storeDtoHelpers;
             this.storeManager = storeManager;
             log = logFactory(typeof(OdbcStoreRepository));
+            odbcStoreDtoFactory = storeDtoFactories[StoreTypeCode.Odbc];
 
             LambdaComparer<OdbcStoreEntity> storeComparer = new LambdaComparer<OdbcStoreEntity>((a, b) => a.StoreID == b.StoreID);
             storeCache = new ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore>(storeComparer);
@@ -66,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 
                 // Since there was no store in the cache, get one from the hub
                 OdbcStore storeFromHub = Task.Run(
-                    async () => await GetStoreFromHub(store).ConfigureAwait(true)).Result;
+                    async () => await GetStoreFromHub(store).ConfigureAwait(false)).Result;
  
                 if (storeFromHub != null)
                 {
@@ -82,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             }
 
             // If not a warehouse user, just return the local odbc store data
-            return storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
+            return (OdbcStore) Task.Run(async () => await odbcStoreDtoFactory.Create(store).ConfigureAwait(false)).Result;
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             if (WarehouseUser && store.WarehouseStoreID.HasValue)
             {
-                OdbcStore storeDto = storeDtoHelpers.PopulateCommonData(store, new OdbcStore());
+                OdbcStore storeDto = (OdbcStore) await odbcStoreDtoFactory.Create(store).ConfigureAwait(false);
 
                 // Get the old store, if there is one
                 RefreshingOdbcStore oldStore;
@@ -111,7 +113,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private async Task<OdbcStore> GetStoreFromHub(OdbcStoreEntity store)
         {
-            Store storeData = storeDtoHelpers.PopulateCommonData(store, new Store());
+            Store storeData = await odbcStoreDtoFactory.Create(store).ConfigureAwait(false);
 
             GenericResult<OdbcStore> getStoreResult = await odbcStoreClient
                 .GetStore(store.WarehouseStoreID.Value, storeData).ConfigureAwait(false);
