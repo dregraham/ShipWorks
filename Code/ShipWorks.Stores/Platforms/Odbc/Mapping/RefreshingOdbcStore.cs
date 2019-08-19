@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly OdbcStoreEntity storeEntity;
         private readonly Func<OdbcStoreEntity, Task<OdbcStore>> refreshAction;
         private readonly Timer timer;
-        object lockObject = new object();
 
         /// <summary>
         /// Constructor
@@ -44,17 +43,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// </summary>
         private async void TimerCallback(object state)
         {
-            if (Monitor.TryEnter(lockObject))
-            {
-                try
-                {
-                    Store = await refreshAction(storeEntity).ConfigureAwait(false);
-                }
-                finally
-                {
-                    Monitor.Exit(lockObject);
-                }
-            }
+            Store = await refreshAction(storeEntity).ConfigureAwait(false);
         }
 
         /// <summary>
