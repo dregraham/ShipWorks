@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
 
             if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload ||
                 store.UploadColumnSourceType != (int) OdbcColumnSourceType.Table ||
-                store.InExistingHubStoreSetup)
+                !store.IsMappingRequired)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

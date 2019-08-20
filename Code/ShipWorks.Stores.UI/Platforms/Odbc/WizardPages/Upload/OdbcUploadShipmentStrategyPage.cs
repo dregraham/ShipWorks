@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         {
             store = GetStore<OdbcStoreEntity>();
 
-            if (store.InExistingHubStoreSetup)
+            if (!store.IsMappingRequired)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

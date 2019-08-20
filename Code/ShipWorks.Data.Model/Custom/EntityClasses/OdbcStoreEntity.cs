@@ -12,8 +12,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class OdbcStoreEntity 
     {
         /// <summary>
-        /// True if the user is setting up a store they downloaded from the Hub.
+        /// True if the user is not going through the initial setup of a store they downloaded from the Hub
         /// </summary>
-        public bool InExistingHubStoreSetup => WarehouseStoreID.HasValue && !SetupComplete;
+        public bool IsMappingRequired => !WarehouseStoreID.HasValue || SetupComplete;
     }
 }
