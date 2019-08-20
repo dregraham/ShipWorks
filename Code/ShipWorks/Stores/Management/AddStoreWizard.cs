@@ -1027,7 +1027,7 @@ namespace ShipWorks.Stores.Management
                 // has been added.
                 licenseService.GetLicense(store)?.ForceRefresh();
 
-                SelectedStoreType.StoreAdded(store, scope);
+                SelectedStoreType.RaiseStoreAdded(store, scope);
             }
             catch (DuplicateNameException ex)
             {

@@ -37,6 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             this.downloadSettingsFactory = downloadSettingsFactory;
             odbcStore = (OdbcStoreEntity) store;
+            StoreAdded += OnStoreAdded;
         }
 
         /// <summary>
@@ -190,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Reset the store cache
         /// </summary>
-        public override void StoreAdded(StoreEntity store, ILifetimeScope scope)
+        private void OnStoreAdded(StoreEntity store, ILifetimeScope scope)
         {
             if (store is OdbcStoreEntity)
             {

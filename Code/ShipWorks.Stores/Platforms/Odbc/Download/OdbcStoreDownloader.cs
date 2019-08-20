@@ -62,7 +62,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcStoreRepository odbcStoreRepository) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
-            this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
             this.odbcStoreRepository = odbcStoreRepository;
