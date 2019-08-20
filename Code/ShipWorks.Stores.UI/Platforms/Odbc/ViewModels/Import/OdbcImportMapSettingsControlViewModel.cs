@@ -178,9 +178,9 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public override bool ValidateRequiredMapSettings()
         {
-            if (IsWarehouseAllowed && ImportStrategy != OdbcImportStrategy.OnDemand)
+            if (IsWarehouseAllowed && ImportStrategy == OdbcImportStrategy.All)
             {
-                messageHelper.ShowError("Warehouse customers must choose: On order search only");
+                messageHelper.ShowError("Warehouse customers can not select \"All orders\"");
                 return false;
             }
 
