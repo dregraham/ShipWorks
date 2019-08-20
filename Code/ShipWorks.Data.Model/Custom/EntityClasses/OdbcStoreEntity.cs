@@ -15,5 +15,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// True if the user is not going through the initial setup of a store they downloaded from the Hub
         /// </summary>
         public bool IsMappingRequired => !WarehouseStoreID.HasValue || SetupComplete;
+
+        /// <summary>
+        /// Whether or not this store should upload ODBC orders to the hub
+        /// </summary>
+        public bool ShouldUploadWarehouseOrders { get; set; }
     }
 }
