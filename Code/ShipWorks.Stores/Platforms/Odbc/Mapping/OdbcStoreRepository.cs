@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 // If we got here, we were unable to get a store from the cache or the hub.
                 log.Error("Failed to retrieve odbc store data from the hub.");
 
-                throw new ShipWorksOdbcException("Failed to retrieve store from the hub.");
+                throw new ShipWorksOdbcException("Unable to retrieve store settings. Try again later.");
             }
 
             // If not a warehouse user, just return the local odbc store data
