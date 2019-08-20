@@ -272,6 +272,10 @@
     <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseItem.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseOrder.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Shopify\Warehouse\ShopifyWarehouseItem.cs" />
+    <Compile Include="Platforms\Shopify\Warehouse\ShopifyWarehouseOrder.cs" />
+    <Compile Include="Platforms\Shopify\Warehouse\ShopifyStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Shopify\Warehouse\ShopifyWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
@@ -935,7 +939,8 @@
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\AmazonStore.cs" />
-    <Compile Include="Warehouse\StoreData\ChannelAdvisorStoreData.cs" />
+    <Compile Include="Warehouse\StoreData\ChannelAdvisorStore.cs" />
+    <Compile Include="Warehouse\StoreData\ShopifyStore.cs" />
     <Compile Include="Warehouse\StoreDtoHelpers.cs" />
     <Compile Include="Warehouse\WarehouseModule.cs" />
     <Compile Include="Warehouse\WarehouseOrderClient.cs" />

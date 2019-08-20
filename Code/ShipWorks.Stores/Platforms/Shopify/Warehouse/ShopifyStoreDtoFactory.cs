@@ -8,13 +8,13 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Warehouse;
 using ShipWorks.Stores.Warehouse.StoreData;
 
-namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
+namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
 {
     /// <summary>
     /// Factory for creating StoreDtos from StoreEntities
     /// </summary>
-    [KeyedComponent(typeof(IStoreDtoFactory), StoreTypeCode.Ebay)]
-    public class EbayStoreDtoFactory : IStoreDtoFactory
+    [KeyedComponent(typeof(IStoreDtoFactory), StoreTypeCode.Shopify)]
+    public class ShopifyStoreDtoFactory : IStoreDtoFactory
     {
         private readonly IDownloadStartingPoint downloadStartingPoint;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public EbayStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint,
+        public ShopifyStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint,
                                IEncryptionProviderFactory encryptionProviderFactory,
                                IStoreDtoHelpers helpers)
         {
@@ -39,13 +39,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// ShipWorks warehouse mode.</exception>
         public async Task<Store> Create(StoreEntity baseStoreEntity)
         {
-            var storeEntity = baseStoreEntity as EbayStoreEntity;
-            var store = helpers.PopulateCommonData(storeEntity, new EbayStore());
+            var storeEntity = baseStoreEntity as ShopifyStoreEntity;
+            var store = helpers.PopulateCommonData(storeEntity, new ShopifyStore());
             var downloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity).ConfigureAwait(false);
 
             store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
-            store.EbayToken = await helpers.EncryptSecret(storeEntity.EBayToken).ConfigureAwait(false);
-            store.UseSandbox = !EbayUrlUtilities.UseLiveServer;
+            store.ShopifyToken = await helpers.EncryptSecret(storeEntity.ShopifyAccessToken).ConfigureAwait(false);
+            store.ShopifyShopUrlName = storeEntity.ShopifyShopUrlName;
 
             return store;
         }
