@@ -8,16 +8,17 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Drawing;
 using System.Threading;
-using WinForms = System.Windows.Forms;
 
+using WinForms = System.Windows.Forms;
 using Ranorex;
 using Ranorex.Core;
 using Ranorex.Core.Testing;
-using System.Diagnostics;
+using SikuliSharp;
 
 namespace ShipWorksPerformanceTestSuite
 {
@@ -32,24 +33,45 @@ namespace ShipWorksPerformanceTestSuite
 		{
 			// Do not delete - a parameterless constructor is required!
 		}
-
 		
 		void ITestModule.Run()
 		{
-			Mouse.DefaultMoveTime = 300;
-			Keyboard.DefaultKeyPressTime = 100;
-			Delay.SpeedFactor = 1.0;
+			string search = @"..\..\Sikuli_Images\Search.PNG";
+			string searchfield = @"..\..\Sikuli_Images\SearchField.PNG";
+			string shipmentdetails = @"..\..\Sikuli_Images\ShipmentDetails.PNG";
+			string clear = @"..\..\Sikuli_Images\ClearButton.PNG";
+			int[] average90 = new int[20];
+			Random r = new Random();
+			Stopwatch sw = new Stopwatch();
+
+			using (var session = Sikuli.CreateSession())
+			{
+				for(int i = 0; i < 20; i++)
+				{
+					session.Click(Patterns.FromFile(searchfield));
+					session.Type(r.Next(50,71).ToString());
+					session.Click(Patterns.FromFile(search));
+										
+					sw.Start();
+					session.Hover(Patterns.FromFile(clear));
+					session.Exists(Patterns.FromFile(shipmentdetails));
+					sw.Stop();
+					
+					session.Click(Patterns.FromFile(clear));
+					average90[i] = (int)sw.ElapsedMilliseconds;
+					sw.Reset();					
+				}
+			}
 			
-			Report.Log(ReportLevel.Info, "Mouse", "Mouse Left Click item 'MainForm.PanelDockingArea.PARTContentHost' at Center.", repo.MainForm.PanelDockingArea.PARTContentHostInfo, new RecordItemIndex(2));
-			repo.MainForm.PanelDockingArea.PARTContentHost.Click();
-			Delay.Milliseconds(0);
+			Array.Sort(average90);
+			int averageSingleScanTime = 0;
 			
-			Keyboard.Press("{1}");
-			singleScanTime.Start();
-			repo.MainForm.PanelDockingArea.CreateLabelInfo.WaitForAttributeEqual(30000, "Visible", true);
-			singleScanTime.Stop();
+			for(int i = 0; i < 18; i++)
+			{
+				averageSingleScanTime += average90[i];
+			}
 			
-			Timing.singleScanTime = singleScanTime.ElapsedMilliseconds;
+			Timing.singleScanTime = (averageSingleScanTime/18);		
 		}
 	}
 }

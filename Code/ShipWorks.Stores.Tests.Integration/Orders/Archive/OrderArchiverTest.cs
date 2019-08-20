@@ -34,6 +34,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
 {
     [Collection("Database collection")]
     [Trait("Category", "SmokeTest")]
+    [Trait("Category", "OrderArchiveSmokeTest")]
     public class OrderArchiverTest
     {
         private readonly DataContext context;

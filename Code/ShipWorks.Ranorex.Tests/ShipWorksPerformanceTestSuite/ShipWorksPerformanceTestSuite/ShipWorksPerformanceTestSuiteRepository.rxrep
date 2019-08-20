@@ -3295,6 +3295,16 @@ ff4fYphfXqzU2wwPhE4AAAAASUVORK5CYII=
 			searchtimeout="30000ms">
 				/form[@title~'^master-public-installer\ \[']/container[@accessiblename~'^master-public-installer\ \[']/container/container[1]
 			</item>
+			<item
+			addcaps="container,accessible"
+			capname="container"
+			id="59c418b5-5a82-4ef8-8014-6c71ced3fdf5"
+			name="Pane1"
+			refimgid="cec4794a-0e22-4593-8c28-15a2a3058199"
+			refpath="/form[@title~'^master-public-installer\ \[']/container/container/container[2]/container[1]"
+			searchtimeout="30000ms">
+				/form[@title~'^master-public-installer\ \[']/container[@accessiblename~'^master-public-installer\ \[']/container/container[2]/container[1]
+			</item>
 			<basepath>
 				/form[@title~'^master-public-installer\ \[']
 			</basepath>

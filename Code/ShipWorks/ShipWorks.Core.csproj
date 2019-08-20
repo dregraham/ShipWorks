@@ -583,6 +583,7 @@
     <Compile Include="Actions\Tasks\Common\IManageDisabledIndexesRepo.cs" />
     <Compile Include="Actions\Tasks\Common\IMissingIndexResolver.cs" />
     <Compile Include="Actions\Tasks\Common\IndexColumn.cs" />
+    <Compile Include="Actions\Tasks\Common\ISingleDispatchAction.cs" />
     <Compile Include="Actions\Tasks\Common\ManageDisabledIndexesRepo.cs" />
     <Compile Include="Actions\Tasks\Common\ManageIndexStateTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">

@@ -29,16 +29,9 @@ namespace ShipWorks.Stores.Platforms.Walmart
         private DateTime accessTokenExpireTime;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
         private readonly IHttpRequestSubmitterFactory httpRequestSubmitterFactory;
+        private readonly IWalmartWebClientSettings walmartWebClientSettings;
         private const string ChannelType = "a7a7db08-682f-488a-a005-921af89d7e9b";
-        private const string TestConnectionUrl = "https://marketplace.walmartapis.com/v3/feeds";
-        private const string GetOrdersUrl = "https://marketplace.walmartapis.com/v3/orders";
-        private const string GetOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}";
-        private const string AcknowledgeOrderUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/acknowledge";
-        private const string GetTokenUrl = "https://marketplace.walmartapis.com/v3/token";
         private const int DownloadOrderCountLimit = 200;
-        private const string UpdateShipmentUrl = "https://marketplace.walmartapis.com/v3/orders/{0}/shipping";
-
-        private const string BaseErrorMessage = "ShipWorks encountered an error communicating with Walmart";
 
 
         /// <summary>
@@ -46,13 +39,24 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// </summary>
         public WalmartWebClient(Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
            IHttpRequestSubmitterFactory httpRequestSubmitterFactory,
-           IEncryptionProviderFactory encryptionProviderFactory)
+           IEncryptionProviderFactory encryptionProviderFactory,
+           IWalmartWebClientSettings walmartWebClientSettings)
         {
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.httpRequestSubmitterFactory = httpRequestSubmitterFactory;
+            this.walmartWebClientSettings = walmartWebClientSettings;
             encryptionProvider = encryptionProviderFactory.CreateWalmartEncryptionProvider();
             this.log = LogManager.GetLogger(typeof(WalmartWebClient));
         }
+
+        private string TestConnectionUrl => $"{walmartWebClientSettings.Endpoint}/v3/feeds";
+        private string GetOrdersUrl => $"{walmartWebClientSettings.Endpoint}/v3/orders";
+        private string GetOrderUrl => $"{walmartWebClientSettings.Endpoint}/v3/orders/{{0}}";
+        private string AcknowledgeOrderUrl => $"{walmartWebClientSettings.Endpoint}/v3/orders/{{0}}/acknowledge";
+        private string GetTokenUrl => $"{walmartWebClientSettings.Endpoint}/v3/token";
+        private string UpdateShipmentUrl => $"{walmartWebClientSettings.Endpoint}/v3/orders/{{0}}/shipping";
+
+        private const string BaseErrorMessage = "ShipWorks encountered an error communicating with Walmart";
 
         /// <summary>
         /// Tests the connection to Walmart, throws if invalid credentials

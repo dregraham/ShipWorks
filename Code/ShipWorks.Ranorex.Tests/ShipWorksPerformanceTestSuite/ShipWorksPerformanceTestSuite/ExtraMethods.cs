@@ -99,6 +99,6 @@ namespace ShipWorksPerformanceTestSuite
 		public static long totalLoad100Time = 0;
 		public static long totalApplyProfile100Time = 0;		
 		public static long totalProcess100Time = 0;
-		public static long totalVoid100Time = 0;		
+		public static long totalVoid100Time = 0;	
 	}
 }

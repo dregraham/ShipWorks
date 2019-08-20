@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using Autofac.Util;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Data;
@@ -13,6 +15,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -78,10 +81,9 @@ namespace ShipWorks.Stores.Orders.Archive
                     }
 
                     return await ArchiveAsync(cutoffDate, evt)
-                        .Do(async result =>
+                        .Do(result =>
                         {
                             AddTelemetryProperties(cutoffDate, evt, totalOrderCount, ordersToPurgeCount, result.Value);
-                            await orderArchiveDataAccess.Audit(isManualArchive).ConfigureAwait(false);
                         })
                         .Map(result => (IResult) result);
                 });
@@ -132,18 +134,33 @@ namespace ShipWorks.Stores.Orders.Archive
                             .Recover(ex =>
                             {
                                 exception = ex;
-                                return TerminateNonStartedTasks(ex, new[] { prepareProgress, archiveProgress, syncProgress, filterProgress });
+                                return TerminateNonStartedTasks(ex, new[] {prepareProgress, archiveProgress, syncProgress, filterProgress});
                             })
                             .Bind(_ => progressProvider.Terminated)
                             .ConfigureAwait(true);
 
-                        return progressProvider.HasErrors ? GenericResult.FromError(exception, OrderArchiveResult.Failed) : OrderArchiveResult.Succeeded;
+                        await orderArchiveDataAccess.Audit(manualArchive, !progressProvider.HasErrors).ConfigureAwait(false);
+
+                        return OrderArchiveResult.Succeeded;
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                log.Error("An error occurred while archiving.", ex);
+				// On failure, we want the archive task to leave the action queue, so always return success.
+                return OrderArchiveResult.Succeeded;
+            }
             finally
             {
-                userLoginWorkflow.Logon(loggedInUser);
+                try
+                {
+                    userLoginWorkflow.Logon(loggedInUser);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
         }
 
@@ -234,7 +251,23 @@ namespace ShipWorks.Stores.Orders.Archive
             return ExecuteSqlAsync(prepareProgress, conn, "Creating Archive Database", copyDatabaseSql,
                         (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.CreateArchive.DurationInSecond", timeInSeconds.ToString()))
                     .Bind(_ => ExecuteSqlAsync(archiveProgress, conn, "Archiving Order and Shipment data", currentDbArchiveSql,
-                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())));
+                        (timeInSeconds) => trackedDurationEvent.AddProperty("Orders.Archiving.Purge.DurationInSeconds", timeInSeconds.ToString())))
+                    .Map(_ => PerformArchiveFinished());
+        }
+
+        /// <summary>
+        /// Do any cleanup necessary after performing the archive
+        /// </summary>
+        private Unit PerformArchiveFinished()
+        {
+            return Functional.Using(
+                System.Reactive.Disposables.Disposable.Empty,
+                _ =>
+                {
+                    // Since the db name changed, clear all the connection pools so that no weird connection errors occurr.
+                    SqlConnection.ClearAllPools();
+                    return Unit.Default;
+                });
         }
 
         /// <summary>

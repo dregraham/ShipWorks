@@ -145,6 +145,12 @@ namespace ShipWorks.Data.Caching
                     ProcessCheckForChangesSqlException(ex);
                     return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                 }
+                catch (Exception ex)
+                {
+                    // If we can't get changes from the db, just return LoadAsInvalid
+                    log.Error("Error in CheckForChanges", ex);
+                    return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
+                }
 
                 // No tables means we didnt return any results at all - which will only happen if the lastSyncVersion has not changed
                 if (dataSet.Tables.Count > 0)
@@ -217,19 +223,26 @@ namespace ShipWorks.Data.Caching
             dataSet = new DataSet();
             string lsvParameter = "@lsv";
 
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            if (SqlSession.Current?.CanConnect() == true)
             {
-                using (DbCommand cmd = DbCommandProvider.Create(con))
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    cmd.CommandText = syncQuery;
-                    cmd.AddParameterWithValue(lsvParameter, lastSyncVersion);
-
-                    using (DbDataAdapter adapter = DataAccessAdapter.GetDbProviderFactory().CreateDataAdapter())
+                    using (DbCommand cmd = DbCommandProvider.Create(con))
                     {
-                        adapter.SelectCommand = cmd;
-                        adapter.Fill(dataSet);
+                        cmd.CommandText = syncQuery;
+                        cmd.AddParameterWithValue(lsvParameter, lastSyncVersion);
+
+                        using (DbDataAdapter adapter = DataAccessAdapter.GetDbProviderFactory().CreateDataAdapter())
+                        {
+                            adapter.SelectCommand = cmd;
+                            adapter.Fill(dataSet);
+                        }
                     }
                 }
+            }
+            else
+            {
+                log.Info("SqlSession.Current.CanConnect was false...");
             }
 
             return dataSet;

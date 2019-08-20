@@ -82,6 +82,12 @@ rxversion="8.1">
 			type="UserCode">
 			</testmodule>
 			<testmodule
+			id="29bcab12-f301-4653-8158-e3f41e85a8ce"
+			name="SingleScanTime"
+			ref="f8be65f7-a99b-4462-88db-7c96270826b7"
+			type="UserCode">
+			</testmodule>
+			<testmodule
 			id="2fd80ddb-0f79-49ec-9ee8-d447041c909d"
 			name="ApplyProfileTo100Orders"
 			ref="4833ecee-b4ac-4eaf-9fa5-25ddf1d28f38"
@@ -103,12 +109,6 @@ rxversion="8.1">
 			id="44cac686-339b-4902-8a46-560e623779f5"
 			name="TestCase">
 			</testcase>
-			<testmodule
-			id="49638b19-4ecd-4aa2-b040-53b25e6bc974"
-			name="SingleScanTime"
-			ref="f8be65f7-a99b-4462-88db-7c96270826b7"
-			type="UserCode">
-			</testmodule>
 			<testmodule
 			id="4b498e92-42d5-45bb-bb5c-cb7510c1a7db"
 			name="WriteToCSV"
@@ -204,12 +204,6 @@ rxversion="8.1">
 			id="af5e1629-1100-4c60-8e81-84ebda8fd5ec"
 			name="teardown">
 			</teardown>
-			<testmodule
-			id="b2dedb2f-c094-4a78-b913-cbf04a439abf"
-			name="PrintLabel"
-			ref="805f6ba8-7a3d-4130-a711-ba21bf1703e6"
-			type="UserCode">
-			</testmodule>
 			<testmodule
 			id="b5e51417-9041-49cd-ad86-b401078bc02e"
 			name="Load100SROrders"
@@ -336,7 +330,7 @@ rxversion="8.1">
 								name="SwitchToOLM">
 								</testmodule>
 								<testmodule
-								id="49638b19-4ecd-4aa2-b040-53b25e6bc974"
+								id="29bcab12-f301-4653-8158-e3f41e85a8ce"
 								name="SingleScanTime">
 								</testmodule>
 								<smartfoldernode
@@ -476,10 +470,13 @@ rxversion="8.1">
 	</testconfigurations>
 	<references>
 		<reference>
-			..\..\..\..\..\..\..\..\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
+			C:\Program Files (x86)\Ranorex 8.1\Bin\Ionic.Zip.dll
 		</reference>
 		<reference>
 			SikuliModule.dll
+		</reference>
+		<reference>
+			SikuliSharp.dll
 		</reference>
 	</references>
 </testsuitedoc>

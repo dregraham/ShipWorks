@@ -44,6 +44,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     return;
                 }
 
+                // during the update process the shipworks installer upgrades the database
+                // if for some reason we are running a newer version of shipworks than the database
+                // we know we are not the auto updating machine because the database would have been
+                // upgraded during the shipworks installer, at this point we need to do nothing
+                // and wait for the upgrading machine to finish
                 if (SqlSchemaUpdater.IsUpgradeRequired())
                 {
                     log.Info("Update required. Not getting lock");
