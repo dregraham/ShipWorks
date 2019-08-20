@@ -83,6 +83,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Result RestoreBackup()
         {
+            log.Info("Initiating restore");
+
             using (DbConnection con = SqlSession.Current.OpenConnection())
             {
                 try
@@ -102,8 +104,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                             }
                         };
                     }
-
-                    log.Info("Initiating restore");
 
                     // Disconnect all other users
                     SqlUtility.SetSingleUser(con);
@@ -209,6 +209,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     DbCommandProvider.ExecuteScalar(cmd);
                 }
             }
+
+            log.Info("Back up succeeded.");
         }
     }
 }

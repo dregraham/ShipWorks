@@ -21,7 +21,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// ActionTask that rebuilds database table indexes and other maintenance tasks.
     /// </summary>
     [ActionTask("Database Maintenance", "DatabaseMaintenance", ActionTaskCategory.Administration, true)]
-    public class DatabaseMaintenanceTask : ActionTask
+    public class DatabaseMaintenanceTask : ActionTask, ISingleDispatchAction
     {
         private ILog log;
         private IDateTimeProvider dateTimeProvider;

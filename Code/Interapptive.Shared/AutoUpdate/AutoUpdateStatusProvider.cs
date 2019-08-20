@@ -25,6 +25,8 @@ namespace Interapptive.Shared.AutoUpdate
         /// </summary>
         public void UpdateStatus(string status)
         {
+            log.Info($"AutoUpdateStatusProvider.UpdateStatus - status: {status}");
+
             using (NamedPipeClientStream statusPipe = new NamedPipeClientStream(".", "ShipWorksUpgradeStatus", PipeDirection.Out))
             {
                 try

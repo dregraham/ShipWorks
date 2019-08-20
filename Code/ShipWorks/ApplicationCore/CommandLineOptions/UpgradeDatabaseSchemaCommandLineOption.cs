@@ -5,10 +5,12 @@ using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -33,56 +35,112 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
-            // before doing anything make sure we can connect to the database and an upgrade is required
-            SqlSession.Initialize();
-            Version versionRequired = SqlSchemaUpdater.GetRequiredSchemaVersion();
+            log.Info("Execute starting.");
 
-            if (SqlSchemaUpdater.IsUpgradeRequired())
+            Version versionRequired = new Version();
+            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+            TelemetricResult<Result> backupResult = null;
+            AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter = new AutoUpgradeFailureSubmitter();
+
+            try
             {
-                TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-                TelemetricResult<Result> backupResult = null;
+                // before doing anything make sure we can connect to the database and an upgrade is required
+                SqlSession.Initialize();
 
-                DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
-                try
+                if (!SqlSession.Current.CanConnect())
                 {
-					autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+                    throw new Exception("Cannot connect to SQL Server. Not running upgrade.");
+                }
 
-                    if (SqlServerInfo.HasCustomTriggers())
-                    {
-                        throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
-                    }
+                // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
+                // is lost, we can still track the customer id.
+                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+                Telemetry.GetCustomerID = () => tangoCustomerId;
+                log.Info($"TangoCustomerId: {tangoCustomerId}.");
 
-                    autoUpdateStatusProvider.UpdateStatus("Creating Backup");
-                    // If an upgrade is required create a backup first
-                    backupResult = backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
+                autoUpgradeFailureSubmitter.Initialize();
+
+                versionRequired = SqlSchemaUpdater.GetRequiredSchemaVersion();
+                log.Info($"RequiredSchemaVersion: {versionRequired}.");
+
+                if (SqlSchemaUpdater.IsUpgradeRequired())
+                {
+                    log.Info("IsUpgradeRequired: true.");
+                    DatabaseUpgradeBackupManager backupManager = new DatabaseUpgradeBackupManager();
+                    backupResult = BackupDatabase(backupManager);
 
                     if (backupResult.Value.Success)
                     {
                         autoUpdateStatusProvider.UpdateStatus("Upgrading Database");
                         TryDatabaseUpgrade(backupManager, databaseUpdateResult);
                     }
-                }
-                catch (Exception ex)
-                {
-                    DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
-                    log.Error("Failed to upgrade database schema", ex);
-
-                    if (ex is SqlException sqlEx)
+                    else
                     {
-                        Environment.ExitCode = sqlEx.Number;
+                        log.Error($"Backup failed.  {backupResult.Value.Message}");
                     }
-
-                    Environment.ExitCode = -1;
-
-                    AutoUpgradeFailureSubmitter.Submit(versionRequired.ToString(), ex.Message);
                 }
-                finally
-                {
-                    SubmitTelemetryTelemetry(databaseUpdateResult, backupResult);
-                }
+
+                SetMultiUserIfNeeded();
+            }
+            catch (Exception ex)
+            {
+                HandleException(databaseUpdateResult, ex, autoUpgradeFailureSubmitter, versionRequired);
+            }
+            finally
+            {
+                SubmitTelemetryTelemetry(databaseUpdateResult, backupResult);
             }
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Set the db to multi user if needed
+        /// </summary>
+        private static void SetMultiUserIfNeeded()
+        {
+            // If we can't connect now, try to set back to multi-user
+            if (!SqlSession.Current.CanConnect())
+            {
+                log.Info("Unable to connect to db, so trying to set to multi user.");
+                SqlUtility.SetMultiUser(SqlSession.Current.Configuration.GetConnectionString(), SqlSession.Current.Configuration.DatabaseName);
+            }
+        }
+
+        /// <summary>
+        /// Backup the database
+        /// </summary>
+        private TelemetricResult<Result> BackupDatabase(DatabaseUpgradeBackupManager backupManager)
+        {
+            autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+
+            if (SqlServerInfo.HasCustomTriggers())
+            {
+                throw new Exception("Database has custom triggers and cannot be automatically upgraded.");
+            }
+
+            autoUpdateStatusProvider.UpdateStatus("Creating Backup");
+
+            // If an upgrade is required create a backup first
+            return backupManager.CreateBackup(autoUpdateStatusProvider.UpdateStatus);
+        }
+
+        /// <summary>
+        /// Handle an exception
+        /// </summary>
+        private static void HandleException(TelemetricResult<Unit> databaseUpdateResult, Exception ex, AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter, Version versionRequired)
+        {
+            DatabaseUpgradeTelemetry.ExtractErrorDataForTelemetry(databaseUpdateResult, ex);
+            log.Error("Failed to upgrade database.", ex);
+
+            if (ex is SqlException sqlEx)
+            {
+                Environment.ExitCode = sqlEx.Number;
+            }
+
+            Environment.ExitCode = -1;
+
+            autoUpgradeFailureSubmitter.Submit(versionRequired.ToString(), ex);
         }
 
         /// <summary>
@@ -95,8 +153,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 databaseUpdateResult.RunTimedEvent(TelemetricEventType.SchemaUpdate,
                     () => SqlSchemaUpdater.UpdateDatabase(new ProgressProvider(), databaseUpdateResult));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("TryDatabaseUpgrade had an exception.", ex);
                 autoUpdateStatusProvider.UpdateStatus("An error occurred during upgrade, rolling back.");
                 // Upgrading the schema failed, restore
                 databaseUpdateResult.RunTimedEvent("RestoreBackupTimeInMilliseconds", () => backupManager.RestoreBackup());
@@ -111,11 +170,15 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         private void SubmitTelemetryTelemetry(TelemetricResult<Unit> databaseUpdateResult, TelemetricResult<Result> backupResult)
         {
-            DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
+            if (SqlSession.Current.CanConnect())
+            {
+                DatabaseUpgradeTelemetry.RecordDatabaseTelemetry(databaseUpdateResult);
+            }
 
             using (ITrackedEvent telementryEvent = new TrackedEvent("Database.Update"))
             {
                 telementryEvent.AddProperty("Mode", "CommandLine");
+                telementryEvent.AddProperty("MachineName", Environment.MachineName);
                 databaseUpdateResult.WriteTo(telementryEvent);
                 backupResult?.WriteTo(telementryEvent);
             }

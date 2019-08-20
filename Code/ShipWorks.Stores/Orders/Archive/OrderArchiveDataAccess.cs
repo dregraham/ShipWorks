@@ -12,6 +12,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -93,7 +94,7 @@ namespace ShipWorks.Stores.Orders.Archive
                     .ExecuteNonQueryAsync()
                     .Bind(__ => progressReporter.Status == ProgressItemStatus.Running ?
                         Task.FromResult(CompleteProgress(progressReporter)) :
-                        Task.FromException<Unit>(Errors.Error.Canceled)));
+                        Task.FromException<Unit>(progressReporter is ProgressItem progressItem ? progressItem.Error : Error.Canceled)));
         }
 
         /// <summary>
@@ -271,17 +272,24 @@ namespace ShipWorks.Stores.Orders.Archive
                 .Bind(totalOrders => GetCountOfOrdersToArchive(cutoffDate).Map(purgedOrders => (totalOrders, purgedOrders)));
 
         /// <summary>
-        /// Audit that an archive was run
+        /// Audit that an archive run failed
         /// </summary>
-        public Task Audit(bool isManualArchive) =>
-            UsingAsync(
-                sqlAdapterFactory.Create(),
-                adapter => auditUtility.AuditAsync(null, AuditActionType.Archive, CreateAuditReason(isManualArchive), adapter));
+        public Task Audit(bool isManualArchive, bool success)
+        {
+            if (SqlSession.Current?.CanConnect() == true)
+            {
+                return UsingAsync(
+                    sqlAdapterFactory.Create(),
+                    adapter => auditUtility.AuditAsync(null, AuditActionType.Archive, CreateAuditReason(isManualArchive, success), adapter));
+            }
+
+            return Task.CompletedTask;
+        }
 
         /// <summary>
         /// Create the reason for auditing
         /// </summary>
-        private AuditReason CreateAuditReason(bool isManualArchive) =>
-            new AuditReason(AuditReasonType.Archive, $"{(isManualArchive ? "Manual" : "Automatic")} archive performed");
+        private AuditReason CreateAuditReason(bool isManualArchive, bool success) =>
+            new AuditReason(AuditReasonType.Archive, $"{(isManualArchive ? "Manual" : "Automatic")} archive {(success ? "succeeded." : "failed.")}");
     }
 }

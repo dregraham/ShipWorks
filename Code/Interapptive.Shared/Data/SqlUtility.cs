@@ -108,6 +108,38 @@ namespace Interapptive.Shared.Data
         }
 
         /// <summary>
+        /// Set the database on the given connection into multi-user mode
+        /// </summary>
+        public static void SetMultiUser(string connectionString, string databaseName)
+        {
+            using (SqlConnection con = new SqlConnection(GetMasterDatabaseConnectionString(connectionString)))
+            {
+                con.Open();
+
+                log.Info($"Altering database '{databaseName}' to MULTI_USER");
+                DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + databaseName + "] SET MULTI_USER WITH ROLLBACK IMMEDIATE");
+            }
+        }
+
+        /// <summary>
+        /// Gets an open connection to the master database
+        /// </summary>
+        public static string GetMasterDatabaseConnectionString(string connectionString)
+        {
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new ArgumentNullException("connectionString");
+            }
+
+            SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(connectionString);
+            csb.InitialCatalog = "master";
+            csb.Pooling = false;
+            csb.WorkstationID += Guid.NewGuid().ToString("N").Substring(5);
+
+            return csb.ToString();
+        }
+
+        /// <summary>
         /// Determines if the specified database is in SINGLE_USER mode using the given connection
         /// </summary>
         public static bool IsSingleUser(string connectionString, string databaseName)
