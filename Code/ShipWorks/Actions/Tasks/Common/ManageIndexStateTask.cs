@@ -17,7 +17,7 @@ namespace ShipWorks.Actions.Tasks.Common
     /// ActionTask that manages database table indexes state (enabled/disabled)..
     /// </summary>
     [ActionTask("Manage Index State", "ManageIndexState", ActionTaskCategory.Administration, true)]
-    public class ManageIndexStateTask : ActionTask
+    public class ManageIndexStateTask : ActionTask, ISingleDispatchAction
     {
         private const int DefaultDaysBack = 14;
         private const int DefaultMinIndexAdvantage = 100;

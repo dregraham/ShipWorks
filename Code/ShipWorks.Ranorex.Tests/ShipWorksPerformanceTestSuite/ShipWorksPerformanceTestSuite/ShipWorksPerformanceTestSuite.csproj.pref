@@ -1,13 +1,10 @@
 ﻿<Properties>
   <Array name="active">
-    <Element value="Recording1.rxrec" />
+    <Element value="ShipWorksPerformanceTestSuite.rxtst" />
   </Array>
   <Array name="bookmarks" />
   <Array name="files">
-    <Element value="ShipWorksPerformanceTestSuiteRepository.rxrep" />
     <Element value="ShipWorksPerformanceTestSuite.rxtst" />
-    <Element value="ShipWorksPerformanceTestSuiteRepository.cs" />
-    <Element value="Recording1.rxrec" />
   </Array>
   <Properties name="projectSavedData">
     <Properties name="customTool">

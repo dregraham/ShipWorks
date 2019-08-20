@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Transactions;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
@@ -203,27 +204,30 @@ namespace ShipWorks.Data.Connection
             string originalDatabaseName = csb.InitialCatalog;
             csb.InitialCatalog = "master";
 
-            using (DbConnection con = new SqlConnection(csb.ToString()))
+            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
             {
-                con.Open();
-
-                if (SqlUtility.IsSingleUser(csb.ToString(), originalDatabaseName))
+                using (DbConnection con = new SqlConnection(csb.ToString()))
                 {
-                    return false;
+                    con.Open();
+
+                    if (SqlUtility.IsSingleUser(csb.ToString(), originalDatabaseName))
+                    {
+                        return false;
+                    }
+
+                    con.Close();
                 }
 
-                con.Close();
-            }
+                // The db isn't single user, so try connecting to it.
+                csb.InitialCatalog = originalDatabaseName;
+                using (DbConnection con = new SqlConnection(csb.ToString()))
+                {
+                    con.Open();
 
-            // The db isn't single user, so try connecting to it.
-            csb.InitialCatalog = originalDatabaseName;
-            using (DbConnection con = new SqlConnection(csb.ToString()))
-            {
-                con.Open();
+                    ConnectionMonitor.ValidateOpenConnection(con);
 
-                ConnectionMonitor.ValidateOpenConnection(con);
-
-                con.Close();
+                    con.Close();
+                }
             }
 
             return true;
@@ -238,8 +242,9 @@ namespace ShipWorks.Data.Connection
             {
                 return TestConnection();
             }
-            catch (SqlException)
+            catch (SqlException ex)
             {
+                log.Error(ex.Message, ex);
                 return false;
             }
         }

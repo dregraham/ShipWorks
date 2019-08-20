@@ -35,7 +35,7 @@ namespace ShipWorksPerformanceTestSuite
 			WriteHighVolumeBatchGrid();
 			WriteECommerceIBatchGrid();
 			WriteECommerceIIBatchGrid();
-			
+			WriteHighVolumeOLM();			
 		}
 		
 		void WriteHighVolumeBatchGrid()
@@ -45,7 +45,7 @@ namespace ShipWorksPerformanceTestSuite
 			using (StreamWriter sw = new StreamWriter(currentFile,false))
 			{
 				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
-				sw.WriteLine($"{Timing.totalLoad500Time},{Timing.totalApplyProfile500Time},{Timing.totalProcessTime},{Timing.totalVoid500Time}");
+				sw.WriteLine(Timing.totalLoad500Time+","+Timing.totalApplyProfile500Time+","+Timing.totalProcessTime+","+Timing.totalVoid500Time);
 			}
 		}
 		
@@ -56,7 +56,7 @@ namespace ShipWorksPerformanceTestSuite
 			using (StreamWriter sw = new StreamWriter(currentFile,false))
 			{
 				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
-				sw.WriteLine($"{Timing.totalLoad100SRTime},{Timing.totalApplyProfile100SRTime},{Timing.totalProcess100SRTime},{Timing.totalVoid100SRTime}");
+				sw.WriteLine(Timing.totalLoad100SRTime+","+Timing.totalApplyProfile100SRTime+","+Timing.totalProcess100SRTime+","+Timing.totalVoid100SRTime);
 			}
 		}
 		
@@ -67,8 +67,19 @@ namespace ShipWorksPerformanceTestSuite
 			using (StreamWriter sw = new StreamWriter(currentFile,false))
 			{
 				sw.WriteLine("LoadOrders,ApplyProfile,ProcessShipments,VoidShipments");
-				sw.WriteLine($"{Timing.totalLoad100Time},{Timing.totalApplyProfile100Time},{Timing.totalProcess100Time},{Timing.totalVoid100Time}");
+				sw.WriteLine(Timing.totalLoad100Time+","+Timing.totalApplyProfile100Time+","+Timing.totalProcess100Time+","+Timing.totalVoid100Time);
 			}
+		}
+		
+		void WriteHighVolumeOLM()
+		{
+			currentFile = currentDir + "HighVolumeOLM.csv";
+			
+			using (StreamWriter sw = new StreamWriter(currentFile,false))
+			{
+				sw.WriteLine("SingleScanTime(ms)");
+				sw.WriteLine(Timing.singleScanTime);
+			}			
 		}
 	}
 }
