@@ -180,10 +180,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 return;
             }
 
-            fieldMap.Load(odbcStore.UploadMap);
             MapName = fieldMap.Name;
-
-            ColumnSourceIsTable = odbcStore.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
+            fieldMap.Load(odbcStore.UploadMap);
+            
+            ColumnSourceIsTable = odbcStore.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;            
         }
 
         /// <summary>

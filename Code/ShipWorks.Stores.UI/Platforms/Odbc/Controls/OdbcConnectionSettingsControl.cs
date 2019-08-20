@@ -117,6 +117,18 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 throw new ArgumentException("OdbcStore expected.", "odbcStore");
             }
 
+            OdbcStore storeFromRepo = odbcStoreRepository.GetStore(store);
+            store.ImportColumnSource = storeFromRepo.ImportColumnSource;
+            store.ImportColumnSourceType = storeFromRepo.ImportColumnSourceType;
+            store.ImportMap = storeFromRepo.ImportMap;
+            store.ImportOrderItemStrategy = storeFromRepo.ImportOrderItemStrategy;
+            store.ImportStrategy = storeFromRepo.ImportStrategy;
+
+            store.UploadColumnSource = storeFromRepo.UploadColumnSource;
+            store.UploadColumnSourceType = storeFromRepo.UploadColumnSourceType;
+            store.UploadMap = storeFromRepo.UploadMap;
+            store.UploadStrategy = storeFromRepo.UploadStrategy;
+
             ToggleExportUploadMapButtonEnabled();
         }
 
