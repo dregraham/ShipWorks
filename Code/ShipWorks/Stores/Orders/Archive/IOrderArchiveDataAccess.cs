@@ -65,6 +65,6 @@ namespace ShipWorks.Stores.Orders.Archive
         /// <summary>
         /// Audit that an archive was run
         /// </summary>
-        Task Audit(bool isManualArchive);
+        Task Audit(bool isManualArchive, bool success);
     }
 }

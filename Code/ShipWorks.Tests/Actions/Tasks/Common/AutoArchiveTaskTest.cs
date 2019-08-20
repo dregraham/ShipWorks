@@ -9,7 +9,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Stores.Orders.Archive;
 using ShipWorks.Tests.Shared.ExtensionMethods;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
@@ -19,6 +22,8 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
     public class AutoArchiveTaskTest
     {
         private AutoArchiveTask testObject;
+        private Mock<ISqlAdapterFactory> sqlAdapterFactory;
+        private Mock<ISqlAdapter> sqlAdapter;
         private Mock<IOrderArchiver> orderArchiver;
         private Mock<ILog> log;
         private Mock<IDateTimeProvider> dateTimeProvider;
@@ -32,6 +37,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<object>(), It.IsAny<object>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>()));
 
+            sqlAdapterFactory = new Mock<ISqlAdapterFactory>();
+            sqlAdapter = new Mock<ISqlAdapter>();
+            sqlAdapterFactory.Setup(af => af.Create()).Returns(sqlAdapter.Object);
+            
             dateTimeProvider = new Mock<IDateTimeProvider>();
             orderArchiver = new Mock<IOrderArchiver>();
             orderArchiver.Setup(oa => oa.Archive(AnyDate, AnyBool)).ReturnsAsync(Result.FromSuccess());
@@ -77,7 +86,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 TaskIdentifier = "AutoArchiveTask"
             };
 
-            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object, sqlAdapterFactory.Object);
 
             ActionQueueEntity queueEntity = new ActionQueueEntity();
             queueEntity.ActionVersion = GetBytes("167C");
@@ -104,7 +113,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void TimeoutInMinutes_IsDefaultedTo120()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object, sqlAdapterFactory.Object);
 
             Assert.Equal(120, testObject.TimeoutInMinutes);
         }
@@ -112,7 +121,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void NumberOfDaysToKeep_IsDefaultedTo90()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object, sqlAdapterFactory.Object);
 
             Assert.Equal(90, testObject.NumberOfDaysToKeep);
         }
@@ -120,7 +129,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void ExecuteOnDayOfWeek_IsDefaultedToSunday()
         {
-            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object);
+            testObject = new AutoArchiveTask(dateTimeProvider.Object, orderArchiver.Object, sqlAdapterFactory.Object);
 
             Assert.Equal(DayOfWeek.Sunday, testObject.ExecuteOnDayOfWeek);
         }

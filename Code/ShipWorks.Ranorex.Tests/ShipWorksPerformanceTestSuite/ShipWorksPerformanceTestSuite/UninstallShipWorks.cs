@@ -37,7 +37,7 @@ namespace ShipWorksPerformanceTestSuite
         void LaunchUninstaller()
         {
         	
-        	Host.Local.RunApplication($@"{RetryAction.CurrentInstallDir}\Uninstall\unins000.exe");
+        	Host.Local.RunApplication(RetryAction.CurrentInstallDir + @"\Uninstall\unins000.exe");
         }
         
         void ShipWorksUninstall()

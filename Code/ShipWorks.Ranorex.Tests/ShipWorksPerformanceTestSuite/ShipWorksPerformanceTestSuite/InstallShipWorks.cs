@@ -80,7 +80,7 @@ namespace ShipWorksPerformanceTestSuite
             Delay.Milliseconds(0);      
             
             Report.Log(ReportLevel.Info, "Keyboard", "Key sequence 'C Drive' with focus on 'SomeForm.DirEdit'.", repo.SomeForm.DirEditInfo, new RecordItemIndex(5));
-            RetryAction.CurrentInstallDir = $@"C:\{extra.GetFolderName()}";
+            RetryAction.CurrentInstallDir = @"C:\" + extra.GetFolderName();
             repo.SomeForm.DirEdit.PressKeys("{LControlKey down}{Akey}{LControlKey up}" + RetryAction.CurrentInstallDir);
             Delay.Milliseconds(0);           
             
