@@ -2838,6 +2838,7 @@
           <Field Name="ApiKey" Type="string" MaxLength="100" FieldIndex="4" />
           <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="ShopifyAccessToken" Type="string" MaxLength="255" FieldIndex="2" />
+          <Field Name="ShopifyFulfillmentLocation" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="ShopifyNotifyCustomer" Type="bool" FieldIndex="6" />
           <Field Name="ShopifyRequestedShippingOption" Type="int" FieldIndex="3" />
           <Field Name="ShopifyShopDisplayName" Type="string" MaxLength="100" FieldIndex="1" />
@@ -4563,7 +4564,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-02T13:55:18.0622271Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-19T01:43:12.6720981Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8632,6 +8633,7 @@
                     <Field Name="ApiKey" Ordinal="6" DbType="12" Length="100" />
                     <Field Name="Password" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="ShopifyNotifyCustomer" Ordinal="8" DbType="2" />
+                    <Field Name="ShopifyFulfillmentLocation" Ordinal="9" HasDefaultValue="true" DefaultValue="(0)" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopSiteStore">
@@ -13608,6 +13610,7 @@
             <FieldMapping FieldName="ApiKey" TargetFieldName="ApiKey" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="ShopifyAccessToken" TargetFieldName="ShopifyAccessToken" />
+            <FieldMapping FieldName="ShopifyFulfillmentLocation" TargetFieldName="ShopifyFulfillmentLocation" />
             <FieldMapping FieldName="ShopifyNotifyCustomer" TargetFieldName="ShopifyNotifyCustomer" />
             <FieldMapping FieldName="ShopifyRequestedShippingOption" TargetFieldName="ShopifyRequestedShippingOption" />
             <FieldMapping FieldName="ShopifyShopDisplayName" TargetFieldName="ShopifyShopDisplayName" />

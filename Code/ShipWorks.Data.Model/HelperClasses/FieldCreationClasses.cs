@@ -26442,6 +26442,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyNotifyCustomer);}
 		}
+		/// <summary>Creates a new ShopifyStoreEntity.ShopifyFulfillmentLocation field instance</summary>
+		public static EntityField2 ShopifyFulfillmentLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyFulfillmentLocation);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShopSiteStoreEntity</summary>
