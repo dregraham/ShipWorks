@@ -29,11 +29,19 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         public string CompressedUploadMap { get; set; } = string.Empty;
 
         public int ImportStrategy { get; set; }
+
         public int ImportColumnSourceType { get; set; }
+
         public string ImportColumnSource { get; set; }
+
         public int ImportOrderItemStrategy { get; set; }
+
         public int UploadStrategy { get; set; }
+
         public int UploadColumnSourceType { get; set; }
+
         public string UploadColumnSource { get; set; }
+
+        public string WarehouseID { get; set; } = null;
     }
 }
