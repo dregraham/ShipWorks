@@ -136,17 +136,26 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
-        protected abstract Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder);
+        protected virtual Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
+        {
+            return Task.FromResult(GenericResult.FromSuccess(new OrderEntity()));
+        }
 
         /// <summary>
         /// Load store specific order details
         /// </summary>
-        protected abstract void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
+        protected virtual void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+
+        }
 
         /// <summary>
         /// Load store specific item details
         /// </summary>
-        protected abstract void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
+        protected virtual void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+
+        }
 
         /// <summary>
         /// Load items from the warehouse order into the order entity
