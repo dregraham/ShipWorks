@@ -6,6 +6,7 @@ using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -31,25 +32,20 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
-        protected override Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
+        protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            throw new NotImplementedException();
-        }
+            string orderNumber = warehouseOrder.OrderNumber;
 
-        /// <summary>
-        /// Load store specific order details
-        /// </summary>
-        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
-        {
-            throw new NotImplementedException();
-        }
+            // get the order instance
+            GenericResult<OrderEntity> result = await orderElementFactory
+                .CreateOrder(new AlphaNumericOrderIdentifier(orderNumber)).ConfigureAwait(false);
 
-        /// <summary>
-        /// Load store specific item details
-        /// </summary>
-        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
-        {
-            throw new NotImplementedException();
+            if (result.Failure)
+            {
+                log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
+            }
+
+            return result;
         }
     }
 }
