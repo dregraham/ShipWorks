@@ -6291,6 +6291,7 @@ CREATE TABLE [dbo].[OdbcStore]
 	[UploadColumnSourceType] [int] NOT NULL,
 	[UploadColumnSource] [nvarchar](max) NOT NULL,
 	[UploadConnectionString] [nvarchar](2048) NOT NULL,
+	[WarehouseLastModified] [DateTime2] NULL
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'

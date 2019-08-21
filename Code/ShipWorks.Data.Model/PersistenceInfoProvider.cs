@@ -2297,7 +2297,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OdbcStoreEntity's mappings</summary>
 		private void InitOdbcStoreEntityMappings()
 		{
-			this.AddElementMapping("OdbcStoreEntity", @"ShipWorksLocal", @"dbo", "OdbcStore", 12, 0);
+			this.AddElementMapping("OdbcStoreEntity", @"ShipWorksLocal", @"dbo", "OdbcStore", 13, 0);
 			this.AddElementFieldMapping("OdbcStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportConnectionString", "ImportConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportMap", "ImportMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
@@ -2310,6 +2310,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadConnectionString", "UploadConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportOrderItemStrategy", "ImportOrderItemStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
+			this.AddElementFieldMapping("OdbcStoreEntity", "WarehouseLastModified", "WarehouseLastModified", true, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 12);
 		}
 
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
