@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Shopify.Warehouse
         /// <summary>
         /// Load Shopify item details
         /// </summary>
-        protected override void LoadStoreItemDetails(OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
             ShopifyOrderItemEntity ShopifyItemEntity = (ShopifyOrderItemEntity) itemEntity;
             var shopifyWarehouseItem = warehouseItem.AdditionalData[shopifyEntryKey].ToObject<ShopifyWarehouseItem>();

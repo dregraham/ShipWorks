@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.Warehouse
         /// <summary>
         /// Load Walmart order details
         /// </summary>
-        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             var walmartOrderEntity = (WalmartOrderEntity) orderEntity;
             var walmartWarehouseOrder = warehouseOrder.AdditionalData[walmartEntryKey].ToObject<WalmartWarehouseOrder>();

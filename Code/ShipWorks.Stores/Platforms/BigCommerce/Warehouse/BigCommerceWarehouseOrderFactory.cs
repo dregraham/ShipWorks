@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce.Warehouse
         /// <summary>
         /// Load BigCommerce order details
         /// </summary>
-        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             // BigCommerce doesn't have its own Order table.
         }
