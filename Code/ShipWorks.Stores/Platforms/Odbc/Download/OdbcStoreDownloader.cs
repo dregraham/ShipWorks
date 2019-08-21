@@ -10,10 +10,12 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
@@ -34,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IOdbcOrderLoader orderLoader;
         private readonly IWarehouseOrderClient warehouseOrderClient;
         private readonly IOdbcStoreRepository odbcStoreRepository;
+        private readonly ILicenseService licenseService;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
@@ -59,12 +62,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcOrderLoader orderLoader,
             IOdbcDownloaderExtraDependencies extras,
             IWarehouseOrderClient warehouseOrderClient,
-            IOdbcStoreRepository odbcStoreRepository) : base(store, extras.GetStoreType(store))
+            IOdbcStoreRepository odbcStoreRepository,
+            ILicenseService licenseService) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
             this.odbcStoreRepository = odbcStoreRepository;
+            this.licenseService = licenseService;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
@@ -174,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Only download from warehouse if we are not using ondemand
         /// </summary>
-        protected override Task DownloadWarehouseOrders(Guid batchId)
+        protected override async Task DownloadWarehouseOrders(Guid batchId)
         {
             if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
@@ -182,7 +187,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                                             "To automatically download orders, change this store's order import settings.");
             }
 
-            return base.DownloadWarehouseOrders(batchId);
+            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            {
+                await Download(trackedDurationEvent).ConfigureAwait(false);
+
+                CollectDownloadTelemetry(trackedDurationEvent);
+            }
+
+            base.DownloadWarehouseOrders(batchId);
         }
 
         /// <summary>
@@ -227,6 +239,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 // Get the starting point and include it for telemetry
                 DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+
+                if (IsWarehouseAllowed && store.WarehouseLastModified > startingPoint)
+                {
+                    startingPoint = store.WarehouseLastModified.Value;
+                }
+
                 trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
                 return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap.Value);
@@ -268,6 +286,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         private async Task LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
         {
+            List<OrderEntity> ordersToSendToHub = new List<OrderEntity>();
+            
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
                 if (Progress.IsCancelRequested)
@@ -281,21 +301,55 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 if (downloadedOrder.Success)
                 {
-                    await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
+                    if (IsWarehouseAllowed)
+                    {
+                        if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+                        {
+                            await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
+                            await SaveOrder(downloadedOrder).ConfigureAwait(false);
+                        }
 
-                    try
-                    {
-                        await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
+                        if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+                        {
+                            ordersToSendToHub.Add(downloadedOrder.Value);
+                        }
                     }
-                    catch (ORMQueryExecutionException ex)
+                    else
                     {
-                        throw new DownloadException(ex.Message, ex);
+                        await SaveOrder(downloadedOrder).ConfigureAwait(false);
                     }
                 }
 
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
+
+            if (IsWarehouseAllowed)
+            {
+                await UploadOrdersToHub(ordersToSendToHub).ConfigureAwait(false);
+
+                store.WarehouseLastModified = ordersToSendToHub.Max(x => x.OnlineLastModified);
+            }
         }
+
+        /// <summary>
+        /// Save order to the database
+        /// </summary>
+        private async Task SaveOrder(GenericResult<OrderEntity> downloadedOrder)
+        {
+            try
+            {
+                await SaveDownloadedOrder(downloadedOrder.Value).ConfigureAwait(false);
+            }
+            catch (ORMQueryExecutionException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Is warehouse allowed for the customer
+        /// </summary>
+        private bool IsWarehouseAllowed => licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
 
         /// <summary>
         /// Upload the order to the hub (if required)
@@ -314,6 +368,30 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
                 downloadedOrder.HubSequence = orderResponse.HubSequence;
+            }
+        }
+
+        /// <summary>
+        /// Upload the order to the hub (if required)
+        /// </summary>
+        private async Task UploadOrdersToHub(IEnumerable<OrderEntity> downloadedOrders)
+        {
+            if (store.WarehouseStoreID.HasValue)
+            {
+                GenericResult<WarehouseUploadOrderResponses> result = await warehouseOrderClient.UploadOrders(downloadedOrders, store).ConfigureAwait(false);
+                if (result.Failure)
+                {
+                    throw new DownloadException(result.Message);
+                }
+
+                foreach (WarehouseUploadOrderResponse orderResponse in result.Value.OrderResponses)
+                {
+                    OrderEntity downloadedOrder = downloadedOrders.Single(x => x.StoreID.ToString() == orderResponse.StoreId &&
+                                                 x.OrderNumberComplete == orderResponse.OrderNumberComplete);
+
+                    downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
+                    downloadedOrder.HubSequence = orderResponse.HubSequence;
+                }
             }
         }
 
@@ -347,7 +425,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             if (orderResultToUse.Value.IsNew)
             {
-
                 // We strip out leading 0's. If all 0's, TrimStart would make it an empty string,
                 // so in that case, we leave a single 0.
                 string trimmedOrderNumber = orderNumberToUse.All(n => n == '0') ? "0" : orderNumberToUse.TrimStart('0');
