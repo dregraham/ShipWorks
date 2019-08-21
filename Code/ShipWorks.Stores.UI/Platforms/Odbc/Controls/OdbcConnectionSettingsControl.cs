@@ -15,6 +15,8 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Editions;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -30,6 +32,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly IOdbcSettingsFile uploadSettingsFile;
         private readonly IOdbcStoreRepository odbcStoreRepository;
+        private readonly ILicenseService licenseService;
         private OdbcStoreEntity store;
 
         /// <summary>
@@ -40,13 +43,16 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             Func<ISaveFileDialog> fileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
             IOdbcSettingsFile uploadSettingsFile,
-            IOdbcStoreRepository odbcStoreRepository)
+            IOdbcStoreRepository odbcStoreRepository,
+            ILicenseService licenseService)
         {
             this.odbcFieldMapFactory = odbcFieldMapFactory;
             this.fileDialogFactory = fileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             this.uploadSettingsFile = uploadSettingsFile;
             this.odbcStoreRepository = odbcStoreRepository;
+            this.licenseService = licenseService;
+
             InitializeComponent();
         }
 
@@ -130,6 +136,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             store.UploadStrategy = storeFromRepo.UploadStrategy;
 
             ToggleExportUploadMapButtonEnabled();
+
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+            {
+                warehouseWarning.Visible = true;
+            }
         }
 
         /// <summary>
