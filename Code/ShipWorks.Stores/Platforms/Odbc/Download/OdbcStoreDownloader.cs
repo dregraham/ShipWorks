@@ -12,6 +12,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -20,6 +21,7 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -35,12 +37,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly Lazy<IOdbcFieldMap> fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly IWarehouseOrderClient warehouseOrderClient;
-        private readonly IOdbcStoreRepository odbcStoreRepository;
         private readonly ILicenseService licenseService;
+        private readonly IConfigurationData configurationData;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
-        private readonly Lazy<bool> reloadEntireOrder;
+        private readonly Lazy<OdbcStore> odbcStore;
+        readonly Lazy<string> warehouseID;
 
         // not including decimal, money, numeric, real and float because that would be stupid
         // included names for integers from sql, mysql, oracle, and db2
@@ -63,19 +66,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcDownloaderExtraDependencies extras,
             IWarehouseOrderClient warehouseOrderClient,
             IOdbcStoreRepository odbcStoreRepository,
-            ILicenseService licenseService) : base(store, extras.GetStoreType(store))
+            ILicenseService licenseService, 
+            IConfigurationData configurationData) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
-            this.odbcStoreRepository = odbcStoreRepository;
             this.licenseService = licenseService;
+            this.configurationData = configurationData;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
+            odbcStore = new Lazy<OdbcStore>(() => odbcStoreRepository.GetStore(this.store));
             fieldMap = new Lazy<IOdbcFieldMap>(() => GetFieldMap(createFieldMap));
-            reloadEntireOrder = new Lazy<bool>(() => odbcStoreRepository.GetStore(this.store).ImportStrategy == (int) OdbcImportStrategy.OnDemand);
+            warehouseID = new Lazy<string>(() => configurationData.FetchReadOnly().WarehouseID);
         }
 
         /// <summary>
@@ -84,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private IOdbcFieldMap GetFieldMap(Func<IOdbcFieldMap> createFieldMap)
         {
             IOdbcFieldMap newFieldMap = createFieldMap();
-            newFieldMap.Load(odbcStoreRepository.GetStore(this.store).ImportMap);
+            newFieldMap.Load(odbcStore.Value.ImportMap);
             return newFieldMap;
         }
 
@@ -156,7 +161,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
@@ -181,17 +186,30 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         protected override async Task DownloadWarehouseOrders(Guid batchId)
         {
-            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            OdbcImportStrategy importStrategy = (OdbcImportStrategy) odbcStore.Value.ImportStrategy;
+            if (importStrategy == OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
             }
 
-            using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+            if (importStrategy == OdbcImportStrategy.All)
             {
-                await Download(trackedDurationEvent).ConfigureAwait(false);
+                // This should never happen
+                throw new DownloadException($"The store, {store.StoreName}, is set to download ALL orders and this is not supported. \r\n\r\n" +
+                                            "To automatically download orders, change this store's order import settings to download by last modified.");
+            }
+            
+            if (!string.IsNullOrEmpty(store.ImportConnectionString) &&
+                (string.IsNullOrEmpty(odbcStore.Value.WarehouseID) || warehouseID.Value == odbcStore.Value.WarehouseID) &&
+                IsWarehouseAllowed())
+            {
+                using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                {
+                    await Download(trackedDurationEvent).ConfigureAwait(false);
 
-                CollectDownloadTelemetry(trackedDurationEvent);
+                    CollectDownloadTelemetry(trackedDurationEvent);
+                }
             }
 
             base.DownloadWarehouseOrders(batchId);
@@ -203,7 +221,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private void AddTelemetryData(TrackedDurationEvent trackedDurationEvent, IOdbcCommand downloadCommand)
         {
             trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
-            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStoreRepository.GetStore(store).ImportStrategy));
+            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStore.Value.ImportStrategy));
         }
 
         /// <summary>
@@ -232,7 +250,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
-            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
@@ -240,7 +258,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 // Get the starting point and include it for telemetry
                 DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
 
-                if (IsWarehouseAllowed && store.WarehouseLastModified > startingPoint)
+                if (IsWarehouseAllowed() && store.WarehouseLastModified > startingPoint)
                 {
                     startingPoint = store.WarehouseLastModified.Value;
                 }
@@ -301,7 +319,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 if (downloadedOrder.Success)
                 {
-                    if (IsWarehouseAllowed)
+                    if (IsWarehouseAllowed())
                     {
                         if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
                         {
@@ -323,7 +341,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
 
-            if (IsWarehouseAllowed)
+            if (ordersToSendToHub.Any())
             {
                 await UploadOrdersToHub(ordersToSendToHub).ConfigureAwait(false);
 
@@ -349,7 +367,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Is warehouse allowed for the customer
         /// </summary>
-        private bool IsWarehouseAllowed => licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
+        private bool IsWarehouseAllowed()
+        {
+            return licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
+                    store.WarehouseStoreID.HasValue;
+        }
 
         /// <summary>
         /// Upload the order to the hub (if required)
@@ -444,12 +466,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             OrderEntity orderEntity = orderResultToUse.Value;
 
-            if (reloadEntireOrder.Value)
+            bool reloadEntireOrder = odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+            if (reloadEntireOrder)
             {
                 RemoveOrderItems(orderEntity);
             }
-
-            orderLoader.Load(fieldMap.Value, orderEntity, odbcRecordsForOrder, reloadEntireOrder.Value);
+            orderLoader.Load(fieldMap.Value, orderEntity, odbcRecordsForOrder, reloadEntireOrder);
 
             orderEntity.ChangeOrderNumber(orderNumberToUse);
 
