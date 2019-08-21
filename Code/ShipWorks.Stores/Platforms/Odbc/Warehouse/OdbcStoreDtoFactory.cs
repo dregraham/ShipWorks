@@ -1,7 +1,9 @@
+using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.IO.Zip;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Warehouse;
 using ShipWorks.Stores.Warehouse.StoreData;
@@ -15,14 +17,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
     public class OdbcStoreDtoFactory : IStoreDtoFactory
     {
         private readonly IStoreDtoHelpers helpers;
+        readonly Lazy<string> warehouseID;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="helpers"></param>
-        public OdbcStoreDtoFactory(IStoreDtoHelpers helpers)
+        public OdbcStoreDtoFactory(IStoreDtoHelpers helpers, IConfigurationData configurationData)
         {
             this.helpers = helpers;
+            warehouseID = new Lazy<string>(() => configurationData.FetchReadOnly().WarehouseID);
         }
 
         /// <summary>
@@ -42,6 +46,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
             store.UploadStrategy = storeEntity.UploadStrategy;
             store.UploadColumnSourceType = storeEntity.UploadColumnSourceType;
             store.UploadColumnSource = storeEntity.UploadColumnSource;
+            if (storeEntity.ShouldUploadWarehouseOrders)
+            {
+                store.WarehouseID = warehouseID.Value;
+            }
 
             return Task.FromResult<Store>(store);
         }
