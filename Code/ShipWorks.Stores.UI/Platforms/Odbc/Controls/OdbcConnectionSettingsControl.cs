@@ -15,6 +15,7 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Platforms.Odbc;
@@ -38,6 +39,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcConnectionSettingsControl"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public OdbcConnectionSettingsControl(
             IOdbcFieldMapFactory odbcFieldMapFactory,
             Func<ISaveFileDialog> fileDialogFactory,
