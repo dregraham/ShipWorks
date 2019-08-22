@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// The batch
         /// </summary>
-        Guid Batch { get; }
+        Guid? Batch { get; }
 
         /// <summary>
         /// The order

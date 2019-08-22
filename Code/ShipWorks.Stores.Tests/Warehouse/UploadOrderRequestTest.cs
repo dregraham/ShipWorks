@@ -7,6 +7,7 @@ using Moq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Warehouse;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Warehouse.DTO.Orders;
@@ -20,7 +21,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         private readonly UploadOrdersRequest testObject;
         private readonly Mock<IWarehouseRequestClient> requestClient;
         private readonly Mock<IWarehouseOrderDtoFactory> dtoFactory;
-        private readonly StoreEntity store;
+        private readonly OdbcStoreEntity store;
         private readonly OrderEntity[] orders;
 
         public UploadOrderRequestTest()
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
             requestClient = mock.Mock<IWarehouseRequestClient>();
             dtoFactory = mock.Mock<IWarehouseOrderDtoFactory>();
 
-            store = new StoreEntity();
+            store = new OdbcStoreEntity();
             orders = new[] { new OrderEntity() };
 
             testObject = mock.Create<UploadOrdersRequest>();
@@ -61,13 +62,25 @@ namespace ShipWorks.Stores.Tests.Warehouse
         }
 
         [Fact]
-        public async Task Submit_BatchIsPopulated()
+        public async Task Submit_BatchIsPopulated_WhenStoreIsOnDemaind()
         {
-            Assert.Equal(Guid.Empty, testObject.Batch);
+            Assert.Null(testObject.Batch);
+            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
 
             await testObject.Submit(orders, store);
 
             Assert.NotNull(testObject.Batch);
+        }
+
+        [Fact]
+        public async Task Submit_BatchIsNull_WhenStoreIsOnDemaind()
+        {
+            Assert.Null(testObject.Batch);
+            store.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+
+            await testObject.Submit(orders, store);
+
+            Assert.Null(testObject.Batch);
         }
 
         [Fact]

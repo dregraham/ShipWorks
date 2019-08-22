@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Warehouse
@@ -40,7 +41,7 @@ namespace ShipWorks.Stores.Warehouse
         /// The batch
         /// </summary>
         [JsonProperty("batch")]
-        public Guid Batch { get; private set; }
+        public Guid? Batch { get; private set; }
 
         /// <summary>
         /// The order
@@ -59,7 +60,11 @@ namespace ShipWorks.Stores.Warehouse
 
             request.RequestFormat = DataFormat.Json;
 
-            Batch = Guid.NewGuid();
+            if (((IOdbcStoreEntity) store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            {
+                Batch = Guid.NewGuid();
+            }
+
             Orders = ConvertWarehouseOrders(orders, store);
 
             request.AddJsonBody(this);
