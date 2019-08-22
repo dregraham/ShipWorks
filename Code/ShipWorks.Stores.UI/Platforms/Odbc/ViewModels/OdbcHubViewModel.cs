@@ -127,13 +127,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             storeEntity.WarehouseStoreID = warehouseStoreId;
             storeEntity.StoreName = odbcStore.Name;
 
-            storeEntity.ImportMap = GZipUtility.Decompress(odbcStore.ImportMap);
+            storeEntity.ImportMap = odbcStore.ImportMap;
             storeEntity.ImportStrategy = odbcStore.ImportStrategy;
             storeEntity.ImportColumnSourceType = odbcStore.ImportColumnSourceType;
             storeEntity.ImportColumnSource = odbcStore.ImportColumnSource;
             storeEntity.ImportOrderItemStrategy = odbcStore.ImportOrderItemStrategy;
 
-            storeEntity.UploadMap = GZipUtility.Decompress(odbcStore.UploadMap);
+            storeEntity.UploadMap = odbcStore.UploadMap;
             storeEntity.UploadStrategy = odbcStore.UploadStrategy;
             storeEntity.UploadColumnSourceType = odbcStore.UploadColumnSourceType;
             storeEntity.UploadColumnSource = odbcStore.UploadColumnSource;

@@ -265,6 +265,8 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -937,7 +939,6 @@
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
-    <Compile Include="Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="Warehouse\UploadOrdersRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />

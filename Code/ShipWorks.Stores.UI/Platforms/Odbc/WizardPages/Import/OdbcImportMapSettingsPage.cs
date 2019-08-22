@@ -91,7 +91,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         {
             store = GetStore<OdbcStoreEntity>();
 
-            if (store.WarehouseStoreID.HasValue)
+            if (!store.IsMappingRequired)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

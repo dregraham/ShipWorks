@@ -16,6 +16,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 {
@@ -25,13 +26,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModel : OdbcMapSettingsControlViewModel
     {
         private bool columnSourceIsTable = true;
-        private bool isSubquery = true; 
+        private bool isSubquery = true;
         private OdbcImportStrategy importStrategy = OdbcImportStrategy.ByModifiedTime;
         private OdbcImportOrderItemStrategy importOrderItemStrategy = OdbcImportOrderItemStrategy.SingleLine;
         private IOdbcFieldMap fieldMap;
         private readonly Func<IOpenFileDialog> openFileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly ILicenseService licenseService;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
         private bool parameterizedQueryAllowed;
 
         /// <summary>
@@ -42,13 +44,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             IOdbcFieldMap fieldMap,
             Func<IOpenFileDialog> openFileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
-            ILicenseService licenseService) :
+            ILicenseService licenseService,
+            IOdbcStoreRepository odbcStoreRepository) :
                 base(messageHelper, columnSourceFactory)
         {
             this.fieldMap = fieldMap;
             this.openFileDialogFactory = openFileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             this.licenseService = licenseService;
+            this.odbcStoreRepository = odbcStoreRepository;
             OpenMapSettingsFileCommand = new RelayCommand(OpenMapSettingsFile);
         }
 
@@ -72,7 +76,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
                 // Set query type to subquery query is selected
                 if (!value)
                 {
-                    IsSubquery = true;   
+                    IsSubquery = true;
                 }
 
                 ColumnSource = value ? SelectedTable : CustomQueryColumnSource;
@@ -90,10 +94,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
             set
             {
                 Handler.Set(nameof(ImportStrategy), ref importStrategy, value);
-                
+
                 // Parameterized query is only allowed when not using all
                 ParameterizedQueryAllowed = value != OdbcImportStrategy.All && !ColumnSourceIsTable;
-                
+
                 // if the user changes their import strategy to all and they are using query, make sure we set it subquery
                 // since that is their only option
                 if (!ColumnSourceIsTable && value == OdbcImportStrategy.All)
@@ -213,15 +217,26 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
         /// </summary>
         public override void LoadMapSettings(OdbcStoreEntity store)
         {
-            fieldMap.Load(store.ImportMap);
+            OdbcStore odbcStore;
+            try
+            {
+                odbcStore = odbcStoreRepository.GetStore(store);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                messageHelper.ShowError("Failed to load import map");
+                return;
+            }
+
+            fieldMap.Load(odbcStore.ImportMap);
             MapName = fieldMap.Name;
 
-            ImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
-            
-            ColumnSourceIsTable = store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
-            IsSubquery = store.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
+            ImportStrategy = (OdbcImportStrategy) odbcStore.ImportStrategy;
 
-            importOrderItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
+            ColumnSourceIsTable = odbcStore.ImportColumnSourceType == (int) OdbcColumnSourceType.Table;
+            IsSubquery = odbcStore.ImportColumnSourceType == (int) OdbcColumnSourceType.CustomQuery;
+
+            importOrderItemStrategy = (OdbcImportOrderItemStrategy) odbcStore.ImportOrderItemStrategy;
         }
 
         /// <summary>

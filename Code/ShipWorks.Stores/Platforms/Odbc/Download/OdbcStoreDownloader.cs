@@ -30,13 +30,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
     public class OdbcStoreDownloader : StoreDownloader
     {
         private readonly IOdbcDownloadCommandFactory downloadCommandFactory;
-        private readonly IOdbcFieldMap fieldMap;
+        private readonly Lazy<IOdbcFieldMap> fieldMap;
         private readonly IOdbcOrderLoader orderLoader;
         private readonly IWarehouseOrderClient warehouseOrderClient;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
-        private readonly bool reloadEntireOrder;
+        private readonly Lazy<bool> reloadEntireOrder;
 
         // not including decimal, money, numeric, real and float because that would be stupid
         // included names for integers from sql, mysql, oracle, and db2
@@ -54,21 +55,32 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         [NDependIgnoreTooManyParamsAttribute]
         public OdbcStoreDownloader(StoreEntity store,
             IOdbcDownloadCommandFactory downloadCommandFactory,
-            IOdbcFieldMap fieldMap,
+            Func<IOdbcFieldMap> createFieldMap,
             IOdbcOrderLoader orderLoader,
             IOdbcDownloaderExtraDependencies extras,
-            IWarehouseOrderClient warehouseOrderClient) : base(store, extras.GetStoreType(store))
+            IWarehouseOrderClient warehouseOrderClient,
+            IOdbcStoreRepository odbcStoreRepository) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
-            this.fieldMap = fieldMap;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
+            this.odbcStoreRepository = odbcStoreRepository;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
 
-            fieldMap.Load(this.store.ImportMap);
-            reloadEntireOrder = this.store.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+            fieldMap = new Lazy<IOdbcFieldMap>(() => GetFieldMap(createFieldMap));
+            reloadEntireOrder = new Lazy<bool>(() => odbcStoreRepository.GetStore(this.store).ImportStrategy == (int) OdbcImportStrategy.OnDemand);
+        }
+
+        /// <summary>
+        /// Gets the field map used in this class
+        /// </summary>
+        private IOdbcFieldMap GetFieldMap(Func<IOdbcFieldMap> createFieldMap)
+        {
+            IOdbcFieldMap newFieldMap = createFieldMap();
+            newFieldMap.Load(odbcStoreRepository.GetStore(this.store).ImportMap);
+            return newFieldMap;
         }
 
         /// <summary>
@@ -78,7 +90,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             try
             {
-                IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap);
+                IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap.Value);
                 AddTelemetryData(trackedDurationEvent, downloadCommand);
                 await Download(downloadCommand).ConfigureAwait(false);
             }
@@ -139,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
@@ -164,7 +176,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         protected override Task DownloadWarehouseOrders(Guid batchId)
         {
-            if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings.");
@@ -179,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private void AddTelemetryData(TrackedDurationEvent trackedDurationEvent, IOdbcCommand downloadCommand)
         {
             trackedDurationEvent.AddProperty("Odbc.Driver", downloadCommand.Driver);
-            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) store.ImportStrategy));
+            trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStoreRepository.GetStore(store).ImportStrategy));
         }
 
         /// <summary>
@@ -208,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
 
-            if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+            if (odbcStoreRepository.GetStore(store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
@@ -217,12 +229,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
                 trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
-                return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap);
+                return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap.Value);
             }
 
             // Use -1 to indicate that we are using the "all orders" download strategy
             trackedDurationEvent.AddMetric("Minutes.Back", -1);
-            return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap);
+            return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap.Value);
         }
 
         /// <summary>
@@ -235,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             if (orderGroups.Any(groups => string.IsNullOrWhiteSpace(groups.Key)))
             {
                 throw new DownloadException(
-                    $"At least one order is missing a value in {fieldMap.RecordIdentifierSource}");
+                    $"At least one order is missing a value in {fieldMap.Value.RecordIdentifierSource}");
             }
         }
 
@@ -313,7 +325,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             OdbcRecord firstRecord = odbcRecordsForOrder.First();
 
-            fieldMap.ApplyValues(firstRecord);
+            fieldMap.Value.ApplyValues(firstRecord);
 
             IOdbcFieldMapEntry odbcFieldMapEntry = GetOrderNumberFieldMapEntry();
 
@@ -355,12 +367,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             OrderEntity orderEntity = orderResultToUse.Value;
 
-            if (reloadEntireOrder)
+            if (reloadEntireOrder.Value)
             {
                 RemoveOrderItems(orderEntity);
             }
 
-            orderLoader.Load(fieldMap, orderEntity, odbcRecordsForOrder, reloadEntireOrder);
+            orderLoader.Load(fieldMap.Value, orderEntity, odbcRecordsForOrder, reloadEntireOrder.Value);
 
             orderEntity.ChangeOrderNumber(orderNumberToUse);
 
@@ -375,8 +387,17 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </remarks>
         private IOdbcFieldMapEntry GetOrderNumberFieldMapEntry()
         {
-            // Find the OrderNumber Entry
-            IOdbcFieldMapEntry odbcFieldMapEntry = fieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+            IOdbcFieldMapEntry odbcFieldMapEntry;
+
+            try
+            {
+                // Find the OrderNumber Entry
+                odbcFieldMapEntry = fieldMap.Value.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault();
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
 
             if (odbcFieldMapEntry == null)
             {

@@ -17,14 +17,16 @@ namespace ShipWorks.Stores.Platforms.Odbc
     {
         private readonly IOdbcDataSourceService dataSourceService;
         private readonly IOdbcFieldMapFactory odbcFieldMapFactory;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreSettingsTelemetryCollector"/> class.
         /// </summary>
-        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapFactory odbcFieldMapFactory)
+        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapFactory odbcFieldMapFactory, IOdbcStoreRepository odbcStoreRepository)
         {
             this.dataSourceService = dataSourceService;
             this.odbcFieldMapFactory = odbcFieldMapFactory;
+            this.odbcStoreRepository = odbcStoreRepository;
         }
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             }
 
             IOdbcFieldMap importMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            importMap.Load(odbcStore.ImportMap);
+            importMap.Load(odbcStoreRepository.GetStore(odbcStore).ImportMap);
 
             IOdbcFieldMapEntry orderNumberEntry = importMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
@@ -139,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         private string GetUploadDriverName(OdbcStoreEntity odbcStore)
         {
-            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            if (odbcStoreRepository.GetStore(odbcStore).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return "None";
             }
@@ -155,7 +157,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             return GetUploadDriverName(odbcStore).Equals("None", StringComparison.InvariantCultureIgnoreCase) ?
                 "None" :
-                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
+                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStoreRepository.GetStore(odbcStore).UploadColumnSourceType);
         }
     }
 }
