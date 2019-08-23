@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
         private readonly Func<ISecurityContext> securityContext;
-        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
