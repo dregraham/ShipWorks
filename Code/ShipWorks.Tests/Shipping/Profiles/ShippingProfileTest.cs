@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -27,6 +28,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
             shippingProfileManagerMock = mock.Mock<IShippingProfileManager>();
             shortcutManagerMock = mock.Mock<IShortcutManager>();
 
+
+
+            IoC.InitializeForUnitTests(mock.Container);
+
             securityContext = mock.Mock<ISecurityContext>();
             securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(true);
         }
@@ -38,6 +43,14 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
             var shippingManager = mock.Mock<IShippingManager>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             testObject.Apply(shipment);
 
@@ -78,6 +91,15 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
+
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
+
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
             testObject.Apply(shipment);
@@ -94,6 +116,14 @@ namespace ShipWorks.Tests.Shipping.Profiles
             mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.AmazonSFP)).Returns(strategy);
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
+
             testObject.Apply(shipment);
 
             strategy.Verify(s => s.ApplyProfile(profile, shipment), Times.Once);
@@ -106,6 +136,14 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
             var messenger = mock.Mock<IMessenger>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             testObject.Apply(shipment);
 

@@ -46,8 +46,6 @@ namespace ShipWorks.Shipping.Profiles
 
             ShippingProfileEntity = profile;
             Shortcut = shortcut;
-
-            shipmentTypeManager = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentTypeManager>();
         }
 
         /// <summary>
@@ -142,10 +140,17 @@ namespace ShipWorks.Shipping.Profiles
         {
             bool isAllowed = true;
 
-            if (ShippingProfileEntity.ShipmentType != null)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var profileShipmentType = ShippingProfileEntity.ShipmentType ?? ShipmentTypeCode.None;
-                isAllowed = shipments.All(s => shipmentTypeManager.Get(profileShipmentType).IsAllowedFor(s));
+                var shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
+
+                if (ShippingProfileEntity.ShipmentType != null)
+                {
+                    ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType ??
+                        ShipmentTypeCode.None);
+
+                    isAllowed = shipments.All(s => profileShipmentType.IsAllowedFor(s));
+                }
             }
 
             return shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
