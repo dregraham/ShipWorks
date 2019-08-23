@@ -152,6 +152,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             store.UploadStrategy = storeFromRepo.UploadStrategy;
 
             ToggleExportUploadMapButtonEnabled();
+
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+            {
+                warehouseWarning.Visible = true;
+            }
         }
 
         /// <summary>
