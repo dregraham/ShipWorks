@@ -1133,10 +1133,10 @@ namespace ShipWorks
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
-                (getShipmentType, onApply) => profilePopupService.BuildMenu(
+                (getShipment, onApply) => profilePopupService.BuildMenu(
                     buttonOrderLookupViewApplyProfile,
                     new Guid("98602808-B402-48F9-A5D1-EE10FCE16565"),
-                    getShipmentType,
+                    getShipment,
                     onApply));
 
             panelDockingArea.Controls.Add(orderLookupControl.Control);
