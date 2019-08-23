@@ -102,6 +102,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 orderManager.PopulateOrderDetails(shipment);
             }
 
+            var storeTypeCode = shipment.Order.Store.StoreTypeCode;
+
+            // Due to TOS don't allow SWA for Walmart, eBay or Generic Module stores
+            if (storeTypeCode == StoreTypeCode.Walmart || storeTypeCode == StoreTypeCode.Ebay ||
+                    storeTypeCode == StoreTypeCode.GenericModule)
+            {
+                return false;
+            }
+
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
             AmazonShippingPolicyTarget target = new AmazonShippingPolicyTarget()
