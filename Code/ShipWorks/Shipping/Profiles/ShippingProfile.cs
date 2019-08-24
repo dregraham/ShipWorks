@@ -139,12 +139,12 @@ namespace ShipWorks.Shipping.Profiles
         {
             bool isAllowed = true;
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            if (ShippingProfileEntity.ShipmentType != null)
             {
-                var shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
-
-                if (ShippingProfileEntity.ShipmentType != null)
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
+                    var shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
+
                     ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType ??
                         ShipmentTypeCode.None);
 
