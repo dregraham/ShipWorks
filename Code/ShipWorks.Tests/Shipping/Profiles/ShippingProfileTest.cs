@@ -28,8 +28,6 @@ namespace ShipWorks.Tests.Shipping.Profiles
             shippingProfileManagerMock = mock.Mock<IShippingProfileManager>();
             shortcutManagerMock = mock.Mock<IShortcutManager>();
 
-
-
             IoC.InitializeForUnitTests(mock.Container);
 
             securityContext = mock.Mock<ISecurityContext>();
