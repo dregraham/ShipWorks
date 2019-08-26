@@ -45,7 +45,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as a timer callback")]
         private async void TimerCallback(object state)
         {
-            Store = await refreshAction(storeEntity).ConfigureAwait(false);
+            var store = await refreshAction(storeEntity).ConfigureAwait(false);
+            Store = store ?? Store;
         }
 
         /// <summary>
