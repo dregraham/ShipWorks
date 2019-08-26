@@ -42,13 +42,11 @@ namespace ShipWorks.Tests.Shipping.Profiles
             var shippingManager = mock.Mock<IShippingManager>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
-
-            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             testObject.Apply(shipment);
 
@@ -90,13 +88,11 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
 
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
-
-            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
@@ -114,13 +110,11 @@ namespace ShipWorks.Tests.Shipping.Profiles
             mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.AmazonSFP)).Returns(strategy);
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
-
-            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             testObject.Apply(shipment);
 
@@ -135,13 +129,11 @@ namespace ShipWorks.Tests.Shipping.Profiles
             var messenger = mock.Mock<IMessenger>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Mock<IShipmentTypeManager>();
+            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
             shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
-
-            mock.AddRegistration(x => x.RegisterInstance(shipmentTypeManager.Object));
 
             testObject.Apply(shipment);
 

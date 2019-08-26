@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ShipWorks.Shipping.Profiles
 {
     /// <summary>
-    /// Thrown when a known error occurs during shipping
+    /// Thrown when an error occurs applying a profile
     /// </summary>
     [Description("ProfileException")]
     public class ProfileException : Exception
