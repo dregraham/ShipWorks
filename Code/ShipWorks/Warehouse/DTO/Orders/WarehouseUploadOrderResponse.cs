@@ -13,7 +13,7 @@ namespace ShipWorks.Warehouse.DTO.Orders
         /// <summary>
         /// OrderNumberComplete
         /// </summary>
-        public string OrderNumberComplete { get; set; }
+        public string OrderNumber { get; set; }
 
         /// <summary>
         /// StoreID of added order

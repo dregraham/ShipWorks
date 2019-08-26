@@ -408,8 +408,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 foreach (WarehouseUploadOrderResponse orderResponse in result.Value)
                 {
-                    OrderEntity downloadedOrder = downloadedOrders.Single(x => x.StoreID.ToString() == orderResponse.StoreId &&
-                                                 x.OrderNumberComplete == orderResponse.OrderNumberComplete);
+                    OrderEntity downloadedOrder = downloadedOrders.Single(x => x.OrderNumberComplete == orderResponse.OrderNumber);
 
                     downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
                     downloadedOrder.HubSequence = orderResponse.HubSequence;
