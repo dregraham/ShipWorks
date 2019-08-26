@@ -111,6 +111,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 return false;
             }
 
+            if (storeTypeCode == StoreTypeCode.ChannelAdvisor)
+            {
+                var order = shipment.Order as ChannelAdvisorOrderEntity;
+
+                if (order.MarketplaceNames.Contains("Walmart", StringComparison.OrdinalIgnoreCase) ||
+                    order.MarketplaceNames.Contains("eBay", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
+
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
             AmazonShippingPolicyTarget target = new AmazonShippingPolicyTarget()
