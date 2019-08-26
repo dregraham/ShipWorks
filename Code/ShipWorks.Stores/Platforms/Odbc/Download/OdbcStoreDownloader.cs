@@ -39,6 +39,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private readonly IWarehouseOrderClient warehouseOrderClient;
         private readonly ILicenseService licenseService;
         private readonly IConfigurationData configurationData;
+        private readonly IStoreManager storeManager;
         private readonly OdbcStoreEntity store;
         private readonly ILog log;
         private readonly OdbcStoreType odbcStoreType;
@@ -67,13 +68,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IWarehouseOrderClient warehouseOrderClient,
             IOdbcStoreRepository odbcStoreRepository,
             ILicenseService licenseService,
-            IConfigurationData configurationData) : base(store, extras.GetStoreType(store))
+            IConfigurationData configurationData,
+            IStoreManager storeManager) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
             this.orderLoader = orderLoader;
             this.warehouseOrderClient = warehouseOrderClient;
             this.licenseService = licenseService;
             this.configurationData = configurationData;
+            this.storeManager = storeManager;
             this.store = (OdbcStoreEntity) store;
             log = extras.GetLog(GetType());
             odbcStoreType = StoreType as OdbcStoreType;
@@ -212,7 +215,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 }
             }
 
-            base.DownloadWarehouseOrders(batchId);
+            await base.DownloadWarehouseOrders(batchId).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -258,7 +261,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 // Get the starting point and include it for telemetry
                 DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
 
-                if (IsWarehouseAllowed() && store.WarehouseLastModified > startingPoint)
+                if (IsWarehouseAllowed() && store.WarehouseLastModified.HasValue)
                 {
                     startingPoint = store.WarehouseLastModified.Value;
                 }
@@ -346,6 +349,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 await UploadOrdersToHub(ordersToSendToHub).ConfigureAwait(false);
 
                 store.WarehouseLastModified = ordersToSendToHub.Max(x => x.OnlineLastModified);
+                storeManager.SaveStore(store);                
             }
         }
 
