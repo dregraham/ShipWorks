@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponses>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
+        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             try
             {
@@ -117,13 +117,13 @@ namespace ShipWorks.Stores.Warehouse
                 else
                 {
                     log.Error(RestrictedErrorMessage);
-                    return GenericResult.FromError<WarehouseUploadOrderResponses>(RestrictedErrorMessage);
+                    return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(RestrictedErrorMessage);
                 }
             }
             catch (Exception ex)
             {
                 log.Error($"Failed to upload order to hub. First Order ID was {orders.FirstOrDefault()?.OrderID.ToString() ?? "???"}", ex);
-                return GenericResult.FromError<WarehouseUploadOrderResponses>(ex);
+                return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(ex);
             }
         }
 

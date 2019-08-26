@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             IOdbcDownloaderExtraDependencies extras,
             IWarehouseOrderClient warehouseOrderClient,
             IOdbcStoreRepository odbcStoreRepository,
-            ILicenseService licenseService, 
+            ILicenseService licenseService,
             IConfigurationData configurationData) : base(store, extras.GetStoreType(store))
         {
             this.downloadCommandFactory = downloadCommandFactory;
@@ -199,7 +199,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 throw new DownloadException($"The store, {store.StoreName}, is set to download ALL orders and this is not supported. \r\n\r\n" +
                                             "To automatically download orders, change this store's order import settings to download by last modified.");
             }
-            
+
             if (!string.IsNullOrEmpty(store.ImportConnectionString) &&
                 (string.IsNullOrEmpty(odbcStore.Value.WarehouseID) || warehouseID.Value == odbcStore.Value.WarehouseID) &&
                 IsWarehouseAllowed())
@@ -305,7 +305,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         private async Task LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
         {
             List<OrderEntity> ordersToSendToHub = new List<OrderEntity>();
-            
+
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
                 if (Progress.IsCancelRequested)
@@ -380,13 +380,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<WarehouseUploadOrderResponses> result = await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store).ConfigureAwait(false);
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     throw new DownloadException(result.Message);
                 }
 
-                WarehouseUploadOrderResponse orderResponse = result.Value.OrderResponses.Single();
+                WarehouseUploadOrderResponse orderResponse = result.Value.Single();
 
                 downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
                 downloadedOrder.HubSequence = orderResponse.HubSequence;
@@ -400,13 +400,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<WarehouseUploadOrderResponses> result = await warehouseOrderClient.UploadOrders(downloadedOrders, store).ConfigureAwait(false);
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = await warehouseOrderClient.UploadOrders(downloadedOrders, store).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     throw new DownloadException(result.Message);
                 }
 
-                foreach (WarehouseUploadOrderResponse orderResponse in result.Value.OrderResponses)
+                foreach (WarehouseUploadOrderResponse orderResponse in result.Value)
                 {
                     OrderEntity downloadedOrder = downloadedOrders.Single(x => x.StoreID.ToString() == orderResponse.StoreId &&
                                                  x.OrderNumberComplete == orderResponse.OrderNumberComplete);

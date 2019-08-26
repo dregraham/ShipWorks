@@ -54,14 +54,13 @@ namespace ShipWorks.Stores.Tests.Warehouse
         [Fact]
         public async Task UploadOrders_ReturnsResponseFromUploadOrdersRequest()
         {
-            string message = "expected message";
             uploadOrdersRequest
                 .Setup(r => r.Submit(orders, store.Object))
-                .ReturnsAsync(GenericResult.FromSuccess(new WarehouseUploadOrderResponses(), message));
+                .ReturnsAsync(GenericResult.FromSuccess<IEnumerable<WarehouseUploadOrderResponse>>(new List<WarehouseUploadOrderResponse>(), "expected message"));
 
             var actualResult = await testObject.UploadOrders(orders, store.Object);
 
-            Assert.Equal(message, actualResult.Message);
+            Assert.Equal("expected message", actualResult.Message);
         }
 
         [Fact]

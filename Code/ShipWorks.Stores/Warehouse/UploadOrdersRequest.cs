@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Submit this UploadOrderRequest to the hub and return the response
         /// </summary>
-        public async Task<GenericResult<WarehouseUploadOrderResponses>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
+        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
         {
             IRestRequest request = createRateRequest(WarehouseEndpoints.UploadOrders, Method.POST);
 
@@ -75,13 +75,13 @@ namespace ShipWorks.Stores.Warehouse
 
             if (response.Failure)
             {
-                return GenericResult.FromError<WarehouseUploadOrderResponses>(response.Message);
+                return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(response.Message);
             }
 
-            var orderResponse = JsonConvert.DeserializeObject<WarehouseUploadOrderResponses>(
+            var orderResponse = JsonConvert.DeserializeObject<IEnumerable<WarehouseUploadOrderResponse>>(
                 response.Value.Content, GetJsonSerializerSettings());
 
-            return orderResponse;
+            return GenericResult.FromSuccess(orderResponse);
         }
 
         /// <summary>

@@ -64,12 +64,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 {
                     // If there was a store in the cache return it
                     return refreshingOdbcStore.Store;
-                }                
+                }
 
                 // Since there was no store in the cache, get one from the hub
                 OdbcStore storeFromHub = Task.Run(
                     async () => await GetStoreFromHub(store).ConfigureAwait(false)).Result;
- 
+
                 if (storeFromHub != null)
                 {
                     // Save the store to the cache and return it
