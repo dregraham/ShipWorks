@@ -42,6 +42,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
 
         public string UploadColumnSource { get; set; }
 
-        public string WarehouseID { get; set; } = null;
+        [JsonProperty("orderImportingWarehouseId")]
+        public string OrderImportingWarehouseId { get; set; } = null;
     }
 }

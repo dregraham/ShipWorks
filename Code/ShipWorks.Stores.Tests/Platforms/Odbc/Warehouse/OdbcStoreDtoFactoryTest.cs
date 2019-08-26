@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Warehouse
                 .Create(store)
                 .ConfigureAwait(false);
 
-            Assert.Equal(warehouseId, ((OdbcStore) result).WarehouseID);
+            Assert.Equal(warehouseId, ((OdbcStore) result).OrderImportingWarehouseId);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Warehouse
                 .Create(store)
                 .ConfigureAwait(false);
 
-            Assert.True(string.IsNullOrEmpty(((OdbcStore) result).WarehouseID));
+            Assert.True(string.IsNullOrEmpty(((OdbcStore) result).OrderImportingWarehouseId));
         }
     }
 }

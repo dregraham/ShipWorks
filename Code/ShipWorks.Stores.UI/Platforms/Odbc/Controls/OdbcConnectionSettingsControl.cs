@@ -104,6 +104,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnEditUploadSettingsClick(object sender, EventArgs e)
         {
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
+                !store.WarehouseStoreID.HasValue)
+            {
+                messageHelper.ShowError(this, "Unable to change settings for this store until this ShipWorks database is linked to a warehouse in ShipWorks Hub");
+            }
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
                 WizardPage[] uploadPages =

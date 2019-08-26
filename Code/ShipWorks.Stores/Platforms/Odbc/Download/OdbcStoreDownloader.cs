@@ -201,7 +201,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             }
 
             if (!string.IsNullOrEmpty(store.ImportConnectionString) &&
-                (string.IsNullOrEmpty(odbcStore.Value.WarehouseID) || warehouseID.Value == odbcStore.Value.WarehouseID) &&
+                (string.IsNullOrEmpty(odbcStore.Value.OrderImportingWarehouseId) || warehouseID.Value == odbcStore.Value.OrderImportingWarehouseId) &&
                 IsWarehouseAllowed())
             {
                 using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))

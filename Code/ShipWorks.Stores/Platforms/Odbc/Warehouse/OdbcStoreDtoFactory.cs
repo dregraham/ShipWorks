@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
             store.UploadColumnSource = storeEntity.UploadColumnSource;
             if (storeEntity.ShouldUploadWarehouseOrders)
             {
-                store.WarehouseID = warehouseID.Value;
+                store.OrderImportingWarehouseId = warehouseID.Value;
             }
 
             return Task.FromResult<Store>(store);
