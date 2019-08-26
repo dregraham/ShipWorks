@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Warehouse
             return new WarehouseOrder
             {
                 StoreId = warehouseStoreID.Value.ToString(),
-                StoreType = (int) StoreTypeCode.Odbc,
+                StoreType = (int) store.StoreTypeCode,
                 Warehouse = warehouseID.Value,
                 OrderNumber = order.OrderNumberComplete,
                 OrderDate = order.OrderDate,

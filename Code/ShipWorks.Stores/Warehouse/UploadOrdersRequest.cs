@@ -60,12 +60,19 @@ namespace ShipWorks.Stores.Warehouse
 
             request.RequestFormat = DataFormat.Json;
 
+            Orders = ConvertWarehouseOrders(orders, store);
+
             if (((IOdbcStoreEntity) store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 Batch = Guid.NewGuid();
             }
-
-            Orders = ConvertWarehouseOrders(orders, store);
+            else
+            {
+                foreach (var order in Orders)
+                {
+                    order.Warehouse = string.Empty;
+                }
+            }
 
             request.AddJsonBody(this);
 
