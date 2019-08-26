@@ -164,15 +164,16 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
-            if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
-            {
-                throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
-                                            "To automatically download orders, change this store's order import settings.");
-            }
-
-            Progress.Detail = "Querying data source...";
             try
             {
+                if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+                {
+                    throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
+                                                "To automatically download orders, change this store's order import settings.");
+                }
+
+                Progress.Detail = "Querying data source...";
+
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
                 AddTelemetryData(trackedDurationEvent, downloadCommand);
 
@@ -189,30 +190,40 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         protected override async Task DownloadWarehouseOrders(Guid batchId)
         {
-            OdbcImportStrategy importStrategy = (OdbcImportStrategy) odbcStore.Value.ImportStrategy;
-            if (importStrategy == OdbcImportStrategy.OnDemand)
+            try
             {
-                throw new DownloadException($"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
-                                            "To automatically download orders, change this store's order import settings.");
-            }
-
-            if (importStrategy == OdbcImportStrategy.All)
-            {
-                // This should never happen
-                throw new DownloadException($"The store, {store.StoreName}, is set to download ALL orders and this is not supported. \r\n\r\n" +
-                                            "To automatically download orders, change this store's order import settings to download by last modified.");
-            }
-
-            if (!string.IsNullOrEmpty(store.ImportConnectionString) &&
-                (string.IsNullOrEmpty(odbcStore.Value.OrderImportingWarehouseId) || warehouseID.Value == odbcStore.Value.OrderImportingWarehouseId) &&
-                IsWarehouseAllowed())
-            {
-                using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                OdbcImportStrategy importStrategy = (OdbcImportStrategy) odbcStore.Value.ImportStrategy;
+                if (importStrategy == OdbcImportStrategy.OnDemand)
                 {
-                    await Download(trackedDurationEvent).ConfigureAwait(false);
-
-                    CollectDownloadTelemetry(trackedDurationEvent);
+                    throw new DownloadException(
+                        $"The store, {store.StoreName}, is set to download orders on order search only. \r\n\r\n" +
+                        "To automatically download orders, change this store's order import settings.");
                 }
+
+                if (importStrategy == OdbcImportStrategy.All)
+                {
+                    // This should never happen
+                    throw new DownloadException(
+                        $"The store, {store.StoreName}, is set to download ALL orders and this is not supported. \r\n\r\n" +
+                        "To automatically download orders, change this store's order import settings to download by last modified.");
+                }
+
+                if (!string.IsNullOrEmpty(store.ImportConnectionString) &&
+                    (string.IsNullOrEmpty(odbcStore.Value.OrderImportingWarehouseId) ||
+                     warehouseID.Value == odbcStore.Value.OrderImportingWarehouseId) &&
+                    IsWarehouseAllowed())
+                {
+                    using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                    {
+                        await Download(trackedDurationEvent).ConfigureAwait(false);
+
+                        CollectDownloadTelemetry(trackedDurationEvent);
+                    }
+                }
+            }
+            catch (ShipWorksOdbcException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
             }
 
             await base.DownloadWarehouseOrders(batchId).ConfigureAwait(false);
