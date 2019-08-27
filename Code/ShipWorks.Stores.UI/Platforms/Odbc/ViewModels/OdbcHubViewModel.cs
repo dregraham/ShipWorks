@@ -10,6 +10,9 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
+using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -148,14 +151,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels
             storeEntity.StoreName = null;
 
             storeEntity.ImportMap = string.Empty;
-            storeEntity.ImportStrategy = 0;
-            storeEntity.ImportColumnSourceType = 0;
+            storeEntity.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+            storeEntity.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
             storeEntity.ImportColumnSource = string.Empty;
-            storeEntity.ImportOrderItemStrategy = 0;
+            storeEntity.ImportOrderItemStrategy = (int) OdbcImportOrderItemStrategy.SingleLine;
 
             storeEntity.UploadMap = string.Empty;
-            storeEntity.UploadStrategy = 0;
-            storeEntity.UploadColumnSourceType = 0;
+            storeEntity.UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload;
+            storeEntity.UploadColumnSourceType = (int) OdbcColumnSourceType.Table;
             storeEntity.UploadColumnSource = string.Empty;
         }
 
