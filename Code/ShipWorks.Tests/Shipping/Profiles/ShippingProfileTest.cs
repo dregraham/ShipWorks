@@ -2,7 +2,6 @@
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -28,8 +27,6 @@ namespace ShipWorks.Tests.Shipping.Profiles
             shippingProfileManagerMock = mock.Mock<IShippingProfileManager>();
             shortcutManagerMock = mock.Mock<IShortcutManager>();
 
-            IoC.InitializeForUnitTests(mock.Container);
-
             securityContext = mock.Mock<ISecurityContext>();
             securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(true);
         }
@@ -42,10 +39,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
             var shippingManager = mock.Mock<IShippingManager>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
 
             testObject.Apply(shipment);
@@ -88,10 +85,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
             ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.AmazonSFP };
             var shippingProfileApplicationStrategyFactory = mock.Mock<IShippingProfileApplicationStrategyFactory>();
 
-            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
 
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
@@ -110,10 +107,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
             mock.Mock<IShippingProfileApplicationStrategyFactory>().Setup(f => f.Create(ShipmentTypeCode.AmazonSFP)).Returns(strategy);
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
 
             testObject.Apply(shipment);
@@ -129,10 +126,10 @@ namespace ShipWorks.Tests.Shipping.Profiles
             var messenger = mock.Mock<IMessenger>();
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
 
-            var shipmentTypeManager = mock.Override<IShipmentTypeManager>();
             var shipmentType = mock.Mock<ShipmentType>();
             shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
-            shipmentTypeManager.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
 
             testObject.Apply(shipment);
@@ -204,7 +201,7 @@ namespace ShipWorks.Tests.Shipping.Profiles
         }
 
         [Fact]
-        public void IsApplicable_ReturnsFalse_WhenShipmentTypeCodeIsNoneAndProfileIsAmazon()
+        public void IsApplicable_ReturnsTrue_WhenShipmentTypeCodeIsNoneAndProfileIsAmazon()
         {
             ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.AmazonSFP };
             var testObject = CreateShippingProfile(profile, new ShortcutEntity());
@@ -212,6 +209,69 @@ namespace ShipWorks.Tests.Shipping.Profiles
             Assert.True(testObject.IsApplicable(ShipmentTypeCode.None));
         }
 
+        [Fact]
+        public void CanApply_ReturnsFalse_WhenUserDoesNotHavePermission()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
+            var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            securityContext.Setup(s => s.HasPermission(PermissionType.ShipmentsCreateEditProcess, It.IsAny<long>())).Returns(false);
+
+            Assert.False(testObject.CanApply(shipment));
+        }
+
+        [Fact]
+        public void CanApply_ReturnsFalse_WhenShipmentTypeIsNotApplicable()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.None };
+            var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.False(testObject.CanApply(shipment));
+        }
+
+        [Fact]
+        public void CanApply_ReturnsFalse_WhenProfileTypeIsNotAllowedForShipment()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.FedEx };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
+            var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(false);
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            Assert.False(testObject.CanApply(shipment));
+        }
+
+        [Fact]
+        public void CanApply_ReturnsTrue_WhenUserHasPermissionAndShipmentTypeIsApplicableAndProfileIsGlobal()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = null };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
+            var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            Assert.True(testObject.CanApply(shipment));
+        }
+
+        [Fact]
+        public void CanApply_ReturnsTrue_WhenUserHasPermissionAndShipmentTypeIsApplicableAndProfileTypeIsAllowed()
+        {
+            ShippingProfileEntity profile = new ShippingProfileEntity { ShipmentType = ShipmentTypeCode.FedEx };
+            ShipmentEntity shipment = new ShipmentEntity { ShipmentTypeCode = ShipmentTypeCode.FedEx };
+            var testObject = CreateShippingProfile(profile, new ShortcutEntity());
+
+            var shipmentType = mock.Mock<ShipmentType>();
+            shipmentType.Setup(x => x.IsAllowedFor(shipment)).Returns(true);
+
+            mock.Mock<IShipmentTypeManager>().Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
+
+            Assert.True(testObject.CanApply(shipment));
+        }
 
         private ShippingProfile CreateShippingProfile(IShippingProfileEntity profile, IShortcutEntity shortcut) =>
             mock.Create<ShippingProfile>(TypedParameter.From(profile), TypedParameter.From(shortcut));
