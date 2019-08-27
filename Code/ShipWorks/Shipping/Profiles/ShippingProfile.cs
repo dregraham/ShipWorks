@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
@@ -9,7 +10,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users.Security;
 
@@ -25,23 +25,26 @@ namespace ShipWorks.Shipping.Profiles
         private readonly IShippingManager shippingManager;
         private readonly IMessenger messenger;
         private readonly Func<ISecurityContext> securityContext;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor used when we don't have an existing ShippingProfileEntity or ShortcutEntity
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShippingProfile(
             IShippingProfileEntity profile,
             IShortcutEntity shortcut,
             IShippingProfileApplicationStrategyFactory strategyFactory,
             IShippingManager shippingManager,
             IMessenger messenger,
-            Func<ISecurityContext> securityContext)
+            Func<ISecurityContext> securityContext,
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.strategyFactory = strategyFactory;
             this.shippingManager = shippingManager;
             this.messenger = messenger;
             this.securityContext = securityContext;
-
+            this.shipmentTypeManager = shipmentTypeManager;
             ShippingProfileEntity = profile;
             Shortcut = shortcut;
         }
@@ -108,7 +111,7 @@ namespace ShipWorks.Shipping.Profiles
         }
 
         /// <summary>
-        /// Is the profile applicable to the Shipment
+        /// Is the profile applicable for this shipment type?
         /// </summary>
         public bool IsApplicable(ShipmentTypeCode? shipmentTypeCode)
         {
@@ -134,22 +137,25 @@ namespace ShipWorks.Shipping.Profiles
         /// <summary>
         /// Check to see if the profile can be applied
         /// </summary>
-        private bool CanApply(IEnumerable<ShipmentEntity> shipments) =>
-            shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
-                shipments.All(s => IsApplicable(s.ShipmentTypeCode) && IsApplicable(s));
-
-        /// <summary>
-        /// Check to see if the profile is applicable to the given shipment
-        /// </summary>
-        private bool IsApplicable(ShipmentEntity shipment)
+        public bool CanApply(IEnumerable<ShipmentEntity> shipments)
         {
-            if (ShippingProfileEntity.ShipmentType == ShipmentTypeCode.AmazonSWA)
+            bool isAllowed = true;
+
+            if (ShippingProfileEntity.ShipmentType != null)
             {
-                IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
-                return !amazonOrder?.IsPrime ?? false;
+                ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType.Value);
+
+                isAllowed = shipments.All(s => profileShipmentType.IsAllowedFor(s));
             }
 
-            return true;
+            return shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
+                shipments.All(s => IsApplicable(s.ShipmentTypeCode)) && isAllowed;
         }
+
+        /// <summary>
+        /// Check to see if the profile can be applied  
+        /// </summary>
+        public bool CanApply(ShipmentEntity shipment) =>
+            CanApply(new[] { shipment });
     }
 }

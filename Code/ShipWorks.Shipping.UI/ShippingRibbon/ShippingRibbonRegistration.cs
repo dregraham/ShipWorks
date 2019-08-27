@@ -4,6 +4,7 @@ using Divelements.SandRibbon;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls.SandRibbon;
 using TD.SandDock;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         private IDisposable profileMenuDisposable;
         private ApplyProfileButtonWrapper applyProfileButton;
         private RibbonButton manageProfilesButton;
-        private ShipmentTypeCode? currentShipmentType;
+        private ShipmentEntity currentShipment;
         private readonly IProfilePopupService profilePopupService;
 
         public ShippingRibbonRegistration(
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             profileMenuDisposable = profilePopupService.BuildMenu(
                 actualApplyProfileButton,
                 new Guid("7DC9AA2C-DB1A-447E-B717-DB252CC39338"),
-                () => currentShipmentType,
+                () => currentShipment,
                 applyProfileButton.ApplyProfile);
 
             manageProfilesButton = new RibbonButton
@@ -203,9 +204,9 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Set the type of the currently selected shipment, if any
         /// </summary>
-        public void SetCurrentShipmentType(ShipmentTypeCode? shipmentType)
+        public void SetCurrentShipment(ShipmentEntity shipment)
         {
-            currentShipmentType = shipmentType;
+            currentShipment = shipment;
         }
 
         /// <summary>

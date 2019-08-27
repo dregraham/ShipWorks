@@ -1,11 +1,9 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -16,25 +14,16 @@ namespace ShipWorks.Shipping.Services
     public class ShippingProfileFactory : IShippingProfileFactory
     {
         private readonly Func<IEditableShippingProfileRepository> shippingProfileRepository;
-        private readonly IShippingProfileApplicationStrategyFactory strategyFactory;
-        private readonly IShippingManager shippingManager;
-        private readonly IMessenger messenger;
-        private readonly Func<ISecurityContext> securityContext;
+        private readonly Func<IShippingProfileEntity, IShortcutEntity, IShippingProfile> createShippingProfile;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingProfileFactory(Func<IEditableShippingProfileRepository> shippingProfileRepository,
-            IShippingProfileApplicationStrategyFactory strategyFactory,
-            IShippingManager shippingManager,
-            IMessenger messenger,
-            Func<ISecurityContext> securityContext)
+            Func<IShippingProfileEntity, IShortcutEntity, IShippingProfile> createShippingProfile)
         {
             this.shippingProfileRepository = shippingProfileRepository;
-            this.strategyFactory = strategyFactory;
-            this.shippingManager = shippingManager;
-            this.messenger = messenger;
-            this.securityContext = securityContext;
+            this.createShippingProfile = createShippingProfile;
         }
 
         /// <summary>
@@ -70,6 +59,6 @@ namespace ShipWorks.Shipping.Services
         /// Create a profile that can be applied to a shipment
         /// </summary>
         public IShippingProfile Create(IShippingProfileEntity profile, IShortcutEntity shortcut) =>
-            new ShippingProfile(profile, shortcut, strategyFactory, shippingManager, messenger, securityContext);
+            createShippingProfile(profile, shortcut);
     }
 }
