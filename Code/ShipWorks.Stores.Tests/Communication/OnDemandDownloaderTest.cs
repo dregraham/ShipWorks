@@ -98,7 +98,7 @@ namespace ShipWorks.Stores.Tests.Communication
 
             await testObject.Download("blah");
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowPopup("There was an error downloading 'blah.' Please see the download log for additional information."), Times.Once);
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowPopup("There was an error downloading 'blah'. Please see the download log for additional information."), Times.Once);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace ShipWorks.Stores.Tests.Communication
 
             await testObject.Download("blah");
 
-            mock.Mock<IMessageHelper>().Verify(m => m.ShowPopup("There was an error downloading 'blah.' Please see the download log for additional information."), Times.Once);
+            mock.Mock<IMessageHelper>().Verify(m => m.ShowPopup("There was an error downloading 'blah'. Please see the download log for additional information."), Times.Once);
         }
 
         [Fact]

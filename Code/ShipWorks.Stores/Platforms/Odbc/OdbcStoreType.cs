@@ -78,7 +78,6 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Returns an empty OdbcStoreType
         /// </summary>
-        /// <returns></returns>
         public override StoreEntity CreateStoreInstance()
         {
             OdbcStoreEntity store = new OdbcStoreEntity

@@ -66,19 +66,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
-            if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload)
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return null;
             }
 
             IOdbcDataSource dataSource = dataSourceFactory();
 
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource)
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource && !string.IsNullOrEmpty(store.ImportConnectionString))
             {
                 dataSource.Restore(store.ImportConnectionString);
             }
-
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseShipmentDataSource)
+            else
             {
                 dataSource.Restore(store.UploadConnectionString);
             }

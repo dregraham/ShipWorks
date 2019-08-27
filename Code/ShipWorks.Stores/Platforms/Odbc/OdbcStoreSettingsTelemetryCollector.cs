@@ -7,6 +7,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Warehouse.StoreData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,8 +37,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         {
             try
             {
-                OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
-                if (odbcStore == null)
+                OdbcStoreEntity odbcStoreEntity = store as OdbcStoreEntity;
+                OdbcStore odbcStore = odbcStoreRepository.GetStore(odbcStoreEntity);
+                if (odbcStoreEntity == null)
                 {
                     // This is invalid, but we don't want to throw an exception here
                     // that could result in a crash.
@@ -45,13 +47,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 }
                 else
                 {
-                    trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStore));
-                    trackedDurationEvent.AddProperty("Import.QueryType", GetImportColumnSourceTypeName(odbcStore));
-                    trackedDurationEvent.AddProperty("Import.OrderItemDataStructure", OrderItemDataStructure(odbcStore));
-                    trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStore.ImportStrategy));
-                    trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStore));
-                    trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStore));
-                    trackedDurationEvent.AddProperty("Upload.QueryType", GetUploadColumnSourceTypeName(odbcStore));
+                    trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStoreEntity));
+                    trackedDurationEvent.AddProperty("Import.QueryType", GetImportColumnSourceTypeName(odbcStoreEntity));
+                    trackedDurationEvent.AddProperty("Import.OrderItemDataStructure", OrderItemDataStructure(odbcStoreEntity, odbcStore));
+                    trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStoreEntity.ImportStrategy));
+                    trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStoreEntity, odbcStore));
+                    trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStoreEntity, odbcStore));
+                    trackedDurationEvent.AddProperty("Upload.QueryType", GetUploadColumnSourceTypeName(odbcStoreEntity, odbcStore));
                 }
             }
             catch (Exception exception)
@@ -75,26 +77,26 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the name of the import column source.
         /// </summary>
-        private string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStore)
+        private string GetImportColumnSourceTypeName(OdbcStoreEntity odbcStoreEntity)
         {
-            return GetImportDriverName(odbcStore).Equals("None", StringComparison.InvariantCultureIgnoreCase) ?
+            return GetImportDriverName(odbcStoreEntity).Equals("None", StringComparison.InvariantCultureIgnoreCase) ?
                 "None" :
-                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.ImportColumnSourceType);
+                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStoreEntity.ImportColumnSourceType);
         }
 
         /// <summary>
         /// Determines if the import map is single line.
         /// </summary>
         /// <returns>Single line, Multi-line, or Unknown</returns>
-        private string OrderItemDataStructure(OdbcStoreEntity odbcStore)
+        private string OrderItemDataStructure(OdbcStoreEntity odbcStoreEntity, OdbcStore odbcStore)
         {
-            if (GetImportDriverName(odbcStore).Equals("None", StringComparison.InvariantCultureIgnoreCase))
+            if (GetImportDriverName(odbcStoreEntity).Equals("None", StringComparison.InvariantCultureIgnoreCase))
             {
                 return "None";
             }
 
             IOdbcFieldMap importMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            importMap.Load(odbcStoreRepository.GetStore(odbcStore).ImportMap);
+            importMap.Load(odbcStore.ImportMap);
 
             IOdbcFieldMapEntry orderNumberEntry = importMap.FindEntriesBy(OrderFields.OrderNumber, true).SingleOrDefault();
 
@@ -123,9 +125,9 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Gets the name of the upload strategy.
         /// </summary>
-        private string GetUploadStrategyName(OdbcStoreEntity odbcStore)
+        private string GetUploadStrategyName(OdbcStoreEntity odbcStoreEntity, OdbcStore odbcStore)
         {
-            string orderItemDataStructure = OrderItemDataStructure(odbcStore);
+            string orderItemDataStructure = OrderItemDataStructure(odbcStoreEntity, odbcStore);
 
             if (orderItemDataStructure.Equals("None", StringComparison.InvariantCultureIgnoreCase) ||
                 orderItemDataStructure.Equals("Unknown", StringComparison.InvariantCultureIgnoreCase))
@@ -133,31 +135,31 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return "None";
             }
 
-            return EnumHelper.GetApiValue((OdbcShipmentUploadStrategy) odbcStore.UploadStrategy);
+            return EnumHelper.GetApiValue((OdbcShipmentUploadStrategy) odbcStoreEntity.UploadStrategy);
         }
 
         /// <summary>
         /// Gets the name of the upload driver.
         /// </summary>
-        private string GetUploadDriverName(OdbcStoreEntity odbcStore)
+        private string GetUploadDriverName(OdbcStoreEntity odbcStoreEntity, OdbcStore odbcStore)
         {
-            if (odbcStoreRepository.GetStore(odbcStore).UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return "None";
             }
 
-            return dataSourceService.GetUploadDataSource(odbcStore)?.Driver ?? "Unknown";
+            return dataSourceService.GetUploadDataSource(odbcStoreEntity)?.Driver ?? "Unknown";
         }
 
 
         /// <summary>
         /// Gets the name of the upload column source type.
         /// </summary>
-        private string GetUploadColumnSourceTypeName(OdbcStoreEntity odbcStore)
+        private string GetUploadColumnSourceTypeName(OdbcStoreEntity odbcStoreEntity, OdbcStore odbcStore)
         {
-            return GetUploadDriverName(odbcStore).Equals("None", StringComparison.InvariantCultureIgnoreCase) ?
+            return GetUploadDriverName(odbcStoreEntity, odbcStore).Equals("None", StringComparison.InvariantCultureIgnoreCase) ?
                 "None" :
-                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStoreRepository.GetStore(odbcStore).UploadColumnSourceType);
+                EnumHelper.GetApiValue((OdbcColumnSourceType) odbcStore.UploadColumnSourceType);
         }
     }
 }

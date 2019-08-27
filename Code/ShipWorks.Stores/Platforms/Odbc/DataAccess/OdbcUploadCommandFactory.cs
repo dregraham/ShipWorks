@@ -1,4 +1,5 @@
 ﻿using Autofac.Features.Indexed;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -18,30 +19,31 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     [Component]
     public class OdbcUploadCommandFactory : IOdbcUploadCommandFactory
     {
-        private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcFieldMap fieldMap;
         private readonly ITemplateTokenProcessor templateTokenProcessor;
         private readonly IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers;
         private readonly IOdbcStoreRepository odbcStoreRepository;
+        private readonly IOdbcDataSourceService odbcDataSourceService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public OdbcUploadCommandFactory(
-            IOdbcDataSource dataSource,
             IShipWorksDbProviderFactory dbProviderFactory,
             IOdbcFieldMap fieldMap,
             ITemplateTokenProcessor templateTokenProcessor,
             IIndex<OdbcFieldValueResolutionStrategy, IOdbcFieldValueResolver> odbcFieldValueResolvers,
-            IOdbcStoreRepository odbcStoreRepository)
+            IOdbcStoreRepository odbcStoreRepository,
+            IOdbcDataSourceService odbcDataSourceService)
         {
-            this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
             this.fieldMap = fieldMap;
             this.templateTokenProcessor = templateTokenProcessor;
             this.odbcFieldValueResolvers = odbcFieldValueResolvers;
             this.odbcStoreRepository = odbcStoreRepository;
+            this.odbcDataSourceService = odbcDataSourceService;
         }
 
         /// <summary>
@@ -53,20 +55,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             OdbcShipmentUploadStrategy uploadStrategy = (OdbcShipmentUploadStrategy) odbcStoreRepository.GetStore(store).UploadStrategy;
-            switch (uploadStrategy)
+            if (uploadStrategy == OdbcShipmentUploadStrategy.DoNotUpload)
             {
-                case OdbcShipmentUploadStrategy.UseImportDataSource:
-                    dataSource.Restore(store.ImportConnectionString);
-                    break;
-                case OdbcShipmentUploadStrategy.UseShipmentDataSource:
-                    dataSource.Restore(store.UploadConnectionString);
-                    break;
-                default:
-                    string uploadStrategyName = EnumHelper.GetDescription(uploadStrategy);
-                    throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload strategy is '{uploadStrategyName}'.");
+                string uploadStrategyName = EnumHelper.GetDescription(uploadStrategy);
+                throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload strategy is '{uploadStrategyName}'.");
             }
+            IOdbcDataSource dataSource = odbcDataSourceService.GetUploadDataSource(store);
 
-            IOdbcQuery uploadQuery = CreateUploadQuery(store, shipment);
+            IOdbcQuery uploadQuery = CreateUploadQuery(store, shipment, dataSource);
 
             return new OdbcUploadCommand(dataSource, dbProviderFactory, uploadQuery);
         }
@@ -74,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Creates the download query used to retrieve orders.
         /// </summary>
-        private IOdbcQuery CreateUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
+        private IOdbcQuery CreateUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment, IOdbcDataSource dataSource)
         {
             OdbcColumnSourceType uploadColumnSourceType = 
                 (OdbcColumnSourceType) odbcStoreRepository.GetStore(store).UploadColumnSourceType;
@@ -82,7 +78,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
             switch (uploadColumnSourceType)
             {
                 case OdbcColumnSourceType.Table:
-                    return CreateTableUploadQuery(store, shipment);
+                    return CreateTableUploadQuery(store, shipment, dataSource);
                 case OdbcColumnSourceType.CustomQuery:
                 case OdbcColumnSourceType.CustomParameterizedQuery:
                     return CreateCustomUploadQuery(store, shipment);
@@ -103,7 +99,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Creates the table upload query for the given store and shipment
         /// </summary>
-        private IOdbcQuery CreateTableUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment)
+        private IOdbcQuery CreateTableUploadQuery(OdbcStoreEntity store, ShipmentEntity shipment, IOdbcDataSource dataSource)
         {
             fieldMap.Load(odbcStoreRepository.GetStore(store).UploadMap);
             fieldMap.ApplyValues(new IEntity2[] { shipment, shipment.Order }, odbcFieldValueResolvers);
