@@ -35,6 +35,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Warehouse
         public Task<Store> Create(StoreEntity baseStoreEntity)
         {
             OdbcStore store = helpers.PopulateCommonData(baseStoreEntity, new OdbcStore());
+            // At this point, unique identifier is the license identifier. This could lead us to 
+            // pick an existing store for warehouse and not the store the user selected.
+            store.UniqueIdentifier = Guid.NewGuid().ToString();
+
             OdbcStoreEntity storeEntity = baseStoreEntity as OdbcStoreEntity;
 
             store.ImportMap = storeEntity.ImportMap;
