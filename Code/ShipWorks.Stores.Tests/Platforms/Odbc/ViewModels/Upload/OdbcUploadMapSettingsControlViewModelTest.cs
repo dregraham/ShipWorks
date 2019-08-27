@@ -11,6 +11,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -21,6 +22,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
         private const string DefaultFileName = "default file name";
 
         private readonly AutoMock mock;
+        private readonly OdbcStore odbcStore;
+        private OdbcStoreEntity store;
+
         private const string InitialQueryComment =
             "/**********************************************************************/\n" +
             "/*                                                                    */\n" +
@@ -41,6 +45,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
         public OdbcUploadMapSettingsControlViewModelTest()
         {
             mock = AutoMock.GetLoose();
+            
+            odbcStore = new OdbcStore();
+            store = new OdbcStoreEntity();
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
         }
 
         [Fact]
@@ -59,10 +70,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity
+            store = new OdbcStoreEntity
             {
                 UploadColumnSourceType = (int) OdbcColumnSourceType.Table
             };
+
+            odbcStore.UploadColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcUploadMapSettingsControlViewModel testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
 
@@ -80,10 +97,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity()
+            store = new OdbcStoreEntity()
             {
                 UploadColumnSourceType = (int) OdbcColumnSourceType.Table
             };
+
+            odbcStore.UploadColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcUploadMapSettingsControlViewModel testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
 
@@ -105,11 +128,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
 
             var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
 
-
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
             testObject.ColumnSourceIsTable = false;
 
             func.Verify(f => f("OdbcCustomQueryWarningDlg"), Times.Once);
@@ -126,7 +148,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
             testObject.ColumnSourceIsTable = true;
 
             func.Verify(f => f("OdbcCustomQueryWarningDlg"), Times.Never);
@@ -140,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             var columnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
             testObject.SelectedTable = columnSourceMock.Object;
@@ -164,7 +186,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             var columnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
             testObject.CustomQueryColumnSource = columnSourceMock.Object;
@@ -203,8 +225,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
 
-                OdbcStoreEntity store = new OdbcStoreEntity();
-
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
 
@@ -235,8 +255,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
 
-                OdbcStoreEntity store = new OdbcStoreEntity();
-
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
 
@@ -266,7 +284,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -295,7 +312,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var aTableColumnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
                 aTableColumnSourceMock.Setup(x => x.Name).Returns("a table");
@@ -330,7 +346,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -342,7 +357,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
         }
 
         [Fact]
-        public void OpenMapSettingsFile_CallsUpgradetoAlphanumericOrderNumbers()
+        public void OpenMapSettingsFile_CallsUpgradeToAlphanumericOrderNumbers()
         {
             using (var stream = new MemoryStream())
             {
@@ -359,7 +374,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -392,7 +406,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcUploadMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
