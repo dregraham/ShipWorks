@@ -145,8 +145,7 @@ namespace ShipWorks.Shipping.Profiles
                 {
                     var shipmentTypeManager = lifetimeScope.Resolve<IShipmentTypeManager>();
 
-                    ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType ??
-                        ShipmentTypeCode.None);
+                    ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType.Value);
 
                     isAllowed = shipments.All(s => profileShipmentType.IsAllowedFor(s));
                 }
