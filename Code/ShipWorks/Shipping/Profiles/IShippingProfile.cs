@@ -45,5 +45,15 @@ namespace ShipWorks.Shipping.Profiles
         /// Get a printable barcode of this profile
         /// </summary>
         PrintableBarcode ToPrintableBarcode();
+
+        /// <summary>
+        /// Check to see if the profile can be applied
+        /// </summary>
+        bool CanApply(IEnumerable<ShipmentEntity> shipments);
+
+        /// <summary>
+        /// Check to see if the profile can be applied
+        /// </summary>
+        bool CanApply(ShipmentEntity shipment);
     }
 }

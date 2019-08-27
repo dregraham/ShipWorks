@@ -521,17 +521,16 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
-            profileDisposable = profileRegistration(() => ShipmentAdapter?.ShipmentTypeCode, x => ApplyProfile(x));
+        public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
+            profileDisposable = profileRegistration(() => ShipmentAdapter?.Shipment, x => ApplyProfile(x));
 
         /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
         public bool ApplyProfile(IShippingProfile profile)
         {
-            //var profile = profileService.Get(profileID);
             if (ShipmentAdapter?.Shipment?.Processed == false &&
-                profile.IsApplicable(ShipmentAdapter.Shipment.ShipmentTypeCode))
+                profile.CanApply(ShipmentAdapter.Shipment))
             {
                 ShipmentNeedsBinding?.Invoke(this, EventArgs.Empty);
 

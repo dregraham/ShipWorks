@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Services
                 {
                     ApplyReturnProfile(returnShipment, shipment.ReturnProfileID);
                 }
-                catch (NotFoundException ex)
+                catch (Exception ex)
                 {
                     ReturnException = new ShippingException(ex.Message, ex);
                 }
@@ -78,7 +79,16 @@ namespace ShipWorks.Shipping.Services
             IShippingProfileEntity returnProfile = ShippingProfileManager.GetProfileReadOnly(returnProfileID);
             if (returnProfile != null)
             {
-                shippingProfileService.Get(returnProfile).Apply(shipment);
+                var profile = shippingProfileService.Get(returnProfile);
+
+                if (profile.CanApply(shipment))
+                {
+                    profile.Apply(shipment);
+                }
+                else
+                {
+                    throw new ProfileException("The selected return profile cannot be applied.");
+                }
             }
             else
             {

@@ -429,12 +429,9 @@ namespace ShipWorks.Shipping.Editing
             // Load initial values
             using (MultiValueScope scope = new MultiValueScope())
             {
+                RefreshIncludeReturnProfileMenu();
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    // Refresh the menu for each shipment to prevent changing the selection
-                    // when multiple types of shipments are selected
-                    RefreshIncludeReturnProfileMenu(shipment.ShipmentTypeCode);
-
                     returnShipment.ApplyMultiCheck(shipment.ReturnShipment);
                     includeReturn.ApplyMultiCheck(shipment.IncludeReturn);
                     applyReturnProfile.ApplyMultiCheck(shipment.ApplyReturnProfile);
@@ -740,7 +737,7 @@ namespace ShipWorks.Shipping.Editing
             if (!isLoading)
             {
                 // Populate the list of profiles
-                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+                RefreshIncludeReturnProfileMenu();
             }
         }
 
@@ -765,17 +762,16 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         protected void OnReturnProfileIDEnabledChanged(object sender, EventArgs e)
         {
-            List<ShipmentType> loadedTypes = LoadedShipments.Select(s => s.ShipmentType).Distinct().Select(st => ShipmentTypeManager.GetType((ShipmentTypeCode) st)).ToList();
-            if (returnProfileID.Enabled && !isLoading && loadedTypes.Count == 1)
+            if (returnProfileID.Enabled && !isLoading && LoadedShipments.Count == 1)
             {
-                RefreshIncludeReturnProfileMenu(shipmentTypeCode);
+                RefreshIncludeReturnProfileMenu();
             }
         }
 
         /// <summary>
         /// Add applicable profiles for the given shipment type to the context menu
         /// </summary>
-        private void RefreshIncludeReturnProfileMenu(ShipmentTypeCode shipmentTypeCode)
+        private void RefreshIncludeReturnProfileMenu()
         {
             BindingList<KeyValuePair<long, string>> newReturnProfiles = new BindingList<KeyValuePair<long, string>>();
 
@@ -786,7 +782,7 @@ namespace ShipWorks.Shipping.Editing
                 List<KeyValuePair<long, string>> returnProfiles = shippingProfileService
                     .GetConfiguredShipmentTypeProfiles()
                     .Where(p => p.ShippingProfileEntity.ShipmentType.HasValue)
-                    .Where(p => p.IsApplicable(shipmentTypeCode))
+                    .Where(p => p.CanApply(LoadedShipments))
                     .Where(p => p.ShippingProfileEntity.ReturnShipment == true)
                     .Select(s => new KeyValuePair<long, string>(s.ShippingProfileEntity.ShippingProfileID, s.ShippingProfileEntity.Name))
                     .OrderBy(g => g.Value)
