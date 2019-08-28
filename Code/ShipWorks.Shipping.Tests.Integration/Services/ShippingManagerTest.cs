@@ -226,6 +226,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType);
 
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType);
+
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
             Assert.Equal(shipmentTypeCode, shipment.ShipmentTypeCode);
@@ -300,6 +304,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             shipmentTypeManager
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
                 .Returns(shipmentType.Object);
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
+                .Returns(shipmentType.Object);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
@@ -318,6 +325,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Returns(shipmentType.Object);
             shipmentTypeManager
                 .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
+                .Returns(shipmentType.Object);
+            shipmentTypeManager
+                .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(shipmentType.Object);
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);

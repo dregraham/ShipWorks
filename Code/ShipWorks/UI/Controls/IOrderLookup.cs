@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.UI.Controls
@@ -34,7 +34,7 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
+        void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration);
 
         /// <summary>
         /// Save the order

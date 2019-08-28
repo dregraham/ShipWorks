@@ -121,7 +121,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        void RegisterProfileHandler(Func<Func<ShipmentTypeCode?>, Action<IShippingProfile>, IDisposable> profileRegistration);
+        void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration);
 
         /// <summary>
         /// Wire a property changed event on an INotifyPropertyChanged object

@@ -1723,7 +1723,7 @@ namespace ShipWorks.Shipping
             IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfileEntity>> profileGroups = shippingProfileService
                 .GetConfiguredShipmentTypeProfiles()
                 .Where(p => shipmentTypeCodes.Any(s => s != ShipmentTypeCode.None) || p.ShippingProfileEntity.ShipmentType.HasValue)
-                .Where(p => shipmentTypeCodes.All(s => p.IsApplicable(s)))
+                .Where(p => p.CanApply(loadedShipmentEntities))
                 .Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
                 .GroupBy(p => p.ShipmentType)
                 .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);

@@ -311,7 +311,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
             }
 
             // Update the current shipment type
-            shippingRibbonActions.SetCurrentShipmentType(currentShipment?.ShipmentTypeCode);
+            shippingRibbonActions.SetCurrentShipment(currentShipment);
 
             // Update manage profiles button state
             SetManageProfilesEnabled();

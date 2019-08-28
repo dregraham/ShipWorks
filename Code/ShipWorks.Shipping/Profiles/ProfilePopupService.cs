@@ -6,7 +6,7 @@ using Divelements.SandRibbon;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -33,9 +33,9 @@ namespace ShipWorks.Shipping.Profiles
         public IDisposable BuildMenu(
                 Button profileButton,
                 Guid menuGuid,
-                Func<ShipmentTypeCode?> getCurrentShipmentType,
+                Func<ShipmentEntity> getCurrentShipment,
                 Action<IShippingProfile> onSelection) =>
-            new ProfilePopup(profileButton, menuGuid, getCurrentShipmentType, onSelection, profileService);
+            new ProfilePopup(profileButton, menuGuid, getCurrentShipment, onSelection, profileService);
 
         /// <summary>
         /// Profile popup
@@ -44,19 +44,19 @@ namespace ShipWorks.Shipping.Profiles
         {
             private readonly Popup popup;
             private readonly Menu menu;
-            private readonly Func<ShipmentTypeCode?> getCurrentShipmentType;
+            private readonly Func<ShipmentEntity> getCurrentShipment;
             private readonly Action<IShippingProfile> onSelection;
             private readonly IShippingProfileService profileService;
 
             public ProfilePopup(Button profileButton,
                 Guid menuGuid,
-                Func<ShipmentTypeCode?> getCurrentShipmentType,
+                Func<ShipmentEntity> getCurrentShipment,
                 Action<IShippingProfile> onSelection,
                 IShippingProfileService profileService)
             {
                 this.profileService = profileService;
                 this.onSelection = onSelection;
-                this.getCurrentShipmentType = getCurrentShipmentType;
+                this.getCurrentShipment = getCurrentShipment;
 
                 menu = new Menu
                 {
@@ -84,8 +84,7 @@ namespace ShipWorks.Shipping.Profiles
                 List<WidgetBase> menuItems = new List<WidgetBase>();
                 IEnumerable<IGrouping<ShipmentTypeCode?, IShippingProfile>> profileGroups = profileService
                     .GetConfiguredShipmentTypeProfiles()
-                    .Where(p => p.IsApplicable(getCurrentShipmentType()))
-                    //.Select(s => s.ShippingProfileEntity).Cast<IShippingProfileEntity>()
+                    .Where(p => p.CanApply(getCurrentShipment()))
                     .GroupBy(p => p.ShippingProfileEntity.ShipmentType)
                     .OrderBy(g => g.Key.HasValue ? ShipmentTypeManager.GetSortValue(g.Key.Value) : -1);
 

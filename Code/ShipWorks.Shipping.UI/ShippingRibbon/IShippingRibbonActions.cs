@@ -1,4 +1,5 @@
-﻿using ShipWorks.UI.Controls.SandRibbon;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
 {
@@ -45,6 +46,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// <summary>
         /// Set the type of the currently selected shipment, if any
         /// </summary>
-        void SetCurrentShipmentType(ShipmentTypeCode? shipmentType);
+        void SetCurrentShipment(ShipmentEntity shipment);
     }
 }
