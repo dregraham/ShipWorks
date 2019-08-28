@@ -85,10 +85,17 @@ namespace ShipWorks.Stores.Warehouse
                 return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(response.Message);
             }
 
-            var orderResponse = JsonConvert.DeserializeObject<IEnumerable<WarehouseUploadOrderResponse>>(
-                response.Value.Content, GetJsonSerializerSettings());
+            try
+            {
+                var orderResponse = JsonConvert.DeserializeObject<IEnumerable<WarehouseUploadOrderResponse>>(
+                    response.Value.Content, GetJsonSerializerSettings());
 
-            return GenericResult.FromSuccess(orderResponse);
+                return GenericResult.FromSuccess(orderResponse);
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>("An error occurred while uploading orders to hub.");
+            }
         }
 
         /// <summary>
