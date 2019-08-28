@@ -17,6 +17,7 @@ using System.IO;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Warehouse.StoreData;
@@ -36,6 +37,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private readonly ILicenseService licenseService;
         private readonly IMessageHelper messageHelper;
         private OdbcStoreEntity store;
+        private readonly string warehouseID;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcConnectionSettingsControl"/> class.
@@ -48,7 +50,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             IOdbcSettingsFile uploadSettingsFile,
             IOdbcStoreRepository odbcStoreRepository,
             ILicenseService licenseService,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            IConfigurationData configurationData)
         {
             this.odbcFieldMapFactory = odbcFieldMapFactory;
             this.fileDialogFactory = fileDialogFactory;
@@ -57,6 +60,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             this.odbcStoreRepository = odbcStoreRepository;
             this.licenseService = licenseService;
             this.messageHelper = messageHelper;
+            warehouseID = configurationData.FetchReadOnly().WarehouseID;
 
             InitializeComponent();
         }
@@ -67,9 +71,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private void OnEditImportSettingsClick(object sender, EventArgs e)
         {
             if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
-                !store.WarehouseStoreID.HasValue)
+                string.IsNullOrWhiteSpace(warehouseID))
             {
                 messageHelper.ShowError(this, "Unable to change settings for this store until this ShipWorks database is linked to a warehouse in ShipWorks Hub");
+                return;
             }
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
@@ -105,10 +110,12 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private void OnEditUploadSettingsClick(object sender, EventArgs e)
         {
             if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
-                !store.WarehouseStoreID.HasValue)
+                string.IsNullOrWhiteSpace(warehouseID))
             {
                 messageHelper.ShowError(this, "Unable to change settings for this store until this ShipWorks database is linked to a warehouse in ShipWorks Hub");
+                return;
             }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
                 WizardPage[] uploadPages =
