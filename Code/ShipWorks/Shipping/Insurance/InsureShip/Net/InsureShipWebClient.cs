@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -13,6 +14,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 
 namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 {
@@ -74,7 +76,15 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
                 LogInsureShipResponse(logEntry, response.HttpWebResponse, responseText);
 
-                return JsonConvert.DeserializeObject<T>(responseText);
+                var deserializedResponse = JsonConvert.DeserializeObject<T>(responseText);
+
+                // Log telemetry when insuring a shipment
+                if (typeof(T) == typeof(InsureShipNewPolicyResponse))
+                {
+                    LogTelemetry(response.HttpWebResponse, deserializedResponse as InsureShipNewPolicyResponse);
+                }
+
+                return deserializedResponse;
             }
             catch (WebException ex)
             {
@@ -191,6 +201,19 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                 responseText.AppendLine(content);
 
                 logEntry.LogResponse(responseText.ToString(), "log");
+            }
+        }
+
+        /// <summary>
+        /// Log telemetry when insuring a shipment
+        /// </summary>
+        private void LogTelemetry(HttpWebResponse response, InsureShipNewPolicyResponse responseObject)
+        {
+            using (ITrackedEvent telemetricEvent = new TrackedEvent("Shipping.InsureShip.Response"))
+            {
+                telemetricEvent.AddProperty("Status", responseObject.Status);
+                telemetricEvent.AddProperty("HttpStatusCode", response.StatusCode.ToString());
+                telemetricEvent.AddProperty("PolicyNumber", responseObject.PolicyID.ToString());
             }
         }
     }
