@@ -33,6 +33,20 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Constructor
         /// </summary>
+        public LabelPersistenceResult(ILabelRetrievalResult result, ShipmentEntity shipmentForTango, Exception exception)
+        {
+            Index = result.Index;
+            EntityLock = result.EntityLock;
+            Exception = exception;
+            Canceled = result.Canceled;
+            OriginalShipment = result.OriginalShipment;
+            ShipmentForTango = shipmentForTango;
+            Store = result.Store;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public LabelPersistenceResult(ILabelRetrievalResult result, Exception exception) : this(result, result.OriginalShipment)
         {
             Index = result.Index;
