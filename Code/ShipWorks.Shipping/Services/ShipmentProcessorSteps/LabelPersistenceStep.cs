@@ -82,13 +82,12 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         {
             ShipmentEntity shipment = result.OriginalShipment;
             ShipmentEntity shipmentForTango = result.OriginalShipment;
-            bool insureShipSucceeded;
 
             using (new LoggedStopwatch(log, "ShippingManager.ProcessShipmentHelper transaction committed."))
             {
                 try
                 {
-                    insureShipSucceeded = EnsureShipmentIsInsured(result, shipment);
+                    bool insureShipSucceeded = EnsureShipmentIsInsured(result, shipment);
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
@@ -256,6 +255,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                 if (insuranceResult.Failure)
                 {
+                    shipment.Insurance = false;
                     log.Error($"Shipment {shipment.ShipmentID}  - Insure Shipment Failed");
                     return false;
                 }
