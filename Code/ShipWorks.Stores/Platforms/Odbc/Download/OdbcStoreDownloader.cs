@@ -306,9 +306,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// </summary>
         private int GetOrderCount(List<IGrouping<string, OdbcRecord>> orderGroups)
         {
+            string noOrdersMessage = "No orders to download.";
+            if (IsWarehouseAllowed())
+            {
+                noOrdersMessage = "No orders to upload.";
+            }
+            
             int orderCount = orderGroups.Count;
 
-            Progress.Detail = orderCount == 0 ? "No orders to download." : $"{orderCount} orders found.";
+            Progress.Detail = orderCount == 0 ? noOrdersMessage : $"{orderCount} orders found.";
 
             return orderCount;
         }
