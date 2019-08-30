@@ -162,6 +162,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             using (ITrackedEvent telemetryEvent = new TrackedEvent("Shipping.BestRate"))
             {
                 RateResult cheapestRate = rateGroup.Rates.Aggregate((curMin, x) => x.Amount < curMin.Amount ? x : curMin);
+                int i = 1;
 
                 telemetryEvent.AddProperty($"Shipping.BestRate.SelectedProvider",
                                 rateResult.CarrierDescription);
@@ -186,12 +187,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 foreach (string carrierName in rateGroup.Rates.Select(x => x.CarrierDescription).Distinct())
                 {
-                    telemetryEvent.AddMetric($"Shipping.BestRate.ServiceQuantity",
+                    telemetryEvent.AddMetric($"Shipping.BestRate.ServiceQuantity" + "." + carrierName,
                         rateGroup.Rates.Count(x => x.CarrierDescription.Equals(carrierName)));
                 }
 
-                telemetryEvent.AddMetric($"Shipping.BestRate.ComparisonWorkflow",
-                               (int) shipment.BestRateEvents);
+                foreach (var events in Enum.GetValues(typeof(BestRateEventTypes)).Cast<BestRateEventTypes>())
+                {
+                    telemetryEvent.AddProperty($"Shipping.BestRate.ComparisonWorkflow" + i,
+                               events.ToString());
+                    i++;
+                }
             }
         }
     }
