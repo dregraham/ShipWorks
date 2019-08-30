@@ -1210,13 +1210,9 @@ namespace ShipWorks.Shipping
         {
             shipment.Insurance = false;
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
-                var packages = shipmentAdapterFactory.Get(shipment).GetPackageAdapters();
+            var packages = GetPackageAdapters(shipment);
 
-                packages.ForEach(x => x.InsuranceChoice.Insured = false);
-            }
+            packages.ForEach(x => x.InsuranceChoice.Insured = false);
         }
     }
 }

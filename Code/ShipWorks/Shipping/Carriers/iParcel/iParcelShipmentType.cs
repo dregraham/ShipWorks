@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
