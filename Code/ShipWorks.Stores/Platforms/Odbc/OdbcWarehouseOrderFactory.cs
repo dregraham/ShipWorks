@@ -40,12 +40,24 @@ namespace ShipWorks.Stores.Platforms.Odbc
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AlphaNumericOrderIdentifier(orderNumber)).ConfigureAwait(false);
 
+            
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);
             }
 
+            result.Value.LocalStatus = warehouseOrder.LocalStatus;
+
             return result;
+        }
+
+
+        /// <summary>
+        /// Load BigCommerce item details
+        /// </summary>
+        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+            itemEntity.LocalStatus = warehouseItem.LocalStatus;
         }
     }
 }

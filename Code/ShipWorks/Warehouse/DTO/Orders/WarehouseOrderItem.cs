@@ -32,11 +32,21 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public decimal Length { get; set; }
         public decimal Width { get; set; }
         public decimal Height { get; set; }
-        
+        public string LocalStatus { get; set; }
+
+        [JsonProperty("custom_1")]
         public string Custom1 { get; set; }
+
+        [JsonProperty("custom_2")]
         public string Custom2 { get; set; }
+
+        [JsonProperty("custom_3")]
         public string Custom3 { get; set; }
+
+        [JsonProperty("custom_4")]
         public string Custom4 { get; set; }
+
+        [JsonProperty("custom_5")]
         public string Custom5 { get; set; }
         
         public IEnumerable<WarehouseOrderItemAttribute> ItemAttributes { get; set; }

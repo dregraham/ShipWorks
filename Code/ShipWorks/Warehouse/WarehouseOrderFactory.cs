@@ -194,6 +194,12 @@ namespace ShipWorks.Warehouse
             itemEntity.Width = warehouseItem.Width;
             itemEntity.Height = warehouseItem.Height;
 
+            itemEntity.Custom1 = warehouseItem.Custom1;
+            itemEntity.Custom2 = warehouseItem.Custom2;
+            itemEntity.Custom3 = warehouseItem.Custom3;
+            itemEntity.Custom4 = warehouseItem.Custom4;
+            itemEntity.Custom5 = warehouseItem.Custom5;
+            
             LoadItemAttributes(itemEntity, warehouseItem);
 
             LoadStoreItemDetails(store, itemEntity, warehouseItem);

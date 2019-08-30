@@ -166,6 +166,7 @@ namespace ShipWorks.Stores.Warehouse
                 Custom3 = item.Custom3,
                 Custom4 = item.Custom4,
                 Custom5 = item.Custom5,
+                LocalStatus = item.LocalStatus,
                 ItemAttributes = item.OrderItemAttributes.Select(CreateOrderItemAttributes).ToList()
             };
         }
