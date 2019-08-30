@@ -341,13 +341,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 {
                     if (IsWarehouseAllowed())
                     {
-                        if (store.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+                        if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
                         {
                             await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
                             await SaveOrder(downloadedOrder).ConfigureAwait(false);
                         }
 
-                        if (store.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+                        if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
                         {
                             ordersToSendToHub.Add(downloadedOrder.Value);
                         }
