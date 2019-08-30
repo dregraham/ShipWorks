@@ -500,15 +500,5 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return eligibleCountryCodes;
         }
-
-        /// <summary>
-        /// Sets a shipment and its packages to have no insurance
-        /// </summary>
-        public override void UnsetInsurance(ShipmentEntity shipment)
-        {
-            base.UnsetInsurance(shipment);
-
-            shipment.Postal.Insurance = false;
-        }
     }
 }

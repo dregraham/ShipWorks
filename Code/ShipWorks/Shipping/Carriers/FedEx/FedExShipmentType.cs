@@ -951,15 +951,5 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return string.Empty;
         }
-
-        /// <summary>
-        /// Sets a shipment and its packages to have no insurance
-        /// </summary>
-        public override void UnsetInsurance(ShipmentEntity shipment)
-        {
-            base.UnsetInsurance(shipment);
-
-            shipment.FedEx.Packages.ForEach(x => x.Insurance = false);
-        }
     }
 }

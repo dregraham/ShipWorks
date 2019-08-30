@@ -450,15 +450,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
                 .ToList();
         }
-
-        /// <summary>
-        /// Sets a shipment and its packages to have no insurance
-        /// </summary>
-        public override void UnsetInsurance(ShipmentEntity shipment)
-        {
-            base.UnsetInsurance(shipment);
-
-            shipment.DhlExpress.Packages.ForEach(x => x.Insurance = false);
-        }
     }
 }

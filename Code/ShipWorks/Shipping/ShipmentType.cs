@@ -1206,9 +1206,17 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Sets a shipment and its packages to have no insurance
         /// </summary>
-        public virtual void UnsetInsurance(ShipmentEntity shipment)
+        public void UnsetInsurance(ShipmentEntity shipment)
         {
             shipment.Insurance = false;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                ICarrierShipmentAdapterFactory shipmentAdapterFactory = lifetimeScope.Resolve<ICarrierShipmentAdapterFactory>();
+                var packages = shipmentAdapterFactory.Get(shipment).GetPackageAdapters();
+
+                packages.ForEach(x => x.InsuranceChoice.Insured = false);
+            }
         }
     }
 }
