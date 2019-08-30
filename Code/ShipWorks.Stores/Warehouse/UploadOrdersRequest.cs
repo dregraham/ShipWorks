@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Warehouse
 
                 return GenericResult.FromSuccess(orderResponse);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>("An error occurred while uploading orders to hub.");
             }
