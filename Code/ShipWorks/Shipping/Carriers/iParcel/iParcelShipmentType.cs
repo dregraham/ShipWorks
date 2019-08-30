@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -776,6 +777,16 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             bucket.Relations.Add(ShipmentEntity.Relations.IParcelShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new IParcelShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.IParcel.Packages.ForEach(x => x.Insurance = false);
         }
     }
 }

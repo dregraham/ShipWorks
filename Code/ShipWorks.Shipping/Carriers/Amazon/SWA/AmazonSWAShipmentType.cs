@@ -382,5 +382,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 return new TrackingResult { Summary = $"<p>Tracking data is currently not available.</p>" };
             }
         }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.AmazonSWA.Insurance = false;
+        }
     }
 }

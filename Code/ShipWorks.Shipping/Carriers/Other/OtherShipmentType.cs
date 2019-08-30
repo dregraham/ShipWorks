@@ -137,5 +137,15 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.Other.Insurance = false;
+        }
     }
 }

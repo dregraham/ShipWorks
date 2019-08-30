@@ -327,5 +327,15 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 return new TrackingResult { Summary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
             }
         }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.Asendia.Insurance = false;
+        }
     }
 }

@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                 if (insuranceResult.Failure)
                 {
-                    shipment.Insurance = false;
+                    ShipmentTypeManager.GetType(shipment).UnsetInsurance(shipment);
                     log.Error($"Shipment {shipment.ShipmentID}  - Insure Shipment Failed");
                     return false;
                 }

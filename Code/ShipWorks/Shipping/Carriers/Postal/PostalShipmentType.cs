@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -500,6 +499,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
             };
 
             return eligibleCountryCodes;
+        }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.Postal.Insurance = false;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -726,6 +727,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 shipment.Ups.RequestedLabelFormat = (int) requestedLabelFormat;
             }
+        }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.Ups.Packages.ForEach(x => x.Insurance = false);
         }
     }
 }

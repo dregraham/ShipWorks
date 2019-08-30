@@ -431,5 +431,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             adapter.UpdateEntitiesDirectly(new OnTracShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.OnTrac.Insurance = false;
+        }
     }
 }

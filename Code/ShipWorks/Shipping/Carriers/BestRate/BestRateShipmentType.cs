@@ -326,5 +326,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         protected override double GetDimsWeight(IShipmentEntity shipment) =>
             shipment.BestRate?.DimsAddWeight == true ? shipment.BestRate.DimsWeight : 0;
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public override void UnsetInsurance(ShipmentEntity shipment)
+        {
+            base.UnsetInsurance(shipment);
+
+            shipment.BestRate.Insurance = false;
+        }
     }
 }
