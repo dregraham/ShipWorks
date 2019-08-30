@@ -8,6 +8,7 @@ using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 
 namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
@@ -40,7 +41,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.CoreExtensions.Actions
         {
             OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
 
-            return odbcStore != null && odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
+            using(var scope = IoC.BeginLifetimeScope())
+            {
+                IOdbcStoreRepository storeRepository = scope.Resolve<IOdbcStoreRepository>();
+                return odbcStore != null && storeRepository.GetStore(odbcStore).UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
+            }
         }
 
         /// <summary>

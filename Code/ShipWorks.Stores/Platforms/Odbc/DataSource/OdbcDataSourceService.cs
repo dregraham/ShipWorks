@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -22,13 +23,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <param name="dataSourceFactory"></param>
         /// <param name="dataSourceRepository"></param>
         public OdbcDataSourceService(
-            Func<IOdbcDataSource> dataSourceFactory,
+            Func<IOdbcDataSource> dataSourceFactory, 
             IOdbcDataSourceRepository dataSourceRepository, 
             IOdbcStoreRepository storeRepository)
         {
             this.dataSourceFactory = dataSourceFactory;
             this.dataSourceRepository = dataSourceRepository;
-            storeRepository = storeRepository;
+            this.storeRepository = storeRepository;
         }
 
         /// <summary>
@@ -71,8 +72,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            var odbcStore = storeRepository.GetStore(store);
-
+            OdbcStore odbcStore = storeRepository.GetStore(store);
+            
             if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return null;

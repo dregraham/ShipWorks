@@ -23,7 +23,10 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreSettingsTelemetryCollector"/> class.
         /// </summary>
-        public OdbcStoreSettingsTelemetryCollector(IOdbcDataSourceService dataSourceService, IOdbcFieldMapFactory odbcFieldMapFactory, IOdbcStoreRepository odbcStoreRepository)
+        public OdbcStoreSettingsTelemetryCollector(
+            IOdbcDataSourceService dataSourceService, 
+            IOdbcFieldMapFactory odbcFieldMapFactory, 
+            IOdbcStoreRepository odbcStoreRepository)
         {
             this.dataSourceService = dataSourceService;
             this.odbcFieldMapFactory = odbcFieldMapFactory;
@@ -50,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                     trackedDurationEvent.AddProperty("Import.Driver", GetImportDriverName(odbcStoreEntity));
                     trackedDurationEvent.AddProperty("Import.QueryType", GetImportColumnSourceTypeName(odbcStoreEntity));
                     trackedDurationEvent.AddProperty("Import.OrderItemDataStructure", OrderItemDataStructure(odbcStoreEntity, odbcStore));
-                    trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStoreEntity.ImportStrategy));
+                    trackedDurationEvent.AddProperty("Import.Strategy", EnumHelper.GetApiValue((OdbcImportStrategy) odbcStore.ImportStrategy));
                     trackedDurationEvent.AddProperty("Upload.Strategy", GetUploadStrategyName(odbcStoreEntity, odbcStore));
                     trackedDurationEvent.AddProperty("Upload.Driver", GetUploadDriverName(odbcStoreEntity, odbcStore));
                     trackedDurationEvent.AddProperty("Upload.QueryType", GetUploadColumnSourceTypeName(odbcStoreEntity, odbcStore));
@@ -135,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return "None";
             }
 
-            return EnumHelper.GetApiValue((OdbcShipmentUploadStrategy) odbcStoreEntity.UploadStrategy);
+            return EnumHelper.GetApiValue((OdbcShipmentUploadStrategy) odbcStore.UploadStrategy);
         }
 
         /// <summary>
