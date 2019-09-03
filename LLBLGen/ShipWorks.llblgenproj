@@ -999,9 +999,13 @@
       <EntityDefinition Name="EndiciaShipment" ObjectID="15beb8bc-2590-445f-8cf7-e31b1efb4553">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" FieldIndex="1" />
+          <Field Name="GroupCode" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="OriginalEndiciaAccountID" Type="long" IsOptional="true" FieldIndex="2" />
           <Field Name="ReferenceID" Type="string" MaxLength="300" FieldIndex="4" />
+          <Field Name="ReferenceID2" Type="string" MaxLength="300" FieldIndex="11" />
+          <Field Name="ReferenceID3" Type="string" MaxLength="300" FieldIndex="12" />
+          <Field Name="ReferenceID4" Type="string" MaxLength="300" FieldIndex="13" />
           <Field Name="RefundFormID" Type="int" IsOptional="true" FieldIndex="6" />
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="9" />
           <Field Name="ScanBasedReturn" Type="bool" FieldIndex="8" />
@@ -4564,7 +4568,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-19T01:43:12.6720981Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-03T15:04:41.0264061Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5672,6 +5676,10 @@
                     <Field Name="ScanBasedReturn" Ordinal="9" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="Insurance" Ordinal="11" DbType="2" />
+                    <Field Name="ReferenceID2" Ordinal="12" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="ReferenceID3" Ordinal="13" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="ReferenceID4" Ordinal="14" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="GroupCode" Ordinal="15" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyOrder">
@@ -11732,9 +11740,13 @@
         <EntityMapping EntityName=":EndiciaShipment" TargetName="ShipWorksLocal:dbo:EndiciaShipment">
           <FieldMappings>
             <FieldMapping FieldName="EndiciaAccountID" TargetFieldName="EndiciaAccountID" />
+            <FieldMapping FieldName="GroupCode" TargetFieldName="GroupCode" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="OriginalEndiciaAccountID" TargetFieldName="OriginalEndiciaAccountID" />
             <FieldMapping FieldName="ReferenceID" TargetFieldName="ReferenceID" />
+            <FieldMapping FieldName="ReferenceID2" TargetFieldName="ReferenceID2" />
+            <FieldMapping FieldName="ReferenceID3" TargetFieldName="ReferenceID3" />
+            <FieldMapping FieldName="ReferenceID4" TargetFieldName="ReferenceID4" />
             <FieldMapping FieldName="RefundFormID" TargetFieldName="RefundFormID" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ScanBasedReturn" TargetFieldName="ScanBasedReturn" />

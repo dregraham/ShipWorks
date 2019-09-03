@@ -3190,6 +3190,14 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>ReferenceID2. </summary>
+		ReferenceID2,
+		///<summary>ReferenceID3. </summary>
+		ReferenceID3,
+		///<summary>ReferenceID4. </summary>
+		ReferenceID4,
+		///<summary>GroupCode. </summary>
+		GroupCode,
 		/// <summary></summary>
 		AmountOfFields
 	}

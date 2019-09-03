@@ -7367,6 +7367,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.Insurance);}
 		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID2 field instance</summary>
+		public static EntityField2 ReferenceID2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID2);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID3 field instance</summary>
+		public static EntityField2 ReferenceID3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID3);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID4 field instance</summary>
+		public static EntityField2 ReferenceID4
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID4);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.GroupCode field instance</summary>
+		public static EntityField2 GroupCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.GroupCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EtsyOrderEntity</summary>

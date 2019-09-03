@@ -1256,7 +1256,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EndiciaShipmentEntity's mappings</summary>
 		private void InitEndiciaShipmentEntityMappings()
 		{
-			this.AddElementMapping("EndiciaShipmentEntity", @"ShipWorksLocal", @"dbo", "EndiciaShipment", 11, 0);
+			this.AddElementMapping("EndiciaShipmentEntity", @"ShipWorksLocal", @"dbo", "EndiciaShipment", 15, 0);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "EndiciaAccountID", "EndiciaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "OriginalEndiciaAccountID", "OriginalEndiciaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -1268,6 +1268,10 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID2", "ReferenceID2", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID3", "ReferenceID3", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID4", "ReferenceID4", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "GroupCode", "GroupCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits EtsyOrderEntity's mappings</summary>
