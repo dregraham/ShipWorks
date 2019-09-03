@@ -187,15 +187,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 foreach (string carrierName in rateGroup.Rates.Select(x => x.CarrierDescription).Distinct())
                 {
-                    telemetryEvent.AddMetric($"Shipping.BestRate.ServiceQuantity" + "." + carrierName,
+                    telemetryEvent.AddMetric($"Shipping.BestRate.ServiceQuantity.{carrierName}",
                         rateGroup.Rates.Count(x => x.CarrierDescription.Equals(carrierName)));
                 }
 
-                foreach (var events in Enum.GetValues(typeof(BestRateEventTypes)).Cast<BestRateEventTypes>())
+                var events = (BestRateEventTypes) shipment.BestRateEvents;
+
+                foreach (var eventType in Enum.GetValues(typeof(BestRateEventTypes)).OfType<BestRateEventTypes>())
                 {
-                    telemetryEvent.AddProperty($"Shipping.BestRate.ComparisonWorkflow" + i,
-                               events.ToString());
-                    i++;
+                    telemetryEvent.AddProperty($"Shipping.BestRate.ComparisonWorkflow.{eventType.ToString()}",
+                        events.HasFlag(eventType) ? "true" : "false");
                 }
             }
         }
