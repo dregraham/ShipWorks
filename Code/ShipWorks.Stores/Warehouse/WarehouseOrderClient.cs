@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload a order to the hub
         /// </summary>
-        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store)
+        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Warehouse
                     licenseService.CheckRestriction(EditionFeature.Warehouse, null);
                 if (restrictionLevel == EditionRestrictionLevel.None)
                 {
-                    return await uploadOrderRequestCreator().Submit(orders, store);
+                    return await uploadOrderRequestCreator().Submit(orders, store, assignBatch);
                 }
                 else
                 {

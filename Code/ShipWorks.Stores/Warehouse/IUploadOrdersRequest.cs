@@ -26,6 +26,6 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Submit this UploadOrderRequest to the hub and return the response
         /// </summary>
-        Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store);
+        Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch);
     }
 }

@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         [Fact]
         public async Task Submit_DelegatesToWarehouseRequestClient()
         {
-            await testObject.Submit(orders, store);
+            await testObject.Submit(orders, store, false);
 
             requestClient.Verify(r => r.MakeRequest(It.IsAny<IRestRequest>(), "Upload Order"));
         }
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         [Fact]
         public async Task Submit_DelegatesToWarehouseOrderDtoFactory()
         {
-            await testObject.Submit(orders, store);
+            await testObject.Submit(orders, store, false);
 
             dtoFactory.Verify(d => d.Create(orders.First(), store));
         }
@@ -56,29 +56,27 @@ namespace ShipWorks.Stores.Tests.Warehouse
         [Fact]
         public async Task Submit_AddsSelfToRequest()
         {
-            await testObject.Submit(orders, store);
+            await testObject.Submit(orders, store, false);
 
             mock.Mock<IRestRequest>().Verify(r => r.AddJsonBody(testObject), Times.Once);
         }
 
         [Fact]
-        public async Task Submit_BatchIsPopulated_WhenStoreIsOnDemaind()
+        public async Task Submit_BatchIsPopulated_WhenAssignBatchIsTrue()
         {
             Assert.Null(testObject.Batch);
-            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
-
-            await testObject.Submit(orders, store);
+            
+            await testObject.Submit(orders, store, true);
 
             Assert.NotNull(testObject.Batch);
         }
 
         [Fact]
-        public async Task Submit_BatchIsNull_WhenStoreIsOnDemaind()
+        public async Task Submit_BatchIsNull_WhenAssignBatchIsFalse()
         {
             Assert.Null(testObject.Batch);
-            store.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
-
-            await testObject.Submit(orders, store);
+            
+            await testObject.Submit(orders, store, false);
 
             Assert.Null(testObject.Batch);
         }
@@ -92,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
 
             dtoFactory.Setup(f => f.Create(orders.Single(), store)).Returns(warehouseOrder);
 
-            await testObject.Submit(orders, store);
+            await testObject.Submit(orders, store, true);
 
             Assert.Same(warehouseOrder, testObject.Orders.Single());
         }

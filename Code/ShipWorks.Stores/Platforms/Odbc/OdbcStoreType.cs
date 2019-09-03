@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -14,6 +16,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Odbc
@@ -26,17 +29,24 @@ namespace ShipWorks.Stores.Platforms.Odbc
     public class OdbcStoreType : StoreType
     {
         private readonly IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory;
-        private readonly OdbcStoreEntity odbcStore;
+        private readonly OdbcStoreEntity odbcStoreEntity;
+        private readonly Lazy<OdbcStore> odbcStore;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public OdbcStoreType(StoreEntity store,
-            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory)
+            IIndex<StoreTypeCode, IDownloadSettingsControl> downloadSettingsFactory,
+            IOdbcStoreRepository odbcStoreRepository,
+            Func<Type, ILog> createLog)
             : base(store)
         {
             this.downloadSettingsFactory = downloadSettingsFactory;
-            odbcStore = (OdbcStoreEntity) store;
+            odbcStoreEntity = (OdbcStoreEntity) store;
+            odbcStore = new Lazy<OdbcStore>(()=>odbcStoreRepository.GetStore(odbcStoreEntity));
+
+            log = createLog(typeof(OdbcStoreType));
             StoreAdded += OnStoreAdded;
         }
 
@@ -54,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             {
                 StringHash stringHash = new StringHash();
 
-                return $"{stringHash.Hash(odbcStore.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
+                return $"{stringHash.Hash(odbcStoreEntity.ImportConnectionString, "ODBC")} {SystemData.Fetch().DatabaseID.ToString("D")}";
             }
         }
 
@@ -125,20 +135,29 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <summary>
         /// Sets the stores initial download policy
         /// </summary>
-        public override InitialDownloadPolicy InitialDownloadPolicy
-        {
-            get
-            {
-                return ((OdbcStoreEntity) Store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime
-                    ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30 }
-                    : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
-            }
-        }
+        public override InitialDownloadPolicy InitialDownloadPolicy =>
+            ((OdbcStoreEntity) Store).ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime
+                ? new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30 }
+                : new InitialDownloadPolicy(InitialDownloadRestrictionType.None);
 
         /// <summary>
         /// Should this store type auto download
         /// </summary>
-        public override bool IsOnDemandDownloadEnabled => odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+        public override bool IsOnDemandDownloadEnabled
+        {
+            get
+            {
+                try
+                {
+                    return odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand;
+                }
+                catch (ShipWorksOdbcException ex)
+                {
+                    log.Error("Error getting import strategy for odbcStore", ex);
+                    return false;
+                }
+            }
+        }
 
         /// <summary>
         /// Creates the add store wizard online update action control.
@@ -154,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// </summary>
         public override IDownloadSettingsControl CreateDownloadSettingsControl()
         {
-            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
             {
                 return downloadSettingsFactory[StoreTypeCode.Odbc];
             }
@@ -168,13 +187,13 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// <returns></returns>
         public override bool ShowTaskWizardPage()
         {
-            if (odbcStore == null)
+            if (odbcStoreEntity == null)
             {
                 return false;
             }
 
-            return odbcStore.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime ||
-                   odbcStore.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
+            return odbcStoreEntity.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime ||
+                   odbcStoreEntity.UploadStrategy != (int) OdbcShipmentUploadStrategy.DoNotUpload;
         }
 
         /// <summary>

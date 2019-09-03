@@ -46,19 +46,19 @@ namespace ShipWorks.Stores.Tests.Warehouse
         [Fact]
         public async Task UploadOrders_SubmitsOrders_WhenWarehouseNotRestricted()
         {
-            await testObject.UploadOrders(orders, store.Object);
+            await testObject.UploadOrders(orders, store.Object, true);
 
-            uploadOrdersRequest.Verify(r => r.Submit(orders, store.Object), Times.Once);
+            uploadOrdersRequest.Verify(r => r.Submit(orders, store.Object, true), Times.Once);
         }
 
         [Fact]
         public async Task UploadOrders_ReturnsResponseFromUploadOrdersRequest()
         {
             uploadOrdersRequest
-                .Setup(r => r.Submit(orders, store.Object))
+                .Setup(r => r.Submit(orders, store.Object, true))
                 .ReturnsAsync(GenericResult.FromSuccess<IEnumerable<WarehouseUploadOrderResponse>>(new List<WarehouseUploadOrderResponse>(), "expected message"));
 
-            var actualResult = await testObject.UploadOrders(orders, store.Object);
+            var actualResult = await testObject.UploadOrders(orders, store.Object, true);
 
             Assert.Equal("expected message", actualResult.Message);
         }
@@ -68,9 +68,9 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             warehouseRestriction = EditionRestrictionLevel.Forbidden;
 
-            await testObject.UploadOrders(orders, store.Object);
+            await testObject.UploadOrders(orders, store.Object, true);
 
-            uploadOrdersRequest.Verify(r => r.Submit(It.IsAny<IEnumerable<OrderEntity>>(), It.IsAny<IStoreEntity>()), Times.Never);
+            uploadOrdersRequest.Verify(r => r.Submit(It.IsAny<IEnumerable<OrderEntity>>(), It.IsAny<IStoreEntity>(), true), Times.Never);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             warehouseRestriction = EditionRestrictionLevel.Forbidden;
 
-            var result = await testObject.UploadOrders(orders, store.Object);
+            var result = await testObject.UploadOrders(orders, store.Object, true);
 
             Assert.False(result.Success);
             Assert.Equal(WarehouseOrderClient.RestrictedErrorMessage, result.Message);
@@ -89,10 +89,10 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             string message = "exception message";
             uploadOrdersRequest
-                .Setup(r => r.Submit(It.IsAny<IEnumerable<OrderEntity>>(), It.IsAny<IStoreEntity>()))
+                .Setup(r => r.Submit(It.IsAny<IEnumerable<OrderEntity>>(), It.IsAny<IStoreEntity>(), false))
                 .Throws(new Exception(message));
 
-            var result = await testObject.UploadOrders(orders, store.Object);
+            var result = await testObject.UploadOrders(orders, store.Object, false);
 
             Assert.False(result.Success);
             Assert.Equal(message, result.Exception.Message);

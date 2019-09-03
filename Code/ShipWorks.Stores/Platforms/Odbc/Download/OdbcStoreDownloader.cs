@@ -174,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 Progress.Detail = "Querying data source...";
 
-                IOdbcCommand downloadCommand = await GenerateDownloadCommand(store, trackedDurationEvent);
+                IOdbcCommand downloadCommand = await GenerateDownloadCommand(trackedDurationEvent).ConfigureAwait(false);
                 AddTelemetryData(trackedDurationEvent, downloadCommand);
 
                 await Download(downloadCommand).ConfigureAwait(false);
@@ -260,17 +260,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Generates the download command based on the store entity
         /// </summary>
-        private async Task<IOdbcCommand> GenerateDownloadCommand(OdbcStoreEntity odbcStore, TrackedDurationEvent trackedDurationEvent)
+        private async Task<IOdbcCommand> GenerateDownloadCommand(TrackedDurationEvent trackedDurationEvent)
         {
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
+            MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
-            if (odbcStore.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
+            if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
             {
                 // Used in the case that GetOnlineLastModifiedStartingPoint returns null
                 int defaultDaysBack = store.InitialDownloadDays.GetValueOrDefault(7);
 
                 // Get the starting point and include it for telemetry
-                DateTime startingPoint = (await GetOnlineLastModifiedStartingPoint()).GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
+                DateTime? onlineLastModifiedStartingPoint = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+                DateTime startingPoint = onlineLastModifiedStartingPoint.GetValueOrDefault(DateTime.UtcNow.AddDays(-defaultDaysBack));
 
                 if (IsWarehouseAllowed() && store.WarehouseLastModified.HasValue)
                 {
@@ -279,12 +280,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
                 trackedDurationEvent.AddMetric("Minutes.Back", DateTime.UtcNow.Subtract(startingPoint).TotalMinutes);
 
-                return downloadCommandFactory.CreateDownloadCommand(odbcStore, startingPoint, fieldMap.Value);
+                return downloadCommandFactory.CreateDownloadCommand(store, startingPoint, fieldMap.Value);
             }
 
             // Use -1 to indicate that we are using the "all orders" download strategy
             trackedDurationEvent.AddMetric("Minutes.Back", -1);
-            return downloadCommandFactory.CreateDownloadCommand(odbcStore, fieldMap.Value);
+            return downloadCommandFactory.CreateDownloadCommand(store, fieldMap.Value);
         }
 
         /// <summary>
@@ -401,7 +402,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store).ConfigureAwait(false);
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                    await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store, true).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     throw new DownloadException(result.Message);
@@ -421,7 +423,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = await warehouseOrderClient.UploadOrders(downloadedOrders, store).ConfigureAwait(false);
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                    await warehouseOrderClient.UploadOrders(downloadedOrders, store, false).ConfigureAwait(false);
                 if (result.Failure)
                 {
                     throw new DownloadException(result.Message);

@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Submit this UploadOrderRequest to the hub and return the response
         /// </summary>
-        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store)
+        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch)
         {
             IRestRequest request = createRateRequest(WarehouseEndpoints.UploadOrders, Method.POST);
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Stores.Warehouse
 
             Orders = ConvertWarehouseOrders(orders, store);
 
-            if (((IOdbcStoreEntity) store).ImportStrategy == (int) OdbcImportStrategy.OnDemand)
+            if (assignBatch)
             {
                 Batch = Guid.NewGuid();
             }
