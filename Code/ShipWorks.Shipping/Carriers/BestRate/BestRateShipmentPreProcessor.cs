@@ -162,7 +162,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             using (ITrackedEvent telemetryEvent = new TrackedEvent("Shipping.BestRate"))
             {
                 RateResult cheapestRate = rateGroup.Rates.Aggregate((curMin, x) => x.Amount < curMin.Amount ? x : curMin);
-                int i = 1;
 
                 telemetryEvent.AddProperty($"Shipping.BestRate.SelectedProvider",
                                 rateResult.CarrierDescription);
