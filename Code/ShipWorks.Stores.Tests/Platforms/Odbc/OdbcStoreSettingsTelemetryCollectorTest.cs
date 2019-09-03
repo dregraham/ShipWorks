@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             mock.Mock<IOdbcStoreRepository>()
                 .Setup(r => r.GetStore(odbcStoreEntity))
                 .Returns(odbcStore);
-            
+
 
             trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
 
@@ -204,7 +204,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource)]
         public void CollectTelemetry_UploadStrategyTypeSetFromOdbcStore(OdbcShipmentUploadStrategy sourceType)
         {
-            odbcStoreEntity.UploadStrategy = (int) sourceType;
+            OdbcStore store = new OdbcStore();
+            store.UploadStrategy = (int) sourceType;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(It.IsAny<OdbcStoreEntity>())).Returns(store);
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
@@ -247,7 +251,11 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcImportStrategy.OnDemand)]
         public void CollectTelemetry_ImportStrategyTypeSetFromOdbcStore(OdbcImportStrategy sourceType)
         {
-            odbcStoreEntity.ImportStrategy = (int) sourceType;
+            OdbcStore store = new OdbcStore();
+            store.ImportStrategy = (int) sourceType;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(It.IsAny<OdbcStoreEntity>())).Returns(store);
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
             testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
