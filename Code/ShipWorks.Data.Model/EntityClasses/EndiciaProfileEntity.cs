@@ -359,6 +359,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferenceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ScanBasedReturn", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID4", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("GroupCode", fieldHashtable);
 		}
 		#endregion
 
@@ -505,6 +513,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)EndiciaProfileFieldIndex.ScanBasedReturn, false); }
 			set	{ SetValue((int)EndiciaProfileFieldIndex.ScanBasedReturn, value); }
+		}
+
+		/// <summary> The ReferenceID2 property of the Entity EndiciaProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaProfile"."ReferenceID2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceID2
+		{
+			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.ReferenceID2, true); }
+			set	{ SetValue((int)EndiciaProfileFieldIndex.ReferenceID2, value); }
+		}
+
+		/// <summary> The ReferenceID3 property of the Entity EndiciaProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaProfile"."ReferenceID3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceID3
+		{
+			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.ReferenceID3, true); }
+			set	{ SetValue((int)EndiciaProfileFieldIndex.ReferenceID3, value); }
+		}
+
+		/// <summary> The ReferenceID4 property of the Entity EndiciaProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaProfile"."ReferenceID4"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ReferenceID4
+		{
+			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.ReferenceID4, true); }
+			set	{ SetValue((int)EndiciaProfileFieldIndex.ReferenceID4, value); }
+		}
+
+		/// <summary> The GroupCode property of the Entity EndiciaProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaProfile"."GroupCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String GroupCode
+		{
+			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.GroupCode, true); }
+			set	{ SetValue((int)EndiciaProfileFieldIndex.GroupCode, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'PostalProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

@@ -1185,6 +1185,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaProfileEntity", "StealthPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.StealthPostage, 0, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ScanBasedReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.ScanBasedReturn, 0, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID2", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID2, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID3", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID3, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID4", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID4, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "GroupCode", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.GroupCode, 50, 0, 0);
 		}
 		/// <summary>Inits EndiciaScanFormEntity's FieldInfo objects</summary>
 		private void InitEndiciaScanFormEntityInfos()

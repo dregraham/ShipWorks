@@ -41,6 +41,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             StealthPostage = source.StealthPostage;
             ReferenceID = source.ReferenceID;
             ScanBasedReturn = source.ScanBasedReturn;
+            ReferenceID2 = source.ReferenceID2;
+            ReferenceID3 = source.ReferenceID3;
+            ReferenceID4 = source.ReferenceID4;
+            GroupCode = source.GroupCode;
             
             PostalProfile = (IPostalProfileEntity) source.PostalProfile?.AsReadOnly(objectMap);
             
@@ -80,6 +84,30 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> ScanBasedReturn { get; }
+        /// <summary> The ReferenceID2 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID2"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ReferenceID2 { get; }
+        /// <summary> The ReferenceID3 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID3"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ReferenceID3 { get; }
+        /// <summary> The ReferenceID4 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID4"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ReferenceID4 { get; }
+        /// <summary> The GroupCode property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."GroupCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String GroupCode { get; }
         
         public IPostalProfileEntity PostalProfile { get; }
         

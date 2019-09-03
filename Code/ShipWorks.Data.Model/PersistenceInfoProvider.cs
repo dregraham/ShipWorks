@@ -1232,12 +1232,16 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EndiciaProfileEntity's mappings</summary>
 		private void InitEndiciaProfileEntityMappings()
 		{
-			this.AddElementMapping("EndiciaProfileEntity", @"ShipWorksLocal", @"dbo", "EndiciaProfile", 5, 0);
+			this.AddElementMapping("EndiciaProfileEntity", @"ShipWorksLocal", @"dbo", "EndiciaProfile", 9, 0);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "EndiciaAccountID", "EndiciaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "StealthPostage", "StealthPostage", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID", "ReferenceID", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ScanBasedReturn", "ScanBasedReturn", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID2", "ReferenceID2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID3", "ReferenceID3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID4", "ReferenceID4", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "GroupCode", "GroupCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits EndiciaScanFormEntity's mappings</summary>

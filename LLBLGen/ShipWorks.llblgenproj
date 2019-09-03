@@ -979,7 +979,11 @@
       <EntityDefinition Name="EndiciaProfile" ObjectID="2956325f-4467-416a-bc73-9548e4f2fe47">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" IsOptional="true" FieldIndex="1" />
+          <Field Name="GroupCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="8" />
           <Field Name="ReferenceID" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
+          <Field Name="ReferenceID2" Type="string" IsOptional="true" MaxLength="300" FieldIndex="5" />
+          <Field Name="ReferenceID3" Type="string" IsOptional="true" MaxLength="300" FieldIndex="6" />
+          <Field Name="ReferenceID4" Type="string" IsOptional="true" MaxLength="300" FieldIndex="7" />
           <Field Name="ScanBasedReturn" Type="bool" IsOptional="true" FieldIndex="4" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="StealthPostage" Type="bool" IsOptional="true" FieldIndex="2" />
@@ -4568,7 +4572,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-03T15:04:41.0264061Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-03T15:56:07.845508Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5636,6 +5640,10 @@
                     <Field Name="StealthPostage" Ordinal="3" IsOptional="true" DbType="2" />
                     <Field Name="ReferenceID" Ordinal="4" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ScanBasedReturn" Ordinal="5" IsOptional="true" DbType="2" />
+                    <Field Name="ReferenceID2" Ordinal="6" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ReferenceID3" Ordinal="7" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ReferenceID4" Ordinal="8" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="GroupCode" Ordinal="9" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaScanForm">
@@ -11720,7 +11728,11 @@
         <EntityMapping EntityName=":EndiciaProfile" TargetName="ShipWorksLocal:dbo:EndiciaProfile">
           <FieldMappings>
             <FieldMapping FieldName="EndiciaAccountID" TargetFieldName="EndiciaAccountID" />
+            <FieldMapping FieldName="GroupCode" TargetFieldName="GroupCode" />
             <FieldMapping FieldName="ReferenceID" TargetFieldName="ReferenceID" />
+            <FieldMapping FieldName="ReferenceID2" TargetFieldName="ReferenceID2" />
+            <FieldMapping FieldName="ReferenceID3" TargetFieldName="ReferenceID3" />
+            <FieldMapping FieldName="ReferenceID4" TargetFieldName="ReferenceID4" />
             <FieldMapping FieldName="ScanBasedReturn" TargetFieldName="ScanBasedReturn" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="StealthPostage" TargetFieldName="StealthPostage" />

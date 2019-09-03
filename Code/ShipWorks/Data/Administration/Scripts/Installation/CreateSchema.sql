@@ -1799,7 +1799,11 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [EndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ScanBasedReturn] [bit] NULL
+[ScanBasedReturn] [bit] NULL,
+[ReferenceID2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceID3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceID4] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[GroupCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaProfile] on [dbo].[EndiciaProfile]'

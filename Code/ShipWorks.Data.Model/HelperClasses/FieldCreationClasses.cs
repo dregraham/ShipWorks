@@ -7267,6 +7267,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ScanBasedReturn);}
 		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID2 field instance</summary>
+		public static EntityField2 ReferenceID2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID2);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID3 field instance</summary>
+		public static EntityField2 ReferenceID3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID3);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID4 field instance</summary>
+		public static EntityField2 ReferenceID4
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID4);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.GroupCode field instance</summary>
+		public static EntityField2 GroupCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.GroupCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaScanFormEntity</summary>

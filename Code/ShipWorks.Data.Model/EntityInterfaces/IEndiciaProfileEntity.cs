@@ -51,6 +51,30 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> ScanBasedReturn { get; }
+        /// <summary> The ReferenceID2 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID2"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ReferenceID2 { get; }
+        /// <summary> The ReferenceID3 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID3"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ReferenceID3 { get; }
+        /// <summary> The ReferenceID4 property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."ReferenceID4"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ReferenceID4 { get; }
+        /// <summary> The GroupCode property of the Entity EndiciaProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaProfile"."GroupCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String GroupCode { get; }
         
         IPostalProfileEntity PostalProfile { get; }
         
