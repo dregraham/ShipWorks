@@ -2162,7 +2162,7 @@ namespace ShipWorks.Shipping
         {
             ShipmentEntity shipment = (ShipmentEntity) doWorkEventArgs.Argument;
             doWorkEventArgs.Result = doWorkEventArgs.Argument;
-            ShipmentEntity selectedShipment = shipmentControl.SelectedShipments.FirstOrDefault();
+            ShipmentEntity selectedShipment = shipmentControl.SelectedShipments.First();
 
             try
             {
