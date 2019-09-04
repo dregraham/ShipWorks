@@ -70,10 +70,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 mock.Override<IInsuranceUtility>();
             });
 
-            var trackedEvent = new Mock<ITrackedEvent>
-            {
-                CallBase = false
-            };
+            var trackedEvent = new Mock<ITrackedEvent>();
 
             IoC.UnsafeGlobalLifetimeScope
                 .Resolve<IEnumerable<ILabelRetrievalShipmentValidator>>()

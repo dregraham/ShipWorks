@@ -17,16 +17,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentPreProcessor : IShipmentPreProcessor
     {
         private readonly IBestRateBrokerRatingService brokerRatingService;
+        private readonly Func<string, ITrackedEvent> telemetryEventFactory;
         private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public BestRateShipmentPreProcessor(IShippingManager shippingManager,
-            IBestRateBrokerRatingService brokerRatingService)
+            IBestRateBrokerRatingService brokerRatingService,
+            Func<string, ITrackedEvent> telemetryEventFactory)
         {
             this.shippingManager = shippingManager;
             this.brokerRatingService = brokerRatingService;
+            this.telemetryEventFactory = telemetryEventFactory;
         }
 
         /// <summary>
@@ -159,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private void LogTelemetry(ShipmentEntity shipment, RateGroup rateGroup, RateResult rateResult)
         {
-            using (ITrackedEvent telemetryEvent = new TrackedEvent("Shipping.BestRate"))
+            using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shipping.BestRate"))
             {
                 RateResult cheapestRate = rateGroup.Rates.Aggregate((curMin, x) => x.Amount < curMin.Amount ? x : curMin);
 
