@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -146,6 +147,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
@@ -156,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Save the origin
             originControl.SaveToEntities();
 
-            // Save the
+            // Save the fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 endiciaAccount.ReadMultiValue(v => shipment.Postal.Endicia.EndiciaAccountID = (long) v);
