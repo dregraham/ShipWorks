@@ -97,11 +97,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     if (result == DialogResult.OK)
                     {
                         store.ShouldUploadWarehouseOrders = true;
+                        odbcStoreRepository.UpdateStoreCache(store);
                     }
                 }
             }
-            
-            odbcStoreRepository.UpdateStoreCache(store);
         }
 
         /// <summary>
@@ -133,11 +132,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     if (wizard.ShowDialog(this) == DialogResult.OK)
                     {
                         ToggleExportUploadMapButtonEnabled();
+                        odbcStoreRepository.UpdateStoreCache(store);
                     }
                 }
             }
-
-            odbcStoreRepository.UpdateStoreCache(store);
         }
 
         /// <summary>
