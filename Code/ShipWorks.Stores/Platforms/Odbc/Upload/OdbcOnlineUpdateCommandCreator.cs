@@ -47,10 +47,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         {
             OdbcStoreEntity odbcStoreEntity = store as OdbcStoreEntity;
             MethodConditions.EnsureArgumentIsNotNull(odbcStoreEntity, nameof(odbcStoreEntity));
-            
-            OdbcStore odbcStore = odbcStoreRepository.GetStore(odbcStoreEntity);
 
-            if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            OdbcStore odbcStore = GetOdbcStoreFromRepository(odbcStoreEntity);
+
+            if (odbcStore == null || odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return Enumerable.Empty<MenuCommand>();
             }
@@ -59,6 +59,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
             {
                 new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(odbcStoreEntity, context))
             };
+        }
+
+        /// <summary>
+        /// Get store from repository. Catch error if not found.
+        /// </summary>
+        private OdbcStore GetOdbcStoreFromRepository(OdbcStoreEntity odbcStoreEntity)
+        {
+            try
+            {
+                return odbcStoreRepository.GetStore(odbcStoreEntity);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                return null;
+            }
         }
 
         /// <summary>
