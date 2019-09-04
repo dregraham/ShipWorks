@@ -462,6 +462,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Custom4", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom5", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubItemID", fieldHashtable);
 		}
 		#endregion
 
@@ -865,6 +867,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom5, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Custom5, value); }
+		}
+
+		/// <summary> The HubItemID property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."HubItemID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String HubItemID
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.HubItemID, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.HubItemID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
