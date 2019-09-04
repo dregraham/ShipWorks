@@ -68,8 +68,12 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 mock.Override<IMessageHelper>();
                 mock.Override<IMainForm>();
                 mock.Override<IInsuranceUtility>();
-                mock.Override<ITrackedEvent>();
             });
+
+            var trackedEvent = new Mock<ITrackedEvent>
+            {
+                CallBase = false
+            };
 
             IoC.UnsafeGlobalLifetimeScope
                 .Resolve<IEnumerable<ILabelRetrievalShipmentValidator>>()
