@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
                 var events = (BestRateEventTypes) shipment.BestRateEvents;
 
-                foreach (var eventType in Enum.GetValues(typeof(BestRateEventTypes)).OfType<BestRateEventTypes>())
+                foreach (var eventType in Enum.GetValues(typeof(BestRateEventTypes)).OfType<BestRateEventTypes>().Where(x => x != BestRateEventTypes.None))
                 {
                     telemetryEvent.AddProperty($"Shipping.BestRate.ComparisonWorkflow.{eventType.ToString()}",
                         events.HasFlag(eventType) ? "true" : "false");
