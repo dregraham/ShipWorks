@@ -38,6 +38,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
                 ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
                 ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
+                ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
+                ApplyProfileValue(endiciaProfile.ReferenceID2, endiciaShipment, EndiciaShipmentFields.ReferenceID2);
+                ApplyProfileValue(endiciaProfile.ReferenceID3, endiciaShipment, EndiciaShipmentFields.ReferenceID3);
+                ApplyProfileValue(endiciaProfile.ReferenceID4, endiciaShipment, EndiciaShipmentFields.ReferenceID4);
+                ApplyProfileValue(endiciaProfile.GroupCode, endiciaShipment, EndiciaShipmentFields.GroupCode);
                 ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
                 ApplyProfileValue(endiciaProfile.PostalProfile.Profile.Insurance, endiciaShipment, EndiciaShipmentFields.Insurance);
             }
