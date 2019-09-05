@@ -35,8 +35,8 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public decimal Width { get; set; }
         public decimal Height { get; set; }
 
-        [JsonProperty("hubItemId")]
-        public string HubItemID { get; set; }
+        [JsonProperty("id")]
+        public string ID { get; set; }
         public IEnumerable<WarehouseOrderItemAttribute> ItemAttributes { get; set; }
 
         [JsonExtensionData]

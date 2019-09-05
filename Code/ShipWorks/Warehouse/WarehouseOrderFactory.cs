@@ -165,7 +165,7 @@ namespace ShipWorks.Warehouse
         /// </summary>
         private void LoadItem(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
-            itemEntity.HubItemID = warehouseItem.HubItemID;
+            itemEntity.HubItemID = warehouseItem.ID;
             itemEntity.Name = warehouseItem.Name;
             itemEntity.Code = warehouseItem.Code;
             itemEntity.SKU = warehouseItem.SKU;
