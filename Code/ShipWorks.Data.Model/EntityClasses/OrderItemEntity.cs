@@ -872,7 +872,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The HubItemID property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."HubItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String HubItemID
 		{
 			get { return (System.String)GetValue((int)OrderItemFieldIndex.HubItemID, true); }

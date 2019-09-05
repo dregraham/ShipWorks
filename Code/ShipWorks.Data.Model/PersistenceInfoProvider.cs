@@ -2518,7 +2518,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderItemEntity", "Custom3", "Custom3", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 27);
 			this.AddElementFieldMapping("OrderItemEntity", "Custom4", "Custom4", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 28);
 			this.AddElementFieldMapping("OrderItemEntity", "Custom5", "Custom5", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 29);
-			this.AddElementFieldMapping("OrderItemEntity", "HubItemID", "HubItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 30);
+			this.AddElementFieldMapping("OrderItemEntity", "HubItemID", "HubItemID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 30);
 		}
 
 		/// <summary>Inits OrderItemAttributeEntity's mappings</summary>

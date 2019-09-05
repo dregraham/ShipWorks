@@ -2068,7 +2068,7 @@
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
-          <Field Name="HubItemID" Type="string" MaxLength="50" FieldIndex="29" />
+          <Field Name="HubItemID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="29" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -4564,7 +4564,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-04T21:40:29.9102008Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-05T14:09:30.3833423Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7590,7 +7590,7 @@
                     <Field Name="Custom3" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="HubItemID" Ordinal="32" DbType="12" Length="50" />
+                    <Field Name="HubItemID" Ordinal="32" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">

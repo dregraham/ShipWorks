@@ -262,7 +262,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."HubItemID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String HubItemID { get; }
         
         
