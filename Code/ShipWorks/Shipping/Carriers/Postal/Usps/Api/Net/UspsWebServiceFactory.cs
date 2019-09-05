@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static string ServiceUrl =>
             UspsWebClient.UseTestServer ?
-                "https://swsim.testing.stamps.com/swsim/SwsimV69.asmx" :
-                "https://swsim.stamps.com/swsim/SwsimV69.asmx";
+                "https://swsim.testing.stamps.com/swsim/SwsimV84.asmx" :
+                "https://swsim.stamps.com/swsim/SwsimV84.asmx";
 
         /// <summary>
         /// Create the web service
