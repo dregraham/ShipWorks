@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
@@ -808,11 +809,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             List<Guid> uspsTransactions = uspsShipmentEntities.Select(s => s.UspsTransactionID).ToList();
             List<string> trackingNumbers = uspsShipmentEntities.Select(s => s.PostalShipment.Shipment.TrackingNumber).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
-            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());
-            
-            string scanFormUspsId = string.Empty;
-            string scanFormUrl = string.Empty;
+            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());            
+  
             string transactionID = Guid.NewGuid().ToString();
+
+            EndOfDayManifest[] endOfDayManifests;
 
             using (ISwsimV84 webService = CreateWebService("ScanForm"))
             {
@@ -824,17 +825,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         null, // TrackingNumbers (not needed because we send the uspsTransactions)
                         null, // ShipDate
                         false, // ShipDateSpecified
-                        null, //PrintLayout
+                        null, // PrintLayout
                         CreateScanFormAddress(person),
                         ImageType.Png,
                         false, // Don't print instructions
                         ManifestType.All,
                         0, // NumberOfLabels (wsdl shows it as optional and default is 0)
-                        out EndOfDayManifest[] endOfDayManifest
+                        out endOfDayManifests
                     );
             }
 
-            string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormUspsId, scanFormUrl);
+            StringBuilder innerXml = new StringBuilder();
+            foreach (var item in endOfDayManifests)
+            {
+                innerXml.AppendLine($"<TransactionId>{item.ManifestId}</TransactionId><Url>{item.ManifestUrl}</Url>");
+            }
+            string responseXml = $"<ScanForm>{innerXml.ToString()}</ScanForm>";
+
             XDocument response = XDocument.Parse(responseXml);
 
             return response;
