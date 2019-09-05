@@ -9,7 +9,7 @@
     var services = new object[]
     {
         "ShipWorks.ApplicationCore.Licensing.Activation.WebServices", "Activation",
-        "ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV69",
+        "ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV84",
         "ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
         "ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
         "ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
@@ -25,6 +25,7 @@
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate", "RateService",
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship", "ShipService",
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.Track", "TrackService",
+        "ShipWorks.Shipping.Carriers.FedEx.WebServices.UploadDocument", "UploadDocumentService",
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement", "PackageMovementInformationService",
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation", "AddressValidationService",
         "ShipWorks.Shipping.Carriers.FedEx.WebServices.Close", "CloseService",
