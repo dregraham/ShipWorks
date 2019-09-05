@@ -15,11 +15,3 @@ Scenario: User has access to Best Rate in Shipping Panel
 	And Best Rate is on in Tango
 	When a shipment is loaded
 	Then the user can access Best Rate
-
-Scenario: Provider used is displayed after processing with Best Rate
-	Given a Legacy Tango account
-	And Best Rate is on in Tango
-	And a Best Rate shipment is loaded in the Shipping Panel
-	And the only rate is USPS Priority Mail
-	When the shipment is processed
-	Then the provider is USPS
