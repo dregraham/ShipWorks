@@ -2162,11 +2162,15 @@ namespace ShipWorks.Shipping
         {
             ShipmentEntity shipment = (ShipmentEntity) doWorkEventArgs.Argument;
             doWorkEventArgs.Result = doWorkEventArgs.Argument;
+            ShipmentEntity selectedShipment = shipmentControl.SelectedShipments.First();
 
             try
             {
                 anyAttempted = true;
                 doWorkEventArgs.Result = lifetimeScope.Resolve<IRatesRetriever>().GetRates(shipment).Value;
+
+                // Update the BestRateEvents on the actual shipment from the clone
+                selectedShipment.BestRateEvents |= shipment.BestRateEvents;
 
                 // Just in case it used to have an error remove it
                 ErrorManager?.Remove(shipment.ShipmentID);
