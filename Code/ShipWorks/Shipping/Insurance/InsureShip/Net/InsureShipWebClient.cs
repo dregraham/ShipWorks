@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
             using (ITrackedEvent telemetricEvent = new TrackedEvent("Shipping.InsureShip.Response"))
             {
                 telemetricEvent.AddProperty("Shipping.InsureShip.Response.Status", responseObject.Status);
-                telemetricEvent.AddProperty("Shipping.InsureShip.Response.HttpStatusCode", response.StatusCode.ToString());
+                telemetricEvent.AddMetric("Shipping.InsureShip.Response.HttpStatusCode", (int) response.StatusCode);
                 telemetricEvent.AddProperty("Shipping.InsureShip.Response.PolicyNumber", responseObject.PolicyID.ToString());
             }
         }
