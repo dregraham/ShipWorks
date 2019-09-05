@@ -1241,7 +1241,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID2", "ReferenceID2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID3", "ReferenceID3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID4", "ReferenceID4", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 7);
-			this.AddElementFieldMapping("EndiciaProfileEntity", "GroupCode", "GroupCode", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 8);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "GroupCode", "GroupCode", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits EndiciaScanFormEntity's mappings</summary>
@@ -1275,7 +1275,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID2", "ReferenceID2", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 11);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID3", "ReferenceID3", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID4", "ReferenceID4", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 13);
-			this.AddElementFieldMapping("EndiciaShipmentEntity", "GroupCode", "GroupCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "GroupCode", "GroupCode", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits EtsyOrderEntity's mappings</summary>

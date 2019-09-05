@@ -979,7 +979,7 @@
       <EntityDefinition Name="EndiciaProfile" ObjectID="2956325f-4467-416a-bc73-9548e4f2fe47">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" IsOptional="true" FieldIndex="1" />
-          <Field Name="GroupCode" Type="string" IsOptional="true" MaxLength="50" FieldIndex="8" />
+          <Field Name="GroupCode" Type="string" IsOptional="true" MaxLength="300" FieldIndex="8" />
           <Field Name="ReferenceID" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
           <Field Name="ReferenceID2" Type="string" IsOptional="true" MaxLength="300" FieldIndex="5" />
           <Field Name="ReferenceID3" Type="string" IsOptional="true" MaxLength="300" FieldIndex="6" />
@@ -1003,7 +1003,7 @@
       <EntityDefinition Name="EndiciaShipment" ObjectID="15beb8bc-2590-445f-8cf7-e31b1efb4553">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" FieldIndex="1" />
-          <Field Name="GroupCode" Type="string" MaxLength="50" FieldIndex="14" />
+          <Field Name="GroupCode" Type="string" MaxLength="300" FieldIndex="14" />
           <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="OriginalEndiciaAccountID" Type="long" IsOptional="true" FieldIndex="2" />
           <Field Name="ReferenceID" Type="string" MaxLength="300" FieldIndex="4" />
@@ -4572,7 +4572,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-03T15:56:07.845508Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-05T16:32:54.227208Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5643,7 +5643,7 @@
                     <Field Name="ReferenceID2" Ordinal="6" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ReferenceID3" Ordinal="7" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ReferenceID4" Ordinal="8" IsOptional="true" DbType="12" Length="300" />
-                    <Field Name="GroupCode" Ordinal="9" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="GroupCode" Ordinal="9" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaScanForm">
@@ -5687,7 +5687,7 @@
                     <Field Name="ReferenceID2" Ordinal="12" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                     <Field Name="ReferenceID3" Ordinal="13" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                     <Field Name="ReferenceID4" Ordinal="14" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
-                    <Field Name="GroupCode" Ordinal="15" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="GroupCode" Ordinal="15" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyOrder">

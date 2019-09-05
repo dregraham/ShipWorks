@@ -1188,7 +1188,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID2", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID2, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID3", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID3, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID4", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID4, 300, 0, 0);
-			this.AddElementFieldInfo("EndiciaProfileEntity", "GroupCode", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.GroupCode, 50, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "GroupCode", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.GroupCode, 300, 0, 0);
 		}
 		/// <summary>Inits EndiciaScanFormEntity's FieldInfo objects</summary>
 		private void InitEndiciaScanFormEntityInfos()
@@ -1220,7 +1220,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID2", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID2, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID3", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID3, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID4", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID4, 300, 0, 0);
-			this.AddElementFieldInfo("EndiciaShipmentEntity", "GroupCode", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.GroupCode, 50, 0, 0);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "GroupCode", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.GroupCode, 300, 0, 0);
 		}
 		/// <summary>Inits EtsyOrderEntity's FieldInfo objects</summary>
 		private void InitEtsyOrderEntityInfos()

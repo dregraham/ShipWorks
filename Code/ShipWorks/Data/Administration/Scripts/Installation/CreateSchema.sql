@@ -1803,7 +1803,7 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [ReferenceID2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferenceID3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ReferenceID4] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[GroupCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[GroupCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaProfile] on [dbo].[EndiciaProfile]'
@@ -1904,7 +1904,7 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [ReferenceID2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID2] DEFAULT (''),
 [ReferenceID3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID3] DEFAULT (''),
 [ReferenceID4] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID4] DEFAULT (''),
-[GroupCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_GroupCode] DEFAULT ('')
+[GroupCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_GroupCode] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'

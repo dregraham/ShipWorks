@@ -148,7 +148,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The GroupCode property of the Entity EndiciaShipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EndiciaShipment"."GroupCode"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String GroupCode { get; }
         
