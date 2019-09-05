@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV69
+    partial class SwsimV84
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        public SwsimV69(IApiLogEntry logEntry)
+        public SwsimV84(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

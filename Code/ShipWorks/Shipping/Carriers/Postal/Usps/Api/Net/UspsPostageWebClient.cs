@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             IUspsWebClient client = CreateWebClient();
             if ((UspsResellerType) account.UspsReseller != UspsResellerType.Express1)
             {
-                AccountInfoV27 accountInfo = (AccountInfoV27) client.GetAccountInfo(account);
+                AccountInfoV37 accountInfo = (AccountInfoV37) client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;

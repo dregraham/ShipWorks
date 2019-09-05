@@ -298,13 +298,13 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
         {
-            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
+            Mock<ISwsimV84> webService = context.Mock.CreateMock<ISwsimV84>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
 
-                AccountInfoV27 accountInfo = new AccountInfoV27()
+                AccountInfoV37 accountInfo = new AccountInfoV37()
                 {
                     Terms = new Terms()
                     {
@@ -339,17 +339,17 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
         {
-            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
+            Mock<ISwsimV84> webService = context.Mock.CreateMock<ISwsimV84>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
-                        Rate = new RateV25(),
+                        Rate = new RateV31(),
                         ImageData = new[] { new byte[] { 0x20, 0x20 } },
                     });
 
-                AccountInfoV27 accountInfo = new AccountInfoV27()
+                AccountInfoV37 accountInfo = new AccountInfoV37()
                 {
                     Terms = new Terms()
                     {
@@ -383,7 +383,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         [Fact]
         public async Task Process_ShowsErrorMessage_WhenServerReturns500()
         {
-            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
+            Mock<ISwsimV84> webService = context.Mock.CreateMock<ISwsimV84>(w =>
             {
                 XmlDocument details = new XmlDocument();
                 details.LoadXml("<error><details code=\"bar\" /></error>");
@@ -392,7 +392,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
 
-                AccountInfoV27 accountInfo = new AccountInfoV27()
+                AccountInfoV37 accountInfo = new AccountInfoV37()
                 {
                     Terms = new Terms()
                     {

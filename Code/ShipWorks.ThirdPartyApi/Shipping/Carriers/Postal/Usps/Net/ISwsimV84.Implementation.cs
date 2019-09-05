@@ -6,28 +6,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Mark the web service as implementing the interface
     /// </summary>
-    public partial class SwsimV69 : ISwsimV69
+    public partial class SwsimV84 : ISwsimV84
     {
         /// <summary>
         /// Get account info
         /// </summary>
         public AccountInfoResult GetAccountInfo(Credentials credentials)
         {
-            AccountInfoV27 accountInfo;
+            AccountInfoV37 accountInfo;
             Address address;
-            string email;
 
-            GetAccountInfo(credentials, out accountInfo, out address, out email);
+            GetAccountInfo(credentials, out accountInfo, out address, out string customerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
-            return new AccountInfoResult(accountInfo, address, email);
+            return new AccountInfoResult(accountInfo, address, customerEmail);
         }
 
         /// <summary>
         /// Get rates
         /// </summary>
-        public RateV25[] GetRates(Credentials account, RateV25 rate)
+        public RateV31[] GetRates(Credentials account, RateV31 rate)
         {
-            RateV25[] rateResults;
+            RateV31[] rateResults;
 
             GetRates(account, rate, out rateResults);
 
@@ -49,6 +48,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             string postageHash;
             string trackingNumber;
 
+            string reference1 = string.Empty;
+            string reference2 = string.Empty;
+            string reference3 = string.Empty;
+            string reference4 = string.Empty;
+
             string result = CreateEnvelopeIndicium(
                 parameters.Item,
                 ref integratorTxID,
@@ -63,15 +67,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.RateToken,
                 parameters.OrderId,
                 "", // memo
-                false, // BypassCleanseAddress
+                false, // BypassCleanseAddress,
                 0, // ImageId
                 0, // ImageId2
+                ref reference1,
+                ref reference2,
+                ref reference3,
+                ref reference4,
+                false, // ReturnIndiciumData
+                null, // ExtendedPostageInfoV1
                 out trackingNumber,
                 out stampsTxID,
                 out url,
                 out postageBalance,
                 out mac,
-                out postageHash);
+                out postageHash,
+                out byte[] IndicumData);
 
             return new CreateIndiciumResult
             {
@@ -106,6 +117,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             HoldForPickUpFacility holdForPickup;
             string formURL;
 
+            string reference1 = string.Empty;
+            string reference2 = string.Empty;
+            string reference3 = string.Empty;
+            string reference4 = string.Empty;
+
             string result = CreateIndicium(
                 parameters.Item,
                 ref integratorTxID,
@@ -137,6 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.RequestPostageHash,
                 parameters.NonDeliveryOption,
                 parameters.RedirectTo,
+                parameters.OutboundTransactionID,
                 parameters.OriginalPostageHash,
                 parameters.ReturnImageData,
                 parameters.ReturnImageDataSpecified,
@@ -151,6 +168,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 parameters.OrderId,
                 false, // BypassCleanseAddress
                 0, //image id,
+                ref reference1, // Reference1
+                ref reference2, // Reference2
+                ref reference3, // Reference3
+                ref reference4, // Reference4
+                false, // ReturnIndiciumData
+                null, // ExtendedPostageInfo
+                EnclosedServiceType.Unknown,
+                EnclosedPackageType.Unknown,
+                out string encodedTrackingNumber,
+                out string bannerText,
+                out string trailingSuperScript,
                 out outTrackingNumber,
                 out stampsTxID,
                 out url,
@@ -159,7 +187,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
                 out postageHash,
                 out imageData,
                 out holdForPickup,
-                out formURL);
+                out formURL,
+                out string labelCategory,
+                out byte[] indiciumData);
 
             return new CreateIndiciumResult
             {
