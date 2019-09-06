@@ -91,6 +91,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 AddToServices(PostalServiceType.GlobalPostSmartSaverEconomyIntl);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverStandardIntl);
             }
+
+            if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.GlobalPostPlus))
+            {
+                AddToServices(PostalServiceType.GlobalPostPlus);
+            }
         }
 
         /// <summary>

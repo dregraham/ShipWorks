@@ -364,11 +364,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get GlobalPost service availability from the account info
         /// </summary>
-        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
+        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV27 capabilities)
         {
             return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
                 HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
-                GetGlobalPostInternationalPresortAvailability(capabilities);
+                GetGlobalPostInternationalPresortAvailability(capabilities) | 
+                GetGlobalPostPlusAvailability(capabilities);
+        }
+
+        /// <summary>
+        /// Get GlobalPostPlus
+        /// </summary>
+        private static GlobalPostServiceAvailability GetGlobalPostPlusAvailability(CapabilitiesV27 capabilities)
+        {
+            if (capabilities.CanPrintGPSmartSaver && capabilities.CanPrintGlobalPostPlus && capabilities.CanCleanseIntlAddress)
+            {
+                return GlobalPostServiceAvailability.GlobalPostPlus;
+            }
+
+            return GlobalPostServiceAvailability.None;
         }
 
         /// <summary>
