@@ -2839,6 +2839,7 @@
           <Field Name="ApiKey" Type="string" MaxLength="100" FieldIndex="4" />
           <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="ShopifyAccessToken" Type="string" MaxLength="255" FieldIndex="2" />
+          <Field Name="ShopifyFulfillmentLocation" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="ShopifyNotifyCustomer" Type="bool" FieldIndex="6" />
           <Field Name="ShopifyRequestedShippingOption" Type="int" FieldIndex="3" />
           <Field Name="ShopifyShopDisplayName" Type="string" MaxLength="100" FieldIndex="1" />
@@ -4564,7 +4565,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-05T14:09:30.3833423Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-02T13:55:18.0622271Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4990,10 +4991,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
-                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -6899,8 +6900,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7700,9 +7701,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -8634,6 +8635,7 @@
                     <Field Name="ApiKey" Ordinal="6" DbType="12" Length="100" />
                     <Field Name="Password" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="ShopifyNotifyCustomer" Ordinal="8" DbType="2" />
+                    <Field Name="ShopifyFulfillmentLocation" Ordinal="9" HasDefaultValue="true" DefaultValue="(0)" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopSiteStore">
@@ -13611,6 +13613,7 @@
             <FieldMapping FieldName="ApiKey" TargetFieldName="ApiKey" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="ShopifyAccessToken" TargetFieldName="ShopifyAccessToken" />
+            <FieldMapping FieldName="ShopifyFulfillmentLocation" TargetFieldName="ShopifyFulfillmentLocation" />
             <FieldMapping FieldName="ShopifyNotifyCustomer" TargetFieldName="ShopifyNotifyCustomer" />
             <FieldMapping FieldName="ShopifyRequestedShippingOption" TargetFieldName="ShopifyRequestedShippingOption" />
             <FieldMapping FieldName="ShopifyShopDisplayName" TargetFieldName="ShopifyShopDisplayName" />

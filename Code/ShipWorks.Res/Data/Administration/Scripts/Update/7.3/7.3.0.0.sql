@@ -1,8 +1,5 @@
-PRINT N'Altering [dbo].[OrderItem]'
+PRINT N'Altering [dbo].[ShopifyStore]'
 GO
-IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'OrderItem' AND COLUMN_NAME = 'HubItemID')
-BEGIN
-	ALTER TABLE OrderItem
-		ADD HubItemID NVARCHAR(50) NULL
-END
+IF COL_LENGTH(N'[dbo].[ShopifyStore]', N'ShopifyFulfillmentLocation') IS NULL
+ALTER TABLE [dbo].[ShopifyStore] ADD[ShopifyFulfillmentLocation] [bigint] NOT NULL CONSTRAINT [DF_ShopifyStore_ShopifyFulfillmentLocation] DEFAULT ((0))
 GO

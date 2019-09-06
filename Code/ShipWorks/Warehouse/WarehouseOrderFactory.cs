@@ -60,7 +60,7 @@ namespace ShipWorks.Warehouse
 
                 await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
-                LoadStoreOrderDetails(orderEntity, warehouseOrder);
+                LoadStoreOrderDetails(store, orderEntity, warehouseOrder);
 
                 Debug.Assert(orderEntity.OrderNumber != 0,
                              "Ensure order number was set by the store specific order factory");
@@ -141,7 +141,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load store specific order details
         /// </summary>
-        protected abstract void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder);
+        protected abstract void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder);
 
         /// <summary>
         /// Load store specific item details

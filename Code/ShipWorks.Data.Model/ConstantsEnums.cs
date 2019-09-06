@@ -11356,6 +11356,8 @@ namespace ShipWorks.Data.Model
 		Password,
 		///<summary>ShopifyNotifyCustomer. </summary>
 		ShopifyNotifyCustomer,
+		///<summary>ShopifyFulfillmentLocation. </summary>
+		ShopifyFulfillmentLocation,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -10,6 +10,7 @@ using log4net;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 
@@ -59,6 +60,8 @@ namespace ShipWorks.Shipping.Services
                 .Do(_ => messenger.Send(new RatesNotSupportedMessage(this, "Unable to get rates for multiple shipments.")))
                 .Subscribe();
 
+            ShipmentEntity selectedShipment = null;
+
             // Ignore shipment changes from the GridProvider. This means someone changed the carrier from the
             // shipments panel, and if it is for the current shipment, we'll get another request for rates from
             // the shipping panel
@@ -66,6 +69,7 @@ namespace ShipWorks.Shipping.Services
                 .Merge(ChangedOrders())
                 .Merge(SelectedShipment())
                 .Where(x => x.ShipmentAdapter?.Shipment?.Processed == false)
+                .Do(x => selectedShipment = x.ShipmentAdapter.Shipment)
                 .Select(x => new
                 {
                     ShipmentAdapter = CloneAdapter(x.ShipmentAdapter, x.OnAfterClone),
@@ -80,6 +84,7 @@ namespace ShipWorks.Shipping.Services
                     x.RatingHash,
                     Rates = ratesRetriever.GetRates(x.ShipmentAdapter.Shipment)
                 })
+                .Do(x => selectedShipment.BestRateEvents |= x.ShipmentAdapter.Shipment.BestRateEvents)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(x => messenger.Send(new RatesRetrievedMessage(this, x.RatingHash, x.Rates, x.ShipmentAdapter)))
                 .CatchAndContinue((Exception ex) => log.Error("Error occurred while getting rates", ex))
