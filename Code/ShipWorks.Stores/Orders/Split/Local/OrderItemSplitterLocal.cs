@@ -3,12 +3,12 @@ using System.Linq;
 using Interapptive.Shared.Extensions;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Stores.Orders.Split
+namespace ShipWorks.Stores.Orders.Split.Local
 {
     /// <summary>
     /// Class for splitting order items between two orders
     /// </summary>
-    public class OrderItemSplitter : IOrderDetailSplitter
+    public class OrderItemSplitterLocal : IOrderDetailSplitterLocal
     {
         /// <summary>
         /// Split the order items

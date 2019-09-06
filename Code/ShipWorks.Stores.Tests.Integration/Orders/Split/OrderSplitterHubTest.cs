@@ -10,6 +10,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Orders.Split.Hub;
+using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -18,12 +20,12 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class OrderSplitterTest : IDisposable
+    public class OrderSplitterHubTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ThreeDCartStoreEntity threeDCartStore;
 
-        public OrderSplitterTest(DatabaseFixture db)
+        public OrderSplitterHubTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             threeDCartStore = CreateThreeDCartStore();
@@ -34,7 +36,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
         {
             ThreeDCartOrderEntity originalOrder = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, true);
 
-            IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
+            IOrderSplitter testObject = context.Mock.Create<OrderSplitterHub>();
 
             Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             foreach (var orderItem in originalOrder.OrderItems)
@@ -48,33 +50,24 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
                 chargeAmounts.Add(orderCharge.OrderChargeID, orderCharge.Amount);
             }
 
-            string newOrderNumber = $"1234-1";
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "0", OrderSplitterType.Hub);
 
-            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
-            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
+            int originalOrderChargesCount = originalOrder.OrderCharges.Count;
+
+            await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
-            ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
             Assert.Equal(1234, originalOrder.OrderNumber);
             Assert.Equal("1234", originalOrder.OrderNumberComplete);
             Assert.Equal(0, originalOrder.OrderItems.Count);
-            Assert.Equal(0, originalOrder.OrderCharges.Count);
-            Assert.Equal(0, originalOrder.OrderTotal);
+            Assert.Equal(originalOrderChargesCount, originalOrder.OrderCharges.Count);
 
             ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, false);
-            decimal originalOrderTotal = OrderUtility.CalculateTotal(originalOrderForCheckingValues, true);
 
-            Assert.Equal(1234, newOrder.OrderNumber);
-            Assert.Equal("1234-1", newOrder.OrderNumberComplete);
-            Assert.Equal(itemQuanities.Count, newOrder.OrderItems.Count);
-            Assert.Equal(chargeAmounts.Count, newOrder.OrderCharges.Count);
-            Assert.Equal(originalOrderTotal, newOrder.OrderTotal);
-            Assert.Equal(originalOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), newOrder.OrderCharges.Sum(oc => oc.Amount));
-            Assert.Equal(originalOrderForCheckingValues.OrderItems.Sum(oi => oi.Quantity), newOrder.OrderItems.Sum(oi => oi.Quantity));
+            Assert.Equal(originalOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), originalOrder.OrderCharges.Sum(oc => oc.Amount));
         }
 
         [Fact]
@@ -82,20 +75,16 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
         {
             ThreeDCartOrderEntity originalOrder = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, true);
 
-            IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
+            IOrderSplitter testObject = context.Mock.Create<OrderSplitterHub>();
 
             Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             Dictionary<long, decimal> chargeAmounts = new Dictionary<long, decimal>();
 
-            string newOrderNumber = $"1234-1";
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Hub);
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
-
-            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
-            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
+            await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
-            ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
             ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1, 2, 3, "", false, false);
@@ -106,12 +95,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(originalOrder.OrderTotal, originalOrder.OrderTotal);
             Assert.Equal(originalOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), originalOrder.OrderCharges.Sum(oc => oc.Amount));
             Assert.Equal(originalOrderForCheckingValues.OrderItems.Sum(oi => oi.Quantity), originalOrder.OrderItems.Sum(oi => oi.Quantity));
-
-            Assert.Equal(0, newOrder.OrderItems.Count);
-            Assert.Equal(0, newOrder.OrderCharges.Count);
-            Assert.Equal(0, newOrder.OrderTotal);
-            Assert.Equal(0, newOrder.OrderCharges.Sum(oc => oc.Amount));
-            Assert.Equal(0, newOrder.OrderItems.Sum(oi => oi.Quantity));
         }
 
         [Fact]
@@ -119,7 +102,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
         {
             ThreeDCartOrderEntity originalOrder = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, true);
 
-            IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
+            IOrderSplitter testObject = context.Mock.Create<OrderSplitterHub>();
 
             Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             OrderItemEntity orderItem = originalOrder.OrderItems.First();
@@ -129,20 +112,15 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             OrderChargeEntity orderCharge = originalOrder.OrderCharges.First();
             chargeAmounts.Add(orderCharge.OrderChargeID, orderCharge.Amount);
 
-            string newOrderNumber = $"1234-1";
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Hub);
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, newOrderNumber);
-
-            var result = await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
-            long newOrderID = result.First(o => o.Key != originalOrder.OrderID).Key;
+            await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
             IOrderSplitGateway orderSplitGateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
-            ThreeDCartOrderEntity newOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(newOrderID);
             originalOrder = (ThreeDCartOrderEntity) await orderSplitGateway.LoadOrder(originalOrder.OrderID);
 
             ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, false);
             originalOrderForCheckingValues.OrderItems.Remove(originalOrderForCheckingValues.OrderItems.FirstOrDefault());
-            originalOrderForCheckingValues.OrderCharges.Remove(originalOrderForCheckingValues.OrderCharges.FirstOrDefault());
             decimal originalOrderTotal = OrderUtility.CalculateTotal(originalOrderForCheckingValues, true);
 
             Assert.Equal(1234, originalOrder.OrderNumber);
@@ -156,15 +134,6 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             newOrderForCheckingValues.OrderItems.Add(orderItem);
             newOrderForCheckingValues.OrderCharges.Clear();
             newOrderForCheckingValues.OrderCharges.Add(orderCharge);
-            decimal newOrderTotal = OrderUtility.CalculateTotal(newOrderForCheckingValues, true);
-
-            Assert.Equal(1234, newOrder.OrderNumber);
-            Assert.Equal("1234-1", newOrder.OrderNumberComplete);
-            Assert.Equal(itemQuanities.Count, newOrder.OrderItems.Count);
-            Assert.Equal(chargeAmounts.Count, newOrder.OrderCharges.Count);
-            Assert.Equal(newOrderTotal, newOrder.OrderTotal);
-            Assert.Equal(newOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), newOrder.OrderCharges.Sum(oc => oc.Amount));
-            Assert.Equal(newOrderForCheckingValues.OrderItems.Sum(oi => oi.Quantity), newOrder.OrderItems.Sum(oi => oi.Quantity));
         }
 
         [Fact]
@@ -175,7 +144,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
                 .WithCharge(c => c.Set(x => x.Description, "Bar").Set(x => x.Amount, 0))
                 .Save();
 
-            IOrderSplitter testObject = context.Mock.Create<OrderSplitter>();
+            IOrderSplitter testObject = context.Mock.Create<OrderSplitterHub>();
 
             var orderItem = order.OrderItems.First();
             var itemQuanities = new Dictionary<long, decimal> { { orderItem.OrderItemID, 0 } };
@@ -184,17 +153,13 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var chargeAmounts = new Dictionary<long, decimal> { { orderCharge.OrderChargeID, 0 } };
 
             var result = await testObject.Split(
-                new OrderSplitDefinition(order, itemQuanities, chargeAmounts, "ABC"), new ProgressItem("Foo"));
+                new OrderSplitDefinition(order, itemQuanities, chargeAmounts, "ABC", OrderSplitterType.Hub), new ProgressItem("Foo"));
 
             var gateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
 
             var originalOrder = await gateway.LoadOrder(result.Keys.First());
             Assert.Contains("Foo", originalOrder.OrderItems.Select(x => x.Name));
             Assert.Contains("Bar", originalOrder.OrderCharges.Select(x => x.Description));
-
-            var splitOrder = await gateway.LoadOrder(result.Keys.Last());
-            Assert.DoesNotContain("Foo", splitOrder.OrderItems.Select(x => x.Name));
-            Assert.DoesNotContain("Bar", splitOrder.OrderCharges.Select(x => x.Description));
         }
 
         private ThreeDCartStoreEntity CreateThreeDCartStore()

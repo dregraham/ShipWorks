@@ -10,7 +10,6 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -19,29 +18,29 @@ using ShipWorks.Stores.Orders.Split.Actions;
 using ShipWorks.Stores.Orders.Split.Errors;
 using static Interapptive.Shared.Utility.Functional;
 
-namespace ShipWorks.Stores.Orders.Split
+namespace ShipWorks.Stores.Orders.Split.Hub
 {
     /// <summary>
     /// Split an order
     /// </summary>
-    [Component]
-    public class OrderSplitter : IOrderSplitter
+    [KeyedComponent(typeof(IOrderSplitter), OrderSplitterType.Hub)]
+    public class OrderSplitterHub : IOrderSplitter
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderSplitGateway orderSplitGateway;
-        private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
-        private readonly IOrderSplitAudit splitOrderAudit;
+        private readonly IEnumerable<IOrderDetailSplitterHub> orderDetailSplitters;
+        private readonly IOrderSplitAuditHub splitOrderAudit;
         private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
         private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitter(
+        public OrderSplitterHub(
             ISqlAdapterFactory sqlAdapterFactory,
-            IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
+            IEnumerable<IOrderDetailSplitterHub> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
-            IOrderSplitAudit splitOrderAudit,
+            IOrderSplitAuditHub splitOrderAudit,
             IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
             )
         {
@@ -72,9 +71,9 @@ namespace ShipWorks.Stores.Orders.Split
             return orderSplitGateway
                 .LoadOrder(definition.Order.OrderID)
                 .Map(order => PerformSplit(order, definition))
-                .Bind(x => SaveOrders(x.original, x.split, progressProvider))
-                .Bind(x => AuditOrders(x.original, x.split))
-                .Map(newOrder => new[] { definition.Order, newOrder.split }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
+                .Bind(x => SaveOrders(x.original, progressProvider))
+                .Bind(AuditOrders)
+                .Map(originalOrder => new[] { definition.Order }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
                 .Map(x => x as IDictionary<long, string>);
         }
 
@@ -94,6 +93,7 @@ namespace ShipWorks.Stores.Orders.Split
                     trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
                     trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
                     trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
+                    trackedDurationEvent.AddProperty("Orders.Split.OrderSplitterType", EnumHelper.GetDescription(definition.OrderSplitterType));
                 }
             }
             catch
@@ -112,46 +112,37 @@ namespace ShipWorks.Stores.Orders.Split
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             originalOrder.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
-            OrderEntity newOrderEntity = EntityUtility.CloneAsNew(originalOrder);
-            newOrderEntity.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
-            newOrderEntity.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
+            //OrderEntity newOrderEntity = EntityUtility.CloneAsNew(originalOrder);
+            //newOrderEntity.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
+            //newOrderEntity.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
-            SplitValues(definition, newOrderEntity, definition.NewOrderNumber, originalOrder);
+            SplitValues(definition, definition.NewOrderNumber, originalOrder);
 
-            AddOrderSearch(newOrderEntity, originalOrder);
-
-            foreach (IEntityFieldCore field in newOrderEntity.Fields)
-            {
-                field.IsChanged = true;
-            }
-
-            return (originalOrder, newOrderEntity);
+            return (originalOrder, null);
         }
 
         /// <summary>
         /// Audit each order
         /// </summary>
-        private async Task<(OrderEntity original, OrderEntity split)> AuditOrders(OrderEntity originalOrder, OrderEntity newOrderEntity)
+        private async Task<OrderEntity> AuditOrders(OrderEntity originalOrder)
         {
-            await splitOrderAudit.Audit(originalOrder, newOrderEntity).ConfigureAwait(false);
+            await splitOrderAudit.Audit(originalOrder).ConfigureAwait(false);
 
-            return (originalOrder, newOrderEntity);
+            return originalOrder;
         }
 
         /// <summary>
         /// Save the orders
         /// </summary>
-        private async Task<(OrderEntity original, OrderEntity split)> SaveOrders(OrderEntity originalOrder, OrderEntity newOrderEntity, IProgressReporter progressProvider)
+        private async Task<OrderEntity> SaveOrders(OrderEntity originalOrder, IProgressReporter progressProvider)
         {
             return await sqlAdapterFactory.WithPhysicalTransactionAsync(async sqlAdapter =>
             {
-                await SaveOrder(newOrderEntity, sqlAdapter)
-                    .Bind(x => SaveOrder(originalOrder, sqlAdapter).Map(y => x && y))
+                await SaveOrder(originalOrder, sqlAdapter)
                     .Bind(x => CompleteTransaction(x, sqlAdapter, progressProvider))
-                    .Map(_ => newOrderEntity)
                     .ConfigureAwait(false);
 
-                return (originalOrder, newOrderEntity);
+                return originalOrder;
             }).ConfigureAwait(false);
         }
 
@@ -173,40 +164,6 @@ namespace ShipWorks.Stores.Orders.Split
 
             sqlAdapter.Commit();
             return Result.FromSuccess();
-        }
-
-        /// <summary>
-        /// Add an order search to the new order
-        /// </summary>
-        private void AddOrderSearch(OrderEntity newOrderEntity, OrderEntity originalOrder)
-        {
-            if (originalOrderCombineSplitStatus == CombineSplitStatusType.None)
-            {
-                // Create an OrderSearch for the new order.  So that we get back to original order,
-                // everything is the same except for the OrderID.
-                OrderSearchEntity newOrderSearch = newOrderEntity.OrderSearch.AddNew();
-                newOrderSearch.OriginalOrderID = originalOrder.OrderID;
-                newOrderSearch.IsManual = originalOrder.IsManual;
-                newOrderSearch.OrderNumber = originalOrder.OrderNumber;
-                newOrderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
-                newOrderSearch.StoreID = originalOrder.StoreID;
-
-                // Also create an OrderSearch for the original order so that we know that
-                // it was part of a split operation and searching works.
-                OrderSearchEntity orderSearch = originalOrder.OrderSearch.AddNew();
-                orderSearch.OriginalOrderID = originalOrder.OrderID;
-                orderSearch.IsManual = originalOrder.IsManual;
-                orderSearch.OrderNumber = originalOrder.OrderNumber;
-                orderSearch.OrderNumberComplete = originalOrder.OrderNumberComplete;
-                orderSearch.StoreID = originalOrder.StoreID;
-
-                // Add store specific search entries.
-                IStoreSpecificSplitOrderAction platformSplitter;
-                storeSpecificOrderSplitter.TryGetValue((StoreTypeCode) originalOrder.Store.TypeCode, out platformSplitter);
-
-                platformSplitter?.Perform(originalOrder.OrderID, newOrderEntity);
-                platformSplitter?.Perform(originalOrder.OrderID, originalOrder);
-            }
         }
 
         /// <summary>
@@ -249,26 +206,14 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Split the order values between the two orders
         /// </summary>
-        private void SplitValues(OrderSplitDefinition definition, OrderEntity newOrderEntity, string newOrderNumber, OrderEntity originalOrder)
+        private void SplitValues(OrderSplitDefinition definition, string newOrderNumber, OrderEntity originalOrder)
         {
             originalOrder.CombineSplitStatus = originalOrder.CombineSplitStatus.AsSplit();
 
-            newOrderEntity.IsNew = true;
-            newOrderEntity.OrderID = 0;
-            newOrderEntity.ChangeOrderNumber(newOrderNumber, "", "", newOrderEntity.OrderNumber);
-
-            newOrderEntity.CombineSplitStatus = newOrderEntity.CombineSplitStatus.AsSplit();
-
-            newOrderEntity.OnlineLastModified = originalOrder.OnlineLastModified;
-
-            foreach (IOrderDetailSplitter orderDetailSplitter in orderDetailSplitters)
+            foreach (IOrderDetailSplitterHub orderDetailSplitter in orderDetailSplitters)
             {
-                orderDetailSplitter.Split(definition, originalOrder, newOrderEntity);
+                orderDetailSplitter.Split(definition, originalOrder);
             }
-
-            newOrderEntity.RollupItemCount = 0;
-            newOrderEntity.RollupItemTotalWeight = 0;
-            newOrderEntity.RollupNoteCount = 0;
         }
     }
 }

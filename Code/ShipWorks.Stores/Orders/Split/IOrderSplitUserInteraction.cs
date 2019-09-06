@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Split.Local;
 
 namespace ShipWorks.Stores.Orders.Split
 {

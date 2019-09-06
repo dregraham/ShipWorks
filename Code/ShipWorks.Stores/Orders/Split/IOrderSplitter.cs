@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
+using ShipWorks.Stores.Orders.Split.Local;
 
 namespace ShipWorks.Stores.Orders.Split
 {

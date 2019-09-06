@@ -142,7 +142,7 @@ namespace ShipWorks.Stores.Orders.Split
             return messageHelper
                 .ShowDialog(SetupDialog)
                 .Bind(x => x == true ?
-                    Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix)) :
+                    Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix, OrderSplitterType.Local)) :
                     Task.FromException<OrderSplitDefinition>(Error.Canceled));
         }
 
