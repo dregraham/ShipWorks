@@ -51,112 +51,112 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_FedEx")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_FedEx.csv")]
         public void AdjustedShipCountryCode_ForFedEx(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.FedEx);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Ups")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         public void AdjustedShipCountryCode_ForUpsOnlineTools(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.UpsOnLineTools);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Ups")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         public void AdjustedShipCountryCode_ForUpsWorldShip(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.UpsWorldShip);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Usps")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         public void AdjustedShipCountryCode_ForUsps(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.Usps);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Usps")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         public void AdjustedShipCountryCode_ForUspsExpress1(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.Express1Usps);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Endicia")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         public void AdjustedShipCountryCode_ForEndicia(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.Endicia);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Endicia")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         public void AdjustedShipCountryCode_ForEndiciaExpress1(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.Express1Endicia);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_iParcel")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_iParcel.csv")]
         public void AdjustedShipCountryCode_ForIParcel(DataRow row)
         {
             TestAdjustedShipCountryCode(row, ShipmentTypeCode.iParcel);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_FedEx")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_FedEx.csv")]
         public void AdjustedOriginCountryCode_ForFedEx(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.FedEx);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Ups")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         public void AdjustedOriginCountryCode_ForUpsOnlineTools(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.UpsOnLineTools);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Ups")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         public void AdjustedOriginCountryCode_ForUpsWorldShip(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.UpsWorldShip);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Usps")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         public void AdjustedOriginCountryCode_ForUsps(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.Usps);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Usps")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         public void AdjustedOriginCountryCode_ForUspsExpress1(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.Express1Usps);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Endicia")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         public void AdjustedOriginCountryCode_ForEndicia(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.Endicia);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_Endicia")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         public void AdjustedOriginCountryCode_ForEndiciaExpress1(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.Express1Endicia);
         }
 
         [Theory]
-        [CsvData(@"Shipping", "AdjustedCountryCodeData_iParcel")]
+        [ExcelData(@"Shipping\AdjustedCountryCodeData_iParcel.csv")]
         public void AdjustedOriginCountryCode_ForIParcel(DataRow row)
         {
             TestAdjustedOriginCountryCode(row, ShipmentTypeCode.iParcel);
