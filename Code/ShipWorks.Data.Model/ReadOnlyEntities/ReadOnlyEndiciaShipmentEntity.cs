@@ -47,6 +47,10 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ScanBasedReturn = source.ScanBasedReturn;
             RequestedLabelFormat = source.RequestedLabelFormat;
             Insurance = source.Insurance;
+            ReferenceID2 = source.ReferenceID2;
+            ReferenceID3 = source.ReferenceID3;
+            ReferenceID4 = source.ReferenceID4;
+            GroupCode = source.GroupCode;
             
             PostalShipment = (IPostalShipmentEntity) source.PostalShipment?.AsReadOnly(objectMap);
             
@@ -123,6 +127,30 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean Insurance { get; }
+        /// <summary> The ReferenceID2 property of the Entity EndiciaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaShipment"."ReferenceID2"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ReferenceID2 { get; }
+        /// <summary> The ReferenceID3 property of the Entity EndiciaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaShipment"."ReferenceID3"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ReferenceID3 { get; }
+        /// <summary> The ReferenceID4 property of the Entity EndiciaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaShipment"."ReferenceID4"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ReferenceID4 { get; }
+        /// <summary> The GroupCode property of the Entity EndiciaShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaShipment"."GroupCode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String GroupCode { get; }
         
         public IPostalShipmentEntity PostalShipment { get; }
         
