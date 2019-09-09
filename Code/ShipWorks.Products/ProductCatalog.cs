@@ -500,7 +500,7 @@ namespace ShipWorks.Products
             dt.Rows.InsertAt(secondHeaderRow, 0);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
         public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize)
