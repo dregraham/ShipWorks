@@ -19,6 +19,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
         private const string voidShipment = "api/orders/{0}/void";
+        private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -42,8 +43,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public static string ShipOrder(string warehouseOrderID) => string.Format(shipOrder, warehouseOrderID);
 
         /// <summary>
-        /// Create void order endpoint with given warehouseOrderid
+        /// Create void order endpoint with given warehouseOrderID
         /// </summary>
         public static string VoidShipment(string warehouseOrderID) => string.Format(voidShipment, warehouseOrderID);
+
+        /// <summary>
+        /// Create a reroute order items endpoint with an warehouseOrderID
+        /// </summary>
+        public static string RerouteOrderItems(string warehouseOrderID) => string.Format(rerouteOrderItems, warehouseOrderID);
     }
 }

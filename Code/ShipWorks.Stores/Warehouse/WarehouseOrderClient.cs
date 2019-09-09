@@ -169,5 +169,47 @@ namespace ShipWorks.Stores.Warehouse
                 return Result.FromError(ex);
             }
         }
+
+        /// <summary>
+        /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
+        /// </summary>
+        public async Task<Result> RerouteOrderItems(Guid hubOrderID, RerouteOrderItems rerouteOrderItems)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel =
+                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    IRestRequest request =
+                        new RestRequest(WarehouseEndpoints.RerouteOrderItems(hubOrderID.ToString("N")), Method.PUT);
+
+                    request.AddJsonBody(JsonConvert.SerializeObject(rerouteOrderItems));
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Reroute Order items")
+                        .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        log.Error($"Failed to reroute order items for order {hubOrderID} to hub. {response.Message}",
+                            response.Exception);
+                        return Result.FromError(response.Exception);
+                    }
+
+                    return Result.FromSuccess();
+                }
+
+                string restrictedErrorMessage = "Attempted to reroute order items to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                return Result.FromError(restrictedErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to reroute order items for order {hubOrderID} to hub.", ex);
+                return Result.FromError(ex);
+            }
+        }
     }
 }

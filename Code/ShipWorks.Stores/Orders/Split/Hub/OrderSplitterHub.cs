@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
@@ -10,12 +10,14 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Orders.Split.Actions;
 using ShipWorks.Stores.Orders.Split.Errors;
+using ShipWorks.Warehouse;
 using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Stores.Orders.Split.Hub
@@ -30,8 +32,8 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IEnumerable<IOrderDetailSplitterHub> orderDetailSplitters;
         private readonly IOrderSplitAuditHub splitOrderAudit;
-        private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
-        private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
+        private readonly IConfigurationData configurationData;
+        private readonly IWarehouseOrderClient warehouseOrderClient;
 
         /// <summary>
         /// Constructor
@@ -41,14 +43,16 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             IEnumerable<IOrderDetailSplitterHub> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
             IOrderSplitAuditHub splitOrderAudit,
-            IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
+            IConfigurationData configurationData,
+            IWarehouseOrderClient warehouseOrderClient
             )
         {
             this.orderSplitGateway = orderSplitGateway;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.orderDetailSplitters = orderDetailSplitters;
             this.splitOrderAudit = splitOrderAudit;
-            this.storeSpecificOrderSplitter = storeSpecificOrderSplitter;
+            this.configurationData = configurationData;
+            this.warehouseOrderClient = warehouseOrderClient;
         }
 
         /// <summary>
@@ -70,8 +74,8 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         {
             return orderSplitGateway
                 .LoadOrder(definition.Order.OrderID)
-                .Map(order => PerformSplit(order, definition))
-                .Bind(x => SaveOrders(x.original, progressProvider))
+                .Bind(async order => await PerformSplit(order, definition).ConfigureAwait(false))
+                .Bind(x => SaveOrders(x, progressProvider))
                 .Bind(AuditOrders)
                 .Map(originalOrder => new[] { definition.Order }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
                 .Map(x => x as IDictionary<long, string>);
@@ -105,20 +109,36 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         /// <summary>
         /// Perform the split
         /// </summary>
-        private (OrderEntity original, OrderEntity split) PerformSplit(OrderEntity originalOrder, OrderSplitDefinition definition)
+        private async Task<OrderEntity> PerformSplit(OrderEntity originalOrder, OrderSplitDefinition definition)
         {
-            originalOrderCombineSplitStatus = originalOrder.CombineSplitStatus;
-
             originalOrder.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
             originalOrder.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
 
-            //OrderEntity newOrderEntity = EntityUtility.CloneAsNew(originalOrder);
-            //newOrderEntity.OrderCharges.RemovedEntitiesTracker = new EntityCollection<OrderChargeEntity>();
-            //newOrderEntity.OrderItems.RemovedEntitiesTracker = new EntityCollection<OrderItemEntity>();
-
             SplitValues(definition, definition.NewOrderNumber, originalOrder);
 
-            return (originalOrder, null);
+            var itemValues = definition.Order.OrderItems.ToDictionary(oi => oi.OrderItemID, oi => oi.HubItemID);
+            
+            RerouteOrderItems rerouteOrderItems = new RerouteOrderItems()
+            {
+                PathParameters = new PathParameters() {OrderId = originalOrder.HubOrderID.Value.ToString("N")},
+                ItemsToReroute = new ItemsToReroute()
+                {
+                    FromWarehouseId = new Guid(configurationData.FetchReadOnly().WarehouseID).ToString("N"),
+                    Items = definition.ItemQuantities
+                        .Where(iq => iq.Value > 0)
+                        .Select(iq => 
+                        new ItemQuantity()
+                        {
+                            Id = itemValues[iq.Key],
+                            Quantity = iq.Value
+                        })
+                }
+            };
+
+            await warehouseOrderClient.RerouteOrderItems(originalOrder.HubOrderID.Value, rerouteOrderItems)
+                .ConfigureAwait(false);
+
+            return originalOrder;
         }
 
         /// <summary>

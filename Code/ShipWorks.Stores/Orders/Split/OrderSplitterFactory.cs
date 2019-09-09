@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public IOrderSplitter Create(OrderSplitterType orderSplitterType)
         {
-            return lifetimeScope.ResolveKeyed<IOrderSplitter>(OrderSplitterType.Local);
+            return lifetimeScope.ResolveKeyed<IOrderSplitter>(OrderSplitterType.Hub);
         }
     }
 }

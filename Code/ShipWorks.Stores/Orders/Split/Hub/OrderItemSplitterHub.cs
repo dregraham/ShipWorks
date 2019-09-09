@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             foreach (KeyValuePair<long, decimal> orderItemQuantityDefinition in orderSplitDefinition.ItemQuantities)
             {
                 //// Find the new order item based on OrderItemID
-                //OrderItemEntity newOrderItemEntity = splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemQuantityDefinition.Key);
+                //OrderItemEntity newOrderItemEntity = splitOrder.OrderItems.First(oi => oi.OrderItemID == orderItemQuantityDefinition.Key)
 
                 // Find the original item based on OrderItemID
                 OrderItemEntity originalOrderItemEntity = originalOrder.OrderItems.First(oi => oi.OrderItemID == orderItemQuantityDefinition.Key);
@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             }
 
             //splitOrder.OrderItems
-            //    .RemoveWhere(x => x.Quantity == 0 || !orderSplitDefinition.ItemQuantities.ContainsKey(x.OrderItemID));
+            //    .RemoveWhere(x => x.Quantity == 0 || !orderSplitDefinition.ItemQuantities.ContainsKey(x.OrderItemID))
 
             originalOrder.OrderItems
                 .RemoveWhere(x => x.Quantity == 0 &&

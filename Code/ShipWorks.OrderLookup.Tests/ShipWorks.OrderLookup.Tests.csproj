@@ -70,4 +70,7 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\net46\" />
+  </ItemGroup>
 </Project>
