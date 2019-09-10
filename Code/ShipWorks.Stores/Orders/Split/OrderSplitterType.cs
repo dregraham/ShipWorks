@@ -4,7 +4,7 @@ using System.Reflection;
 namespace ShipWorks.Stores.Orders.Split
 {
     /// <summary>
-    /// The type of order splitter: Local or Hub
+    /// The type of order splitter: Local or Reroute
     /// </summary>
     [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum OrderSplitterType
@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Orders.Split
         [Description("Local")]
         Local = 0,
 
-        [Description("Hub")]
-        Hub = 1
+        [Description("Reroute")]
+        Reroute = 1
     }
 }

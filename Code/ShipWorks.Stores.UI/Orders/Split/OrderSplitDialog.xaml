@@ -168,7 +168,7 @@
         <StackPanel Grid.Row="3" IsEnabled="{Binding IsHubCustomer}">
             <TextBlock FontWeight="Bold">How would you like this order to ship?</TextBlock>
             <StackPanel Margin="6,6,0,0">
-                <RadioButton Margin="0,0,0,4" IsChecked="{Binding SplitType, Converter={StaticResource RadioButtonChecked}, ConverterParameter={x:Static split:OrderSplitterType.Hub}}">Ship the new order from a different warehouse</RadioButton>
+                <RadioButton Margin="0,0,0,4" IsChecked="{Binding SplitType, Converter={StaticResource RadioButtonChecked}, ConverterParameter={x:Static split:OrderSplitterType.Reroute}}">Ship the new order from a different warehouse</RadioButton>
                 <RadioButton IsChecked="{Binding SplitType, Converter={StaticResource RadioButtonChecked}, ConverterParameter={x:Static split:OrderSplitterType.Local}}">Ship the new order from this warehouse</RadioButton>
             </StackPanel>
         </StackPanel>

@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             }
 
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "0", OrderSplitterType.Hub);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "0", OrderSplitterType.Reroute);
 
             int originalOrderChargesCount = originalOrder.OrderCharges.Count;
 
@@ -80,7 +80,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Dictionary<long, decimal> itemQuanities = new Dictionary<long, decimal>();
             Dictionary<long, decimal> chargeAmounts = new Dictionary<long, decimal>();
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Hub);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Reroute);
 
             await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             OrderChargeEntity orderCharge = originalOrder.OrderCharges.First();
             chargeAmounts.Add(orderCharge.OrderChargeID, orderCharge.Amount);
 
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Hub);
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "", OrderSplitterType.Reroute);
 
             await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
@@ -153,7 +153,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var chargeAmounts = new Dictionary<long, decimal> { { orderCharge.OrderChargeID, 0 } };
 
             var result = await testObject.Split(
-                new OrderSplitDefinition(order, itemQuanities, chargeAmounts, "ABC", OrderSplitterType.Hub), new ProgressItem("Foo"));
+                new OrderSplitDefinition(order, itemQuanities, chargeAmounts, "ABC", OrderSplitterType.Reroute), new ProgressItem("Foo"));
 
             var gateway = context.Mock.Container.Resolve<IOrderSplitGateway>();
 

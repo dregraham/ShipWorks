@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Orders.Split
         private string orderNumberPostfix;
         private decimal originalTotalCharge;
         private decimal splitTotalCharge;
-        private OrderSplitterType splitType = OrderSplitterType.Hub;
+        private OrderSplitterType splitType = OrderSplitterType.Reroute;
         private bool isHubCustomer;
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace ShipWorks.Stores.Orders.Split
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
             IsHubCustomer = licenseService.IsHub;
-            SplitType = licenseService.IsHub ? OrderSplitterType.Hub : OrderSplitterType.Local;
+            SplitType = licenseService.IsHub ? OrderSplitterType.Reroute : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
             OrderNumberPostfix = suggestedOrderNumber;
 

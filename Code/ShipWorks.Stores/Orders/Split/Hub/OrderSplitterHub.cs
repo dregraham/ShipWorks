@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
     /// <summary>
     /// Split an order
     /// </summary>
-    [KeyedComponent(typeof(IOrderSplitter), OrderSplitterType.Hub)]
+    [KeyedComponent(typeof(IOrderSplitter), OrderSplitterType.Reroute)]
     public class OrderSplitterHub : IOrderSplitter
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
@@ -63,8 +63,8 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             return UsingAsync(
                 new TrackedDurationEvent("OrderManagement.Orders.Split"),
                 evt => SplitInternal(definition, progressProvider)
-                    .Do(_ => AddTelemetryProperties(evt, definition, true),
-                        _ => AddTelemetryProperties(evt, definition, false)));
+                    .Do(_ => AddTelemetryProperties(evt, definition),
+                        ex => AddTelemetryProperties(evt, definition, ex)));
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         /// <summary>
         /// Add telemetry properties
         /// </summary>
-        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, OrderSplitDefinition definition, bool result)
+        private void AddTelemetryProperties(TrackedDurationEvent trackedDurationEvent, OrderSplitDefinition definition, Exception ex = null)
         {
             try
             {
@@ -92,12 +92,23 @@ namespace ShipWorks.Stores.Orders.Split.Hub
 
                 if (order != null)
                 {
-                    trackedDurationEvent.AddProperty("Orders.Split.Result", result ? "Success" : "Failed");
+                    trackedDurationEvent.AddProperty("Orders.Split.Result", ex == null ? "Success" : "Failed");
                     trackedDurationEvent.AddProperty("Orders.Split.PreSplitStatus", EnumHelper.GetDescription(order.CombineSplitStatus));
                     trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
                     trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
                     trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
-                    trackedDurationEvent.AddProperty("Orders.Split.OrderSplitterType", EnumHelper.GetDescription(definition.OrderSplitterType));
+                    trackedDurationEvent.AddProperty("Orders.Split.Type", EnumHelper.GetDescription(definition.OrderSplitterType));
+
+                    int originalItemCount = order.OrderItems.Count;
+                    int splitOrderItemCount = definition.ItemQuantities.Values.Count(q => q > 0);
+
+                    trackedDurationEvent.AddProperty("Orders.Split.NewOrder.ItemCount", splitOrderItemCount.ToString());
+                    trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder.ItemCount", (originalItemCount - splitOrderItemCount).ToString());
+
+                    if (ex != null)
+                    {
+                        trackedDurationEvent.AddProperty("Orders.Split.Reroute.FailureReason", ex.Message);
+                    }
                 }
             }
             catch

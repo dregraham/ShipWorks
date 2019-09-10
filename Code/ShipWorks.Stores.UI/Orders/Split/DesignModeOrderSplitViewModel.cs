@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.UI.Orders.Split
         /// <summary>
         /// Should the order be split locally or on the Hub
         /// </summary>
-        public OrderSplitterType SplitType { get; set; } = OrderSplitterType.Hub;
+        public OrderSplitterType SplitType { get; set; } = OrderSplitterType.Reroute;
 
         /// <summary>
         /// Is this a Hub customer
