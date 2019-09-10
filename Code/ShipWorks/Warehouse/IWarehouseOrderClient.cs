@@ -32,6 +32,6 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        Task<Result> RerouteOrderItems(Guid hubOrderID, RerouteOrderItems rerouteOrderItems);
+        Task<Result> RerouteOrderItems(Guid hubOrderID, ItemsToReroute itemsToReroute);
     }
 }

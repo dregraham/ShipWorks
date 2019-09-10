@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<Result> RerouteOrderItems(Guid hubOrderID, RerouteOrderItems rerouteOrderItems)
+        public async Task<Result> RerouteOrderItems(Guid hubOrderID, ItemsToReroute itemsToReroute)
         {
             try
             {
@@ -185,7 +185,7 @@ namespace ShipWorks.Stores.Warehouse
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.RerouteOrderItems(hubOrderID.ToString("N")), Method.PUT);
 
-                    request.AddJsonBody(JsonConvert.SerializeObject(rerouteOrderItems));
+                    request.AddJsonBody(JsonConvert.SerializeObject(itemsToReroute));
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
                         .MakeRequest(request, "Reroute Order items")

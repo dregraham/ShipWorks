@@ -5,23 +5,6 @@ using Newtonsoft.Json;
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class RerouteOrderItems
-    {
-        [JsonProperty("pathParameters")]
-        public PathParameters PathParameters { get; set; }
-
-        [JsonProperty("parsedBody")]
-        public ItemsToReroute ItemsToReroute { get; set; }
-    }
-
-    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
-    public class PathParameters
-    {
-        [JsonProperty("orderId")]
-        public string OrderId { get; set; }
-    }
-
-    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ItemsToReroute
     {
         [JsonProperty("fromWarehouseId")]

@@ -117,12 +117,9 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             SplitValues(definition, definition.NewOrderNumber, originalOrder);
 
             var itemValues = definition.Order.OrderItems.ToDictionary(oi => oi.OrderItemID, oi => oi.HubItemID);
-            
-            RerouteOrderItems rerouteOrderItems = new RerouteOrderItems()
+
+            ItemsToReroute itemsToReroute = new ItemsToReroute()
             {
-                PathParameters = new PathParameters() {OrderId = originalOrder.HubOrderID.Value.ToString("N")},
-                ItemsToReroute = new ItemsToReroute()
-                {
                     FromWarehouseId = new Guid(configurationData.FetchReadOnly().WarehouseID).ToString("N"),
                     Items = definition.ItemQuantities
                         .Where(iq => iq.Value > 0)
@@ -132,10 +129,9 @@ namespace ShipWorks.Stores.Orders.Split.Hub
                             Id = itemValues[iq.Key],
                             Quantity = iq.Value
                         })
-                }
             };
 
-            await warehouseOrderClient.RerouteOrderItems(originalOrder.HubOrderID.Value, rerouteOrderItems)
+            await warehouseOrderClient.RerouteOrderItems(originalOrder.HubOrderID.Value, itemsToReroute)
                 .ConfigureAwait(false);
 
             return originalOrder;
