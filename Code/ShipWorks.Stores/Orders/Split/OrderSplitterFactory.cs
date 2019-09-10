@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Stores.Orders.Split
@@ -9,22 +10,19 @@ namespace ShipWorks.Stores.Orders.Split
     [Component]
     public class OrderSplitterFactory : IOrderSplitterFactory
     {
-        private readonly ILifetimeScope lifetimeScope;
+        private readonly IIndex<OrderSplitterType, IOrderSplitter> splitters;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitterFactory(ILifetimeScope lifetimeScope)
+        public OrderSplitterFactory(IIndex<OrderSplitterType, IOrderSplitter> splitters)
         {
-            this.lifetimeScope = lifetimeScope;
+            this.splitters = splitters;
         }
 
         /// <summary>
         /// Create an order splitter based on OrderSplitterType
         /// </summary>
-        public IOrderSplitter Create(OrderSplitterType orderSplitterType)
-        {
-            return lifetimeScope.ResolveKeyed<IOrderSplitter>(OrderSplitterType.Hub);
-        }
+        public IOrderSplitter Create(OrderSplitterType orderSplitterType) => splitters[orderSplitterType];
     }
 }

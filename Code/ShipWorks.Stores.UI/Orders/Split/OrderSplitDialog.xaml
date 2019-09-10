@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShipWorks.Stores.UI.Orders.Split"
+        xmlns:split="clr-namespace:ShipWorks.Stores.Orders.Split;assembly=ShipWorks.Stores" 
         xmlns:ui="http://schemas.shipworks.com/ui"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:DesignModeOrderSplitViewModel, IsDesignTimeCreatable=True}"
@@ -28,12 +29,14 @@
             <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
             <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
             <ui:PluralizingValueConverter x:Key="PluralizingValue" />
+            <ui:RadioButtonCheckedConverter x:Key="RadioButtonChecked" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
@@ -162,7 +165,15 @@
             </StackPanel>
         </ScrollViewer>
 
-        <ui:AlignmentWrapPanel Grid.Row="3"
+        <StackPanel Grid.Row="3">
+            <TextBlock FontWeight="Bold">How would you like this order to ship?</TextBlock>
+            <StackPanel Margin="6,6,0,0">
+                <RadioButton Margin="0,0,0,4" IsChecked="{Binding SplitType, Converter={StaticResource RadioButtonChecked}, ConverterParameter={x:Static split:OrderSplitterType.Hub}}">Ship the new order from a different warehouse</RadioButton>
+                <RadioButton IsChecked="{Binding SplitType, Converter={StaticResource RadioButtonChecked}, ConverterParameter={x:Static split:OrderSplitterType.Local}}">Ship the new order from this warehouse</RadioButton>
+            </StackPanel>
+        </StackPanel>
+        
+        <ui:AlignmentWrapPanel Grid.Row="4"
                                Margin="0, 8, 0, 0">
             <TextBlock Grid.Row="0"
                        FontWeight="Bold"

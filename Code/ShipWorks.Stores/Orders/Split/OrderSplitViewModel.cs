@@ -12,10 +12,12 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split.Errors;
+using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -27,20 +29,25 @@ namespace ShipWorks.Stores.Orders.Split
     {
         private readonly IAsyncMessageHelper messageHelper;
         private readonly IOrderSplitDialog splitOrdersDialog;
+        private readonly ILicenseService licenseService;
         private readonly PropertyChangedHandler handler;
 
         private string selectedOrderNumber;
         private string orderNumberPostfix;
         private decimal originalTotalCharge;
         private decimal splitTotalCharge;
+        private OrderSplitterType splitType = OrderSplitterType.Hub;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitViewModel(IAsyncMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog)
+        public OrderSplitViewModel(IAsyncMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog, ILicenseService licenseService)
         {
             this.splitOrdersDialog = splitOrdersDialog;
+            this.licenseService = licenseService;
             this.messageHelper = messageHelper;
+
+            //userSession.
 
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
@@ -129,6 +136,16 @@ namespace ShipWorks.Stores.Orders.Split
             set => handler.Set(nameof(SplitTotalCharge), ref splitTotalCharge, value);
         }
 
+        /// <summary>
+        /// Type of split to perform
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public OrderSplitterType SplitType
+        {
+            get => splitType;
+            set => handler.Set(nameof(SplitType), ref splitType, value);
+        }
+
         [Obfuscation(Exclude = true)]
         public bool ShowItemQuantityDecimals => !Items.All(x => x.TotalQuantity.IsInt());
 
@@ -142,7 +159,7 @@ namespace ShipWorks.Stores.Orders.Split
             return messageHelper
                 .ShowDialog(SetupDialog)
                 .Bind(x => x == true ?
-                    Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix, OrderSplitterType.Local)) :
+                    Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix, SplitType)) :
                     Task.FromException<OrderSplitDefinition>(Error.Canceled));
         }
 
@@ -162,6 +179,7 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
+            SplitType = licenseService.IsHub ? OrderSplitterType.Hub : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
             OrderNumberPostfix = suggestedOrderNumber;
 

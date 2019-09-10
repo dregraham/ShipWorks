@@ -78,6 +78,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
+        /// True if Hub customer
+        /// </summary>
+        public bool IsHub => CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
+
+        /// <summary>
         /// Returns the correct ILicense for the store
         /// </summary>
         /// <exception cref="EncryptionException" />

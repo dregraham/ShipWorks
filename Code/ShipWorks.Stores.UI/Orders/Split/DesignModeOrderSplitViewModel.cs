@@ -55,6 +55,11 @@ namespace ShipWorks.Stores.UI.Orders.Split
         public decimal SplitTotalCharge => Charges.Sum(x => x.SplitAmountValue);
 
         /// <summary>
+        /// Should the order be split locally or on the Hub
+        /// </summary>
+        public OrderSplitterType SplitType { get; set; } = OrderSplitterType.Hub;
+
+        /// <summary>
         /// Order items
         /// </summary>
         public IEnumerable<OrderSplitItemViewModel> Items { get; set; }
