@@ -60,6 +60,11 @@ namespace ShipWorks.Stores.UI.Orders.Split
         public OrderSplitterType SplitType { get; set; } = OrderSplitterType.Hub;
 
         /// <summary>
+        /// Is this a Hub customer
+        /// </summary>
+        public bool IsHubCustomer => true;
+
+        /// <summary>
         /// Order items
         /// </summary>
         public IEnumerable<OrderSplitItemViewModel> Items { get; set; }

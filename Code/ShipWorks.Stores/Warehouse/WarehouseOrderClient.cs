@@ -193,7 +193,6 @@ namespace ShipWorks.Stores.Warehouse
                         log.Error($"Failed to reroute order items for order {hubOrderID} to hub. {response.Message}",
                             response.Exception);
                         throw response.Exception;
-                        //return Result.FromError(response.Exception);
                     }
 
                     return Result.FromSuccess();
@@ -202,7 +201,6 @@ namespace ShipWorks.Stores.Warehouse
                 string restrictedErrorMessage = "Attempted to reroute order items to hub for a non warehouse customer";
                 log.Error(restrictedErrorMessage);
                 throw new InvalidOperationException(restrictedErrorMessage);
-                //return Result.FromError(restrictedErrorMessage);
             }
             catch (Exception ex)
             {

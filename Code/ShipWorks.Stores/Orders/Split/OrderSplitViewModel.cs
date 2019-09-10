@@ -37,6 +37,7 @@ namespace ShipWorks.Stores.Orders.Split
         private decimal originalTotalCharge;
         private decimal splitTotalCharge;
         private OrderSplitterType splitType = OrderSplitterType.Hub;
+        private bool isHubCustomer;
 
         /// <summary>
         /// Constructor
@@ -146,6 +147,16 @@ namespace ShipWorks.Stores.Orders.Split
             set => handler.Set(nameof(SplitType), ref splitType, value);
         }
 
+        /// <summary>
+        /// Is this a Hub customer
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsHubCustomer
+        {
+            get => isHubCustomer;
+            set => handler.Set(nameof(IsHubCustomer), ref isHubCustomer, value);
+        }
+
         [Obfuscation(Exclude = true)]
         public bool ShowItemQuantityDecimals => !Items.All(x => x.TotalQuantity.IsInt());
 
@@ -179,6 +190,7 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
+            IsHubCustomer = licenseService.IsHub;
             SplitType = licenseService.IsHub ? OrderSplitterType.Hub : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
             OrderNumberPostfix = suggestedOrderNumber;
