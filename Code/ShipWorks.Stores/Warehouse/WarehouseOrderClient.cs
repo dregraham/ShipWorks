@@ -177,10 +177,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             try
             {
-                EditionRestrictionLevel restrictionLevel =
-                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                if (restrictionLevel == EditionRestrictionLevel.None)
+                if (licenseService.IsHub)
                 {
                     IRestRequest request =
                         new RestRequest(WarehouseEndpoints.RerouteOrderItems(hubOrderID.ToString("N")), Method.PUT);
@@ -195,7 +192,8 @@ namespace ShipWorks.Stores.Warehouse
                     {
                         log.Error($"Failed to reroute order items for order {hubOrderID} to hub. {response.Message}",
                             response.Exception);
-                        return Result.FromError(response.Exception);
+                        throw response.Exception;
+                        //return Result.FromError(response.Exception);
                     }
 
                     return Result.FromSuccess();
@@ -203,12 +201,13 @@ namespace ShipWorks.Stores.Warehouse
 
                 string restrictedErrorMessage = "Attempted to reroute order items to hub for a non warehouse customer";
                 log.Error(restrictedErrorMessage);
-                return Result.FromError(restrictedErrorMessage);
+                throw new InvalidOperationException(restrictedErrorMessage);
+                //return Result.FromError(restrictedErrorMessage);
             }
             catch (Exception ex)
             {
                 log.Error($"Failed to reroute order items for order {hubOrderID} to hub.", ex);
-                return Result.FromError(ex);
+                throw;
             }
         }
     }

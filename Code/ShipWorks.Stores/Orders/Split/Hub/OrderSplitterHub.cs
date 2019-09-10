@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         {
             return orderSplitGateway
                 .LoadOrder(definition.Order.OrderID)
-                .Bind(async order => await PerformSplit(order, definition).ConfigureAwait(false))
+                .Bind(order => PerformSplit(order, definition))
                 .Bind(x => SaveOrders(x, progressProvider))
                 .Bind(AuditOrders)
                 .Map(originalOrder => new[] { definition.Order }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
