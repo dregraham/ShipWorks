@@ -40,7 +40,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
 
-            result.Value.OrderNumber = await orderElementFactory.GetNextOrderNumberAsync().ConfigureAwait(false);
+            AmazonWarehouseOrder amazonWarehouseOrder = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseOrder>();
+            result.Value.ChangeOrderNumber(amazonWarehouseOrder.AmazonOrderID);
 
             if (result.Failure)
             {
