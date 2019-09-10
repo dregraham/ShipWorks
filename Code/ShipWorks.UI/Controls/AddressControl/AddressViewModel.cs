@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
@@ -232,7 +233,20 @@ namespace ShipWorks.UI.Controls.AddressControl
                 SaveToEntity(personAdapter);
                 personAdapter.CopyTo(addressAdapter);
 
-                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, store, true);
+                //check address validation type to see if the display address needs to be adjusted 
+                bool canAdjustAddress = false;
+                if(addressAdapter.CountryCode == "US" && store.DomesticAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply)
+                {
+                    canAdjustAddress = true;
+                }
+                else if(addressAdapter.CountryCode != "US" && store.InternationalAddressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply)
+                {
+                    canAdjustAddress = true;
+                }
+                 
+                                        
+
+                ValidatedAddressData validationData = await validator.ValidateAsync(addressAdapter, store, canAdjustAddress);
 
                 // See if the loaded address has changed since we started validating
                 if (currentEntityId != entityId)
