@@ -17,6 +17,8 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -119,7 +121,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             licenseService.Setup(x => x.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
                 .Returns(bestRateSetting == "on" ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden);
 
-<<<<<<< HEAD
         [Given(@"a Best Rate shipment is loaded in the Shipping Panel")]
         public void GivenABestRateShipmentIsLoadedInTheShippingPanel()
         {
@@ -168,8 +169,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                     } });
         }
 
-=======
->>>>>>> staging
         [When(@"a shipment is loaded")]
         public void WhenAShipmentIsLoaded()
         {
