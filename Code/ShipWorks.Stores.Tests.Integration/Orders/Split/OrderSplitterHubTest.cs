@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
+using Moq;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Orders.Split.Hub;
-using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
+using ShipWorks.Warehouse;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Split
@@ -22,13 +28,30 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
     [Trait("Category", "ContinuousIntegration")]
     public class OrderSplitterHubTest : IDisposable
     {
+        private readonly AutoMock mock;
         private readonly DataContext context;
         private readonly ThreeDCartStoreEntity threeDCartStore;
 
         public OrderSplitterHubTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
+            mock = context.Mock;
             threeDCartStore = CreateThreeDCartStore();
+            var configData = ConfigurationData.Fetch();
+            configData.WarehouseID = Guid.NewGuid().ToString("N");
+            ConfigurationData.Save(configData);
+
+            var licenseService = mock.MockRepository.Create<ILicenseService>();
+            licenseService.Setup(ls => ls.CheckRestriction(It.IsAny<EditionFeature>(), It.IsAny<object>()))
+                .Returns(EditionRestrictionLevel.None);
+            licenseService.Setup(ls => ls.IsHub)
+                .Returns(true);
+            mock.Provide(licenseService.Object);
+
+            var warehouseOrderClient = mock.MockRepository.Create<IWarehouseOrderClient>();
+            warehouseOrderClient.Setup(ls => ls.RerouteOrderItems(It.IsAny<Guid>(), It.IsAny<ItemsToReroute>()))
+                .ReturnsAsync(Result.FromSuccess());
+            mock.Provide(warehouseOrderClient.Object);
         }
 
         [Fact]
@@ -142,6 +165,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             var order = Modify.Order(context.Order)
                 .WithItem(i => i.Set(x => x.Name, "Foo").Set(x => x.Quantity, 0))
                 .WithCharge(c => c.Set(x => x.Description, "Bar").Set(x => x.Amount, 0))
+                .Set(o => o.HubOrderID = Guid.NewGuid())
                 .Save();
 
             IOrderSplitter testObject = context.Mock.Create<OrderSplitterHub>();
@@ -240,7 +264,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
                 .Set(x => x.RollupItemCount = 0)
                 .Set(x => x.IsManual, manual)
                 .Set(x => x.ThreeDCartOrderID, orderNumber)
-                .Set(o => o.OnlineStatus, EnumHelper.GetApiValue(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New));
+                .Set(o => o.OnlineStatus, EnumHelper.GetApiValue(ShipWorks.Stores.Platforms.ThreeDCart.Enums.ThreeDCartOrderStatus.New))
+                .Set(o => o.HubOrderID = Guid.NewGuid());
 
             ThreeDCartOrderEntity order = save ? orderBuilder.Save() : orderBuilder.Build();
 
