@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<ISwsimV69> client;
+        private Mock<ISwsimV84> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -119,6 +119,57 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             licenseService.Setup(x => x.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
                 .Returns(bestRateSetting == "on" ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden);
 
+<<<<<<< HEAD
+        [Given(@"a Best Rate shipment is loaded in the Shipping Panel")]
+        public void GivenABestRateShipmentIsLoadedInTheShippingPanel()
+        {
+            var shipment = Create.Shipment(context.Order)
+                .AsBestRate(s =>
+                {
+                    s.Set(x => x.DimsWeight, 1)
+                    .Set(x => x.DimsLength, 1)
+                    .Set(x => x.DimsWidth, 1)
+                    .Set(x => x.DimsHeight, 1);
+                })
+                .WithAddress(x => x.OriginPerson, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
+                .WithAddress(x => x.ShipPerson, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
+                .Set(x => x.TotalWeight, 2)
+                .Set(x => x.ContentWeight, 2)
+                .Save();
+
+            var shipmentAdapter = context.Container.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
+
+            var message = new OrderSelectionChangedMessage(
+                this,
+                new IOrderSelection[]
+                {
+                    new LoadedOrderSelection(context.Order, new [] { shipmentAdapter }, Enumerable.Empty<KeyValuePair<long, ShippingAddressEditStateType>>())
+                },
+                null);
+
+            shippingPanelViewModel.LoadOrder(message);
+        }
+
+        [Given(@"the only rate is USPS Priority Mail")]
+        public void GivenTheOnlyRateIsUSPSPriorityMail()
+        {
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>()
+                .WithAddress(x => x.Address, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
+                .Save();
+            Create.Profile().AsPrimary().AsPostal(x => x.AsUsps()).Save();
+
+            client.Setup(x => x.GetRates(It.IsAny<Credentials>(), It.IsAny<RateV31>()))
+                .Returns(new[] { new RateV31
+                {
+                    ServiceType = ServiceType.USPM,
+                    Amount = 10,
+                    AddOns = new AddOnV15[0],
+                    DeliverDays = "1"
+                    } });
+        }
+
+=======
+>>>>>>> staging
         [When(@"a shipment is loaded")]
         public void WhenAShipmentIsLoaded()
         {
@@ -156,13 +207,13 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             }, 5, TimeSpan.FromSeconds(250), ex => true);
 
         /// <summary>
-        /// Create a mocked version of ISwsimV69
+        /// Create a mocked version of ISwsimV84
         /// </summary>
-        private Mock<ISwsimV69> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<ISwsimV84> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<ISwsimV69>();
+            var uspsClient = mock.CreateMock<ISwsimV84>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
-                .Returns(new AccountInfoResult(new AccountInfoV27
+                .Returns(new AccountInfoResult(new AccountInfoV37
                 {
                     Terms = new Terms
                     {
@@ -177,7 +228,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Returns(new CreateIndiciumResult
                 {
                     TrackingNumber = "123abc",
-                    Rate = new RateV25(),
+                    Rate = new RateV31(),
                     StampsTxID = Guid.NewGuid()
                 });
             return uspsClient;
@@ -199,7 +250,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 true, // IsPOBoxSpecified
                 new [] { address }, // CandidateAddresses
                 new StatusCodes(), // Status codes
-                new RateV25[0], // Rates
+                new RateV31[0], // Rates
                 "", // AddressCleansingResult
                 AddressVerificationLevel.Maximum // Verification Level
             };

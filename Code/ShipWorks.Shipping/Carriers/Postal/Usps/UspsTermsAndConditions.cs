@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private bool AreTermsAccepted(IUspsAccountEntity uspsAccount)
         {
             IUspsWebClient webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
-            AccountInfoV27 accountInfo = (AccountInfoV27) webClient.GetAccountInfo(uspsAccount);
+            AccountInfoV37 accountInfo = (AccountInfoV37) webClient.GetAccountInfo(uspsAccount);
             return accountInfo.Terms.TermsAR && accountInfo.Terms.TermsSL && accountInfo.Terms.TermsGP;
         }
     }

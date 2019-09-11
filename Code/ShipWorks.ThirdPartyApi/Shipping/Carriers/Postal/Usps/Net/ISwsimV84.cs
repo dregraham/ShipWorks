@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Interface around the Stamps WebService
     /// </summary>
-    public interface ISwsimV69 : IDisposable
+    public interface ISwsimV84 : IDisposable
     {
         /// <summary>
         /// Url of the web service
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get account info
         /// </summary>
-        string GetAccountInfo(object Item, out AccountInfoV27 AccountInfo, out Address Address, out string CustomerEmail);
+        string GetAccountInfo(object Item, out AccountInfoV37 AccountInfo, out Address Address, out string CustomerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
         /// <summary>
         /// Get account info
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get rates
         /// </summary>
-        RateV25[] GetRates(Credentials account, RateV25 rate);
+        RateV31[] GetRates(Credentials account, RateV31 rate);
 
         /// <summary>
         /// Cleanse the address
@@ -61,34 +61,47 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Register an account
         /// </summary>
         RegistrationStatus RegisterAccount(
-            Guid IntegrationID,
-            string UserName,
-            string Password,
-            CodewordType Codeword1Type,
-            bool Codeword1TypeSpecified,
-            string Codeword1,
-            CodewordType Codeword2Type,
-            bool Codeword2TypeSpecified,
-            string Codeword2,
-            Address PhysicalAddress,
-            Address MailingAddress,
-            MachineInfo MachineInfo,
-            string Email,
-            AccountType AccountType,
-            string PromoCode,
-            object Item,
-            bool? SendEmail,
-            bool SendEmailSpecified,
-            out string SuggestedUserName,
-            out int UserId,
-            out string PromoUrl);
+            System.Guid IntegrationID,
+                    string UserName,
+                    string Password,
+                    CodewordType Codeword1Type,
+                    bool Codeword1TypeSpecified,
+                    string Codeword1,
+                    CodewordType Codeword2Type,
+                    bool Codeword2TypeSpecified,
+                    string Codeword2,
+                    Address PhysicalAddress,
+                    Address MailingAddress,
+                    MachineInfo MachineInfo,
+                    string Email,
+                    AccountType AccountType,
+                    string PromoCode,
+                    object Item,
+                    Nullable<bool> SendEmail,
+                    bool SendEmailSpecified,
+                    System.Nullable<bool> ResetPasswordAfterRegistration,
+                    bool ResetPasswordAfterRegistrationSpecified,
+                    out string SuggestedUserName,
+                    out int UserId,
+                    out string PromoUrl);
 
         /// <summary>
         /// Create a scan form
         /// </summary>
-        string CreateScanForm(object Item, Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType,
-            bool PrintInstructions, Carrier Carrier, DateTime? ShipDate, bool ShipDateSpecified,
-            out string ScanFormId, out string Url);
+        string CreateManifest(
+            object Item, 
+            ref string IntegratorTxID, 
+            Guid[] StampsTxIDs, 
+            string[] TrackingNumbers, 
+            DateTime? ShipDate, 
+            bool ShipDateSpecified, 
+            string PrintLayout, 
+            Address FromAddress, 
+            ImageType ImageType,
+            bool PrintInstructions, 
+            ManifestType ManifestType,
+            int NumberOfLabels,
+            out EndOfDayManifest[] EndOfDayManifests);
 
         /// <summary>
         /// Cancel an Indicium
