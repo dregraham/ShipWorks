@@ -4,6 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
+using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
@@ -37,6 +38,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             OdbcStoreEntity store = GetStore<OdbcStoreEntity>();
+
+            if (!store.IsMappingRequired && store.ImportStrategy != (int) OdbcImportStrategy.OnDemand)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
 
             if (!string.IsNullOrWhiteSpace(store.ImportConnectionString))
             {

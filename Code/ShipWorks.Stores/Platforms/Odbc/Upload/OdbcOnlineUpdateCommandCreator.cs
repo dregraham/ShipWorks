@@ -9,6 +9,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Upload
 {
@@ -20,13 +22,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
     {
         private readonly IOdbcUploader odbcUploader;
         private readonly IMessageHelper messageHelper;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OdbcOnlineUpdateCommandCreator(IOdbcUploader odbcUploader, IMessageHelper messageHelper)
+        public OdbcOnlineUpdateCommandCreator(IOdbcUploader odbcUploader, IMessageHelper messageHelper, IOdbcStoreRepository odbcStoreRepository)
         {
             this.messageHelper = messageHelper;
+            this.odbcStoreRepository = odbcStoreRepository;
             this.odbcUploader = odbcUploader;
         }
 
@@ -41,18 +45,35 @@ namespace ShipWorks.Stores.Platforms.Odbc.Upload
         /// </summary>
         public IEnumerable<IMenuCommand> CreateOnlineUpdateInstanceCommands(StoreEntity store)
         {
-            OdbcStoreEntity odbcStore = store as OdbcStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(odbcStore, nameof(odbcStore));
+            OdbcStoreEntity odbcStoreEntity = store as OdbcStoreEntity;
+            MethodConditions.EnsureArgumentIsNotNull(odbcStoreEntity, nameof(odbcStoreEntity));
 
-            if (odbcStore?.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            OdbcStore odbcStore = GetOdbcStoreFromRepository(odbcStoreEntity);
+
+            if (odbcStore == null || odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return Enumerable.Empty<MenuCommand>();
             }
 
             return new[]
             {
-                new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(odbcStore, context))
+                new AsyncMenuCommand("Upload Shipment Details", context => OnUploadDetails(odbcStoreEntity, context))
             };
+        }
+
+        /// <summary>
+        /// Get store from repository. Catch error if not found.
+        /// </summary>
+        private OdbcStore GetOdbcStoreFromRepository(OdbcStoreEntity odbcStoreEntity)
+        {
+            try
+            {
+                return odbcStoreRepository.GetStore(odbcStoreEntity);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                return null;
+            }
         }
 
         /// <summary>

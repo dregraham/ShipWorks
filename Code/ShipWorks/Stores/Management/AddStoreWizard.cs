@@ -418,6 +418,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnStepNextStoreType(object sender, WizardStepEventArgs e)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             StoreType storeType = SelectedStoreType;
 
             if (storeType == null)
@@ -1000,7 +1002,8 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                if (SelectedStoreType.ShouldUseHub(store) &&
+                if (store.WarehouseStoreID == null &&
+                    SelectedStoreType.ShouldUseHub(store) &&
                     (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
@@ -1023,6 +1026,8 @@ namespace ShipWorks.Stores.Management
                 // Ensure the license has the latest capabilities now that a new store
                 // has been added.
                 licenseService.GetLicense(store)?.ForceRefresh();
+
+                SelectedStoreType.RaiseStoreAdded(store, scope);
             }
             catch (DuplicateNameException ex)
             {
@@ -1056,7 +1061,7 @@ namespace ShipWorks.Stores.Management
                         this,
                         $"An error occurred saving the store to ShipWorks.");
                     e.Skip = true;
-                    e.SkipToPage = wizardPageSettings;
+                    e.SkipToPage = wizardPageContactInfo;
                     BackEnabled = true;
                 }
                 return result;

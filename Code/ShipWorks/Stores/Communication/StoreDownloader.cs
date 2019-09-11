@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Collect the download telemetry
         /// </summary>
-        private void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
+        protected void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
             trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
