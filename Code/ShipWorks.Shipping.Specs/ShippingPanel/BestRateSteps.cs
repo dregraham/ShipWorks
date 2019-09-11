@@ -17,8 +17,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -120,54 +118,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         public void GivenBestRateIsOffInTango(string bestRateSetting) =>
             licenseService.Setup(x => x.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
                 .Returns(bestRateSetting == "on" ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden);
-
-        [Given(@"a Best Rate shipment is loaded in the Shipping Panel")]
-        public void GivenABestRateShipmentIsLoadedInTheShippingPanel()
-        {
-            var shipment = Create.Shipment(context.Order)
-                .AsBestRate(s =>
-                {
-                    s.Set(x => x.DimsWeight, 1)
-                    .Set(x => x.DimsLength, 1)
-                    .Set(x => x.DimsWidth, 1)
-                    .Set(x => x.DimsHeight, 1);
-                })
-                .WithAddress(x => x.OriginPerson, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
-                .WithAddress(x => x.ShipPerson, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
-                .Set(x => x.TotalWeight, 2)
-                .Set(x => x.ContentWeight, 2)
-                .Save();
-
-            var shipmentAdapter = context.Container.Resolve<ICarrierShipmentAdapterFactory>().Get(shipment);
-
-            var message = new OrderSelectionChangedMessage(
-                this,
-                new IOrderSelection[]
-                {
-                    new LoadedOrderSelection(context.Order, new [] { shipmentAdapter }, Enumerable.Empty<KeyValuePair<long, ShippingAddressEditStateType>>())
-                },
-                null);
-
-            shippingPanelViewModel.LoadOrder(message);
-        }
-
-        [Given(@"the only rate is USPS Priority Mail")]
-        public void GivenTheOnlyRateIsUSPSPriorityMail()
-        {
-            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>()
-                .WithAddress(x => x.Address, "1 Memorial Dr.", "", "St. Louis", "MO", "63102", "US")
-                .Save();
-            Create.Profile().AsPrimary().AsPostal(x => x.AsUsps()).Save();
-
-            client.Setup(x => x.GetRates(It.IsAny<Credentials>(), It.IsAny<RateV31>()))
-                .Returns(new[] { new RateV31
-                {
-                    ServiceType = ServiceType.USPM,
-                    Amount = 10,
-                    AddOns = new AddOnV15[0],
-                    DeliverDays = "1"
-                    } });
-        }
 
         [When(@"a shipment is loaded")]
         public void WhenAShipmentIsLoaded()
