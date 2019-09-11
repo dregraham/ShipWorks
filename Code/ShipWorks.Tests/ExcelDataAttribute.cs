@@ -5,75 +5,58 @@ using System.Data.OleDb;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Interapptive.Shared.Collections;
 using Xunit.Sdk;
+using Syncfusion.XlsIO;
 
 namespace ShipWorks.Tests
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public sealed class ExcelDataAttribute : OdbcDataAttribute
+    public sealed class ExcelDataAttribute : DataAttribute
     {
-        public ExcelDataAttribute(string path, string worksheet) :
-            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}; Extended Properties='Excel 12.0;HDR=YES;IMEX=1;';",
-                $"select * from [{worksheet}$]")
+        public ExcelDataAttribute(string path, string worksheet = "") 
         {
-            Filepath = path;
+            Filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+
+            if (!File.Exists(Filepath))
+            {
+                path = $@"..\..\{path}";
+                Filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path);
+            }
+
             Worksheet = worksheet;
         }
 
         public string Filepath { get; }
 
         public string Worksheet { get; }
-    }
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public sealed class CsvDataAttribute : OdbcDataAttribute
-    {
-        public CsvDataAttribute(string path, string fileName) :
-            base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={Path.Combine(AppDomain.CurrentDomain.BaseDirectory, path)}; Extended Properties='Text;HDR=YES;FORMAT=Delimited;IMEX=1;';",
-                $"select * from [{fileName}#csv]")
-        {
-
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class OdbcDataAttribute : DataAttribute
-    {
-        public OdbcDataAttribute(string connectionString, string queryString)
-        {
-            ConnectionString = connectionString;
-            QueryString = queryString;
-        }
-
-        public string ConnectionString { get; private set; }
-
-        public string QueryString { get; private set; }
 
         public override IEnumerable<object[]> GetData(MethodInfo testMethod)
         {
-            if (testMethod == null)
-                throw new ArgumentNullException("testMethod");
-
             ParameterInfo[] pars = testMethod.GetParameters();
-            return DataSource(QueryString, pars.Select(par => par.ParameterType).ToArray());
+            return DataSource();
         }
 
-        IEnumerable<object[]> DataSource(string selectString, Type[] parameterTypes)
+        private IEnumerable<object[]> DataSource()
         {
-            IDataAdapter adapter = new OleDbDataAdapter(selectString, ConnectionString);
-            DataSet dataSet = new DataSet();
 
-            try
+            using (Stream fileStream = File.OpenRead(Filepath))
             {
-                adapter.Fill(dataSet);
+                using (ExcelEngine excelEngine = new ExcelEngine())
+                {
+                    IWorkbook workbook = excelEngine.Excel.Workbooks.Open(fileStream);
+                    var worksheet = workbook.Worksheets.FirstOrDefault(w => w.Name == Worksheet);
+                    if (worksheet == null)
+                    {
+                        worksheet = workbook.Worksheets[0];
+                    }
 
-                foreach (DataRow row in dataSet.Tables[0].Rows.OfType<DataRow>().Where(x => x.ItemArray.Any(y => y != null && y != DBNull.Value)))
-                    yield return new[] { row };
-            }
-            finally
-            {
-                IDisposable disposable = adapter as IDisposable;
-                disposable.Dispose();
+                    var dataTable = worksheet.ExportDataTable(worksheet.UsedRange, ExcelExportDataTableOptions.ColumnNames | ExcelExportDataTableOptions.PreserveOleDate);
+
+                    foreach (DataRow row in dataTable.Select().Where(x => x.ItemArray.Any(y => y != null && y != DBNull.Value)))
+                        yield return new[] { row };
+                }
             }
         }
     }

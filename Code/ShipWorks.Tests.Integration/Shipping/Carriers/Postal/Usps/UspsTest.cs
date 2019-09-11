@@ -24,7 +24,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             justLabels = true;
         }
 
-        // [DataSource("DataSource_Ship_Stamps")]
         [ExcelData("DataSources\\Usps.xlsx", "Stamps")]
         [Trait("Category", "USPS")]
         [Theory]
