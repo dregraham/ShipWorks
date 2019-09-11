@@ -550,7 +550,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.2\7.2.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.2\7.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.0.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.1.1.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />
@@ -723,9 +724,6 @@
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\InvoiceBillTo\settings.xml" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\template.xsl" />
     <EmbeddedResource Include="Templates\Distribution\Source\System\Snippets\FormatAddress\settings.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="obj\NewFolder1\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
