@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -14,16 +17,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentPreProcessor : IShipmentPreProcessor
     {
         private readonly IBestRateBrokerRatingService brokerRatingService;
+        private readonly Func<string, ITrackedEvent> telemetryEventFactory;
         private readonly IShippingManager shippingManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public BestRateShipmentPreProcessor(IShippingManager shippingManager,
-            IBestRateBrokerRatingService brokerRatingService)
+            IBestRateBrokerRatingService brokerRatingService,
+            Func<string, ITrackedEvent> telemetryEventFactory)
         {
             this.shippingManager = shippingManager;
             this.brokerRatingService = brokerRatingService;
+            this.telemetryEventFactory = telemetryEventFactory;
         }
 
         /// <summary>
@@ -88,6 +94,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipmentsToReturn.Add(shipment);
             }
 
+            LogTelemetry(shipment, filteredRates, selectedRate);
+
             return shipmentsToReturn;
         }
 
@@ -147,6 +155,52 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return ratesToApplyToReturnedShipments;
+        }
+
+        /// <summary>
+        /// Telemetry for Best Rate
+        /// </summary>
+        private void LogTelemetry(ShipmentEntity shipment, RateGroup rateGroup, RateResult rateResult)
+        {
+            using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shipping.BestRate"))
+            {
+                RateResult cheapestRate = rateGroup.Rates.Aggregate((curMin, x) => x.Amount < curMin.Amount ? x : curMin);
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.SelectedProvider",
+                                rateResult.CarrierDescription);
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.SelectedService",
+                                rateResult.Description);
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.Cheapest.Provider",
+                                cheapestRate.CarrierDescription);
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.Cheapest.Service",
+                                cheapestRate.Description);
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.Cheapest.Price",
+                                 cheapestRate.Amount.ToString());
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.SelectedServiceLevel",
+                                EnumHelper.GetDescription((ServiceLevelType) shipment.BestRate.ServiceLevel));
+
+                telemetryEvent.AddProperty($"Shipping.BestRate.DeliveryDays",
+                                rateResult.Days);
+
+                foreach (string carrierName in rateGroup.Rates.Select(x => x.CarrierDescription).Distinct())
+                {
+                    telemetryEvent.AddMetric($"Shipping.BestRate.ServiceQuantity.{carrierName}",
+                        rateGroup.Rates.Count(x => x.CarrierDescription.Equals(carrierName)));
+                }
+
+                var events = (BestRateEventTypes) shipment.BestRateEvents;
+
+                foreach (var eventType in Enum.GetValues(typeof(BestRateEventTypes)).OfType<BestRateEventTypes>().Where(x => x != BestRateEventTypes.None))
+                {
+                    telemetryEvent.AddProperty($"Shipping.BestRate.ComparisonWorkflow.{eventType.ToString()}",
+                        events.HasFlag(eventType) ? "true" : "false");
+                }
+            }
         }
     }
 }

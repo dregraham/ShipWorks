@@ -345,6 +345,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Password", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShopifyNotifyCustomer", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShopifyFulfillmentLocation", fieldHashtable);
 		}
 		#endregion
 
@@ -466,6 +468,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, true); }
 			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, value); }
+		}
+
+		/// <summary> The ShopifyFulfillmentLocation property of the Entity ShopifyStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyFulfillmentLocation"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 ShopifyFulfillmentLocation
+		{
+			get { return (System.Int64)GetValue((int)ShopifyStoreFieldIndex.ShopifyFulfillmentLocation, true); }
+			set	{ SetValue((int)ShopifyStoreFieldIndex.ShopifyFulfillmentLocation, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

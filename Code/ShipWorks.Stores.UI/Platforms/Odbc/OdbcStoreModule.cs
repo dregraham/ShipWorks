@@ -183,6 +183,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc
                 .As<IOdbcWizardPage>()
                 .AsSelf();
 
+            builder.RegisterType<OdbcHubPage>()
+                .As<IOdbcWizardPage>()
+                .AsSelf();
+
             builder.RegisterType<OdbcSetupFinishPage>()
                 .AsSelf();
 

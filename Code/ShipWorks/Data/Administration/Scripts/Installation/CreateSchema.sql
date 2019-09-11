@@ -1799,7 +1799,11 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [EndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ScanBasedReturn] [bit] NULL
+[ScanBasedReturn] [bit] NULL,
+[ReferenceID2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceID3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[ReferenceID4] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[GroupCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaProfile] on [dbo].[EndiciaProfile]'
@@ -1896,7 +1900,11 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [ScanFormBatchID] [bigint] NULL,
 [ScanBasedReturn] [bit] NOT NULL,
 [RequestedLabelFormat] [int] NOT NULL,
-[Insurance] [bit] NOT NULL
+[Insurance] [bit] NOT NULL,
+[ReferenceID2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID2] DEFAULT (''),
+[ReferenceID3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID3] DEFAULT (''),
+[ReferenceID4] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_ReferenceID4] DEFAULT (''),
+[GroupCode] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_EndiciaShipment_GroupCode] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
@@ -3801,7 +3809,8 @@ CREATE TABLE [dbo].[ShopifyStore]
 [ShopifyRequestedShippingOption] [int] NOT NULL,
 [ApiKey] [nvarchar](100) NOT NULL,
 [Password] [nvarchar](100) NOT NULL,
-[ShopifyNotifyCustomer] [bit] NOT NULL
+[ShopifyNotifyCustomer] [bit] NOT NULL,
+[ShopifyFulfillmentLocation] [bigint] NOT NULL CONSTRAINT [DF_ShopifyStore_ShopifyFulfillmentLocation] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_ShopifyStore] on [dbo].[ShopifyStore]'
@@ -6291,6 +6300,7 @@ CREATE TABLE [dbo].[OdbcStore]
 	[UploadColumnSourceType] [int] NOT NULL,
 	[UploadColumnSource] [nvarchar](max) NOT NULL,
 	[UploadConnectionString] [nvarchar](2048) NOT NULL,
+	[WarehouseLastModified] [DateTime2] NULL
 )
 GO
 PRINT N'Creating primary key [PK_OdbcStore] on [dbo].[OdbcStore]'

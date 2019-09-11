@@ -391,23 +391,23 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                result = storeSettingsControl.SaveToEntity(store);
+                result = storeSettingsControl.SaveToEntity(store);                
+            }
 
-                if (result && store?.WarehouseStoreID != null && store.IsDirty && storeType.ShouldUseHub(store))
+            if (result && store?.WarehouseStoreID != null && store.IsDirty && storeType.ShouldUseHub(store))
+            {
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    Result warehouseResult;
+                    using (scope.Resolve<IMessageHelper>().ShowProgressDialog("Updating store information...", "Updating store information..."))
                     {
-                        Result warehouseResult;
-                        using (scope.Resolve<IMessageHelper>().ShowProgressDialog("Updating store information...", "Updating store information..."))
-                        {
-                            warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
-                        }
-                         
-                        if (warehouseResult.Failure)
-                        {
-                            MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
-                            result = false;
-                        }
+                        warehouseResult = await scope.Resolve<IWarehouseStoreClient>().UpdateStoreCredentials(store).ConfigureAwait(true);
+                    }
+
+                    if (warehouseResult.Failure)
+                    {
+                        MessageHelper.ShowError(this, $"An error occurred saving the store to ShipWorks.{Environment.NewLine + Environment.NewLine + warehouseResult.Message}");
+                        result = false;
                     }
                 }
             }

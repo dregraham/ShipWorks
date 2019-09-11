@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
 
-            result.Value.OrderNumber = await orderElementFactory.GetNextOrderNumberAsync().ConfigureAwait(false);
+            result.Value.ChangeOrderNumber(amazonOrderID);
 
             if (result.Failure)
             {
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
         /// <summary>
         /// Load Amazon order details
         /// </summary>
-        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             AmazonOrderEntity amazonOrderEntity = (AmazonOrderEntity) orderEntity;
             AmazonWarehouseOrder amazonWarehouseOrder = warehouseOrder.AdditionalData[amazonEntryKey].ToObject<AmazonWarehouseOrder>();

@@ -1048,8 +1048,8 @@ namespace ShipWorks
         /// </summary>
         private void ToggleUiModeCheckbox(UIMode currentMode)
         {
-            mainMenuItemBatchGrid.Text = GetTextForModeMenuItem("Batch Grid", currentMode == UIMode.Batch);
-            mainMenuItemOrderLookup.Text = GetTextForModeMenuItem("Order Lookup", currentMode == UIMode.OrderLookup);
+            mainMenuItemBatchGrid.Text = GetTextForModeMenuItem("Classic", currentMode == UIMode.Batch);
+            mainMenuItemOrderLookup.Text = GetTextForModeMenuItem("Scan-to-Ship", currentMode == UIMode.OrderLookup);
             mainMenuItemProducts.Text = GetTextForModeMenuItem("Products", currentMode == UIMode.Products);
         }
 

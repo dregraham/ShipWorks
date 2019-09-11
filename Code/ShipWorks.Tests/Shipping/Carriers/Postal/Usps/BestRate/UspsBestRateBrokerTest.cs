@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
         //[DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "Usps_GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
         //[DeploymentItem(@"Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv")]
-        [CsvData(@"Shipping\Carriers\Postal\Usps\BestRate", "Usps_GetBestRates_DoesNotIncludeTypes")]
+        [ExcelData(@"Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv")]
         [Theory]
         public void GetBestRates_ExcludesVariousTypes(DataRow row)
         {

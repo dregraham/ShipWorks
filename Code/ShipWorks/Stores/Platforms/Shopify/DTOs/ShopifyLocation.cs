@@ -14,5 +14,11 @@ namespace ShipWorks.Stores.Platforms.Shopify.DTOs
         /// </summary>
         [JsonProperty("id")]
         public long ID { get; set; }
+
+        /// <summary>
+        /// Name of the location
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
     }
 }

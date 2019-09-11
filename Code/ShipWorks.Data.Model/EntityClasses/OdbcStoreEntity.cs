@@ -353,6 +353,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UploadConnectionString", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ImportOrderItemStrategy", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("WarehouseLastModified", fieldHashtable);
 		}
 		#endregion
 
@@ -514,6 +516,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, true); }
 			set	{ SetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, value); }
+		}
+
+		/// <summary> The WarehouseLastModified property of the Entity OdbcStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OdbcStore"."WarehouseLastModified"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.DateTime> WarehouseLastModified
+		{
+			get { return (Nullable<System.DateTime>)GetValue((int)OdbcStoreFieldIndex.WarehouseLastModified, false); }
+			set	{ SetValue((int)OdbcStoreFieldIndex.WarehouseLastModified, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

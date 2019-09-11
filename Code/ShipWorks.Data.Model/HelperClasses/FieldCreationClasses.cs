@@ -7267,6 +7267,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ScanBasedReturn);}
 		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID2 field instance</summary>
+		public static EntityField2 ReferenceID2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID2);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID3 field instance</summary>
+		public static EntityField2 ReferenceID3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID3);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID4 field instance</summary>
+		public static EntityField2 ReferenceID4
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID4);}
+		}
+		/// <summary>Creates a new EndiciaProfileEntity.GroupCode field instance</summary>
+		public static EntityField2 GroupCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.GroupCode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaScanFormEntity</summary>
@@ -7366,6 +7386,26 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Insurance
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.Insurance);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID2 field instance</summary>
+		public static EntityField2 ReferenceID2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID2);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID3 field instance</summary>
+		public static EntityField2 ReferenceID3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID3);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID4 field instance</summary>
+		public static EntityField2 ReferenceID4
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID4);}
+		}
+		/// <summary>Creates a new EndiciaShipmentEntity.GroupCode field instance</summary>
+		public static EntityField2 GroupCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.GroupCode);}
 		}
 	}
 
@@ -18497,6 +18537,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportOrderItemStrategy);}
 		}
+		/// <summary>Creates a new OdbcStoreEntity.WarehouseLastModified field instance</summary>
+		public static EntityField2 WarehouseLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.WarehouseLastModified);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OnTracAccountEntity</summary>
@@ -26441,6 +26486,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShopifyNotifyCustomer
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyNotifyCustomer);}
+		}
+		/// <summary>Creates a new ShopifyStoreEntity.ShopifyFulfillmentLocation field instance</summary>
+		public static EntityField2 ShopifyFulfillmentLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShopifyFulfillmentLocation);}
 		}
 	}
 

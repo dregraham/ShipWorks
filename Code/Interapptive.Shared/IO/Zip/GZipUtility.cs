@@ -14,6 +14,20 @@ namespace Interapptive.Shared.IO.Zip
         /// <summary>
         /// Compress the given input using gzip
         /// </summary>
+        public static string Compress(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(input);
+            return Convert.ToBase64String(Compress(bytes));
+        }
+
+        /// <summary>
+        /// Compress the given input using gzip
+        /// </summary>
         public static byte[] Compress(byte[] input)
         {
             using (MemoryStream targetStream = new MemoryStream())
@@ -25,6 +39,20 @@ namespace Interapptive.Shared.IO.Zip
 
                 return targetStream.ToArray();
             }
+        }
+
+        /// <summary>
+        /// Compress the given input using gzip
+        /// </summary>
+        public static string Decompress(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
+            var bytes = Convert.FromBase64String(input);
+            return Encoding.UTF8.GetString(Decompress(bytes));
         }
 
         /// <summary>

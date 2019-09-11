@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -132,6 +133,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             rubberStamp3.ApplyMultiText(shipment.Postal.Memo3);
 
             referenceID.ApplyMultiText(shipment.Postal.Endicia.ReferenceID);
+            referenceID2.ApplyMultiText(shipment.Postal.Endicia.ReferenceID2);
+            referenceID3.ApplyMultiText(shipment.Postal.Endicia.ReferenceID3);
+            referenceID4.ApplyMultiText(shipment.Postal.Endicia.ReferenceID4);
+            groupCode.ApplyMultiText(shipment.Postal.Endicia.GroupCode);
 
             sortType.ApplyMultiValue((PostalSortType) shipment.Postal.SortType);
             entryFacility.ApplyMultiValue((PostalEntryFacility) shipment.Postal.EntryFacility);
@@ -142,6 +147,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Save the values in the control to the specified entities
         /// </summary>
+        [NDependIgnoreLongMethod]
+        [NDependIgnoreComplexMethodAttribute]
         public override void SaveToShipments()
         {
             SuspendRateCriteriaChangeEvent();
@@ -152,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Save the origin
             originControl.SaveToEntities();
 
-            // Save the
+            // Save the fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 endiciaAccount.ReadMultiValue(v => shipment.Postal.Endicia.EndiciaAccountID = (long) v);
@@ -165,6 +172,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 rubberStamp3.ReadMultiText(t => shipment.Postal.Memo3 = t);
 
                 referenceID.ReadMultiText(t => shipment.Postal.Endicia.ReferenceID = t);
+                referenceID2.ReadMultiText(t => shipment.Postal.Endicia.ReferenceID2 = t);
+                referenceID3.ReadMultiText(t => shipment.Postal.Endicia.ReferenceID3 = t);
+                referenceID4.ReadMultiText(t => shipment.Postal.Endicia.ReferenceID4 = t);
+                groupCode.ReadMultiText(t => shipment.Postal.Endicia.GroupCode = t);
 
                 sortType.ReadMultiValue(v => shipment.Postal.SortType = (int) v);
                 entryFacility.ReadMultiValue(v => shipment.Postal.EntryFacility = (int) v);

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -18,11 +17,8 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Core.Messaging.Messages.Shipping;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Insurance;
@@ -123,6 +119,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             licenseService.Setup(x => x.CheckRestriction(EditionFeature.ShipmentType, ShipmentTypeCode.BestRate))
                 .Returns(bestRateSetting == "on" ? EditionRestrictionLevel.None : EditionRestrictionLevel.Hidden);
 
+<<<<<<< HEAD
         [Given(@"a Best Rate shipment is loaded in the Shipping Panel")]
         public void GivenABestRateShipmentIsLoadedInTheShippingPanel()
         {
@@ -171,6 +168,8 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                     } });
         }
 
+=======
+>>>>>>> staging
         [When(@"a shipment is loaded")]
         public void WhenAShipmentIsLoaded()
         {
@@ -188,21 +187,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             shippingPanelViewModel.LoadOrder(message);
         }
 
-        [When(@"the shipment is processed")]
-        public async Task WhenTheShipmentIsProcessed()
-        {
-            shippingPanelViewModel.CreateLabel();
-
-            var completedTask = Task.WhenAll(
-                messenger.OfType<ShipmentChangedMessage>().FirstAsync().ToTask(),
-                messenger.OfType<ShipmentsProcessedMessage>().FirstAsync().ToTask());
-
-            var foo = await Task.WhenAny(
-                completedTask,
-                Task.Delay(TimeSpan.FromSeconds(10))
-                    .ContinueWith(t => throw new TimeoutException("Never received ShipmentsProcessedMessage")));
-        }
-
         [Then(@"the user can not access Best Rate")]
         public void ThenTheUserCanNotAccessBestRate() =>
             Assert.DoesNotContain(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
@@ -210,10 +194,6 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         [Then(@"the user can access Best Rate")]
         public void ThenTheUserCanAccessBestRate() =>
             Assert.Contains(ShipmentTypeCode.BestRate, shippingPanelViewModel.AvailableProviders);
-
-        [Then(@"the provider is USPS")]
-        public Task ThenTheProviderIsUSPS() =>
-            RetryAssertion(() => Assert.Equal(ShipmentTypeCode.Usps, shippingPanelViewModel.ShipmentType));
 
         /// <summary>
         /// Retry a given assertion, since we may need to wait for actions to complete
