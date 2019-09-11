@@ -15,6 +15,12 @@ using ShipWorks.UI.Wizard;
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Interapptive.Shared;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
+using ShipWorks.Editions;
+using ShipWorks.Stores.Platforms.Odbc;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
 {
@@ -27,21 +33,35 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         private readonly Func<ISaveFileDialog> fileDialogFactory;
         private readonly IOdbcImportSettingsFile importSettingsFile;
         private readonly IOdbcSettingsFile uploadSettingsFile;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
+        private readonly ILicenseService licenseService;
+        private readonly IMessageHelper messageHelper;
         private OdbcStoreEntity store;
+        private readonly string warehouseID;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcConnectionSettingsControl"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public OdbcConnectionSettingsControl(
             IOdbcFieldMapFactory odbcFieldMapFactory,
             Func<ISaveFileDialog> fileDialogFactory,
             IOdbcImportSettingsFile importSettingsFile,
-            IOdbcSettingsFile uploadSettingsFile)
+            IOdbcSettingsFile uploadSettingsFile,
+            IOdbcStoreRepository odbcStoreRepository,
+            ILicenseService licenseService,
+            IMessageHelper messageHelper,
+            IConfigurationData configurationData)
         {
             this.odbcFieldMapFactory = odbcFieldMapFactory;
             this.fileDialogFactory = fileDialogFactory;
             this.importSettingsFile = importSettingsFile;
             this.uploadSettingsFile = uploadSettingsFile;
+            this.odbcStoreRepository = odbcStoreRepository;
+            this.licenseService = licenseService;
+            this.messageHelper = messageHelper;
+            warehouseID = configurationData.FetchReadOnly().WarehouseID;
+
             InitializeComponent();
         }
 
@@ -50,6 +70,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnEditImportSettingsClick(object sender, EventArgs e)
         {
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
+                string.IsNullOrWhiteSpace(warehouseID))
+            {
+                messageHelper.ShowError(this, "Unable to change settings for this store until this ShipWorks database is linked to a warehouse in ShipWorks Hub");
+                return;
+            }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
                 WizardPage[] importPages =
@@ -65,7 +92,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 using (OdbcSettingsWizard wizard = scope.Resolve<OdbcSettingsWizard>())
                 {
                     wizard.LoadPages(store, importPages);
-                    wizard.ShowDialog(this);
+                    DialogResult result = wizard.ShowDialog(this);
+
+                    if (result == DialogResult.OK)
+                    {
+                        store.ShouldUploadWarehouseOrders = true;
+                        odbcStoreRepository.UpdateStoreCache(store);
+                    }
                 }
             }
         }
@@ -75,6 +108,13 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnEditUploadSettingsClick(object sender, EventArgs e)
         {
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None &&
+                string.IsNullOrWhiteSpace(warehouseID))
+            {
+                messageHelper.ShowError(this, "Unable to change settings for this store until this ShipWorks database is linked to a warehouse in ShipWorks Hub");
+                return;
+            }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope(ConfigureOdbcSettingsWizardDependencies))
             {
                 WizardPage[] uploadPages =
@@ -92,6 +132,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                     if (wizard.ShowDialog(this) == DialogResult.OK)
                     {
                         ToggleExportUploadMapButtonEnabled();
+                        odbcStoreRepository.UpdateStoreCache(store);
                     }
                 }
             }
@@ -108,7 +149,24 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
                 throw new ArgumentException("OdbcStore expected.", "odbcStore");
             }
 
+            OdbcStore storeFromRepo = odbcStoreRepository.GetStore(store);
+            store.ImportColumnSource = storeFromRepo.ImportColumnSource;
+            store.ImportColumnSourceType = storeFromRepo.ImportColumnSourceType;
+            store.ImportMap = storeFromRepo.ImportMap;
+            store.ImportOrderItemStrategy = storeFromRepo.ImportOrderItemStrategy;
+            store.ImportStrategy = storeFromRepo.ImportStrategy;
+
+            store.UploadColumnSource = storeFromRepo.UploadColumnSource;
+            store.UploadColumnSourceType = storeFromRepo.UploadColumnSourceType;
+            store.UploadMap = storeFromRepo.UploadMap;
+            store.UploadStrategy = storeFromRepo.UploadStrategy;
+
             ToggleExportUploadMapButtonEnabled();
+
+            if (licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None)
+            {
+                warehouseWarning.Visible = true;
+            }
         }
 
         /// <summary>
@@ -125,8 +183,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnSaveImportMapClick(object sender, EventArgs e)
         {
+            OdbcStore odbcStore;
+            try
+            {
+                odbcStore = odbcStoreRepository.GetStore(store);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                messageHelper.ShowError(this, "Failed to load import map");
+                return;
+            }
+
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            fieldMap.Load(store.ImportMap);
+            fieldMap.Load(odbcStore.ImportMap);
 
             ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = importSettingsFile.Extension;
@@ -141,10 +210,10 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             using (Stream streamToSave = fileDialog.CreateFileStream())
             using(TextWriter writer = new StreamWriter(streamToSave))
             {
-                importSettingsFile.OdbcImportStrategy = (OdbcImportStrategy) store.ImportStrategy;
-                importSettingsFile.OdbcImportItemStrategy = (OdbcImportOrderItemStrategy) store.ImportOrderItemStrategy;
-                importSettingsFile.ColumnSourceType = (OdbcColumnSourceType) store.ImportColumnSourceType;
-                importSettingsFile.ColumnSource = store.ImportColumnSource;
+                importSettingsFile.OdbcImportStrategy = (OdbcImportStrategy) odbcStore.ImportStrategy;
+                importSettingsFile.OdbcImportItemStrategy = (OdbcImportOrderItemStrategy) odbcStore.ImportOrderItemStrategy;
+                importSettingsFile.ColumnSourceType = (OdbcColumnSourceType) odbcStore.ImportColumnSourceType;
+                importSettingsFile.ColumnSource = odbcStore.ImportColumnSource;
                 importSettingsFile.OdbcFieldMap = fieldMap;
                 importSettingsFile.Save(writer);
             }
@@ -155,8 +224,19 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void OnSaveUploadMapClick(object sender, EventArgs e)
         {
+            OdbcStore odbcStore;
+            try
+            {
+                odbcStore = odbcStoreRepository.GetStore(store);
+            }
+            catch (ShipWorksOdbcException)
+            {
+                messageHelper.ShowError(this, "Failed to load upload map");
+                return;
+            }
+
             IOdbcFieldMap fieldMap = odbcFieldMapFactory.CreateEmptyFieldMap();
-            fieldMap.Load(store.UploadMap);
+            fieldMap.Load(odbcStore.UploadMap);
 
             ISaveFileDialog fileDialog = fileDialogFactory();
             fileDialog.DefaultExt = uploadSettingsFile.Extension;
@@ -171,8 +251,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
             using (Stream streamToSave = fileDialog.CreateFileStream())
             using (TextWriter writer = new StreamWriter(streamToSave))
             {
-                uploadSettingsFile.ColumnSourceType = (OdbcColumnSourceType)store.UploadColumnSourceType;
-                uploadSettingsFile.ColumnSource = store.UploadColumnSource;
+                uploadSettingsFile.ColumnSourceType = (OdbcColumnSourceType) odbcStore.UploadColumnSourceType;
+                uploadSettingsFile.ColumnSource = odbcStore.UploadColumnSource;
                 uploadSettingsFile.OdbcFieldMap = fieldMap;
                 uploadSettingsFile.Save(writer);
             }

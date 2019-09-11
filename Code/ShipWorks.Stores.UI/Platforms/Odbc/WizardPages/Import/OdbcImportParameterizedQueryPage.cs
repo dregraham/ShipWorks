@@ -47,7 +47,8 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Import
         {
             store = GetStore<OdbcStoreEntity>();
             
-            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.CustomParameterizedQuery)
+            if (store.ImportColumnSourceType != (int) OdbcColumnSourceType.CustomParameterizedQuery ||
+                !store.IsMappingRequired)
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;

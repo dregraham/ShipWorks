@@ -1900,6 +1900,7 @@
           <Field Name="UploadConnectionString" Type="string" MaxLength="2048" FieldIndex="9" />
           <Field Name="UploadMap" Type="string" MaxLength="2147483647" FieldIndex="6" />
           <Field Name="UploadStrategy" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="WarehouseLastModified" Type="datetime" IsOptional="true" Precision="7" FieldIndex="11" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OnTracAccount" ObjectID="79269e79-c65c-4a0e-8623-250621f9b71b">
@@ -4573,7 +4574,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-19T01:43:12.6720981Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-05T16:32:54.227208Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7326,6 +7327,7 @@
                     <Field Name="UploadColumnSourceType" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UploadColumnSource" Ordinal="11" DbType="12" Length="2147483647" />
                     <Field Name="UploadConnectionString" Ordinal="12" DbType="12" Length="2048" />
+                    <Field Name="WarehouseLastModified" Ordinal="13" IsOptional="true" DbType="29" Precision="7" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracAccount">
@@ -12682,6 +12684,7 @@
             <FieldMapping FieldName="UploadConnectionString" TargetFieldName="UploadConnectionString" />
             <FieldMapping FieldName="UploadMap" TargetFieldName="UploadMap" />
             <FieldMapping FieldName="UploadStrategy" TargetFieldName="UploadStrategy" />
+            <FieldMapping FieldName="WarehouseLastModified" TargetFieldName="WarehouseLastModified" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OnTracAccount" TargetName="ShipWorksLocal:dbo:OnTracAccount">

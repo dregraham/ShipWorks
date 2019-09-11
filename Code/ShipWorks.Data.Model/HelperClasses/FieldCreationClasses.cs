@@ -18597,6 +18597,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ImportOrderItemStrategy);}
 		}
+		/// <summary>Creates a new OdbcStoreEntity.WarehouseLastModified field instance</summary>
+		public static EntityField2 WarehouseLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.WarehouseLastModified);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OnTracAccountEntity</summary>

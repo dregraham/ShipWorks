@@ -1,14 +1,18 @@
 ﻿using Autofac;
 using Autofac.Extras.Moq;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Odbc;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
 {
@@ -16,11 +20,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     {
         private readonly AutoMock mock;
         private readonly OdbcStoreEntity store;
+        private readonly OdbcStore storeFromRepo;
 
         public OdbcStoreTypeTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             store = new OdbcStoreEntity { TypeCode = (int) StoreTypeCode.Odbc };
+            storeFromRepo = new OdbcStore();
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(It.IsAny<OdbcStoreEntity>()))
+                .Returns(() => storeFromRepo);
         }
 
         [Fact]
@@ -157,7 +166,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void IsOnDemandDownloadEnabled_ReturnsFalse_WhenImportStrategyIsNotOnDemand()
         {
-            store.ImportStrategy = (int) OdbcImportStrategy.All;
+            storeFromRepo.ImportStrategy = (int) OdbcImportStrategy.All;
 
             var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
 
@@ -167,7 +176,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void IsOnDemandDownloadEnabled_ReturnsTrue_WhenImportStrategyIsOnDemand()
         {
-            store.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
+            storeFromRepo.ImportStrategy = (int) OdbcImportStrategy.OnDemand;
 
             var testObject = mock.Create<OdbcStoreType>(TypedParameter.From<StoreEntity>(store));
 

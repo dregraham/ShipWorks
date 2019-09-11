@@ -25,13 +25,13 @@ namespace ShipWorks.Stores.Warehouse
     public class WarehouseStoreClient : IWarehouseStoreClient
     {
         private readonly ILicenseService licenseService;
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseStoreClient(ILicenseService licenseService, WarehouseRequestClient warehouseRequestClient,
+        public WarehouseStoreClient(ILicenseService licenseService, IWarehouseRequestClient warehouseRequestClient,
                                     IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories)
         {
             this.licenseService = licenseService;

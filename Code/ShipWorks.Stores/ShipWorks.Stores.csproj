@@ -273,6 +273,8 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
+    <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -284,6 +286,10 @@
     <Compile Include="Platforms\Shopify\Warehouse\ShopifyWarehouseOrder.cs" />
     <Compile Include="Platforms\Shopify\Warehouse\ShopifyStoreDtoFactory.cs" />
     <Compile Include="Platforms\Shopify\Warehouse\ShopifyWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Odbc\OdbcWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Odbc\Warehouse\IOdbcStoreClient.cs" />
+    <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreClient.cs" />
+    <Compile Include="Platforms\Odbc\Warehouse\OdbcStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IStoreDtoHelpers.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceCombineOrderNumberSearchProvider.cs" />
     <Compile Include="Platforms\AmeriCommerce\AmeriCommerceWebClient.cs" />
@@ -943,6 +949,10 @@
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionException.cs" />
     <Compile Include="Warehouse\Encryption\WarehouseEncryptionService.cs" />
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
+    <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
+    <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
+    <Compile Include="Warehouse\UploadOrdersRequest.cs" />
+    <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />
     <Compile Include="Warehouse\StoreData\GenericModuleStore.cs" />
     <Compile Include="Warehouse\ShipmentDtoFactory.cs" />
@@ -1010,7 +1020,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

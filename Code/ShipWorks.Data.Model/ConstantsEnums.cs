@@ -7938,6 +7938,8 @@ namespace ShipWorks.Data.Model
 		UploadConnectionString,
 		///<summary>ImportOrderItemStrategy. </summary>
 		ImportOrderItemStrategy,
+		///<summary>WarehouseLastModified. </summary>
+		WarehouseLastModified,
 		/// <summary></summary>
 		AmountOfFields
 	}

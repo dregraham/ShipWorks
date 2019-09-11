@@ -1,17 +1,24 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
+using RestSharp.Serializers;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -23,27 +30,38 @@ namespace ShipWorks.Stores.Warehouse
     [Component]
     public class WarehouseOrderClient : IWarehouseOrderClient
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILicenseService licenseService;
         private readonly ShipmentDtoFactory shipmentDtoFactory;
+        private readonly Func<IUploadOrdersRequest> uploadOrderRequestCreator;
         private readonly ILog log;
+
+        public const string RestrictedErrorMessage = "Attempted to upload order to hub for a non warehouse customer";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseOrderClient(WarehouseRequestClient warehouseRequestClient, ILicenseService licenseService,
-                                    ShipmentDtoFactory shipmentDtoFactory, Func<Type, ILog> logFactory)
+        [NDependIgnoreTooManyParamsAttribute]
+        public WarehouseOrderClient(
+            IWarehouseRequestClient warehouseRequestClient,
+            ILicenseService licenseService,
+            ShipmentDtoFactory shipmentDtoFactory,
+            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
+            Func<IUploadOrdersRequest> uploadOrderRequestCreator,
+            Func<Type, ILog> logFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.licenseService = licenseService;
             this.shipmentDtoFactory = shipmentDtoFactory;
+            this.uploadOrderRequestCreator = uploadOrderRequestCreator;
             log = logFactory(typeof(WarehouseOrderClient));
         }
 
         /// <summary>
         /// Get orders for the given warehouse ID from the ShipWorks Warehouse app
         /// </summary>
-        public async Task<WarehouseGetOrdersResponse> GetOrders(string warehouseID, string warehouseStoreID, long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
+        public async Task<WarehouseGetOrdersResponse> GetOrders(string warehouseID, string warehouseStoreID,
+            long mostRecentSequence, StoreTypeCode storeType, Guid batchId)
         {
             try
             {
@@ -80,6 +98,32 @@ namespace ShipWorks.Stores.Warehouse
             catch (Exception ex) when (ex.GetType() != typeof(DownloadException))
             {
                 throw new DownloadException($"An error occurred downloading orders for warehouse ID {warehouseID}", ex);
+            }
+        }
+
+        /// <summary>
+        /// Upload a order to the hub
+        /// </summary>
+        public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch)
+        {
+            try
+            {
+                EditionRestrictionLevel restrictionLevel =
+                    licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+                if (restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    return await uploadOrderRequestCreator().Submit(orders, store, assignBatch);
+                }
+                else
+                {
+                    log.Error(RestrictedErrorMessage);
+                    return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(RestrictedErrorMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to upload order to hub. First Order ID was {orders.FirstOrDefault()?.OrderID.ToString() ?? "???"}", ex);
+                return GenericResult.FromError<IEnumerable<WarehouseUploadOrderResponse>>(ex);
             }
         }
 
