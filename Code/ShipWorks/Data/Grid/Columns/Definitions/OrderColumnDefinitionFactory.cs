@@ -671,6 +671,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Ebay
                         },
 
+                     new GridColumnDefinition("{CA085EE9-4F6E-4D5C-99D4-00CBE576CBE8}", true,
+                        new GridEbayBuyerIDDisplayType(), "Order ID", 12345,
+                        EbayOrderFields.EbayOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.Ebay
+                        },
+
                     new GridColumnDefinition("{053FF282-5FDE-472e-8BB4-C9D984FA8041}", true,
                         new GridEnumDisplayType<EbayEffectivePaymentMethod>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Payment Method", EbayEffectivePaymentMethod.PayPal,
                         EbayOrderFields.RollupEffectivePaymentMethod)
