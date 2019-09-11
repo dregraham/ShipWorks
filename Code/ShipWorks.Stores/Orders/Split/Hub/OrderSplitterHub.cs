@@ -128,7 +128,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
             SplitValues(definition, definition.NewOrderNumber, originalOrder);
 
             var itemValues = definition.Order.OrderItems.ToDictionary(oi => oi.OrderItemID, oi => oi.HubItemID);
-            var charges = definition.Order.OrderCharges.ToDictionary(c => c.OrderChargeID, c => c.Description);
+            var charges = definition.Order.OrderCharges.ToDictionary(c => c.OrderChargeID, c => c.HubChargeID);
 
             ItemsToReroute itemsToReroute = new ItemsToReroute()
             {

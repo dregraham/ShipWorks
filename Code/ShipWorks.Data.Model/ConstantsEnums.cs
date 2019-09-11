@@ -8254,6 +8254,8 @@ namespace ShipWorks.Data.Model
 		Description,
 		///<summary>Amount. </summary>
 		Amount,
+		///<summary>HubChargeID. </summary>
+		HubChargeID,
 		/// <summary></summary>
 		AmountOfFields
 	}

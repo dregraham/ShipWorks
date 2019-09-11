@@ -2059,6 +2059,7 @@
         <Fields>
           <Field Name="Amount" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="Description" Type="string" MaxLength="255" FieldIndex="4" />
+          <Field Name="HubChargeID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="6" />
           <Field Name="OrderChargeID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -4574,7 +4575,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-05T16:32:54.227208Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-11T18:06:28.2487378Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7561,6 +7562,7 @@
                         <CustomProperty Name="AuditFormat" Value="2" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="HubChargeID" Ordinal="7" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItem">
@@ -12843,6 +12845,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Amount" TargetFieldName="Amount" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HubChargeID" TargetFieldName="HubChargeID" />
             <FieldMapping FieldName="OrderChargeID" TargetFieldName="OrderChargeID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />

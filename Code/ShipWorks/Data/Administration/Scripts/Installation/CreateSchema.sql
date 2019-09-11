@@ -3192,7 +3192,8 @@ CREATE TABLE [dbo].[OrderCharge]
 [OrderID] [bigint] NOT NULL,
 [Type] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Amount] [money] NOT NULL
+[Amount] [money] NOT NULL,
+[HubChargeID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_OrderCharge] on [dbo].[OrderCharge]'

@@ -232,10 +232,12 @@ namespace ShipWorks.Warehouse
         {
             foreach (WarehouseOrderCharge warehouseOrderCharge in warehouseOrder.Charges)
             {
-                orderElementFactory.CreateCharge(orderEntity,
+                var charge = orderElementFactory.CreateCharge(orderEntity,
                                                  warehouseOrderCharge.Type,
                                                  warehouseOrderCharge.Description,
                                                  warehouseOrderCharge.Amount);
+
+                charge.HubChargeID = warehouseOrderCharge.ID;
             }
         }
 
