@@ -12,6 +12,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 
         [JsonProperty("items")]
         public IEnumerable<ItemQuantity> Items { get; set; }
+
+        [JsonProperty("charges")]
+        public IEnumerable<OrderCharge> Charges { get; set; }
     }
 
     [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
@@ -22,5 +25,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 
         [JsonProperty("quantity")]
         public decimal Quantity { get; set; }
+    }
+
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
+    public class OrderCharge
+    {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
+        [JsonProperty("amount")]
+        public decimal Amount { get; set; }
     }
 }

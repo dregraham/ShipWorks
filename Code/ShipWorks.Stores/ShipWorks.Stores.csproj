@@ -227,6 +227,7 @@
     <Compile Include="Orders\Split\Errors\OrderSplitException.cs" />
     <Compile Include="Orders\Split\Hub\IOrderDetailSplitterHub.cs" />
     <Compile Include="Orders\Split\Hub\IOrderSplitAuditHub.cs" />
+    <Compile Include="Orders\Split\Hub\OrderChargeSplitterHub.cs" />
     <Compile Include="Orders\Split\Hub\OrderItemSplitterHub.cs" />
     <Compile Include="Orders\Split\Hub\OrderSplitAuditHub.cs" />
     <Compile Include="Orders\Split\Hub\OrderSplitterHub.cs" />

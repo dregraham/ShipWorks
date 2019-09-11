@@ -73,10 +73,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
                 chargeAmounts.Add(orderCharge.OrderChargeID, orderCharge.Amount);
             }
 
-
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, itemQuanities, chargeAmounts, "0", OrderSplitterType.Reroute);
-
-            int originalOrderChargesCount = originalOrder.OrderCharges.Count;
 
             await testObject.Split(orderSplitDefinition, new ProgressItem("Foo"));
 
@@ -86,11 +83,8 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
             Assert.Equal(1234, originalOrder.OrderNumber);
             Assert.Equal("1234", originalOrder.OrderNumberComplete);
             Assert.Equal(0, originalOrder.OrderItems.Count);
-            Assert.Equal(originalOrderChargesCount, originalOrder.OrderCharges.Count);
-
-            ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, false);
-
-            Assert.Equal(originalOrderForCheckingValues.OrderCharges.Sum(oc => oc.Amount), originalOrder.OrderCharges.Sum(oc => oc.Amount));
+            Assert.Equal(0, originalOrder.OrderCharges.Count);
+            Assert.Equal(0, originalOrder.OrderCharges.Sum(oc => oc.Amount));
         }
 
         [Fact]
@@ -144,6 +138,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             ThreeDCartOrderEntity originalOrderForCheckingValues = CreateThreeDCartOrder(threeDCartStore, 1234, 2, 3, "", false, false);
             originalOrderForCheckingValues.OrderItems.Remove(originalOrderForCheckingValues.OrderItems.FirstOrDefault());
+            originalOrderForCheckingValues.OrderCharges.Remove(originalOrderForCheckingValues.OrderCharges.FirstOrDefault());
             decimal originalOrderTotal = OrderUtility.CalculateTotal(originalOrderForCheckingValues, true);
 
             Assert.Equal(1234, originalOrder.OrderNumber);
