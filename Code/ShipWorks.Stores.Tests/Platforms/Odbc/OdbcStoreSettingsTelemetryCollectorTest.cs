@@ -272,7 +272,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             importDataSource.Setup(d => d.Driver).Returns(() => ImportDriverName);
 
             var dataSourceServiceMock = mock.Mock<IOdbcDataSourceService>();
-            dataSourceServiceMock.Setup(s => s.GetUploadDataSource(odbcStoreEntity)).Returns(uploadDataSource.Object);
+            dataSourceServiceMock.Setup(s => s.GetUploadDataSource(odbcStoreEntity, false)).Returns(uploadDataSource.Object);
             dataSourceServiceMock.Setup(s => s.GetImportDataSource(odbcStoreEntity)).Returns(importDataSource.Object);
         }
 

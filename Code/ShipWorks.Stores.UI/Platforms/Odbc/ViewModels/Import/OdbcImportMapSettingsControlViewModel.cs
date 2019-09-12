@@ -210,11 +210,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import
 
             fieldMap.Name = MapName;
             store.ImportMap = fieldMap.Serialize();
-
-            // We display the cached OdbcStore object in the UI, when saving we persist its value to the entity
-            // there is a chance that the objects value matches whats already int he database because of that we
-            // need to set the entity to dirty so that downstream other things know that the value has changed
-            store.IsDirty = true;
         }
 
         /// <summary>
