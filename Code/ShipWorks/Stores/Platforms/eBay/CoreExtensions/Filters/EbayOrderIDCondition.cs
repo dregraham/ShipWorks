@@ -1,12 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
-    class EbayOrderIDCondition
+    [ConditionElement("eBay Order ID", "EbayOrder.EbayOrderID")]
+    [ConditionStoreType(StoreTypeCode.Ebay)]
+    class EbayOrderIDCondition : StringCondition
     {
+        public override string GenerateSql(SqlGenerationContext context)
+        {
+            string orderSql = String.Empty;
+            string orderSearchSql = String.Empty;
+
+            // First we have to get from Order -> EbayOrder
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, EbayOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                orderSql = scope.Adorn(GenerateSql(context.GetColumnReference(EbayOrderFields.EbayOrderID), context));
+            }
+
+            // First we have to get from Order -> EbayOrder
+            using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, EbayOrderSearchFields.OrderID, SqlGenerationScopeType.AnyChild))
+            {
+                orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(EbayOrderSearchFields.EbayOrderID), context));
+            }
+
+            return $"{orderSql} OR {orderSearchSql}"; ;
+        }
     }
 }
