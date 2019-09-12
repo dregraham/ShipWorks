@@ -1377,7 +1377,7 @@ namespace ShipWorks.Stores.Communication
                         if (orderEntity == null)
                         {
                             // We return null when the order should be skipped, like if it was split or combined
-                            UpdateSkippedOrderSequence(warehouseOrder);hu
+                            UpdateSkippedOrderSequence(warehouseOrder);
                         }
                         else
                         {
