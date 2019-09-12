@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.GetUploadDataSource(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.GetUploadDataSource(null, false));
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            testObject.GetUploadDataSource(storeEntity);
+            testObject.GetUploadDataSource(storeEntity, false);
 
             dataSource.Verify(d => d.Restore(storeEntity.UploadConnectionString));
         }
@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
             storeRepo.Setup(s => s.GetStore(storeEntity)).Returns(store);
 
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
-            IOdbcDataSource source = testObject.GetUploadDataSource(storeEntity);
+            IOdbcDataSource source = testObject.GetUploadDataSource(storeEntity, false);
 
             Assert.Null(source);
         }

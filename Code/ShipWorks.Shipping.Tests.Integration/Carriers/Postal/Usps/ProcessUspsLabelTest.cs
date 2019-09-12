@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         private readonly CreateIndiciumResult defaultResponse = new CreateIndiciumResult
         {
             TrackingNumber = string.Empty,
-            Rate = new RateV25(),
+            Rate = new RateV31(),
             ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
         };
 
@@ -75,18 +75,18 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         [Fact]
         public async Task Process_WithUspsShipment_SavesTrackingNumber()
         {
-            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
+            Mock<ISwsimV84> webService = context.Mock.CreateMock<ISwsimV84>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
                     .Returns(new CreateIndiciumResult
                     {
                         TrackingNumber = "FooTracking",
-                        Rate = new RateV25(),
+                        Rate = new RateV31(),
                         ImageData = new[] { Convert.FromBase64String("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==") },
                     });
 
-                AccountInfoV27 accountInfo = new AccountInfoV27()
+                AccountInfoV37 accountInfo = new AccountInfoV37()
                 {
                     Terms = new Terms()
                     {
@@ -133,23 +133,23 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 { "third", Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Set(x => x.Username, "third").Save().AccountId },
             };
 
-            Mock<ISwsimV69> webService = context.Mock.CreateMock<ISwsimV69>(w =>
+            Mock<ISwsimV84> webService = context.Mock.CreateMock<ISwsimV84>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>())).Returns(defaultResponse);
 
-                Func<decimal, RateV25[]> createRate = amount => new[] {
-                    new RateV25 { ServiceType = ServiceType.USFC, Amount = amount,
-                        AddOns = new [] { new AddOnV11 { AddOnType = AddOnTypeV11.USADC } }, DeliverDays = "2" } };
+                Func<decimal, RateV31[]> createRate = amount => new[] {
+                    new RateV31 { ServiceType = ServiceType.USFC, Amount = amount,
+                        AddOns = new [] { new AddOnV15 { AddOnType = AddOnTypeV15.USADC } }, DeliverDays = "2" } };
 
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV25>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV31>()))
                     .Returns(createRate(first));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV25>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV31>()))
                     .Returns(createRate(second));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV25>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV31>()))
                     .Returns(createRate(third));
 
-                AccountInfoV27 accountInfo = new AccountInfoV27()
+                AccountInfoV37 accountInfo = new AccountInfoV37()
                 {
                     Terms = new Terms()
                     {

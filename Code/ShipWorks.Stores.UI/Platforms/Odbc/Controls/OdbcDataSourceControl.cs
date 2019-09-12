@@ -122,7 +122,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.Controls
         /// </summary>
         private void UpdatePanelVisibility()
         {
-            if (SelectedDataSource.IsCustom)
+            if (SelectedDataSource?.IsCustom ?? false)
             {
                 customPanel.Show();
                 credentialsPanel.Hide();

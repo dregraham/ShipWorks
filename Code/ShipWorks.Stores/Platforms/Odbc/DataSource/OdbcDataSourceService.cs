@@ -23,8 +23,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <param name="dataSourceFactory"></param>
         /// <param name="dataSourceRepository"></param>
         public OdbcDataSourceService(
-            Func<IOdbcDataSource> dataSourceFactory, 
-            IOdbcDataSourceRepository dataSourceRepository, 
+            Func<IOdbcDataSource> dataSourceFactory,
+            IOdbcDataSourceRepository dataSourceRepository,
             IOdbcStoreRepository storeRepository)
         {
             this.dataSourceFactory = dataSourceFactory;
@@ -69,11 +69,26 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Create the upload data source for the given store
         /// </summary>
-        public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
+        public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store, bool useLocalEntity)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
+
+            if (useLocalEntity)
+            {
+                string connectionString = GetUploadConnectionString(store);
+
+                if (connectionString != null)
+                {
+                    IOdbcDataSource localDataSource = dataSourceFactory();
+                    localDataSource.Restore(connectionString);
+                    return localDataSource;
+                }
+
+                return null;
+            }
+
             OdbcStore odbcStore = storeRepository.GetStore(store);
-            
+
             if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return null;
@@ -91,6 +106,25 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
             }
 
             return dataSource;
+        }
+
+        /// <summary>
+        /// Get the stores connection string for uploading
+        /// </summary>
+        /// <param name="store"></param>
+        private string GetUploadConnectionString(OdbcStoreEntity store)
+        {
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
+            {
+                return null;
+            }
+
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource && !string.IsNullOrEmpty(store.ImportConnectionString))
+            {
+                return store.ImportConnectionString;
+            }
+
+            return store.UploadConnectionString;
         }
     }
 }
