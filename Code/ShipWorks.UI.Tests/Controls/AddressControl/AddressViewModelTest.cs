@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         [Theory]
         [InlineData("US", AddressValidationStoreSettingType.ValidateAndApply, AddressValidationStoreSettingType.ValidateAndApply , true)]
         [InlineData("US", AddressValidationStoreSettingType.ValidationDisabled, AddressValidationStoreSettingType.ValidationDisabled , false)]
-        [InlineData("CA", AddressValidationStoreSettingType.ValidateAndApply, AddressValidationStoreSettingType.ValidationDisabled, true)]
+        [InlineData("CA", AddressValidationStoreSettingType.ValidateAndApply, AddressValidationStoreSettingType.ValidationDisabled, false)]
         [InlineData("CA", AddressValidationStoreSettingType.ValidationDisabled, AddressValidationStoreSettingType.ValidationDisabled, false)]
         public void ValidateAddress_DelegatesToAddressValidator_WithCanAdjustBasedOnStoreSetting(string countryCode, AddressValidationStoreSettingType domesticSetting, AddressValidationStoreSettingType intSetting, bool expectedResult)
         {
