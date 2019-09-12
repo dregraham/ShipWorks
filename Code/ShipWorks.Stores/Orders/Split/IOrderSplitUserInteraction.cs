@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split.Local;
 
@@ -19,5 +21,10 @@ namespace ShipWorks.Stores.Orders.Split
         /// Show a success dialog after an order has been split
         /// </summary>
         Task ShowSuccessConfirmation(IEnumerable<string> orderNumbers);
+
+        /// <summary>
+        /// Show an error while splitting orders
+        /// </summary>
+        Task ShowError(Exception ex);
     }
 }

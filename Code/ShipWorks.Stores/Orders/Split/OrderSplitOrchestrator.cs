@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split.Errors;
+using ShipWorks.Stores.Orders.Split.Hub;
 using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Users.Security;
 using static Interapptive.Shared.Utility.Functional;
@@ -96,7 +98,13 @@ namespace ShipWorks.Stores.Orders.Split
         /// Show an error message
         /// </summary>
         private Task DisplayErrorMessage(Exception ex) =>
-            ex == Error.Canceled ? Task.CompletedTask : messageHelper.ShowError(ex.Message);
+            ex == Error.Canceled ? Task.CompletedTask : DisplayErrorMessageForException(ex);
+
+        /// <summary>
+        /// Get a more friendly error depending on the exception we got
+        /// </summary>
+        private Task DisplayErrorMessageForException(Exception ex) =>
+            ex is OrderSplitterHubException ? userInteraction.ShowError(ex.InnerException) : messageHelper.ShowError(ex.Message);
 
         /// <summary>
         /// Get order IDs from the split results

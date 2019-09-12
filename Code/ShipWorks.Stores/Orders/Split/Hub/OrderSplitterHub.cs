@@ -58,28 +58,25 @@ namespace ShipWorks.Stores.Orders.Split.Hub
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        public Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider)
-        {
-            return UsingAsync(
+        public Task<IDictionary<long, string>> Split(OrderSplitDefinition definition, IProgressReporter progressProvider) =>
+            UsingAsync(
                 new TrackedDurationEvent("OrderManagement.Orders.Split"),
                 evt => SplitInternal(definition, progressProvider)
                     .Do(_ => AddTelemetryProperties(evt, definition),
-                        ex => AddTelemetryProperties(evt, definition, ex)));
-        }
+                        ex => AddTelemetryProperties(evt, definition, ex)))
+                .MapException(ex => new OrderSplitterHubException(ex));
 
         /// <summary>
         /// Split an order based on the definition
         /// </summary>
-        private Task<IDictionary<long, string>> SplitInternal(OrderSplitDefinition definition, IProgressReporter progressProvider)
-        {
-            return orderSplitGateway
+        private Task<IDictionary<long, string>> SplitInternal(OrderSplitDefinition definition, IProgressReporter progressProvider) =>
+            orderSplitGateway
                 .LoadOrder(definition.Order.OrderID)
                 .Bind(order => PerformSplit(order, definition))
                 .Bind(x => SaveOrders(x, progressProvider))
                 .Bind(AuditOrders)
                 .Map(originalOrder => new[] { definition.Order }.ToDictionary(x => x.OrderID, x => x.OrderNumberComplete))
                 .Map(x => x as IDictionary<long, string>);
-        }
 
         /// <summary>
         /// Add telemetry properties

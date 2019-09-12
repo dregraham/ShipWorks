@@ -231,12 +231,15 @@
     <Compile Include="Orders\Split\Hub\OrderItemSplitterHub.cs" />
     <Compile Include="Orders\Split\Hub\OrderSplitAuditHub.cs" />
     <Compile Include="Orders\Split\Hub\OrderSplitterHub.cs" />
+    <Compile Include="Orders\Split\Hub\OrderSplitterHubException.cs" />
     <Compile Include="Orders\Split\IOrderSplitGateway.cs" />
     <Compile Include="Orders\Split\IOrderSplitSuccessDialog.cs" />
     <Compile Include="Orders\Split\IOrderSplitSuccessViewModel.cs" />
     <Compile Include="Orders\Split\IOrderSplitter.cs" />
     <Compile Include="Orders\Split\IOrderSplitViewModel.cs" />
     <Compile Include="Orders\Split\IOrderSplitUserInteraction.cs" />
+    <Compile Include="Orders\Split\IRoutingErrorViewModel.cs" />
+    <Compile Include="Orders\Split\IRoutingErrorDialog.cs" />
     <Compile Include="Orders\Split\Local\IOrderDetailSplitterLocal.cs" />
     <Compile Include="Orders\Split\Local\IOrderSplitAuditLocal.cs" />
     <Compile Include="Orders\Split\Local\OrderChargeSplitterLocal.cs" />
@@ -256,6 +259,7 @@
     <Compile Include="Orders\Split\IOrderSplitDialog.cs" />
     <Compile Include="Orders\Split\OrderSplitValidator.cs" />
     <Compile Include="Orders\Split\Local\OrderSplitAuditLocal.cs" />
+    <Compile Include="Orders\Split\RoutingErrorViewModel.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonQuickSearchSql.cs" />
     <Compile Include="Platforms\Amazon\Content\AmazonSplitOrderAction.cs" />
     <Compile Include="Platforms\Amazon\OnlineUpdating\AmazonOnlineUpdateCommandCreator.cs" />

@@ -802,6 +802,7 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\RerouteOrderItems.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiException.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
