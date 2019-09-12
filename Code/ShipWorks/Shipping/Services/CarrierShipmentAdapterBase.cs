@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.Services
 
         /// <summary>
         /// Delete a package
-        ///// </summary>
+        /// </summary>
         /// <param name="manipulateEntity">
         /// Pass in an action to manipulate the package that gets added to the shipment
         /// </param>
