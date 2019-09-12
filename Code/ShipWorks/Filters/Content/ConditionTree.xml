@@ -115,6 +115,7 @@
         <Condition identifier="CommerceInterfaceOrder.CommerceInterfaceOrderNumber" />
         <Condition identifier="EbayOrder.GuaranteedDelivery" />
         <Condition identifier="EbayOrder.EbayBuyerID" />
+        <Condition identifier="EbayOrder.EbayOrderID" />
         <Condition identifier="EbayOrder.SellingManagerRecord" />
         <Condition identifier="EbayOrder.SelectedShippingMethod" />
         <Condition identifier="EbayOrder.GspEligible" />
