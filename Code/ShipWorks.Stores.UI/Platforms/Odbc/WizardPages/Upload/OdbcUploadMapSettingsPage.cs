@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
                 return;
             }
 
-            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store);
+            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store, true);
 
             // Create new ViewModel when one does not exist, or a new data source is selected. This means clicking
             // back on the mapping page and not changing the data source will keep any mappings made, but selecting
