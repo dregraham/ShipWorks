@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
                 orderSearchSql = scope.Adorn(GenerateSql(context.GetColumnReference(EbayOrderSearchFields.EbayOrderID), context));
             }
 
-            return $"{orderSql} OR {orderSearchSql}"; ;
+            return $"{orderSql} OR {orderSearchSql}";
         }
     }
 }
