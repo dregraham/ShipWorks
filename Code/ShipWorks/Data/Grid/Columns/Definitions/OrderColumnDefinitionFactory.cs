@@ -672,7 +672,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         },
 
                      new GridColumnDefinition("{CA085EE9-4F6E-4D5C-99D4-00CBE576CBE8}", true,
-                        new GridEbayBuyerIDDisplayType(), "Order ID", 12345,
+                        new GridOrderNumberDisplayType(), "eBay Order ID", 12345,
                         EbayOrderFields.EbayOrderID)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay
