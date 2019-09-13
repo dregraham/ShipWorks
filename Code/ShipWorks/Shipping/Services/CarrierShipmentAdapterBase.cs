@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public virtual bool CustomsAllowed
         {
-            get { return !shipmentType.IsDomestic(Shipment); }
+            get { return shipmentType.IsCustomsRequired(Shipment); }
         }
 
         /// <summary>
