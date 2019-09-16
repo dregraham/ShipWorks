@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading;
@@ -17,20 +18,12 @@ namespace ShipWorks.Data.Connection
 
         static AsyncLocal<bool> active = new AsyncLocal<bool>();
         static AsyncLocal<TimeSpan> reconnectTimeout = new AsyncLocal<TimeSpan>();
+        static AsyncLocal<DbConnection> dbConnection = new AsyncLocal<DbConnection>();
 
         /// <summary>
         /// Constructor - initiates the scope
         /// </summary>
-        public SingleUserModeScope() :
-            this(TimeSpan.FromSeconds(30))
-        {
-
-        }
-
-        /// <summary>
-        /// Constructor - initiates the scope
-        /// </summary>
-        public SingleUserModeScope(TimeSpan reconnectTimeout)
+        public SingleUserModeScope(DbConnection connection, TimeSpan reconnectTimeout)
         {
             if (active.Value)
             {
@@ -41,16 +34,13 @@ namespace ShipWorks.Data.Connection
 
             log.Info("Entering SingleUserModeScope");
 
-            // Start by disconnecting all users. We don't use this same connection the whole time, so its possible that
-            // someone could sneak in and take the single connection in between us releasing and getting it.  But if that happened,
-            // we would blowup, and the upgrade would just have to start over the next time.
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            dbConnection.Value = connection;
+            if (connection.State != ConnectionState.Open)
             {
-                SqlUtility.SetSingleUser(con);
+                connection.Open();
             }
 
-            // Clear out the pool so that connection holding onto SINGLE_USER gets released
-            SqlConnection.ClearAllPools();
+            SqlUtility.SetSingleUser(connection, connection.Database);
 
             active.Value = true;
         }
@@ -66,19 +56,6 @@ namespace ShipWorks.Data.Connection
         public static bool IsActive = active.Value;
 
         /// <summary>
-        /// Return the database to multi user mode using the specified connection
-        /// </summary>
-        public static void RestoreMultiUserMode(DbConnection con)
-        {
-            if (!active.Value)
-            {
-                return;
-            }
-
-            RestoreMultiUserMode(con, false);
-        }
-
-        /// <summary>
         /// Dispose - get rid of single user mode
         /// </summary>
         public void Dispose()
@@ -88,15 +65,14 @@ namespace ShipWorks.Data.Connection
                 return;
             }
 
-            RestoreMultiUserMode(null, true);
+            RestoreMultiUserMode();
         }
 
         /// <summary>
         /// Return the database to multi user mode using the specified connection
         /// </summary>
-        private static void RestoreMultiUserMode(DbConnection con, bool clearConnectionPool)
+        public static void RestoreMultiUserMode()
         {
-            bool shouldDisposeConnection = false;
             bool succeeded = false;
             int maxTries = 100;
 
@@ -106,38 +82,15 @@ namespace ShipWorks.Data.Connection
 
                 try
                 {
-                    // Clear out the pool so any connection holding onto SINGLE_USER gets released
-                    if (clearConnectionPool)
-                    {
-                        SqlConnection.ClearAllPools();
-                    }
-
-                    // Allow multiple connections again
-                    if (con == null)
-                    {
-                        shouldDisposeConnection = true;
-                        con = SqlSession.Current.OpenConnection();
-                    }
-
-                    SqlUtility.SetMultiUser(con);
+                    SqlUtility.SetMultiUser(dbConnection.Value);
 
                     succeeded = true;
                 }
-                catch (SingleUserModeException ex)
+                catch (Exception ex) when (ex is SingleUserModeException || ex is SqlException)
                 {
                     log.Error("Failed to set database back to multi-user mode.", ex);
-                }
-                catch (SqlException ex)
-                {
-                    log.Error("Failed to set database back to multi-user mode.", ex);
-                }
-                finally
-                {
-                    // Dispose the connection if this function created it
-                    if (shouldDisposeConnection && con != null)
-                    {
-                        con.Dispose();
-                    }
+                    SqlConnection.ClearAllPools();
+                    dbConnection.Value = SqlSession.Current.OpenConnection();
                 }
             }
 

@@ -184,6 +184,16 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Open a connection to the master database using the current properties of the SqlSession
+        /// </summary>
+        public static DbConnection OpenConnectionToMaster()
+        {
+            DbConnection con = DataAccessAdapter.CreateConnection(SqlUtility.GetMasterDatabaseConnectionString(Current.Configuration.GetConnectionString()));
+            ConnectionMonitor.OpenConnection(con);
+            return con;
+        }
+
+        /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
         public bool TestConnection()

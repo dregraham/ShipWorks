@@ -175,20 +175,22 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFilterCounts = new ProgressItem("Calculate Initial Filter Counts");
             progressFilterCounts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFilterCounts);
-                        
-            // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
-            // because reconnection to a very large database seems to take some time after running a big upgrade
-            using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
-            {
-                try
-                {
-                    // Put the SuperUser in scope, and don't audit
-                    using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
-                    {
-                        SqlSession.Current.Configuration.ForceWorkstationID = true;
 
-                        using (new ExistingConnectionScope())
+            using (new ExistingConnectionScope())
+            {
+                // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
+                // because reconnection to a very large database seems to take some time after running a big upgrade
+                using (SingleUserModeScope singleUserScope = debuggingMode ? 
+                    null : 
+                    new SingleUserModeScope(ExistingConnectionScope.ScopedConnection, TimeSpan.FromMinutes(1)))
+                {
+                    try
+                    {
+                        // Put the SuperUser in scope, and don't audit
+                        using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                         {
+                            SqlSession.Current.Configuration.ForceWorkstationID = true;
+                            
                             using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                             {
                                 // Update the tables
@@ -207,7 +209,7 @@ namespace ShipWorks.Data.Administration
                                 // database upgrade can take time and cause a timeout.
                                 if (singleUserScope != null)
                                 {
-                                    SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                                    SingleUserModeScope.RestoreMultiUserMode();
                                 }
 
                                 ApplyVersionSpecificUpdates(installedAssembly);
@@ -217,15 +219,15 @@ namespace ShipWorks.Data.Administration
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    log.Error("UpdateDatabase failed", ex);
-                    throw;
-                }
-                finally
-                {
-                    SqlSession.Current.Configuration.ForceWorkstationID = false;
+                    catch (Exception ex)
+                    {
+                        log.Error("UpdateDatabase failed", ex);
+                        throw;
+                    }
+                    finally
+                    {
+                        SqlSession.Current.Configuration.ForceWorkstationID = false;
+                    }
                 }
             }
         }
