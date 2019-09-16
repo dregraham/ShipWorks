@@ -158,7 +158,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 LicenseCapabilities = tangoWebClient.GetLicenseCapabilities(this);
                 lastRefreshTimeInUtc = DateTime.UtcNow;
 
-                //reset disabled reason now that we can reconnect
+                // Reset disabled reason now that we can reconnect
                 DisabledReason = null;
 
                 // Let anyone who cares know that enabled carriers may have changed.
