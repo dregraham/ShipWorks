@@ -278,6 +278,16 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\GenericFile\GenericStoreHubControl.xaml.cs">
+      <DependentUpon>GenericStoreHubControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\GenericFile\GenericStoreHubPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\GenericFile\GenericStoreHubPage.Designer.cs">
+      <DependentUpon>GenericStoreHubPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\GenericFile\GenericStoreHubViewModel.cs" />
     <Compile Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -647,6 +657,9 @@
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorSoapAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorSoapAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\GenericFile\GenericStoreHubPage.resx">
+      <DependentUpon>GenericStoreHubPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\GenericModule\GenericModuleStoreSettingsControl.resx">
       <DependentUpon>GenericModuleStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -864,6 +877,9 @@
     <Page Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Platforms\GenericFile\GenericStoreHubControl.xaml">
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Jet\JetStoreSetupControl.xaml">
       <SubType>Designer</SubType>

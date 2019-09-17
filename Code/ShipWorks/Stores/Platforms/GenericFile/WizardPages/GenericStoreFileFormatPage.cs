@@ -27,6 +27,17 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
+        /// Stepping into the
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            var store = GetStore<GenericFileStoreEntity>();
+
+            // if we have a map then we know the file format and it must be a hub store
+            e.Skip = string.IsNullOrWhiteSpace(store.FlatImportMap);
+        }
+
+        /// <summary>
         /// Stepping next
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)

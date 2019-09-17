@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// Stepping into the 
+        /// Stepping into the
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
@@ -38,7 +38,9 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
                 excelMapChooser.Initialize(new GenericSpreadsheetOrderSchema());
             }
 
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Excel;
+            var store = GetStore<GenericFileStoreEntity>();
+
+            e.Skip = store.FileFormat != (int) GenericFileFormat.Excel || !string.IsNullOrWhiteSpace(store.FlatImportMap);
         }
 
         /// <summary>

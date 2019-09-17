@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// Stepping into the 
+        /// Stepping into the
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
@@ -39,7 +39,9 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
                 csvMapChooser.Initialize(new GenericSpreadsheetOrderSchema());
             }
 
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Csv;
+            var store = GetStore<GenericFileStoreEntity>();
+
+            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Csv || !string.IsNullOrWhiteSpace(store.FlatImportMap);
         }
 
         /// <summary>

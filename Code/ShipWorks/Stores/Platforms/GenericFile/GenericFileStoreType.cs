@@ -167,6 +167,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         {
             return new List<WizardPage>
                 {
+                    (WizardPage) scope.Resolve<IGenericStoreHubPage>(),
                     new GenericStoreFileFormatPage(),
                     new GenericStoreFileSourcePage(),
                     new GenericStoreXmlSetupPage(),
@@ -218,5 +219,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         /// <returns></returns>
         public override bool ShowTaskWizardPage() => false;
+
+        /// <summary>
+        /// Supports Hub
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }
