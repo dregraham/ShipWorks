@@ -33,7 +33,7 @@ namespace ShipWorks.SingleScan
         {
             this.messenger = messenger;
 
-            int scanBufferMilliseconds = InterapptiveOnly.Registry.GetValue("ScanBufferMilliseconds", 150);
+            int scanBufferMilliseconds = InterapptiveOnly.Registry.GetValue("ScanBufferMilliseconds", 100);
 
             IObservable<string> scanStream = Observable.Create<string>(x =>
                 {
