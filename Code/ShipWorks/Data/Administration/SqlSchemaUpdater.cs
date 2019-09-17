@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Transactions;
 using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
@@ -121,31 +122,34 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static Version GetInstalledSchemaVersion()
         {
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
-                try
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    return GetInstalledSchemaVersion(con);
-                }
-                catch (SqlException ex)
-                {
-                    // "Could not find stored procedure"
-                    if (ex.Number == 2812 || ex.Number == 21343)
+                    try
                     {
-                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        return GetInstalledSchemaVersion(con);
                     }
-
-                    throw;
-                }
-                catch (ArgumentException ex)
-                {
-                    // We can't figure out the version, which means it's been modified
-                    if (ex.Message.Contains("Version"))
+                    catch (SqlException ex)
                     {
-                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
-                    }
+                        // "Could not find stored procedure"
+                        if (ex.Number == 2812 || ex.Number == 21343)
+                        {
+                            throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        }
 
-                    throw;
+                        throw;
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        // We can't figure out the version, which means it's been modified
+                        if (ex.Message.Contains("Version"))
+                        {
+                            throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        }
+
+                        throw;
+                    }
                 }
             }
         }
@@ -280,7 +284,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
+        private static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
         {
             using (DbCommand cmd = DbCommandProvider.Create(con))
             {
@@ -291,7 +295,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
+        private static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
         {
             UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion", true);
         }

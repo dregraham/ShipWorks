@@ -214,7 +214,7 @@ namespace ShipWorks.Data.Connection
             string originalDatabaseName = csb.InitialCatalog;
             csb.InitialCatalog = "master";
 
-            using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Suppress))
+            using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
                 using (DbConnection con = new SqlConnection(csb.ToString()))
                 {
