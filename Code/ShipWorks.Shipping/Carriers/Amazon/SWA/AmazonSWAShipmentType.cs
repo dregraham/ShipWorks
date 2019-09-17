@@ -115,9 +115,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             {
                 var order = shipment.Order as ChannelAdvisorOrderEntity;
 
-                if (order.MarketplaceNames != null &&
-                    order.MarketplaceNames.Contains("Walmart", StringComparison.OrdinalIgnoreCase) ||
-                    order.MarketplaceNames.Contains("eBay", StringComparison.OrdinalIgnoreCase))
+                if (order != null &&
+                    order.MarketplaceNames != null &&
+                    (order.MarketplaceNames.Contains("Walmart", StringComparison.OrdinalIgnoreCase) ||
+                    order.MarketplaceNames.Contains("eBay", StringComparison.OrdinalIgnoreCase)))
                 {
                     return false;
                 }
