@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             var store = GetStore<GenericFileStoreEntity>();
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Xml;
+            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Xml || store.XmlXsltContent != null;
         }
 
         /// <summary>
