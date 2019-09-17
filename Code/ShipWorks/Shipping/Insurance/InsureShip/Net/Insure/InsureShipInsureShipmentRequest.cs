@@ -47,6 +47,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
                 CreatedWithApi = false
             };
 
+            if (shipment.Order.OrderItems.All(x => String.IsNullOrWhiteSpace(x.Name)))
+            {
+                return GenericResult.FromError<InsureShipNewPolicyResponse>(new InsureShipException("Can not insure a shipment with no item names."));
+            }
+
             return webClient.Submit<InsureShipNewPolicyResponse>("new_policy", shipment.Order.Store, CreatePostData(shipment))
                 .Do(x =>
                 {

@@ -59,35 +59,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
 
             Uri uri = new Uri(settings.ApiUrl.AbsoluteUri + endpoint);
             var requestSubmitter = ConfigureNewRequestSubmitter(store, uri);
-            bool creatingNewPolicy = typeof(T) == typeof(InsureShipNewPolicyResponse);
-
-            // Make sure items_ordered is set before creating a new policy
-            if (creatingNewPolicy)
-            {
-                try
-                {
-                    string items = postData["items_ordered"];
-                    if (items != null)
-                    {
-                        if (String.IsNullOrWhiteSpace(items.Replace(",", "")))
-                        {
-                            throw new ArgumentException("The 'items_ordered' parameter must be set to insure a shipment.");
-                        }
-                    }
-                    else
-                    {
-                        throw new NullReferenceException("The 'items_ordered' parameter must be set to insure a shipment.");
-                    }
-                }
-                catch (Exception ex) when (
-                    ex is KeyNotFoundException ||
-                    ex is ArgumentException ||
-                    ex is NullReferenceException
-                    )
-                {
-                    return ex;
-                }
-            }
 
             foreach (string key in postData.Keys)
             {
@@ -108,7 +79,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
                 var deserializedResponse = JsonConvert.DeserializeObject<T>(responseText);
 
                 // Log telemetry when insuring a shipment
-                if (creatingNewPolicy)
+                if (typeof(T) == typeof(InsureShipNewPolicyResponse))
                 {
                     LogTelemetry(response.HttpWebResponse, deserializedResponse as InsureShipNewPolicyResponse);
                 }
