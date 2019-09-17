@@ -12,6 +12,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.SingleScan
 {
@@ -32,6 +33,8 @@ namespace ShipWorks.SingleScan
         {
             this.messenger = messenger;
 
+            int scanBufferMilliseconds = InterapptiveOnly.Registry.GetValue("ScanBufferMilliseconds", 150);
+
             IObservable<string> scanStream = Observable.Create<string>(x =>
                 {
                     observer = x;
@@ -42,14 +45,14 @@ namespace ShipWorks.SingleScan
                 .RefCount();
 
             // Observer.OnNext is called with a letter from the scanner.  We ignore
-            // the letter is null or empty. We wait 100 milliseconds to see
-            // if there is another input. If we do get another input within the 100
-            // milliseconds, the timer restarts. Once the 100 milliseconds is hit,
-            // we send all the inputs to SendScanMessage.
+            // the letter is null or empty. We wait scanBufferMilliseconds to see
+            // if there is another input. If we do get another input within the 
+            // scanBufferMilliseconds , the timer restarts. Once the scanBufferMilliseconds 
+            // is hit, we send all the inputs to SendScanMessage.
             // The ObserveOn makes sure we call the callback method on the
             // WindowsFormsEventLoop.
             scanStream.Where(x => !x.IsNullOrWhiteSpace())
-                .BufferUntilInactive(TimeSpan.FromMilliseconds(100), schedulerProvider.Default)
+                .BufferUntilInactive(TimeSpan.FromMilliseconds(scanBufferMilliseconds), schedulerProvider.Default)
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
                 .Do(SendScanMessage)
                 .Subscribe();
