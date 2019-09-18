@@ -19,20 +19,31 @@ namespace ShipWorks.Data.Connection
         static AsyncLocal<bool> active = new AsyncLocal<bool>();
         static AsyncLocal<TimeSpan> reconnectTimeout = new AsyncLocal<TimeSpan>();
         static AsyncLocal<DbConnection> dbConnection = new AsyncLocal<DbConnection>();
+        static AsyncLocal<ISqlUtility> sqlUtility = new AsyncLocal<ISqlUtility>();
+        static AsyncLocal<ConnectionSensitiveScope> sonnectionSensitiveScope = new AsyncLocal<ConnectionSensitiveScope>();
 
         /// <summary>
         /// Constructor - initiates the scope
         /// </summary>
-        public SingleUserModeScope(DbConnection connection, TimeSpan reconnectTimeout)
+        public SingleUserModeScope(DbConnection connection, TimeSpan reconnectTimeout, ISqlUtility sqlUtilityWrapper)
         {
             if (active.Value)
             {
                 throw new InvalidOperationException("Can only have one active scope at a time.");
             }
 
+            sonnectionSensitiveScope.Value = new ConnectionSensitiveScope("creating single user mode scope", null);
+
+            if (!sonnectionSensitiveScope.Value.Acquired)
+            {
+                throw new InvalidOperationException("Could not acquire connection sensitive scope.");
+            }
+
             SingleUserModeScope.reconnectTimeout.Value = reconnectTimeout;
 
             log.Info("Entering SingleUserModeScope");
+
+            sqlUtility.Value = sqlUtilityWrapper;
 
             dbConnection.Value = connection;
             if (connection.State != ConnectionState.Open)
@@ -40,7 +51,7 @@ namespace ShipWorks.Data.Connection
                 connection.Open();
             }
 
-            SqlUtility.SetSingleUser(connection, connection.Database);
+            sqlUtility.Value.SetSingleUser(connection, connection.Database);
 
             active.Value = true;
         }
@@ -60,12 +71,17 @@ namespace ShipWorks.Data.Connection
         /// </summary>
         public void Dispose()
         {
-            if (!active.Value)
+            try
             {
-                return;
+                if (active.Value)
+                {
+                    RestoreMultiUserMode();
+                }
             }
-
-            RestoreMultiUserMode();
+            finally
+            {
+                sonnectionSensitiveScope?.Value?.Dispose();
+            }
         }
 
         /// <summary>
@@ -82,11 +98,11 @@ namespace ShipWorks.Data.Connection
 
                 try
                 {
-                    SqlUtility.SetMultiUser(dbConnection.Value);
+                    sqlUtility.Value.SetMultiUser(dbConnection.Value);
 
                     succeeded = true;
                 }
-                catch (Exception ex) when (ex is SingleUserModeException || ex is SqlException)
+                catch (Exception ex)
                 {
                     log.Error("Failed to set database back to multi-user mode.", ex);
                     SqlConnection.ClearAllPools();

@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Metrics;
@@ -37,6 +38,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             log.Info("Execute starting.");
 
+            string tangoCustomerId = string.Empty;
             Version versionRequired = new Version();
             TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
             TelemetricResult<Result> backupResult = null;
@@ -54,7 +56,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
                 // is lost, we can still track the customer id.
-                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ITangoWebClient tangoWebClient = scope.Resolve<ITangoWebClient>();
+                    tangoCustomerId = tangoWebClient.GetTangoCustomerId();
+                }
+
                 Telemetry.GetCustomerID = () => tangoCustomerId;
                 log.Info($"TangoCustomerId: {tangoCustomerId}.");
 

@@ -199,7 +199,7 @@ namespace Interapptive.Shared.Data
 		                
 		                ALTER DATABASE [{dbName}] SET MULTI_USER WITH ROLLBACK IMMEDIATE
 
-		                RAISERROR (N'Database is already in single user mode.', 16, 1)
+		                RAISERROR (N'Error occurred during sql execution.  Database has been put back into multi user mode.', 16, 1)
 		                
 	                END CATCH;  
 	                

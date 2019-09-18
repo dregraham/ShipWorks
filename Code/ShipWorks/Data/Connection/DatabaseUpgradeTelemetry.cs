@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -21,6 +22,21 @@ namespace ShipWorks.Data.Connection
         /// Record database telemetry data to the telemetric result
         /// </summary>
         public static void RecordDatabaseTelemetry(TelemetricResult<Unit> telemetricResult)
+        {
+            Functional
+                .Retry(() =>
+                        {
+                            RecordDatabaseTelemetryInternal(telemetricResult);
+                            return Unit.Default;
+                        }, 
+                    10, _ => true)
+                .Match(x => x, ex => Unit.Default);
+        }
+
+        /// <summary>
+        /// Record database telemetry data to the telemetric result
+        /// </summary>
+        private static void RecordDatabaseTelemetryInternal(TelemetricResult<Unit> telemetricResult)
         {
             if (SqlSession.Current.CanConnect())
             {
