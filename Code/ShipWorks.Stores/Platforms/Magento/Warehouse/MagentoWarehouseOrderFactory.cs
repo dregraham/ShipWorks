@@ -60,9 +60,9 @@ namespace ShipWorks.Stores.Platforms.Magento.Warehouse
         /// <summary>
         /// Load store specific order details
         /// </summary>
-        protected override void LoadStoreOrderDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            base.LoadStoreOrderDetails(orderEntity, warehouseOrder);
+            base.LoadStoreOrderDetails(store, orderEntity, warehouseOrder);
 
             var magentoOrderEntity = (MagentoOrderEntity) orderEntity;
             var magentoWarehouseOrder = warehouseOrder.AdditionalData[MagentoEntryKey].ToObject<MagentoWarehouseOrder>();

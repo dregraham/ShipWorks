@@ -12,8 +12,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// <summary>
     /// Makes requests to the warehouse and handles authentication token management
     /// </summary>
-    [Component(RegistrationType.Self, SingleInstance = true)]
-    public class WarehouseRequestClient : IInitializeForCurrentUISession
+    [Component(RegistrationType.SpecificService, Service = typeof(IWarehouseRequestClient), SingleInstance = true)]
+    public class WarehouseRequestClient : IInitializeForCurrentUISession, IWarehouseRequestClient
     {
         private readonly IWarehouseRemoteLoginWithToken warehouseRemoteLoginWithToken;
         private readonly IWarehouseRefreshToken warehouseRefreshToken;
@@ -90,7 +90,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     return GenericResult.FromSuccess(restResponse);
                 }
 
-                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request. StatusCode: {restResponse.StatusCode}");
+                string error = string.IsNullOrWhiteSpace(restResponse.Content) ? restResponse.StatusCode.ToString() : restResponse.Content;
+
+                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request.{Environment.NewLine}{error}");
             }
             catch (Exception e)
             {

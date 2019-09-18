@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.UI.Tests.Carriers.Postal.Usps
             bool canPrintPMEI,
             GlobalPostServiceAvailability expected)
         {
-            var result = UspsWebClient.GetGlobalPostServiceAvailability(new CapabilitiesV18
+            var result = UspsWebClient.GetGlobalPostServiceAvailability(new CapabilitiesV27
             {
                 CanPrintGP = canPrintGP,
                 CanPrintGPSmartSaver = canPrintGPSmartSaver,

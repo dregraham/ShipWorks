@@ -1232,12 +1232,16 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EndiciaProfileEntity's mappings</summary>
 		private void InitEndiciaProfileEntityMappings()
 		{
-			this.AddElementMapping("EndiciaProfileEntity", @"ShipWorksLocal", @"dbo", "EndiciaProfile", 5, 0);
+			this.AddElementMapping("EndiciaProfileEntity", @"ShipWorksLocal", @"dbo", "EndiciaProfile", 9, 0);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "EndiciaAccountID", "EndiciaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "StealthPostage", "StealthPostage", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID", "ReferenceID", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("EndiciaProfileEntity", "ScanBasedReturn", "ScanBasedReturn", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID2", "ReferenceID2", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID3", "ReferenceID3", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "ReferenceID4", "ReferenceID4", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 7);
+			this.AddElementFieldMapping("EndiciaProfileEntity", "GroupCode", "GroupCode", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 8);
 		}
 
 		/// <summary>Inits EndiciaScanFormEntity's mappings</summary>
@@ -1256,7 +1260,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EndiciaShipmentEntity's mappings</summary>
 		private void InitEndiciaShipmentEntityMappings()
 		{
-			this.AddElementMapping("EndiciaShipmentEntity", @"ShipWorksLocal", @"dbo", "EndiciaShipment", 11, 0);
+			this.AddElementMapping("EndiciaShipmentEntity", @"ShipWorksLocal", @"dbo", "EndiciaShipment", 15, 0);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "EndiciaAccountID", "EndiciaAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "OriginalEndiciaAccountID", "OriginalEndiciaAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
@@ -1268,6 +1272,10 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);
 			this.AddElementFieldMapping("EndiciaShipmentEntity", "Insurance", "Insurance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID2", "ReferenceID2", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 11);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID3", "ReferenceID3", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 12);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "ReferenceID4", "ReferenceID4", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 13);
+			this.AddElementFieldMapping("EndiciaShipmentEntity", "GroupCode", "GroupCode", false, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 14);
 		}
 
 		/// <summary>Inits EtsyOrderEntity's mappings</summary>
@@ -2297,7 +2305,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OdbcStoreEntity's mappings</summary>
 		private void InitOdbcStoreEntityMappings()
 		{
-			this.AddElementMapping("OdbcStoreEntity", @"ShipWorksLocal", @"dbo", "OdbcStore", 12, 0);
+			this.AddElementMapping("OdbcStoreEntity", @"ShipWorksLocal", @"dbo", "OdbcStore", 13, 0);
 			this.AddElementFieldMapping("OdbcStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportConnectionString", "ImportConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportMap", "ImportMap", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 2);
@@ -2310,6 +2318,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadColumnSource", "UploadColumnSource", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("OdbcStoreEntity", "UploadConnectionString", "UploadConnectionString", false, "NVarChar", 2048, 0, 0, false, "", null, typeof(System.String), 10);
 			this.AddElementFieldMapping("OdbcStoreEntity", "ImportOrderItemStrategy", "ImportOrderItemStrategy", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 11);
+			this.AddElementFieldMapping("OdbcStoreEntity", "WarehouseLastModified", "WarehouseLastModified", true, "DateTime2", 0, 7, 0, false, "", null, typeof(System.DateTime), 12);
 		}
 
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
@@ -3384,7 +3393,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ShopifyStoreEntity's mappings</summary>
 		private void InitShopifyStoreEntityMappings()
 		{
-			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 8, 0);
+			this.AddElementMapping("ShopifyStoreEntity", @"ShipWorksLocal", @"dbo", "ShopifyStore", 9, 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopUrlName", "ShopifyShopUrlName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyShopDisplayName", "ShopifyShopDisplayName", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3393,6 +3402,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ApiKey", "ApiKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 5);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "Password", "Password", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 6);
 			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyNotifyCustomer", "ShopifyNotifyCustomer", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 7);
+			this.AddElementFieldMapping("ShopifyStoreEntity", "ShopifyFulfillmentLocation", "ShopifyFulfillmentLocation", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 8);
 		}
 
 		/// <summary>Inits ShopSiteStoreEntity's mappings</summary>

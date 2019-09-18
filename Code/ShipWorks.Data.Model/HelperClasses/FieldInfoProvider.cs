@@ -1185,6 +1185,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaProfileEntity", "StealthPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.StealthPostage, 0, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID, 300, 0, 0);
 			this.AddElementFieldInfo("EndiciaProfileEntity", "ScanBasedReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.ScanBasedReturn, 0, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID2", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID2, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID3", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID3, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID4", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID4, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaProfileEntity", "GroupCode", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.GroupCode, 300, 0, 0);
 		}
 		/// <summary>Inits EndiciaScanFormEntity's FieldInfo objects</summary>
 		private void InitEndiciaScanFormEntityInfos()
@@ -1213,6 +1217,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "ScanBasedReturn", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ScanBasedReturn, 0, 0, 0);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("EndiciaShipmentEntity", "Insurance", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.Insurance, 0, 0, 0);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID2", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID2, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID3", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID3, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID4", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID4, 300, 0, 0);
+			this.AddElementFieldInfo("EndiciaShipmentEntity", "GroupCode", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.GroupCode, 300, 0, 0);
 		}
 		/// <summary>Inits EtsyOrderEntity's FieldInfo objects</summary>
 		private void InitEtsyOrderEntityInfos()
@@ -2191,6 +2199,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadColumnSource", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadColumnSource, 2147483647, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "UploadConnectionString", typeof(System.String), false, false, false, false,  (int)OdbcStoreFieldIndex.UploadConnectionString, 2048, 0, 0);
 			this.AddElementFieldInfo("OdbcStoreEntity", "ImportOrderItemStrategy", typeof(System.Int32), false, false, false, false,  (int)OdbcStoreFieldIndex.ImportOrderItemStrategy, 0, 0, 10);
+			this.AddElementFieldInfo("OdbcStoreEntity", "WarehouseLastModified", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OdbcStoreFieldIndex.WarehouseLastModified, 0, 0, 7);
 		}
 		/// <summary>Inits OnTracAccountEntity's FieldInfo objects</summary>
 		private void InitOnTracAccountEntityInfos()
@@ -3212,6 +3221,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ApiKey", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.ApiKey, 100, 0, 0);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "Password", typeof(System.String), false, false, false, false,  (int)ShopifyStoreFieldIndex.Password, 100, 0, 0);
 			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyNotifyCustomer", typeof(System.Boolean), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, 0, 0, 0);
+			this.AddElementFieldInfo("ShopifyStoreEntity", "ShopifyFulfillmentLocation", typeof(System.Int64), false, false, false, false,  (int)ShopifyStoreFieldIndex.ShopifyFulfillmentLocation, 0, 0, 19);
 		}
 		/// <summary>Inits ShopSiteStoreEntity's FieldInfo objects</summary>
 		private void InitShopSiteStoreEntityInfos()

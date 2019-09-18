@@ -42,6 +42,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
+        /// Get the location ID set in the store. If none set, get shop default
+        /// </summary>
+        public long GetLocationID(IShopifyStoreEntity store, IShopifyWebClient webClient)
+        {
+            return store.ShopifyFulfillmentLocation == 0 ? GetPrimaryLocationID(store, webClient) : store.ShopifyFulfillmentLocation;
+        }
+
+        /// <summary>
         /// Get items grouped by the location id that should be used for them
         /// </summary>
         public IEnumerable<(long locationID, IEnumerable<IShopifyOrderItemEntity> items)> GetItemLocations(IShopifyWebClient webClient, long shopifyOrderID, IEnumerable<IShopifyOrderItemEntity> items)

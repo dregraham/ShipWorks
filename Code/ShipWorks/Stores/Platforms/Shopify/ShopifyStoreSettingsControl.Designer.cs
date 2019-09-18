@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace ShipWorks.Stores.Platforms.Shopify
+﻿namespace ShipWorks.Stores.Platforms.Shopify
 {
     partial class ShopifyStoreSettingsControl
     {
@@ -10,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private System.ComponentModel.IContainer components = null;
 
 
-        
+
 
         /// <summary> 
         /// Clean up any resources being used.
@@ -37,15 +35,17 @@ namespace ShipWorks.Stores.Platforms.Shopify
             this.requestedShippingOptions = new System.Windows.Forms.ComboBox();
             this.labelWeightUnitOfMeasure = new System.Windows.Forms.Label();
             this.shopifyNotifyCustomer = new System.Windows.Forms.CheckBox();
+            this.shopifyLocations = new System.Windows.Forms.ComboBox();
+            this.shopifyLocationsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // sectionTitle1
             // 
-            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitle1.Location = new System.Drawing.Point(0, 0);
             this.sectionTitle1.Name = "sectionTitle1";
-            this.sectionTitle1.Size = new System.Drawing.Size(489, 23);
+            this.sectionTitle1.Size = new System.Drawing.Size(564, 23);
             this.sectionTitle1.TabIndex = 0;
             this.sectionTitle1.Text = "Shopify Store Settings";
             // 
@@ -70,24 +70,45 @@ namespace ShipWorks.Stores.Platforms.Shopify
             // shopifyNotifyCustomer
             // 
             this.shopifyNotifyCustomer.AutoSize = true;
-            this.shopifyNotifyCustomer.Location = new System.Drawing.Point(20, 69);
+            this.shopifyNotifyCustomer.Location = new System.Drawing.Point(20, 68);
             this.shopifyNotifyCustomer.Name = "shopifyNotifyCustomer";
             this.shopifyNotifyCustomer.Size = new System.Drawing.Size(316, 17);
             this.shopifyNotifyCustomer.TabIndex = 24;
             this.shopifyNotifyCustomer.Text = "Shopify should notify the customer when an order is shipped.";
             this.shopifyNotifyCustomer.UseVisualStyleBackColor = true;
             // 
+            // shopifyLocations
+            // 
+            this.shopifyLocations.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.shopifyLocations.FormattingEnabled = true;
+            this.shopifyLocations.Location = new System.Drawing.Point(235, 94);
+            this.shopifyLocations.Name = "shopifyLocations";
+            this.shopifyLocations.Size = new System.Drawing.Size(134, 21);
+            this.shopifyLocations.TabIndex = 26;
+            // 
+            // shopifyLocationsLabel
+            // 
+            this.shopifyLocationsLabel.AutoSize = true;
+            this.shopifyLocationsLabel.Location = new System.Drawing.Point(17, 97);
+            this.shopifyLocationsLabel.Name = "shopifyLocationsLabel";
+            this.shopifyLocationsLabel.Size = new System.Drawing.Size(201, 13);
+            this.shopifyLocationsLabel.TabIndex = 25;
+            this.shopifyLocationsLabel.Text = "Select the fulfillment location for this store:";
+            // 
             // ShopifyStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.shopifyLocations);
+            this.Controls.Add(this.shopifyLocationsLabel);
             this.Controls.Add(this.shopifyNotifyCustomer);
             this.Controls.Add(this.requestedShippingOptions);
             this.Controls.Add(this.labelWeightUnitOfMeasure);
             this.Controls.Add(this.sectionTitle1);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "ShopifyStoreSettingsControl";
-            this.Size = new System.Drawing.Size(489, 96);
+            this.MinimumSize = new System.Drawing.Size(564, 120);
+            this.Size = new System.Drawing.Size(564, 120);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,5 +120,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private System.Windows.Forms.ComboBox requestedShippingOptions;
         private System.Windows.Forms.Label labelWeightUnitOfMeasure;
         private System.Windows.Forms.CheckBox shopifyNotifyCustomer;
+        private System.Windows.Forms.ComboBox shopifyLocations;
+        private System.Windows.Forms.Label shopifyLocationsLabel;
     }
 }

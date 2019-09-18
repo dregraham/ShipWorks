@@ -39,6 +39,18 @@
             this.labelNoPostage = new System.Windows.Forms.Label();
             this.stateNoPostage = new System.Windows.Forms.CheckBox();
             this.groupBoxRubberStamps = new System.Windows.Forms.GroupBox();
+            this.stateGroupCode = new System.Windows.Forms.CheckBox();
+            this.GroupCodeLabel = new System.Windows.Forms.Label();
+            this.GroupCodeToken = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelReferenceID4 = new System.Windows.Forms.Label();
+            this.stateReferenceID4 = new System.Windows.Forms.CheckBox();
+            this.labelReferenceID3 = new System.Windows.Forms.Label();
+            this.stateReferenceID3 = new System.Windows.Forms.CheckBox();
+            this.stateReferenceID2 = new System.Windows.Forms.CheckBox();
+            this.labelReferenceID2 = new System.Windows.Forms.Label();
+            this.referenceID4 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.referenceID3 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.referenceID2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.stateReferenceID = new System.Windows.Forms.CheckBox();
             this.stateRubberStamp3 = new System.Windows.Forms.CheckBox();
             this.stateRubberStamp2 = new System.Windows.Forms.CheckBox();
@@ -76,8 +88,9 @@
             this.groupReturns.SuspendLayout();
             this.groupInsurance.SuspendLayout();
             this.groupExpressMail.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxReturnWarning)).BeginInit();
             this.groupBoxRubberStamps.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.groupParcelSelect.SuspendLayout();
             this.groupLabels.SuspendLayout();
             this.SuspendLayout();
@@ -87,7 +100,7 @@
             this.groupBoxFrom.Controls.Add(this.labelAccount);
             this.groupBoxFrom.Controls.Add(this.endiciaAccount);
             this.groupBoxFrom.Controls.Add(this.stateAccount);
-            this.groupBoxFrom.Size = new System.Drawing.Size(411, 82);
+            this.groupBoxFrom.Size = new System.Drawing.Size(360, 82);
             this.groupBoxFrom.Controls.SetChildIndex(this.stateAccount, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.senderState, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.endiciaAccount, 0);
@@ -105,7 +118,7 @@
             this.groupShipment.Controls.Add(this.labelStealth);
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 94);
-            this.groupShipment.Size = new System.Drawing.Size(411, 264);
+            this.groupShipment.Size = new System.Drawing.Size(360, 264);
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
@@ -139,6 +152,7 @@
             // groupBoxCustoms
             // 
             this.groupBoxCustoms.Location = new System.Drawing.Point(8, 514);
+            this.groupBoxCustoms.Size = new System.Drawing.Size(400, 54);
             this.groupBoxCustoms.TabIndex = 4;
             // 
             // tabPage
@@ -161,9 +175,16 @@
             // 
             this.groupReturns.Controls.Add(this.scanBasedPaymentState);
             this.groupReturns.Controls.Add(this.scanBasedPayment);
-            this.groupReturns.Location = new System.Drawing.Point(8, 923);
+            this.groupReturns.Location = new System.Drawing.Point(8, 974);
             this.groupReturns.Size = new System.Drawing.Size(417, 139);
             this.groupReturns.TabIndex = 8;
+            this.groupReturns.Controls.SetChildIndex(this.kryptonBorderEdge3, 0);
+            this.groupReturns.Controls.SetChildIndex(this.returnState, 0);
+            this.groupReturns.Controls.SetChildIndex(this.returnProfileIDLabel, 0);
+            this.groupReturns.Controls.SetChildIndex(this.labelReturnWarning, 0);
+            this.groupReturns.Controls.SetChildIndex(this.pictureBoxReturnWarning, 0);
+            this.groupReturns.Controls.SetChildIndex(this.includeReturnState, 0);
+            this.groupReturns.Controls.SetChildIndex(this.applyReturnProfileState, 0);
             this.groupReturns.Controls.SetChildIndex(this.includeReturn, 0);
             this.groupReturns.Controls.SetChildIndex(this.applyReturnProfile, 0);
             this.groupReturns.Controls.SetChildIndex(this.returnProfileID, 0);
@@ -174,12 +195,15 @@
             // groupInsurance
             // 
             this.groupInsurance.Location = new System.Drawing.Point(8, 427);
+            this.groupInsurance.Size = new System.Drawing.Size(400, 82);
             this.groupInsurance.TabIndex = 3;
+            this.groupInsurance.Controls.SetChildIndex(this.kryptonBorderEdge4, 0);
             this.groupInsurance.Controls.SetChildIndex(this.insuranceControl, 0);
             // 
             // groupExpressMail
             // 
             this.groupExpressMail.Location = new System.Drawing.Point(8, 761);
+            this.groupExpressMail.Size = new System.Drawing.Size(400, 53);
             this.groupExpressMail.TabIndex = 6;
             // 
             // labelAccount
@@ -271,8 +295,20 @@
             // 
             // groupBoxRubberStamps
             // 
-            this.groupBoxRubberStamps.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBoxRubberStamps.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxRubberStamps.Controls.Add(this.stateGroupCode);
+            this.groupBoxRubberStamps.Controls.Add(this.GroupCodeLabel);
+            this.groupBoxRubberStamps.Controls.Add(this.GroupCodeToken);
+            this.groupBoxRubberStamps.Controls.Add(this.labelReferenceID4);
+            this.groupBoxRubberStamps.Controls.Add(this.stateReferenceID4);
+            this.groupBoxRubberStamps.Controls.Add(this.labelReferenceID3);
+            this.groupBoxRubberStamps.Controls.Add(this.stateReferenceID3);
+            this.groupBoxRubberStamps.Controls.Add(this.stateReferenceID2);
+            this.groupBoxRubberStamps.Controls.Add(this.labelReferenceID2);
+            this.groupBoxRubberStamps.Controls.Add(this.referenceID4);
+            this.groupBoxRubberStamps.Controls.Add(this.referenceID3);
+            this.groupBoxRubberStamps.Controls.Add(this.referenceID2);
             this.groupBoxRubberStamps.Controls.Add(this.stateReferenceID);
             this.groupBoxRubberStamps.Controls.Add(this.stateRubberStamp3);
             this.groupBoxRubberStamps.Controls.Add(this.stateRubberStamp2);
@@ -290,10 +326,60 @@
             this.groupBoxRubberStamps.Controls.Add(this.labelRubberStamp1);
             this.groupBoxRubberStamps.Location = new System.Drawing.Point(8, 574);
             this.groupBoxRubberStamps.Name = "groupBoxRubberStamps";
-            this.groupBoxRubberStamps.Size = new System.Drawing.Size(411, 180);
+            this.groupBoxRubberStamps.Size = new System.Drawing.Size(400, 304);
             this.groupBoxRubberStamps.TabIndex = 5;
             this.groupBoxRubberStamps.TabStop = false;
             this.groupBoxRubberStamps.Text = "Rubber Stamps";
+            // 
+            // labelReferenceID
+            // 
+            this.labelReferenceID.AutoSize = true;
+            this.labelReferenceID.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID.Location = new System.Drawing.Point(58, 134);
+            this.labelReferenceID.Name = "labelReferenceID";
+            this.labelReferenceID.Size = new System.Drawing.Size(75, 13);
+            this.labelReferenceID.TabIndex = 93;
+            this.labelReferenceID.Text = "Reference ID:";
+            // 
+            // labelReferenceID2
+            // 
+            this.labelReferenceID2.AutoSize = true;
+            this.labelReferenceID2.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID2.Location = new System.Drawing.Point(48, 184);
+            this.labelReferenceID2.Name = "labelReferenceID2";
+            this.labelReferenceID2.Size = new System.Drawing.Size(84, 13);
+            this.labelReferenceID2.TabIndex = 99;
+            this.labelReferenceID2.Text = "Reference ID 2:";
+            // 
+            // labelReferenceID3
+            // 
+            this.labelReferenceID3.AutoSize = true;
+            this.labelReferenceID3.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID3.Location = new System.Drawing.Point(48, 214);
+            this.labelReferenceID3.Name = "labelReferenceID3";
+            this.labelReferenceID3.Size = new System.Drawing.Size(84, 13);
+            this.labelReferenceID3.TabIndex = 102;
+            this.labelReferenceID3.Text = "Reference ID 3:";
+            // 
+            // labelReferenceID4
+            // 
+            this.labelReferenceID4.AutoSize = true;
+            this.labelReferenceID4.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID4.Location = new System.Drawing.Point(48, 243);
+            this.labelReferenceID4.Name = "labelReferenceID4";
+            this.labelReferenceID4.Size = new System.Drawing.Size(84, 13);
+            this.labelReferenceID4.TabIndex = 104;
+            this.labelReferenceID4.Text = "Reference ID 4:";
+            // 
+            // GroupCodeLabel
+            // 
+            this.GroupCodeLabel.AutoSize = true;
+            this.GroupCodeLabel.BackColor = System.Drawing.Color.White;
+            this.GroupCodeLabel.Location = new System.Drawing.Point(63, 277);
+            this.GroupCodeLabel.Name = "GroupCodeLabel";
+            this.GroupCodeLabel.Size = new System.Drawing.Size(68, 13);
+            this.GroupCodeLabel.TabIndex = 106;
+            this.GroupCodeLabel.Text = "Group Code:";
             // 
             // stateReferenceID
             // 
@@ -303,6 +389,87 @@
             this.stateReferenceID.Size = new System.Drawing.Size(15, 14);
             this.stateReferenceID.TabIndex = 6;
             this.stateReferenceID.UseVisualStyleBackColor = true;
+            // 
+            // stateReferenceID2
+            // 
+            this.stateReferenceID2.AutoSize = true;
+            this.stateReferenceID2.Location = new System.Drawing.Point(9, 187);
+            this.stateReferenceID2.Name = "stateReferenceID2";
+            this.stateReferenceID2.Size = new System.Drawing.Size(15, 14);
+            this.stateReferenceID2.TabIndex = 100;
+            this.stateReferenceID2.UseVisualStyleBackColor = true;
+            // 
+            // stateReferenceID3
+            // 
+            this.stateReferenceID3.AutoSize = true;
+            this.stateReferenceID3.Location = new System.Drawing.Point(9, 214);
+            this.stateReferenceID3.Name = "stateReferenceID3";
+            this.stateReferenceID3.Size = new System.Drawing.Size(15, 14);
+            this.stateReferenceID3.TabIndex = 101;
+            this.stateReferenceID3.UseVisualStyleBackColor = true;
+            // 
+            // stateReferenceID4
+            // 
+            this.stateReferenceID4.AutoSize = true;
+            this.stateReferenceID4.Location = new System.Drawing.Point(9, 243);
+            this.stateReferenceID4.Name = "stateReferenceID4";
+            this.stateReferenceID4.Size = new System.Drawing.Size(15, 14);
+            this.stateReferenceID4.TabIndex = 103;
+            this.stateReferenceID4.UseVisualStyleBackColor = true;
+            // 
+            // stateGroupCode
+            // 
+            this.stateGroupCode.AutoSize = true;
+            this.stateGroupCode.Location = new System.Drawing.Point(9, 277);
+            this.stateGroupCode.Name = "stateGroupCode";
+            this.stateGroupCode.Size = new System.Drawing.Size(15, 14);
+            this.stateGroupCode.TabIndex = 107;
+            this.stateGroupCode.UseVisualStyleBackColor = true;
+            // 
+            // referenceID
+            // 
+            this.referenceID.Location = new System.Drawing.Point(139, 131);
+            this.referenceID.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID.Name = "referenceID";
+            this.referenceID.Size = new System.Drawing.Size(236, 21);
+            this.referenceID.TabIndex = 7;
+            // 
+            // referenceID2
+            // 
+            this.referenceID2.Location = new System.Drawing.Point(138, 180);
+            this.referenceID2.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID2, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID2.Name = "referenceID2";
+            this.referenceID2.Size = new System.Drawing.Size(236, 21);
+            this.referenceID2.TabIndex = 96;
+            // 
+            // referenceID3
+            // 
+            this.referenceID3.Location = new System.Drawing.Point(139, 208);
+            this.referenceID3.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID3, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID3.Name = "referenceID3";
+            this.referenceID3.Size = new System.Drawing.Size(236, 21);
+            this.referenceID3.TabIndex = 97;
+            // 
+            // referenceID4
+            // 
+            this.referenceID4.Location = new System.Drawing.Point(139, 236);
+            this.referenceID4.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID4, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID4.Name = "referenceID4";
+            this.referenceID4.Size = new System.Drawing.Size(236, 21);
+            this.referenceID4.TabIndex = 98;
+            // 
+            // GroupCodeToken
+            // 
+            this.GroupCodeToken.Location = new System.Drawing.Point(139, 277);
+            this.GroupCodeToken.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.GroupCodeToken, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.GroupCodeToken.Name = "GroupCodeToken";
+            this.GroupCodeToken.Size = new System.Drawing.Size(236, 21);
+            this.GroupCodeToken.TabIndex = 105;
             // 
             // stateRubberStamp3
             // 
@@ -333,15 +500,15 @@
             // 
             // kryptonBorderEdge31
             // 
-            this.kryptonBorderEdge31.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge31.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge31.AutoSize = false;
             this.kryptonBorderEdge31.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge31.Location = new System.Drawing.Point(29, 20);
             this.kryptonBorderEdge31.Name = "kryptonBorderEdge31";
-            this.kryptonBorderEdge31.Size = new System.Drawing.Size(1, 150);
+            this.kryptonBorderEdge31.Size = new System.Drawing.Size(1, 270);
             this.kryptonBorderEdge31.Text = "kryptonBorderEdge1";
-            //
+            // 
             // kryptonBorderEdge3
             //
             this.kryptonBorderEdge3.Size = new System.Drawing.Size(1, 109);
@@ -351,37 +518,18 @@
             this.labelReferenceIdInfo.AutoSize = true;
             this.labelReferenceIdInfo.BackColor = System.Drawing.Color.White;
             this.labelReferenceIdInfo.ForeColor = System.Drawing.Color.DimGray;
-            this.labelReferenceIdInfo.Location = new System.Drawing.Point(136, 155);
+            this.labelReferenceIdInfo.Location = new System.Drawing.Point(125, 155);
             this.labelReferenceIdInfo.Name = "labelReferenceIdInfo";
             this.labelReferenceIdInfo.Size = new System.Drawing.Size(247, 13);
             this.labelReferenceIdInfo.TabIndex = 95;
             this.labelReferenceIdInfo.Text = "This is used to lookup the shipment in Endicia logs.";
-            // 
-            // referenceID
-            // 
-            this.referenceID.Location = new System.Drawing.Point(139, 131);
-            this.referenceID.MaxLength = 32767;
-            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
-            this.referenceID.Name = "referenceID";
-            this.referenceID.Size = new System.Drawing.Size(236, 21);
-            this.referenceID.TabIndex = 7;
-            // 
-            // labelReferenceID
-            // 
-            this.labelReferenceID.AutoSize = true;
-            this.labelReferenceID.BackColor = System.Drawing.Color.White;
-            this.labelReferenceID.Location = new System.Drawing.Point(58, 134);
-            this.labelReferenceID.Name = "labelReferenceID";
-            this.labelReferenceID.Size = new System.Drawing.Size(75, 13);
-            this.labelReferenceID.TabIndex = 93;
-            this.labelReferenceID.Text = "Reference ID:";
             // 
             // labelRubberStampWarning
             // 
             this.labelRubberStampWarning.AutoSize = true;
             this.labelRubberStampWarning.BackColor = System.Drawing.Color.White;
             this.labelRubberStampWarning.ForeColor = System.Drawing.Color.DimGray;
-            this.labelRubberStampWarning.Location = new System.Drawing.Point(69, 100);
+            this.labelRubberStampWarning.Location = new System.Drawing.Point(45, 96);
             this.labelRubberStampWarning.Name = "labelRubberStampWarning";
             this.labelRubberStampWarning.Size = new System.Drawing.Size(328, 13);
             this.labelRubberStampWarning.TabIndex = 92;
@@ -455,16 +603,16 @@
             this.groupParcelSelect.Controls.Add(this.labelSortType);
             this.groupParcelSelect.Controls.Add(this.sortType);
             this.groupParcelSelect.Controls.Add(this.stateSortType);
-            this.groupParcelSelect.Location = new System.Drawing.Point(8, 822);
+            this.groupParcelSelect.Location = new System.Drawing.Point(8, 878);
             this.groupParcelSelect.Name = "groupParcelSelect";
-            this.groupParcelSelect.Size = new System.Drawing.Size(417, 90);
+            this.groupParcelSelect.Size = new System.Drawing.Size(366, 90);
             this.groupParcelSelect.TabIndex = 7;
             this.groupParcelSelect.TabStop = false;
             this.groupParcelSelect.Text = "Parcel Select";
             // 
             // kryptonBorderEdge6
             // 
-            this.kryptonBorderEdge6.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge6.AutoSize = false;
             this.kryptonBorderEdge6.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -549,14 +697,14 @@
             // 
             // groupLabels
             // 
-            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupLabels.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
             this.groupLabels.Controls.Add(this.requestedLabelFormatState);
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
             this.groupLabels.Location = new System.Drawing.Point(8, 364);
             this.groupLabels.Name = "groupLabels";
-            this.groupLabels.Size = new System.Drawing.Size(411, 58);
+            this.groupLabels.Size = new System.Drawing.Size(360, 58);
             this.groupLabels.TabIndex = 2;
             this.groupLabels.TabStop = false;
             this.groupLabels.Text = "Labels";
@@ -581,7 +729,7 @@
             // 
             // kryptonBorderEdge11
             // 
-            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.kryptonBorderEdge11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.kryptonBorderEdge11.AutoSize = false;
             this.kryptonBorderEdge11.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
@@ -609,9 +757,10 @@
             this.groupInsurance.PerformLayout();
             this.groupExpressMail.ResumeLayout(false);
             this.groupExpressMail.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxReturnWarning)).EndInit();
             this.groupBoxRubberStamps.ResumeLayout(false);
             this.groupBoxRubberStamps.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.groupParcelSelect.ResumeLayout(false);
             this.groupParcelSelect.PerformLayout();
             this.groupLabels.ResumeLayout(false);
@@ -662,5 +811,17 @@
         protected System.Windows.Forms.GroupBox groupLabels;
         protected ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl requestedLabelFormat;
         protected System.Windows.Forms.CheckBox requestedLabelFormatState;
+        private System.Windows.Forms.CheckBox stateGroupCode;
+        private System.Windows.Forms.Label GroupCodeLabel;
+        private Templates.Tokens.TemplateTokenTextBox GroupCodeToken;
+        private System.Windows.Forms.Label labelReferenceID4;
+        private System.Windows.Forms.CheckBox stateReferenceID4;
+        private System.Windows.Forms.Label labelReferenceID3;
+        private System.Windows.Forms.CheckBox stateReferenceID3;
+        private System.Windows.Forms.CheckBox stateReferenceID2;
+        private System.Windows.Forms.Label labelReferenceID2;
+        private Templates.Tokens.TemplateTokenTextBox referenceID4;
+        private Templates.Tokens.TemplateTokenTextBox referenceID3;
+        private Templates.Tokens.TemplateTokenTextBox referenceID2;
     }
 }

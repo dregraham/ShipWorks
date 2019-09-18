@@ -12,6 +12,8 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Warehouse.StoreData;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc
@@ -19,8 +21,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
     public class OdbcStoreSettingsTelemetryCollectorTest : IDisposable
     {
         private readonly AutoMock mock;
-        readonly OdbcStoreEntity odbcStore;
-
+        readonly OdbcStoreEntity odbcStoreEntity;
+        private readonly OdbcStore odbcStore;
         private const string UploadDriverName = "uploadDriver";
         private const string ImportDriverName = "importDriver";
         private readonly string mapRecordIdentifierSource = "externalColumnName";
@@ -34,13 +36,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
 
         public OdbcStoreSettingsTelemetryCollectorTest()
         {
-            odbcStore = new OdbcStoreEntity()
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            odbcStoreEntity = new OdbcStoreEntity()
             {
                 ImportConnectionString = "not a null string",
                 UploadConnectionString = "also not null"
             };
 
-            mock = AutoMock.GetLoose();
+            odbcStore = new OdbcStore();
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(odbcStoreEntity))
+                .Returns(odbcStore);
+
 
             trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
 
@@ -75,7 +83,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             trackedDurationEventMock.Setup(e => e.AddProperty("Import.Driver", It.IsAny<string>())).Throws(new Exception("the message"));
 
             OdbcStoreSettingsTelemetryCollector testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Error", "the message"));
         }
@@ -85,7 +93,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
 
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.Driver", ImportDriverName));
         }
@@ -93,10 +101,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CollectTelemetry_ImportDriverSetToNone_WhenImportConnectionStringIsEmpty()
         {
-            odbcStore.ImportConnectionString = string.Empty;
+            odbcStoreEntity.ImportConnectionString = string.Empty;
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
 
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.Driver", "None"));
         }
@@ -107,10 +115,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcColumnSourceType.Table)]
         public void CollectTelemetry_ImportColumnSourceTypeSetFromOdbcStore(OdbcColumnSourceType sourceType)
         {
-            odbcStore.ImportColumnSourceType = (int) sourceType;
+            odbcStoreEntity.ImportColumnSourceType = (int) sourceType;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.QueryType", EnumHelper.GetApiValue(sourceType)));
         }
@@ -118,10 +126,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CollectTelemetry_ImportColumnSourceTypeSetToNone_WhenDriveIsNone()
         {
-            odbcStore.ImportConnectionString = string.Empty;
+            odbcStoreEntity.ImportConnectionString = string.Empty;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.QueryType", "None"));
         }
@@ -129,11 +137,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CollectTelemetry_IsSingleLineSetToUnknown_WhenNoOrderNumberEntry()
         {
+            odbcStore.ImportOrderItemStrategy = (int) OdbcImportOrderItemStrategy.SingleLine;
             importFieldMapMock.Setup(m => m.FindEntriesBy(It.Is<EntityField2>(f => f.Name == "OrderNumber"), true))
                 .Returns(() => new IOdbcFieldMapEntry[0]);
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "Unknown"));
         }
@@ -142,7 +151,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CollectTelemetry_IsSingleLineSetToYes_WhenOneItemPerOrder_AndRecordIdentifierSourceEqualsOrderNumberExternalFieldColumnName()
         {
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "Single line"));
         }
@@ -153,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             maxEntryIndex = 1;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "Multi-line"));
         }
@@ -163,7 +172,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             orderNumberExternalColumnName = "AnotherName";
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "Multi-line"));
         }
@@ -171,9 +180,9 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [Fact]
         public void CollectTelemetry_OrderItemDataStructure_SetToNone_WhenImportDriveIsNone()
         {
-            odbcStore.ImportConnectionString = string.Empty;
+            odbcStoreEntity.ImportConnectionString = string.Empty;
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "None"));
         }
@@ -184,7 +193,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             MockEmptyFieldMap();
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.OrderItemDataStructure", "None"));
         }
@@ -195,10 +204,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcShipmentUploadStrategy.UseShipmentDataSource)]
         public void CollectTelemetry_UploadStrategyTypeSetFromOdbcStore(OdbcShipmentUploadStrategy sourceType)
         {
-            odbcStore.UploadStrategy = (int) sourceType;
+            OdbcStore store = new OdbcStore();
+            store.UploadStrategy = (int) sourceType;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(It.IsAny<OdbcStoreEntity>())).Returns(store);
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Upload.Strategy", EnumHelper.GetApiValue(sourceType)));
         }
@@ -211,7 +224,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         {
             odbcStore.UploadStrategy = (int) strategy;
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Upload.Driver", expectedResult), Times.Once);
         }
@@ -224,11 +237,10 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         public void CollectTelemetry_UploadColumnSourceTypeSetFromOdbcStore(OdbcShipmentUploadStrategy strategy, OdbcColumnSourceType sourceType, string expectedResult)
         {
             odbcStore.UploadStrategy = (int) strategy;
-
             odbcStore.UploadColumnSourceType = (int) sourceType;
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Upload.QueryType", expectedResult));
         }
@@ -239,10 +251,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
         [InlineData(OdbcImportStrategy.OnDemand)]
         public void CollectTelemetry_ImportStrategyTypeSetFromOdbcStore(OdbcImportStrategy sourceType)
         {
-            odbcStore.ImportStrategy = (int) sourceType;
+            OdbcStore store = new OdbcStore();
+            store.ImportStrategy = (int) sourceType;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(It.IsAny<OdbcStoreEntity>())).Returns(store);
 
             var testObject = mock.Create<OdbcStoreSettingsTelemetryCollector>();
-            testObject.CollectTelemetry(odbcStore, trackedDurationEventMock.Object);
+            testObject.CollectTelemetry(odbcStoreEntity, trackedDurationEventMock.Object);
 
             trackedDurationEventMock.Verify(e => e.AddProperty("Import.Strategy", EnumHelper.GetApiValue(sourceType)));
         }
@@ -256,8 +272,8 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc
             importDataSource.Setup(d => d.Driver).Returns(() => ImportDriverName);
 
             var dataSourceServiceMock = mock.Mock<IOdbcDataSourceService>();
-            dataSourceServiceMock.Setup(s => s.GetUploadDataSource(odbcStore)).Returns(uploadDataSource.Object);
-            dataSourceServiceMock.Setup(s => s.GetImportDataSource(odbcStore)).Returns(importDataSource.Object);
+            dataSourceServiceMock.Setup(s => s.GetUploadDataSource(odbcStoreEntity)).Returns(uploadDataSource.Object);
+            dataSourceServiceMock.Setup(s => s.GetImportDataSource(odbcStoreEntity)).Returns(importDataSource.Object);
         }
 
         private void MockFieldMap()

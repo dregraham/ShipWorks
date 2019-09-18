@@ -979,7 +979,11 @@
       <EntityDefinition Name="EndiciaProfile" ObjectID="2956325f-4467-416a-bc73-9548e4f2fe47">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" IsOptional="true" FieldIndex="1" />
+          <Field Name="GroupCode" Type="string" IsOptional="true" MaxLength="300" FieldIndex="8" />
           <Field Name="ReferenceID" Type="string" IsOptional="true" MaxLength="300" FieldIndex="3" />
+          <Field Name="ReferenceID2" Type="string" IsOptional="true" MaxLength="300" FieldIndex="5" />
+          <Field Name="ReferenceID3" Type="string" IsOptional="true" MaxLength="300" FieldIndex="6" />
+          <Field Name="ReferenceID4" Type="string" IsOptional="true" MaxLength="300" FieldIndex="7" />
           <Field Name="ScanBasedReturn" Type="bool" IsOptional="true" FieldIndex="4" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
           <Field Name="StealthPostage" Type="bool" IsOptional="true" FieldIndex="2" />
@@ -999,9 +1003,13 @@
       <EntityDefinition Name="EndiciaShipment" ObjectID="15beb8bc-2590-445f-8cf7-e31b1efb4553">
         <Fields>
           <Field Name="EndiciaAccountID" Type="long" FieldIndex="1" />
+          <Field Name="GroupCode" Type="string" MaxLength="300" FieldIndex="14" />
           <Field Name="Insurance" Type="bool" FieldIndex="10" />
           <Field Name="OriginalEndiciaAccountID" Type="long" IsOptional="true" FieldIndex="2" />
           <Field Name="ReferenceID" Type="string" MaxLength="300" FieldIndex="4" />
+          <Field Name="ReferenceID2" Type="string" MaxLength="300" FieldIndex="11" />
+          <Field Name="ReferenceID3" Type="string" MaxLength="300" FieldIndex="12" />
+          <Field Name="ReferenceID4" Type="string" MaxLength="300" FieldIndex="13" />
           <Field Name="RefundFormID" Type="int" IsOptional="true" FieldIndex="6" />
           <Field Name="RequestedLabelFormat" Type="int" FieldIndex="9" />
           <Field Name="ScanBasedReturn" Type="bool" FieldIndex="8" />
@@ -1892,6 +1900,7 @@
           <Field Name="UploadConnectionString" Type="string" MaxLength="2048" FieldIndex="9" />
           <Field Name="UploadMap" Type="string" MaxLength="2147483647" FieldIndex="6" />
           <Field Name="UploadStrategy" Type="int" Precision="10" FieldIndex="5" />
+          <Field Name="WarehouseLastModified" Type="datetime" IsOptional="true" Precision="7" FieldIndex="11" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OnTracAccount" ObjectID="79269e79-c65c-4a0e-8623-250621f9b71b">
@@ -2838,6 +2847,7 @@
           <Field Name="ApiKey" Type="string" MaxLength="100" FieldIndex="4" />
           <Field Name="Password" Type="string" MaxLength="100" FieldIndex="5" />
           <Field Name="ShopifyAccessToken" Type="string" MaxLength="255" FieldIndex="2" />
+          <Field Name="ShopifyFulfillmentLocation" Type="long" Precision="19" FieldIndex="7" />
           <Field Name="ShopifyNotifyCustomer" Type="bool" FieldIndex="6" />
           <Field Name="ShopifyRequestedShippingOption" Type="int" FieldIndex="3" />
           <Field Name="ShopifyShopDisplayName" Type="string" MaxLength="100" FieldIndex="1" />
@@ -4563,7 +4573,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-02T13:55:18.0622271Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-21T15:39:11.0799313Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5631,6 +5641,10 @@
                     <Field Name="StealthPostage" Ordinal="3" IsOptional="true" DbType="2" />
                     <Field Name="ReferenceID" Ordinal="4" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ScanBasedReturn" Ordinal="5" IsOptional="true" DbType="2" />
+                    <Field Name="ReferenceID2" Ordinal="6" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ReferenceID3" Ordinal="7" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="ReferenceID4" Ordinal="8" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="GroupCode" Ordinal="9" IsOptional="true" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaScanForm">
@@ -5671,6 +5685,10 @@
                     <Field Name="ScanBasedReturn" Ordinal="9" DbType="2" />
                     <Field Name="RequestedLabelFormat" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="Insurance" Ordinal="11" DbType="2" />
+                    <Field Name="ReferenceID2" Ordinal="12" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="ReferenceID3" Ordinal="13" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="ReferenceID4" Ordinal="14" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
+                    <Field Name="GroupCode" Ordinal="15" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="300" />
                   </Fields>
                 </Table>
                 <Table Name="EtsyOrder">
@@ -7308,6 +7326,7 @@
                     <Field Name="UploadColumnSourceType" Ordinal="10" DbType="8" Precision="10" />
                     <Field Name="UploadColumnSource" Ordinal="11" DbType="12" Length="2147483647" />
                     <Field Name="UploadConnectionString" Ordinal="12" DbType="12" Length="2048" />
+                    <Field Name="WarehouseLastModified" Ordinal="13" IsOptional="true" DbType="29" Precision="7" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracAccount">
@@ -8632,6 +8651,7 @@
                     <Field Name="ApiKey" Ordinal="6" DbType="12" Length="100" />
                     <Field Name="Password" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="ShopifyNotifyCustomer" Ordinal="8" DbType="2" />
+                    <Field Name="ShopifyFulfillmentLocation" Ordinal="9" HasDefaultValue="true" DefaultValue="(0)" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ShopSiteStore">
@@ -11710,7 +11730,11 @@
         <EntityMapping EntityName=":EndiciaProfile" TargetName="ShipWorksLocal:dbo:EndiciaProfile">
           <FieldMappings>
             <FieldMapping FieldName="EndiciaAccountID" TargetFieldName="EndiciaAccountID" />
+            <FieldMapping FieldName="GroupCode" TargetFieldName="GroupCode" />
             <FieldMapping FieldName="ReferenceID" TargetFieldName="ReferenceID" />
+            <FieldMapping FieldName="ReferenceID2" TargetFieldName="ReferenceID2" />
+            <FieldMapping FieldName="ReferenceID3" TargetFieldName="ReferenceID3" />
+            <FieldMapping FieldName="ReferenceID4" TargetFieldName="ReferenceID4" />
             <FieldMapping FieldName="ScanBasedReturn" TargetFieldName="ScanBasedReturn" />
             <FieldMapping FieldName="ShippingProfileID" TargetFieldName="ShippingProfileID" />
             <FieldMapping FieldName="StealthPostage" TargetFieldName="StealthPostage" />
@@ -11730,9 +11754,13 @@
         <EntityMapping EntityName=":EndiciaShipment" TargetName="ShipWorksLocal:dbo:EndiciaShipment">
           <FieldMappings>
             <FieldMapping FieldName="EndiciaAccountID" TargetFieldName="EndiciaAccountID" />
+            <FieldMapping FieldName="GroupCode" TargetFieldName="GroupCode" />
             <FieldMapping FieldName="Insurance" TargetFieldName="Insurance" />
             <FieldMapping FieldName="OriginalEndiciaAccountID" TargetFieldName="OriginalEndiciaAccountID" />
             <FieldMapping FieldName="ReferenceID" TargetFieldName="ReferenceID" />
+            <FieldMapping FieldName="ReferenceID2" TargetFieldName="ReferenceID2" />
+            <FieldMapping FieldName="ReferenceID3" TargetFieldName="ReferenceID3" />
+            <FieldMapping FieldName="ReferenceID4" TargetFieldName="ReferenceID4" />
             <FieldMapping FieldName="RefundFormID" TargetFieldName="RefundFormID" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
             <FieldMapping FieldName="ScanBasedReturn" TargetFieldName="ScanBasedReturn" />
@@ -12654,6 +12682,7 @@
             <FieldMapping FieldName="UploadConnectionString" TargetFieldName="UploadConnectionString" />
             <FieldMapping FieldName="UploadMap" TargetFieldName="UploadMap" />
             <FieldMapping FieldName="UploadStrategy" TargetFieldName="UploadStrategy" />
+            <FieldMapping FieldName="WarehouseLastModified" TargetFieldName="WarehouseLastModified" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":OnTracAccount" TargetName="ShipWorksLocal:dbo:OnTracAccount">
@@ -13608,6 +13637,7 @@
             <FieldMapping FieldName="ApiKey" TargetFieldName="ApiKey" />
             <FieldMapping FieldName="Password" TargetFieldName="Password" />
             <FieldMapping FieldName="ShopifyAccessToken" TargetFieldName="ShopifyAccessToken" />
+            <FieldMapping FieldName="ShopifyFulfillmentLocation" TargetFieldName="ShopifyFulfillmentLocation" />
             <FieldMapping FieldName="ShopifyNotifyCustomer" TargetFieldName="ShopifyNotifyCustomer" />
             <FieldMapping FieldName="ShopifyRequestedShippingOption" TargetFieldName="ShopifyRequestedShippingOption" />
             <FieldMapping FieldName="ShopifyShopDisplayName" TargetFieldName="ShopifyShopDisplayName" />

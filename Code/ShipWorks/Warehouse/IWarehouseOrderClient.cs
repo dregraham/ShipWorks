@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -17,6 +19,11 @@ namespace ShipWorks.Warehouse
         /// </summary>
         Task<WarehouseGetOrdersResponse> GetOrders(string warehouseID, string warehouseStoreID, long mustRecentSequence,
                                                     StoreTypeCode storeType, Guid batchId);
+
+        /// <summary>
+        /// Upload a order to the hub
+        /// </summary>
+        Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> UploadOrders(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch);
 
         /// <summary>
         /// Send a shipment to the hub

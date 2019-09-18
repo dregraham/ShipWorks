@@ -3,6 +3,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using System;
 using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataSource
 {
@@ -13,16 +15,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
     {
         private readonly Func<IOdbcDataSource> dataSourceFactory;
         private readonly IOdbcDataSourceRepository dataSourceRepository;
+        private readonly IOdbcStoreRepository storeRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="dataSourceFactory"></param>
         /// <param name="dataSourceRepository"></param>
-        public OdbcDataSourceService(Func<IOdbcDataSource> dataSourceFactory, IOdbcDataSourceRepository dataSourceRepository)
+        public OdbcDataSourceService(
+            Func<IOdbcDataSource> dataSourceFactory, 
+            IOdbcDataSourceRepository dataSourceRepository, 
+            IOdbcStoreRepository storeRepository)
         {
             this.dataSourceFactory = dataSourceFactory;
             this.dataSourceRepository = dataSourceRepository;
+            this.storeRepository = storeRepository;
         }
 
         /// <summary>
@@ -65,20 +72,20 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         public IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-
-            if (store.UploadStrategy == (int)OdbcShipmentUploadStrategy.DoNotUpload)
+            OdbcStore odbcStore = storeRepository.GetStore(store);
+            
+            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload)
             {
                 return null;
             }
 
             IOdbcDataSource dataSource = dataSourceFactory();
 
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource)
+            if (odbcStore.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseImportDataSource && !string.IsNullOrEmpty(store.ImportConnectionString))
             {
                 dataSource.Restore(store.ImportConnectionString);
             }
-
-            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.UseShipmentDataSource)
+            else
             {
                 dataSource.Restore(store.UploadConnectionString);
             }

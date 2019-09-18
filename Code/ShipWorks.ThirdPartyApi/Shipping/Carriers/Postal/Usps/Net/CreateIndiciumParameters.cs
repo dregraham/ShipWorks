@@ -10,11 +10,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public object Item { get; set; }
         public string IntegratorTxID { get; set; }
         public string TrackingNumber { get; set; }
-        public RateV25 Rate { get; set; }
+        public RateV31 Rate { get; set; }
         public Address From { get; set; }
         public Address To { get; set; }
         public string CustomerID { get; set; }
-        public CustomsV4 Customs { get; set; }
+        public CustomsV5 Customs { get; set; }
         public bool SampleOnly { get; set; }
         public PostageMode PostageMode { get; set; }
         public ImageType ImageType { get; set; }
@@ -49,5 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         public ImageDpi ImageDpi { get; set; }
         public string RateToken { get; set; }
         public string OrderId { get; set; }
+        public string OutboundTransactionID { get; internal set; }
+        public string Reference1 { get; internal set; }
     }
 }
