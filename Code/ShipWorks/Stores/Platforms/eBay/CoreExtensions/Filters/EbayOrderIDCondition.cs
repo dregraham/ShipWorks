@@ -6,6 +6,9 @@ using ShipWorks.Filters.Content.SqlGeneration;
 
 namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
 {
+    /// <summary>
+    /// Condition for the ebay order id field
+    /// </summary>
     [ConditionElement("eBay Order ID", "EbayOrder.EbayOrderID")]
     [ConditionStoreType(StoreTypeCode.Ebay)]
     class EbayOrderIDCondition : StringCondition
