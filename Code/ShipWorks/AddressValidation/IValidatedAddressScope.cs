@@ -1,6 +1,6 @@
-﻿using ShipWorks.Data.Connection;
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Collections.Generic;
 
 namespace ShipWorks.AddressValidation
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save the stored validated addresses to the database
         /// </summary>
-        void FlushAddressesToDatabase(SqlAdapter sqlAdapter, long entityId, string prefix);
+        void FlushAddressesToDatabase(ISqlAdapter sqlAdapter, long entityId, string prefix);
 
         /// <summary>
         /// Save the stored validated addresses to the database
