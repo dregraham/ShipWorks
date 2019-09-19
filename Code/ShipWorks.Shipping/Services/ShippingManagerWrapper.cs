@@ -25,6 +25,7 @@ namespace ShipWorks.Shipping.Services
         private readonly IDataProvider dataProvider;
         private readonly IReturnItemRepository returnItemRepository;
         private readonly ILog log;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         /// <summary>
         /// Constructor
@@ -34,13 +35,15 @@ namespace ShipWorks.Shipping.Services
             IValidatedAddressScope validatedAddressScope,
             IDataProvider dataProvider,
             IReturnItemRepository returnItemRepository,
-            Func<Type, ILog> getLogger)
+            Func<Type, ILog> getLogger,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.validatedAddressScope = validatedAddressScope;
             this.dataProvider = dataProvider;
             this.returnItemRepository = returnItemRepository;
             log = getLogger(GetType());
+            this.sqlAdapterFactory = sqlAdapterFactory;
         }
 
         /// <summary>
@@ -214,7 +217,7 @@ namespace ShipWorks.Shipping.Services
 
                     ShippingManager.SaveShipment(shipment);
 
-                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
                     {
                         validatedAddressScope?.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
                         sqlAdapter.Commit();
@@ -355,7 +358,7 @@ namespace ShipWorks.Shipping.Services
             else
             {
                 // Ensure order items are loaded to the order
-                using (SqlAdapter adapter = new SqlAdapter())
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
                     adapter.FetchEntityCollection(order.OrderItems, order.GetRelationInfoOrderItems());
                 }
