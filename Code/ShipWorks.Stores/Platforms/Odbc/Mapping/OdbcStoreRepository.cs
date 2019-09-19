@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         private readonly IStoreDtoFactory odbcStoreDtoFactory;
         private readonly TimeSpan refreshInterval = TimeSpan.FromMinutes(15);
 
-        private readonly ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore> storeCache;
+        private readonly ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore<OdbcStore, OdbcStoreEntity>> storeCache;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -50,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
             odbcStoreDtoFactory = storeDtoFactories[StoreTypeCode.Odbc];
 
             LambdaComparer<OdbcStoreEntity> storeComparer = new LambdaComparer<OdbcStoreEntity>((a, b) => a.StoreID == b.StoreID);
-            storeCache = new ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore>(storeComparer);
+            storeCache = new ConcurrentDictionary<OdbcStoreEntity, RefreshingOdbcStore<OdbcStore, OdbcStoreEntity>>(storeComparer);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             if (WarehouseUser && store.WarehouseStoreID.HasValue)
             {
-                if(storeCache.TryGetValue(store, out RefreshingOdbcStore refreshingOdbcStore))
+                if(storeCache.TryGetValue(store, out RefreshingOdbcStore<OdbcStore, OdbcStoreEntity> refreshingOdbcStore))
                 {
                     // If there was a store in the cache return it
                     return refreshingOdbcStore.Store;
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 if (storeFromHub != null)
                 {
                     // Save the store to the cache and return it
-                    storeCache[store] = new RefreshingOdbcStore(storeFromHub, store, GetStoreFromHub, refreshInterval);
+                    storeCache[store] = new RefreshingOdbcStore<OdbcStore, OdbcStoreEntity>(storeFromHub, store, GetStoreFromHub, refreshInterval);
                     return storeFromHub;
                 }
 
@@ -97,11 +97,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
                 OdbcStore storeDto = (OdbcStore) await odbcStoreDtoFactory.Create(store).ConfigureAwait(false);
 
                 // Get the old store, if there is one
-                RefreshingOdbcStore oldStore;
+                RefreshingOdbcStore<OdbcStore, OdbcStoreEntity> oldStore;
                 storeCache.TryGetValue(store, out oldStore);
 
                 // Add or overwrite the value of store
-                storeCache[store] = new RefreshingOdbcStore(storeDto, store, GetStoreFromHub, refreshInterval);
+                storeCache[store] = new RefreshingOdbcStore<OdbcStore, OdbcStoreEntity>(storeDto, store, GetStoreFromHub, refreshInterval);
 
                 // delete the old store, if found.
                 oldStore?.Dispose();

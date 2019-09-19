@@ -7,6 +7,7 @@ using System.Xml.Xsl;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
@@ -14,6 +15,7 @@ using ShipWorks.Data.Import.Xml;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -35,8 +37,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         public GenericFileXmlDownloader(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
-            ISqlAdapterFactory sqlAdapterFactory)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IWarehouseOrderClient warehouseOrderClient,
+            IGenericFileStoreWarehouseRepository genericFileStoreWarehouseRepository,
+            ILicenseService licenseService)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, genericFileStoreWarehouseRepository, licenseService)
         {
 
         }
@@ -47,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         protected override void InitializeDownload()
         {
             // Prepare the transform
-            xslTransform = GenericFileXmlUtility.LoadXslTransform(GenericStore.XmlXsltContent);
+            xslTransform = GenericFileXmlUtility.LoadXslTransform(GenericStoreEntity.XmlXsltContent);
         }
 
         /// <summary>

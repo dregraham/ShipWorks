@@ -8,6 +8,7 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Excel;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
 {
@@ -28,8 +29,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
         public GenericFileExcelDownloader(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
-            ISqlAdapterFactory sqlAdapterFactory)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IWarehouseOrderClient warehouseOrderClient,
+            IGenericFileStoreWarehouseRepository warehouseRepository)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, warehouseRepository)
         {
 
         }
@@ -41,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
         {
             try
             {
-                excelMap = new GenericExcelMap(new GenericSpreadsheetOrderSchema(), GenericStore.FlatImportMap);
+                excelMap = new GenericExcelMap(new GenericSpreadsheetOrderSchema(), GenericStoreEntity.FlatImportMap);
             }
             catch (GenericSpreadsheetException ex)
             {

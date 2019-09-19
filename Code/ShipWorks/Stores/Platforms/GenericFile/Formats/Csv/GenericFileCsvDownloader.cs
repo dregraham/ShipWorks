@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.Data;
@@ -9,6 +10,7 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
 {
@@ -26,11 +28,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public GenericFileCsvDownloader(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
-            ISqlAdapterFactory sqlAdapterFactory)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory, 
+            IWarehouseOrderClient warehouseOrderClient,
+            IGenericFileStoreWarehouseRepository storeWarehouseRepository)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, storeWarehouseRepository)
         {
 
         }
@@ -42,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         {
             try
             {
-                csvMap = new GenericCsvMap(new GenericSpreadsheetOrderSchema(), GenericStore.FlatImportMap);
+                csvMap = new GenericCsvMap(new GenericSpreadsheetOrderSchema(), GenericStoreEntity.FlatImportMap);
             }
             catch (GenericSpreadsheetException ex)
             {

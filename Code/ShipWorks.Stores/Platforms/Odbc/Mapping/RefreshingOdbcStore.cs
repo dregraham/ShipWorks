@@ -13,18 +13,18 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
     /// <summary>
     /// An ODBC store container that holds a store and refreshes it based on the specified timeframe.
     /// </summary>
-    public class RefreshingOdbcStore : IDisposable
+    public class RefreshingOdbcStore<TStoreDto, TStoreEntity> : IDisposable
     {
-        private readonly OdbcStoreEntity storeEntity;
-        private readonly Func<OdbcStoreEntity, Task<OdbcStore>> refreshAction;
+        private readonly TStoreEntity storeEntity;
+        private readonly Func<TStoreEntity, Task<TStoreDto>> refreshAction;
         private readonly Timer timer;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RefreshingOdbcStore(OdbcStore store,
-            OdbcStoreEntity storeEntity,
-            Func<OdbcStoreEntity, Task<OdbcStore>> refreshAction,
+        public RefreshingOdbcStore(TStoreDto store,
+            TStoreEntity storeEntity,
+            Func<TStoreEntity, Task<TStoreDto>> refreshAction,
             TimeSpan timeToRefresh)
         {
             Store = store;
@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         /// <summary>
         /// The store
         /// </summary>
-        public OdbcStore Store { get; private set; }
+        public TStoreDto Store { get; private set; }
 
         /// <summary>
         /// Refreshes the Store
@@ -45,8 +45,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [SuppressMessage("SonarQube", "S3168:Return Task instead", Justification = "This is used as a timer callback")]
         private async void TimerCallback(object state)
         {
-            var store = await refreshAction(storeEntity).ConfigureAwait(false);
-            Store = store ?? Store;
+            TStoreDto store = await refreshAction(storeEntity).ConfigureAwait(false);
+            if (store != null)
+            {
+                Store = store;
+            }
         }
 
         /// <summary>

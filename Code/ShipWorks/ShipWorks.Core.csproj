@@ -1360,6 +1360,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\IGenericWarehouseRepository.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\IGenericFileStoreClient.cs" />
