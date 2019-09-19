@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 try
                 {
-                    bool insureShipSucceeded = EnsureShipmentIsInsured(result, shipment);
+                    bool insureShipSucceeded = EnsureShipmentIsInsured(shipment);
 
                     using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
                     {
@@ -119,6 +119,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                     if (!insureShipSucceeded)
                     {
                         string exceptionMessage = "Insuring the shipment failed. If insurance is required, please void the shipment and try again.";
+
                         return new LabelPersistenceResult(result, shipmentForTango, new InsureShipException(exceptionMessage));
                     }
                 }
@@ -245,7 +246,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Ensure that the shipment is insured by our service, if necessary
         /// </summary>
-        private bool EnsureShipmentIsInsured(ILabelRetrievalResult result, ShipmentEntity shipment)
+        private bool EnsureShipmentIsInsured(ShipmentEntity shipment)
         {
             // Insurance makes multiple web calls so it's done outside of the transaction
             if (insureShipService.IsInsuredByInsureShip(shipment))
@@ -256,7 +257,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 if (insuranceResult.Failure)
                 {
                     ShipmentTypeManager.GetType(shipment).UnsetInsurance(shipment);
-                    log.Error($"Shipment {shipment.ShipmentID}  - Insure Shipment Failed");
+                    log.Error($"Shipment {shipment.ShipmentID}  - Insure Shipment failed with the following error: {insuranceResult.Exception.Message}");
                     return false;
                 }
                 else

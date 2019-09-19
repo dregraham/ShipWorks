@@ -65,7 +65,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Save the stored validated addresses to the database
         /// </summary>
-        public void FlushAddressesToDatabase(SqlAdapter sqlAdapter, long entityId, string prefix)
+        public void FlushAddressesToDatabase(ISqlAdapter sqlAdapter, long entityId, string prefix)
         {
             FlushAddressesToDatabase(new AdapterAddressValidationDataAccess(sqlAdapter), entityId, prefix);
         }
