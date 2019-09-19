@@ -350,7 +350,15 @@ namespace ShipWorks.Shipping.Services
             OrderEntity order = dataProvider.GetEntity(shipment.OrderID) as OrderEntity;
             if (order == null)
             {
-                log.InfoFormat("Order {0} seems to be now deleted.", shipment.OrderID);
+                log.InfoFormat("Order {0} seems to now be deleted.", shipment.OrderID);
+            }
+            else
+            {
+                // Ensure order items are loaded to the order
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.FetchEntityCollection(order.OrderItems, order.GetRelationInfoOrderItems());
+                }
             }
 
             shipment.Order = order;
