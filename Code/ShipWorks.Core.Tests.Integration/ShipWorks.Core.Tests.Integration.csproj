@@ -10,9 +10,6 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <PropertyGroup>
-    <CodeAnalysisRuleSet>..\..\Build\Interapptive.Strict.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug %28No Analyzers%29|AnyCPU'">
     <CodeAnalysisRuleSet>..\..\Build\Empty.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
@@ -28,6 +25,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AddressValidation\TestAddresses.xlsx" />
+    <EmbeddedResource Include="DbBackups\ShipWorks_Bad.bk" />
+    <EmbeddedResource Include="DbBackups\ShipWorks_Good.bk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />

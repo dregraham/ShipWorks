@@ -400,7 +400,7 @@ namespace ShipWorks.Data.Administration
             }
 
             // Make sure nobody else is on this database right now, so that detach will work
-            SqlUtility.SetSingleUser(con);
+            SqlUtility.SetSingleUser(con, con.Database);
 
             // Have to get out of the db to detach
             con.ChangeDatabase("master");

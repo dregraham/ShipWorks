@@ -550,6 +550,10 @@ namespace ShipWorks.Data.Administration
         private void RestoreSqlBackup(BackupDatabase database)
         {
             ProgressItem progress = database.Progress;
+            string sourceDb = null;
+            string sourceLog = null;
+            string targetDb;
+            string targetLog;
 
             // Can't cancel during restore
             progress.CanCancel = false;
@@ -563,8 +567,6 @@ namespace ShipWorks.Data.Administration
                 // Change into the database we are restoring into
                 con.ChangeDatabase(database.DatabaseName);
 
-                string targetDb;
-                string targetLog;
                 GetPhysicalFileLocations(con, out targetDb, out targetLog);
 
                 log.InfoFormat("Data file: {0}", targetDb);
@@ -574,9 +576,6 @@ namespace ShipWorks.Data.Administration
                 {
                     throw new FileNotFoundException("Could not locate physical database files.");
                 }
-
-                string sourceDb = null;
-                string sourceLog = null;
 
                 // We have to move the original logical files to the the file locations we are restoring to.  First we find
                 // the current logical file names.
@@ -627,14 +626,17 @@ namespace ShipWorks.Data.Administration
                 {
                     throw new InvalidOperationException("The logical file groups could not be located in the SQL Server backup.");
                 }
-
-                DbCommand cmdRestore = CreateRestoreCommand(sourceDb, sourceLog, targetDb, targetLog, con);
-                SetupRestoreParameters(database, cmdRestore);
-                ExecuteSqlRestore(con, cmdRestore, database.DatabaseName, progress);
-
-                progress.Detail = "Done";
-                progress.Completed();
             }
+
+            using (DbConnection masterConnection = SqlSession.OpenConnectionToMaster())
+            {
+                DbCommand cmdRestore = CreateRestoreCommand(sourceDb, sourceLog, targetDb, targetLog, masterConnection, database.DatabaseName);
+                SetupRestoreParameters(database, cmdRestore);
+                ExecuteSqlRestore(masterConnection, cmdRestore, database.DatabaseName, progress);
+            }
+
+            progress.Detail = "Done";
+            progress.Completed();
         }
 
         /// <summary>
@@ -680,12 +682,6 @@ namespace ShipWorks.Data.Administration
 
             progress.Detail = "Logging off all users";
 
-            // Disconnect all other users
-            SqlUtility.SetSingleUser(con);
-
-            // Get out of the database we are restoring to
-            con.ChangeDatabase("master");
-
             try
             {
                 Regex percentRegex = new Regex(@"(\d+) percent processed.");
@@ -712,19 +708,6 @@ namespace ShipWorks.Data.Administration
             }
             finally
             {
-                try
-                {
-                    SqlUtility.ConfigureSql2017ForClr(con, databaseName, SqlUtility.GetUsername(con));
-                    con.ChangeDatabase(databaseName);
-
-                    // Allow multiple connections again
-                    SqlUtility.SetMultiUser(con);
-                }
-                catch (SqlException ex)
-                {
-                    log.Error("Failed to set database back to multi-user mode.", ex);
-                }
-
                 SqlConnection.ClearAllPools();
             }
         }
@@ -732,15 +715,19 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Creates the Restore DbCommand
         /// </summary>
-        private static DbCommand CreateRestoreCommand(string sourceDb, string sourceLog, string targetDb, string targetLog, DbConnection con)
+        private static DbCommand CreateRestoreCommand(string sourceDb, string sourceLog, string targetDb, string targetLog, DbConnection con, string databaseName)
         {
             DbCommand cmdRestore = DbCommandProvider.Create(con);
-            cmdRestore.CommandText =
-                "RESTORE DATABASE @Database  " +
-                " FROM DISK = @FilePath      " +
-                " WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE, " +
-                "  MOVE '" + sourceDb + "' TO '" + targetDb + "', " +
-                "  MOVE '" + sourceLog + "' TO '" + targetLog + "'";
+            string sql =
+                $@"RESTORE DATABASE @Database
+                    FROM DISK = @FilePath 
+                    WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE,   
+                    MOVE '{sourceDb}' TO '{targetDb}',   
+                    MOVE '{sourceLog}' TO '{targetLog}';
+
+                {SqlUtility.ConfigureSqlServerForClrSql(databaseName, SqlUtility.GetUsername(con))}";
+            
+            cmdRestore.CommandText = SqlUtility.WrapSqlInSingleUserMode(sql, databaseName);
 
             cmdRestore.CommandTimeout = 1800;
 

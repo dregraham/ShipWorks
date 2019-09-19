@@ -44,16 +44,24 @@ namespace ShipWorks.Tests.Shared.Database
     public class DatabaseFixture : IDisposable
     {
         protected bool clearTestData = true;
-        private readonly Checkpoint checkpoint;
-        private readonly SqlSessionScope sqlSessionScope;
-        private readonly ExecutionModeScope executionModeScope;
-        private readonly string databaseName;
+        private Checkpoint checkpoint;
+        private SqlSessionScope sqlSessionScope;
+        private ExecutionModeScope executionModeScope;
+        private string databaseName;
         private readonly string databaseSource = @"localhost\Development";
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DatabaseFixture()
+        {
+            ResetDatabase();
+        }
+
+        /// <summary>
+        /// Delete and create the database
+        /// </summary>
+        public void ResetDatabase()
         {
             string databasePrefix = string.Empty;
 
@@ -89,6 +97,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Replace(".", "_");
 
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
+            sqlSessionScope?.Dispose();
 
             if (clearTestData)
             {
@@ -132,7 +141,7 @@ namespace ShipWorks.Tests.Shared.Database
             };
 
             configuration.Freeze();
-
+           
             return new SqlSessionScope(new SqlSession(configuration));
         }
 
@@ -223,6 +232,7 @@ namespace ShipWorks.Tests.Shared.Database
             try
             {
                 DataPath.Initialize();
+                SqlSessionScope.ScopedSqlSession.Configuration.Save();
             }
             catch (IOException)
             {
@@ -284,6 +294,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             ShipWorksSession.Initialize(Guid.NewGuid());
 
             DataPath.Initialize();
+            SqlSessionScope.ScopedSqlSession.Configuration.Save();
 
             return new DataContext(mock, context.Item1, context.Item2);
         }
