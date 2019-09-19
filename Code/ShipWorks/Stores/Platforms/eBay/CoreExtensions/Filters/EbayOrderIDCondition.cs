@@ -13,6 +13,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Filters
     [ConditionStoreType(StoreTypeCode.Ebay)]
     class EbayOrderIDCondition : StringCondition
     {
+        /// <summary>
+        /// Create the sql for filtering
+        /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
             string orderSql = String.Empty;
