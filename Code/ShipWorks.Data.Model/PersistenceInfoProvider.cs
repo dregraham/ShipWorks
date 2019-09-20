@@ -2418,7 +2418,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OrderEntity", "BillStateProvCode", "BillStateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 23);
 			this.AddElementFieldMapping("OrderEntity", "BillPostalCode", "BillPostalCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 24);
 			this.AddElementFieldMapping("OrderEntity", "BillCountryCode", "BillCountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 25);
-			this.AddElementFieldMapping("OrderEntity", "BillPhone", "BillPhone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 26);
+			this.AddElementFieldMapping("OrderEntity", "BillPhone", "BillPhone", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 26);
 			this.AddElementFieldMapping("OrderEntity", "BillFax", "BillFax", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 27);
 			this.AddElementFieldMapping("OrderEntity", "BillEmail", "BillEmail", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 28);
 			this.AddElementFieldMapping("OrderEntity", "BillWebsite", "BillWebsite", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 29);

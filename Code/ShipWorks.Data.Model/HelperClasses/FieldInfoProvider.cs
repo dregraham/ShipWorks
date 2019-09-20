@@ -2295,7 +2295,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "BillStateProvCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillStateProvCode, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillPostalCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillCountryCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillCountryCode, 50, 0, 0);
-			this.AddElementFieldInfo("OrderEntity", "BillPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPhone, 25, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "BillPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPhone, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillFax", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillFax, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillEmail", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillEmail, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillWebsite", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillWebsite, 50, 0, 0);
