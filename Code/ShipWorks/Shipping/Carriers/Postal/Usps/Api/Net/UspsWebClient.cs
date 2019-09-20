@@ -1248,6 +1248,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 address.PhoneNumber = person.Phone;
             }
 
+            address.EmailAddress = person.Email;
+
             return address;
         }
 
@@ -1475,6 +1477,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 line.HSTariffNumber = customsItem.HarmonizedCode;
                 line.CountryOfOrigin = customsItem.CountryOfOrigin;
+
+                line.sku = customsItem.Description;
 
                 lines.Add(line);
             }
