@@ -3142,6 +3142,14 @@ namespace ShipWorks.Data.Model
 		ReferenceID,
 		///<summary>ScanBasedReturn. </summary>
 		ScanBasedReturn,
+		///<summary>ReferenceID2. </summary>
+		ReferenceID2,
+		///<summary>ReferenceID3. </summary>
+		ReferenceID3,
+		///<summary>ReferenceID4. </summary>
+		ReferenceID4,
+		///<summary>GroupCode. </summary>
+		GroupCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3190,6 +3198,14 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>Insurance. </summary>
 		Insurance,
+		///<summary>ReferenceID2. </summary>
+		ReferenceID2,
+		///<summary>ReferenceID3. </summary>
+		ReferenceID3,
+		///<summary>ReferenceID4. </summary>
+		ReferenceID4,
+		///<summary>GroupCode. </summary>
+		GroupCode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7898,6 +7914,8 @@ namespace ShipWorks.Data.Model
 		UploadConnectionString,
 		///<summary>ImportOrderItemStrategy. </summary>
 		ImportOrderItemStrategy,
+		///<summary>WarehouseLastModified. </summary>
+		WarehouseLastModified,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11324,6 +11342,8 @@ namespace ShipWorks.Data.Model
 		Password,
 		///<summary>ShopifyNotifyCustomer. </summary>
 		ShopifyNotifyCustomer,
+		///<summary>ShopifyFulfillmentLocation. </summary>
+		ShopifyFulfillmentLocation,
 		/// <summary></summary>
 		AmountOfFields
 	}

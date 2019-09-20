@@ -124,26 +124,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             switch (reseller)
             {
                 case EndiciaReseller.Express1:
-                    {
-                        return Express1EndiciaUtility.ApiKey;
-                    }
+                {
+                    return Express1EndiciaUtility.ApiKey;
+                }
 
                 case EndiciaReseller.None:
                 default:
+                {
+                    if (UseTestServer)
                     {
-                        if (UseTestServer)
-                        {
-                            return TestEndiciaPartnerID;
-                        }
-
-                        if (FreemiumFreeEdition.IsActive)
-                        {
-                            return freemiumEndiciaPartnerID;
-                        }
-
-                        // non-freemium, and freemium-paid use our standard partnerID
-                        return standardEndiciaPartnerID;
+                        return TestEndiciaPartnerID;
                     }
+
+                    if (FreemiumFreeEdition.IsActive)
+                    {
+                        return freemiumEndiciaPartnerID;
+                    }
+
+                    // non-freemium, and freemium-paid use our standard partnerID
+                    return standardEndiciaPartnerID;
+                }
             }
         }
 
@@ -181,24 +181,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 // Express1
                 case EndiciaReseller.Express1:
-                    {
-                        IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
+                {
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Endicia, logName, logActionType);
 
-                        webService = new Express1EndiciaServiceWrapper(apiLogEntry);
+                    webService = new Express1EndiciaServiceWrapper(apiLogEntry);
 
-                        webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
-                        break;
-                    }
+                    webService.Url = Express1EndiciaUtility.UseTestServer ? Express1EndiciaUtility.Express1DevelopmentUrl : Express1EndiciaUtility.Express1ProductionUrl;
+                    break;
+                }
 
                 // Endicia Label Server
                 default:
-                    {
-                        IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
+                {
+                    IApiLogEntry apiLogEntry = logEntryFactory.GetLogEntry(ApiLogSource.UspsEndicia, logName, logActionType);
 
-                        webService = new EwsLabelService(apiLogEntry);
-                        webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
-                        break;
-                    }
+                    webService = new EwsLabelService(apiLogEntry);
+                    webService.Url = UseTestServer ? EnumHelper.GetApiValue(UseTestServerUrl) : productionUrl;
+                    break;
+                }
             }
 
             return webService;
@@ -1331,11 +1331,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             postal.Memo2 = ProcessTokenizedField(postal.Memo2, postal).Truncate(50);
             postal.Memo3 = ProcessTokenizedField(postal.Memo3, postal).Truncate(50);
             postal.Endicia.ReferenceID = ProcessTokenizedField(postal.Endicia.ReferenceID, postal).Truncate(50);
+            postal.Endicia.ReferenceID2 = ProcessTokenizedField(postal.Endicia.ReferenceID2, postal).Truncate(50);
+            postal.Endicia.ReferenceID3 = ProcessTokenizedField(postal.Endicia.ReferenceID3, postal).Truncate(50);
+            postal.Endicia.ReferenceID4 = ProcessTokenizedField(postal.Endicia.ReferenceID4, postal).Truncate(50);
+            postal.Endicia.GroupCode = ProcessTokenizedField(postal.Endicia.GroupCode, postal).Truncate(50);
 
             request.RubberStamp1 = postal.Memo1;
             request.RubberStamp2 = postal.Memo2;
             request.RubberStamp3 = postal.Memo3;
             request.ReferenceID = postal.Endicia.ReferenceID;
+            request.ReferenceID2 = postal.Endicia.ReferenceID2;
+            request.ReferenceID3 = postal.Endicia.ReferenceID3;
+            request.ReferenceID4 = postal.Endicia.ReferenceID4;
+            request.CostCenterAlphaNumeric = postal.Endicia.GroupCode;
         }
 
         /// <summary>

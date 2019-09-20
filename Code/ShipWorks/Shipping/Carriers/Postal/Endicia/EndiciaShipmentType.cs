@@ -433,9 +433,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 case PostalServiceType.InternationalPriority: return "PriorityMailInternational";
 
                 case PostalServiceType.InternationalFirst:
-                    {
-                        return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
-                    }
+                {
+                    return PostalUtility.IsEnvelopeOrFlat(packagingType) ? "FirstClassMailInternational" : "FirstClassPackageInternationalService";
+                }
             }
 
             if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))

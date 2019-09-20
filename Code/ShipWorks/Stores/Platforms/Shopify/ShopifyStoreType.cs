@@ -241,5 +241,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             return null;
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }

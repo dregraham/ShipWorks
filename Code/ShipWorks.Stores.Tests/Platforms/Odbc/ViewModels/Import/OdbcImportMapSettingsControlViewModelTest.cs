@@ -4,17 +4,15 @@ using Interapptive.Shared.Utility;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Import;
 using System;
-using System.Data;
 using System.IO;
 using System.Windows.Forms;
+using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -23,11 +21,20 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
     public class OdbcImportMapSettingsControlViewModelTest : IDisposable
     {
         private readonly AutoMock mock;
+        private readonly OdbcStore odbcStore;
+        private OdbcStoreEntity store;
         private const string DefaultFileName = "default file name";
 
         public OdbcImportMapSettingsControlViewModelTest()
         {
             mock = AutoMock.GetLoose();
+            
+            odbcStore = new OdbcStore();
+            store = new OdbcStoreEntity();
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
         }
 
         [Fact]
@@ -38,11 +45,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity()
+            store = new OdbcStoreEntity()
             {
-                ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
-                ImportColumnSourceType = (int)OdbcColumnSourceType.Table
+                ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime,
+                ImportColumnSourceType = (int) OdbcColumnSourceType.Table
             };
+
+            odbcStore.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+            odbcStore.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -60,11 +74,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity()
+            store = new OdbcStoreEntity()
             {
                 ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table
             };
+
+            odbcStore.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+            odbcStore.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -82,11 +103,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity()
+            store = new OdbcStoreEntity()
             {
                 ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table
             };
+
+            odbcStore.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+            odbcStore.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -105,11 +133,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
             columnSource.Setup(c => c.Name).Returns("Orders");
 
-            OdbcStoreEntity store = new OdbcStoreEntity()
+            store = new OdbcStoreEntity()
             {
                 ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
                 ImportColumnSourceType = (int)OdbcColumnSourceType.Table
             };
+
+            odbcStore.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+            odbcStore.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+            mock.Mock<IOdbcStoreRepository>()
+                .Setup(r => r.GetStore(store))
+                .Returns(odbcStore);
 
             OdbcImportMapSettingsControlViewModel testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -130,7 +165,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
             testObject.ColumnSourceIsTable = true;
 
             func.Verify(f => f("OdbcCustomQueryWarningDlg"), Times.Never);
@@ -144,7 +179,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             var columnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
             testObject.SelectedTable = columnSourceMock.Object;
@@ -168,7 +203,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             var dataSourceMock = mock.MockRepository.Create<IOdbcDataSource>();
             var schemaMock = mock.MockRepository.Create<IOdbcSchema>();
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             var columnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
             testObject.CustomQueryColumnSource = columnSourceMock.Object;
@@ -179,7 +214,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Fact]
-        public void SetColumnSource_SetsMapName_WhenMapnameIsDatasourceName_AndNotNull()
+        public void SetColumnSource_SetsMapName_WhenMapNameIsDataSourceName_AndNotNull()
         {
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -193,7 +228,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             string columnSourceName = "column source name";
             columnSourceMock.SetupGet(s => s.Name).Returns(columnSourceName);
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             testObject.MapName = "ds";
 
@@ -203,7 +238,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
         }
 
         [Fact]
-        public void SetColumnSource_SetsMapName_WhenMapnameIsDatasourceName_AndNull()
+        public void SetColumnSource_SetsMapName_WhenMapNameIsDataSourceName_AndNull()
         {
             var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
 
@@ -217,7 +252,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
             string columnSourceName = "column source name";
             columnSourceMock.SetupGet(s => s.Name).Returns(columnSourceName);
 
-            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", new OdbcStoreEntity());
+            testObject.Load(dataSourceMock.Object, schemaMock.Object, "blah", store);
 
             testObject.MapName = "ds";
 
@@ -304,11 +339,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
 
-                OdbcStoreEntity store = new OdbcStoreEntity()
+                store = new OdbcStoreEntity()
                 {
                     ImportStrategy = (int)OdbcImportStrategy.ByModifiedTime,
                     ImportColumnSourceType = (int)OdbcColumnSourceType.Table
                 };
+
+                odbcStore.ImportStrategy = (int) OdbcImportStrategy.ByModifiedTime;
+                odbcStore.ImportColumnSourceType = (int) OdbcColumnSourceType.Table;
+
+                mock.Mock<IOdbcStoreRepository>()
+                    .Setup(r => r.GetStore(store))
+                    .Returns(odbcStore);
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -340,8 +382,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
 
-                OdbcStoreEntity store = new OdbcStoreEntity();
-
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
 
@@ -371,7 +411,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -402,7 +441,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.Mock<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -431,7 +469,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var aTableColumnSourceMock = mock.MockRepository.Create<IOdbcColumnSource>();
                 aTableColumnSourceMock.Setup(x => x.Name).Returns("a table");
@@ -466,7 +503,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);
@@ -499,7 +535,6 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Import
                 Mock<IOdbcSchema> schema = mock.Mock<IOdbcSchema>();
                 Mock<IOdbcColumnSource> columnSource = mock.MockRepository.Create<IOdbcColumnSource>();
                 columnSource.Setup(c => c.Name).Returns("Orders");
-                OdbcStoreEntity store = new OdbcStoreEntity();
 
                 var testObject = mock.Create<OdbcImportMapSettingsControlViewModel>();
                 testObject.Load(dataSource.Object, schema.Object, "source", store);

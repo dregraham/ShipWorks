@@ -409,6 +409,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Insurance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID3", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ReferenceID4", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("GroupCode", fieldHashtable);
 		}
 		#endregion
 
@@ -655,6 +663,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.Insurance, true); }
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.Insurance, value); }
+		}
+
+		/// <summary> The ReferenceID2 property of the Entity EndiciaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceID2
+		{
+			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID2, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.ReferenceID2, value); }
+		}
+
+		/// <summary> The ReferenceID3 property of the Entity EndiciaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceID3
+		{
+			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID3, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.ReferenceID3, value); }
+		}
+
+		/// <summary> The ReferenceID4 property of the Entity EndiciaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID4"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ReferenceID4
+		{
+			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID4, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.ReferenceID4, value); }
+		}
+
+		/// <summary> The GroupCode property of the Entity EndiciaShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaShipment"."GroupCode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String GroupCode
+		{
+			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.GroupCode, true); }
+			set	{ SetValue((int)EndiciaShipmentFieldIndex.GroupCode, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

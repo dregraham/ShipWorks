@@ -260,7 +260,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
             Assert.True(rates.Rates.Any(r => r.RateID == result2.RateID));
         }
 
-        [CsvData(@"Shipping\Carriers\Postal\Endicia\BestRate", "Endicia_GetBestRates_DoesNotIncludeTypes")]
+        [ExcelData(@"Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv")]
         [Theory]
         public void GetBestRates_ExcludesVariousTypes(DataRow row)
         {

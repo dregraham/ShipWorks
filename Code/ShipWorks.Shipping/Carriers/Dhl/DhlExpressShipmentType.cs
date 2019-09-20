@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             DhlExpressShipmentEntity dhlExpressShipmentEntity = shipment.DhlExpress;
             DhlExpressAccountEntity account = accountRepository.GetAccount(dhlExpressShipmentEntity.DhlExpressAccountID);
 
-            commonDetail.OriginAccount = (account == null) ? "" : account.Description;
+            commonDetail.OriginAccount = (account == null) ? "" : account.AccountNumber.ToString();
             commonDetail.ServiceType = dhlExpressShipmentEntity.Service;
 
             // i-Parcel doesn't have a packaging type concept, so default to 0

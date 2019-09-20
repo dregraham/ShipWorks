@@ -10,6 +10,9 @@ using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {
+    /// <summary>
+    /// Factory for creating StoreDtos from StoreEntities
+    /// </summary>
     [KeyedComponent(typeof(IStoreDtoFactory), StoreTypeCode.Ebay)]
     public class EbayStoreDtoFactory : IStoreDtoFactory
     {

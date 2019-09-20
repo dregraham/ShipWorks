@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,6 +8,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
 
@@ -161,6 +163,13 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             if (!store.Enabled)
             {
                 return new ShippingException("The store has been disabled for downloading and shipping in your ShipWorks store settings.");
+            }
+
+            // Validate that at least one item has a name set if using InsureShip
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.ShipWorks &&
+                shipment.Order.OrderItems.All(x => String.IsNullOrWhiteSpace(x.Name)))
+            {
+                return new ShippingException("Can not insure a shipment with no item names.");
             }
 
             // Validate that the license is valid

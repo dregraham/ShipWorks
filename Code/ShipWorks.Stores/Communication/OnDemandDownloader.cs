@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Communication
                 if (shouldShowError)
                 {
                     messageHelper.ShowPopup(
-                        $"There was an error downloading '{orderNumber}.' Please see the download log for additional information.");
+                        $"There was an error downloading '{orderNumber}'. Please see the download log for additional information.");
                 }
             }
         }

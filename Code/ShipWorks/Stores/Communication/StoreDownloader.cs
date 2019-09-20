@@ -179,7 +179,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Collect the download telemetry
         /// </summary>
-        private void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
+        protected void CollectDownloadTelemetry(TrackedDurationEvent trackedDurationEvent)
         {
             trackedDurationEvent.AddProperty("Store.Type", EnumHelper.GetDescription(StoreType.TypeCode));
             trackedDurationEvent.AddMetric("Orders.Total", QuantitySaved);
@@ -1373,7 +1373,12 @@ namespace ShipWorks.Stores.Communication
                         Progress.Detail = "Downloading order " + count.ToString("#,##0");
 
                         OrderEntity orderEntity = await orderFactory.CreateOrder(Store, StoreType, warehouseOrder).ConfigureAwait(false);
-                        await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
+
+                        // the order factory returns null if the order has been combined
+                        if (orderEntity != null)
+                        {
+                            await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
+                        }
                     }
 
                     // We only care about the last request because if there was an error initially but that got cleared during

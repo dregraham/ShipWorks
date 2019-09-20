@@ -103,8 +103,28 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
                 .OnFailure(ex => Assert.Same(exception, ex));
         }
 
-        private ShipmentEntity CreateShipment() =>
-            new ShipmentEntity { Order = new OrderEntity() };
+        [Fact]
+        public void CreateInsurancePoliy_ReturnsFailure_WhenNoItemHasAName()
+        {
+            var exception = new InsureShipException("Can not insure a shipment with no item names.");
+            var shipment = new ShipmentEntity { Order = new OrderEntity() };
+
+            var testObject = mock.Create<InsureShipInsureShipmentRequest>();
+
+            var result = testObject.CreateInsurancePolicy(shipment);
+
+            result
+                .Do(() => Assert.False(true))
+                .OnFailure(ex => Assert.Equal(exception.Message, ex.Message));
+        }
+
+        private ShipmentEntity CreateShipment()
+        {
+            var item = new OrderItemEntity { Name = "Something" };
+            var order = new OrderEntity();
+            order.OrderItems.Add(item);
+            return new ShipmentEntity { Order = order };
+        }
 
         public void Dispose()
         {

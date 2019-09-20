@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Walmart
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => 
+        protected override string InternalLicenseIdentifier =>
             string.IsNullOrWhiteSpace(walmartStore.ConsumerID) ? walmartStore.ClientID : walmartStore.ConsumerID;
 
         /// <summary>
@@ -132,6 +132,11 @@ namespace ShipWorks.Stores.Platforms.Walmart
                 CreatePartialItemStatusFilter("Partially Cancelled", "Cancelled")
             };
         }
+
+        /// <summary>
+        /// Should this store use the Hub
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
 
         /// <summary>
         /// Create a filter for any item of the given status but not all the same status

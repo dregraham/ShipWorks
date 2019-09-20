@@ -39,6 +39,14 @@
             this.labelReferenceIdInfo = new System.Windows.Forms.Label();
             this.referenceID = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelReferenceID = new System.Windows.Forms.Label();
+            this.referenceID2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelReferenceID2 = new System.Windows.Forms.Label();
+            this.referenceID3 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelReferenceID3 = new System.Windows.Forms.Label();
+            this.referenceID4 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelReferenceID4 = new System.Windows.Forms.Label();
+            this.groupCode = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelGroupCode = new System.Windows.Forms.Label();
             this.labelRubberStampWarning = new System.Windows.Forms.Label();
             this.pictureBoxRubberStampWarning = new System.Windows.Forms.PictureBox();
             this.rubberStamp3 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -215,6 +223,14 @@
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelReferenceIdInfo);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.referenceID);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelReferenceID);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.referenceID2);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelReferenceID2);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.referenceID3);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelReferenceID3);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.referenceID4);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelReferenceID4);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.groupCode);
+            this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelGroupCode);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelRubberStampWarning);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.pictureBoxRubberStampWarning);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.rubberStamp3);
@@ -223,7 +239,7 @@
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelRubberStamp2);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.rubberStamp1);
             this.sectionRubberStamps.ContentPanel.Controls.Add(this.labelRubberStamp1);
-            this.sectionRubberStamps.ExpandedHeight = 198;
+            this.sectionRubberStamps.ExpandedHeight = 312;
             this.sectionRubberStamps.ExtraText = "";
             this.sectionRubberStamps.Location = new System.Drawing.Point(3, 524);
             this.sectionRubberStamps.Name = "sectionRubberStamps";
@@ -256,11 +272,87 @@
             // 
             this.labelReferenceID.AutoSize = true;
             this.labelReferenceID.BackColor = System.Drawing.Color.White;
-            this.labelReferenceID.Location = new System.Drawing.Point(20, 125);
+            this.labelReferenceID.Location = new System.Drawing.Point(24, 125);
             this.labelReferenceID.Name = "labelReferenceID";
             this.labelReferenceID.Size = new System.Drawing.Size(75, 13);
             this.labelReferenceID.TabIndex = 83;
             this.labelReferenceID.Text = "Reference ID:";
+            // 
+            // referenceID2
+            // 
+            this.referenceID2.Location = new System.Drawing.Point(101, 170);
+            this.referenceID2.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID2, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID2.Name = "referenceID2";
+            this.referenceID2.Size = new System.Drawing.Size(236, 21);
+            this.referenceID2.TabIndex = 4;
+            // 
+            // labelReferenceID2
+            // 
+            this.labelReferenceID2.AutoSize = true;
+            this.labelReferenceID2.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID2.Location = new System.Drawing.Point(15, 173);
+            this.labelReferenceID2.Name = "labelReferenceID2";
+            this.labelReferenceID2.Size = new System.Drawing.Size(10, 13);
+            this.labelReferenceID2.TabIndex = 84;
+            this.labelReferenceID2.Text = "Reference ID 2:";
+            // 
+            // referenceID3
+            // 
+            this.referenceID3.Location = new System.Drawing.Point(101, 199);
+            this.referenceID3.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID3, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID3.Name = "referenceID3";
+            this.referenceID3.Size = new System.Drawing.Size(236, 21);
+            this.referenceID3.TabIndex = 5;
+            // 
+            // labelReferenceID3
+            // 
+            this.labelReferenceID3.AutoSize = true;
+            this.labelReferenceID3.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID3.Location = new System.Drawing.Point(15, 202);
+            this.labelReferenceID3.Name = "labelReferenceID";
+            this.labelReferenceID3.Size = new System.Drawing.Size(10, 13);
+            this.labelReferenceID3.TabIndex = 85;
+            this.labelReferenceID3.Text = "Reference ID 3:";
+            // 
+            // referenceID4
+            // 
+            this.referenceID4.Location = new System.Drawing.Point(101, 228);
+            this.referenceID4.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.referenceID4, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.referenceID4.Name = "referenceID4";
+            this.referenceID4.Size = new System.Drawing.Size(236, 21);
+            this.referenceID4.TabIndex = 6;
+            // 
+            // labelReferenceID4
+            // 
+            this.labelReferenceID4.AutoSize = true;
+            this.labelReferenceID4.BackColor = System.Drawing.Color.White;
+            this.labelReferenceID4.Location = new System.Drawing.Point(15, 231);
+            this.labelReferenceID4.Name = "labelReferenceID4";
+            this.labelReferenceID4.Size = new System.Drawing.Size(75, 13);
+            this.labelReferenceID4.TabIndex = 86;
+            this.labelReferenceID4.Text = "Reference ID 4:";
+            // 
+            // groupCode
+            // 
+            this.groupCode.Location = new System.Drawing.Point(101, 257);
+            this.groupCode.MaxLength = 32767;
+            this.fieldLengthProvider.SetMaxLengthSource(this.groupCode, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaReference);
+            this.groupCode.Name = "groupCode";
+            this.groupCode.Size = new System.Drawing.Size(236, 21);
+            this.groupCode.TabIndex = 7;
+            // 
+            // labelGroupCode
+            // 
+            this.labelGroupCode.AutoSize = true;
+            this.labelGroupCode.BackColor = System.Drawing.Color.White;
+            this.labelGroupCode.Location = new System.Drawing.Point(31, 260);
+            this.labelGroupCode.Name = "labelGroupCode";
+            this.labelGroupCode.Size = new System.Drawing.Size(75, 13);
+            this.labelGroupCode.TabIndex = 87;
+            this.labelGroupCode.Text = "Group Code:";
             // 
             // labelRubberStampWarning
             // 
@@ -465,9 +557,9 @@
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionRecipient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionReturns)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize) (this.sectionLabelOptions)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize) (this.sectionShipment)).EndInit();
@@ -511,6 +603,14 @@
         private System.Windows.Forms.Label labelReferenceIdInfo;
         private ShipWorks.Templates.Tokens.TemplateTokenTextBox referenceID;
         private System.Windows.Forms.Label labelReferenceID;
+        private ShipWorks.Templates.Tokens.TemplateTokenTextBox referenceID2;
+        private System.Windows.Forms.Label labelReferenceID2;
+        private ShipWorks.Templates.Tokens.TemplateTokenTextBox referenceID3;
+        private System.Windows.Forms.Label labelReferenceID3;
+        private ShipWorks.Templates.Tokens.TemplateTokenTextBox referenceID4;
+        private System.Windows.Forms.Label labelReferenceID4;
+        private ShipWorks.Templates.Tokens.TemplateTokenTextBox groupCode;
+        private System.Windows.Forms.Label labelGroupCode;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.CollapsibleGroupControl sectionEntryFacility;
         private System.Windows.Forms.Label labelEntryFacility;

@@ -5,6 +5,8 @@ using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using System;
 using ShipWorks.Stores.Platforms.Odbc.Upload;
 using Xunit;
+using ShipWorks.Stores.Warehouse.StoreData;
+using ShipWorks.Stores.Platforms.Odbc.Mapping;
 
 namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
 {
@@ -25,7 +27,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         {
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            Assert.Throws<ArgumentNullException>(() => testObject.GetUploadDataSource(null));
+            Assert.Throws<ArgumentNullException>(() => testObject.GetUploadDataSource(null, false));
         }
 
         [Fact]
@@ -44,23 +46,35 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataSource
         [Fact]
         public void CreateUploadDataSource_CallsRestoreOnDataSourceWithStoreUploadConnectionString_WhenStoreUploadStrategyIsUseUploadConnectionString()
         {
-            OdbcStoreEntity store = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource};
+            OdbcStoreEntity storeEntity = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.UseShipmentDataSource};
+
+            OdbcStore store = new OdbcStore();
+            store.UploadStrategy = storeEntity.UploadStrategy;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(storeEntity)).Returns(store);
 
             Mock<IOdbcDataSource> dataSource = mock.Mock<IOdbcDataSource>();
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
 
-            testObject.GetUploadDataSource(store);
+            testObject.GetUploadDataSource(storeEntity, false);
 
-            dataSource.Verify(d => d.Restore(store.UploadConnectionString));
+            dataSource.Verify(d => d.Restore(storeEntity.UploadConnectionString));
         }
 
         [Fact]
         public void CreateUploadDataSource_ReturnsNull_WhenStoreUploadStrategyIsDoNotUpload()
         {
-            OdbcStoreEntity store = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload};
+            OdbcStoreEntity storeEntity = new OdbcStoreEntity() { UploadConnectionString = "foobarbaz", UploadStrategy = (int) OdbcShipmentUploadStrategy.DoNotUpload};
+
+            OdbcStore store = new OdbcStore();
+            store.UploadStrategy = storeEntity.UploadStrategy;
+            var storeRepo = mock.Mock<IOdbcStoreRepository>();
+
+            storeRepo.Setup(s => s.GetStore(storeEntity)).Returns(store);
 
             OdbcDataSourceService testObject = mock.Create<OdbcDataSourceService>();
-            IOdbcDataSource source = testObject.GetUploadDataSource(store);
+            IOdbcDataSource source = testObject.GetUploadDataSource(storeEntity, false);
 
             Assert.Null(source);
         }
