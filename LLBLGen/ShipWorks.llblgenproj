@@ -1607,6 +1607,7 @@
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="255" FieldIndex="4" />
           <Field Name="EmailAddress" Type="string" IsOptional="true" MaxLength="100" FieldIndex="9" />
           <Field Name="InsureShipPolicyID" Type="long" IsOptional="true" Precision="19" FieldIndex="10" />
+          <Field Name="InsureShipStatus" Type="string" IsOptional="true" MaxLength="50" FieldIndex="12" />
           <Field Name="InsureShipStoreName" Type="string" MaxLength="75" FieldIndex="1" />
           <Field Name="ItemName" Type="string" IsOptional="true" MaxLength="255" FieldIndex="3" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -4573,7 +4574,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-21T15:39:11.0799313Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T20:11:50.4999489Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6959,6 +6960,7 @@
                     <Field Name="EmailAddress" Ordinal="10" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="InsureShipPolicyID" Ordinal="11" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="DateOfIssue" Ordinal="12" IsOptional="true" DbType="4" />
+                    <Field Name="InsureShipStatus" Ordinal="13" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="iParcelAccount">
@@ -12371,6 +12373,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="EmailAddress" TargetFieldName="EmailAddress" />
             <FieldMapping FieldName="InsureShipPolicyID" TargetFieldName="InsureShipPolicyID" />
+            <FieldMapping FieldName="InsureShipStatus" TargetFieldName="InsureShipStatus" />
             <FieldMapping FieldName="InsureShipStoreName" TargetFieldName="InsureShipStoreName" />
             <FieldMapping FieldName="ItemName" TargetFieldName="ItemName" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />

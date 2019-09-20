@@ -93,6 +93,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.DateTime> DateOfIssue { get; }
+        /// <summary> The InsureShipStatus property of the Entity InsurancePolicy<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "InsurancePolicy"."InsureShipStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String InsureShipStatus { get; }
         
         IShipmentEntity Shipment { get; }
         

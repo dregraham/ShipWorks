@@ -5474,6 +5474,8 @@ namespace ShipWorks.Data.Model
 		InsureShipPolicyID,
 		///<summary>DateOfIssue. </summary>
 		DateOfIssue,
+		///<summary>InsureShipStatus. </summary>
+		InsureShipStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
