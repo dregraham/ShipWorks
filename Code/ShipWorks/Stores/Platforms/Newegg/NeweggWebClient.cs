@@ -378,13 +378,17 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
                     PostalServiceType uspsType = (PostalServiceType) shipmentEntity.Postal.Service;
-                    if (uspsType == PostalServiceType.GlobalPostEconomyIntl || uspsType == PostalServiceType.GlobalPostSmartSaverEconomyIntl)
+                    switch (uspsType)
                     {
-                        uspsType = PostalServiceType.InternationalFirst;
-                    }
-                    if (uspsType == PostalServiceType.GlobalPostStandardIntl || uspsType == PostalServiceType.GlobalPostSmartSaverStandardIntl)
-                    {
-                        uspsType = PostalServiceType.InternationalPriority;
+                        case PostalServiceType.GlobalPostEconomyIntl:
+                        case PostalServiceType.GlobalPostSmartSaverEconomyIntl:
+                            uspsType = PostalServiceType.InternationalFirst;
+                            break;
+                        case PostalServiceType.GlobalPostStandardIntl:
+                        case PostalServiceType.GlobalPostSmartSaverStandardIntl:
+                        case PostalServiceType.GlobalPostPlus:
+                            uspsType = PostalServiceType.InternationalPriority;
+                            break;
                     }
 
                     service = EnumHelper.GetDescription(uspsType);

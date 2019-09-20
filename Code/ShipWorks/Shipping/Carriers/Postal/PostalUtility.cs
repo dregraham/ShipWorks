@@ -610,7 +610,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             PostalServiceType[] postalServiceTypes = {
                 PostalServiceType.GlobalPostEconomyIntl, PostalServiceType.GlobalPostStandardIntl,
-                PostalServiceType.GlobalPostSmartSaverEconomyIntl, PostalServiceType.GlobalPostSmartSaverStandardIntl
+                PostalServiceType.GlobalPostSmartSaverEconomyIntl, PostalServiceType.GlobalPostSmartSaverStandardIntl,
+                PostalServiceType.GlobalPostPlus
             };
 
             return postalServiceTypes.Contains(serviceType);
