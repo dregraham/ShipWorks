@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
         // These lengths come from the error that USPS's API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
+        private const int MaxCustomsSkuLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
@@ -1478,7 +1479,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 line.HSTariffNumber = customsItem.HarmonizedCode;
                 line.CountryOfOrigin = customsItem.CountryOfOrigin;
 
-                line.sku = customsItem.Description;
+                line.sku = customsItem.Description.Truncate(MaxCustomsSkuLength);
 
                 lines.Add(line);
             }
