@@ -183,5 +183,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("GlobalPost SmartSaver Standard Intl")]
         GlobalPostSmartSaverStandardIntl = 230,
+
+        [Description("GlobalPost Plus")]
+        GlobalPostPlus = 231,
     }
 }

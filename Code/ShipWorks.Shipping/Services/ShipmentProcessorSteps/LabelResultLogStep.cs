@@ -6,13 +6,12 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Warehouse;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -135,6 +134,11 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             {
                 outOfFundsException = FindTypeInExceptionChain<IInsufficientFunds>(exception);
                 termsAndConditionsException = FindTypeInExceptionChain<ITermsAndConditionsException>(exception);
+                return errorManager.SetShipmentErrorMessage(shipmentID, exception);
+            }
+
+            if (exception is InsureShipException)
+            {
                 return errorManager.SetShipmentErrorMessage(shipmentID, exception);
             }
 

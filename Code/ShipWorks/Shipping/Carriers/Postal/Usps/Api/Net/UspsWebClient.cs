@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
         // These lengths come from the error that USPS's API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
+        private const int MaxCustomsSkuLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
@@ -364,11 +365,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get GlobalPost service availability from the account info
         /// </summary>
-        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
+        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV27 capabilities)
         {
             return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
                 HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
-                GetGlobalPostInternationalPresortAvailability(capabilities);
+                GetGlobalPostInternationalPresortAvailability(capabilities) | 
+                GetGlobalPostPlusAvailability(capabilities);
+        }
+
+        /// <summary>
+        /// Get GlobalPostPlus
+        /// </summary>
+        private static GlobalPostServiceAvailability GetGlobalPostPlusAvailability(CapabilitiesV27 capabilities)
+        {
+            if (capabilities.CanPrintGPSmartSaver && capabilities.CanPrintGlobalPostPlus && capabilities.CanCleanseIntlAddress)
+            {
+                return GlobalPostServiceAvailability.GlobalPostPlus;
+            }
+
+            return GlobalPostServiceAvailability.None;
         }
 
         /// <summary>
@@ -1234,6 +1249,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 address.PhoneNumber = person.Phone;
             }
 
+            address.EmailAddress = person.Email;
+
             return address;
         }
 
@@ -1461,6 +1478,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 line.HSTariffNumber = customsItem.HarmonizedCode;
                 line.CountryOfOrigin = customsItem.CountryOfOrigin;
+
+                line.sku = customsItem.Description.Truncate(MaxCustomsSkuLength);
 
                 lines.Add(line);
             }

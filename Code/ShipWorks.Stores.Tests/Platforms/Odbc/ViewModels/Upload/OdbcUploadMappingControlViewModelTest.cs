@@ -235,7 +235,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.ViewModels.Upload
             };
 
             Mock<IOdbcDataSourceService> dataSourceService = mock.Mock<IOdbcDataSourceService>();
-            dataSourceService.Setup(s => s.GetUploadDataSource(store)).Returns(dataSource.Object);
+            dataSourceService.Setup(s => s.GetUploadDataSource(store, It.IsAny<bool>())).Returns(dataSource.Object);
 
             var mapFactory = mock.Create<OdbcFieldMapFactory>(new TypedParameter(typeof(IOdbcFieldMapIOFactory), ioFactory));
 

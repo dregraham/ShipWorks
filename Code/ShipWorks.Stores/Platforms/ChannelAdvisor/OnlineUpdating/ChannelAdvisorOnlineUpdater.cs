@@ -393,6 +393,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                 case PostalServiceType.GlobalPostSmartSaverStandardIntl:
                 case PostalServiceType.GlobalPostStandardIntl:
+                case PostalServiceType.GlobalPostPlus:
                 case PostalServiceType.InternationalPriority:
                     return "IPRIORITY";
 

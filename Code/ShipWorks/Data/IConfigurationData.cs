@@ -22,6 +22,11 @@ namespace ShipWorks.Data
         IConfigurationEntity FetchReadOnly();
 
         /// <summary>
+        /// Get the customer key
+        /// </summary>
+        string FetchCustomerKey();
+
+        /// <summary>
         /// Load the configuration from the database
         /// </summary>
         void CheckForChangesNeeded();

@@ -24,8 +24,8 @@ namespace ShipWorks.Stores.Platforms.Odbc
         /// Initializes a new instance of the <see cref="OdbcStoreSettingsTelemetryCollector"/> class.
         /// </summary>
         public OdbcStoreSettingsTelemetryCollector(
-            IOdbcDataSourceService dataSourceService, 
-            IOdbcFieldMapFactory odbcFieldMapFactory, 
+            IOdbcDataSourceService dataSourceService,
+            IOdbcFieldMapFactory odbcFieldMapFactory,
             IOdbcStoreRepository odbcStoreRepository)
         {
             this.dataSourceService = dataSourceService;
@@ -151,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
                 return "None";
             }
 
-            return dataSourceService.GetUploadDataSource(odbcStoreEntity)?.Driver ?? "Unknown";
+            return dataSourceService.GetUploadDataSource(odbcStoreEntity, false)?.Driver ?? "Unknown";
         }
 
 
