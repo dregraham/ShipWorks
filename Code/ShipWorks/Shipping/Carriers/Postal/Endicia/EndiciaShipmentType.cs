@@ -336,6 +336,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
 
+            PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
+            if (packaging == PostalPackagingType.CubicSoftPack && shipment.Postal.DimsHeight > 0.75)
+            {
+                throw new ShippingException(string.Format("{0} may only have a Height of 0.75\" or less.", EnumHelper.GetDescription(packaging)));
+            }
+
             // Validate that scan based payment returns is allowed.
             // This method throws if not allowed.
             ValidateScanBasedReturns(shipment);
