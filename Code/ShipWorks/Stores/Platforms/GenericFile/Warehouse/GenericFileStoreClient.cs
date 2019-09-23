@@ -54,8 +54,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
                         result.StoreType = baseStore.StoreType;
                         result.UniqueIdentifier = baseStore.UniqueIdentifier;
 
-                        result.ImportMap = result.ImportMap ?? string.Empty;
-
                         return GenericResult.FromSuccess<GenericFileStore>(result);
                     }
                 }

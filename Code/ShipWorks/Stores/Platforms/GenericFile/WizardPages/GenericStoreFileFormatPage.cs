@@ -10,6 +10,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 {
@@ -33,8 +34,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         {
             var store = GetStore<GenericFileStoreEntity>();
 
-            // if we have a map then we know the file format and it must be a hub store
-            e.Skip = string.IsNullOrWhiteSpace(store.FlatImportMap);
+            // if we have are downloading from the hub skip mapping pages
+            e.Skip = store.FileSource == (int)GenericFileSourceTypeCode.Warehouse;
         }
 
         /// <summary>

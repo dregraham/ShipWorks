@@ -37,15 +37,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
 
             GenericFileStoreEntity storeEntity = baseStoreEntity as GenericFileStoreEntity;
 
-            if (storeEntity.FileFormat == (int) GenericFileFormat.Xml)
-            {
-                store.ImportMap = storeEntity.XmlXsltContent;
-            }
-            else
-            {
-                store.ImportMap = storeEntity.FlatImportMap;
-            }
-
             store.FileFormat = storeEntity.FileFormat;
 
             return Task.FromResult<Store>(store);

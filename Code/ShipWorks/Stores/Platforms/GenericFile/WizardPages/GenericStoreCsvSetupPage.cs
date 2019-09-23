@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.GenericFile.Formats.Csv;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 {
@@ -41,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 
             var store = GetStore<GenericFileStoreEntity>();
 
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Csv || !string.IsNullOrWhiteSpace(store.FlatImportMap);
+            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Csv || store.FileSource == (int) GenericFileSourceTypeCode.Warehouse;
         }
 
         /// <summary>

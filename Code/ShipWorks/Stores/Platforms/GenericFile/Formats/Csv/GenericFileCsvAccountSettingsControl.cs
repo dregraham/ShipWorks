@@ -12,6 +12,8 @@ using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using log4net;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
 {
@@ -60,11 +62,22 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         {
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
-            generic.FlatImportMap = csvMapChooser.Map.SerializeToXml();
-
             if (!fileSourceControl.SaveToEntity(generic))
             {
                 return false;
+            }
+
+            if (generic.FileSource != (int) GenericFileSourceTypeCode.Warehouse)
+            {
+                string map = csvMapChooser?.Map?.SerializeToXml() ?? string.Empty;
+
+                if (map == string.Empty)
+                {
+                    MessageHelper.ShowError(this, "Map cannot be empty!");
+                    return false;
+                }
+
+                generic.FlatImportMap = map;
             }
 
             return true;

@@ -24,7 +24,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
                     {
                         GetFileSourceType(GenericFileSourceTypeCode.Disk),
                         GetFileSourceType(GenericFileSourceTypeCode.FTP),
-                        GetFileSourceType(GenericFileSourceTypeCode.Email)
+                        GetFileSourceType(GenericFileSourceTypeCode.Email),
+                        GetFileSourceType(GenericFileSourceTypeCode.Warehouse)
                     };
             }
         }
@@ -39,6 +40,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
                 case GenericFileSourceTypeCode.Disk: return new GenericFileSourceDiskType();
                 case GenericFileSourceTypeCode.FTP: return new GenericFileSourceFtpType();
                 case GenericFileSourceTypeCode.Email: return new GenericFileSourceEmailType();
+                case GenericFileSourceTypeCode.Warehouse: return new GenericFileSourceWarehouseType();
             }
 
             throw new InvalidOperationException("Invalid GenericFileSourceType: " + typeCode);

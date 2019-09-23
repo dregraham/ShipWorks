@@ -15,7 +15,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string GenerateDataKey = "api/store/generateDataKey";
         public const string Stores = "api/stores";
         public const string OdbcStores = "api/stores/{0}/odbc";
-        public const string GenericFile = "api/stores/{0}/genericfile";
+        public const string GenericFile = "api/stores/{0}/genericFile";
         public const string UploadOrders = "api/orders";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";

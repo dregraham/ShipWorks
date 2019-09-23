@@ -9,8 +9,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
     [Obfuscation]
     public class GenericFileStore : Store
     {
-        public string ImportMap { get; set; }
-
         public int FileFormat { get; set; }
     }
 }

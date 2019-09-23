@@ -10,6 +10,7 @@ using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 using ShipWorks.Stores.Platforms.GenericFile.Warehouse;
 using ShipWorks.Stores.Warehouse.StoreData;
 
@@ -127,7 +128,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
             storeEntity.WarehouseStoreID = warehouseStoreId;
             storeEntity.StoreName = genericFileStore.Name;
 
-            storeEntity.FlatImportMap = genericFileStore.ImportMap;
+            storeEntity.FileSource = (int) GenericFileSourceTypeCode.Warehouse;
             storeEntity.FileFormat = genericFileStore.FileFormat;
         }
 

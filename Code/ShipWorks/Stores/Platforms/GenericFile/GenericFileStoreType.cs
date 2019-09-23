@@ -63,6 +63,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                     case GenericFileSourceTypeCode.Email:
                         return EmailAccountManager.GetAccount(generic.EmailAccountID.Value).EmailAddress;
 
+                    case GenericFileSourceTypeCode.Warehouse:
+                        return generic.WarehouseStoreID.Value.ToString("D");
                     default:
                         throw new InvalidOperationException("Invalid generic file source type: " + generic.FileSource);
                 }
