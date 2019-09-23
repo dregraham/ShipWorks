@@ -391,10 +391,10 @@ namespace ShipWorks.Stores.Management
 
             if (storeSettingsControl != null)
             {
-                result = storeSettingsControl.SaveToEntity(store);                
+                result = storeSettingsControl.SaveToEntity(store);
             }
 
-            if (result && store?.WarehouseStoreID != null && store.IsDirty && storeType.ShouldUseHub(store))
+            if (result && store?.WarehouseStoreID != null && storeType.ShouldUseHub(store))
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {

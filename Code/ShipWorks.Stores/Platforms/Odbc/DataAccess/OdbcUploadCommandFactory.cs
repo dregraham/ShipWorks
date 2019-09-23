@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
                 string uploadStrategyName = EnumHelper.GetDescription(uploadStrategy);
                 throw new ShipWorksOdbcException($"Unable to create upload command for store when the store upload strategy is '{uploadStrategyName}'.");
             }
-            IOdbcDataSource dataSource = odbcDataSourceService.GetUploadDataSource(store);
+            IOdbcDataSource dataSource = odbcDataSourceService.GetUploadDataSource(store, false);
 
             IOdbcQuery uploadQuery = CreateUploadQuery(store, shipment, dataSource);
 

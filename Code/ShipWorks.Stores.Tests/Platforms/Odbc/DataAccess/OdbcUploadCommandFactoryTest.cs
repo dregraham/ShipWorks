@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.DataAccess
             };
             testObject.CreateUploadCommand(store, new ShipmentEntity() { Order = new OrderEntity() });
 
-            mock.Mock<IOdbcDataSourceService>().Verify(f => f.GetUploadDataSource(store));
+            mock.Mock<IOdbcDataSourceService>().Verify(f => f.GetUploadDataSource(store, false));
         }
 
         [Fact]

@@ -28,6 +28,6 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataSource
         /// <summary>
         /// Create the upload datasource for the given store
         /// </summary>
-        IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store);
+        IOdbcDataSource GetUploadDataSource(OdbcStoreEntity store, bool useLocalEntity);
     }
 }

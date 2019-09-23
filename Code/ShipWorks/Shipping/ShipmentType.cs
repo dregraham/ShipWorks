@@ -1202,5 +1202,17 @@ namespace ShipWorks.Shipping
         {
             // Default will have nothing to update
         }
+
+        /// <summary>
+        /// Sets a shipment and its packages to have no insurance
+        /// </summary>
+        public void UnsetInsurance(ShipmentEntity shipment)
+        {
+            shipment.Insurance = false;
+
+            var packages = GetPackageAdapters(shipment);
+
+            packages.ForEach(x => x.InsuranceChoice.Insured = false);
+        }
     }
 }
