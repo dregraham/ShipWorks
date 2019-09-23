@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -22,6 +23,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.Database.IntegrationDB;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
@@ -124,6 +126,36 @@ namespace ShipWorks.Tests.Shared.Database
             }
 
             DataProvider.InitializeForApplication(ExecutionModeScope.Current);
+        }
+
+        /// <summary>
+        /// Delete and restore the database with given backup file
+        /// </summary>
+        public void ResetDatabase(DbConnection connection, string databaseName, string backupFileName)
+        {
+            DbUtils.RestoreDb(connection, backupFileName);
+
+            executionModeScope = new ExecutionModeScope(new TestExecutionMode());
+            sqlSessionScope?.Dispose();
+
+            if (clearTestData)
+            {
+                checkpoint = new Checkpoint();
+                TempIntegrationDB db = new TempIntegrationDB(databaseName, databaseSource, false);
+
+                sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+
+                SqlUtility.EnableClr(db.Open());
+            }
+            else
+            {
+                string connectionString = $"Data Source = {databaseSource}; Initial Catalog = {databaseName}";
+
+                sqlSessionScope = CreateSqlSessionScope(connectionString);
+            }
+
+            DataProvider.InitializeForApplication(ExecutionModeScope.Current);
+            DbUtils.DropAssemblies();
         }
 
         /// <summary>

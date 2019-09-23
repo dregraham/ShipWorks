@@ -37,6 +37,7 @@
     <ProjectReference Include="..\ShipWorks.SingleScan\ShipWorks.SingleScan.csproj" />
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj" />
     <ProjectReference Include="..\ShipWorks.Stores\ShipWorks.Stores.csproj" />
+    <ProjectReference Include="..\ShipWorks.Tests.Integration.Shared\ShipWorks.Tests.Integration.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj">
       <Project>{C12E4E75-63BC-4720-8BB2-5ACBA56285CA}</Project>
       <Name>ShipWorks.Tests.Shared</Name>

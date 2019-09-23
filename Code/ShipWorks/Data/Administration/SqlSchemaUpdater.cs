@@ -184,57 +184,59 @@ namespace ShipWorks.Data.Administration
             {
                 ISqlUtility sqlUtility = lifetimeScope.Resolve<ISqlUtility>();
 
-                using (new ExistingConnectionScope())
+                // Put the SuperUser in scope, and don't audit
+                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                 {
-                    // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
-                    // because reconnection to a very large database seems to take some time after running a big upgrade
-                    using (SingleUserModeScope singleUserScope = debuggingMode ?
-                        null :
-                        new SingleUserModeScope(ExistingConnectionScope.ScopedConnection, TimeSpan.FromMinutes(1), sqlUtility))
+                    using (new ExistingConnectionScope())
                     {
-                        try
+                        // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
+                        // because reconnection to a very large database seems to take some time after running a big upgrade
+                        using (SingleUserModeScope singleUserScope = debuggingMode ?
+                            null :
+                            new SingleUserModeScope(ExistingConnectionScope.ScopedConnection, TimeSpan.FromMinutes(1), sqlUtility))
                         {
-                            // Put the SuperUser in scope, and don't audit
-                            using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
+                            try
                             {
-                                SqlSession.Current.Configuration.ForceWorkstationID = true;
-
-                                using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                                 {
-                                    // Update the tables
-                                    UpdateScripts(installedSchema, progressScripts, telemetryEvent);
+                                    SqlSession.Current.Configuration.ForceWorkstationID = true;
 
-                                    // Functionality starting
-                                    progressFunctionality.Starting();
-
-                                    // Update the assemblies
-                                    UpdateAssemblies(progressFunctionality);
-
-                                    // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                    UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                                    // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                                    // database upgrade can take time and cause a timeout.
-                                    if (singleUserScope != null)
+                                    using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                                     {
-                                        SingleUserModeScope.RestoreMultiUserMode();
+                                        // Update the tables
+                                        UpdateScripts(installedSchema, progressScripts, telemetryEvent);
+
+                                        // Functionality starting
+                                        progressFunctionality.Starting();
+
+                                        // Update the assemblies
+                                        UpdateAssemblies(progressFunctionality);
+
+                                        // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                                        UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
+
+                                        // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                                        // database upgrade can take time and cause a timeout.
+                                        if (singleUserScope != null)
+                                        {
+                                            SingleUserModeScope.RestoreMultiUserMode();
+                                        }
+
+                                        ApplyVersionSpecificUpdates(installedAssembly);
+
+                                        // Execute any support scripts
+                                        ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
                                     }
-
-                                    ApplyVersionSpecificUpdates(installedAssembly);
-
-                                    // Execute any support scripts
-                                    ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            log.Error("UpdateDatabase failed", ex);
-                            throw;
-                        }
-                        finally
-                        {
-                            SqlSession.Current.Configuration.ForceWorkstationID = false;
+                            catch (Exception ex)
+                            {
+                                log.Error("UpdateDatabase failed", ex);
+                                throw;
+                            }
+                            finally
+                            {
+                                SqlSession.Current.Configuration.ForceWorkstationID = false;
+                            }
                         }
                     }
                 }
