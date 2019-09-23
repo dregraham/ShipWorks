@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.AddressValidation;
@@ -22,6 +23,46 @@ namespace ShipWorks.Shipping.UI.Tests.ShippingPanel.AddressControl
         public AddressViewModelTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+        }
+
+        [Theory]
+        [InlineData("US", AddressValidationStoreSettingType.ValidateAndApply, AddressValidationStoreSettingType.ValidateAndApply , true)]
+        [InlineData("US", AddressValidationStoreSettingType.ValidationDisabled, AddressValidationStoreSettingType.ValidationDisabled , false)]
+        [InlineData("CA", AddressValidationStoreSettingType.ValidateAndApply, AddressValidationStoreSettingType.ValidationDisabled, false)]
+        [InlineData("CA", AddressValidationStoreSettingType.ValidationDisabled, AddressValidationStoreSettingType.ValidationDisabled, false)]
+        public void ValidateAddress_DelegatesToAddressValidator_WithCanAdjustBasedOnStoreSetting(string countryCode, AddressValidationStoreSettingType domesticSetting, AddressValidationStoreSettingType intSetting, bool expectedResult)
+        {
+            PersonAdapter person = new PersonAdapter(new OrderEntity() { OrderID = 4 }, "Ship")
+            {
+                Street1 = "1 Main",
+                City = "Foo",
+                StateProvCode = "Bar",
+                CountryCode = countryCode,
+                PostalCode = "12345",
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "Foo Company",
+                Email = "bar@example.com",
+                Phone = "314-555-1234"
+            };
+
+            var store = new StoreEntity()
+            {
+                DomesticAddressValidationSetting = domesticSetting,
+                InternationalAddressValidationSetting = intSetting
+            };
+
+            var validator = mock.Mock<IAddressValidator>();
+            validator.Setup(v => v.ValidateAsync(It.IsAny<AddressAdapter>(), store, expectedResult))
+                .ReturnsAsync(new ValidatedAddressData(new ValidatedAddressEntity(), new[] { new ValidatedAddressEntity() }));
+
+            var testObject = mock.Create<AddressViewModel>();
+            testObject.Load(person, store);
+
+            testObject.ValidateCommand.Execute("");
+
+            validator
+               .Verify(x => x.ValidateAsync(It.IsAny<AddressAdapter>(), store, expectedResult));
         }
 
         [Fact]

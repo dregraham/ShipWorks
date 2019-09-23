@@ -1374,6 +1374,7 @@ namespace ShipWorks.Stores.Communication
 
                         OrderEntity orderEntity = await orderFactory.CreateOrder(Store, StoreType, warehouseOrder).ConfigureAwait(false);
 
+                        // the order factory returns null if the order has been combined
                         if (orderEntity == null)
                         {
                             // We return null when the order should be skipped, like if it was split or combined
