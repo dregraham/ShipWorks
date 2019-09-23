@@ -20,7 +20,7 @@ namespace ShipWorks.Data.Connection
         static AsyncLocal<TimeSpan> reconnectTimeout = new AsyncLocal<TimeSpan>();
         static AsyncLocal<DbConnection> dbConnection = new AsyncLocal<DbConnection>();
         static AsyncLocal<ISqlUtility> sqlUtility = new AsyncLocal<ISqlUtility>();
-        static AsyncLocal<ConnectionSensitiveScope> sonnectionSensitiveScope = new AsyncLocal<ConnectionSensitiveScope>();
+        static AsyncLocal<ConnectionSensitiveScope> connectionSensitiveScope = new AsyncLocal<ConnectionSensitiveScope>();
 
         /// <summary>
         /// Constructor - initiates the scope
@@ -32,9 +32,9 @@ namespace ShipWorks.Data.Connection
                 throw new InvalidOperationException("Can only have one active scope at a time.");
             }
 
-            sonnectionSensitiveScope.Value = new ConnectionSensitiveScope("creating single user mode scope", null);
+            connectionSensitiveScope.Value = new ConnectionSensitiveScope("creating single user mode scope", null);
 
-            if (!sonnectionSensitiveScope.Value.Acquired)
+            if (!connectionSensitiveScope.Value.Acquired)
             {
                 throw new InvalidOperationException("Could not acquire connection sensitive scope.");
             }
@@ -80,7 +80,7 @@ namespace ShipWorks.Data.Connection
             }
             finally
             {
-                sonnectionSensitiveScope?.Value?.Dispose();
+                connectionSensitiveScope?.Value?.Dispose();
             }
         }
 

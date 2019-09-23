@@ -29,8 +29,7 @@ namespace ShipWorks.Data.Connection
                             RecordDatabaseTelemetryInternal(telemetricResult);
                             return Unit.Default;
                         }, 
-                    10, _ => true)
-                .Match(x => x, ex => Unit.Default);
+                    10, _ => true);
         }
 
         /// <summary>
