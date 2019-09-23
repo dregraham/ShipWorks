@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -22,6 +23,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
+using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.Database.IntegrationDB;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
@@ -44,16 +46,24 @@ namespace ShipWorks.Tests.Shared.Database
     public class DatabaseFixture : IDisposable
     {
         protected bool clearTestData = true;
-        private readonly Checkpoint checkpoint;
-        private readonly SqlSessionScope sqlSessionScope;
-        private readonly ExecutionModeScope executionModeScope;
-        private readonly string databaseName;
+        private Checkpoint checkpoint;
+        private SqlSessionScope sqlSessionScope;
+        private ExecutionModeScope executionModeScope;
+        private string databaseName;
         private readonly string databaseSource = @"localhost\Development";
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DatabaseFixture()
+        {
+            ResetDatabase();
+        }
+
+        /// <summary>
+        /// Delete and create the database
+        /// </summary>
+        public void ResetDatabase()
         {
             string databasePrefix = string.Empty;
 
@@ -89,6 +99,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Replace(".", "_");
 
             executionModeScope = new ExecutionModeScope(new TestExecutionMode());
+            sqlSessionScope?.Dispose();
 
             if (clearTestData)
             {
@@ -118,6 +129,36 @@ namespace ShipWorks.Tests.Shared.Database
         }
 
         /// <summary>
+        /// Delete and restore the database with given backup file
+        /// </summary>
+        public void ResetDatabase(DbConnection connection, string databaseName, string backupFileName)
+        {
+            DbUtils.RestoreDb(connection, backupFileName);
+
+            executionModeScope = new ExecutionModeScope(new TestExecutionMode());
+            sqlSessionScope?.Dispose();
+
+            if (clearTestData)
+            {
+                checkpoint = new Checkpoint();
+                TempIntegrationDB db = new TempIntegrationDB(databaseName, databaseSource, false);
+
+                sqlSessionScope = CreateSqlSessionScope(db.ConnectionString);
+
+                SqlUtility.EnableClr(db.Open());
+            }
+            else
+            {
+                string connectionString = $"Data Source = {databaseSource}; Initial Catalog = {databaseName}";
+
+                sqlSessionScope = CreateSqlSessionScope(connectionString);
+            }
+
+            DataProvider.InitializeForApplication(ExecutionModeScope.Current);
+            DbUtils.DropAssemblies();
+        }
+
+        /// <summary>
         /// Create the Sql Session scope that will be used for the rest of the test run
         /// </summary>
         private static SqlSessionScope CreateSqlSessionScope(string connectionString)
@@ -132,7 +173,7 @@ namespace ShipWorks.Tests.Shared.Database
             };
 
             configuration.Freeze();
-
+           
             return new SqlSessionScope(new SqlSession(configuration));
         }
 
@@ -223,6 +264,7 @@ namespace ShipWorks.Tests.Shared.Database
             try
             {
                 DataPath.Initialize();
+                SqlSessionScope.ScopedSqlSession.Configuration.Save();
             }
             catch (IOException)
             {
@@ -284,6 +326,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             ShipWorksSession.Initialize(Guid.NewGuid());
 
             DataPath.Initialize();
+            SqlSessionScope.ScopedSqlSession.Configuration.Save();
 
             return new DataContext(mock, context.Item1, context.Item2);
         }
