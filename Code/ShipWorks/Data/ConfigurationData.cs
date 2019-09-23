@@ -115,7 +115,7 @@ namespace ShipWorks.Data
                     }
                 }
 
-                return customerKey;
+                return customerKey?.Trim();
             }
         }
 
