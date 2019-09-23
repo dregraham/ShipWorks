@@ -25,6 +25,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
             mock = context.Mock;
+            mock.Provide<ISqlUtility>(new SqlUtilityWrapper());
         }
 
         [Fact]
@@ -34,7 +35,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
             string dbName = string.Empty;
 
             bool isSingleUserWhenInScope = false;
-            mock.Provide<ISqlUtility>(new SqlUtilityWrapper());
+
             using (IDbConnection connection = SqlSession.Current.OpenConnection())
             {
                 connectionString = connection.ConnectionString;
@@ -56,7 +57,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
         {
             bool isSingleUserWhenInScopeBeforeRestore = false;
             bool isSingleUserWhenInScopeAfterRestore = false;
-            mock.Provide<ISqlUtility>(new SqlUtilityWrapper());
+
             using (IDbConnection connection = SqlSession.Current.OpenConnection())
             {
                 using (SingleUserModeScope singleUserModeScope = mock.Create<SingleUserModeScope>(
@@ -79,7 +80,6 @@ namespace ShipWorks.Core.Tests.Integration.Data
             string connectionString = string.Empty;
             string dbName = string.Empty;
 
-            mock.Provide<ISqlUtility>(new SqlUtilityWrapper());
             using (IDbConnection connection = SqlSession.Current.OpenConnection())
             {
                 connectionString = connection.ConnectionString;
@@ -107,7 +107,6 @@ namespace ShipWorks.Core.Tests.Integration.Data
             string connectionString = string.Empty;
             string dbName = string.Empty;
 
-            mock.Provide<ISqlUtility>(new SqlUtilityWrapper());
             using (IDbConnection connection = SqlSession.Current.OpenConnection())
             {
                 connectionString = connection.ConnectionString;
