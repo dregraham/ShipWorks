@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using ShipWorks.Stores.Platforms.GenericFile.Sources.Disk;
 using ShipWorks.Stores.Platforms.GenericFile.Sources.FTP;
 using ShipWorks.Stores.Platforms.GenericFile.Sources.Email;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using Autofac;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources
 {
@@ -16,18 +19,41 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
         /// <summary>
         /// Returns all file sources
         /// </summary>
-        public static List<GenericFileSourceType> FileSources
+        public static List<GenericFileSourceType> GetFileSources(GenericFileStoreEntity store, bool newStore)
         {
-            get
+
+            var result = new List<GenericFileSourceType>
+                {
+                    GetFileSourceType(GenericFileSourceTypeCode.Disk),
+                    GetFileSourceType(GenericFileSourceTypeCode.FTP),
+                    GetFileSourceType(GenericFileSourceTypeCode.Email)
+                };
+
+            if (IncludeWarehouseOption(store, newStore))
             {
-                return new List<GenericFileSourceType>
-                    {
-                        GetFileSourceType(GenericFileSourceTypeCode.Disk),
-                        GetFileSourceType(GenericFileSourceTypeCode.FTP),
-                        GetFileSourceType(GenericFileSourceTypeCode.Email),
-                        GetFileSourceType(GenericFileSourceTypeCode.Warehouse)
-                    };
+                result.Add(GetFileSourceType(GenericFileSourceTypeCode.Warehouse));
             }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Include warehouse if the store is not new and this is a warehouse user
+        /// </summary>
+        private static bool IncludeWarehouseOption(GenericFileStoreEntity store, bool newStore)
+        {
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                ILicenseService licenseService = scope.Resolve<ILicenseService>();
+                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
+
+                if (!newStore && restrictionLevel == EditionRestrictionLevel.None)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

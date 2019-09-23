@@ -87,15 +87,19 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             await base.DownloadWarehouseOrders(batchId).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Should we send orders to the hub
+        /// </summary>
+        /// <returns></returns>
         private bool ShouldUploadToHub()
         {
-            if (GenericStoreEntity.FileSource != (int) GenericFileSourceTypeCode.Warehouse)
+            // If this machine is configured to pull orders from warehouse then dont send orders to the hub
+            if (GenericStoreEntity.FileSource == (int) GenericFileSourceTypeCode.Warehouse)
             {
-                // Not setup for warehouse
                 return false;
             }
 
-            if (IsWarehouseAllowed())
+            if (!IsWarehouseAllowed())
             {
                 return false;
             }
@@ -113,7 +117,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             try
             {
                 InitializeDownload();
-                
+
                 GenericFileSourceType sourceType = GenericFileSourceTypeManager.GetFileSourceType((GenericFileSourceTypeCode) GenericStoreEntity.FileSource);
 
                 // Prepare the file source
@@ -233,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         private async Task UploadOrdersToHub(IEnumerable<OrderEntity> downloadedOrders)
         {
-            if (GenericStoreEntity.WarehouseStoreID.HasValue)
+            if (GenericStoreEntity.WarehouseStoreID.HasValue && downloadedOrders.Any())
             {
                 var result =
                     await warehouseOrderClient.UploadOrders(downloadedOrders, GenericStoreEntity, false).ConfigureAwait(false);

@@ -43,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 
             if (e.FirstTime)
             {
-                fileSourceMasterControl.LoadStore(GetStore<GenericFileStoreEntity>());
+                fileSourceMasterControl.LoadStore(GetStore<GenericFileStoreEntity>(), true);
             }
         }
 

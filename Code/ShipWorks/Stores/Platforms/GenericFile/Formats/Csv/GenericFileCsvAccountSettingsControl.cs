@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
                 log.Error("Failed to load import map", ex);
             }
 
-            fileSourceControl.LoadStore(generic);
+            fileSourceControl.LoadStore(generic, false);
         }
 
         /// <summary>

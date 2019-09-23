@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
             xmlSetupControl.LoadStore(generic);
-            fileSourceControl.LoadStore(generic);
+            fileSourceControl.LoadStore(generic, false);
         }
 
         /// <summary>
