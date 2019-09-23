@@ -280,7 +280,7 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
-
+            
             ShipWorksSession.Initialize(Guid.NewGuid());
 
             DataPath.Initialize();
