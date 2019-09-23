@@ -318,8 +318,8 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 
             if (shipWorksInsured)
             {
-                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID.ToString().Truncate(20));
-                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus.Truncate(50));
+                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
+                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
             }
         }
     }
