@@ -30,10 +30,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
 
         protected readonly GenericFileStoreType storeType;
         private readonly IWarehouseOrderClient warehouseOrderClient;
-        private readonly IGenericFileStoreWarehouseRepository storeWarehouseRepository;
         private int fileCount = 0;
-
-        private readonly Lazy<GenericFileStore> genericFileStore;
         private readonly ILicenseService licenseService;
         private List<OrderEntity> ordersToSendToHub;
 
@@ -46,15 +43,11 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseOrderClient warehouseOrderClient,
-            IGenericFileStoreWarehouseRepository storeWarehouseRepository,
             ILicenseService licenseService)
             : base(store, getStoreType(store), configurationData, sqlAdapterFactory)
         {
             storeType = StoreType as GenericFileStoreType;
             this.warehouseOrderClient = warehouseOrderClient;
-            this.storeWarehouseRepository = storeWarehouseRepository;
-
-            genericFileStore = new Lazy<GenericFileStore>(() => storeWarehouseRepository.GetStore(store));
             this.licenseService = licenseService;
         }
 

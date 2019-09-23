@@ -39,9 +39,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseOrderClient warehouseOrderClient,
-            IGenericFileStoreWarehouseRepository genericFileStoreWarehouseRepository,
             ILicenseService licenseService)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, genericFileStoreWarehouseRepository, licenseService)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, licenseService)
         {
 
         }

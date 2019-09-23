@@ -32,9 +32,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseOrderClient warehouseOrderClient,
-            IGenericFileStoreWarehouseRepository warehouseRepository,
             ILicenseService licenseService)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, warehouseRepository, licenseService)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, licenseService)
         {
 
         }
