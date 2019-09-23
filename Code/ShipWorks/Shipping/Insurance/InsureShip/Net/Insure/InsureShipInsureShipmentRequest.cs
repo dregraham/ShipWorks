@@ -57,6 +57,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
                 {
                     shipment.InsurancePolicy.InsureShipPolicyID = x.PolicyID;
                     shipment.InsurancePolicy.CreatedWithApi = true;
+                    shipment.InsurancePolicy.InsureShipStatus = x.Status.Truncate(50);
                 });
         }
 

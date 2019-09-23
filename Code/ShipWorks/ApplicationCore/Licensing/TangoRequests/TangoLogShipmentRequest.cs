@@ -315,6 +315,12 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 
             postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
             postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
+
+            if (shipWorksInsured)
+            {
+                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID.ToString().Truncate(20));
+                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus.Truncate(50));
+            }
         }
     }
 }
