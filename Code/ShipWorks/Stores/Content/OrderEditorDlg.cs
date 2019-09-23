@@ -344,7 +344,7 @@ namespace ShipWorks.Stores.Content
                 ShipBillAddressEditorDlg dlg = lifetimeScope.Resolve<ShipBillAddressEditorDlg>(
                     new TypedParameter(typeof(EntityBase2), order),
                     new TypedParameter(typeof(bool), true));
-                dlg.ShowDialog(this);
+                dlg.ShowDialog(this);                
             }
         }
 

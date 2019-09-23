@@ -3123,7 +3123,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ShipmentEntity", "ShipStateProvCode", "ShipStateProvCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 29);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipPostalCode", "ShipPostalCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 30);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipCountryCode", "ShipCountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 31);
-			this.AddElementFieldMapping("ShipmentEntity", "ShipPhone", "ShipPhone", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 32);
+			this.AddElementFieldMapping("ShipmentEntity", "ShipPhone", "ShipPhone", false, "NVarChar", 35, 0, 0, false, "", null, typeof(System.String), 32);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipEmail", "ShipEmail", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 33);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipAddressValidationSuggestionCount", "ShipAddressValidationSuggestionCount", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 34);
 			this.AddElementFieldMapping("ShipmentEntity", "ShipAddressValidationStatus", "ShipAddressValidationStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 35);

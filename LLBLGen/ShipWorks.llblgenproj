@@ -2631,7 +2631,7 @@
           <Field Name="ShipMiddleName" Type="string" MaxLength="30" FieldIndex="22" />
           <Field Name="ShipMilitaryAddress" Type="int" FieldIndex="40" />
           <Field Name="ShipNameParseStatus" Type="int" FieldIndex="62" />
-          <Field Name="ShipPhone" Type="string" MaxLength="25" FieldIndex="32" />
+          <Field Name="ShipPhone" Type="string" MaxLength="35" FieldIndex="32" />
           <Field Name="ShipPOBox" Type="int" FieldIndex="38" />
           <Field Name="ShipPostalCode" Type="string" MaxLength="20" FieldIndex="30" />
           <Field Name="ShipResidentialStatus" Type="int" FieldIndex="37" />
@@ -4573,7 +4573,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T18:14:38.2884915Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T21:59:51.2445802Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8393,7 +8393,7 @@
                         <CustomProperty Name="AuditName" Value="ShipCountry" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="ShipPhone" Ordinal="33" DbType="12" Length="25" />
+                    <Field Name="ShipPhone" Ordinal="33" DbType="12" Length="35" />
                     <Field Name="ShipEmail" Ordinal="34" DbType="12" Length="100" />
                     <Field Name="ShipAddressValidationSuggestionCount" Ordinal="35" DbType="8" Precision="10" />
                     <Field Name="ShipAddressValidationStatus" Ordinal="36" DbType="8" Precision="10" />
@@ -11360,7 +11360,7 @@
         </Catalog>
         <Catalog Name="SW_Debug_Shipping_Specs">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T17:56:08.5342091Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T21:59:54.8663381Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -18146,7 +18146,7 @@
         </Catalog>
         <Catalog Name="SW_ShipWorks_Core_Specs">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T17:56:11.8593158Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T21:59:57.9072241Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -24932,7 +24932,7 @@
         </Catalog>
         <Catalog Name="SW_ShipWorks_Stores_Tests_Integration">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T17:56:14.9580322Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T22:00:00.9920417Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
