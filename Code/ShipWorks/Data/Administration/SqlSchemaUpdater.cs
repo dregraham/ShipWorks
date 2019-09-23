@@ -155,16 +155,10 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
-        /// customer or production scenarios.
+        /// Create progress items
         /// </summary>
-        public static void UpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> telemetryEvent, bool debuggingMode = false)
+        private static (ProgressItem progressScripts, ProgressItem progressFunctionality, ProgressItem progressFilterCounts) CreateProgressItems(IProgressProvider progressProvider)
         {
-            Version installedSchema = GetInstalledSchemaVersion();
-            Version installedAssembly = GetInstalledAssemblyVersion();
-
-            log.Info($"Upgrading database to {GetRequiredSchemaVersion()}. From Schema: {installedSchema} & Assembly: {installedAssembly}.");
-
             // Create the primary progress item
             ProgressItem progressScripts = new ProgressItem("Update Tables");
             progressScripts.CanCancel = false;
@@ -179,6 +173,26 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFilterCounts = new ProgressItem("Calculate Initial Filter Counts");
             progressFilterCounts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFilterCounts);
+
+            return (progressScripts, progressFunctionality, progressFilterCounts);
+        }
+
+        /// <summary>
+        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
+        /// customer or production scenarios.
+        /// </summary>
+        public static void UpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> telemetryEvent, bool debuggingMode = false)
+        {
+            Version installedSchema = GetInstalledSchemaVersion();
+            Version installedAssembly = GetInstalledAssemblyVersion();
+
+            log.Info($"Upgrading database to {GetRequiredSchemaVersion()}. From Schema: {installedSchema} & Assembly: {installedAssembly}.");
+
+            // Create progress items
+            var progressItems = CreateProgressItems(progressProvider);
+            ProgressItem progressScripts = progressItems.progressScripts;
+            ProgressItem progressFunctionality = progressItems.progressFunctionality;
+            ProgressItem progressFilterCounts = progressItems.progressFilterCounts;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {

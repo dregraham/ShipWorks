@@ -25,6 +25,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
+        private string tangoCustomerId = string.Empty;
+        private Version versionRequired = new Version();
+        private TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+        private TelemetricResult<Result> backupResult = null;
+        private AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter = new AutoUpgradeFailureSubmitter();
 
         /// <summary>
         /// The CommandName that can be sent to the ShipWorks.exe
@@ -37,12 +42,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             log.Info("Execute starting.");
-
-            string tangoCustomerId = string.Empty;
-            Version versionRequired = new Version();
-            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-            TelemetricResult<Result> backupResult = null;
-            AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter = new AutoUpgradeFailureSubmitter();
 
             try
             {
