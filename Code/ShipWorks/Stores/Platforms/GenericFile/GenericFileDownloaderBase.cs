@@ -70,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         protected abstract Task<bool> ImportFile(GenericFileInstance file);
 
         /// <summary>
-        /// Only download from warehouse if we are not using ondemand
+        /// Conditionally upload orders to hub. Then download orders from hub.
         /// </summary>
         protected override async Task DownloadWarehouseOrders(Guid batchId)
         {
@@ -90,16 +90,10 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// <summary>
         /// Should we send orders to the hub
         /// </summary>
-        /// <returns></returns>
         private bool ShouldUploadToHub()
         {
             // If this machine is configured to pull orders from warehouse then dont send orders to the hub
-            if (GenericStoreEntity.FileSource == (int) GenericFileSourceTypeCode.Warehouse)
-            {
-                return false;
-            }
-
-            if (!IsWarehouseAllowed())
+            if (GenericStoreEntity.FileSource == (int) GenericFileSourceTypeCode.Warehouse || !IsWarehouseAllowed())
             {
                 return false;
             }
