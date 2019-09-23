@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Import.Spreadsheet;
@@ -31,8 +32,9 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
             IConfigurationData configurationData,
             ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseOrderClient warehouseOrderClient,
-            IGenericFileStoreWarehouseRepository warehouseRepository)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, warehouseRepository)
+            IGenericFileStoreWarehouseRepository warehouseRepository,
+            ILicenseService licenseService)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, warehouseRepository, licenseService)
         {
 
         }
