@@ -17,7 +17,7 @@ using ShipWorks.Stores.Warehouse.StoreData;
 namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 {
     /// <summary>
-    /// View model for the OdbcHubControl
+    /// View model for the GenericStoreHubViewModel
     /// </summary>
     [Component(RegistrationType.Self)]
     public class GenericStoreHubViewModel : ViewModelBase
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// List of existing odbc stores from the hub
+        /// List of existing GenericFileStore stores from the hub
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<Store> Stores
@@ -121,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// Save the odbc store details to the OdbcStoreEntity
+        /// Save the GenericFileStore store details to the GenericFileStoreEntity
         /// </summary>
         private void SaveStoreEntity(GenericFileStoreEntity storeEntity, Guid warehouseStoreId, GenericFileStore genericFileStore)
         {
@@ -133,7 +133,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// Clear the ODBC store entity details
+        /// Clear the GenericFileStore store entity details
         /// </summary>
         private void ClearStoreEntity(GenericFileStoreEntity storeEntity)
         {
@@ -171,12 +171,12 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
                 }
                 else
                 {
-                    Message = "No existing ODBC stores were found in the Hub. Please select \"Create a new ODBC store\" and click next.";
+                    Message = "No existing Generic File stores were found in the Hub. Please select \"Create a new Generic File store\" and click next.";
                 }
             }
             catch (Exception e)
             {
-                Message = $"Failed to load existing ODBC stores from the Hub.{Environment.NewLine}{Environment.NewLine}{e.Message}";
+                Message = $"Failed to load existing Generic File stores from the Hub.{Environment.NewLine}{Environment.NewLine}{e.Message}";
             }
         }
     }

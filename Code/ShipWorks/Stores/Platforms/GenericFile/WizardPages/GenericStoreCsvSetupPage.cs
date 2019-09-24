@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 
             var store = GetStore<GenericFileStoreEntity>();
 
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Csv || store.FileSource == (int) GenericFileSourceTypeCode.Warehouse;
+            e.Skip = store.FileFormat != (int) GenericFileFormat.Csv || store.FileSource == (int) GenericFileSourceTypeCode.Warehouse;
         }
 
         /// <summary>

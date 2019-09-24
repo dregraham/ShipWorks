@@ -11,7 +11,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
     /// <summary>
     /// Client for interacting with generic file stores and warehouse
     /// </summary>
-    [Service]
     public interface IGenericFileStoreClient
     {
         /// <summary>
@@ -20,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
         Task<GenericResult<Dictionary<Guid, Store>>> GetStores();
 
         /// <summary>
-        /// Get the given warehouseStoreIds OdbcStore
+        /// Get the given warehouseStoreIds GenericFileStore
         /// </summary>
         Task<GenericResult<GenericFileStore>> GetStore(Guid warehouseStoreId, Store baseStore);
     }

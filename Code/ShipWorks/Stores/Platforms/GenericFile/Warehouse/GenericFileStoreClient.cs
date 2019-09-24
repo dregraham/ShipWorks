@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,6 +13,10 @@ using ShipWorks.Editions;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Warehouse
 {
+    /// <summary>
+    /// Client interacting with Generic File stores and the hub
+    /// </summary>
+    [Component]
     class GenericFileStoreClient : IGenericFileStoreClient
     {
         private ILicenseService licenseService;

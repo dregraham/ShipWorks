@@ -34,8 +34,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             GenericFileStoreEntity store = GetStore<GenericFileStoreEntity>();
-            bool skip = store.FileSource == (int) GenericFileSourceTypeCode.Warehouse;
-            if (skip)
+
+            if (store.FileSource == (int) GenericFileSourceTypeCode.Warehouse)
             {
                 e.Skip = true;
                 return;
