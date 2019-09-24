@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 {
@@ -106,6 +107,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                     };
 
                     await updateClient.UploadShipmentDetails(store, uploadShipment, order).ConfigureAwait(false);
+
+                    //Manually set the shipping status
+                    ChannelAdvisorOrderEntity caOrder = order as ChannelAdvisorOrderEntity;
+                    if(caOrder != null)
+                    {
+                        caOrder.OnlineShippingStatus = (int)ChannelAdvisorShippingStatus.Shipped;
+                        var sql = new SqlAdapter();
+                        await sql.SaveEntityAsync(caOrder, false);
+                    }
                 }
                 catch (ChannelAdvisorException ex)
                 {
