@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Enums;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -37,7 +38,7 @@ namespace ShipWorks.Stores.Orders.Split
         private decimal originalTotalCharge;
         private decimal splitTotalCharge;
         private OrderSplitterType splitType = OrderSplitterType.Reroute;
-        private bool isHubCustomer;
+        private bool canChangeSplitType;
 
         /// <summary>
         /// Constructor
@@ -151,10 +152,10 @@ namespace ShipWorks.Stores.Orders.Split
         /// Is this a Hub customer
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsHubCustomer
+        public bool CanChangeSplitType
         {
-            get => isHubCustomer;
-            set => handler.Set(nameof(IsHubCustomer), ref isHubCustomer, value);
+            get => canChangeSplitType;
+            set => handler.Set(nameof(CanChangeSplitType), ref canChangeSplitType, value);
         }
 
         [Obfuscation(Exclude = true)]
@@ -190,8 +191,9 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
-            IsHubCustomer = licenseService.IsHub;
-            SplitType = licenseService.IsHub ? OrderSplitterType.Reroute : OrderSplitterType.Local;
+            CanChangeSplitType = licenseService.IsHub && 
+                (order.CombineSplitStatus == CombineSplitStatusType.None || order.CombineSplitStatus == CombineSplitStatusType.Split);
+            SplitType = CanChangeSplitType ? OrderSplitterType.Reroute : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
             OrderNumberPostfix = suggestedOrderNumber;
 
