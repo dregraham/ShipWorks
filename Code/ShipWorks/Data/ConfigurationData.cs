@@ -109,7 +109,7 @@ namespace ShipWorks.Data
                         IDataReader reader = sqlAdapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0, null, true);
                         while (reader.Read())
                         {
-                            customerKey = reader.GetString(0);
+                            customerKey = reader.GetString(0).Trim();
                             break;
                         }
                     }
@@ -130,6 +130,7 @@ namespace ShipWorks.Data
                 getSqlAdapter().FetchEntity(newConfig);
                 config = newConfig;
                 configReadOnly = newConfig.AsReadOnly();
+                customerKey = newConfig.CustomerKey;
                 needCheckForChanges = false;
             }
         }
@@ -149,6 +150,7 @@ namespace ShipWorks.Data
                     configReadOnly = config.AsReadOnly();
                 }
 
+                customerKey = configuration.CustomerKey;
                 needCheckForChanges = false;
             }
         }
