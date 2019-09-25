@@ -216,7 +216,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// <summary> The ShipPhone property of the Entity Shipment<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "Shipment"."ShipPhone"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String ShipPhone { get; }
         /// <summary> The ShipEmail property of the Entity Shipment<br/><br/>

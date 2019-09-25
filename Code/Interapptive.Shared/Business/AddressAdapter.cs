@@ -54,6 +54,7 @@ namespace Interapptive.Shared.Business
             adapter.POBox = 0;
             adapter.USTerritory = 0;
             adapter.MilitaryAddress = 0;
+            adapter.Phone = "";
         }
 
         /// <summary>
@@ -109,6 +110,7 @@ namespace Interapptive.Shared.Business
             toAdapter.POBox = fromAdapter.POBox;
             toAdapter.USTerritory = fromAdapter.USTerritory;
             toAdapter.MilitaryAddress = fromAdapter.MilitaryAddress;
+            toAdapter.Phone = fromAdapter.Phone;
         }
 
         /// <summary>
@@ -141,6 +143,8 @@ namespace Interapptive.Shared.Business
             destinationAddress.StateProvCode = StateProvCode;
             destinationAddress.PostalCode = PostalCode;
             destinationAddress.CountryCode = CountryCode;
+
+            destinationAddress.Phone = Phone;
 
             destinationAddress.AddressValidationStatus = AddressValidationStatus;
             destinationAddress.AddressValidationError = AddressValidationError;
@@ -185,7 +189,8 @@ namespace Interapptive.Shared.Business
                 AreEqualTrimmed(City, other.City) &&
                 AreEqualTrimmed(StateProvCode, other.StateProvCode) &&
                 AreEqualTrimmed(PostalCode, other.PostalCode) &&
-                AreEqualTrimmed(CountryCode, other.CountryCode);
+                AreEqualTrimmed(CountryCode, other.CountryCode) &&
+                AreEqualTrimmed(Phone, other.Phone);
         }
 
         /// <summary>
@@ -464,6 +469,12 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<int>("AddressType"); }
             set { SetField("AddressType", value); }
+        }
+
+        public string Phone
+        {
+            get { return GetField<string>("Phone"); }
+            set { SetField("Phone",value); }
         }
     }
 }

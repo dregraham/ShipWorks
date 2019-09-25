@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Content.Controls
             {
                 personBilling.EditStyle = value;
                 personShipping.EditStyle = value;
-
+                
                 linkCopyFromBilling.Visible = value != PersonEditStyle.ReadOnly;
                 linkCopyFromShipping.Visible = value != PersonEditStyle.ReadOnly;
             }

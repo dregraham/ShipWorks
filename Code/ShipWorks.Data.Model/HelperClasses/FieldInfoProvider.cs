@@ -2295,7 +2295,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "BillStateProvCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillStateProvCode, 50, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillPostalCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillCountryCode", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillCountryCode, 50, 0, 0);
-			this.AddElementFieldInfo("OrderEntity", "BillPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPhone, 25, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "BillPhone", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillPhone, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillFax", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillFax, 35, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillEmail", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillEmail, 100, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "BillWebsite", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.BillWebsite, 50, 0, 0);
@@ -2956,7 +2956,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "ShipStateProvCode", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipStateProvCode, 50, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipPostalCode", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipCountryCode", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipCountryCode, 50, 0, 0);
-			this.AddElementFieldInfo("ShipmentEntity", "ShipPhone", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipPhone, 25, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "ShipPhone", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipPhone, 35, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipEmail", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipEmail, 100, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipAddressValidationSuggestionCount", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipAddressValidationSuggestionCount, 0, 0, 10);
 			this.AddElementFieldInfo("ShipmentEntity", "ShipAddressValidationStatus", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.ShipAddressValidationStatus, 0, 0, 10);
