@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
+﻿using System.Data.Common;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Data
@@ -12,6 +8,7 @@ namespace Interapptive.Shared.Data
     /// <summary>
     /// Utility functions for dealing with Sql Server and Sql statements
     /// </summary>
+    [Component]
     public class SqlUtilityWrapper : ISqlUtility
     {
         /// <summary>
