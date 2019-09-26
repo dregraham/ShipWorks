@@ -201,6 +201,8 @@ namespace ShipWorks.Data.Administration
                 // Put the SuperUser in scope, and don't audit
                 using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                 {
+                    SqlSession.Current.Configuration.ForceWorkstationID = true;
+
                     using (new ExistingConnectionScope())
                     {
                         // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
@@ -212,8 +214,6 @@ namespace ShipWorks.Data.Administration
                             try
                             {
                                 {
-                                    SqlSession.Current.Configuration.ForceWorkstationID = true;
-
                                     using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
                                     {
                                         // Update the tables
