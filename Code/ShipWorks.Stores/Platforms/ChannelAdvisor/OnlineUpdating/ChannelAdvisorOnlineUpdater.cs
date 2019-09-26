@@ -38,11 +38,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// Constructor
         /// </summary>
         public ChannelAdvisorOnlineUpdater(IChannelAdvisorUpdateClient updateClient,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger, ISqlAdapterFactory adapterFactory)
         {
             this.updateClient = updateClient;
             log = createLogger(GetType());
-            adapterFactory = new SqlAdapterFactory();
+            this.adapterFactory = adapterFactory;
         }
 
         /// <summary>
@@ -169,9 +169,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             //If an exception escapes the retry we want to igonore it
             //so that customer doesn't try to reupload the order  
             catch(Exception ex)
-                {
-                    log.Warn(ex);
-                }
+            {
+                log.Warn(ex);
+            }
+                
         }
 
         /// <summary>
