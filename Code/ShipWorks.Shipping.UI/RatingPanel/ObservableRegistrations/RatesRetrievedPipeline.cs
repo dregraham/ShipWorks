@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
 {
@@ -49,12 +50,19 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Switch(this)
                     .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .ObserveOn(schedulerProvider.Dispatcher)
+                    .IgnoreBetweenMessages(
+                        messenger.OfType<ShippingDialogOpeningMessage>(),
+                        GetResumeObservable())
                     .Dump(this)
                     .Subscribe(this, viewModel.LoadRates),
                     messenger.OfType<ShipmentsProcessedMessage>()
                         .Trackable()
                         .ObserveOn(schedulerProvider.Dispatcher)
-                        .Subscribe(this, _ => viewModel.ClearRates()));
+                        .Subscribe(this, _ =>
+                        {
+                            viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
+                            viewModel.IsLoading = false;
+                        }));
 
             messenger.Send(new InitializeRatesRetrievedPipelineMessage());
 
