@@ -62,6 +62,14 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                         {
                             viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
                             viewModel.IsLoading = false;
+                        }),
+                     messenger.OfType<OrderSelectionChangingMessage>()
+                        .Trackable()
+                        .ObserveOn(schedulerProvider.Dispatcher)
+                        .Subscribe(this, _ =>
+                        {
+                            viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
+                            viewModel.IsLoading = false;
                         }));
 
             messenger.Send(new InitializeRatesRetrievedPipelineMessage());
