@@ -1,4 +1,6 @@
 ﻿using System;
+using Autofac.Extras.Moq;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
