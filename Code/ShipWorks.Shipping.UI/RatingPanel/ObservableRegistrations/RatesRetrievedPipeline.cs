@@ -50,10 +50,11 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .ObserveOn(schedulerProvider.Dispatcher)
                     .Dump(this)
-                    .IgnoreBetweenMessages(
-                        messenger.OfType<OpenShippingDialogMessage>().Trackable().Select(this, x => "Window closing"),
-                        GetResumeObservable().Trackable().Select(this, x => "Window opening"))
-                    .Subscribe(this, viewModel.LoadRates));
+                    .Subscribe(this, viewModel.LoadRates),
+                    messenger.OfType<ShipmentsProcessedMessage>()
+                        .Trackable()
+                        .ObserveOn(schedulerProvider.Dispatcher)
+                        .Subscribe(this, _ => viewModel.ClearRates()));
 
             messenger.Send(new InitializeRatesRetrievedPipelineMessage());
 

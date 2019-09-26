@@ -173,6 +173,11 @@ namespace ShipWorks.Shipping.UI.RatingPanel
             SelectedRate = rate;
         }
 
+        public virtual void ClearRates()
+        {
+            this.Rates = Enumerable.Empty<RateResult>();
+        }
+
         /// <summary>
         /// Dispose any held resources
         /// </summary>
