@@ -215,7 +215,12 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         /// </summary>
         protected override Task SaveDownloadedOrder(OrderEntity order)
         {
-            if (IsWarehouseAllowed())
+            // if the hub order id is null this order is comming
+            // from a local folder and first needs to be sent to the hub
+
+            // if we have a hub order id this order is comming directly from
+            // the hub and we need to save it
+            if (IsWarehouseAllowed() && order.HubOrderID == null)
             {
                 ordersToSendToHub.Add(order);
                 return Task.CompletedTask;
