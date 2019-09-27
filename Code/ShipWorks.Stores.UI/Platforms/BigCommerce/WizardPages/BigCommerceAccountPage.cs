@@ -41,12 +41,16 @@ namespace ShipWorks.Stores.UI.Platforms.BigCommerce.WizardPages
         protected async void OnStepNext(object sender, WizardStepEventArgs e)
         {
             BigCommerceStoreEntity store = GetStore<BigCommerceStoreEntity>();
+
+            WizardPage cachedNextPage = e.NextPage;
+            e.NextPage = this;
+
             bool saveSuccessful = await accountSettingsControl.SaveToEntityAsync(store).ConfigureAwait(false);
 
             // Ask the account settings control to save it's info to the store.  If anything is invalid, stay on this page.
-            if (!saveSuccessful)
+            if (saveSuccessful)
             {
-                e.NextPage = this;
+                e.NextPage = cachedNextPage;
             }
         }
     }
