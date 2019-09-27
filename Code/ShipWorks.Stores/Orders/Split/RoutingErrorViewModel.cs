@@ -82,18 +82,18 @@ namespace ShipWorks.Stores.Orders.Split
                 {
                     case HubErrorCode.NoWarehousesAvailableForRouting:
                         return (
-                            "This order can't ship from another warehouse.", 
-                            "https://www.shipworks.com/blog/7-tips-for-online-retailers-to-handle-backorders/"
+                            "This order can't ship from another warehouse.",
+                            "https://support.shipworks.com/hc/en-us/articles/360022469872"
                             );
                     case HubErrorCode.CustomerHasSingleWarehouse:
                         return (
-                            "You must add another warehouse in order to attempt to ship this item elsewhere.", 
-                            "https://www.shipworks.com/"
+                            "You must add another warehouse in order to attempt to ship this item elsewhere.",
+                            "https://support.shipworks.com/hc/en-us/articles/360022469872"
                             );
                 }
             }
 
-            return ("ShipWorks Hub was not able to reroute this order.", "https://www.shipworks.com/");
+            return ("ShipWorks Hub was not able to reroute this order.", "https://support.shipworks.com/hc/en-us/articles/360022469872");
         }
     }
 }
