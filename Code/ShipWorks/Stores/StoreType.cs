@@ -39,6 +39,9 @@ namespace ShipWorks.Stores
         private readonly StoreEntity store;
         private IStoreEntity storeReadOnly;
 
+        protected delegate void StoreAddedHandler(StoreEntity store, ILifetimeScope lifetimeScope);
+        protected event StoreAddedHandler StoreAdded;
+
         /// <summary>
         /// Construction
         /// </summary>
@@ -669,5 +672,11 @@ namespace ShipWorks.Stores
         /// Should the Hub be used for this store?
         /// </summary>
         public virtual bool ShouldUseHub(IStoreEntity store) => false;
+
+        /// <summary>
+        /// Raise the StoreAdded event
+        /// </summary>
+        public void RaiseStoreAdded(StoreEntity store, ILifetimeScope lifetimeScope) =>
+            StoreAdded?.Invoke(store, lifetimeScope);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Xml;
 using System.Xml.Linq;
@@ -25,7 +26,7 @@ namespace ShipWorks.Data
         private static ConfigurationEntity config;
         private static IConfigurationEntity configReadOnly;
         private static bool needCheckForChanges;
-
+        private static string customerKey;
         private static readonly Version archiveVersion = new Version(5, 23, 1, 6);
 
         /// <summary>
@@ -92,6 +93,33 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
+        /// Gets the CustomerKey
+        /// </summary>
+        public static string FetchCustomerKey()
+        {
+            lock (lockObj)
+            {
+                if (needCheckForChanges || string.IsNullOrEmpty(customerKey))
+                {
+                    ResultsetFields resultFields = new ResultsetFields(1);
+                    resultFields.DefineField(ConfigurationFields.CustomerKey, 0, "CustomerKey", "");
+
+                    using (var sqlAdapter = defaultGetSqlAdapter())
+                    {
+                        IDataReader reader = sqlAdapter.FetchDataReader(resultFields, null, CommandBehavior.CloseConnection, 0, null, true);
+                        while (reader.Read())
+                        {
+                            customerKey = reader.GetString(0).Trim();
+                            break;
+                        }
+                    }
+                }
+
+                return customerKey;
+            }
+        }
+
+        /// <summary>
         /// Update the configuration stored in memory
         /// </summary>
         private static void UpdateConfiguration(Func<ISqlAdapter> getSqlAdapter)
@@ -102,6 +130,7 @@ namespace ShipWorks.Data
                 getSqlAdapter().FetchEntity(newConfig);
                 config = newConfig;
                 configReadOnly = newConfig.AsReadOnly();
+                customerKey = newConfig.CustomerKey;
                 needCheckForChanges = false;
             }
         }
@@ -121,6 +150,7 @@ namespace ShipWorks.Data
                     configReadOnly = config.AsReadOnly();
                 }
 
+                customerKey = configuration.CustomerKey;
                 needCheckForChanges = false;
             }
         }

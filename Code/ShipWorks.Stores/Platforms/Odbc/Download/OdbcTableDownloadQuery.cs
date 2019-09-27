@@ -3,6 +3,7 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.DataSource;
 using ShipWorks.Stores.Platforms.Odbc.DataSource.Schema;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
+using ShipWorks.Stores.Warehouse.StoreData;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
@@ -11,7 +12,8 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
     public class OdbcTableDownloadQuery : IOdbcQuery
     {
-        private readonly OdbcStoreEntity store;
+        private readonly OdbcStoreEntity storeEntity;
+        private readonly OdbcStore store;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
         private readonly IOdbcDataSource dataSource;
         private readonly IOdbcFieldMap fieldMap;
@@ -20,8 +22,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// Initializes a new instance of the <see cref="OdbcTableDownloadQuery"/> class.
         /// </summary>
         /// <exception cref="ShipWorksOdbcException">An incompatible source was provided to perform an ODBC table based query.</exception>
-        public OdbcTableDownloadQuery(OdbcStoreEntity store, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
+        public OdbcTableDownloadQuery(OdbcStoreEntity storeEntity, OdbcStore store, IShipWorksDbProviderFactory dbProviderFactory, IOdbcFieldMap fieldMap, IOdbcDataSource dataSource)
         {
+            this.storeEntity = storeEntity;
             this.store = store;
             this.dbProviderFactory = dbProviderFactory;
             this.dataSource = dataSource;

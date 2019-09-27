@@ -11,6 +11,7 @@ using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using System;
 using System.Data.Common;
+using ShipWorks.Stores.Warehouse.StoreData;
 using Xunit;
 
 #endregion
@@ -49,17 +50,25 @@ namespace ShipWorks.Stores.Tests.Platforms.Odbc.Download
             dbProvider.Setup(p => p.CreateShipWorksOdbcCommandBuilder(null))
                 .Returns(cmdBuilder.Object);
 
+            OdbcStoreEntity odbcStoreEntity = new OdbcStoreEntity()
+            {
+                ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
+                ImportColumnSource = "MyTable"
+            };
 
+            var odbcStore = new OdbcStore()
+            {
+                ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
+                ImportColumnSource = "RepoTable"
+            };
+            
             var testObject =
-                mock.Create<OdbcTableDownloadQuery>(new TypedParameter(typeof(OdbcStoreEntity),
-                    new OdbcStoreEntity()
-                    {
-                        ImportColumnSourceType = (int) OdbcColumnSourceType.Table,
-                        ImportColumnSource = "MyTable"
-                    }));
+                mock.Create<OdbcTableDownloadQuery>(
+                    new TypedParameter(typeof(OdbcStoreEntity), odbcStoreEntity),
+                    new TypedParameter(typeof(OdbcStore), odbcStore));
             string sql = testObject.GenerateSql();
 
-            Assert.Equal("SELECT [field1], [field2], [FieldId] FROM [MyTable]", sql);
+            Assert.Equal("SELECT [field1], [field2], [FieldId] FROM [RepoTable]", sql);
         }
 
         [Fact]

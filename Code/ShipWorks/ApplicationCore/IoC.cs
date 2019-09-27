@@ -19,6 +19,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using RestSharp;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
@@ -259,6 +260,9 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterType<HttpRequestSubmitterFactory>()
                 .As<IHttpRequestSubmitterFactory>();
+
+            builder.RegisterType<RestRequest>()
+                .As<IRestRequest>();
 
             foreach (var taskDescriptor in ActionTaskManager.TaskDescriptors)
             {

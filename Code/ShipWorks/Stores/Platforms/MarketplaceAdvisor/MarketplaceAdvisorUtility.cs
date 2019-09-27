@@ -196,6 +196,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
                             case PostalServiceType.InternationalPriority:
                             case PostalServiceType.GlobalPostStandardIntl:
                             case PostalServiceType.GlobalPostSmartSaverStandardIntl:
+                            case PostalServiceType.GlobalPostPlus:
                                 return 65510;
 
                             // Going to treat Critical as Priority - not sure where to get updated code

@@ -381,6 +381,9 @@
     <Compile Include="Platforms\Odbc\Controls\OdbcDataSourceControl.Designer.cs">
       <DependentUpon>OdbcDataSourceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\Odbc\Controls\OdbcHubControl.xaml.cs">
+      <DependentUpon>OdbcHubControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\Odbc\Controls\OdbcOnDemandDownloadSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -414,6 +417,7 @@
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportParameterizedQueryControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Import\OdbcImportSubqueryControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\IOdbcMapSettingsControlViewModel.cs" />
+    <Compile Include="Platforms\Odbc\ViewModels\OdbcHubViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\OdbcMapSettingsControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\IOdbcUploadMappingControlViewModel.cs" />
     <Compile Include="Platforms\Odbc\ViewModels\Upload\OdbcUploadMappingControlViewModel.cs" />
@@ -447,6 +451,12 @@
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.Designer.cs">
       <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcHubPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Odbc\WizardPages\OdbcHubPage.Designer.cs">
+      <DependentUpon>OdbcHubPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.cs">
       <SubType>UserControl</SubType>
@@ -697,6 +707,9 @@
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\Import\OdbcImportSubqueryPage.resx">
       <DependentUpon>OdbcImportSubqueryPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcHubPage.resx">
+      <DependentUpon>OdbcHubPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\Odbc\WizardPages\OdbcSetupFinishPage.resx">
       <DependentUpon>OdbcSetupFinishPage.cs</DependentUpon>
     </EmbeddedResource>
@@ -884,6 +897,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Platforms\Odbc\Controls\OdbcHubControl.xaml" />
     <Page Include="Platforms\Odbc\Controls\OdbcMappingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

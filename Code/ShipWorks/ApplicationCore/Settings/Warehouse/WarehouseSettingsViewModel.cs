@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -37,6 +38,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public WarehouseSettingsViewModel(
             IWarehouseSettings warehouseSettingsView,
             IWarehouseListViewModel warehouseList,

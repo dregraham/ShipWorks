@@ -33,7 +33,7 @@ using CustomsV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.Custom
 using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.EltronPrinterDPIType;
 using ImageType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ImageType;
 using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.NonDeliveryOption;
-using PackageTypeV7 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV7;
+using PackageTypeV9 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV9;
 using PaperSizeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PaperSizeV1;
 using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PurchaseStatus;
 using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.ResidentialDeliveryIndicatorType;
@@ -901,7 +901,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            PackageTypeV7 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            PackageTypeV9 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType) shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
@@ -1223,41 +1223,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Gets the v36 version of the CodewordType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV7 packageType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV9 packageType)
         {
             switch (packageType)
             {
-                case PackageTypeV7.Postcard:
+                case PackageTypeV9.Postcard:
                     return Usps.WebServices.v36.PackageTypeV6.Postcard;
-                case PackageTypeV7.Letter:
+                case PackageTypeV9.Letter:
                     return Usps.WebServices.v36.PackageTypeV6.Letter;
-                case PackageTypeV7.LargeEnvelopeorFlat:
+                case PackageTypeV9.LargeEnvelopeorFlat:
                     return Usps.WebServices.v36.PackageTypeV6.LargeEnvelopeorFlat;
-                case PackageTypeV7.ThickEnvelope:
+                case PackageTypeV9.ThickEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.ThickEnvelope;
-                case PackageTypeV7.Package:
+                case PackageTypeV9.Package:
                     return Usps.WebServices.v36.PackageTypeV6.Package;
-                case PackageTypeV7.FlatRateBox:
+                case PackageTypeV9.FlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRateBox;
-                case PackageTypeV7.SmallFlatRateBox:
+                case PackageTypeV9.SmallFlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.SmallFlatRateBox;
-                case PackageTypeV7.LargeFlatRateBox:
+                case PackageTypeV9.LargeFlatRateBox:
                     return Usps.WebServices.v36.PackageTypeV6.LargeFlatRateBox;
-                case PackageTypeV7.FlatRateEnvelope:
+                case PackageTypeV9.FlatRateEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRateEnvelope;
-                case PackageTypeV7.FlatRatePaddedEnvelope:
+                case PackageTypeV9.FlatRatePaddedEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.FlatRatePaddedEnvelope;
-                case PackageTypeV7.LargePackage:
+                case PackageTypeV9.LargePackage:
                     return Usps.WebServices.v36.PackageTypeV6.LargePackage;
-                case PackageTypeV7.OversizedPackage:
+                case PackageTypeV9.OversizedPackage:
                     return Usps.WebServices.v36.PackageTypeV6.OversizedPackage;
-                case PackageTypeV7.RegionalRateBoxA:
+                case PackageTypeV9.RegionalRateBoxA:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxA;
-                case PackageTypeV7.RegionalRateBoxB:
+                case PackageTypeV9.RegionalRateBoxB:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxB;
-                case PackageTypeV7.LegalFlatRateEnvelope:
+                case PackageTypeV9.LegalFlatRateEnvelope:
                     return Usps.WebServices.v36.PackageTypeV6.LegalFlatRateEnvelope;
-                case PackageTypeV7.RegionalRateBoxC:
+                case PackageTypeV9.RegionalRateBoxC:
                     return Usps.WebServices.v36.PackageTypeV6.RegionalRateBoxC;
                 default:
                     throw new ArgumentOutOfRangeException("packageType");

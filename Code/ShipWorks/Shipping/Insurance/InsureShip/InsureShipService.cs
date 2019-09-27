@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// Insures the shipment with InsureShip and sets the InsuredWith property of the shipment based
         /// on the response from InsureShip.
         /// </summary>
-        public void Insure(ShipmentEntity shipment) =>
+        public Result Insure(ShipmentEntity shipment) =>
             insureShipment.CreateInsurancePolicy(shipment);
 
         /// <summary>

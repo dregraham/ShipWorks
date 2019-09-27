@@ -87,11 +87,11 @@ namespace ShipWorks.Warehouse
             orderEntity.OrderDate = warehouseOrder.OrderDate;
             orderEntity.OrderTotal = Math.Round(warehouseOrder.OrderTotal, 2);
             orderEntity.OnlineLastModified = warehouseOrder.OnlineLastModified;
-            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerID;
+            orderEntity.OnlineCustomerID = warehouseOrder.OnlineCustomerId;
             orderEntity.OnlineStatus = warehouseOrder.OnlineStatus;
             orderEntity.OnlineStatusCode = warehouseOrder.OnlineStatusCode;
             orderEntity.RequestedShipping = warehouseOrder.RequestedShipping;
-            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderID;
+            orderEntity.ChannelOrderID = warehouseOrder.ChannelOrderId;
             orderEntity.ShipByDate = warehouseOrder.ShipByDate;
             orderEntity.HubOrderID = Guid.Parse(warehouseOrder.HubOrderId);
             orderEntity.HubSequence = warehouseOrder.HubSequence;
@@ -114,11 +114,15 @@ namespace ShipWorks.Warehouse
         /// </summary>
         private void LoadAddress(PersonAdapter localAddress, WarehouseOrderAddress warehouseOrderAddress)
         {
-            // todo: parse names if needed
-            localAddress.UnparsedName = warehouseOrderAddress.UnparsedName;
-            localAddress.FirstName = warehouseOrderAddress.FirstName;
-            localAddress.MiddleName = warehouseOrderAddress.MiddleName;
-            localAddress.LastName = warehouseOrderAddress.LastName;
+            PersonName parsedName = warehouseOrderAddress.UnparsedName.IsNullOrWhiteSpace() ?
+                new PersonName(warehouseOrderAddress.FirstName, warehouseOrderAddress.MiddleName, warehouseOrderAddress.LastName) :
+                PersonName.Parse(warehouseOrderAddress.UnparsedName);
+
+            localAddress.UnparsedName = parsedName.UnparsedName;
+            localAddress.FirstName = parsedName.First;
+            localAddress.MiddleName = parsedName.Middle;
+            localAddress.LastName = parsedName.Last;
+
             localAddress.Company = warehouseOrderAddress.Company;
             localAddress.Street1 = warehouseOrderAddress.Street1;
             localAddress.Street2 = warehouseOrderAddress.Street2;
@@ -136,17 +140,26 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Create an order entity with the store specific identifier
         /// </summary>
-        protected abstract Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder);
+        protected virtual Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
+        {
+            return Task.FromResult(GenericResult.FromSuccess(new OrderEntity()));
+        }
 
         /// <summary>
         /// Load store specific order details
         /// </summary>
-        protected abstract void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder);
+        protected virtual void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+
+        }
 
         /// <summary>
         /// Load store specific item details
         /// </summary>
-        protected abstract void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem);
+        protected virtual void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
+        {
+
+        }
 
         /// <summary>
         /// Load items from the warehouse order into the order entity
@@ -184,6 +197,12 @@ namespace ShipWorks.Warehouse
             itemEntity.Length = warehouseItem.Length;
             itemEntity.Width = warehouseItem.Width;
             itemEntity.Height = warehouseItem.Height;
+
+            itemEntity.Custom1 = warehouseItem.Custom1;
+            itemEntity.Custom2 = warehouseItem.Custom2;
+            itemEntity.Custom3 = warehouseItem.Custom3;
+            itemEntity.Custom4 = warehouseItem.Custom4;
+            itemEntity.Custom5 = warehouseItem.Custom5;
 
             LoadItemAttributes(itemEntity, warehouseItem);
 

@@ -32,7 +32,14 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
             store = GetStore<OdbcStoreEntity>();
-            
+
+            if (!store.IsMappingRequired)
+            {
+                e.Skip = true;
+                e.RaiseStepEventWhenSkipping = false;
+                return;
+            }
+
             OdbcShipmentUploadStrategy uploadStrategy = (OdbcShipmentUploadStrategy)store.UploadStrategy;
 
             doNotUpload.Checked = uploadStrategy == OdbcShipmentUploadStrategy.DoNotUpload;

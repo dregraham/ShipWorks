@@ -7,6 +7,7 @@ using System;
 using System.Data.Common;
 using System.Linq;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores.Warehouse.StoreData;
 
 namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
 {
@@ -17,32 +18,39 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
     {
         private readonly IOdbcDataSource dataSource;
         private readonly IShipWorksDbProviderFactory dbProviderFactory;
+        private readonly IOdbcStoreRepository odbcStoreRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcDownloadCommandFactory"/> class.
         /// </summary>
-        public OdbcDownloadCommandFactory(IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        public OdbcDownloadCommandFactory(IOdbcDataSource dataSource, 
+            IShipWorksDbProviderFactory dbProviderFactory,
+            IOdbcStoreRepository odbcStoreRepository)
         {
             this.dataSource = dataSource;
             this.dbProviderFactory = dbProviderFactory;
+            this.odbcStoreRepository = odbcStoreRepository;
         }
 
         /// <summary>
         /// Creates the download command.
         /// </summary>
-        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap)
+        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity storeEntity, IOdbcFieldMap odbcFieldMap)
         {
-            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            OdbcStore store = odbcStoreRepository.GetStore(storeEntity);
 
+            IOdbcQuery downloadQuery = GetDownloadQuery(storeEntity, store, odbcFieldMap, dataSource, dbProviderFactory);
+ 
             return new OdbcDownloadCommand(odbcFieldMap, dataSource, dbProviderFactory, downloadQuery);
         }
 
         /// <summary>
         /// Creates the download command using OnlineLastModified.
         /// </summary>
-        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, DateTime onlineLastModified, IOdbcFieldMap odbcFieldMap)
+        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity storeEntity, DateTime onlineLastModified, IOdbcFieldMap odbcFieldMap)
         {
-            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            OdbcStore store = odbcStoreRepository.GetStore(storeEntity);
+            IOdbcQuery downloadQuery = GetDownloadQuery(storeEntity, store, odbcFieldMap, dataSource, dbProviderFactory);
 
             string lastModifiedColumnName = odbcFieldMap.FindEntriesBy(OrderFields.OnlineLastModified).FirstOrDefault()?.ExternalField.Column.Name;
             string quotedLastModifiedColumnName = WrapColumnInQuoteIdentifier(lastModifiedColumnName);
@@ -60,9 +68,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Create a download command using orderNumber
         /// </summary>
-        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity store, string orderNumber, IOdbcFieldMap odbcFieldMap)
+        public IOdbcCommand CreateDownloadCommand(OdbcStoreEntity storeEntity, string orderNumber, IOdbcFieldMap odbcFieldMap)
         {
-            IOdbcQuery downloadQuery = GetDownloadQuery(store, odbcFieldMap, dataSource, dbProviderFactory);
+            OdbcStore store = odbcStoreRepository.GetStore(storeEntity);
+            IOdbcQuery downloadQuery = GetDownloadQuery(storeEntity, store, odbcFieldMap, dataSource, dbProviderFactory);
             
             string orderNumberColumnName = odbcFieldMap.FindEntriesBy(OrderFields.OrderNumberComplete).FirstOrDefault()?.ExternalField.Column.Name;
             string quotedOrderNumberColumnName = WrapColumnInQuoteIdentifier(orderNumberColumnName);
@@ -80,13 +89,13 @@ namespace ShipWorks.Stores.Platforms.Odbc.DataAccess
         /// <summary>
         /// Creates the download query used to retrieve orders.
         /// </summary>
-        private static IOdbcQuery GetDownloadQuery(OdbcStoreEntity store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
+        private static IOdbcQuery GetDownloadQuery(OdbcStoreEntity storeEntity, OdbcStore store, IOdbcFieldMap odbcFieldMap, IOdbcDataSource dataSource, IShipWorksDbProviderFactory dbProviderFactory)
         {
-            dataSource.Restore(store.ImportConnectionString);
+            dataSource.Restore(storeEntity.ImportConnectionString);
 
             return store.ImportColumnSourceType == (int) OdbcColumnSourceType.Table
-                ? (IOdbcQuery)new OdbcTableDownloadQuery(store, dbProviderFactory, odbcFieldMap, dataSource)
-                : new OdbcCustomDownloadQuery(store);
+                ? (IOdbcQuery) new OdbcTableDownloadQuery(storeEntity, store, dbProviderFactory, odbcFieldMap, dataSource)
+                : new OdbcCustomDownloadQuery(storeEntity);
         }
 
         /// <summary>

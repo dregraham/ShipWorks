@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         public void Load(OdbcStoreEntity store)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
-            
+
             LoadColumnSource(store);
             LoadMap(store.UploadMap);
         }
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
         /// </summary>
         private void LoadColumnSource(OdbcStoreEntity store)
         {
-            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store);
+            IOdbcDataSource selectedDataSource = dataSourceService.GetUploadDataSource(store, true);
 
             // If we are in the upload mapping page, we know the column source is a table, not a custom query
             IOdbcColumnSource columnSource = columnSourceFactory(store.UploadColumnSource);
@@ -172,7 +172,6 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
                 messageHelper.ShowError(ex.Message);
             }
         }
-
 
         /// <summary>
         /// Build a single ODBC Field Map from the Order Address and Item Field Maps

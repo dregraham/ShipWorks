@@ -16,13 +16,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     [Component]
     public class WarehouseLink : IWarehouseLink
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IDatabaseIdentifier databaseIdentifier;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseLink(WarehouseRequestClient warehouseRequestClient, IDatabaseIdentifier databaseIdentifier)
+        public WarehouseLink(IWarehouseRequestClient warehouseRequestClient, IDatabaseIdentifier databaseIdentifier)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.databaseIdentifier = databaseIdentifier;

@@ -27,6 +27,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         InternationalPriority = 8,
 
         [Description("InternationalExpress")]
-        InternationalExpress = 16
+        InternationalExpress = 16,
+
+        [Description("GlobalPostPlus")]
+        GlobalPostPlus = 32
     }
 }

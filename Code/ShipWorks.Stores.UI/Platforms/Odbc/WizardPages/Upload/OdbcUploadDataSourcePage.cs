@@ -45,14 +45,15 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.WizardPages.Upload
         {
             store = GetStore<OdbcStoreEntity>();
 
-            if (store.UploadStrategy != (int)OdbcShipmentUploadStrategy.UseShipmentDataSource)
+            if (store.UploadStrategy == (int) OdbcShipmentUploadStrategy.DoNotUpload ||
+                (store.UploadStrategy != (int)OdbcShipmentUploadStrategy.UseShipmentDataSource && !string.IsNullOrEmpty(store.ImportConnectionString)))
             {
                 e.Skip = true;
                 e.RaiseStepEventWhenSkipping = false;
             }
             else if (!string.IsNullOrWhiteSpace(store.UploadConnectionString) && !dataSourceLoaded)
             {
-                odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store));
+                odbcDataSourceControl.LoadDataSource(dataSourceService.GetUploadDataSource(store, false));
                 dataSourceLoaded = true;
             }
         }

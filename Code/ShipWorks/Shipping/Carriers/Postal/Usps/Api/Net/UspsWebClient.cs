@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
@@ -43,12 +44,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     {
         // We don't include delivery confirmation because we want to treat that like None, because it is
         // included at no charge for services to which it applies.
-        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV11> confirmationLookup =
-            new Dictionary<PostalConfirmationType, AddOnTypeV11>
+        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV15> confirmationLookup =
+            new Dictionary<PostalConfirmationType, AddOnTypeV15>
             {
-                { PostalConfirmationType.Signature, AddOnTypeV11.USASC },
-                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV11.USAASR },
-                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV11.USAASRD }
+                { PostalConfirmationType.Signature, AddOnTypeV15.USASC },
+                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV15.USAASR },
+                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV15.USAASRD }
             };
 
         // This value came from USPS (the "standard" account value is 88)
@@ -56,6 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
         // These lengths come from the error that USPS's API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
+        private const int MaxCustomsSkuLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
 
         private readonly ILog log;
@@ -121,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private ISwsimV69 CreateWebService(string logName)
+        private ISwsimV84 CreateWebService(string logName)
         {
             return CreateWebService(logName, LogActionType.Other);
         }
@@ -131,13 +133,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         public static Type WebServiceType
         {
-            get { return typeof(SwsimV69); }
+            get { return typeof(SwsimV84); }
         }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private ISwsimV69 CreateWebService(string logName, LogActionType logActionType) =>
+        private ISwsimV84 CreateWebService(string logName, LogActionType logActionType) =>
            webServiceFactory.Create(logName, logActionType);
 
         /// <summary>
@@ -155,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 bool passwordExpired = false;
                 bool codewordsSet;
 
-                using (ISwsimV69 webService = CreateWebService("Authenticate"))
+                using (ISwsimV84 webService = CreateWebService("Authenticate"))
                 {
                     CheckCertificate(webService.Url);
 
@@ -205,9 +207,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private AccountInfoV27 GetAccountInfoInternal(IUspsAccountEntity account)
+        private AccountInfoV37 GetAccountInfoInternal(IUspsAccountEntity account)
         {
-            using (ISwsimV69 webService = CreateWebService("GetAccountInfo"))
+            using (ISwsimV84 webService = CreateWebService("GetAccountInfo"))
             {
                 return webService.GetAccountInfo(GetCredentials(account)).AccountInfo;
             }
@@ -250,7 +252,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string carrier;
             DestinationInfo destinationInfo;
 
-            using (ISwsimV69 webService = CreateWebService("TrackShipment"))
+            using (ISwsimV84 webService = CreateWebService("TrackShipment"))
             {
                 webService.TrackShipment(GetCredentials(account), shipment.TrackingNumber,
                     out trackingEvents, out guaranteedDeliveryDate,
@@ -319,14 +321,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <returns></returns>
         public UspsAccountEntity PopulateUspsAccountEntityInternal(UspsAccountEntity account)
         {
-            using (ISwsimV69 webService = CreateWebService("GetAccountInfo"))
+            using (ISwsimV84 webService = CreateWebService("GetAccountInfo"))
             {
-                AccountInfoV27 accountInfo;
+                AccountInfoV37 accountInfo;
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
                 string email;
 
-                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email, out string accountStatus, out DateAdvance dataAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
                 account.UspsAccountID = accountInfo.AccountId;
                 account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
@@ -363,11 +365,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get GlobalPost service availability from the account info
         /// </summary>
-        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV18 capabilities)
+        public static GlobalPostServiceAvailability GetGlobalPostServiceAvailability(CapabilitiesV27 capabilities)
         {
             return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
                 HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
-                GetGlobalPostInternationalPresortAvailability(capabilities);
+                GetGlobalPostInternationalPresortAvailability(capabilities) | 
+                GetGlobalPostPlusAvailability(capabilities);
+        }
+
+        /// <summary>
+        /// Get GlobalPostPlus
+        /// </summary>
+        private static GlobalPostServiceAvailability GetGlobalPostPlusAvailability(CapabilitiesV27 capabilities)
+        {
+            if (capabilities.CanPrintGPSmartSaver && capabilities.CanPrintGlobalPostPlus && capabilities.CanCleanseIntlAddress)
+            {
+                return GlobalPostServiceAvailability.GlobalPostPlus;
+            }
+
+            return GlobalPostServiceAvailability.None;
         }
 
         /// <summary>
@@ -406,7 +422,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             string url;
 
-            using (ISwsimV69 webService = CreateWebService("GetURL"))
+            using (ISwsimV84 webService = CreateWebService("GetURL"))
             {
                 webService.GetURL(GetCredentials(account), urlType, string.Empty, out url);
             }
@@ -434,7 +450,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             bool miRequired_Unused;
             PurchaseRejectionCode? purchaseRejectionCode_Unused;
 
-            using (ISwsimV69 webService = CreateWebService("PurchasePostage"))
+            using (ISwsimV84 webService = CreateWebService("PurchasePostage"))
             {
                 webService.PurchasePostage(
                     GetCredentials(account),
@@ -507,7 +523,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Build a RateResult from a USPS rate
         /// </summary>
-        private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV25 uspsRate, PostalServiceType serviceType)
+        private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV31 uspsRate, PostalServiceType serviceType)
         {
             var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
 
@@ -526,28 +542,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get details for required rate addons
         /// </summary>
-        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV11> addOns) =>
+        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV15> addOns) =>
             addOns
-                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV11 type) && type == x.AddOnType)
+                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV15 type) && type == x.AddOnType)
                 .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", amount: x.Amount))
                 .FirstOrDefault();
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private IEnumerable<RateV25> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private IEnumerable<RateV31> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV25 rate = CreateRateForRating(shipment, account);
+            RateV31 rate = CreateRateForRating(shipment, account);
 
-            RateV25[] rateResults;
+            RateV31[] rateResults;
 
-            using (ISwsimV69 webService = CreateWebService("GetRates", LogActionType.GetRates))
+            using (ISwsimV84 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
                 rateResults = webService.GetRates(GetCredentials(account), rate);
             }
 
-            List<RateV25> noConfirmationServiceRates = new List<RateV25>();
+            List<RateV31> noConfirmationServiceRates = new List<RateV31>();
 
             // If its a "Flat" then FirstClass and Priority can't have a confirmation
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
@@ -557,11 +573,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
-            foreach (RateV25 noConfirmationServiceRate in noConfirmationServiceRates)
+            foreach (RateV31 noConfirmationServiceRate in noConfirmationServiceRates)
             {
                 if (noConfirmationServiceRate != null && noConfirmationServiceRate.AddOns != null)
                 {
-                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV11.USASC && a.AddOnType != AddOnTypeV11.USADC).ToArray();
+                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV15.USASC && a.AddOnType != AddOnTypeV15.USADC).ToArray();
                 }
             }
 
@@ -684,7 +700,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address)
         {
-            using (ISwsimV69 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
+            using (ISwsimV84 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
             {
                 CheckCertificate(webService.Url);
 
@@ -733,7 +749,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (ISwsimV69 webService = CreateWebService("RegisterAccount"))
+                using (ISwsimV84 webService = CreateWebService("RegisterAccount"))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API
                     // for cleansing an address assumes there are existing credentials. Question is out to USPS
@@ -758,6 +774,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             (object) registration.CreditCard ?? registration.AchAccount,
                             null,  // SendEmail
                             false, // SendEmailSpecified
+                            false, // ResetPasswordAfterRegistration
+                            true, // ResetPasswordAfterRegistrationSpecified
                             out suggestedUserName,
                             out userId,
                             out promoUrl
@@ -804,30 +822,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             IEnumerable<UspsShipmentEntity> uspsShipmentEntities = shipments as IList<UspsShipmentEntity> ?? shipments.ToList();
 
             List<Guid> uspsTransactions = uspsShipmentEntities.Select(s => s.UspsTransactionID).ToList();
+            List<string> trackingNumbers = uspsShipmentEntities.Select(s => s.PostalShipment.Shipment.TrackingNumber).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
-            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());
+            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());            
+  
+            string transactionID = Guid.NewGuid().ToString();
 
-            string scanFormUspsId = string.Empty;
-            string scanFormUrl = string.Empty;
+            EndOfDayManifest[] endOfDayManifests;
 
-            using (ISwsimV69 webService = CreateWebService("ScanForm"))
+            using (ISwsimV84 webService = CreateWebService("ScanForm"))
             {
-                webService.CreateScanForm
+                webService.CreateManifest
                     (
                         GetCredentials(uspsAccountEntity),
+                        ref transactionID,
                         uspsTransactions.ToArray(),
+                        null, // TrackingNumbers (not needed because we send the uspsTransactions)
+                        null, // ShipDate
+                        false, // ShipDateSpecified
+                        null, // PrintLayout
                         CreateScanFormAddress(person),
                         ImageType.Png,
                         false, // Don't print instructions
-                        carrier,
-                        null,
-                        false,
-                        out scanFormUspsId,
-                        out scanFormUrl
+                        ManifestType.All,
+                        0, // NumberOfLabels (wsdl shows it as optional and default is 0)
+                        out endOfDayManifests
                     );
             }
 
-            string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormUspsId, scanFormUrl);
+            StringBuilder innerXml = new StringBuilder();
+            foreach (var item in endOfDayManifests)
+            {
+                innerXml.AppendLine($"<TransactionId>{item.ManifestId}</TransactionId><Url>{item.ManifestUrl}</Url>");
+            }
+            string responseXml = $"<ScanForm>{innerXml.ToString()}</ScanForm>";
+
             XDocument response = XDocument.Parse(responseXml);
 
             return response;
@@ -873,7 +902,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            using (ISwsimV69 webService = CreateWebService("Void"))
+            using (ISwsimV84 webService = CreateWebService("Void"))
             {
                 webService.CancelIndicium(
                     GetCredentials(account),
@@ -949,8 +978,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
 
-            RateV25 rate = CreateRateForProcessing(shipment, account);
-            CustomsV4 customs = CreateCustoms(shipment);
+            RateV31 rate = CreateRateForProcessing(shipment, account);
+            CustomsV5 customs = CreateCustoms(shipment);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -974,7 +1003,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             CreateIndiciumResult result = null;
 
-            using (ISwsimV69 webService = CreateWebService("Process"))
+            using (ISwsimV84 webService = CreateWebService("Process"))
             {
                 if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope &&
                     shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
@@ -1220,15 +1249,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 address.PhoneNumber = person.Phone;
             }
 
+            address.EmailAddress = person.Email;
+
             return address;
         }
 
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV25 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV31 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV25 rate = new RateV25();
+            RateV31 rate = new RateV31();
 
             string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
             string toZipCode = shipment.ShipPostalCode;
@@ -1277,38 +1308,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV25 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV31 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
-            RateV25 rate = CreateRateForRating(shipment, account);
+            RateV31 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
             rate.PrintLayout = "Normal4X6";
 
             // Get the confirmation type add ons
-            List<AddOnV11> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
+            List<AddOnV15> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
 
             // For express, apply the signature waiver if necessary
             if (serviceType == PostalServiceType.ExpressMail)
             {
                 if (!shipment.Postal.ExpressSignatureWaiver)
                 {
-                    addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USASR });
+                    addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USASR });
                 }
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
             if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
             {
-                addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.SCAHP });
+                addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.SCAHP });
             }
 
             // Add insurance if using SDC insurance
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 rate.InsuredValue = shipment.Postal.InsuranceValue;
-                addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.SCAINS });
+                addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.SCAINS });
             }
 
             if (addOns.Count > 0)
@@ -1334,9 +1365,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Returns a list of confirmation type add ons for the shipment
         /// </summary>
-        private static List<AddOnV11> AddConfirmationTypeAddOnsForProcessing(ShipmentEntity shipment, PostalServiceType serviceType, PostalPackagingType packagingType)
+        private static List<AddOnV15> AddConfirmationTypeAddOnsForProcessing(ShipmentEntity shipment, PostalServiceType serviceType, PostalPackagingType packagingType)
         {
-            List<AddOnV11> addOns = new List<AddOnV11>();
+            List<AddOnV15> addOns = new List<AddOnV15>();
 
             // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
             if (SupportsConfirmation(shipment))
@@ -1349,23 +1380,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 switch (confirmation)
                 {
                     case PostalConfirmationType.Delivery:
-                        addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USADC });
+                        addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USADC });
                         break;
                     case PostalConfirmationType.Signature:
-                        addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USASC });
+                        addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USASC });
                         break;
                     case PostalConfirmationType.AdultSignatureRequired:
-                        addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USAASR });
+                        addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USAASR });
                         break;
                     case PostalConfirmationType.AdultSignatureRestricted:
-                        addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USAASRD });
+                        addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USAASRD });
                         break;
                 }
             }
             else if (((PostalShipmentType) ShipmentTypeManager.GetType(shipment)).IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-                addOns.Add(new AddOnV11 { AddOnType = AddOnTypeV11.USADC });
+                addOns.Add(new AddOnV15 { AddOnType = AddOnTypeV15.USADC });
             }
             return addOns;
         }
@@ -1407,14 +1438,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the customs information for the given shipment
         /// </summary>
-        private static CustomsV4 CreateCustoms(ShipmentEntity shipment)
+        private static CustomsV5 CreateCustoms(ShipmentEntity shipment)
         {
             if (!CustomsManager.IsCustomsRequired(shipment))
             {
                 return null;
             }
 
-            CustomsV4 customs = new CustomsV4();
+            CustomsV5 customs = new CustomsV5();
 
             // Content type
             customs.ContentType = UspsUtility.GetApiContentType((PostalCustomsContentType) shipment.Postal.CustomsContentType);
@@ -1447,6 +1478,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 line.HSTariffNumber = customsItem.HarmonizedCode;
                 line.CountryOfOrigin = customsItem.CountryOfOrigin;
+
+                line.sku = customsItem.Description.Truncate(MaxCustomsSkuLength);
 
                 lines.Add(line);
             }
@@ -1482,7 +1515,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                using (ISwsimV69 webService = CreateWebService("ChangePlan"))
+                using (ISwsimV84 webService = CreateWebService("ChangePlan"))
                 {
                     // We send 0 as the plan id
                     webService.ChangePlan(
@@ -1516,7 +1549,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)
         {
-            using (ISwsimV69 webService = CreateWebService("GetContractType"))
+            using (ISwsimV84 webService = CreateWebService("GetContractType"))
             {
                 CheckCertificate(webService.Url);
 

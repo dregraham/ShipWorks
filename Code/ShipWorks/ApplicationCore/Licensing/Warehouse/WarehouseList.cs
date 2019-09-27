@@ -15,12 +15,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     [Component]
     public class WarehouseList : IWarehouseList
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseList(WarehouseRequestClient warehouseRequestClient)
+        public WarehouseList(IWarehouseRequestClient warehouseRequestClient)
         {
             this.warehouseRequestClient = warehouseRequestClient;
         }

@@ -32,6 +32,11 @@ namespace ShipWorks.Data
             ConfigurationData.FetchReadOnly();
 
         /// <summary>
+        /// Get the customer key
+        /// </summary>
+        public string FetchCustomerKey() => ConfigurationData.FetchCustomerKey().Trim();
+
+        /// <summary>
         /// Load the configuration from the database
         /// </summary>
         public void CheckForChangesNeeded() =>

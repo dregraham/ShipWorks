@@ -7,6 +7,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
 using ShipWorks.Stores;
@@ -105,6 +106,21 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
 
             Assert.IsType<ShipmentAlreadyProcessedException>(result.Exception);
             Assert.Contains("already been processed", result.Exception.Message);
+        }
+
+        [Fact]
+        public void PrepareShipment_ReturnsException_WhenUsingInsureShipAndNoItemNames()
+        {
+            StoreEntity store = new StoreEntity() { Enabled = true };
+            mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
+
+            shipment.Insurance = true;
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
+
+            var result = testObject.PrepareShipment(defaultInput);
+
+            Assert.IsType<ShippingException>(result.Exception);
+            Assert.Contains("insure", result.Exception.Message);
         }
 
         [Fact]

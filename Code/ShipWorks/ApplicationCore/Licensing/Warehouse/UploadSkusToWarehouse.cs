@@ -15,13 +15,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     [Component]
     public class UploadSkusToWarehouse : IUploadSkusToWarehouse
     {
-        private readonly WarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UploadSkusToWarehouse(WarehouseRequestClient warehouseRequestClient, Func<Type, ILog> createLogger)
+        public UploadSkusToWarehouse(IWarehouseRequestClient warehouseRequestClient, Func<Type, ILog> createLogger)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             log = createLogger(GetType());
