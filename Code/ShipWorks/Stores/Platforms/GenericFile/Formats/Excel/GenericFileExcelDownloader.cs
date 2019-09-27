@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
@@ -27,6 +28,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public GenericFileExcelDownloader(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
