@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
 
                 if (map == string.Empty)
                 {
-                    MessageHelper.ShowError(this, "Map cannot be empty!");
+                    MessageHelper.ShowError(this, "Please specify an import map.");
                     return false;
                 }
 
