@@ -176,8 +176,7 @@ namespace ShipWorks.Users
             ShippingDefaultsRuleManager.InitializeForCurrentSession();
             ShippingPrintOutputManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
-            iParcelAccountManager.InitializeForCurrentSession();
-          
+            iParcelAccountManager.InitializeForCurrentSession();        
 
             lifetimeScope?.Dispose();
             lifetimeScope = IoC.BeginLifetimeScope();
