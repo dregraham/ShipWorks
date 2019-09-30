@@ -274,6 +274,7 @@
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseItem.cs" />
     <Compile Include="Platforms\BigCommerce\Warehouse\BigCommerceWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Ebay\Warehouse\EbayStoreDtoFactory.cs" />
+    <Compile Include="Platforms\GenericFile\Warehouse\GenericFileStoreDtoFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrder.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />

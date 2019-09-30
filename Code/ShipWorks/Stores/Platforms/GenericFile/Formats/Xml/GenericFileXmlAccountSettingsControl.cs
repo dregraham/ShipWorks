@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
             xmlSetupControl.LoadStore(generic);
-            fileSourceControl.LoadStore(generic);
+            fileSourceControl.LoadStore(generic, false);
         }
 
         /// <summary>
@@ -42,14 +43,17 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         {
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
-            if (!xmlSetupControl.SaveToEntity(generic))
+            if (!fileSourceControl.SaveToEntity(generic))
             {
                 return false;
             }
 
-            if (!fileSourceControl.SaveToEntity(generic))
+            if (generic.FileSource != (int) GenericFileSourceTypeCode.Warehouse)
             {
-                return false;
+                if (!xmlSetupControl.SaveToEntity(generic))
+                {
+                    return false;
+                }
             }
 
             return true;

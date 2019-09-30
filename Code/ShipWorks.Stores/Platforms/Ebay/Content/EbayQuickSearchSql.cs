@@ -24,6 +24,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
             bool isNumeric = searchText.Replace("%", string.Empty).IsNumeric();
 
             string buyerIdParamName = context.RegisterParameter(EbayOrderFields.EbayBuyerID, searchText);
+            string orderIdParamName = context.RegisterParameter(EbayOrderFields.EbayOrderID, searchText);
             string orderSellingMgrRecordParamName = context.RegisterParameter(EbayOrderFields.SellingManagerRecord, searchText);
             string orderItemCodeParamName = context.RegisterParameter(OrderItemFields.Code, searchText);
 
@@ -38,12 +39,16 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
             {
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE EbayBuyerID LIKE {buyerIdParamName} OR SellingManagerRecord LIKE {orderSellingMgrRecordParamName}");
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayBuyerID LIKE {buyerIdParamName} OR SellingManagerRecord LIKE {orderSellingMgrRecordParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE EbayOrderID LIKE {orderIdParamName} OR SellingManagerRecord LIKE {orderSellingMgrRecordParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayOrderID LIKE {orderIdParamName} OR SellingManagerRecord LIKE {orderSellingMgrRecordParamName}");
                 selectStatements.Add($"SELECT OrderID FROM [EbayOrderItem] WHERE SellingManagerRecord LIKE {orderSellingMgrRecordParamName}");
             }
             else
             {
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE EbayBuyerID LIKE {buyerIdParamName}");
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayBuyerID LIKE {buyerIdParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE EbayOrderID LIKE {orderIdParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayOrderID LIKE {orderIdParamName}");
             }
 
             return selectStatements;

@@ -1364,6 +1364,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\IGenericFileStoreClient.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\WizardPages\IGenericStoreHubPage.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
@@ -10598,7 +10604,9 @@
     <Resource Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
-    <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
+    <EmbeddedResource Include="Filters\Content\ConditionTree.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Resources\Progress\indicator_blue.gif" />
     <None Include="Resources\Progress\circling_ball.gif" />
     <None Include="Resources\Progress\arrows_blue.gif" />
