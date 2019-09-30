@@ -12690,6 +12690,10 @@ namespace ShipWorks.Data.Model
 		LastReleaseNotesSeen,
 		///<summary>AutoPrintRequireValidation. </summary>
 		AutoPrintRequireValidation,
+		///<summary>ShowRibbon. </summary>
+		ShowRibbon,
+		///<summary>ShowQuickAccessToolbar. </summary>
+		ShowQuickAccessToolbar,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -58,6 +58,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderLookupLayout = source.OrderLookupLayout;
             LastReleaseNotesSeen = source.LastReleaseNotesSeen;
             AutoPrintRequireValidation = source.AutoPrintRequireValidation;
+            ShowRibbon = source.ShowRibbon;
+            ShowQuickAccessToolbar = source.ShowQuickAccessToolbar;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -199,6 +201,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AutoPrintRequireValidation { get; }
+        /// <summary> The ShowRibbon property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."ShowRibbon"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ShowRibbon { get; }
+        /// <summary> The ShowQuickAccessToolbar property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."ShowQuickAccessToolbar"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ShowQuickAccessToolbar { get; }
         
         public IUserEntity User { get; }
         

@@ -836,7 +836,10 @@ namespace ShipWorks
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
-
+            ribbon.Minimized = UserSession.User.Settings.ShowRibbon;
+            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQuickAccessToolbar?
+                                                                QuickAccessPosition.Below :
+                                                                QuickAccessPosition.Above;
             // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
@@ -2600,7 +2603,7 @@ namespace ShipWorks
         private void OnShowSettings(object sender, EventArgs e)
         {
             // Create the data structure to send to settings
-            ShipWorksSettingsData data = new ShipWorksSettingsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
+            ShipWorksSettingsData data = new ShipWorksSettingsData(UserSession.User.Settings.ShowQuickAccessToolbar, UserSession.User.Settings.ShowRibbon);
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {

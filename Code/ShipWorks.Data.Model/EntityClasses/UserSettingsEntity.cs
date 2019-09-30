@@ -393,6 +393,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LastReleaseNotesSeen", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoPrintRequireValidation", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShowRibbon", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShowQuickAccessToolbar", fieldHashtable);
 		}
 		#endregion
 
@@ -709,6 +713,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, value); }
+		}
+
+		/// <summary> The ShowRibbon property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."ShowRibbon"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ShowRibbon
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowRibbon, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.ShowRibbon, value); }
+		}
+
+		/// <summary> The ShowQuickAccessToolbar property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."ShowQuickAccessToolbar"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ShowQuickAccessToolbar
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQuickAccessToolbar, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.ShowQuickAccessToolbar, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

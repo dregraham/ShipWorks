@@ -29547,6 +29547,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.ShowRibbon field instance</summary>
+		public static EntityField2 ShowRibbon
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowRibbon);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.ShowQuickAccessToolbar field instance</summary>
+		public static EntityField2 ShowQuickAccessToolbar
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQuickAccessToolbar);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

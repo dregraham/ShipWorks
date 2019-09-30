@@ -95,6 +95,9 @@ namespace ShipWorks.ApplicationCore.Settings
                 data.MinimizeRibbon = minimizeRibbon.Checked;
                 data.ShowQatBelowRibbon = showQatBelowRibbon.Checked;
 
+                settings.ShowRibbon = minimizeRibbon.Checked;
+                settings.ShowQuickAccessToolbar = showQatBelowRibbon.Checked;
+
                 settings.FilterInitialUseLastActive = radioInitialFilterRecent.Checked;
                 settings.FilterInitialSortType = (int) filterInitialSort.SelectedValue;
 
