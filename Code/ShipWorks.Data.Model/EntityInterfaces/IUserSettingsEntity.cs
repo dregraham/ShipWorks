@@ -153,18 +153,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean AutoPrintRequireValidation { get; }
-        /// <summary> The ShowRibbon property of the Entity UserSettings<br/><br/>
+        /// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."ShowRibbon"<br/>
+        /// <remarks>Mapped on table field: "UserSettings"."MinimizeRibbon"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean ShowRibbon { get; }
-        /// <summary> The ShowQuickAccessToolbar property of the Entity UserSettings<br/><br/>
+        System.Boolean MinimizeRibbon { get; }
+        /// <summary> The ShowQAToolbarBelowRibbon property of the Entity UserSettings<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."ShowQuickAccessToolbar"<br/>
+        /// <remarks>Mapped on table field: "UserSettings"."ShowQAToolbarBelowRibbon"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean ShowQuickAccessToolbar { get; }
+        System.Boolean ShowQAToolbarBelowRibbon { get; }
         
         IUserEntity User { get; }
         

@@ -29547,15 +29547,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.ShowRibbon field instance</summary>
-		public static EntityField2 ShowRibbon
+		/// <summary>Creates a new UserSettingsEntity.MinimizeRibbon field instance</summary>
+		public static EntityField2 MinimizeRibbon
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowRibbon);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.MinimizeRibbon);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.ShowQuickAccessToolbar field instance</summary>
-		public static EntityField2 ShowQuickAccessToolbar
+		/// <summary>Creates a new UserSettingsEntity.ShowQAToolbarBelowRibbon field instance</summary>
+		public static EntityField2 ShowQAToolbarBelowRibbon
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQuickAccessToolbar);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
 		}
 	}
 

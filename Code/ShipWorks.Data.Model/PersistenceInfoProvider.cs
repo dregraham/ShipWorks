@@ -3941,8 +3941,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "OrderLookupLayout", "OrderLookupLayout", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 19);
 			this.AddElementFieldMapping("UserSettingsEntity", "LastReleaseNotesSeen", "LastReleaseNotesSeen", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 20);
 			this.AddElementFieldMapping("UserSettingsEntity", "AutoPrintRequireValidation", "AutoPrintRequireValidation", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
-			this.AddElementFieldMapping("UserSettingsEntity", "ShowRibbon", "ShowRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
-			this.AddElementFieldMapping("UserSettingsEntity", "ShowQuickAccessToolbar", "ShowQuickAccessToolbar", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
+			this.AddElementFieldMapping("UserSettingsEntity", "MinimizeRibbon", "MinimizeRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
+			this.AddElementFieldMapping("UserSettingsEntity", "ShowQAToolbarBelowRibbon", "ShowQAToolbarBelowRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
