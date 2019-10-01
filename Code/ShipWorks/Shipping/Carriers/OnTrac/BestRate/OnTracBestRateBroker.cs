@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         protected override string AccountDescription(OnTracAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber.ToString();
         }
     }
 }

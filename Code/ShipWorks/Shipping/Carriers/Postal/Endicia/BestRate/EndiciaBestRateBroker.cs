@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         protected override string AccountDescription(EndiciaAccountEntity account)
         {
-            return account.Description;
+            return account.ApiUserPassword;
         }
 
         /// <summary>
