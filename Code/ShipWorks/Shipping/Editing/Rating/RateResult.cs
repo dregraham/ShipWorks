@@ -203,10 +203,5 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// The provider logo.
         /// </value>
         public Image ProviderLogo { get; set; }
-
-        /// <summary>
-        /// The account used to retrieve the rate
-        /// </summary>
-        public string Account { get; set; }
     }
 }
