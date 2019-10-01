@@ -644,7 +644,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.Services.DeliveryConfirmation = "ON";
                 request.Services.SignatureConfirmation = "ON";
                 request.Services.AdultSignatureRestrictedDelivery = postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRestricted ? "ON" : "OFF";
-                request.Services.AdultSignature = postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRequired ? "ON" : "OFF"; ;            
+                request.Services.AdultSignature = postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRequired ? "ON" : "OFF";            
             }
         }
 
