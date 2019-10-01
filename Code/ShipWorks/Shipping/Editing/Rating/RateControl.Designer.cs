@@ -45,6 +45,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.loadingRatesLabel = new System.Windows.Forms.Label();
             this.loadingImage = new System.Windows.Forms.PictureBox();
+            this.gridColumnAccountDescription = new Divelements.SandGrid.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,6 +55,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.rateGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rateGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnProvider,
+            this.gridColumnAccountDescription,
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnShipping,
@@ -295,6 +297,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.loadingImage.TabIndex = 11;
             this.loadingImage.TabStop = false;
             // 
+            // gridColumnAccountDescription
+            // 
+            this.gridColumnAccountDescription.HeaderText = "Account";
+            this.gridColumnAccountDescription.Visible = false;
+            // 
             // RateControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -326,5 +333,6 @@ namespace ShipWorks.Shipping.Editing.Rating
         private GridColumn gridColumnShipping;
         private GridColumn gridColumnTax;
         private GridColumn gridColumnDuty;
+        private GridColumn gridColumnAccountDescription;
     }
 }
