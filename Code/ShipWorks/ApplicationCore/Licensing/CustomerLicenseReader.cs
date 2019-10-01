@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -14,8 +15,10 @@ namespace ShipWorks.ApplicationCore.Licensing
     {
         private readonly IConfigurationData configurationData;
         private readonly IDatabaseIdentifier databaseIdentifier;
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
+        private readonly IEncryptionProvider encryptionProvider;
         private readonly ILog log;
+        private string currentCustomerKey = string.Empty;
+        private string decryptedCustomerKey = string.Empty;
 
         /// <summary>
         /// Constructor
@@ -27,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             this.configurationData = configurationData;
             this.databaseIdentifier = databaseIdentifier;
-            this.encryptionProviderFactory = encryptionProviderFactory;
+            encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
             log = createLog(typeof(CustomerLicenseReader));
         }
 
@@ -36,21 +39,30 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public string Read()
         {
-            IEncryptionProvider encryptionProvider = encryptionProviderFactory.CreateLicenseEncryptionProvider();
             string customerKey = configurationData.FetchCustomerKey();
+
+            if (!decryptedCustomerKey.IsNullOrWhiteSpace() &&
+                customerKey.Equals(currentCustomerKey, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return decryptedCustomerKey;
+            }
+
+            currentCustomerKey = customerKey;
 
             // try to decrypt the key, if we get an ExcryptionException try setting the cached database identifier
             // and try again. This happens when switching between databases or restoring a database with a different database identifier
             try
             {
-                return encryptionProvider.Decrypt(customerKey);
+                decryptedCustomerKey = encryptionProvider.Decrypt(customerKey);
             }
             catch (EncryptionException ex)
             {
                 log.Error("Decryption failed. Trying again", ex);
                 databaseIdentifier.Reset();
-                return encryptionProvider.Decrypt(customerKey);
+                decryptedCustomerKey = encryptionProvider.Decrypt(customerKey);
             }
+
+            return decryptedCustomerKey;
         }
     }
 }
