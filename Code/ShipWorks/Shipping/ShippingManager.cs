@@ -1147,16 +1147,5 @@ namespace ShipWorks.Shipping
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.ShipmentType == (int) shipmentTypeCode);
             return bucket;
         }
-
-        private static DateTime ConvertToUniversalTime(DateTime dateTime)
-        {
-            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
-            {
-                cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
-                cmd.AddParameterWithValue("@dateTime", dateTime);
-
-                return (DateTime) DbCommandProvider.ExecuteScalar(cmd);
-            });
-        }
     }
 }
