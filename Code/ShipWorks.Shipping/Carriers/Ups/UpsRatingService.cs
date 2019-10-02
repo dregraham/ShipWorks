@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, serviceRateResult.Message);
 
                 // Filter out any excluded services, but always include the service that the shipment is configured with
-                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
+                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(rates);
 
                 RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
@@ -260,10 +260,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the filtered rates based on any excluded services configured for this ups shipment type.
         /// </summary>
-        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        private List<RateResult> FilterRatesByExcludedServices(List<RateResult> rates)
         {
-            IEnumerable<UpsServiceType> availableServices = shipmentType.GetAvailableServiceTypes()
-                .Select(s => (UpsServiceType) s).Union(new List<UpsServiceType> { (UpsServiceType) shipment.Ups.Service });
+            IEnumerable<UpsServiceType> availableServices = shipmentType.GetAvailableServiceTypes().Cast<UpsServiceType>();
 
             return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType) r.Tag))).ToList();
         }
