@@ -12,13 +12,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Gets the sandbox endpoint override
         /// </summary>
-        public static string SandboxEndpointOverride
-        {
-            get
-            {
-                return InterapptiveOnly.Registry.GetValue("eBayEndpoint", String.Empty);
-            }
-        }
+        public static string SandboxEndpointOverride => InterapptiveOnly.Registry.GetValue("eBayEndpoint", String.Empty);
+
+        /// <summary>
+        /// Gets a value indicating whether or not to use the sandbox endpoint override
+        /// </summary>
+        public static bool UseSandboxEndpointOverride => !UseLiveServer && !String.IsNullOrWhiteSpace(SandboxEndpointOverride);
 
         /// <summary>
         /// Gets or sets a value indicating whether to use the live server or the test server.

@@ -236,7 +236,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
 
             string requestURL = EbayUrlUtilities.SoapUrl;
 
-            if (!EbayUrlUtilities.UseLiveServer && !String.IsNullOrEmpty(EbayUrlUtilities.SandboxEndpointOverride))
+            if (EbayUrlUtilities.UseSandboxEndpointOverride)
             {
                 // Reformat the request when using fake stores
                 requestURL += $"/{token.Token}/{configuration.RequestName}";
