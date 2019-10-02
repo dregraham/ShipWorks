@@ -22,24 +22,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
-                <ResourceDictionary Source="./FieldManagerStyle.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <Style BasedOn="{StaticResource FormCheckBox}" TargetType="{x:Type CheckBox}">
-                <Setter Property="Margin" Value="0" />
-            </Style>
-            <Style x:Key="FieldBorder" TargetType="{x:Type Border}">
-                <Setter Property="MinHeight" Value="24" />
-                <Setter Property="BorderBrush" Value="LightGray" />
-                <Setter Property="BorderThickness" Value="0,1,0,0" />
-                <Setter Property="HorizontalAlignment" Value="Stretch" />
-            </Style>
-            <Style x:Key="FieldListBox" TargetType="{x:Type ItemsControl}">
-                <Setter Property="BorderBrush" Value="Transparent" />
-                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                <Setter Property="Padding" Value="0" />
-                <Setter Property="Margin" Value="0" />
-            </Style>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/FieldManagerStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>            
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </ResourceDictionary>
     </Window.Resources>

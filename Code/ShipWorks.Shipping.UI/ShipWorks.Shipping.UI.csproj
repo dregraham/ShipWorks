@@ -165,6 +165,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings\BestRateAccount.cs" />
+    <Compile Include="Settings\BestRateAccountSettingsControl.xaml.cs">
+      <DependentUpon>BestRateAccountSettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPCarrierTermsAndConditionsNotAcceptedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Amazon\SWA\AmazonSWAAccountEditorDlg.cs">
       <SubType>Form</SubType>
@@ -364,6 +368,14 @@
     <Compile Include="RatingPanel\RatingPanelViewModel.cs" />
     <Compile Include="RatingPanel\RatingPanelViewModel.Properties.cs" />
     <Compile Include="RatingPanel\TestRatingPanelViewModel.cs" />
+    <Compile Include="Settings\BestRateAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\BestRateAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
+    <Compile Include="Settings\BestRateCarrier.cs" />
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
@@ -687,11 +699,18 @@
     <EmbeddedResource Include="RatingPanel\RatingPanel.resx">
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings\BestRateAccountSettingsControlHost.resx">
+      <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Settings\BestRateAccountSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Carriers\Amazon\SFP\AmazonSFPSameDayNotAvailableFootnote.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

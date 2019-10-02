@@ -1,0 +1,98 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.Settings.BestRateAccountSettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:settings="clr-namespace:ShipWorks.Shipping.UI.Settings"
+             mc:Ignorable="d" 
+             d:DesignHeight="500"
+             d:DesignWidth="500"
+             d:DataContext="{d:DesignInstance settings:BestRateAccountSettingsViewModel}">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ExpanderStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/FieldManagerStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="11,5,8,8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0"
+                       Text="Best Rate Accounts"
+                       FontWeight="Bold"/>
+
+            <TextBlock TextWrapping="Wrap"
+                   Grid.Row="1"
+                   Margin="15 5 0 0"
+                   Text="Choose the providers and accounts you would like to use with Best Rate"/>
+
+            <ItemsControl Grid.Row="2"
+                IsTabStop="False"
+                ItemsSource="{Binding Carriers}"
+                Style="{StaticResource FieldListBox}"
+                Margin="15 0 0 0">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource FieldBorder}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid SnapsToDevicePixels="False">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                        MinHeight="24"
+                                        VerticalContentAlignment="Center"
+                                        IsChecked="{Binding IsActive}">
+                                        <TextBlock
+                                            Margin="0,2,0,0"
+                                            FontWeight="Bold"
+                                            Text="{Binding Name, Mode=OneTime}" />
+                                    </CheckBox>
+                                    <ToggleButton
+                                        x:Name="expandButton"
+                                        Grid.Column="1"
+                                        IsChecked="true"
+                                        Style="{StaticResource FieldExpander.DownHeaderStyle}"/>
+                                </Grid>
+
+                                <ItemsControl
+                                    Grid.Row="1"
+
+                                    IsTabStop="False"
+                                    ItemsSource="{Binding Accounts, Mode=OneTime}"
+                                    Style="{StaticResource FieldListBox}"
+                                    Visibility="{Binding IsChecked, ElementName=expandButton, Converter={StaticResource BooleanToVisibility}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border>
+                                                <CheckBox
+                                                    Margin="15,5,0,5"
+                                                    VerticalContentAlignment="Center"
+                                                    IsChecked="{Binding IsActive}">
+                                                    <TextBlock Text="{Binding AccountID, Mode=OneTime}" />
+                                                </CheckBox>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

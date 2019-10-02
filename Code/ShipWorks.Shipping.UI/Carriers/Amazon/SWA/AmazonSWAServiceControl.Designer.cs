@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
+﻿using ShipWorks.Shipping.Settings.Origin;
+
+namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
     partial class AmazonSWAServiceControl
     {
@@ -343,7 +345,7 @@
         private System.Windows.Forms.Label accountLabel;
         private ShipWorks.UI.Controls.MultiValueComboBox AmazonSWAAccount;
         private System.Windows.Forms.Label accountSectionLabel;
-        private Settings.Origin.ShipmentOriginControl originControl;
+        private ShipmentOriginControl originControl;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private System.Windows.Forms.Label labelService;
         private ShipWorks.UI.Controls.MultiValueComboBox service;
