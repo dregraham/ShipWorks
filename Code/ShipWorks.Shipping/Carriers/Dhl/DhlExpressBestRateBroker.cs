@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override string AccountDescription(DhlExpressAccountEntity account)
         {
-            return account.AccountNumber;
+            return account.AccountNumber.ToString();
         }
     }
 }
