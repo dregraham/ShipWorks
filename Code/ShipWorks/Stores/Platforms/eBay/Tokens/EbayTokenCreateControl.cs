@@ -37,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
             InitializeComponent();
             token = new EbayToken();
 
-            if (InterapptiveOnly.IsInterapptiveUser && !EbayUrlUtilities.UseLiveServer && !String.IsNullOrWhiteSpace(EbayUrlUtilities.SandboxEndpointOverride))
+            if (InterapptiveOnly.IsInterapptiveUser && !EbayUrlUtilities.UseLiveServer)
             {
                 fakeToken.Visible = true;
                 fakeTokenLabel.Visible = true;
