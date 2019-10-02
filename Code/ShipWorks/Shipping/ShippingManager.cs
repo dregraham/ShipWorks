@@ -1151,7 +1151,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Convert date to UTC with database function
         /// </summary>
-        private static DateTime ConvertToUniversalTime(DateTime dateTime)
+        public static DateTime ConvertToUniversalTime(DateTime dateTime)
         {
             return ExistingConnectionScope.ExecuteWithCommand(cmd =>
             {
