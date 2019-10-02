@@ -294,7 +294,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 upsAccount.ReadMultiValue(v => shipment.Ups.UpsAccountID = (long) v);
                 service.ReadMultiValue(v => { if (v != null) shipment.Ups.Service = (int) v; });
-                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
                 saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
 
                 confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
