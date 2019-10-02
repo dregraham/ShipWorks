@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Set some defaults
-            shipment.ShipDate = lifetimeScope.Resolve<IDateTimeProvider>().Now.Date.AddHours(12);
+            shipment.ShipDate = ConvertToUniversalTime(lifetimeScope.Resolve<IDateTimeProvider>().Now.Date);
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
