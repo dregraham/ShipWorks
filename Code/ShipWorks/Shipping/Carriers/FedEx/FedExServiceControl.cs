@@ -504,7 +504,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
                 thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
-                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
                 fromAddressType.ReadMultiValue(v => shipment.FedEx.OriginResidentialDetermination = (int) v);
