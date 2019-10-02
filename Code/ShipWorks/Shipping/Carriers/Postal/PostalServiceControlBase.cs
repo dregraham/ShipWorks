@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -314,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 service.ReadMultiValue(v => { if (v != null) shipment.Postal.Service = (int) v; });
                 confirmation.ReadMultiValue(v => { if (v != null) shipment.Postal.Confirmation = (int) v; });
 
-                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
 
                 packagingType.ReadMultiValue(v => shipment.Postal.PackagingType = (int) v);
