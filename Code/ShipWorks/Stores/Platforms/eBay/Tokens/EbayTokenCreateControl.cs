@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Net;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Properties;
 using log4net;
-using System.Diagnostics;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
+using ShipWorks.Properties;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Tokens
 {
@@ -42,6 +36,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Tokens
         {
             InitializeComponent();
             token = new EbayToken();
+
+            if (InterapptiveOnly.IsInterapptiveUser && !EbayUrlUtilities.UseLiveServer && !String.IsNullOrWhiteSpace(EbayUrlUtilities.SandboxEndpointOverride))
+            {
+                fakeToken.Visible = true;
+                fakeTokenLabel.Visible = true;
+                this.Size = new System.Drawing.Size(411, 60);
+            }
         }
 
         [Category("Appearance")]

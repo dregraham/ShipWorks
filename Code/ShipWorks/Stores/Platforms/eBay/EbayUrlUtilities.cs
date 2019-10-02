@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.ApplicationCore;
 using System.Web;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -12,6 +9,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
     /// </summary>
     public static class EbayUrlUtilities
     {
+        /// <summary>
+        /// Gets the sandbox endpoint override
+        /// </summary>
+        public static string SandboxEndpointOverride
+        {
+            get
+            {
+                return InterapptiveOnly.Registry.GetValue("eBayEndpoint", String.Empty);
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether to use the live server or the test server.
         /// </summary>
@@ -43,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
                 else
                 {
-                    return "https://api.sandbox.ebay.com/wsapi";
+                    return String.IsNullOrEmpty(SandboxEndpointOverride) ? "https://api.sandbox.ebay.com/wsapi" : SandboxEndpointOverride;
                 }
             }
         }
@@ -87,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // PHP url decodes it again.
             string identifier = HttpUtility.UrlEncode(HttpUtility.UrlEncode(ShipWorksSession.InstanceID.ToString()));
             string tokenParameters = "&runame=interapptive-standard&ruparams=license%3D" + identifier;
-            
+
             if (UseLiveServer)
             {
                 return "https://signin.ebay.com/ws/eBayISAPI.dll?SignIn" + tokenParameters;

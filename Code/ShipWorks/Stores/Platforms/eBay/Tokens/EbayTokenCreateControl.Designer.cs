@@ -33,6 +33,8 @@
             this.statusText = new System.Windows.Forms.Label();
             this.createTokenButton = new System.Windows.Forms.Button();
             this.statusPicture = new System.Windows.Forms.PictureBox();
+            this.fakeToken = new System.Windows.Forms.TextBox();
+            this.fakeTokenLabel = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize) (this.statusPicture)).BeginInit();
             this.SuspendLayout();
@@ -71,6 +73,24 @@
             // 
             this.timer.Interval = 5000;
             this.timer.Tick += new System.EventHandler(this.OnTimerTick);
+            //
+            // fakeToken
+            //
+            this.fakeToken.Location = new System.Drawing.Point(100, 35);
+            this.fakeToken.Name = "fakeToken";
+            this.fakeToken.Size = new System.Drawing.Size(100, 21);
+            this.fakeToken.TabIndex = 14;
+            this.fakeToken.Visible = false;
+            //
+            // fakeTokenLabel
+            //
+            this.fakeTokenLabel.AutoSize = true;
+            this.fakeTokenLabel.Location = new System.Drawing.Point(3, 38);
+            this.fakeTokenLabel.Name = "fakeTokenLabel";
+            this.fakeTokenLabel.Size = new System.Drawing.Size(95, 13);
+            this.fakeTokenLabel.TabIndex = 15;
+            this.fakeTokenLabel.Text = "Fake Store Token:";
+            this.fakeTokenLabel.Visible = false;
             // 
             // EbayTokenCreateControl
             // 
@@ -79,6 +99,8 @@
             this.Controls.Add(this.statusText);
             this.Controls.Add(this.statusPicture);
             this.Controls.Add(this.createTokenButton);
+            this.Controls.Add(this.fakeToken);
+            this.Controls.Add(this.fakeTokenLabel);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.Name = "EbayTokenCreateControl";
             this.Size = new System.Drawing.Size(411, 31);
@@ -94,5 +116,7 @@
         private System.Windows.Forms.PictureBox statusPicture;
         private System.Windows.Forms.Button createTokenButton;
         private System.Windows.Forms.Timer timer;
+        public System.Windows.Forms.TextBox fakeToken;
+        private System.Windows.Forms.Label fakeTokenLabel;
     }
 }
