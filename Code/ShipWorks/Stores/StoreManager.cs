@@ -67,7 +67,7 @@ namespace ShipWorks.Stores
 
             UpdateInheritanceActiveTables();
             CheckForChanges();
-            CleanupIncompleteStores(securityContext);
+            CleanupIncompleteStores();
         }
 
         /// <summary>
@@ -525,7 +525,7 @@ namespace ShipWorks.Stores
         /// Cleanup any stores that did not make it all the way through the AddStoreWizard.  This doesn't do
         /// anything if someone somewhere has an AddStoreWizard open.
         /// </summary>
-        private static void CleanupIncompleteStores(ISecurityContext securityContext)
+        private static void CleanupIncompleteStores()
         {
             // If the add store wizard is not open and there is a non complete store, that basically
             // means sw crashed during the add store wizard and we need to clean it up.
@@ -540,7 +540,8 @@ namespace ShipWorks.Stores
                         foreach (StoreEntity store in StoreCollection.Fetch(SqlAdapter.Default, StoreFields.SetupComplete == false))
                         {
                             log.InfoFormat("Deleting incomplete store {0} '{1}'", store.StoreID, store.StoreName);
-                            DeletionService.DeleteStore(store, securityContext);
+                            
+                            DeletionService.DeleteStore(store, SuperUser.SecurityContext);
                         }
                     }
                 }
