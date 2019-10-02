@@ -498,17 +498,6 @@ namespace ShipWorks
             {
                 return;
             }
-
-            //Its Possible to change the minimized state of the ribbon without saving it.
-            //So, we'll save it here if its changed.
-            if(UserSession.User.Settings.MinimizeRibbon != ribbon.Minimized)
-            {
-                UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.SaveAndRefetch(UserSession.User.Settings);
-                }
-            }
            
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
@@ -1825,6 +1814,9 @@ namespace ShipWorks
             {
                 shipmentHistory.SaveGridColumnState();
             }
+
+            //Save the Ribbon minimized state
+            settings.MinimizeRibbon = ribbon.Minimized;
 
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
