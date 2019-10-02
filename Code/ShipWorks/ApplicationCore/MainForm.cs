@@ -499,6 +499,17 @@ namespace ShipWorks
                 return;
             }
 
+            //Its Possible to change the minimized state of the ribbon without saving it.
+            //So, we'll save it here if its changed.
+            if(UserSession.User.Settings.MinimizeRibbon != ribbon.Minimized)
+            {
+                UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
+                using (SqlAdapter adapter = new SqlAdapter())
+                {
+                    adapter.SaveAndRefetch(UserSession.User.Settings);
+                }
+            }
+           
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -1621,7 +1632,6 @@ namespace ShipWorks
             foreach (RibbonTab tab in ribbonTabs.Where(TabAppliesToUIMode))
             {
                 ribbon.Tabs.Add(tab);
-
                 // Preserve order
                 tab.SendToBack();
             }
@@ -2603,6 +2613,9 @@ namespace ShipWorks
         /// </summary>
         private void OnShowSettings(object sender, EventArgs e)
         {
+            UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
+            UserSession.User.Settings.ShowQAToolbarBelowRibbon = ribbon.ToolBarPosition == QuickAccessPosition.Below;
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 using (ShipWorksSettings dlg = new ShipWorksSettings(scope))
@@ -4197,7 +4210,6 @@ namespace ShipWorks
 
             return holders;
         }
-
         #endregion
 
         #region Administration

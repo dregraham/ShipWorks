@@ -8,6 +8,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -1145,6 +1146,17 @@ namespace ShipWorks.Shipping
             RelationPredicateBucket bucket = CreateUnprocessedShipmentsBucket();
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.ShipmentType == (int) shipmentTypeCode);
             return bucket;
+        }
+
+        private static DateTime ConvertToUniversalTime(DateTime dateTime)
+        {
+            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
+            {
+                cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
+                cmd.AddParameterWithValue("@dateTime", dateTime);
+
+                return (DateTime) DbCommandProvider.ExecuteScalar(cmd);
+            });
         }
     }
 }

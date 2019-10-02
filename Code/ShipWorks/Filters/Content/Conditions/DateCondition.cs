@@ -47,7 +47,7 @@ namespace ShipWorks.Filters.Content.Conditions
             {
                 // We'll need value2
                 effectiveValue2 = ConvertToUniversalTime(effectiveValue2);
-
+                
                 string op1 = ">=";
                 string op2 = "<";
                 string join = "AND";
