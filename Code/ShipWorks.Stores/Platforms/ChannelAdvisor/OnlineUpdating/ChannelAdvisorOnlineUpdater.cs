@@ -6,6 +6,8 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -18,6 +20,7 @@ using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 {
@@ -29,15 +32,17 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
     {
         private readonly ILog log;
         private readonly IChannelAdvisorUpdateClient updateClient;
+        private readonly ISqlAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ChannelAdvisorOnlineUpdater(IChannelAdvisorUpdateClient updateClient,
-            Func<Type, ILog> createLogger)
+            Func<Type, ILog> createLogger, ISqlAdapterFactory adapterFactory)
         {
             this.updateClient = updateClient;
             log = createLogger(GetType());
+            this.adapterFactory = adapterFactory;
         }
 
         /// <summary>
@@ -106,6 +111,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                     };
 
                     await updateClient.UploadShipmentDetails(store, uploadShipment, order).ConfigureAwait(false);
+
+                    //Manually set the shipping status
+                    ChannelAdvisorOrderEntity caOrder = order as ChannelAdvisorOrderEntity;
+                    if(caOrder != null)
+                    {
+                        await SetShippedStatus(caOrder);
+                    }                                      
                 }
                 catch (ChannelAdvisorException ex)
                 {
@@ -130,6 +142,37 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             {
                 log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
             }
+        }
+
+        /// <summary>
+        /// Sets and saves the ChannelAdvisorOrderEntity.OnlineShippingStatus
+        /// </summary>
+        private async Task SetShippedStatus(ChannelAdvisorOrderEntity order)
+        {
+            order.OnlineShippingStatus = (int)ChannelAdvisorShippingStatus.Shipped;
+            try
+            {
+                await SqlAdapterRetry.ExecuteWithRetryAsync(
+                        $"ChannelAdvisorOnlineUpdater.UploadTrackingNumber for entity {order.OrderID}",
+                        new SqlAdapterRetryOptions(log: log),
+                        async () =>
+                                {
+                                    using (ISqlAdapter adapter = this.adapterFactory.Create())
+                                        {
+                                            await adapter.SaveEntityAsync(order);
+                                        }
+                                    return true;
+                                },
+                        ex => true);
+            }
+
+            //If an exception escapes the retry we want to igonore it
+            //so that customer doesn't try to reupload the order  
+            catch(Exception ex)
+            {
+                log.Warn(ex);
+            }
+                
         }
 
         /// <summary>
