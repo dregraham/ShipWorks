@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Set some defaults
-            shipment.ShipDate = ConvertToUniversalTime(lifetimeScope.Resolve<IDateTimeProvider>().Now.Date);
+            shipment.ShipDate = ConvertToUniversalNow(lifetimeScope.Resolve<IDateTimeProvider>().Now.Date);
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
@@ -363,7 +363,7 @@ namespace ShipWorks.Shipping
             clonedShipment.VoidedDate = null;
             clonedShipment.VoidedUserID = null;
             clonedShipment.ActualLabelFormat = null;
-            clonedShipment.ShipDate = ConvertToUniversalTime(DateTime.Now.Date);
+            clonedShipment.ShipDate = ConvertToUniversalNow(DateTime.Now.Date);
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
             clonedShipment.LoggedShippedToHub = false;
@@ -1149,18 +1149,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Convert date to UTC with database function
+        /// Convert date to UTC with a time of now
         /// </summary>
-        public static DateTime ConvertToUniversalTime(DateTime dateTime)
+        public static DateTime ConvertToUniversalNow(DateTime dateTime)
         {
-            return ExistingConnectionScope.ExecuteWithCommand(cmd =>
-            {
-                cmd.CommandText = "SELECT dbo.DateToUniversalTime(@dateTime)";
-                cmd.AddParameterWithValue("@dateTime", dateTime);
-
-                return (DateTime) DbCommandProvider.ExecuteScalar(cmd);
-            });
+            return new DateTime(dateTime.Date.Ticks + DateTime.Now.TimeOfDay.Ticks, DateTimeKind.Utc);
         }
-
     }
 }

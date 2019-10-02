@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                 carrier.ReadMultiText(s => shipment.Other.Carrier = s);
                 service.ReadMultiText(s => shipment.Other.Service = s);
 
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
                 cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
                 tracking.ReadMultiText(s => shipment.TrackingNumber = s);

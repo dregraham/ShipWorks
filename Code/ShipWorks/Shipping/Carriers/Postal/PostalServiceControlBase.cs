@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     service.ApplyMultiValue((PostalServiceType) shipment.Postal.Service);
                     confirmation.ApplyMultiValue((PostalConfirmationType) shipment.Postal.Confirmation);
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     weight.ApplyMultiWeight(shipment.ContentWeight);
 
                     packagingType.ApplyMultiValue((PostalPackagingType) shipment.Postal.PackagingType);
@@ -315,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 service.ReadMultiValue(v => { if (v != null) shipment.Postal.Service = (int) v; });
                 confirmation.ReadMultiValue(v => { if (v != null) shipment.Postal.Confirmation = (int) v; });
 
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
 
                 packagingType.ReadMultiValue(v => shipment.Postal.PackagingType = (int) v);

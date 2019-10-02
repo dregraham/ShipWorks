@@ -275,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     dropoffType.ApplyMultiValue((FedExDropoffType) shipment.FedEx.DropoffType);
                     returnsClearance.ApplyMultiCheck(shipment.FedEx.ReturnsClearance);
                     thirdPartyConsignee.ApplyMultiCheck(shipment.FedEx.ThirdPartyConsignee);
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     packagingType.ApplyMultiValue((FedExPackagingType) shipment.FedEx.PackagingType);
                     nonStandardPackaging.ApplyMultiCheck(shipment.FedEx.NonStandardContainer);
                     fromAddressType.ApplyMultiValue((ResidentialDeterminationType) shipment.FedEx.OriginResidentialDetermination);
@@ -504,7 +504,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
                 returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
                 thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalTime(d.Date));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
                 packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
                 nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
                 fromAddressType.ReadMultiValue(v => shipment.FedEx.OriginResidentialDetermination = (int) v);
