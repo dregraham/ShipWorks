@@ -363,7 +363,7 @@ namespace ShipWorks.Shipping
             clonedShipment.VoidedDate = null;
             clonedShipment.VoidedUserID = null;
             clonedShipment.ActualLabelFormat = null;
-            clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
+            clonedShipment.ShipDate = ConvertToUniversalTime(DateTime.Now.Date);
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
             clonedShipment.LoggedShippedToHub = false;
