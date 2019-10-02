@@ -248,10 +248,11 @@ namespace ShipWorks
             this.buttonDownload = new Divelements.SandRibbon.Button();
             this.ribbonChunkPickList = new Divelements.SandRibbon.RibbonChunk();
             this.buttonPickList = new Divelements.SandRibbon.Button();
-            this.ribbonTabGridViewCreate = new Divelements.SandRibbon.RibbonTab();
+            this.ribbonTabGridOutput = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkPrint = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkSendEmail = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkFile = new Divelements.SandRibbon.RibbonChunk();
+            this.ribbonTabProducts = new Divelements.SandRibbon.RibbonTab();
             this.ribbonTabOrderLookupViewScanPack = new Divelements.SandRibbon.RibbonTab();
             this.ribbonTabOrderLookupViewShipping = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewShipping = new Divelements.SandRibbon.RibbonChunk();
@@ -2247,10 +2248,11 @@ namespace ShipWorks
             this.ribbon.ApplicationMenu = this.applicationMenu;
             this.ribbon.ApplicationToolTip = new Divelements.SandRibbon.SuperToolTip("Application", "Click here to manage ShipWorks.", null, false);
             this.ribbon.Controls.Add(this.ribbonTabGridViewHome);
-            this.ribbon.Controls.Add(this.ribbonTabGridViewCreate);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewScanPack);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipping);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipmentHistory);
+            this.ribbon.Controls.Add(this.ribbonTabProducts);
+            this.ribbon.Controls.Add(this.ribbonTabGridOutput);
             this.ribbon.Controls.Add(this.ribbonTabAdmin);
             this.ribbon.Controls.Add(this.ribbonTabView);
             this.ribbon.Controls.Add(this.ribbonTabHelp);
@@ -2507,16 +2509,16 @@ namespace ShipWorks
             //
             // ribbonTabGridViewCreate
             //
-            this.ribbonTabGridViewCreate.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonTabGridOutput.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.ribbonChunkPrint,
             this.ribbonChunkSendEmail,
             this.ribbonChunkFile});
-            this.ribbonTabGridViewCreate.Location = new System.Drawing.Point(1, 53);
-            this.ribbonTabGridViewCreate.Manager = this.ribbonManager;
-            this.ribbonTabGridViewCreate.Name = "ribbonTabGridViewCreate";
-            this.ribbonTabGridViewCreate.Size = new System.Drawing.Size(967, 90);
-            this.ribbonTabGridViewCreate.TabIndex = 5;
-            this.ribbonTabGridViewCreate.Text = "&Output";
+            this.ribbonTabGridOutput.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabGridOutput.Manager = this.ribbonManager;
+            this.ribbonTabGridOutput.Name = "ribbonTabGridViewCreate";
+            this.ribbonTabGridOutput.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabGridOutput.TabIndex = 5;
+            this.ribbonTabGridOutput.Text = "&Output";
             //
             // ribbonChunkPrint
             //
@@ -2545,6 +2547,15 @@ namespace ShipWorks
             this.buttonSave,
             this.buttonSaveOpen});
             this.ribbonChunkFile.Text = "File";
+            //
+            // ribbonTabProducts
+            //
+            this.ribbonTabProducts.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabProducts.Manager = this.ribbonManager;
+            this.ribbonTabProducts.Name = "ribbonTabProducts";
+            this.ribbonTabProducts.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabProducts.TabIndex = 0;
+            this.ribbonTabProducts.Text = "Prod&ucts";
             //
             // ribbonTabOrderLookupViewScanPack
             //
@@ -2637,7 +2648,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipmentHistory.Name = "ribbonTabOrderLookupViewShipmentHistory";
             this.ribbonTabOrderLookupViewShipmentHistory.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabOrderLookupViewShipmentHistory.TabIndex = 0;
-            this.ribbonTabOrderLookupViewShipmentHistory.Text = "Shipment &History";
+            this.ribbonTabOrderLookupViewShipmentHistory.Text = "&History";
             //
             // ribbonChunkOrderLookupViewActions
             //
@@ -3224,6 +3235,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipping;
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipmentHistory;
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewScanPack;
+        private Divelements.SandRibbon.RibbonTab ribbonTabProducts;
         private Divelements.SandRibbon.RibbonTab ribbonTabGridViewHome;
         private Divelements.SandRibbon.StatusBar statusBar;
         private Divelements.SandRibbon.RibbonTab ribbonTabView;
@@ -3273,7 +3285,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonManageFilters;
         private Divelements.SandRibbon.Button buttonManageTemplates;
         private Divelements.SandRibbon.Button buttonManageActions;
-        private Divelements.SandRibbon.RibbonTab ribbonTabGridViewCreate;
+        private Divelements.SandRibbon.RibbonTab ribbonTabGridOutput;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPrint;
         private Divelements.SandRibbon.Button buttonPrint;
         private Divelements.SandRibbon.Popup popupPrint;

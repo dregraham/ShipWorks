@@ -132,7 +132,6 @@ namespace ShipWorks
 
         // We have to remember these so that we can restore them after blanking the UI
         private readonly List<RibbonTab> ribbonTabs = new List<RibbonTab>();
-        private IDictionary<RibbonTab, Func<UIMode, bool>> shouldTabBeEnabled;
 
         // Used to manage the UI state of the online update commands
         private readonly OnlineUpdateCommandProvider onlineUpdateCommandProvider = new OnlineUpdateCommandProvider();
@@ -180,18 +179,6 @@ namespace ShipWorks
             shipmentDock = new Lazy<DockControl>(GetShipmentDockControl);
 
             InitializeCustomEnablerComponents();
-
-            shouldTabBeEnabled = new Dictionary<RibbonTab, Func<UIMode, bool>>
-            {
-                { ribbonTabGridViewHome, x => x == UIMode.Batch },
-                { ribbonTabGridViewCreate, x => x == UIMode.Batch },
-                { ribbonTabView, x => x == UIMode.Batch },
-                { ribbonTabOrderLookupViewScanPack, x => x == UIMode.OrderLookup },
-                { ribbonTabOrderLookupViewShipping, x => x == UIMode.OrderLookup },
-                { ribbonTabOrderLookupViewShipmentHistory, x => x == UIMode.OrderLookup },
-                { ribbonTabAdmin, x => x == UIMode.Batch || x == UIMode.OrderLookup },
-                { ribbonTabHelp, x => x == UIMode.Batch || x == UIMode.OrderLookup }
-            };
 
             SetShipmentButonEnabledState();
         }
@@ -806,6 +793,8 @@ namespace ShipWorks
             // We can now show the normal UI
             ApplyCurrentUserLayout();
 
+            currentUserSettings.SetUIMode(UIMode.Batch);
+
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
             UpdateUIMode(user, false);
 
@@ -919,43 +908,28 @@ namespace ShipWorks
         /// <summary>
         /// Show the batch view
         /// </summary>
-        private void OnShowBatchView(object sender, EventArgs e)
-        {
-            if (UIMode != UIMode.Batch)
-            {
-                ChangeUIMode(UIMode.Batch);
-            }
-        }
+        private void OnShowBatchView(object sender, EventArgs e) => ChangeUIMode(UIMode.Batch);
 
         /// <summary>
         /// Show the order lookup view
         /// </summary>
-        private void OnShowOrderLookupView(object sender, EventArgs e)
-        {
-            if (UIMode != UIMode.OrderLookup)
-            {
-                // Save the current layout just in case the user made changes to it
-                ChangeUIMode(UIMode.OrderLookup);
-            }
-        }
+        private void OnShowOrderLookupView(object sender, EventArgs e)  => ChangeUIMode(UIMode.OrderLookup);
 
         /// <summary>
         /// Show the products view
         /// </summary>
-        private void OnShowProductsView(object sender, EventArgs e)
-        {
-            if (UIMode != UIMode.Products)
-            {
-                // Save the current layout just in case the user made changes to it
-                ChangeUIMode(UIMode.Products);
-            }
-        }
+        private void OnShowProductsView(object sender, EventArgs e)  => ChangeUIMode(UIMode.Products);
 
         /// <summary>
         /// Change to the given UI mode
         /// </summary>
         private void ChangeUIMode(UIMode uiMode)
         {
+            if (UIMode == uiMode)
+            {
+                return;
+            }
+
             SaveCurrentUserSettings();
 
             currentUserSettings.SetUIMode(uiMode);
@@ -987,12 +961,7 @@ namespace ShipWorks
 
             UIMode = currentMode;
 
-            ToggleQuickAccessToolbar(ribbon, quickAccessToolBar, UIMode);
-
-            ribbon.Tabs.Clear();
             EnableRibbonTabs();
-
-            buttonManageFilters.Visible = UIMode == UIMode.Batch;
 
             UpdateStatusBar();
 
@@ -1005,6 +974,27 @@ namespace ShipWorks
             }
 
             panelDockingArea.Visible = true;
+
+            SelectModeAppropriateTab();
+        }
+
+        /// <summary>
+        /// Select a default tab for the given mode if one is not already selected
+        /// </summary>
+        private void SelectModeAppropriateTab()
+        {
+            if (UIMode == UIMode.Batch && !IsBatchSpecificTab(ribbon.SelectedTab))
+            {
+                ribbon.SelectedTab = ribbonTabGridViewHome;
+            }
+            else if (UIMode == UIMode.OrderLookup && !IsOrderLookupSpecificTab(ribbon.SelectedTab))
+            {
+                ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+            }
+            else if (UIMode == UIMode.Products && !IsProductSpecificTab(ribbon.SelectedTab))
+            {
+                ribbon.SelectedTab = ribbonTabProducts;
+            }
         }
 
         /// <summary>
@@ -1023,23 +1013,6 @@ namespace ShipWorks
             else
             {
                 EnableBatchMode(user);
-            }
-        }
-
-        /// <summary>
-        /// Toggle the display of the quick access tool bar
-        /// </summary>
-        /// <remarks>We've got to remove and re-add the items when showing the tool bar because when showing it
-        /// in some circumstances, the buttons would appear on top of each other.</remarks>
-        private static void ToggleQuickAccessToolbar(Ribbon ribbon, QuickAccessToolBar quickAccessToolBar, UIMode uiMode)
-        {
-            ribbon.ToolBar = uiMode == UIMode.Batch ? quickAccessToolBar : null;
-
-            if (ribbon.ToolBar != null)
-            {
-                var items = ribbon.ToolBar.Items.OfType<WidgetBase>().ToArray();
-                ribbon.ToolBar.Items.Clear();
-                ribbon.ToolBar.Items.AddRange(items);
             }
         }
 
@@ -1152,6 +1125,7 @@ namespace ShipWorks
             {
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
                 panelDockingArea.Controls.Remove(scanPackControl?.Control);
+                panelDockingArea.Controls.Remove(shipmentHistory?.Control);
                 orderLookupControl.Unload();
                 scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
@@ -1189,10 +1163,48 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Is the specified tab a Batch mode specific tab
+        /// </summary>
+        private bool IsBatchSpecificTab(RibbonTab tab) => tab == ribbonTabGridViewHome;
+
+        /// <summary>
+        /// Is the specified tab an order lookup mode specific tab
+        /// </summary>
+        private bool IsOrderLookupSpecificTab(RibbonTab tab) =>
+            tab == ribbonTabOrderLookupViewScanPack ||
+            tab == ribbonTabOrderLookupViewShipmentHistory ||
+            tab == ribbonTabOrderLookupViewShipping;
+
+        /// <summary>
+        /// Is the specified tab a products mode specific tab
+        /// </summary>
+        private bool IsProductSpecificTab(RibbonTab tab) => tab == ribbonTabProducts;
+
+        /// <summary>
         /// Handle when the currently selected ribbon tab has changed
         /// </summary>
         private void OnRibbonSelectedTabChanged(object sender, System.EventArgs e)
         {
+            // The selected tab changes when showing a blank ui on logoff, so without this, we'd crash
+            if (!UserSession.IsLoggedOn)
+            {
+                return;
+            }
+
+            // Ensure we're in the right mode
+            if (IsBatchSpecificTab(ribbon.SelectedTab))
+            {
+                ChangeUIMode(UIMode.Batch);
+            }
+            else if (IsOrderLookupSpecificTab(ribbon.SelectedTab))
+            {
+                ChangeUIMode(UIMode.OrderLookup);
+            }
+            else if (IsProductSpecificTab(ribbon.SelectedTab))
+            {
+                ChangeUIMode(UIMode.Products);
+            }
+
             if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
             {
                 // Save the order in case changes were made before switching to this tab
@@ -1577,6 +1589,15 @@ namespace ShipWorks
             // Show the tool bar
             ribbon.ToolBar = quickAccessToolBar;
 
+            // Add back in the tabs
+            foreach (RibbonTab tab in ribbonTabs)
+            {
+                ribbon.Tabs.Add(tab);
+
+                // Preserve order
+                tab.SendToBack();
+            }
+
             EnableRibbonTabs();
 
             shipmentHistory = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipmentHistory>();
@@ -1613,15 +1634,6 @@ namespace ShipWorks
         /// </summary>
         private void EnableRibbonTabs()
         {
-            // Add back in the tabs
-            foreach (RibbonTab tab in ribbonTabs.Where(TabAppliesToUIMode))
-            {
-                ribbon.Tabs.Add(tab);
-
-                // Preserve order
-                tab.SendToBack();
-            }
-
             if (UIMode == UIMode.OrderLookup)
             {
                 using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
@@ -1629,25 +1641,13 @@ namespace ShipWorks
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                     EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
 
-                    if (restrictionLevel != EditionRestrictionLevel.None)
-                    {
-                        ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
-                    }
-                    else
+                    if (restrictionLevel == EditionRestrictionLevel.None)
                     {
                         ribbonTabOrderLookupViewScanPack.Enabled = true;
                     }
                 }
             }
-
-            ribbonSecurityProvider.UpdateSecurityUI();
         }
-
-        /// <summary>
-        /// Does the specific tab apply to the current UI mode
-        /// </summary>
-        private bool TabAppliesToUIMode(RibbonTab tab) =>
-            shouldTabBeEnabled.TryGetValue(tab, out Func<UIMode, bool> func) ? func(UIMode) : true;
 
         /// <summary>
         /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
@@ -3795,6 +3795,8 @@ namespace ShipWorks
         /// </summary>
         private void OnShowPanel(object sender, EventArgs e)
         {
+            ribbon.SelectedTab = ribbonTabGridViewHome;
+
             SandMenuItem item = (SandMenuItem) sender;
 
             ShowPanel((DockControl) item.Tag);
@@ -3927,6 +3929,8 @@ namespace ShipWorks
         /// </summary>
         private void OnChangeDetailViewDetailHeight(object sender, EventArgs e)
         {
+            ribbon.SelectedTab = ribbonTabGridViewHome;
+
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
 
             // Save the new setting
@@ -3940,6 +3944,8 @@ namespace ShipWorks
         /// </summary>
         private void OnChangeDetailViewDetailMode(object sender, EventArgs e)
         {
+            ribbon.SelectedTab = ribbonTabGridViewHome;
+
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
 
             // Save the new setting
@@ -4045,6 +4051,8 @@ namespace ShipWorks
         /// </summary>
         private void OnSaveEnvironmentSettings(object sender, EventArgs e)
         {
+            ribbon.SelectedTab = ribbonTabGridViewHome;
+
             using (EnvironmentSaveDlg dlg = new EnvironmentSaveDlg(new EnvironmentController(windowLayoutProvider, gridMenuLayoutProvider)))
             {
                 dlg.ShowDialog(this);
@@ -4056,6 +4064,8 @@ namespace ShipWorks
         /// </summary>
         private void OnLoadEnvironmentSettings(object sender, EventArgs e)
         {
+            ribbon.SelectedTab = ribbonTabGridViewHome;
+
             using (EnvironmentLoadDlg dlg = new EnvironmentLoadDlg(new EnvironmentController(windowLayoutProvider, gridMenuLayoutProvider)))
             {
                 dlg.ShowDialog(this);
@@ -4071,6 +4081,8 @@ namespace ShipWorks
             {
                 dlg.ShowDialog(this);
             }
+
+            ribbon.SelectedTab = ribbonTabGridViewHome;
 
             // If a new panel was shown, then we may need to update its display state
             UpdatePanelState();
