@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             var testObject = mock.Create<RatesRetrievedPipeline>();
             testObject.Register(viewModel.Object);
 
-            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new ShippingDialogOpeningMessage(this));
             subject.Send(new RatesRetrievingMessage(this, "Foo"));
             subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.UI.Tests.RatingPanel.ObservableRegistrations
             testObject.Register(viewModel.Object);
 
             subject.Send(new OrderSelectionChangingMessage(this, Enumerable.Empty<long>()));
-            subject.Send(new OpenShippingDialogMessage(this, Enumerable.Empty<ShipmentEntity>()));
+            subject.Send(new ShippingDialogOpeningMessage(this));
             subject.Send(new RatesRetrievingMessage(this, "Foo"));
             subject.Send(CreateRetrievedMessageWithHash("Foo"));
 
