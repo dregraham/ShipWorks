@@ -46,6 +46,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Warehouse;
+using ShipWorks.Common;
 
 namespace ShipWorks.Shipping
 {
@@ -178,7 +179,10 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Set some defaults
-            shipment.ShipDate = ConvertToUniversalNow(lifetimeScope.Resolve<IDateTimeProvider>().Now.Date);
+
+            var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
+            shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(dateTimeProvider.Now.Date);
+
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
@@ -363,7 +367,7 @@ namespace ShipWorks.Shipping
             clonedShipment.VoidedDate = null;
             clonedShipment.VoidedUserID = null;
             clonedShipment.ActualLabelFormat = null;
-            clonedShipment.ShipDate = ConvertToUniversalNow(DateTime.Now.Date);
+            clonedShipment.ShipDate = DateTime.UtcNow;
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
             clonedShipment.LoggedShippedToHub = false;
@@ -1146,14 +1150,6 @@ namespace ShipWorks.Shipping
             RelationPredicateBucket bucket = CreateUnprocessedShipmentsBucket();
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.ShipmentType == (int) shipmentTypeCode);
             return bucket;
-        }
-
-        /// <summary>
-        /// Convert date to UTC with a time of now
-        /// </summary>
-        public static DateTime ConvertToUniversalNow(DateTime dateTime)
-        {
-            return new DateTime(dateTime.Date.Ticks + DateTime.Now.TimeOfDay.Ticks, DateTimeKind.Utc);
         }
     }
 }

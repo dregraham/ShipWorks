@@ -19,9 +19,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
 
         [Theory]
         [InlineData(true, "2017-10-02 10:00:00", "2017-10-03 12:00:00", "2017-10-02 10:00:00")]
-        [InlineData(false, "2017-10-02 10:00:00", "2017-10-03 10:00:00", "2017-10-03 12:00:00")]
-        [InlineData(false, "2017-10-03 08:00:00", "2017-10-03 10:00:00", "2017-10-03 08:00:00")]
-        [InlineData(false, "2017-10-04 08:00:00", "2017-10-03 10:00:00", "2017-10-04 08:00:00")]
+        [InlineData(false, "2017-10-02 10:00:00", "2017-10-03 10:00:00", "2017-10-02 10:00:00")]
+        [InlineData(false, "2017-10-03 08:00:00", "2017-10-03 10:00:00", "2017-10-03 8:00:00")]
+        [InlineData(false, "2017-10-04 08:00:00", "2017-10-03 10:00:00", "2017-10-04 8:00:00")]
         public void Manipulate_SetsDate_Properly(bool processed, string shipDateText, string nowText, string expectedText)
         {
             mock.Mock<IDateTimeProvider>().SetupGet(x => x.Now).Returns(DateTime.Parse(nowText));

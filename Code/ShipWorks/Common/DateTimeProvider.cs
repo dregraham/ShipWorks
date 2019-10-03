@@ -34,5 +34,10 @@ namespace ShipWorks.Common
         /// Gets the current date, with time set to 00:00:00
         /// </summary>
         public DateTime Today => DateTime.Today;
+
+        /// <summary>
+        /// Convert date to UTC with a time of now
+        /// </summary>
+        public DateTime ConvertToUniversalNow(DateTime dateTime) => new DateTime(dateTime.Date.Ticks + Now.TimeOfDay.Ticks, DateTimeKind.Utc);
     }
 }

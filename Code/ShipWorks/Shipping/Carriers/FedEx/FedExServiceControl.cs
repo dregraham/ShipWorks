@@ -494,56 +494,60 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             this.fedExFreightContainerControl.SaveToShipments(LoadedShipments);
 
-            // Save the whales
-            foreach (ShipmentEntity shipment in LoadedShipments)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight);
+                var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
+                // Save the whales
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight);
 
-                fedexAccount.ReadMultiValue(v => shipment.FedEx.FedExAccountID = (long) v);
-                service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
-                dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
-                returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
-                thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
-                packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
-                nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
-                fromAddressType.ReadMultiValue(v => shipment.FedEx.OriginResidentialDetermination = (int) v);
+                    fedexAccount.ReadMultiValue(v => shipment.FedEx.FedExAccountID = (long) v);
+                    service.ReadMultiValue(v => { if (v != null) shipment.FedEx.Service = (int) v; });
+                    dropoffType.ReadMultiValue(v => shipment.FedEx.DropoffType = (int) v);
+                    returnsClearance.ReadMultiCheck(v => shipment.FedEx.ReturnsClearance = v);
+                    thirdPartyConsignee.ReadMultiCheck(v => shipment.FedEx.ThirdPartyConsignee = v);
+                    shipDate.ReadMultiDate(d => shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(d.Date));
+                    packagingType.ReadMultiValue(v => shipment.FedEx.PackagingType = (int) v);
+                    nonStandardPackaging.ReadMultiCheck(c => shipment.FedEx.NonStandardContainer = c);
+                    fromAddressType.ReadMultiValue(v => shipment.FedEx.OriginResidentialDetermination = (int) v);
 
-                signature.ReadMultiValue(v => shipment.FedEx.Signature = (int) v);
-                referenceCustomer.ReadMultiText(t => shipment.FedEx.ReferenceCustomer = t);
-                referenceInvoice.ReadMultiText(t => shipment.FedEx.ReferenceInvoice = t);
-                referencePO.ReadMultiText(t => shipment.FedEx.ReferencePO = t);
-                referenceShipmentIntegrity.ReadMultiText(t => shipment.FedEx.ReferenceShipmentIntegrity = t);
+                    signature.ReadMultiValue(v => shipment.FedEx.Signature = (int) v);
+                    referenceCustomer.ReadMultiText(t => shipment.FedEx.ReferenceCustomer = t);
+                    referenceInvoice.ReadMultiText(t => shipment.FedEx.ReferenceInvoice = t);
+                    referencePO.ReadMultiText(t => shipment.FedEx.ReferencePO = t);
+                    referenceShipmentIntegrity.ReadMultiText(t => shipment.FedEx.ReferenceShipmentIntegrity = t);
 
-                payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
-                transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);
-                payorTransportName.ReadMultiText(t => shipment.FedEx.PayorTransportName = t);
+                    payorTransport.ReadMultiValue(v => shipment.FedEx.PayorTransportType = (int) v);
+                    transportAccount.ReadMultiText(t => shipment.FedEx.PayorTransportAccount = t);
+                    payorTransportName.ReadMultiText(t => shipment.FedEx.PayorTransportName = t);
 
-                payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = (int) v);
-                dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);
+                    payorDuties.ReadMultiValue(v => shipment.FedEx.PayorDutiesType = (int) v);
+                    dutiesAccount.ReadMultiText(t => shipment.FedEx.PayorDutiesAccount = t);
 
-                saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
+                    saturdayDelivery.ReadMultiCheck(c => shipment.FedEx.SaturdayDelivery = c);
 
-                homeInstructions.ReadMultiText(t => shipment.FedEx.HomeDeliveryInstructions = t);
-                homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
-                homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
-                homePremiumPhone.ReadMultiText(t => shipment.FedEx.HomeDeliveryPhone = t);
+                    homeInstructions.ReadMultiText(t => shipment.FedEx.HomeDeliveryInstructions = t);
+                    homePremiumService.ReadMultiValue(v => shipment.FedEx.HomeDeliveryType = (int) v);
+                    homePremiumDate.ReadMultiDate(d => shipment.FedEx.HomeDeliveryDate = (d.Date.AddHours(12)));
+                    homePremiumPhone.ReadMultiText(t => shipment.FedEx.HomeDeliveryPhone = t);
 
-                codEnabled.ReadMultiCheck(c => shipment.FedEx.CodEnabled = c);
-                codAmount.ReadMultiAmount(a => shipment.FedEx.CodAmount = a);
-                codAddFreight.ReadMultiCheck(c => shipment.FedEx.CodAddFreight = c);
-                codPaymentType.ReadMultiValue(v => shipment.FedEx.CodPaymentType = (int) v);
-                codTaxId.ReadMultiText(t => shipment.FedEx.CodTIN = t);
+                    codEnabled.ReadMultiCheck(c => shipment.FedEx.CodEnabled = c);
+                    codAmount.ReadMultiAmount(a => shipment.FedEx.CodAmount = a);
+                    codAddFreight.ReadMultiCheck(c => shipment.FedEx.CodAddFreight = c);
+                    codPaymentType.ReadMultiValue(v => shipment.FedEx.CodPaymentType = (int) v);
+                    codTaxId.ReadMultiText(t => shipment.FedEx.CodTIN = t);
 
-                smartHubID.ReadMultiValue(v => shipment.FedEx.SmartPostHubID = (string) v);
-                smartIndicia.ReadMultiValue(v => shipment.FedEx.SmartPostIndicia = (int) v);
-                smartEndorsement.ReadMultiValue(v => shipment.FedEx.SmartPostEndorsement = (int) v);
-                smartConfirmation.ReadMultiCheck(c => shipment.FedEx.SmartPostConfirmation = c);
-                smartManifestID.ReadMultiText(t => shipment.FedEx.SmartPostCustomerManifest = t);
+                    smartHubID.ReadMultiValue(v => shipment.FedEx.SmartPostHubID = (string) v);
+                    smartIndicia.ReadMultiValue(v => shipment.FedEx.SmartPostIndicia = (int) v);
+                    smartEndorsement.ReadMultiValue(v => shipment.FedEx.SmartPostEndorsement = (int) v);
+                    smartConfirmation.ReadMultiCheck(c => shipment.FedEx.SmartPostConfirmation = c);
+                    smartManifestID.ReadMultiText(t => shipment.FedEx.SmartPostCustomerManifest = t);
 
-                SaveEmailNotificationSettings(shipment.FedEx);
-                fedExHoldAtLocationControl.SaveToShipment(shipment);
-                fimsOptionsControl.SaveToShipment(shipment);
+                    SaveEmailNotificationSettings(shipment.FedEx);
+                    fedExHoldAtLocationControl.SaveToShipment(shipment);
+                    fimsOptionsControl.SaveToShipment(shipment);
+                }
             }
 
             ResumeRateCriteriaChangeEvent();

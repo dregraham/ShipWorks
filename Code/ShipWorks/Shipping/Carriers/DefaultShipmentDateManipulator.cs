@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers
 
             if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = ShippingManager.ConvertToUniversalNow(now.Date);
+                shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(now.Date);
             }
         }
     }

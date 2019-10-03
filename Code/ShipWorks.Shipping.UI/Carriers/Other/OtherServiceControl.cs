@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
+using Autofac;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -56,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                     carrier.ApplyMultiText(shipment.Other.Carrier);
                     service.ApplyMultiText(shipment.Other.Service);
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     weight.ApplyMultiWeight(shipment.ContentWeight);
                     cost.ApplyMultiText(shipment.ShipmentCost.ToString(CultureInfo.InvariantCulture));
                     tracking.ApplyMultiText(shipment.TrackingNumber);
@@ -102,17 +105,20 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             originControl.SaveToEntities();
 
-            foreach (ShipmentEntity shipment in LoadedShipments)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                carrier.ReadMultiText(s => shipment.Other.Carrier = s);
-                service.ReadMultiText(s => shipment.Other.Service = s);
+                var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    carrier.ReadMultiText(s => shipment.Other.Carrier = s);
+                    service.ReadMultiText(s => shipment.Other.Service = s);
 
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
-                weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
-                tracking.ReadMultiText(s => shipment.TrackingNumber = s);
+                    shipDate.ReadMultiDate(d => shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(d.Date));
+                    weight.ReadMultiWeight(v => shipment.ContentWeight = v);
+                    cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
+                    tracking.ReadMultiText(s => shipment.TrackingNumber = s);
+                }
             }
-
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();

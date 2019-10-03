@@ -287,46 +287,50 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packageControl.SaveToEntities();
             packageDetailsControl.SaveToEntities();
 
-            // Save the
-            foreach (ShipmentEntity shipment in LoadedShipments)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.Weight);
+                var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
+                // Save the
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
+                    shipment.ContentWeight = shipment.Ups.Packages.Sum(p => p.Weight);
 
-                upsAccount.ReadMultiValue(v => shipment.Ups.UpsAccountID = (long) v);
-                service.ReadMultiValue(v => { if (v != null) shipment.Ups.Service = (int) v; });
-                shipDate.ReadMultiDate(d => shipment.ShipDate = ShippingManager.ConvertToUniversalNow(d.Date));
-                saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
+                    upsAccount.ReadMultiValue(v => shipment.Ups.UpsAccountID = (long) v);
+                    service.ReadMultiValue(v => { if (v != null) shipment.Ups.Service = (int) v; });
+                    shipDate.ReadMultiDate(d => shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(d.Date));
+                    saturdayDelivery.ReadMultiCheck(c => shipment.Ups.SaturdayDelivery = c);
 
-                confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
-                shipperRelease.ReadMultiCheck(c => shipment.Ups.ShipperRelease = c);
-                carbonNeutral.ReadMultiCheck(c => shipment.Ups.CarbonNeutral = c);
+                    confirmation.ReadMultiValue(v => shipment.Ups.DeliveryConfirmation = (int) v);
+                    shipperRelease.ReadMultiCheck(c => shipment.Ups.ShipperRelease = c);
+                    carbonNeutral.ReadMultiCheck(c => shipment.Ups.CarbonNeutral = c);
 
 
-                referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = DetermineReferenceNumber(shipment.Ups, t)); // shipment.Ups.ReferenceNumber = t);
-                reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = DetermineReferenceNumber(shipment.Ups, t)); // = t);
+                    referenceNumber.ReadMultiText(t => shipment.Ups.ReferenceNumber = DetermineReferenceNumber(shipment.Ups, t)); // shipment.Ups.ReferenceNumber = t);
+                    reference2Number.ReadMultiText(t => shipment.Ups.ReferenceNumber2 = DetermineReferenceNumber(shipment.Ups, t)); // = t);
 
-                payorTransport.ReadMultiValue(v => shipment.Ups.PayorType = (int) v);
-                payorAccount.ReadMultiText(t => shipment.Ups.PayorAccount = t);
-                payorPostalCode.ReadMultiText(t => shipment.Ups.PayorPostalCode = t);
-                payorCountry.ReadMultiValue(v => shipment.Ups.PayorCountryCode = (string) v);
+                    payorTransport.ReadMultiValue(v => shipment.Ups.PayorType = (int) v);
+                    payorAccount.ReadMultiText(t => shipment.Ups.PayorAccount = t);
+                    payorPostalCode.ReadMultiText(t => shipment.Ups.PayorPostalCode = t);
+                    payorCountry.ReadMultiValue(v => shipment.Ups.PayorCountryCode = (string) v);
 
-                payorDuties.ReadMultiValue(v => shipment.Ups.ShipmentChargeType = (int) v);
-                dutiesAccount.ReadMultiText(t => shipment.Ups.ShipmentChargeAccount = t);
-                dutiesPostalCode.ReadMultiText(t => shipment.Ups.ShipmentChargePostalCode = t);
-                dutiesCountryCode.ReadMultiValue(v => shipment.Ups.ShipmentChargeCountryCode = (string) v);
+                    payorDuties.ReadMultiValue(v => shipment.Ups.ShipmentChargeType = (int) v);
+                    dutiesAccount.ReadMultiText(t => shipment.Ups.ShipmentChargeAccount = t);
+                    dutiesPostalCode.ReadMultiText(t => shipment.Ups.ShipmentChargePostalCode = t);
+                    dutiesCountryCode.ReadMultiValue(v => shipment.Ups.ShipmentChargeCountryCode = (string) v);
 
-                SaveEmailNotificationSettings(shipment.Ups);
+                    SaveEmailNotificationSettings(shipment.Ups);
 
-                codEnabled.ReadMultiCheck(c => shipment.Ups.CodEnabled = c);
-                codAmount.ReadMultiAmount(a => shipment.Ups.CodAmount = a);
-                codPaymentType.ReadMultiValue(v => shipment.Ups.CodPaymentType = (int) v);
+                    codEnabled.ReadMultiCheck(c => shipment.Ups.CodEnabled = c);
+                    codAmount.ReadMultiAmount(a => shipment.Ups.CodAmount = a);
+                    codPaymentType.ReadMultiValue(v => shipment.Ups.CodPaymentType = (int) v);
 
-                surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
-                costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
-                packageID.ReadMultiText(t => shipment.Ups.UspsPackageID = t);
-                irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int) v);
+                    surePostClassification.ReadMultiValue(v => shipment.Ups.Subclassification = (int) v);
+                    costCenter.ReadMultiText(t => shipment.Ups.CostCenter = t);
+                    packageID.ReadMultiText(t => shipment.Ups.UspsPackageID = t);
+                    irregularIndicator.ReadMultiValue(v => shipment.Ups.IrregularIndicator = (int) v);
 
-                uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
+                    uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
+                }
             }
 
             ResumeRateCriteriaChangeEvent();
