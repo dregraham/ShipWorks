@@ -71,10 +71,12 @@ namespace ShipWorks.Shipping.Carriers
                 shipDateTime.DayOfWeek == DayOfWeek.Sunday)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
+                shipDateTime = shipDateTime.AddDays(1);
 
-                if (shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday)
+                if (shipDateTime.DayOfWeek == DayOfWeek.Saturday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
+                    shipDateTime = shipDateTime.AddDays(1);
                 }
 
                 if (shipDateTime.DayOfWeek == DayOfWeek.Sunday)
