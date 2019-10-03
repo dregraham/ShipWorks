@@ -51,6 +51,23 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         }
 
         /// <summary>
+        /// The event name to send to telemetry
+        /// </summary>
+        public string TelemetryEventName
+        {
+            get => actualCreateLabelButton.TelemetryEventName;
+            set { }
+        }
+
+        /// <summary>
+        /// Track any telemetry
+        /// </summary>
+        public void TrackButtonClick(string postfix)
+        {
+            actualCreateLabelButton.TrackButtonClick(postfix);
+        }
+
+        /// <summary>
         /// Event handler for button click
         /// </summary>
         public event EventHandler Activate;

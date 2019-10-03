@@ -21,5 +21,15 @@ namespace ShipWorks.UI.Controls.SandRibbon
         /// Tag associated with the element
         /// </summary>
         object Tag { get; }
+
+        /// <summary>
+        /// The event name to send to telemetry
+        /// </summary>
+        string TelemetryEventName { get; set; }
+
+        /// <summary>
+        /// Track any telemetry
+        /// </summary>
+        void TrackButtonClick(string postfix);
     }
 }
