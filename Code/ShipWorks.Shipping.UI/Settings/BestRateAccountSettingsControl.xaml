@@ -4,12 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:settings="clr-namespace:ShipWorks.Shipping.UI.Settings"
+             xmlns:ui="http://schemas.shipworks.com/ui"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
              FontFamily="Tahoma"
              FontSize="11px"
              d:DesignHeight="500"
              d:DesignWidth="500"
              d:DataContext="{d:DesignInstance settings:BestRateAccountSettingsViewModel}">
+    <UserControl.Resources>
+        <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter" />
+        <system:Int32 x:Key="ZeroAsInt">0</system:Int32>
+    </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="11,5,8,8">
             <Grid.RowDefinitions>
@@ -59,6 +65,12 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
+                            <TextBlock Grid.Row="1"
+                                       Text="{Binding Name, StringFormat='ShipWorks has not yet been setup for {0}'}"
+                                       Margin="15,4,0,4"
+                                       Visibility="{Binding Accounts.Count,
+                                           Converter={StaticResource VisibleWhenEqualToParameter},
+                                           ConverterParameter={StaticResource ZeroAsInt}}"/>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

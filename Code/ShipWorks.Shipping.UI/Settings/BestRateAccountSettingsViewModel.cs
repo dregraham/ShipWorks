@@ -55,47 +55,16 @@ namespace ShipWorks.Shipping.UI.Settings
         /// </summary>
         public void Load()
         {
+            // Get the shipment types allowed for best rate
             IEnumerable<ShipmentTypeCode> bestRateShipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(excludedShipmentTypes);
 
             foreach (ShipmentTypeCode shipmentType in bestRateShipmentTypes)
             {
-                ICarrierAccountRetriever carrierAccountRetriever = accountRetrieverFactory.Create(shipmentType);
-
-                IEnumerable<ICarrierAccount> carrierAccounts = carrierAccountRetriever.AccountsReadOnly;
-
-                if (carrierAccounts.Any())
+                Carriers.Add(new BestRateCarrier
                 {
-                    List<long> excludedAccountIDs = excludedAccountRepository.GetAll().ToList();
-
-                    BestRateCarrier carrier = new BestRateCarrier()
-                    {
-                        Name = EnumHelper.GetDescription(shipmentType),
-                        ShipmentType = shipmentType
-                    };
-
-                    foreach (ICarrierAccount carrierAccount in carrierAccounts)
-                    {
-                        BestRateAccount account = new BestRateAccount()
-                        {
-                            AccountID = carrierAccount.AccountId,
-                            AccountDescription = carrierAccount.AccountDescription
-                        };
-
-                        if (excludedAccountIDs.Contains(carrierAccount.AccountId))
-                        {
-                            excludedAccountIDs.Remove(carrierAccount.AccountId);
-                            account.IsActive = false;
-                        }
-                        else
-                        {
-                            account.IsActive = true;
-                        }
-
-                        carrier.Accounts.Add(account);
-                    }
-
-                    Carriers.Add(carrier);
-                }
+                    Name = EnumHelper.GetDescription(shipmentType),
+                    Accounts = GetAccountsForCarrier(shipmentType)
+                });
             }
         }
 
@@ -112,6 +81,38 @@ namespace ShipWorks.Shipping.UI.Settings
             }
 
             excludedAccountRepository.Save(excludedAccounts);
+        }
+
+        /// <summary>
+        /// Get the accounts for the given carrier
+        /// </summary>
+        private ObservableCollection<BestRateAccount> GetAccountsForCarrier(ShipmentTypeCode shipmentType)
+        {
+            ObservableCollection<BestRateAccount> accounts = new ObservableCollection<BestRateAccount>();
+
+            IEnumerable<ICarrierAccount> carrierAccounts = accountRetrieverFactory.Create(shipmentType).AccountsReadOnly;
+
+            if (carrierAccounts.Any())
+            {
+                List<long> excludedAccountIDs = excludedAccountRepository.GetAll().ToList();
+
+                // for each account, see if its in the list of excluded accounts
+                foreach (ICarrierAccount carrierAccount in carrierAccounts)
+                {
+                    BestRateAccount account = new BestRateAccount
+                    {
+                        AccountID = carrierAccount.AccountId,
+                        AccountDescription = carrierAccount.AccountDescription
+                    };
+
+                    // if the account was successfully removed from the list, it should be excluded
+                    account.IsActive = !excludedAccountIDs.Remove(carrierAccount.AccountId);
+
+                    accounts.Add(account);
+                }
+            }
+
+            return accounts;
         }
     }
 }

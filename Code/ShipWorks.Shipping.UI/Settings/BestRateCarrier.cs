@@ -11,8 +11,6 @@ namespace ShipWorks.Shipping.UI.Settings
 
         public string Name { get; set; }
 
-        public ShipmentTypeCode ShipmentType { get; set; }
-
         public ObservableCollection<BestRateAccount> Accounts { get; set; }
     }
 }
