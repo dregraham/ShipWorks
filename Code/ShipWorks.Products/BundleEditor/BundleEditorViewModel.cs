@@ -199,7 +199,7 @@ namespace ShipWorks.Products.BundleEditor
         /// </summary>
         private void RemoveProductFromBundle()
         {
-            ProductBundleEntity bundleProductToDelete = baseProduct.Product.Bundles.FirstOrDefault(b => b.ProductID == SelectedBundleLineItem.BundledProduct.ProductID);
+            ProductBundleEntity bundleProductToDelete = baseProduct.Product.Bundles.FirstOrDefault(b => b.ChildProductVariantID == SelectedBundleLineItem.BundledProduct.ChildProductVariantID);
 
             if (bundleProductToDelete != null)
             {

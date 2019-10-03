@@ -6976,7 +6976,6 @@
     <Compile Include="ApplicationCore\Settings\ShipWorksSettings.Designer.cs">
       <DependentUpon>ShipWorksSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Settings\ShipWorksSettingsData.cs" />
     <Compile Include="Data\Administration\InitialDataLoader.cs" />
     <Compile Include="Data\Connection\ConnectionLostDlg.cs">
       <SubType>Form</SubType>

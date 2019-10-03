@@ -469,7 +469,7 @@ CREATE TABLE [dbo].[Order]
 [BillStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[BillPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BillPhone] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillFax] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BillWebsite] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1235,7 +1235,7 @@ CREATE TABLE [dbo].[Shipment]
 [ShipStateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShipPhone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipPhone] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipAddressValidationSuggestionCount] [int] NOT NULL,
 [ShipAddressValidationStatus] [int] NOT NULL,
@@ -2545,7 +2545,8 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [ClaimID] [bigint] NULL,
 [EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [InsureShipPolicyID] [bigint] NULL,
-[DateOfIssue] [datetime] NULL
+[DateOfIssue] [datetime] NULL,
+[InsureShipStatus] [nvarchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
@@ -4303,7 +4304,9 @@ CREATE TABLE [dbo].[UserSettings]
 [UIMode] [int] NOT NULL,
 [OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS,
 [LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0',
-[AutoPrintRequireValidation] [bit] NOT NULL
+[AutoPrintRequireValidation] [bit] NOT NULL,
+[MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
+[ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

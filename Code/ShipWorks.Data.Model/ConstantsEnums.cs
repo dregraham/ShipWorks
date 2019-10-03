@@ -5492,6 +5492,8 @@ namespace ShipWorks.Data.Model
 		InsureShipPolicyID,
 		///<summary>DateOfIssue. </summary>
 		DateOfIssue,
+		///<summary>InsureShipStatus. </summary>
+		InsureShipStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12726,6 +12728,10 @@ namespace ShipWorks.Data.Model
 		LastReleaseNotesSeen,
 		///<summary>AutoPrintRequireValidation. </summary>
 		AutoPrintRequireValidation,
+		///<summary>MinimizeRibbon. </summary>
+		MinimizeRibbon,
+		///<summary>ShowQAToolbarBelowRibbon. </summary>
+		ShowQAToolbarBelowRibbon,
 		/// <summary></summary>
 		AmountOfFields
 	}
