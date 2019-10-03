@@ -373,6 +373,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsureShipPolicyID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DateOfIssue", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("InsureShipStatus", fieldHashtable);
 		}
 		#endregion
 
@@ -589,6 +591,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)InsurancePolicyFieldIndex.DateOfIssue, false); }
 			set	{ SetValue((int)InsurancePolicyFieldIndex.DateOfIssue, value); }
+		}
+
+		/// <summary> The InsureShipStatus property of the Entity InsurancePolicy<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "InsurancePolicy"."InsureShipStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String InsureShipStatus
+		{
+			get { return (System.String)GetValue((int)InsurancePolicyFieldIndex.InsureShipStatus, true); }
+			set	{ SetValue((int)InsurancePolicyFieldIndex.InsureShipStatus, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

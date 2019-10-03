@@ -2544,7 +2544,8 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [ClaimID] [bigint] NULL,
 [EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [InsureShipPolicyID] [bigint] NULL,
-[DateOfIssue] [datetime] NULL
+[DateOfIssue] [datetime] NULL,
+[InsureShipStatus] [nvarchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
