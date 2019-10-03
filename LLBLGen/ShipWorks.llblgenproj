@@ -3312,10 +3312,12 @@
           <Field Name="FilterInitialUseLastActive" Type="bool" FieldIndex="5" />
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="LastReleaseNotesSeen" Type="string" MaxLength="25" FieldIndex="20" />
+          <Field Name="MinimizeRibbon" Type="bool" FieldIndex="22" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
+          <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
@@ -4573,7 +4575,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-20T21:59:51.2445802Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-01T15:27:58.2818405Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9345,6 +9347,8 @@
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
                     <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
+                    <Field Name="MinimizeRibbon" Ordinal="23" DbType="2" />
+                    <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -34931,10 +34935,12 @@
             <FieldMapping FieldName="FilterInitialUseLastActive" TargetFieldName="FilterInitialUseLastActive" />
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
             <FieldMapping FieldName="LastReleaseNotesSeen" TargetFieldName="LastReleaseNotesSeen" />
+            <FieldMapping FieldName="MinimizeRibbon" TargetFieldName="MinimizeRibbon" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
+            <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />

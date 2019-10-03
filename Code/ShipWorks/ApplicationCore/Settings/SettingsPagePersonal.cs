@@ -17,16 +17,13 @@ namespace ShipWorks.ApplicationCore.Settings
     /// </summary>
     public partial class SettingsPagePersonal : SettingsPageBase
     {
-        private readonly ShipWorksSettingsData data;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SettingsPagePersonal(ShipWorksSettingsData data)
+        public SettingsPagePersonal()
         {
             InitializeComponent();
-
-            this.data = data;
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
@@ -44,8 +41,8 @@ namespace ShipWorks.ApplicationCore.Settings
                 colorScheme.SelectedIndex = (int) ShipWorksDisplay.ColorScheme;
                 systemTray.Checked = ShipWorksDisplay.HideInSystemTray;
 
-                minimizeRibbon.Checked = data.MinimizeRibbon;
-                showQatBelowRibbon.Checked = data.ShowQatBelowRibbon;
+                minimizeRibbon.Checked = settings.MinimizeRibbon;
+                showQatBelowRibbon.Checked = settings.ShowQAToolbarBelowRibbon;
 
                 radioInitialFilterRecent.Checked = settings.FilterInitialUseLastActive;
                 radioInitialFilterAlways.Checked = !settings.FilterInitialUseLastActive;
@@ -92,8 +89,8 @@ namespace ShipWorks.ApplicationCore.Settings
                 ShipWorksDisplay.ColorScheme = (ColorScheme) colorScheme.SelectedIndex;
                 ShipWorksDisplay.HideInSystemTray = systemTray.Checked;
 
-                data.MinimizeRibbon = minimizeRibbon.Checked;
-                data.ShowQatBelowRibbon = showQatBelowRibbon.Checked;
+                settings.MinimizeRibbon = minimizeRibbon.Checked;
+                settings.ShowQAToolbarBelowRibbon = showQatBelowRibbon.Checked;
 
                 settings.FilterInitialUseLastActive = radioInitialFilterRecent.Checked;
                 settings.FilterInitialSortType = (int) filterInitialSort.SelectedValue;
