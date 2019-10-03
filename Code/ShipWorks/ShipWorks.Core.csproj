@@ -851,6 +851,7 @@
     <Compile Include="Data\Administration\IUpdateService.cs" />
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_00.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
@@ -1117,6 +1118,7 @@
     <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesClientDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesImageDetailManipulator.cs" />
