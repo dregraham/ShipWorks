@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (237 + 2));
+			this.InitClass( (238 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -74,6 +74,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitAuditEntityInfos();
 			InitAuditChangeEntityInfos();
 			InitAuditChangeDetailEntityInfos();
+			InitBestRateExcludedAccountEntityInfos();
 			InitBestRateProfileEntityInfos();
 			InitBestRateShipmentEntityInfos();
 			InitBigCommerceOrderItemEntityInfos();
@@ -638,6 +639,12 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "TextNew", typeof(System.String), false, false, false, true,  (int)AuditChangeDetailFieldIndex.TextNew, 2147483647, 0, 0);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "VariantOld", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantOld, 0, 0, 0);
 			this.AddElementFieldInfo("AuditChangeDetailEntity", "VariantNew", typeof(System.Object), false, false, false, true,  (int)AuditChangeDetailFieldIndex.VariantNew, 0, 0, 0);
+		}
+		/// <summary>Inits BestRateExcludedAccountEntity's FieldInfo objects</summary>
+		private void InitBestRateExcludedAccountEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(BestRateExcludedAccountFieldIndex), "BestRateExcludedAccountEntity");
+			this.AddElementFieldInfo("BestRateExcludedAccountEntity", "AccountID", typeof(System.Int64), true, false, false, false,  (int)BestRateExcludedAccountFieldIndex.AccountID, 0, 0, 19);
 		}
 		/// <summary>Inits BestRateProfileEntity's FieldInfo objects</summary>
 		private void InitBestRateProfileEntityInfos()

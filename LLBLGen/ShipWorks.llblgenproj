@@ -479,6 +479,11 @@
           <Field Name="VariantOld" Type="object" IsOptional="true" FieldIndex="8" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="BestRateExcludedAccount" ObjectID="90b5a0d5-6917-4298-bbfb-6659b94f2e69">
+        <Fields>
+          <Field Name="AccountID" Type="long" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="BestRateProfile" ObjectID="78df09d7-4c41-4415-9288-1ca0a9399767">
         <Fields>
           <Field Name="ServiceLevel" Type="int" IsOptional="true" FieldIndex="1" />
@@ -4573,7 +4578,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-21T15:39:11.0799313Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-03T18:02:17.2652296Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4968,6 +4973,12 @@
                     <Field Name="TextNew" Ordinal="8" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="VariantOld" Ordinal="9" IsOptional="true" DbType="18" />
                     <Field Name="VariantNew" Ordinal="10" IsOptional="true" DbType="18" />
+                  </Fields>
+                </Table>
+                <Table Name="BestRateExcludedAccount">
+                  <PkConstraintName Name="PK_AccountID" />
+                  <Fields>
+                    <Field Name="AccountID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BestRateProfile">
@@ -11221,6 +11232,11 @@
             <FieldMapping FieldName="TextOld" TargetFieldName="TextOld" />
             <FieldMapping FieldName="VariantNew" TargetFieldName="VariantNew" />
             <FieldMapping FieldName="VariantOld" TargetFieldName="VariantOld" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":BestRateExcludedAccount" TargetName="ShipWorksLocal:dbo:BestRateExcludedAccount">
+          <FieldMappings>
+            <FieldMapping FieldName="AccountID" TargetFieldName="AccountID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":BestRateProfile" TargetName="ShipWorksLocal:dbo:BestRateProfile">

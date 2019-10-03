@@ -2194,6 +2194,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity BestRateExcludedAccountEntity</summary>
+	public partial class BestRateExcludedAccountFields
+	{
+		/// <summary>Creates a new BestRateExcludedAccountEntity.AccountID field instance</summary>
+		public static EntityField2 AccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(BestRateExcludedAccountFieldIndex.AccountID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity BestRateProfileEntity</summary>
 	public partial class BestRateProfileFields
 	{
