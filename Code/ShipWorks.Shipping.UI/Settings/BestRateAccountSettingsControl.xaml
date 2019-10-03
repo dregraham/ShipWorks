@@ -53,7 +53,7 @@
                                                     Margin="15,4,0,4"
                                                     VerticalContentAlignment="Center"
                                                     IsChecked="{Binding IsActive}">
-                                                <TextBlock Text="{Binding AccountID, Mode=OneTime}" />
+                                                <TextBlock Text="{Binding AccountDescription, Mode=OneTime}" />
                                             </CheckBox>
                                         </Border>
                                     </DataTemplate>
