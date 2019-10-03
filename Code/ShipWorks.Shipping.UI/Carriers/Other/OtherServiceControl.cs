@@ -105,19 +105,15 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             originControl.SaveToEntities();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
-                foreach (ShipmentEntity shipment in LoadedShipments)
-                {
-                    carrier.ReadMultiText(s => shipment.Other.Carrier = s);
-                    service.ReadMultiText(s => shipment.Other.Service = s);
+                carrier.ReadMultiText(s => shipment.Other.Carrier = s);
+                service.ReadMultiText(s => shipment.Other.Service = s);
 
-                    shipDate.ReadMultiDate(d => shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(d.Date));
-                    weight.ReadMultiWeight(v => shipment.ContentWeight = v);
-                    cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
-                    tracking.ReadMultiText(s => shipment.TrackingNumber = s);
-                }
+                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
+                weight.ReadMultiWeight(v => shipment.ContentWeight = v);
+                cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
+                tracking.ReadMultiText(s => shipment.TrackingNumber = s);
             }
             insuranceControl.SaveToInsuranceChoices();
 

@@ -318,7 +318,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     service.ReadMultiValue(v => { if (v != null) shipment.Postal.Service = (int) v; });
                     confirmation.ReadMultiValue(v => { if (v != null) shipment.Postal.Confirmation = (int) v; });
 
-                    shipDate.ReadMultiDate(d => shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(d.Date));
+                    shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
                     weight.ReadMultiWeight(v => shipment.ContentWeight = v);
 
                     packagingType.ReadMultiValue(v => shipment.Postal.PackagingType = (int) v);

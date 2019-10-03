@@ -179,9 +179,7 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Set some defaults
-
-            var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
-            shipment.ShipDate = dateTimeProvider.ConvertToUniversalNow(dateTimeProvider.Now.Date);
+            shipment.ShipDate = DateTime.Now.Date.ToUniversalTime();
 
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
