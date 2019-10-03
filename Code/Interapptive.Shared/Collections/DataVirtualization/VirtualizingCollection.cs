@@ -93,6 +93,11 @@ namespace DataVirtualization
         public int Count => count.Value;
 
         /// <summary>
+        /// Is the collection empty
+        /// </summary>
+        public bool IsEmpty => Count == 0;
+
+        /// <summary>
         /// Gets the item at the specified index. This property will fetch
         /// the corresponding page from the IItemsProvider if required.
         /// </summary>

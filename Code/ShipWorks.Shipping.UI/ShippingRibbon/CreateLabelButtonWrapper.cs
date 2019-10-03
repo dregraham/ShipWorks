@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         public string TelemetryEventName
         {
             get => actualCreateLabelButton.TelemetryEventName;
-            set { }
+            set { /* Setting not allowed in the wrapper.  Code analysis requires this comment.*/ }
         }
 
         /// <summary>
