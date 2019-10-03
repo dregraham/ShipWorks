@@ -57,14 +57,18 @@ namespace ShipWorks.Shipping.Carriers
             DateTime now = dateTimeProvider.Now;
 
             // Bring the past up to now
-            if (shipment.ShipDate.Date < now.Date)
+            var shipDateTime = shipment.ShipDate.Kind == DateTimeKind.Local ?
+                                                          shipment.ShipDate :
+                                                          shipment.ShipDate.ToLocalTime();
+
+            if (shipDateTime.Date < now.Date)
             {
                 shipment.ShipDate = now;
             }
 
-            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date ||
-                shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday ||
-                shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
+            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipDateTime.Date ||
+                shipDateTime.DayOfWeek == DayOfWeek.Saturday ||
+                shipDateTime.DayOfWeek == DayOfWeek.Sunday)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
 
@@ -73,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
                 }
 
-                if (shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
+                if (shipDateTime.DayOfWeek == DayOfWeek.Sunday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
                 }
