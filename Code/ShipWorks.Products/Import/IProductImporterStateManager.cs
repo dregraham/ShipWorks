@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Products.Import
+﻿using System;
+
+namespace ShipWorks.Products.Import
 {
     /// <summary>
     /// Manage the current state of the product import process
@@ -13,6 +15,6 @@
         /// <summary>
         /// Close the dialog
         /// </summary>
-        void Close();
+        Action Close { get; }
     }
 }
