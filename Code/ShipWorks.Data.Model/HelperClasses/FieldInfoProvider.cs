@@ -2367,6 +2367,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderChargeEntity", "Type", typeof(System.String), false, false, false, false,  (int)OrderChargeFieldIndex.Type, 50, 0, 0);
 			this.AddElementFieldInfo("OrderChargeEntity", "Description", typeof(System.String), false, false, false, false,  (int)OrderChargeFieldIndex.Description, 255, 0, 0);
 			this.AddElementFieldInfo("OrderChargeEntity", "Amount", typeof(System.Decimal), false, false, false, false,  (int)OrderChargeFieldIndex.Amount, 0, 4, 19);
+			this.AddElementFieldInfo("OrderChargeEntity", "HubChargeID", typeof(System.String), false, false, false, true,  (int)OrderChargeFieldIndex.HubChargeID, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemEntity's FieldInfo objects</summary>
 		private void InitOrderItemEntityInfos()
@@ -2402,6 +2403,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom3, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom4, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom5, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "HubItemID", typeof(System.String), false, false, false, true,  (int)OrderItemFieldIndex.HubItemID, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

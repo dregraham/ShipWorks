@@ -2059,6 +2059,7 @@
         <Fields>
           <Field Name="Amount" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="Description" Type="string" MaxLength="255" FieldIndex="4" />
+          <Field Name="HubChargeID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="6" />
           <Field Name="OrderChargeID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -2077,6 +2078,7 @@
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
+          <Field Name="HubItemID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="29" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
@@ -4573,7 +4575,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-21T15:39:11.0799313Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-09-11T18:06:28.2487378Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7560,6 +7562,7 @@
                         <CustomProperty Name="AuditFormat" Value="2" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="HubChargeID" Ordinal="7" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItem">
@@ -7608,6 +7611,7 @@
                     <Field Name="Custom3" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="HubItemID" Ordinal="32" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -12841,6 +12845,7 @@
           <FieldMappings>
             <FieldMapping FieldName="Amount" TargetFieldName="Amount" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HubChargeID" TargetFieldName="HubChargeID" />
             <FieldMapping FieldName="OrderChargeID" TargetFieldName="OrderChargeID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
@@ -12859,6 +12864,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="HubItemID" TargetFieldName="HubItemID" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />

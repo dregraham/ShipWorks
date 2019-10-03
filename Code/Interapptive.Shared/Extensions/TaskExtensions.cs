@@ -24,6 +24,21 @@ namespace Interapptive.Shared.Extensions
         }
 
         /// <summary>
+        /// Map an exception to another type
+        /// </summary>
+        public static async Task<T> MapException<T>(this Task<T> task, Func<Exception, Exception> map)
+        {
+            try
+            {
+                return await task.ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw map(ex);
+            }
+        }
+
+        /// <summary>
         /// Convert the task into a Task(Of T)
         /// </summary>
         public static async Task<T> ToTyped<T>(this Task task)

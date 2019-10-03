@@ -1,7 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Orders.Split.Hub;
+using ShipWorks.Stores.Orders.Split.Local;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -13,14 +18,19 @@ namespace ShipWorks.Stores.Orders.Split
     {
         private readonly IOrderSplitViewModel splitViewModel;
         private readonly IOrderSplitSuccessViewModel successViewModel;
+        private readonly IRoutingErrorViewModel routingErrorViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitUserInteraction(IOrderSplitViewModel splitViewModel, IOrderSplitSuccessViewModel successViewModel)
+        public OrderSplitUserInteraction(
+            IOrderSplitViewModel splitViewModel, 
+            IOrderSplitSuccessViewModel successViewModel, 
+            IRoutingErrorViewModel routingErrorViewModel)
         {
             this.splitViewModel = splitViewModel;
             this.successViewModel = successViewModel;
+            this.routingErrorViewModel = routingErrorViewModel;
         }
 
         /// <summary>
@@ -34,5 +44,10 @@ namespace ShipWorks.Stores.Orders.Split
         /// </summary>
         public Task ShowSuccessConfirmation(IEnumerable<string> orderNumbers) =>
             successViewModel.ShowSuccessConfirmation(orderNumbers);
+
+        /// <summary>
+        /// Show an error while splitting orders
+        /// </summary>
+        public Task ShowError(Exception ex) => routingErrorViewModel.ShowError(ex);
     }
 }

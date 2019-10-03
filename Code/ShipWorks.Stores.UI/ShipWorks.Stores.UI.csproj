@@ -166,6 +166,7 @@
     <Compile Include="Orders\Split\DesignModeOrderSplitChargeViewModel.cs" />
     <Compile Include="Orders\Split\DesignModeOrderSplitItemViewModel.cs" />
     <Compile Include="Orders\Split\DesignModeOrderSplitViewModel.cs" />
+    <Compile Include="Orders\Split\DesignModeRoutingErrorViewModel.cs" />
     <Compile Include="Orders\Split\OrderSplitCharge.xaml.cs">
       <DependentUpon>OrderSplitCharge.xaml</DependentUpon>
     </Compile>
@@ -194,6 +195,9 @@
       <DependentUpon>StoreWizardFinishPageControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\StoreWizardFinishPageControlFactory.cs" />
+    <Compile Include="Orders\Split\RoutingErrorDialog.xaml.cs">
+      <DependentUpon>RoutingErrorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\BigCommerce\BigCommerceAccountSettings.xaml.cs">
       <DependentUpon>BigCommerceAccountSettings.xaml</DependentUpon>
     </Compile>
@@ -859,6 +863,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Orders\Combine\CombineOrderSuccessDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Orders\Split\RoutingErrorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

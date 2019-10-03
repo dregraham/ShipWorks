@@ -6,25 +6,24 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Audit;
 
-namespace ShipWorks.Stores.Orders.Split
+namespace ShipWorks.Stores.Orders.Split.Hub
 {
     /// <summary>
     /// Interface for auditing split orders
     /// </summary>
     [Component]
-    public class OrderSplitAudit : IOrderSplitAudit
+    public class OrderSplitAuditHub : IOrderSplitAuditHub
     {
         private readonly IAuditUtility auditUtility;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
-        private const string SplitToOrderReasonFormat = "Split to order : {0}";
-        private const string SplitFromOrderReasonFormat = "Split from order : {0}";
+        private const string SplitToOrderReasonFormat = "Split order : {0}";
         private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitAudit(IAuditUtility auditUtility, IStoreTypeManager storeTypeManager, 
+        public OrderSplitAuditHub(IAuditUtility auditUtility, IStoreTypeManager storeTypeManager, 
             ISqlAdapterFactory sqlAdapterFactory, IConfigurationData configurationData)
         {
             this.storeTypeManager = storeTypeManager;
@@ -36,7 +35,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Audit the original order and split order.
         /// </summary>
-        public async Task Audit(IOrderEntity originalOrder, IOrderEntity splitOrder)
+        public async Task Audit(IOrderEntity originalOrder)
         {
             if (!configurationData.FetchReadOnly().AuditEnabled)
             {
@@ -45,17 +44,16 @@ namespace ShipWorks.Stores.Orders.Split
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                await AuditOrder(originalOrder, splitOrder, SplitToOrderReasonFormat, sqlAdapter).ConfigureAwait(false);
-                await AuditOrder(splitOrder, originalOrder, SplitFromOrderReasonFormat, sqlAdapter).ConfigureAwait(false);
+                await AuditOrder(originalOrder, SplitToOrderReasonFormat, sqlAdapter).ConfigureAwait(false);
             }
         }
 
         /// <summary>
         /// Audit a specific order
         /// </summary>
-        private async Task AuditOrder(IOrderEntity fromOrder, IOrderEntity toOrder, string auditReasonFormat, ISqlAdapter sqlAdapter)
+        private async Task AuditOrder(IOrderEntity fromOrder, string auditReasonFormat, ISqlAdapter sqlAdapter)
         {
-            string reason = string.Format(auditReasonFormat, GetOrderIdentifier(toOrder));
+            string reason = string.Format(auditReasonFormat, GetOrderIdentifier(fromOrder));
 
             AuditReason auditReason = new AuditReason(AuditReasonType.SplitOrder, reason.Truncate(100));
 

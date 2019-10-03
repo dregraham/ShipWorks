@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Core
                 }
                 else
                 {
-                    // If the enum doesn't need the Descrition attribute, just continue to the next enum.
+                    // If the enum doesn't need the Description attribute, just continue to the next enum.
                     if (ignoreMissingDescriptionEnums.Contains(type.FullName.ToUpperInvariant()))
                     {
                         continue;
