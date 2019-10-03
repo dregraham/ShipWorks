@@ -107,7 +107,6 @@ namespace ShipWorks.Users
                     user = UserUtility.CreateUser(name, email.Text.Trim(), password.Text, accountAdmin.Checked, adapter);
                     permissions.CopyTo(user.UserID, adapter);
 
-                    uiModeSelectionControl.SaveTo(user.Settings);
                     adapter.SaveAndRefetch(user.Settings);
 
                     adapter.Commit();
