@@ -53,6 +53,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             // and try again. This happens when switching between databases or restoring a database with a different database identifier
             try
             {
+                log.Debug($"CustomerLicenseReader decrypting customer key.");
                 decryptedCustomerKey = encryptionProvider.Decrypt(customerKey);
             }
             catch (EncryptionException ex)
