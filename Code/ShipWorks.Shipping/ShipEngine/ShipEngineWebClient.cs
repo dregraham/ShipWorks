@@ -154,9 +154,11 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
         {
             string accountId = null;
-            string key = await GetApiKey();
+            string key = null;
             try
             {
+                key = await GetApiKey();
+
                 // first we have to get the account id
                 HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
                 whoAmIRequest.Headers.Add($"Content-Type: application/json");
@@ -190,7 +192,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 string error = GetErrorMessage(ex);
 
                 // If the account has already been connected, get the carrier ID and return it
-                if (accountId != null && error.Contains("already been connected", StringComparison.OrdinalIgnoreCase))
+                if (accountId != null && key != null && error.Contains("already been connected", StringComparison.OrdinalIgnoreCase))
                 {
                     return await GetCarrierIdByAccountNumber(accountId, key);
                 }
