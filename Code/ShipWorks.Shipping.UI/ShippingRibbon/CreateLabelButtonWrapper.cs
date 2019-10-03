@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -57,14 +55,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             get => actualCreateLabelButton.TelemetryEventName;
             set { }
-        }
-
-        /// <summary>
-        /// Track any telemetry
-        /// </summary>
-        public void TrackButtonClick(string postfix)
-        {
-            actualCreateLabelButton.TrackButtonClick(postfix);
         }
 
         /// <summary>

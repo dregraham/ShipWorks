@@ -5,7 +5,7 @@ namespace ShipWorks.UI.Controls.SandRibbon
     /// <summary>
     /// Interface to make testing button usage easier
     /// </summary>
-    public interface IRibbonButton
+    public interface IRibbonButton : IButtonTelemetry
     {
         /// <summary>
         /// Is the button enabled
@@ -21,15 +21,5 @@ namespace ShipWorks.UI.Controls.SandRibbon
         /// Tag associated with the element
         /// </summary>
         object Tag { get; }
-
-        /// <summary>
-        /// The event name to send to telemetry
-        /// </summary>
-        string TelemetryEventName { get; set; }
-
-        /// <summary>
-        /// Track any telemetry
-        /// </summary>
-        void TrackButtonClick(string postfix);
     }
 }

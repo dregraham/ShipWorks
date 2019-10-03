@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         public void ApplyProfile(IShippingProfile profile)
         {
-            TrackButtonClick(profile.ShippingProfileEntity.Name);
+            Telemetry.TrackButtonClick(actualApplyProfileButton.TelemetryEventName, profile.ShippingProfileEntity.Name);
             actualApplyProfileButton.Tag = profile;
             Activate?.Invoke(this, EventArgs.Empty);
         }
@@ -55,14 +55,6 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         {
             get => actualApplyProfileButton.TelemetryEventName;
             set { }
-        }
-
-        /// <summary>
-        /// Track any telemetry
-        /// </summary>
-        public void TrackButtonClick(string postfix)
-        {
-            actualApplyProfileButton.TrackButtonClick(postfix);
         }
 
         /// <summary>
