@@ -30,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.Surcharges
             var shipDateTime = shipment.Shipment.ShipDate.Kind == DateTimeKind.Local ?
                                                           shipment.Shipment.ShipDate :
                                                           shipment.Shipment.ShipDate.ToLocalTime();
+
             if (shipDateTime.DayOfWeek == DayOfWeek.Saturday)
             {
                 double surchargeAmount = surcharges[UpsSurchargeType.SaturdayPickup] * shipment.Packages.Count;

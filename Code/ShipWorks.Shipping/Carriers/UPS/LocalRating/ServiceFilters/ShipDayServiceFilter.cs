@@ -17,7 +17,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating.ServiceFilters
         public IEnumerable<UpsServiceType> GetEligibleServices(UpsShipmentEntity shipment, IEnumerable<UpsServiceType> services)
         {
             // Remove ground when the ship date is saturday
-            return shipment.Shipment.ShipDate.ToLocalTime().DayOfWeek == DayOfWeek.Saturday ?
+            var shipDateTime = shipment.Shipment.ShipDate.Kind == DateTimeKind.Local ?
+                                                          shipment.Shipment.ShipDate :
+                                                          shipment.Shipment.ShipDate.ToLocalTime();
+            return shipDateTime.DayOfWeek == DayOfWeek.Saturday ?
                 services.Except(new[] {UpsServiceType.UpsGround, UpsServiceType.Ups3DaySelect}) :
                 services;
         }
