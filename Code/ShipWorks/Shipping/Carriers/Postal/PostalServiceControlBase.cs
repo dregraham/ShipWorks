@@ -308,25 +308,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Save the dimensions
             dimensionsControl.SaveToEntities();
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            // Save our controls
+            foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                var dateTimeProvider = lifetimeScope.Resolve<IDateTimeProvider>();
-                // Save our controls
-                foreach (ShipmentEntity shipment in LoadedShipments)
-                {
-                    service.ReadMultiValue(v => { if (v != null) shipment.Postal.Service = (int) v; });
-                    confirmation.ReadMultiValue(v => { if (v != null) shipment.Postal.Confirmation = (int) v; });
+                service.ReadMultiValue(v => { if (v != null) shipment.Postal.Service = (int) v; });
+                confirmation.ReadMultiValue(v => { if (v != null) shipment.Postal.Confirmation = (int) v; });
 
-                    shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
-                    weight.ReadMultiWeight(v => shipment.ContentWeight = v);
+                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
+                weight.ReadMultiWeight(v => shipment.ContentWeight = v);
 
-                    packagingType.ReadMultiValue(v => shipment.Postal.PackagingType = (int) v);
+                packagingType.ReadMultiValue(v => shipment.Postal.PackagingType = (int) v);
 
-                    nonRectangular.ReadMultiCheck(c => shipment.Postal.NonRectangular = c);
-                    nonMachinable.ReadMultiCheck(c => shipment.Postal.NonMachinable = c);
+                nonRectangular.ReadMultiCheck(c => shipment.Postal.NonRectangular = c);
+                nonMachinable.ReadMultiCheck(c => shipment.Postal.NonMachinable = c);
 
-                    expressSignatureWaiver.ReadMultiCheck(c => shipment.Postal.ExpressSignatureWaiver = c);
-                }
+                expressSignatureWaiver.ReadMultiCheck(c => shipment.Postal.ExpressSignatureWaiver = c);
             }
 
             insuranceControl.SaveToInsuranceChoices();
