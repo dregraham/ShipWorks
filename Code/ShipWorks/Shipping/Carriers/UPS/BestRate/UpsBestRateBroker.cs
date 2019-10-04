@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         protected override string AccountDescription(UpsAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber;
         }
         
         /// <summary>

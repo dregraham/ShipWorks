@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// </summary>
         protected override string AccountDescription(IParcelAccountEntity account)
         {
-            return account.Description;
+            return account.Username;
         }
     }
 }
