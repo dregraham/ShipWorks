@@ -666,7 +666,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx)
                 .GetAvailableServiceTypes(excludedServiceTypeRepository)
                 .Select(s => (FedExServiceType) s)
-                .Union(new List<FedExServiceType> { (FedExServiceType) shipment.FedEx.Service })
                 .ToList();
 
             return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection) r.Tag).ServiceType));
