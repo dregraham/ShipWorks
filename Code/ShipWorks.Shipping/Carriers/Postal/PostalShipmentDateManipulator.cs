@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
                 if (shipDateTime.DayOfWeek == DayOfWeek.Sunday)
                 {
-                    shipDateTime = shipment.ShipDate.AddDays(1);
+                    shipment.ShipDate = shipment.ShipDate.AddDays(1);
                 }             
             }
         }
