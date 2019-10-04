@@ -76,7 +76,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, UspsAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
             currentShipment.Postal.Usps.Insurance = originalShipment.BestRate.Insurance;
+            currentShipment.Postal.Usps.RateShop = false;
         }
     }
 }
