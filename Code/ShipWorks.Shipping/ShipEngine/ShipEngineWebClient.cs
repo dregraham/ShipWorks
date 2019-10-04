@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -144,15 +143,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// with the ShipEngine API because they have not added connecting to
         /// Amazon to their DLL yet
         /// </remarks>
-        [SuppressMessage("SonarQube", "S2583: Change this condition so that it does not always evaluate to 'false'",
-        Justification = "Assigning to accountId inside a try block is not picked up by SONAR.")]
         public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
         {
-            string accountId = null;
             try
             {
                 // first we have to get the account id
-                accountId = await GetAccountID();
+                string accountId = await GetAccountID();
 
                 AmazonStoreEntity store = storeManager.GetEnabledStores()
                     .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
@@ -168,7 +164,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
-                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Asendia, "ConnectAmazonShippingAccount",
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
                 apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, apiKey.GetPartnerApiKey(), $"se-{accountId}"));
             }
             catch (ApiException ex)
@@ -176,9 +172,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 string error = GetErrorMessage(ex);
 
                 // If the account has already been connected, get the carrier ID and return it
-                if (error.Contains("already been connected", StringComparison.OrdinalIgnoreCase) && accountId != null)
+                if (error.Contains("already been connected", StringComparison.OrdinalIgnoreCase))
                 {
-                    return await GetCarrierId(accountId);
+                    return await GetAmazonShippingCarrierID();
                 }
 
                 return GenericResult.FromError<string>(error);
@@ -448,6 +444,25 @@ namespace ShipWorks.Shipping.ShipEngine
             EnumResult<HttpStatusCode> result =
                 whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
             return JObject.Parse(result.Message)["data"]["username"].ToString();
+        }
+
+        private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
+        {
+            string key = await GetApiKey();
+            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
+            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"ListCarriers", LogActionType.Other);
+
+            try
+            {
+                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
+                return result?.Carriers?.FirstOrDefault(c => c.CarrierCode.Equals("amazon_shipping_us", StringComparison.OrdinalIgnoreCase))?.CarrierId ?? string.Empty;
+            }
+            catch (ApiException ex)
+            {
+                string error = GetErrorMessage(ex);
+
+                return GenericResult.FromError<string>(error);
+            }
         }
     }
 }
