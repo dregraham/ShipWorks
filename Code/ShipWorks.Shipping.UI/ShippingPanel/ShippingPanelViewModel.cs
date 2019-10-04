@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             ShipmentCount = loadedOrderSelection.ShipmentAdapters.Count();
 
             if (LoadedShipmentResult == ShippingPanelLoadedShipmentResult.Success)
-             {
+            {
                 LoadShipment(GetShipmentToLoad());
             }
             else

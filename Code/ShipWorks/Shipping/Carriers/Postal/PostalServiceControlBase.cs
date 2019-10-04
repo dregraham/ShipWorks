@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {

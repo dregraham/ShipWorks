@@ -329,7 +329,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 uspsEndorsement.ReadMultiValue(v => shipment.Ups.Endorsement = (int) v);
             }
 
-
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }

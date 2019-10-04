@@ -8,7 +8,6 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -46,7 +45,6 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Warehouse;
-using ShipWorks.Common;
 
 namespace ShipWorks.Shipping
 {
