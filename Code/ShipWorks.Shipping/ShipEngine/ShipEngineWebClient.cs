@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -151,18 +152,17 @@ namespace ShipWorks.Shipping.ShipEngine
         /// with the ShipEngine API because they have not added connecting to
         /// Amazon to their DLL yet
         /// </remarks>
+        [SuppressMessage("SonarQube", "S2583: Change this condition so that it does not always evaluate to 'false'",
+        Justification = "Assigning to accountId inside a try block is not picked up by SONAR.")]
         public async Task<GenericResult<string>> ConnectAmazonShippingAccount(string authCode)
         {
             string accountId = null;
-            string key = null;
             try
             {
-                key = await GetApiKey();
-
                 // first we have to get the account id
                 HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
                 whoAmIRequest.Headers.Add($"Content-Type: application/json");
-                whoAmIRequest.Headers.Add($"api-key: {key}");
+                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
                 whoAmIRequest.Verb = HttpVerb.Get;
                 whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
 
@@ -192,9 +192,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 string error = GetErrorMessage(ex);
 
                 // If the account has already been connected, get the carrier ID and return it
-                if (accountId != null && key != null && error.Contains("already been connected", StringComparison.OrdinalIgnoreCase))
+                if (error.Contains("already been connected", StringComparison.OrdinalIgnoreCase) && apiKey.Value != null && accountId != null)
                 {
-                    return await GetCarrierIdByAccountNumber(accountId, key);
+                    return await GetCarrierIdByAccountNumber(accountId, apiKey.Value);
                 }
 
                 return GenericResult.FromError<string>(error);
