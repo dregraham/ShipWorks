@@ -1,4 +1,5 @@
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Warehouse.DTO.Orders
 {
@@ -8,6 +9,9 @@ namespace ShipWorks.Warehouse.DTO.Orders
     [Obfuscation]
     public class WarehouseOrderCharge
     {
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
         /// <summary>
         /// Type of the order charge
         /// </summary>

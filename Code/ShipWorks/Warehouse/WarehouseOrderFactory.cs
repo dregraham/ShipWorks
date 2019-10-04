@@ -178,6 +178,7 @@ namespace ShipWorks.Warehouse
         /// </summary>
         private void LoadItem(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
+            itemEntity.HubItemID = warehouseItem.ID;
             itemEntity.Name = warehouseItem.Name;
             itemEntity.Code = warehouseItem.Code;
             itemEntity.SKU = warehouseItem.SKU;
@@ -231,10 +232,12 @@ namespace ShipWorks.Warehouse
         {
             foreach (WarehouseOrderCharge warehouseOrderCharge in warehouseOrder.Charges)
             {
-                orderElementFactory.CreateCharge(orderEntity,
+                var charge = orderElementFactory.CreateCharge(orderEntity,
                                                  warehouseOrderCharge.Type,
                                                  warehouseOrderCharge.Description,
                                                  warehouseOrderCharge.Amount);
+
+                charge.HubChargeID = warehouseOrderCharge.ID;
             }
         }
 

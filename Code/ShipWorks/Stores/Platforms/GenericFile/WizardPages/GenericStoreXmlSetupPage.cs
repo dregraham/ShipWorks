@@ -10,6 +10,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.UI;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 {
@@ -27,11 +28,12 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         }
 
         /// <summary>
-        /// Stepping into the 
+        /// Stepping into the
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            e.Skip = GetStore<GenericFileStoreEntity>().FileFormat != (int) GenericFileFormat.Xml;
+            var store = GetStore<GenericFileStoreEntity>();
+            e.Skip = store.FileFormat != (int) GenericFileFormat.Xml || store.FileSource == (int) GenericFileSourceTypeCode.Warehouse;
         }
 
         /// <summary>

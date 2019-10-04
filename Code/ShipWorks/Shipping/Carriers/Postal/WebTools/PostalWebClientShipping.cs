@@ -46,6 +46,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 throw new ShippingException(string.Format("{0} is not supported by {1}.", EnumHelper.GetDescription(packaging), ShipmentTypeManager.GetType(ShipmentTypeCode.PostalWebTools).ShipmentTypeName));
             }
 
+            if (packaging == PostalPackagingType.CubicSoftPack && postalShipment.DimsHeight > 0.75)
+            {
+                throw new ShippingException(string.Format("{0} may only have a Height of 0.75\" or less.", EnumHelper.GetDescription(packaging)));
+            }
+
             // Generate the request data
             string xmlRequest = GenerateXmlRequest(postalShipment);
 

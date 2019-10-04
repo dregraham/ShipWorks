@@ -10,6 +10,7 @@ using ShipWorks.Stores.Management;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
 {
@@ -24,6 +25,17 @@ namespace ShipWorks.Stores.Platforms.GenericFile.WizardPages
         public GenericStoreFileFormatPage()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Stepping into the
+        /// </summary>
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
+        {
+            var store = GetStore<GenericFileStoreEntity>();
+
+            // if we have are downloading from the hub skip mapping pages
+            e.Skip = store.FileSource == (int)GenericFileSourceTypeCode.Warehouse;
         }
 
         /// <summary>

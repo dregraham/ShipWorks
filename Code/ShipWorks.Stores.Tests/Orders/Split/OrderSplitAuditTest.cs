@@ -8,6 +8,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Stores.Platforms.Ebay;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Audit;
@@ -19,7 +20,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
     {
         private readonly AutoMock mock;
         private readonly Mock<IConfigurationEntity> configuration;
-        private OrderSplitAudit testObject;
+        private OrderSplitAuditLocal testObject;
 
         public OrderSplitAuditTest()
         {
@@ -27,7 +28,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             configuration = mock.Mock<IConfigurationEntity>();
             configuration.Setup(c => c.AuditEnabled).Returns(true);
             mock.Mock<IConfigurationData>().Setup(c => c.FetchReadOnly()).Returns(configuration);
-            testObject = mock.Create<OrderSplitAudit>();
+            testObject = mock.Create<OrderSplitAuditLocal>();
         }
 
         [Fact]
@@ -68,7 +69,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             configuration.Setup(c => c.AuditEnabled).Returns(false);
             mock.Mock<IConfigurationData>().Setup(c => c.FetchReadOnly()).Returns(configuration);
 
-            testObject = mock.Create<OrderSplitAudit>();
+            testObject = mock.Create<OrderSplitAuditLocal>();
 
             await testObject.Audit(originalOrder, splitOrder);
 

@@ -443,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                             }
                         }
                     }
-                    else if (component.Order.EbayOrderID != 0 && combinedOrderRelations.All(e => e.EbayOrderID != component.Order.EbayOrderID))
+                    else if (component.Order.OrderItems.Count > 1 && combinedOrderRelations.All(e => e.EbayOrderID != component.Order.EbayOrderID))
                     {
                         // Create new EbayCombinedOrderRelation
                         AddCombinedOrderRelation(
@@ -455,7 +455,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             }
 
             // For order we create on eBay, some charges are applied based on what the user entered or what we calculate
-            if (newOrder.EbayOrderID > 0)
+            if (newOrder.OrderItems.Count > 1)
             {
                 ApplyCalculatedCharges(newOrder);
             }
@@ -552,7 +552,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 // If we combined it on eBay, then the standard charges are going to get applied based on what the user specified when they created they order, not
                 // the existing charges
-                if (target.EbayOrderID > 0 && new List<string> { "TAX", "SHIPPING", "ADJUST", "OTHER" }.Contains(sourceCharge.Type))
+                if (target.OrderItems.Count > 1 && new List<string> { "TAX", "SHIPPING", "ADJUST", "OTHER" }.Contains(sourceCharge.Type))
                 {
                     continue;
                 }

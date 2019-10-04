@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
 using Xunit;
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         public OrderSplitOrchestratorTest()
         {
             order = new OrderEntity { OrderID = 1006, StoreID = 1005, OrderNumber = 1234 };
-            orderSplitDefinition = new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "Foo");
+            orderSplitDefinition = new OrderSplitDefinition(order, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "Foo", OrderSplitterType.Local);
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -47,6 +48,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             mock.Mock<IOrderSplitter>()
                 .Setup(x => x.Split(It.IsAny<OrderSplitDefinition>(), It.IsAny<IProgressReporter>()))
                 .ReturnsAsync(new Dictionary<long, string>());
+            mock.Mock<IOrderSplitterFactory>()
+                .Setup(x => x.Create(It.IsAny<OrderSplitterType>()))
+                .Returns(mock.Create<IOrderSplitter>());
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowProgressDialog(AnyString, AnyString))
                 .ReturnsAsync(mock.CreateMock<ISingleItemProgressDialog>().Object);

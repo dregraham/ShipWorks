@@ -9,6 +9,7 @@ namespace ShipWorks.Shipping.UI.RatingPanel
     /// </summary>
     public partial class RatingPanelViewModel
     {
+        private bool showAccount;
         private bool showShipping;
         private bool showTaxes;
         private bool showDuties;
@@ -29,6 +30,16 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         {
             get { return rates; }
             set { handler.Set(nameof(Rates), ref rates, value); }
+        }
+
+        /// <summary>
+        /// Should the account column be displayed
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowAccount
+        {
+            get => showAccount;
+            set => handler.Set(nameof(ShowAccount), ref showAccount, value);
         }
 
         /// <summary>

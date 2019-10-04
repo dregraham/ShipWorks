@@ -14,6 +14,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
     {
         Disk = 0,
         FTP = 1,
-        Email = 2
+        Email = 2,
+        Warehouse = 3
     }
 }

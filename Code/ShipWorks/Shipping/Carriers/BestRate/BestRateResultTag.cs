@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -34,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Gets or sets the account description.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string AccountDescription { get; set; }
 
         /// <summary>
