@@ -71,7 +71,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             ShipmentType.UpdateTotalWeight(currentShipment);
 
             currentShipment.FedEx.PackagingType = (int) FedExPackagingType.Custom;
-            currentShipment.FedEx.Service = (int) FedExServiceType.FedExGround;
             SetAccount(currentShipment, account);
 
             currentShipment.FedEx.Packages[0].InsuranceValue = originalShipment.BestRate.InsuranceValue;

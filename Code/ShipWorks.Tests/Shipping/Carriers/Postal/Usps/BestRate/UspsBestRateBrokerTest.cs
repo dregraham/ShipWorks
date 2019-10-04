@@ -337,7 +337,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesProfileServiceAndPackagingType()
+        public void GetBestRates_OverridesProfilePackagingType()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -350,7 +350,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.Equal(PostalServiceType.PriorityMail, (PostalServiceType) shipment.Postal.Service);
                 Assert.Equal(PostalPackagingType.Package, (PostalPackagingType) shipment.Postal.PackagingType);
             }
         }
