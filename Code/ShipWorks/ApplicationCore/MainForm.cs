@@ -2619,11 +2619,14 @@ namespace ShipWorks
                         ApplyDisplaySettings();
 
                         // Apply ribbon settings
-                        ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
+                        if (UserSession.IsLoggedOn)
+                        {
+                            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
                             QuickAccessPosition.Below :
                             QuickAccessPosition.Above;
 
-                        ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+                            ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+                        }                      
                     }
                 }
             }
