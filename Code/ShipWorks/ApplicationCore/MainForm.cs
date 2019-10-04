@@ -1873,7 +1873,24 @@ namespace ShipWorks
             settings.DisplayColorScheme = (int) ShipWorksDisplay.ColorScheme;
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
-            // Save the layout
+            SaveCurrentUserModeSpecificSettings(settings);
+
+            //Save the Ribbon minimized state
+            settings.MinimizeRibbon = ribbon.Minimized;
+
+            // Save the settings
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(settings);
+            }
+        }
+
+        /// <summary>
+        /// Save the current user mode specific settings.
+        /// </summary>
+        private void SaveCurrentUserModeSpecificSettings(UserSettingsEntity settings)
+        {
+            // Save the layout  
             if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
@@ -1909,15 +1926,6 @@ namespace ShipWorks
             else if (UIMode == UIMode.OrderLookup)
             {
                 shipmentHistory.SaveGridColumnState();
-            }
-
-            //Save the Ribbon minimized state
-            settings.MinimizeRibbon = ribbon.Minimized;
-
-            // Save the settings
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.SaveAndRefetch(settings);
             }
         }
 

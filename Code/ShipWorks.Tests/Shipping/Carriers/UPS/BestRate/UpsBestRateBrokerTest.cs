@@ -279,7 +279,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
-        public void GetBestRates_OverridesProfileServiceAndPackagingType()
+        public void GetBestRates_OverridesProfilePackagingType()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
@@ -292,7 +292,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.Equal(UpsServiceType.UpsGround, (UpsServiceType) shipment.Ups.Service);
                 Assert.Equal(UpsPackagingType.Custom, (UpsPackagingType) shipment.Ups.Packages[0].PackagingType);
             }
         }
