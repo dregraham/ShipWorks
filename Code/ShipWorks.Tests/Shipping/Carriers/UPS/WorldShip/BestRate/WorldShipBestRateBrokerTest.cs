@@ -45,6 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
         private int expectedNumberOfAccountsReturned = 1;
         private int numberOfTimesGetRatesCalled = 0;
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
         public WorldShipBestRateBrokerTest()
         {
@@ -86,7 +87,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x => x.Ups.Packages.Add(new UpsPackageEntity()));
 
-            testObject = new WorldShipBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
+
+            testObject = new WorldShipBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, bestRateExludedAccountRepositoryMock.Object)
             {
                 GetRatesAction = (shipment, type) =>
                 {

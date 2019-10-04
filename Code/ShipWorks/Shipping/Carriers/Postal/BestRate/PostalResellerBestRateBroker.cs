@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        protected PostalResellerBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<T, TInterface> accountRepository, string carrierDescription) :
-            base(shipmentType, accountRepository, carrierDescription)
+        protected PostalResellerBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<T, TInterface> accountRepository, string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
         {
 
         }

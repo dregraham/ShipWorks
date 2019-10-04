@@ -376,9 +376,9 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Gets a ShippingBroker
         /// </summary>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            return new DhlExpressBestRateBroker(this, new DhlExpressAccountRepository());
+            return new DhlExpressBestRateBroker(this, new DhlExpressAccountRepository(), BestRateExcludedAccountRepository.Current);
         }
 
         /// <summary>

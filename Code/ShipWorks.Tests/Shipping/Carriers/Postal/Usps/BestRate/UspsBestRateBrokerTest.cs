@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         private UspsAccountEntity account1;
         private UspsAccountEntity account2;
         private UspsAccountEntity account3;
-
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
         public UspsBestRateBrokerTest()
         {
@@ -76,7 +76,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                             .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity { Usps = new UspsShipmentEntity() });
 
-            testObject = new UspsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
+
+            testObject = new UspsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, bestRateExludedAccountRepositoryMock.Object)
             {
                 GetRatesAction = (shipment, type) =>
                 {

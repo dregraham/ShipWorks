@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "")
+        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "", bestRateExcludedAccountRepository)
         {
 
         }

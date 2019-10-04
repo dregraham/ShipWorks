@@ -46,6 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
         private int timesGetRatesCalled = 0;
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
         public UpsBestRateBrokerTest()
         {
@@ -90,7 +91,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                     x.Ups.Packages.Add(new UpsPackageEntity());
                 });
 
-            testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, new UpsSettingsRepository())
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
+
+            testObject = new UpsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, new UpsSettingsRepository(), bestRateExludedAccountRepositoryMock.Object)
             {
                 GetRatesAction = (shipment, type) =>
                 {
@@ -98,7 +102,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
                     timesGetRatesCalled++;
                     return rateResults[shipment.Ups.UpsAccountID];
                 }
-
             };
 
             testShipment = new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.BestRate, ContentWeight = 12.1, BestRate = new BestRateShipmentEntity(), OriginCountryCode = "US" };

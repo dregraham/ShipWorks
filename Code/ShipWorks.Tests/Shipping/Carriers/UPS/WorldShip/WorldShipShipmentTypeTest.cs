@@ -22,7 +22,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
             {
                 WorldShipShipmentType testObject = mock.Create<WorldShipShipmentType>();
 
-                IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+                var bestRateExcludedAccountRepository = mock.Mock<IBestRateExcludedAccountRepository>();
+                bestRateExcludedAccountRepository.Setup(r => r.GetAll()).Returns(new List<long>());
+
+                IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepository.Object);
 
                 Assert.IsAssignableFrom<WorldShipBestRateBroker>(broker);
             }

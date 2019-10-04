@@ -13,14 +13,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShippingBrokerFactory : IBestRateShippingBrokerFactory
     {
         private readonly IEnumerable<IShippingBrokerFilter> filters;
+        private readonly IBestRateExcludedAccountRepository bestRateExcludedAccountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
         /// </summary>
         /// <param name="filters">The filters.</param>
-        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
+        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             this.filters = filters;
+            this.bestRateExcludedAccountRepository = bestRateExcludedAccountRepository;
         }
 
         /// <summary>
@@ -39,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 if (!IsShipmentTypeExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
                 {
                     // Disregard the counter rate brokers
-                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
+                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment, bestRateExcludedAccountRepository);
                     if (broker.HasAccounts)
                     {
                         brokers.Add(broker);

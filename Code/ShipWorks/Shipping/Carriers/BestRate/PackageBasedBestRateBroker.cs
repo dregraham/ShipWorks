@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipmentType">Shipment type that will be used</param>
         /// <param name="accountRepository">Repository that will be used for retrieving accounts</param>
         /// <param name="carrierDescription">Text description of the carrier that will be pre-pended to rate descriptions</param>
-        protected PackageBasedBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription) :
-            base(shipmentType, accountRepository, carrierDescription)
+        protected PackageBasedBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
         {
 
         }

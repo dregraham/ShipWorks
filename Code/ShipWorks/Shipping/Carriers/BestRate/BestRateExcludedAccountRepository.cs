@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
@@ -27,6 +28,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             Initialize();
         }
+
+        public static IBestRateExcludedAccountRepository Current => IoC.UnsafeGlobalLifetimeScope.Resolve<IBestRateExcludedAccountRepository>();
 
         /// <summary>
         /// Save the given excluded best rate accounts

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using Autofac.Extras.Moq;
@@ -21,6 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
     public class iParcelShipmentTypeTest
     {
         private iParcelShipmentType testObject;
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
         private ShipmentEntity shipment;
         private AutoMock mock;
 
@@ -29,6 +31,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             shipment = Create.Shipment(new OrderEntity()).AsIParcel(x => x.WithPackage()).Build();
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             testObject = mock.Create<iParcelShipmentType>();
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
         }
 
         [Fact]
@@ -114,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "UK" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
         }
@@ -124,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "US", ShipCountryCode = "US" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
@@ -134,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "RU" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
@@ -144,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Other, OriginCountryCode = "UK", ShipCountryCode = "UK" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
@@ -154,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity { OriginOriginID = (int) ShipmentOriginSource.Account, OriginCountryCode = "US", ShipCountryCode = "US" };
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<NullShippingBroker>(broker);
         }
@@ -166,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
         }
@@ -178,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             iParcelShipmentType testObject = mock.Create<iParcelShipmentType>();
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity);
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(shipmentEntity, bestRateExludedAccountRepositoryMock.Object);
 
             Assert.IsAssignableFrom<iParcelBestRateBroker>(broker);
         }

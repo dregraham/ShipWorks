@@ -270,12 +270,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a UspsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             if (AccountRepository.AccountsReadOnly.Any())
             {
                 // We have an account that is completely setup, so use the normal broker
-                return new UspsBestRateBroker(this, AccountRepository);
+                return new UspsBestRateBroker(this, AccountRepository, bestRateExcludedAccountRepository);
             }
 
             // Use the null broker for Best Rate. No accounts are in ShipWorks

@@ -22,6 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> accountRepository;
         private readonly List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private readonly List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
+        private readonly Mock<IBestRateExcludedAccountRepository> bestRateExcludedAccountRepositoryMock;
 
         public EndiciaShipmentTypeTest()
         {
@@ -32,6 +33,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             LoadAdultSignatureServiceAndPackagingCombinations();
 
             LoadAllPostalServicePackageTypes();
+
+            bestRateExcludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExcludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
         }
 
         [Fact]
@@ -40,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>());
             testObject.AccountRepository = accountRepository.Object;
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepositoryMock.Object);
 
             Assert.IsType<NullShippingBroker>(broker);
         }
@@ -51,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>() { new EndiciaAccountEntity(1) });
             testObject.AccountRepository = accountRepository.Object;
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepositoryMock.Object);
 
             Assert.IsType<EndiciaBestRateBroker>(broker);
         }

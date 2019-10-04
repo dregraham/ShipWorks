@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker since this is not applicable to the best rate shipment type.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             return new NullShippingBroker();
         }

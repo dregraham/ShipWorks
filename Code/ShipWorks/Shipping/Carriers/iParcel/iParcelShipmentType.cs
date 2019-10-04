@@ -710,7 +710,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an iParcelBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             // There was a conscious decision made with input from Rich that for now we can assume the origin
             // country will always be US when the shipment is configured to ship from the account address
@@ -720,7 +720,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // We only want to check i-parcel for international shipments originating in the US
             if (originCountryCode != shipment.AdjustedShipCountryCode() && originCountryCode == "US")
             {
-                return new iParcelBestRateBroker(this, new iParcelAccountRepository());
+                return new iParcelBestRateBroker(this, new iParcelAccountRepository(), BestRateExcludedAccountRepository.Current);
             }
 
             // This is either a domestic shipment or the shipment does not originate from the US,
