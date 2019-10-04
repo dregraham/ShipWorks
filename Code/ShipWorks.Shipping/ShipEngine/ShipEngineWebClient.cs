@@ -446,6 +446,9 @@ namespace ShipWorks.Shipping.ShipEngine
             return JObject.Parse(result.Message)["data"]["username"].ToString();
         }
 
+        /// <summary>
+        /// Get the Amazon Shipping carrier ID. There can only ever be one connected per api key.
+        /// </summary>
         private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
         {
             string key = await GetApiKey();
