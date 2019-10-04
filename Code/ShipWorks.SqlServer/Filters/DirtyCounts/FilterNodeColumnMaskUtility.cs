@@ -22,8 +22,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
             tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 87;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 31;
-            tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 32;
+            tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 79;
             tableBitCount[(int) FilterNodeColumnMaskTable.PrintResult] = 23;
@@ -51,7 +51,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.BuyDotComOrderItem] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 7;
-            tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 12;
+            tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 13;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 3;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrder] = 2;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrder] = 6;

@@ -485,7 +485,7 @@ namespace ShipWorks
             {
                 return;
             }
-
+           
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -825,7 +825,11 @@ namespace ShipWorks
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
-
+            ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?                                                                
+                                                                QuickAccessPosition.Below:
+                                                                QuickAccessPosition.Above;
+                                                                
             // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
@@ -1812,6 +1816,9 @@ namespace ShipWorks
                 shipmentHistory.SaveGridColumnState();
             }
 
+            //Save the Ribbon minimized state
+            settings.MinimizeRibbon = ribbon.Minimized;
+
             // Save the settings
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -2599,23 +2606,23 @@ namespace ShipWorks
         /// </summary>
         private void OnShowSettings(object sender, EventArgs e)
         {
-            // Create the data structure to send to settings
-            ShipWorksSettingsData data = new ShipWorksSettingsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
+            UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
+            UserSession.User.Settings.ShowQAToolbarBelowRibbon = ribbon.ToolBarPosition == QuickAccessPosition.Below;
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (ShipWorksSettings dlg = new ShipWorksSettings(data, scope))
+                using (ShipWorksSettings dlg = new ShipWorksSettings(scope))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
                         ApplyDisplaySettings();
 
                         // Apply ribbon settings
-                        ribbon.ToolBarPosition = data.ShowQatBelowRibbon ?
+                        ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
                             QuickAccessPosition.Below :
                             QuickAccessPosition.Above;
 
-                        ribbon.Minimized = data.MinimizeRibbon;
+                        ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
                     }
                 }
             }
@@ -4208,7 +4215,6 @@ namespace ShipWorks
 
             return holders;
         }
-
         #endregion
 
         #region Administration

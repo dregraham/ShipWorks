@@ -166,6 +166,7 @@
             ((System.ComponentModel.ISupportInitialize) (this.pictureXml)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.pictureCsv)).EndInit();
             ((System.ComponentModel.ISupportInitialize) (this.imageExcel)).EndInit();
+            this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
             this.ResumeLayout(false);
             this.PerformLayout();
 

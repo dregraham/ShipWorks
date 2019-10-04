@@ -34,6 +34,9 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public decimal Height { get; set; }
         public string LocalStatus { get; set; }
 
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
         [JsonProperty("custom_1")]
         public string Custom1 { get; set; }
 

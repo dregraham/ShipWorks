@@ -98,23 +98,25 @@ namespace ShipWorks.Shipping.UI.RatingPanel
         /// </summary>
         public virtual void LoadRates(RatesRetrievedMessage message)
         {
+            ICarrierShipmentAdapter shipmentAdapter = message.ShipmentAdapter;
+
             if (message.Success)
             {
                 SetRateResults(message.RateGroup.Rates, string.Empty,
-                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
+                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(shipmentAdapter)));
 
-                if (message.ShipmentAdapter != null && message.ShipmentAdapter.Shipment != null &&
-                    (message.ShipmentAdapter.Shipment.ReturnShipment || message.ShipmentAdapter.Shipment.IncludeReturn))
+                if (shipmentAdapter?.Shipment != null &&
+                    (shipmentAdapter.Shipment.ReturnShipment || shipmentAdapter.Shipment.IncludeReturn))
                 {
                     var returnFootnoteFactory = new InformationFootnoteFactory("Rates reflect the service charge only and do not include additional fees for returns.");
-                    Footnotes = Footnotes.Concat(new[] { returnFootnoteFactory.CreateViewModel(message.ShipmentAdapter) });
+                    Footnotes = Footnotes.Concat(new[] { returnFootnoteFactory.CreateViewModel(shipmentAdapter) });
                     ShowFootnotes = true;
                 }
             }
             else
             {
                 SetRateResults(Enumerable.Empty<RateResult>(), message.ErrorMessage,
-                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(message.ShipmentAdapter)));
+                    message.RateGroup.FootnoteFactories.Select(x => x.CreateViewModel(shipmentAdapter)));
             }
 
             // If we didn't get any footnotes, and no error message, and not rates,
@@ -125,11 +127,12 @@ namespace ShipWorks.Shipping.UI.RatingPanel
                 EmptyMessage = "No rates are available for the shipment.";
             }
 
+            ShowAccount = shipmentAdapter?.ShipmentTypeCode == ShipmentTypeCode.BestRate;
             ShowDuties = Rates.Any(x => x.Duties.HasValue);
             ShowTaxes = Rates.Any(x => x.Taxes.HasValue);
             ShowShipping = Rates.Any(x => x.Shipping.HasValue);
 
-            SelectRate(message.ShipmentAdapter);
+            SelectRate(shipmentAdapter);
 
             IsLoading = false;
             AllowSelection = UserHasPermissionToSelectRate;

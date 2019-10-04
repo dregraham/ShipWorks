@@ -10,6 +10,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
 {
@@ -49,11 +50,27 @@ namespace ShipWorks.Shipping.UI.RatingPanel.ObservableRegistrations
                     .Switch(this)
                     .Throttle(TimeSpan.FromMilliseconds(250), schedulerProvider.Default)
                     .ObserveOn(schedulerProvider.Dispatcher)
-                    .Dump(this)
                     .IgnoreBetweenMessages(
-                        messenger.OfType<OpenShippingDialogMessage>().Trackable().Select(this, x => "Window closing"),
-                        GetResumeObservable().Trackable().Select(this, x => "Window opening"))
-                    .Subscribe(this, viewModel.LoadRates));
+                        messenger.OfType<ShippingDialogOpeningMessage>(),
+                        GetResumeObservable())
+                    .Dump(this)
+                    .Subscribe(this, viewModel.LoadRates),
+                    messenger.OfType<ShipmentsProcessedMessage>()
+                        .Trackable()
+                        .ObserveOn(schedulerProvider.Dispatcher)
+                        .Subscribe(this, _ =>
+                        {
+                            viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
+                            viewModel.IsLoading = false;
+                        }),
+                     messenger.OfType<OrderSelectionChangingMessage>()
+                        .Trackable()
+                        .ObserveOn(schedulerProvider.Dispatcher)
+                        .Subscribe(this, _ =>
+                        {
+                            viewModel.SetRateResults(Enumerable.Empty<RateResult>(), string.Empty, Enumerable.Empty<object>());
+                            viewModel.IsLoading = false;
+                        }));
 
             messenger.Send(new InitializeRatesRetrievedPipelineMessage());
 

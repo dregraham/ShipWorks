@@ -11,13 +11,19 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitDefinition(OrderEntity order, IDictionary<long, decimal> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber)
+        public OrderSplitDefinition(OrderEntity order, IDictionary<long, decimal> itemQuanities, IDictionary<long, decimal> chargeAmounts, string newOrderNumber, OrderSplitterType orderSplitterType)
         {
             Order = order;
             ItemQuantities = itemQuanities;
             ChargeAmounts = chargeAmounts;
             NewOrderNumber = newOrderNumber;
+            OrderSplitterType = orderSplitterType;
         }
+
+        /// <summary>
+        /// Order Splitter Type
+        /// </summary>
+        public OrderSplitterType OrderSplitterType { get; }
 
         /// <summary>
         /// Order to be split

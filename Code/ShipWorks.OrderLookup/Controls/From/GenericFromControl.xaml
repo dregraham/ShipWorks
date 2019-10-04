@@ -73,7 +73,7 @@
             </ComboBox.ItemsSource>
         </ComboBox>
 
-        <TextBlock 
+        <TextBlock
             Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
@@ -118,6 +118,6 @@
                 </MultiBinding>
             </local:OrderLookupAddress.IsEnabled>
         </local:OrderLookupAddress>
-        
+
     </Grid>
 </UserControl>

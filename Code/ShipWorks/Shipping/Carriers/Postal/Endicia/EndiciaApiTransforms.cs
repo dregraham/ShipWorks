@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             switch (packagingType)
             {
                 case PostalPackagingType.Envelope: return "Letter";
+                case PostalPackagingType.CubicSoftPack: return "Flat";
                 case PostalPackagingType.LargeEnvelope: return "Flat";
                 case PostalPackagingType.FlatRateEnvelope: return "FlatRateEnvelope";
                 case PostalPackagingType.FlatRatePaddedEnvelope: return "FlatRatePaddedEnvelope";

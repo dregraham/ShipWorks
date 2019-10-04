@@ -393,6 +393,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LastReleaseNotesSeen", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AutoPrintRequireValidation", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("MinimizeRibbon", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShowQAToolbarBelowRibbon", fieldHashtable);
 		}
 		#endregion
 
@@ -709,6 +713,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, value); }
+		}
+
+		/// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."MinimizeRibbon"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean MinimizeRibbon
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.MinimizeRibbon, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.MinimizeRibbon, value); }
+		}
+
+		/// <summary> The ShowQAToolbarBelowRibbon property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."ShowQAToolbarBelowRibbon"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ShowQAToolbarBelowRibbon
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
