@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         protected override string AccountDescription(UspsAccountEntity account)
         {
-            return account.Description;
+            return account.Username;
         }
 
         /// <summary>

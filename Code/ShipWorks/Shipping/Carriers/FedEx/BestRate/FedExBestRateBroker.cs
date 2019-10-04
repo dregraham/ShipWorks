@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         protected override string AccountDescription(FedExAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber;
         }
     }
 }
