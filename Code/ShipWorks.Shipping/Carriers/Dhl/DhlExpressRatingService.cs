@@ -61,8 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<DhlExpressServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t))
-                    .Union(new List<string> { EnumHelper.GetApiValue((DhlExpressServiceType) shipment.DhlExpress.Service) });
+                    .Select(t => EnumHelper.GetApiValue(t));
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress, availableServiceTypeApiCodes);
             }
