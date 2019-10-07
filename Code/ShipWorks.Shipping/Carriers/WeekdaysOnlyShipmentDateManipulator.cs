@@ -64,20 +64,18 @@ namespace ShipWorks.Shipping.Carriers
                 shipment.ShipDate = now;
             }
 
-            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipDateTime.Date ||
-                shipDateTime.DayOfWeek == DayOfWeek.Saturday ||
-                shipDateTime.DayOfWeek == DayOfWeek.Sunday)
+            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date ||
+                shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday ||
+                shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
-                shipDateTime = shipDateTime.AddDays(1);
 
-                if (shipDateTime.DayOfWeek == DayOfWeek.Saturday)
+                if (shipment.ShipDate.DayOfWeek == DayOfWeek.Saturday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
-                    shipDateTime = shipDateTime.AddDays(1);
                 }
 
-                if (shipDateTime.DayOfWeek == DayOfWeek.Sunday)
+                if (shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
                 }

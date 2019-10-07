@@ -61,6 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (shipDateTime.Date < now.Date)
             {
                 shipment.ShipDate = now;
+                shipDateTime = now;
             }
 
             if (now.TimeOfDay >= shipDateCutoff && now.Date == shipDateTime.Date ||
