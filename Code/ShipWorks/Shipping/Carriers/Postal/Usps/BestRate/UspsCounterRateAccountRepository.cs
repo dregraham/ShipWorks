@@ -109,10 +109,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <summary>
         /// Gets the default profile account.
         /// </summary>
-        public UspsAccountEntity DefaultProfileAccount
-        {
-            get { return Accounts.First(); }
-        }
+        public UspsAccountEntity DefaultProfileAccount => Accounts.First();
+        
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
 
         /// <summary>
         /// Saves the specified account.

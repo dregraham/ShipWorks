@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         public IEnumerable<IUpsAccountEntity> AccountsReadOnly => lazyAccounts.Value;
 
-
         /// <summary>
         /// Saves the specified account.
         /// </summary>
@@ -91,13 +90,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// Gets the default profile account. This will always return the same account that is
         /// used to get counter rates.
         /// </summary>
-        public UpsAccountEntity DefaultProfileAccount
-        {
-            get
-            {
-                return Accounts.First();
-            }
-        }
+        public UpsAccountEntity DefaultProfileAccount => Accounts.First();
+
+        /// <summary>
+        /// Gets the default profile account. This will always return the same account that is
+        /// used to get counter rates.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
 
         /// <summary>
         /// Gets the Ups account that should be used for counter rates.

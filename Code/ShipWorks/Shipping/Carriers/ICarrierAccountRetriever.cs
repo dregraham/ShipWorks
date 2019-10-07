@@ -28,6 +28,11 @@ namespace ShipWorks.Shipping.Carriers
         /// Get a collection of read only accounts
         /// </summary>
         IEnumerable<ICarrierAccount> AccountsReadOnly { get; }
+        
+        /// <summary>
+        /// Gets the default profile account
+        /// </summary>
+        ICarrierAccount DefaultProfileAccount { get; }
 
         /// <summary>
         /// Force a check for changes

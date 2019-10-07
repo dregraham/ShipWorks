@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -14,17 +15,17 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     /// <summary>
     /// Update excluded best rate account table
     /// </summary>
-    public class V_07_04_00_00 : IVersionSpecificUpdate
+    public class V_07_04_00_01 : IVersionSpecificUpdate
     {
-        private readonly ICarrierAccountRepositoryFactory accountRepositoryFactory;
+        private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IBestRateExcludedAccountRepository excludedAccountRepository;
-        
-        public V_07_04_00_00(ICarrierAccountRepositoryFactory accountRepositoryFactory,
+
+        public V_07_04_00_01(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory,
             IShipmentTypeManager shipmentTypeManager,
-                IBestRateExcludedAccountRepository excludedAccountRepository)
+            IBestRateExcludedAccountRepository excludedAccountRepository)
         {
-            this.accountRepositoryFactory = accountRepositoryFactory;
+            this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.excludedAccountRepository = excludedAccountRepository;
         }
@@ -32,7 +33,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// <summary>
         /// 7.4.0.0
         /// </summary>
-        public Version AppliesTo => new Version(7, 4, 0, 0);
+        public Version AppliesTo => new Version(7, 4, 0, 1);
 
         /// <summary>
         /// Run Once
@@ -48,7 +49,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 
             foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes)
             {
-                var accountRepository = accountRepositoryFactory.Get(shipmentTypeCode);
+                var accountRepository = carrierAccountRetrieverFactory[shipmentTypeCode];
                 if (accountRepository.AccountsReadOnly.Count() > 1)
                 {
                     long defaultAccountId = accountRepository.DefaultProfileAccount.AccountId;

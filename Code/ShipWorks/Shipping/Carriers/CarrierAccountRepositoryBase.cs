@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers
         ICarrierAccountRepository<T, TInterface>, ICarrierAccountRetriever
         where T : TInterface where TInterface : ICarrierAccount
     {
+
         /// <summary>
         /// Force a check for changes
         /// </summary>
@@ -51,6 +52,11 @@ namespace ShipWorks.Shipping.Carriers
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         public abstract T DefaultProfileAccount { get; }
+
+        /// <summary>
+        ///  Returns the default account as defined by the primary profile
+        ///  </summary>
+        ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
         
         /// <summary>
         /// Readonly list of accounts
