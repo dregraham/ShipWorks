@@ -799,8 +799,12 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Shipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\RerouteOrderItems.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiError.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiException.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubErrorCode.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
@@ -6975,7 +6979,6 @@
     <Compile Include="ApplicationCore\Settings\ShipWorksSettings.Designer.cs">
       <DependentUpon>ShipWorksSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="ApplicationCore\Settings\ShipWorksSettingsData.cs" />
     <Compile Include="Data\Administration\InitialDataLoader.cs" />
     <Compile Include="Data\Connection\ConnectionLostDlg.cs">
       <SubType>Form</SubType>

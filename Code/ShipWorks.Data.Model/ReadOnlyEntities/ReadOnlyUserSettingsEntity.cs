@@ -58,6 +58,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OrderLookupLayout = source.OrderLookupLayout;
             LastReleaseNotesSeen = source.LastReleaseNotesSeen;
             AutoPrintRequireValidation = source.AutoPrintRequireValidation;
+            MinimizeRibbon = source.MinimizeRibbon;
+            ShowQAToolbarBelowRibbon = source.ShowQAToolbarBelowRibbon;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -199,6 +201,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AutoPrintRequireValidation { get; }
+        /// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."MinimizeRibbon"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean MinimizeRibbon { get; }
+        /// <summary> The ShowQAToolbarBelowRibbon property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."ShowQAToolbarBelowRibbon"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ShowQAToolbarBelowRibbon { get; }
         
         public IUserEntity User { get; }
         

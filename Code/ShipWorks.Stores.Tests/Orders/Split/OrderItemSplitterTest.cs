@@ -2,6 +2,7 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split;
+using ShipWorks.Stores.Orders.Split.Local;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Orders.Split
@@ -28,9 +29,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             splitOrder.OrderItems.Add(new OrderItemEntity(2) { Quantity = 3 });
 
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -64,9 +65,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 { 1, 1 },
                 { 2, 3 }
             };
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(4, splitOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -98,9 +99,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
             newOrderItemQuantities.Add(1, 0.5M);
             newOrderItemQuantities.Add(2, 1.5M);
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(2, splitOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -135,9 +136,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal>();
             newOrderItemQuantities.Add(1, 0);
             newOrderItemQuantities.Add(2, 0);
-            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Equal(0, splitOrder.OrderItems.Sum(oi => oi.Quantity));
@@ -158,9 +159,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 5 } };
 
-            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Empty(originalOrder.OrderItems);
@@ -177,9 +178,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 0 } };
 
-            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.Empty(splitOrder.OrderItems);
@@ -196,9 +197,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
 
             Dictionary<long, decimal> newOrderItemQuantities = new Dictionary<long, decimal> { { 1, 0 } };
 
-            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "");
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, newOrderItemQuantities, new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.NotEmpty(originalOrder.OrderItems);
@@ -214,9 +215,9 @@ namespace ShipWorks.Stores.Tests.Orders.Split
             OrderEntity splitOrder = new OrderEntity { OrderNumber = 1 };
             splitOrder.OrderItems.Add(new OrderItemEntity(1) { Description = "Foo" });
 
-            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "");
+            var orderSplitDefinition = new OrderSplitDefinition(originalOrder, new Dictionary<long, decimal>(), new Dictionary<long, decimal>(), "", OrderSplitterType.Local);
 
-            OrderItemSplitter testObject = new OrderItemSplitter();
+            OrderItemSplitterLocal testObject = new OrderItemSplitterLocal();
             testObject.Split(orderSplitDefinition, originalOrder, splitOrder);
 
             Assert.NotEmpty(originalOrder.OrderItems);

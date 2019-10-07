@@ -56,7 +56,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
-            currentShipment.IParcel.Service = (int) iParcelServiceType.Saver;
             currentShipment.IParcel.IParcelAccountID = account.IParcelAccountID;
 
             currentShipment.IParcel.Packages[0].Insurance = originalShipment.Insurance;

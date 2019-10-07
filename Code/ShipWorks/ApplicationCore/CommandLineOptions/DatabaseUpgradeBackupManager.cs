@@ -53,7 +53,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 using (DbCommand command = con.CreateCommand())
                 {
                     command.CommandTimeout = (int) TimeSpan.FromHours(1).TotalSeconds;
-                    command.CommandText = "RESTORE VERIFYONLY FROM DISK = @FilePath";
+                    command.CommandText = "RESTORE VERIFYONLY FROM DISK = @FilePath;";
                     command.AddParameterWithValue("@FilePath", fileName);
 
                     DbCommandProvider.ExecuteNonQuery(command);
@@ -65,15 +65,17 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// <summary>
         /// Creates the Restore DbCommand
         /// </summary>
-        private void ConfigureRestoreCommand(DbCommand command)
+        private void ConfigureRestoreCommand(DbConnection con, DbCommand command)
         {
             command.CommandTimeout = (int) TimeSpan.FromHours(2).TotalSeconds;
-            command.CommandText =
-                $"ALTER DATABASE [{database}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE " +
-                $"RESTORE DATABASE [{database}] " +
-                "FROM DISK = @FilePath      " +
-                "WITH STATS = 3, RECOVERY, REPLACE " +
-                $"ALTER DATABASE [{database}] SET MULTI_USER ";
+            string sql =
+                $@"
+                RESTORE DATABASE [{database}] FROM DISK = @FilePath WITH STATS = 3, RECOVERY, REPLACE;
+               
+                {SqlUtility.ConfigureSqlServerForClrSql(database, SqlUtility.GetUsername(con))}                
+                ";
+
+            command.CommandText = SqlUtility.WrapSqlInSingleUserMode(sql, database);
 
             command.AddParameterWithValue("@FilePath", backupName);
         }
@@ -85,58 +87,34 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             log.Info("Initiating restore");
 
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            using (DbConnection masterConnection = SqlSession.OpenConnectionToMaster())
             {
-                try
-                {
-                    Regex percentRegex = new Regex(@"(\d+) percent processed.");
+                Regex percentRegex = new Regex(@"(\d+) percent processed.");
 
-                    // InfoMessage will provide progress updates
-                    SqlConnection sqlConn = con.AsSqlConnection();
-                    if (sqlConn != null)
+                // InfoMessage will provide progress updates
+                SqlConnection sqlConn = masterConnection.AsSqlConnection();
+                if (sqlConn != null)
+                {
+                    sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
                     {
-                        sqlConn.InfoMessage += delegate (object sender, SqlInfoMessageEventArgs e)
+                        Match match = percentRegex.Match(e.Message);
+                        if (match.Success)
                         {
-                            Match match = percentRegex.Match(e.Message);
-                            if (match.Success)
-                            {
-                                log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
-                            }
-                        };
-                    }
-
-                    // Disconnect all other users
-                    SqlUtility.SetSingleUser(con);
-
-                    // Get out of the database we are restoring to
-                    con.ChangeDatabase("master");
-
-                    using (DbCommand command = con.CreateCommand())
-                    {
-                        ConfigureRestoreCommand(command);
-
-                        // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
-                        DbCommandProvider.ExecuteScalar(command);
-                        return Result.FromSuccess();
-                    }
+                            log.InfoFormat("{0}% complete", Convert.ToInt32(match.Groups[1].Value));
+                        }
+                    };
                 }
-                finally
+
+                using (DbCommand command = masterConnection.CreateCommand())
                 {
-                    try
-                    {
-                        SqlUtility.ConfigureSql2017ForClr(con, database, SqlUtility.GetUsername(con));
-                        con.ChangeDatabase(database);
+                    ConfigureRestoreCommand(masterConnection, command);
 
-                        // Allow multiple connections again
-                        SqlUtility.SetMultiUser(con);
-                    }
-                    catch (SqlException ex)
-                    {
-                        log.Error("Failed to set database back to multi-user mode.", ex);
-                    }
-
+                    // The InfoMessage events only come back in real-time when using ExecuteScalar - NOT ExecuteNonQuery
+                    DbCommandProvider.ExecuteScalar(command);
                     SqlConnection.ClearAllPools();
                 }
+
+                return Result.FromSuccess();
             }
         }
 

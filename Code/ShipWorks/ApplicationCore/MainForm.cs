@@ -498,7 +498,7 @@ namespace ShipWorks
             {
                 return;
             }
-
+           
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -836,7 +836,11 @@ namespace ShipWorks
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
-
+            ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?                                                                
+                                                                QuickAccessPosition.Below:
+                                                                QuickAccessPosition.Above;
+                                                                
             // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
@@ -1617,7 +1621,6 @@ namespace ShipWorks
             foreach (RibbonTab tab in ribbonTabs.Where(TabAppliesToUIMode))
             {
                 ribbon.Tabs.Add(tab);
-
                 // Preserve order
                 tab.SendToBack();
             }
@@ -1774,7 +1777,24 @@ namespace ShipWorks
             settings.DisplayColorScheme = (int) ShipWorksDisplay.ColorScheme;
             settings.DisplaySystemTray = ShipWorksDisplay.HideInSystemTray;
 
-            // Save the layout
+            SaveCurrentUserModeSpecificSettings(settings);
+
+            //Save the Ribbon minimized state
+            settings.MinimizeRibbon = ribbon.Minimized;
+
+            // Save the settings
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.SaveAndRefetch(settings);
+            }
+        }
+
+        /// <summary>
+        /// Save the current user mode specific settings.
+        /// </summary>
+        private void SaveCurrentUserModeSpecificSettings(UserSettingsEntity settings)
+        {
+            // Save the layout  
             if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
@@ -1810,12 +1830,6 @@ namespace ShipWorks
             else if (UIMode == UIMode.OrderLookup)
             {
                 shipmentHistory.SaveGridColumnState();
-            }
-
-            // Save the settings
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.SaveAndRefetch(settings);
             }
         }
 
@@ -2599,23 +2613,23 @@ namespace ShipWorks
         /// </summary>
         private void OnShowSettings(object sender, EventArgs e)
         {
-            // Create the data structure to send to settings
-            ShipWorksSettingsData data = new ShipWorksSettingsData(ribbon.ToolBarPosition == QuickAccessPosition.Below, ribbon.Minimized);
+            UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
+            UserSession.User.Settings.ShowQAToolbarBelowRibbon = ribbon.ToolBarPosition == QuickAccessPosition.Below;
 
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                using (ShipWorksSettings dlg = new ShipWorksSettings(data, scope))
+                using (ShipWorksSettings dlg = new ShipWorksSettings(scope))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {
                         ApplyDisplaySettings();
 
                         // Apply ribbon settings
-                        ribbon.ToolBarPosition = data.ShowQatBelowRibbon ?
+                        ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
                             QuickAccessPosition.Below :
                             QuickAccessPosition.Above;
 
-                        ribbon.Minimized = data.MinimizeRibbon;
+                        ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
                     }
                 }
             }
@@ -4196,7 +4210,6 @@ namespace ShipWorks
 
             return holders;
         }
-
         #endregion
 
         #region Administration

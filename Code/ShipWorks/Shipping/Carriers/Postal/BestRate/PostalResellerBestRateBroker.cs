@@ -105,7 +105,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
             currentShipment.Postal.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Postal.PackagingType = (int) PostalPackagingType.Package;
-            currentShipment.Postal.Service = (int) PostalServiceType.PriorityMail;
             currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;
             currentShipment.Postal.Insurance = originalShipment.BestRate.Insurance;
 

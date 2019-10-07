@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// </summary>
         protected override string AccountDescription(EndiciaAccountEntity account)
         {
-            return account.ApiUserPassword;
+            return account.AccountNumber;
         }
 
         /// <summary>

@@ -448,6 +448,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -1088,6 +1090,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1264,6 +1268,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1626,6 +1632,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -2792,6 +2800,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3466,6 +3476,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4760,6 +4772,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -5190,6 +5204,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -5366,6 +5382,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -5482,6 +5500,8 @@ namespace ShipWorks.Data.Model
 		InsureShipPolicyID,
 		///<summary>DateOfIssue. </summary>
 		DateOfIssue,
+		///<summary>InsureShipStatus. </summary>
+		InsureShipStatus,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -5856,6 +5876,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -6238,6 +6260,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -7670,6 +7694,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -8238,6 +8264,8 @@ namespace ShipWorks.Data.Model
 		Description,
 		///<summary>Amount. </summary>
 		Amount,
+		///<summary>HubChargeID. </summary>
+		HubChargeID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8304,6 +8332,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. </summary>
 		Custom5,
+		///<summary>HubItemID. </summary>
+		HubItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8924,6 +8954,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SalesChannelLineNumber. </summary>
@@ -10314,6 +10346,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -11238,6 +11272,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -12036,6 +12072,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -12698,6 +12736,10 @@ namespace ShipWorks.Data.Model
 		LastReleaseNotesSeen,
 		///<summary>AutoPrintRequireValidation. </summary>
 		AutoPrintRequireValidation,
+		///<summary>MinimizeRibbon. </summary>
+		MinimizeRibbon,
+		///<summary>ShowQAToolbarBelowRibbon. </summary>
+		ShowQAToolbarBelowRibbon,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13222,6 +13264,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -13882,6 +13926,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>HubItemID. Inherited from OrderItem</summary>
+		HubItemID,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>

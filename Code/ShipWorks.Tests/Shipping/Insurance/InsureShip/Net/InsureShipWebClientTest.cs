@@ -53,6 +53,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net
             submitter.Verify(x => x.AddHeader("Accept", "application/json"));
             submitter.Verify(x => x.AddVariable("client_id", "abc123"));
             submitter.Verify(x => x.AddVariable("api_key", "xyx987"));
+            submitter.Verify(x => x.AddVariable("source", "6.4.0.0"));
             submitter.Verify(x => x.AllowHttpStatusCodes(new[] { HttpStatusCode.NoContent, (HttpStatusCode) 311, (HttpStatusCode) 312, HttpStatusCode.Unauthorized, HttpStatusCode.PaymentRequired, HttpStatusCode.Conflict, HttpStatusCode.PreconditionFailed, (HttpStatusCode) 419, HttpStatusCode.OK }));
         }
 

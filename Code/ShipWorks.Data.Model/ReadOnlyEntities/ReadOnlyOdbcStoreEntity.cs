@@ -48,7 +48,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UploadConnectionString = source.UploadConnectionString;
             ImportOrderItemStrategy = source.ImportOrderItemStrategy;
             WarehouseLastModified = source.WarehouseLastModified;
-                        
+            
+            
             
 
             CopyCustomOdbcStoreData(source);

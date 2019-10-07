@@ -124,7 +124,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             ShipmentType.UpdateTotalWeight(currentShipment);
 
             currentShipment.Ups.Packages[0].PackagingType = (int) UpsPackagingType.Custom;
-            currentShipment.Ups.Service = (int) UpsServiceType.UpsGround;
             SetAccount(currentShipment, account);
 
             currentShipment.Ups.Packages[0].Insurance = originalShipment.Insurance;

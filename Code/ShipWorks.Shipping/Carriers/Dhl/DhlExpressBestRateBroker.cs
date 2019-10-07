@@ -119,7 +119,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
-            currentShipment.DhlExpress.Service = (int) DhlExpressServiceType.ExpressWorldWide;
             currentShipment.DhlExpress.DhlExpressAccountID = account.DhlExpressAccountID;
 
             // Customs items are cleared from the shipment when ConfigureNewShipment is called.
@@ -136,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override string AccountDescription(DhlExpressAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber.ToString();
         }
     }
 }
