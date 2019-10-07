@@ -37,9 +37,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 OnTracAccountEntity account = OnTracShipmentType.GetAccountForShipment(shipment);
                 OnTracRates rateRequest = new OnTracRates(account);
                 return rateRequest.GetRates(shipment,
-                    onTracShipmentType.GetAvailableServiceTypes()
-                        .Cast<OnTracServiceType>()
-                        .Union(new List<OnTracServiceType> { (OnTracServiceType) shipment.OnTrac.Service }));
+                    onTracShipmentType.GetAvailableServiceTypes().Cast<OnTracServiceType>());
             }
             catch (OnTracException ex)
             {

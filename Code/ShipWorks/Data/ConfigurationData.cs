@@ -37,8 +37,11 @@ namespace ShipWorks.Data
         /// <summary>
         /// Completely reload the count cache
         /// </summary>
-        public static void InitializeForCurrentDatabase() =>
+        public static void InitializeForCurrentDatabase()
+        {
+            customerKey = string.Empty;
             UpdateConfiguration(defaultGetSqlAdapter);
+        }
 
         /// <summary>
         /// Load the configuration from the database
@@ -99,7 +102,7 @@ namespace ShipWorks.Data
         {
             lock (lockObj)
             {
-                if (needCheckForChanges || string.IsNullOrEmpty(customerKey))
+                if (string.IsNullOrEmpty(customerKey))
                 {
                     ResultsetFields resultFields = new ResultsetFields(1);
                     resultFields.DefineField(ConfigurationFields.CustomerKey, 0, "CustomerKey", "");

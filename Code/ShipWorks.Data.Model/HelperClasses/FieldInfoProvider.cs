@@ -1861,6 +1861,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("InsurancePolicyEntity", "EmailAddress", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.EmailAddress, 100, 0, 0);
 			this.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipPolicyID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)InsurancePolicyFieldIndex.InsureShipPolicyID, 0, 0, 19);
 			this.AddElementFieldInfo("InsurancePolicyEntity", "DateOfIssue", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)InsurancePolicyFieldIndex.DateOfIssue, 0, 0, 0);
+			this.AddElementFieldInfo("InsurancePolicyEntity", "InsureShipStatus", typeof(System.String), false, false, false, true,  (int)InsurancePolicyFieldIndex.InsureShipStatus, 50, 0, 0);
 		}
 		/// <summary>Inits IParcelAccountEntity's FieldInfo objects</summary>
 		private void InitIParcelAccountEntityInfos()
@@ -3729,6 +3730,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "LastReleaseNotesSeen", typeof(System.String), false, false, false, false,  (int)UserSettingsFieldIndex.LastReleaseNotesSeen, 25, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoPrintRequireValidation", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoPrintRequireValidation, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "MinimizeRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.MinimizeRibbon, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "ShowQAToolbarBelowRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

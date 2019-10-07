@@ -323,47 +323,47 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.FedEx:
                 case ShipmentTypeCode.OnTrac:
                 case ShipmentTypeCode.iParcel:
+                {
+                    // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipment will have the same pennyone setting
+                    bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
+
+                    if (!pennyOne)
                     {
-                        // We can hardcode to just look at the first parcel in the shipment - all parcels in a shipment will have the same pennyone setting
-                        bool pennyOne = ShipmentTypeManager.GetType(shipment).GetParcelDetail(shipment, 0).Insurance.InsurancePennyOne.Value;
+                        cost.AdvertisePennyOne = true;
 
-                        if (!pennyOne)
+                        string carrierName = ShippingManager.GetCarrierName(shipmentType);
+
+                        cost.AddInfoMessage(string.Format("The first $100 of coverage is provided by {0}. Learn how to add protection\nfor the first $100 in the Shipping Settings for {0}.", carrierName));
+
+                        if (declaredValue > 0 && declaredValue <= 100)
                         {
-                            cost.AdvertisePennyOne = true;
+                            cost.AddInfoMessage(string.Format("No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by {0}.", carrierName));
 
-                            string carrierName = ShippingManager.GetCarrierName(shipmentType);
-
-                            cost.AddInfoMessage(string.Format("The first $100 of coverage is provided by {0}. Learn how to add protection\nfor the first $100 in the Shipping Settings for {0}.", carrierName));
-
-                            if (declaredValue > 0 && declaredValue <= 100)
-                            {
-                                cost.AddInfoMessage(string.Format("No ShipWorks Insurance coverage will be provided on this shipment\nsince it will be provided by {0}.", carrierName));
-
-                                return;
-                            }
-
-                            adjustedValue = Math.Max(declaredValue - 100, 0);
+                            return;
                         }
 
-                        if (shipmentType == ShipmentTypeCode.iParcel)
-                        {
-                            rate = 0.75m;
-                        }
-                        else
-                        {
-                            rate = 0.55m;
-                        }
+                        adjustedValue = Math.Max(declaredValue - 100, 0);
                     }
-                    break;
+
+                    if (shipmentType == ShipmentTypeCode.iParcel)
+                    {
+                        rate = 0.75m;
+                    }
+                    else
+                    {
+                        rate = 0.55m;
+                    }
+                }
+                break;
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:
-                    {
-                        rate = GetUspsRate(shipment);
-                    }
-                    break;
+                {
+                    rate = GetUspsRate(shipment);
+                }
+                break;
 
                 default:
                     rate = 0.55m;
@@ -455,45 +455,45 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.UpsWorldShip:
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.FedEx:
-                    {
-                        cost.Carrier = CalculateUpsFedExCost(declaredValue);
-                    }
-                    break;
+                {
+                    cost.Carrier = CalculateUpsFedExCost(declaredValue);
+                }
+                break;
                 case ShipmentTypeCode.OnTrac:
-                    {
-                        cost.Carrier = CalculateOnTracCost(declaredValue);
-                    }
-                    break;
+                {
+                    cost.Carrier = CalculateOnTracCost(declaredValue);
+                }
+                break;
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
+                {
+                    cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
+                }
+                break;
+
+                case ShipmentTypeCode.Endicia:
+                {
+                    if (EndiciaUtility.IsEndiciaInsuranceActive)
+                    {
+                        // We don't want to compare our rates to theres
+                        cost.Carrier = null;
+                    }
+                    else
                     {
                         cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
                     }
-                    break;
-
-                case ShipmentTypeCode.Endicia:
-                    {
-                        if (EndiciaUtility.IsEndiciaInsuranceActive)
-                        {
-                            // We don't want to compare our rates to theres
-                            cost.Carrier = null;
-                        }
-                        else
-                        {
-                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
-                        }
-                    }
-                    break;
+                }
+                break;
 
                 case ShipmentTypeCode.Usps:
-                    {
-                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ?
-                            null :
-                            CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
-                    }
-                    break;
+                {
+                    cost.Carrier = UspsUtility.IsStampsInsuranceActive ?
+                        null :
+                        CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType) shipment.Postal.Service);
+                }
+                break;
 
                 case ShipmentTypeCode.AmazonSFP:
                 default:

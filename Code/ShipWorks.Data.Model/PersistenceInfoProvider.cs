@@ -1936,7 +1936,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits InsurancePolicyEntity's mappings</summary>
 		private void InitInsurancePolicyEntityMappings()
 		{
-			this.AddElementMapping("InsurancePolicyEntity", @"ShipWorksLocal", @"dbo", "InsurancePolicy", 12, 0);
+			this.AddElementMapping("InsurancePolicyEntity", @"ShipWorksLocal", @"dbo", "InsurancePolicy", 13, 0);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "InsureShipStoreName", "InsureShipStoreName", false, "NVarChar", 75, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "CreatedWithApi", "CreatedWithApi", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -1949,6 +1949,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("InsurancePolicyEntity", "EmailAddress", "EmailAddress", true, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 9);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "InsureShipPolicyID", "InsureShipPolicyID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 10);
 			this.AddElementFieldMapping("InsurancePolicyEntity", "DateOfIssue", "DateOfIssue", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 11);
+			this.AddElementFieldMapping("InsurancePolicyEntity", "InsureShipStatus", "InsureShipStatus", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 12);
 		}
 
 		/// <summary>Inits IParcelAccountEntity's mappings</summary>
@@ -3918,7 +3919,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 22, 0);
+			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 24, 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -3941,6 +3942,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "OrderLookupLayout", "OrderLookupLayout", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 19);
 			this.AddElementFieldMapping("UserSettingsEntity", "LastReleaseNotesSeen", "LastReleaseNotesSeen", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 20);
 			this.AddElementFieldMapping("UserSettingsEntity", "AutoPrintRequireValidation", "AutoPrintRequireValidation", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
+			this.AddElementFieldMapping("UserSettingsEntity", "MinimizeRibbon", "MinimizeRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
+			this.AddElementFieldMapping("UserSettingsEntity", "ShowQAToolbarBelowRibbon", "ShowQAToolbarBelowRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

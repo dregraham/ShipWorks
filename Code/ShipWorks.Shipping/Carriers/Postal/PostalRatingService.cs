@@ -69,11 +69,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, IEnumerable<RateResult> rates)
         {
-            IEnumerable<PostalServiceType> availableServiceTypes1 = shipmentTypeManager[shipment.ShipmentTypeCode]
+            IEnumerable<PostalServiceType> availableServiceTypes = shipmentTypeManager[shipment.ShipmentTypeCode]
                     .GetAvailableServiceTypes()
                     .Cast<PostalServiceType>();
-            IEnumerable<PostalServiceType> unionWithSelected = availableServiceTypes1.Union(new List<PostalServiceType> { (PostalServiceType) shipment.Postal.Service });
-            List<RateResult> results = rates.Where(r => r.Tag is PostalRateSelection && unionWithSelected.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
+            List<RateResult> results = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
 
             return results;
         }

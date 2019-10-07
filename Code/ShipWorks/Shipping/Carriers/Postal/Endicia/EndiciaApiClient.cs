@@ -572,7 +572,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             AddAccountDetailsToRatesRequest(account, request);
             AddPackageDetailsToRatesRequest(shipment, packagingType, postal, request);
             AddAddressDetailsToRatesRequest(shipment, account, request);
-            AddConfirmationDetailsToRatesRequest(isDomestic, request);
+            AddConfirmationDetailsToRatesRequest(isDomestic, request, postal);
             AddInsuranceDetailsToRatesRequest(shipment, request);
             AddCustomsDetailsToRatesRequest(shipment, postal, request);
 
@@ -635,7 +635,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Add confirmation details from the given shipment to the rate request
         /// </summary>
-        private static void AddConfirmationDetailsToRatesRequest(bool isDomestic, PostageRatesRequest request)
+        private static void AddConfirmationDetailsToRatesRequest(bool isDomestic, PostageRatesRequest request, PostalShipmentEntity postal)
         {
             // We show rate matrix based on delivery and signature options
             if (isDomestic)
@@ -643,8 +643,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.Services = new SpecialServices();
                 request.Services.DeliveryConfirmation = "ON";
                 request.Services.SignatureConfirmation = "ON";
-                request.Services.AdultSignatureRestrictedDelivery = "ON";
-                request.Services.AdultSignature = "ON";
+                request.Services.AdultSignatureRestrictedDelivery = postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRestricted ? "ON" : "OFF";
+                request.Services.AdultSignature = postal.Confirmation == (int) PostalConfirmationType.AdultSignatureRequired ? "ON" : "OFF";
             }
         }
 

@@ -2544,7 +2544,8 @@ CREATE TABLE [dbo].[InsurancePolicy]
 [ClaimID] [bigint] NULL,
 [EmailAddress] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [InsureShipPolicyID] [bigint] NULL,
-[DateOfIssue] [datetime] NULL
+[DateOfIssue] [datetime] NULL,
+[InsureShipStatus] [nvarchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_InsurancePolicy] on [dbo].[InsurancePolicy]'
@@ -4301,7 +4302,9 @@ CREATE TABLE [dbo].[UserSettings]
 [UIMode] [int] NOT NULL,
 [OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS,
 [LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0',
-[AutoPrintRequireValidation] [bit] NOT NULL
+[AutoPrintRequireValidation] [bit] NOT NULL,
+[MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
+[ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
