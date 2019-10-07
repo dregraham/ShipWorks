@@ -153,6 +153,9 @@ namespace ShipWorks
         private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
+        // Is ShipWorks currently changing modes
+        private bool isChangingMode = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -1029,16 +1032,34 @@ namespace ShipWorks
         /// </summary>
         private void ChangeUIMode(UIMode uiMode, ModeChangeBehavior modeChangeBehavior)
         {
-            if (UIMode == uiMode)
+            if (isChangingMode)
             {
                 return;
             }
 
-            SaveCurrentUserSettings();
+            using (StartChangingModes())
+            {
+                if (UIMode == uiMode)
+                {
+                    return;
+                }
 
-            currentUserSettings.SetUIMode(uiMode);
+                SaveCurrentUserSettings();
 
-            UpdateUIMode(UserSession.User, true, modeChangeBehavior);
+                currentUserSettings.SetUIMode(uiMode);
+
+                UpdateUIMode(UserSession.User, true, modeChangeBehavior);
+            }
+        }
+
+        /// <summary>
+        /// Start changing a mode
+        /// </summary>
+        private IDisposable StartChangingModes()
+        {
+            isChangingMode = true;
+
+            return Disposable.Create(() => isChangingMode = false);
         }
 
         /// <summary>
@@ -1088,8 +1109,6 @@ namespace ShipWorks
         private void EnsureBatchMode()
         {
             ChangeUIMode(UIMode.Batch, ModeChangeBehavior.ChangeTabIfNotAppropriate);
-
-            //ribbon.SelectedTab = ribbonTabGridViewHome;
         }
 
         /// <summary>
@@ -4015,6 +4034,8 @@ namespace ShipWorks
         /// </summary>
         private void OnDetailPreviewTemplatePopup(object sender, BeforePopupEventArgs e)
         {
+            EnsureBatchMode();
+
             FolderExpansionState expansionState = null;
 
             TemplateEntity template = TemplateManager.Tree.GetTemplate(gridControl.ActiveDetailViewSettings.TemplateID);
@@ -4068,12 +4089,14 @@ namespace ShipWorks
         /// </summary>
         private void OnChangeDetailViewDetailHeight(object sender, EventArgs e)
         {
+            var newHeightIndex = detailViewDetailHeight.SelectedIndex;
+
             EnsureBatchMode();
 
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
 
             // Save the new setting
-            settings.DetailRows = detailViewDetailHeight.SelectedIndex;
+            settings.DetailRows = newHeightIndex;
 
             UpdateDetailViewSettingsUI();
         }
