@@ -891,7 +891,7 @@ namespace ShipWorks
             currentUserSettings.SetUIMode(UIMode.Batch);
 
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
-            UpdateUIMode(user, false);
+            UpdateUIMode(user, false, ModeChangeBehavior.ChangeTabAlways);
 
             log.InfoFormat("UI shown");
 
@@ -1019,10 +1019,16 @@ namespace ShipWorks
         /// </summary>
         private void OnShowProductsView(object sender, EventArgs e)  => ChangeUIMode(UIMode.Products);
 
+
         /// <summary>
         /// Change to the given UI mode
         /// </summary>
-        private void ChangeUIMode(UIMode uiMode)
+        private void ChangeUIMode(UIMode uiMode) => ChangeUIMode(uiMode, ModeChangeBehavior.ChangeTabAlways);
+
+        /// <summary>
+        /// Change to the given UI mode
+        /// </summary>
+        private void ChangeUIMode(UIMode uiMode, ModeChangeBehavior modeChangeBehavior)
         {
             if (UIMode == uiMode)
             {
@@ -1033,13 +1039,13 @@ namespace ShipWorks
 
             currentUserSettings.SetUIMode(uiMode);
 
-            UpdateUIMode(UserSession.User, true);
+            UpdateUIMode(UserSession.User, true, modeChangeBehavior);
         }
 
         /// <summary>
         /// Update the UI
         /// </summary>
-        private void UpdateUIMode(IUserEntity user, bool startHeartbeat)
+        private void UpdateUIMode(IUserEntity user, bool startHeartbeat, ModeChangeBehavior modeChangeBehavior)
         {
             bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
             mainMenuItemProducts.Visible = hasProductsPermissions;
@@ -1074,14 +1080,29 @@ namespace ShipWorks
 
             panelDockingArea.Visible = true;
 
-            SelectModeAppropriateTab();
+            SelectModeAppropriateTab(modeChangeBehavior);
+        }
+
+        /// <summary>
+        /// Ensure we are currently in batch mode
+        /// </summary>
+        private void EnsureBatchMode()
+        {
+            ChangeUIMode(UIMode.Batch, ModeChangeBehavior.ChangeTabIfNotAppropriate);
+
+            //ribbon.SelectedTab = ribbonTabGridViewHome;
         }
 
         /// <summary>
         /// Select a default tab for the given mode if one is not already selected
         /// </summary>
-        private void SelectModeAppropriateTab()
+        private void SelectModeAppropriateTab(ModeChangeBehavior modeChangeBehavior)
         {
+            if (modeChangeBehavior == ModeChangeBehavior.ChangeTabIfNotAppropriate && IsModeAgnosticTab(ribbon.SelectedTab))
+            {
+                return;
+            }
+
             if (UIMode == UIMode.Batch && !IsBatchSpecificTab(ribbon.SelectedTab))
             {
                 ribbon.SelectedTab = ribbonTabGridViewHome;
@@ -1095,6 +1116,15 @@ namespace ShipWorks
                 ribbon.SelectedTab = ribbonTabProducts;
             }
         }
+
+        /// <summary>
+        /// Is the tab mode agnostic 
+        /// </summary>
+        private bool IsModeAgnosticTab(RibbonTab selectedTab) => 
+            selectedTab == ribbonTabGridOutput || 
+            selectedTab == ribbonTabAdmin || 
+            selectedTab == ribbonTabView || 
+            selectedTab == ribbonTabHelp;
 
         /// <summary>
         /// Enables the given UI mode
@@ -3905,7 +3935,7 @@ namespace ShipWorks
         /// </summary>
         private void OnShowPanel(object sender, EventArgs e)
         {
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             SandMenuItem item = (SandMenuItem) sender;
 
@@ -4039,7 +4069,7 @@ namespace ShipWorks
         /// </summary>
         private void OnChangeDetailViewDetailHeight(object sender, EventArgs e)
         {
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
 
@@ -4054,7 +4084,7 @@ namespace ShipWorks
         /// </summary>
         private void OnChangeDetailViewDetailMode(object sender, EventArgs e)
         {
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             DetailViewSettings settings = gridControl.ActiveDetailViewSettings;
 
@@ -4161,7 +4191,7 @@ namespace ShipWorks
         /// </summary>
         private void OnSaveEnvironmentSettings(object sender, EventArgs e)
         {
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             using (EnvironmentSaveDlg dlg = new EnvironmentSaveDlg(new EnvironmentController(windowLayoutProvider, gridMenuLayoutProvider)))
             {
@@ -4174,7 +4204,7 @@ namespace ShipWorks
         /// </summary>
         private void OnLoadEnvironmentSettings(object sender, EventArgs e)
         {
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             using (EnvironmentLoadDlg dlg = new EnvironmentLoadDlg(new EnvironmentController(windowLayoutProvider, gridMenuLayoutProvider)))
             {
@@ -4192,7 +4222,7 @@ namespace ShipWorks
                 dlg.ShowDialog(this);
             }
 
-            ribbon.SelectedTab = ribbonTabGridViewHome;
+            EnsureBatchMode();
 
             // If a new panel was shown, then we may need to update its display state
             UpdatePanelState();

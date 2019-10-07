@@ -60,6 +60,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Can the view be closed
         /// </summary>
+        [Obfuscation]
         public bool CanClose => stateManager.Close != null;
 
         /// <summary>
