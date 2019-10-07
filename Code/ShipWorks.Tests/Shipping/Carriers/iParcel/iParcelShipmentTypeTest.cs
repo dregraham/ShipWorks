@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             TrackingResult trackingResult = testObject.TrackShipment(shipment);
 
-            Assert.True(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/23/2004 9:00 pm"));
+            Assert.True(trackingResult.Summary.ToLower().Contains("<b>delivered</b> on 8/23/2004"));
         }
 
         [Fact]
