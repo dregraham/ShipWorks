@@ -641,7 +641,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
                 // attach the db files into the full instance
                 DbCommandProvider.ExecuteNonQuery(con, attachSql);
 
-                SqlUtility.ConfigureSql2017ForClr(con, databaseName, databaseOwner);
+                SqlUtility.ConfigureSqlServerForClr(con, databaseName, databaseOwner);
             }
         }
 

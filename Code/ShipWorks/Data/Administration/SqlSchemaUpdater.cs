@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Transactions;
 using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Threading;
@@ -121,46 +122,43 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static Version GetInstalledSchemaVersion()
         {
-            using (DbConnection con = SqlSession.Current.OpenConnection())
+            using (new TransactionScope(TransactionScopeOption.Suppress, TransactionScopeAsyncFlowOption.Enabled))
             {
-                try
+                using (DbConnection con = SqlSession.Current.OpenConnection())
                 {
-                    return GetInstalledSchemaVersion(con);
-                }
-                catch (SqlException ex)
-                {
-                    // "Could not find stored procedure"
-                    if (ex.Number == 2812 || ex.Number == 21343)
+                    try
                     {
-                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        return GetInstalledSchemaVersion(con);
                     }
-
-                    throw;
-                }
-                catch (ArgumentException ex)
-                {
-                    // We can't figure out the version, which means it's been modified
-                    if (ex.Message.Contains("Version"))
+                    catch (SqlException ex)
                     {
-                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
-                    }
+                        // "Could not find stored procedure"
+                        if (ex.Number == 2812 || ex.Number == 21343)
+                        {
+                            throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        }
 
-                    throw;
+                        throw;
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        // We can't figure out the version, which means it's been modified
+                        if (ex.Message.Contains("Version"))
+                        {
+                            throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                        }
+
+                        throw;
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
-        /// customer or production scenarios.
+        /// Create progress items
         /// </summary>
-        public static void UpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> telemetryEvent, bool debuggingMode = false)
+        private static (ProgressItem progressScripts, ProgressItem progressFunctionality, ProgressItem progressFilterCounts) CreateProgressItems(IProgressProvider progressProvider)
         {
-            Version installedSchema = GetInstalledSchemaVersion();
-            Version installedAssembly = GetInstalledAssemblyVersion();
-
-            log.Info($"Upgrading database to {GetRequiredSchemaVersion()}. From Schema: {installedSchema} & Assembly: {installedAssembly}.");
-
             // Create the primary progress item
             ProgressItem progressScripts = new ProgressItem("Update Tables");
             progressScripts.CanCancel = false;
@@ -175,57 +173,86 @@ namespace ShipWorks.Data.Administration
             ProgressItem progressFilterCounts = new ProgressItem("Calculate Initial Filter Counts");
             progressFilterCounts.CanCancel = false;
             progressProvider.ProgressItems.Add(progressFilterCounts);
-                        
-            // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
-            // because reconnection to a very large database seems to take some time after running a big upgrade
-            using (SingleUserModeScope singleUserScope = debuggingMode ? null : new SingleUserModeScope(TimeSpan.FromMinutes(1)))
+
+            return (progressScripts, progressFunctionality, progressFilterCounts);
+        }
+
+        /// <summary>
+        /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in
+        /// customer or production scenarios.
+        /// </summary>
+        public static void UpdateDatabase(IProgressProvider progressProvider, TelemetricResult<Unit> telemetryEvent, bool debuggingMode = false)
+        {
+            Version installedSchema = GetInstalledSchemaVersion();
+            Version installedAssembly = GetInstalledAssemblyVersion();
+
+            log.Info($"Upgrading database to {GetRequiredSchemaVersion()}. From Schema: {installedSchema} & Assembly: {installedAssembly}.");
+
+            // Create progress items
+            var progressItems = CreateProgressItems(progressProvider);
+            ProgressItem progressScripts = progressItems.progressScripts;
+            ProgressItem progressFunctionality = progressItems.progressFunctionality;
+            ProgressItem progressFilterCounts = progressItems.progressFilterCounts;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                try
+                ISqlUtility sqlUtility = lifetimeScope.Resolve<ISqlUtility>();
+
+                // Put the SuperUser in scope, and don't audit
+                using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
                 {
-                    // Put the SuperUser in scope, and don't audit
-                    using (AuditBehaviorScope scope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
+                    SqlSession.Current.Configuration.ForceWorkstationID = true;
+
+                    using (new ExistingConnectionScope())
                     {
-                        SqlSession.Current.Configuration.ForceWorkstationID = true;
-
-                        using (new ExistingConnectionScope())
+                        // Start by disconnecting all users. Allow for a long timeout while trying to regain a connection when in single user mode
+                        // because reconnection to a very large database seems to take some time after running a big upgrade
+                        using (SingleUserModeScope singleUserScope = debuggingMode ?
+                            null :
+                            new SingleUserModeScope(ExistingConnectionScope.ScopedConnection, TimeSpan.FromMinutes(1), sqlUtility))
                         {
-                            using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
+                            try
                             {
-                                // Update the tables
-                                UpdateScripts(installedSchema, progressScripts, telemetryEvent);
-
-                                // Functionality starting
-                                progressFunctionality.Starting();
-
-                                // Update the assemblies
-                                UpdateAssemblies(progressFunctionality);
-
-                                // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
-
-                                // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
-                                // database upgrade can take time and cause a timeout.
-                                if (singleUserScope != null)
                                 {
-                                    SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
+                                    using (new OrderArchiveUpgradeDatabaseScope(ExistingConnectionScope.ScopedConnection))
+                                    {
+                                        // Update the tables
+                                        UpdateScripts(installedSchema, progressScripts, telemetryEvent);
+
+                                        // Functionality starting
+                                        progressFunctionality.Starting();
+
+                                        // Update the assemblies
+                                        UpdateAssemblies(progressFunctionality);
+
+                                        // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
+                                        UpdateFilters(progressFunctionality, progressFilterCounts, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
+
+                                        // Try to restore multi-user mode with the existing connection, since re-acquiring a connection after a large
+                                        // database upgrade can take time and cause a timeout.
+                                        if (singleUserScope != null)
+                                        {
+                                            SingleUserModeScope.RestoreMultiUserMode();
+                                        }
+
+                                        ApplyVersionSpecificUpdates(installedAssembly);
+
+                                        // Execute any support scripts
+                                        ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
+                                    }
                                 }
-
-                                ApplyVersionSpecificUpdates(installedAssembly);
-
-                                // Execute any support scripts
-                                ExecuteSupportSql(ExistingConnectionScope.ScopedConnection);
+                            }
+                            catch (Exception ex)
+                            {
+                                log.Error("UpdateDatabase failed", ex);
+                                throw;
+                            }
+                            finally
+                            {
+                                SqlSession.Current.Configuration.ForceWorkstationID = false;
                             }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    log.Error("UpdateDatabase failed", ex);
-                    throw;
-                }
-                finally
-                {
-                    SqlSession.Current.Configuration.ForceWorkstationID = false;
                 }
             }
         }
@@ -278,7 +305,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
+        private static void UpdateSchemaVersionStoredProcedure(DbConnection con, Version version)
         {
             using (DbCommand cmd = DbCommandProvider.Create(con))
             {
@@ -289,7 +316,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
+        private static void UpdateSchemaVersionStoredProcedure(DbCommand cmd, Version version)
         {
             UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion", true);
         }
