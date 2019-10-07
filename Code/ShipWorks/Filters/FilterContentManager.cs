@@ -23,6 +23,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Messaging.Messages.Filters;
 using ShipWorks.SqlServer.General;
+using ConnectionLostException = ShipWorks.Data.Connection.ConnectionLostException;
 
 namespace ShipWorks.Filters
 {
@@ -378,48 +379,62 @@ namespace ShipWorks.Filters
             bool initial = (bool) castedState[0];
             ApplicationBusyToken token = (ApplicationBusyToken) castedState[1];
 
-            using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-6))
+            try
             {
-                // Get a connection that will not timeout
-                using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+                using (SqlDeadlockPriorityScope deadlockPriorityScope = new SqlDeadlockPriorityScope(-6))
                 {
-                    // Create a new connection
-                    using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
+                    // Get a connection that will not timeout
+                    using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
                     {
-                        // adapter.LogInfoMessages = true;
-
-                        // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
-                        // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
-                        // give this plenty of time.
-                        adapter.CommandTimeOut = int.MaxValue;
-
-                        if (adapter.InSystemTransaction)
+                        // Create a new connection
+                        using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                         {
-                            // If there is no way around this, then wrap it in a TransactionScope with Suppress.
-                            throw new InvalidOperationException("This cannot be within a transaction.");
-                        }
+                            // adapter.LogInfoMessages = true;
 
-                        log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
+                            // The calculation procedures bail out as soon as they hit a time threshold - but only at certain checkpoints.  So if
+                            // a single update calculation took 1 minute - then the command would take a full minute.  So we need to make sure and
+                            // give this plenty of time.
+                            adapter.CommandTimeOut = int.MaxValue;
 
-                        SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
-                            new SqlAdapterRetry<SqlException>(5, -6, "FilterContentManager.InitiateCalculationThread");
+                            if (adapter.InSystemTransaction)
+                            {
+                                // If there is no way around this, then wrap it in a TransactionScope with Suppress.
+                                throw new InvalidOperationException("This cannot be within a transaction.");
+                            }
 
-                        if (initial)
-                        {
-                            int nodesUpdated = 1;
-                            sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                                ActionProcedures.CalculateInitialFilterCounts(ref nodesUpdated, adapter)
+                            log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
+
+                            SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                                new SqlAdapterRetry<SqlException>(5, -6, "FilterContentManager.InitiateCalculationThread");
+
+                            if (initial)
+                            {
+                                int nodesUpdated = 1;
+                                sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
+                                    ActionProcedures.CalculateInitialFilterCounts(ref nodesUpdated, adapter)
                                 );
-                        }
-                        else
-                        {
-                            sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
-                                ActionProcedures.CalculateUpdateFilterCounts(adapter)
+                            }
+                            else
+                            {
+                                sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() =>
+                                    ActionProcedures.CalculateUpdateFilterCounts(adapter)
                                 );
-                        }
+                            }
 
-                        log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
+                            log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");
+                        }
                     }
+                }
+            }
+            catch (Exception e)
+            {
+                if (e is ConnectionLostException || !ConnectionMonitor.IsDbConnectionException(e))
+                {
+                    log.Info($"Lost connection to the db, just continuing.", e);
+                }
+                else
+                {
+                    throw;
                 }
             }
 
@@ -461,28 +476,42 @@ namespace ShipWorks.Filters
         /// </summary>
         private static void InitiateQuickFilterCalculationThread(object state)
         {
-            // Get a connection that will not timeout
-            using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
+            try
             {
-                // Create a new connection
-                using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
+                // Get a connection that will not timeout
+                using (DbConnection noTimeoutSqlConnection = SqlSession.Current.OpenConnection(0))
                 {
-                    adapter.CommandTimeOut = int.MaxValue;
-
-                    if (adapter.InSystemTransaction)
+                    // Create a new connection
+                    using (SqlAdapter adapter = new SqlAdapter(noTimeoutSqlConnection))
                     {
-                        // If there is no way around this, then wrap it in a TransactionScope with Suppress.
-                        throw new InvalidOperationException("This cannot be within a transaction.");
+                        adapter.CommandTimeOut = int.MaxValue;
+
+                        if (adapter.InSystemTransaction)
+                        {
+                            // If there is no way around this, then wrap it in a TransactionScope with Suppress.
+                            throw new InvalidOperationException("This cannot be within a transaction.");
+                        }
+
+                        log.DebugFormat("Begin quick filter counts");
+
+                        SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                            new SqlAdapterRetry<SqlException>(5, -5, "FilterContentManager.InitiateQuickFilterCalculationThread");
+
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ActionProcedures.CalculateUpdateQuickFilterCounts(adapter));
+
+                        log.DebugFormat("Complete quick filter counts");
                     }
-
-                    log.DebugFormat("Begin quick filter counts");
-
-                    SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
-                        new SqlAdapterRetry<SqlException>(5, -5, "FilterContentManager.InitiateQuickFilterCalculationThread");
-
-                    sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ActionProcedures.CalculateUpdateQuickFilterCounts(adapter));
-
-                    log.DebugFormat("Complete quick filter counts");
+                }
+            }
+            catch (Exception e) 
+            {
+                if (e is ConnectionLostException || !ConnectionMonitor.IsDbConnectionException(e))
+                {
+                    log.Info($"Lost connection to the db, just continuing.", e);
+                }
+                else
+                {
+                    throw;
                 }
             }
 

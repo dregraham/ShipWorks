@@ -82,15 +82,15 @@ namespace Interapptive.Shared.Data
         /// <summary>
         /// Set the database on the given connection into single-user mode.
         /// </summary>
-        public static void SetSingleUser(DbConnection con)
+        public static void SetSingleUser(DbConnection connection, string dbName)
         {
-            if (con == null)
+            if (connection == null)
             {
-                throw new ArgumentNullException("con");
+                throw new ArgumentNullException("connection");
             }
 
-            log.Info($"Altering database '{con.Database}' to SINGLE_USER");
-            DbCommandProvider.ExecuteNonQuery(con, "ALTER DATABASE [" + con.Database + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE");
+            log.Info($"Altering database '{dbName}' to SINGLE_USER");
+            DbCommandProvider.ExecuteNonQuery(connection, "ALTER DATABASE [" + dbName + "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;");
         }
 
         /// <summary>
@@ -172,6 +172,44 @@ namespace Interapptive.Shared.Data
             }
 
             return Convert.ToInt32(result) == 1;
+        }
+
+        /// <summary>
+        /// Wraps a sql statement in a check for single user mode, set to single user if not in single user,
+        /// executes the given sql, then sets to multi user mode.
+        /// </summary>
+        public static string WrapSqlInSingleUserMode(string sql, string dbName)
+        {
+            return $@"
+                use master;
+
+                DECLARE @dbUserMode bit = 1;
+                SELECT @dbUserMode = user_access FROM sys.databases WHERE name = '{dbName}';
+
+                IF @dbUserMode = 0
+                BEGIN
+	                BEGIN TRY  
+		                ALTER DATABASE [{dbName}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+
+		                {sql}
+		                
+	                END TRY  
+	                BEGIN CATCH  
+		                DECLARE @ErrorMsg nvarchar(max) = ERROR_MESSAGE(); 
+		                
+		                ALTER DATABASE [{dbName}] SET MULTI_USER WITH ROLLBACK IMMEDIATE
+
+		                RAISERROR (N'Error occurred during sql execution.  Database has been put back into multi user mode.', 16, 1)
+		                
+	                END CATCH;  
+	                
+	                ALTER DATABASE [{dbName}] SET MULTI_USER WITH ROLLBACK IMMEDIATE
+                END
+                ELSE
+                BEGIN
+	                RAISERROR (N'Database is already in single user mode.', 16, 1)
+                END	
+            ";
         }
 
         /// <summary>
@@ -356,20 +394,29 @@ namespace Interapptive.Shared.Data
         /// <param name="con">The connection to use</param>
         /// <param name="databaseName">The database to configure</param>
         /// <param name="databaseOwner">The database owner</param>
-        public static void ConfigureSql2017ForClr(DbConnection con, string databaseName, string databaseOwner)
+        public static void ConfigureSqlServerForClr(DbConnection con, string databaseName, string databaseOwner)
         {
-            // Only do this for SQL Server 2017 because it has to be trustworthy to run our CLR
-            string version = DbCommandProvider.ExecuteScalar(con, "SELECT @@VERSION").ToString();
-            if (version.StartsWith("Microsoft SQL Server 2017", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrWhiteSpace(databaseOwner))
-            {
-                string trustworthyStatement = $@"ALTER DATABASE [{databaseName}] SET TRUSTWORTHY ON";
-                log.Info($"Executing: {trustworthyStatement}");
-                DbCommandProvider.ExecuteNonQuery(con, trustworthyStatement);
+            string sql = ConfigureSqlServerForClrSql(databaseName, databaseOwner);
+            DbCommandProvider.ExecuteNonQuery(con, sql);
+        }
 
-                string setDatabaseOwnerStatement = $@"ALTER AUTHORIZATION ON DATABASE::[{databaseName}] TO [{databaseOwner}]";
-                log.Info($"Executing: {setDatabaseOwnerStatement}");
-                DbCommandProvider.ExecuteNonQuery(con, setDatabaseOwnerStatement);
-            }
+        /// <summary>
+        /// Configure SQL Server 2017 to work with our assemblies
+        /// </summary>
+        /// <param name="databaseName">The database to configure</param>
+        /// <param name="databaseOwner">The database owner</param>
+        public static string ConfigureSqlServerForClrSql(string databaseName, string databaseOwner)
+        {
+            return $@"
+                DECLARE @productVersionText nvarchar(100) = CONVERT(NVARCHAR(100), SERVERPROPERTY ('productversion'));
+                DECLARE @productVersion int = CONVERT(INT, LEFT(@productVersionText, CHARINDEX('.', @productVersionText) - 1));
+
+                IF @productVersion >= 14 AND LEN(LTRIM(RTRIM('{databaseOwner}'))) > 0
+                BEGIN
+	                ALTER DATABASE [{databaseName}] SET TRUSTWORTHY ON;
+	                ALTER AUTHORIZATION ON DATABASE::[{databaseName}] TO [{databaseOwner}];
+                END;
+                ";
         }
 
         /// <summary>

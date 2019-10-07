@@ -213,8 +213,10 @@
     <Compile Include="Data\IConnectionSensitiveScope.cs" />
     <Compile Include="Data\ISqlAppLock.cs" />
     <Compile Include="Data\ISqlScript.cs" />
+    <Compile Include="Data\ISqlUtility.cs" />
     <Compile Include="Data\SqlAppLock.cs" />
     <Compile Include="Data\SqlScriptWithMetadata.cs" />
+    <Compile Include="Data\SqlUtilityWrapper.cs" />
     <Compile Include="Enums\AddressValidationStoreSettingType.cs" />
     <Compile Include="Enums\AmazonIsPrime.cs" />
     <Compile Include="Enums\AsendiaServiceType.cs" />

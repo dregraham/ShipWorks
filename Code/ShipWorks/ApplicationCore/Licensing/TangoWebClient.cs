@@ -13,6 +13,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.Activation.WebServices;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
@@ -20,7 +21,10 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.FactoryClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -171,7 +175,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 return store != null ? GetLicenseStatus(store.License, store, false).TangoCustomerID : string.Empty;
             }
-            catch (TangoException ex)
+            catch (Exception ex)
             {
                 log.Error(ex);
                 return string.Empty;
