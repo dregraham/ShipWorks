@@ -438,7 +438,6 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
             ribbonSecurityProvider.AddAdditionalCondition(buttonChangeConnection, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
-            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFields, () => UIMode == UIMode.OrderLookup);
 
             // Prepare stuff that needs prepare for dealing with UI changes for Editions
             PrepareEditionManagedUI();
