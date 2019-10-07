@@ -221,11 +221,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static Dictionary<RateResult, TAccount> CreateRateAccountDictionary(IDictionary<TAccount, RateGroup> accountRateGroups)
         {
-            return accountRateGroups
+            var preDictionary = accountRateGroups
                 .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
                 .SelectMany(x => x)
                 .Where(x => x.Key != null)
-                .ToDictionary(x => x.Key, x => x.Value);
+                .ToList();
+            
+            return preDictionary.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>

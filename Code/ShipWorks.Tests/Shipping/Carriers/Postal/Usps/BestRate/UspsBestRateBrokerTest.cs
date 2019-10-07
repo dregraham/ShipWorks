@@ -47,9 +47,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             account = new UspsAccountEntity { UspsAccountID = 1, CountryCode = "US" };
 
-            account1 = new UspsAccountEntity { UspsAccountID = 1, CountryCode = "US" };
-            account2 = new UspsAccountEntity { UspsAccountID = 2, CountryCode = "US" };
-            account3 = new UspsAccountEntity { UspsAccountID = 3, CountryCode = "US" };
+            account1 = new UspsAccountEntity { UspsAccountID = 2, CountryCode = "US" };
+            account2 = new UspsAccountEntity { UspsAccountID = 3, CountryCode = "US" };
+            account3 = new UspsAccountEntity { UspsAccountID = 4, CountryCode = "US" };
 
             rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail)) { ServiceLevel = ServiceLevelType.TwoDays };
             rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             genericRepositoryMock = new Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
             genericRepositoryMock.Setup(r => r.Accounts).Returns(() =>
             {
-                return new List<UspsAccountEntity> { account1, account2, account3 };
+                return new List<UspsAccountEntity> { account1 };
             });
 
             genericRepositoryMock.Setup(x => x.DefaultProfileAccount)
@@ -356,21 +356,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
                 Assert.Equal(PostalServiceType.PriorityMail, (PostalServiceType) shipment.Postal.Service);
                 Assert.Equal(PostalPackagingType.Package, (PostalPackagingType) shipment.Postal.PackagingType);
             }
-        }
-
-        [Fact]
-        public void GetBestRates_OverridesProfileAccount()
-        {
-            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
-                                   .Callback<ShipmentEntity>(x =>
-                                   {
-                                       x.Postal.Usps.UspsAccountID = 999;
-                                   });
-
-            testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            Assert.True(getRatesShipments.Any(x => x.Postal.Usps.UspsAccountID == 1));
-            Assert.False(getRatesShipments.Any(x => x.Postal.Usps.UspsAccountID == 999));
         }
 
         [Fact]

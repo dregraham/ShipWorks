@@ -515,7 +515,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         {
             if (AccountRepository.Accounts.Any())
             {
-                return new EndiciaBestRateBroker(this, AccountRepository);
+                return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);
             }
 
             // We want to be able to show counter rates to users that don't have

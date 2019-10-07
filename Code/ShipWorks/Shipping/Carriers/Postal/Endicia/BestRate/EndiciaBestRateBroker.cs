@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, 
+        public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, 
             ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository, 
             string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
             base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
