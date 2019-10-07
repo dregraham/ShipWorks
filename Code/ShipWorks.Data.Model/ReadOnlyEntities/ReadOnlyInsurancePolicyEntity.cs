@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EmailAddress = source.EmailAddress;
             InsureShipPolicyID = source.InsureShipPolicyID;
             DateOfIssue = source.DateOfIssue;
+            InsureShipStatus = source.InsureShipStatus;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -129,6 +130,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.DateTime> DateOfIssue { get; }
+        /// <summary> The InsureShipStatus property of the Entity InsurancePolicy<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "InsurancePolicy"."InsureShipStatus"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String InsureShipStatus { get; }
         
         public IShipmentEntity Shipment { get; }
         

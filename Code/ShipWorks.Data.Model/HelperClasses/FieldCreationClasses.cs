@@ -12747,6 +12747,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.DateOfIssue);}
 		}
+		/// <summary>Creates a new InsurancePolicyEntity.InsureShipStatus field instance</summary>
+		public static EntityField2 InsureShipStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(InsurancePolicyFieldIndex.InsureShipStatus);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity IParcelAccountEntity</summary>
@@ -29546,6 +29551,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AutoPrintRequireValidation
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.MinimizeRibbon field instance</summary>
+		public static EntityField2 MinimizeRibbon
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.MinimizeRibbon);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.ShowQAToolbarBelowRibbon field instance</summary>
+		public static EntityField2 ShowQAToolbarBelowRibbon
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
 		}
 	}
 

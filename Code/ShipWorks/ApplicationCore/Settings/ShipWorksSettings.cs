@@ -43,7 +43,7 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipWorksSettings(ShipWorksSettingsData data, ILifetimeScope scope)
+        public ShipWorksSettings(ILifetimeScope scope)
         {
             InitializeComponent();
 
@@ -52,7 +52,7 @@ namespace ShipWorks.ApplicationCore.Settings
             messenger = scope.Resolve<IMessenger>();
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
 
-            settingsPages["My Settings"] = InitializeSettingsPage(new SettingsPagePersonal(data));
+            settingsPages["My Settings"] = InitializeSettingsPage(new SettingsPagePersonal());
 
             settingsPages["Logging"] = InitializeSettingsPage(new SettingsPageLogging());
             settingsPages["Keyboard && Barcode Shortcuts"] = InitializeSettingsPage(new SettingsPageShortcuts(this, scope));

@@ -862,7 +862,7 @@ namespace ShipWorks
             this.buttonArchive.Guid = new System.Guid("457547e9-dc3a-4cd9-a196-864c43cd1249");
             this.buttonArchive.Image = global::ShipWorks.Properties.Resources.data_time;
             this.ribbonSecurityProvider.SetPermission(this.buttonArchive, ShipWorks.Users.Security.PermissionType.DatabaseArchive);
-            this.buttonArchive.QuickAccessKey = "A";
+            this.buttonArchive.QuickAccessKey = "K";
             this.buttonArchive.Text = "Archive";
             this.buttonArchive.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonArchive.Activate += new System.EventHandler(this.OnArchive);

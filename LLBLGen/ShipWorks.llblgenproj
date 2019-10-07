@@ -1607,6 +1607,7 @@
           <Field Name="Description" Type="string" IsOptional="true" MaxLength="255" FieldIndex="4" />
           <Field Name="EmailAddress" Type="string" IsOptional="true" MaxLength="100" FieldIndex="9" />
           <Field Name="InsureShipPolicyID" Type="long" IsOptional="true" Precision="19" FieldIndex="10" />
+          <Field Name="InsureShipStatus" Type="string" IsOptional="true" MaxLength="50" FieldIndex="12" />
           <Field Name="InsureShipStoreName" Type="string" MaxLength="75" FieldIndex="1" />
           <Field Name="ItemName" Type="string" IsOptional="true" MaxLength="255" FieldIndex="3" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" IsAutoCreated="true" FieldIndex="0" />
@@ -1979,7 +1980,7 @@
           <Field Name="BillMiddleName" Type="string" MaxLength="30" FieldIndex="16" />
           <Field Name="BillMilitaryAddress" Type="int" FieldIndex="36" />
           <Field Name="BillNameParseStatus" Type="int" FieldIndex="67" />
-          <Field Name="BillPhone" Type="string" MaxLength="25" FieldIndex="26" />
+          <Field Name="BillPhone" Type="string" MaxLength="35" FieldIndex="26" />
           <Field Name="BillPOBox" Type="int" FieldIndex="34" />
           <Field Name="BillPostalCode" Type="string" MaxLength="20" FieldIndex="24" />
           <Field Name="BillResidentialStatus" Type="int" FieldIndex="33" />
@@ -2631,7 +2632,7 @@
           <Field Name="ShipMiddleName" Type="string" MaxLength="30" FieldIndex="22" />
           <Field Name="ShipMilitaryAddress" Type="int" FieldIndex="40" />
           <Field Name="ShipNameParseStatus" Type="int" FieldIndex="62" />
-          <Field Name="ShipPhone" Type="string" MaxLength="25" FieldIndex="32" />
+          <Field Name="ShipPhone" Type="string" MaxLength="35" FieldIndex="32" />
           <Field Name="ShipPOBox" Type="int" FieldIndex="38" />
           <Field Name="ShipPostalCode" Type="string" MaxLength="20" FieldIndex="30" />
           <Field Name="ShipResidentialStatus" Type="int" FieldIndex="37" />
@@ -3312,10 +3313,12 @@
           <Field Name="FilterInitialUseLastActive" Type="bool" FieldIndex="5" />
           <Field Name="GridMenuLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="4" />
           <Field Name="LastReleaseNotesSeen" Type="string" MaxLength="25" FieldIndex="20" />
+          <Field Name="MinimizeRibbon" Type="bool" FieldIndex="22" />
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
+          <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
@@ -4573,7 +4576,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-08-21T15:39:11.0799313Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-01T15:27:58.2818405Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -6959,6 +6962,7 @@
                     <Field Name="EmailAddress" Ordinal="10" IsOptional="true" DbType="12" Length="100" />
                     <Field Name="InsureShipPolicyID" Ordinal="11" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="DateOfIssue" Ordinal="12" IsOptional="true" DbType="4" />
+                    <Field Name="InsureShipStatus" Ordinal="13" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="iParcelAccount">
@@ -7462,7 +7466,7 @@
                         <CustomProperty Name="AuditName" Value="BillCountry" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="BillPhone" Ordinal="27" DbType="12" Length="25" />
+                    <Field Name="BillPhone" Ordinal="27" DbType="12" Length="35" />
                     <Field Name="BillFax" Ordinal="28" DbType="12" Length="35" />
                     <Field Name="BillEmail" Ordinal="29" DbType="12" Length="100" />
                     <Field Name="BillWebsite" Ordinal="30" DbType="12" Length="50" />
@@ -8330,7 +8334,7 @@
                         <CustomProperty Name="AuditName" Value="ShipCountry" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="ShipPhone" Ordinal="33" DbType="12" Length="25" />
+                    <Field Name="ShipPhone" Ordinal="33" DbType="12" Length="35" />
                     <Field Name="ShipEmail" Ordinal="34" DbType="12" Length="100" />
                     <Field Name="ShipAddressValidationSuggestionCount" Ordinal="35" DbType="8" Precision="10" />
                     <Field Name="ShipAddressValidationStatus" Ordinal="36" DbType="8" Precision="10" />
@@ -9282,6 +9286,8 @@
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
                     <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
+                    <Field Name="MinimizeRibbon" Ordinal="23" DbType="2" />
+                    <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -9733,9 +9739,6 @@
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
                 <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
-                <StoredProcedure Name="GetAssemblySchemaVersion" />
-                <StoredProcedure Name="GetDatabaseGuid" />
-                <StoredProcedure Name="GetSchemaVersion" />
                 <StoredProcedure Name="PurgeAbandonedResources">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
@@ -9781,6 +9784,20 @@
                 <StoredProcedure Name="ValidateFilterLayouts" />
                 <StoredProcedure Name="ValidateGridLayouts" />
               </StoredProcedures>
+              <TableValuedFunctions>
+                <TableValuedFunction Name="GetTemplateDescendantsOfFolder" NumberOfResultsets="1">
+                  <Parameters>
+                    <Parameter Name="@templateFolderID" Direction="1" Ordinal="1" DbType="0" Precision="19" />
+                  </Parameters>
+                  <Resultsets>
+                    <Resultset Name="Resultset1">
+                      <Fields>
+                        <Field Name="TemplateID" Ordinal="1" IsOptional="true" DbType="0" Precision="19" />
+                      </Fields>
+                    </Resultset>
+                  </Resultsets>
+                </TableValuedFunction>
+              </TableValuedFunctions>
             </Schema>
           </Schemas>
           <ForeignKeyConstraints>
@@ -12371,6 +12388,7 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="EmailAddress" TargetFieldName="EmailAddress" />
             <FieldMapping FieldName="InsureShipPolicyID" TargetFieldName="InsureShipPolicyID" />
+            <FieldMapping FieldName="InsureShipStatus" TargetFieldName="InsureShipStatus" />
             <FieldMapping FieldName="InsureShipStoreName" TargetFieldName="InsureShipStoreName" />
             <FieldMapping FieldName="ItemName" TargetFieldName="ItemName" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
@@ -14109,10 +14127,12 @@
             <FieldMapping FieldName="FilterInitialUseLastActive" TargetFieldName="FilterInitialUseLastActive" />
             <FieldMapping FieldName="GridMenuLayout" TargetFieldName="GridMenuLayout" />
             <FieldMapping FieldName="LastReleaseNotesSeen" TargetFieldName="LastReleaseNotesSeen" />
+            <FieldMapping FieldName="MinimizeRibbon" TargetFieldName="MinimizeRibbon" />
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
+            <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />

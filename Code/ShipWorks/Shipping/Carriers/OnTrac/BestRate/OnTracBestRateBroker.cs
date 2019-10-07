@@ -54,7 +54,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
             // Update total weight
             ShipmentType.UpdateTotalWeight(currentShipment);
 
-            currentShipment.OnTrac.Service = (int) OnTracServiceType.Ground;
             currentShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
         }
 
