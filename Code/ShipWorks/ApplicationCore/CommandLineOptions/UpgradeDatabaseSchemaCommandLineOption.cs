@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Metrics;
@@ -24,6 +25,11 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
         private IAutoUpdateStatusProvider autoUpdateStatusProvider = new AutoUpdateStatusProvider();
+        private string tangoCustomerId = string.Empty;
+        private Version versionRequired = new Version();
+        private TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
+        private TelemetricResult<Result> backupResult = null;
+        private AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter = new AutoUpgradeFailureSubmitter();
 
         /// <summary>
         /// The CommandName that can be sent to the ShipWorks.exe
@@ -37,11 +43,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             log.Info("Execute starting.");
 
-            Version versionRequired = new Version();
-            TelemetricResult<Unit> databaseUpdateResult = new TelemetricResult<Unit>("Database.Update");
-            TelemetricResult<Result> backupResult = null;
-            AutoUpgradeFailureSubmitter autoUpgradeFailureSubmitter = new AutoUpgradeFailureSubmitter();
-
             try
             {
                 // before doing anything make sure we can connect to the database and an upgrade is required
@@ -54,7 +55,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
                 // is lost, we can still track the customer id.
-                string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    ITangoWebClient tangoWebClient = scope.Resolve<ITangoWebClient>();
+                    tangoCustomerId = tangoWebClient.GetTangoCustomerId();
+                }
+
                 Telemetry.GetCustomerID = () => tangoCustomerId;
                 log.Info($"TangoCustomerId: {tangoCustomerId}.");
 
