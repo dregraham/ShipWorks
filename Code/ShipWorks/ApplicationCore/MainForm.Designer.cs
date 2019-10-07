@@ -605,7 +605,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewFields.Guid = new System.Guid("A9CE2A60-E87B-4D22-B5E6-A3D02BF5ECCB");
             this.buttonOrderLookupViewFields.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFields, ShipWorks.Users.Security.PermissionType.ManageFields);
-            this.buttonOrderLookupViewFields.QuickAccessKey = "F";
+            this.buttonOrderLookupViewFields.QuickAccessKey = "I";
             this.buttonOrderLookupViewFields.Text = "Fields";
             this.buttonOrderLookupViewFields.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewFields.Activate += new System.EventHandler(this.OnManageOrderLookupFields);
@@ -623,7 +623,7 @@ namespace ShipWorks
             this.buttonManageStores.Guid = new System.Guid("c76be2e7-9f6d-41dc-9fd3-7027357cd54d");
             this.buttonManageStores.Image = global::ShipWorks.Properties.Resources.school32;
             this.ribbonSecurityProvider.SetPermission(this.buttonManageStores, ShipWorks.Users.Security.PermissionType.ManageStores);
-            this.buttonManageStores.QuickAccessKey = "S";
+            this.buttonManageStores.QuickAccessKey = "ST";
             this.buttonManageStores.Text = "Stores";
             this.buttonManageStores.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonManageStores.Activate += new System.EventHandler(this.OnManageStores);
@@ -2650,7 +2650,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipmentHistory.Name = "ribbonTabOrderLookupViewShipmentHistory";
             this.ribbonTabOrderLookupViewShipmentHistory.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabOrderLookupViewShipmentHistory.TabIndex = 0;
-            this.ribbonTabOrderLookupViewShipmentHistory.Text = "&History";
+            this.ribbonTabOrderLookupViewShipmentHistory.Text = "H&istory";
             //
             // ribbonChunkOrderLookupViewActions
             //
@@ -3020,7 +3020,7 @@ namespace ShipWorks
             this.ribbonTabHelp.Name = "ribbonTabHelp";
             this.ribbonTabHelp.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabHelp.TabIndex = 6;
-            this.ribbonTabHelp.Text = "Help";
+            this.ribbonTabHelp.Text = "He&lp";
             //
             // ribbonChunkSupport
             //
@@ -3040,6 +3040,7 @@ namespace ShipWorks
             this.buttonHelpView.Guid = new System.Guid("191a7d17-9f82-48e0-8ce6-7d81843a04b9");
             this.buttonHelpView.Image = global::ShipWorks.Properties.Resources.help2;
             this.buttonHelpView.Text = "View Help";
+            this.buttonHelpView.QuickAccessKey = "L";
             this.buttonHelpView.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpView.Activate += new System.EventHandler(this.OnViewHelp);
             //
@@ -3047,6 +3048,7 @@ namespace ShipWorks
             //
             this.buttonHelpForum.Guid = new System.Guid("cf72da78-5b7c-463f-85e6-cbf919891936");
             this.buttonHelpForum.Image = global::ShipWorks.Properties.Resources.help_earth;
+            this.buttonHelpForum.QuickAccessKey = "F";
             this.buttonHelpForum.Text = "Visit Forum";
             this.buttonHelpForum.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpForum.Activate += new System.EventHandler(this.OnSupportForum);
@@ -3055,6 +3057,7 @@ namespace ShipWorks
             //
             this.buttonRequestHelp.Guid = new System.Guid("774ff044-900b-4b99-93bb-a52469b4bebe");
             this.buttonRequestHelp.Image = global::ShipWorks.Properties.Resources.user_headset;
+            this.buttonRequestHelp.QuickAccessKey = "S";
             this.buttonRequestHelp.Text = "Submit Support \r\nRequest";
             this.buttonRequestHelp.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonRequestHelp.Activate += new System.EventHandler(this.OnRequestHelp);
@@ -3068,6 +3071,7 @@ namespace ShipWorks
             //
             this.buttonHelpRemote.Guid = new System.Guid("6cf9bab1-98a8-42ca-b15f-0bf198f5f6ff");
             this.buttonHelpRemote.Image = global::ShipWorks.Properties.Resources.remote_assist32;
+            this.buttonHelpRemote.QuickAccessKey = "P";
             this.buttonHelpRemote.Text = "Generate PIN";
             this.buttonHelpRemote.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpRemote.Activate += new System.EventHandler(this.OnRemoteAssistance);
@@ -3084,6 +3088,7 @@ namespace ShipWorks
             //
             this.buttonUship.Guid = new System.Guid("d81ade92-db8c-4f88-9f00-ea3bd217f280");
             this.buttonUship.Image = ((System.Drawing.Image) (resources.GetObject("buttonUship.Image")));
+            this.buttonUship.QuickAccessKey = "I";
             this.buttonUship.Text = "uShip LTL Rates";
             this.buttonUship.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonUship.Activate += new System.EventHandler(this.OnUShip);
@@ -3092,6 +3097,7 @@ namespace ShipWorks
             //
             this.buttonBuySupplies.Guid = new System.Guid("b40dbc3d-62af-45f4-88a8-38dc1e2f6c0d");
             this.buttonBuySupplies.Image = global::ShipWorks.Properties.Resources.shoppingcart_full;
+            this.buttonBuySupplies.QuickAccessKey = "U";
             this.buttonBuySupplies.Text = "Buy Supplies";
             this.buttonBuySupplies.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonBuySupplies.Activate += new System.EventHandler(this.OnBuySupplies);
@@ -3107,6 +3113,7 @@ namespace ShipWorks
             //
             this.buttonHelpAbout.Guid = new System.Guid("f09c2eca-c334-4d7c-bc16-9e34d6452ce4");
             this.buttonHelpAbout.Image = global::ShipWorks.Properties.Resources.about;
+            this.buttonHelpAbout.QuickAccessKey = "A";
             this.buttonHelpAbout.Text = "About ShipWorks";
             this.buttonHelpAbout.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpAbout.Activate += new System.EventHandler(this.OnAboutShipWorks);
