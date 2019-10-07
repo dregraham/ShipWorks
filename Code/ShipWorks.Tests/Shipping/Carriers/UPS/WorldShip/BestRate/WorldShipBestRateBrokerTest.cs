@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         private Mock<WorldShipShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
 
-        private int expectedNumberOfAccountsReturned = 1;
+        private int expectedNumberOfAccountsReturned = 3;
         private int numberOfTimesGetRatesCalled = 0;
         private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
@@ -137,7 +137,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            genericRepositoryMock.Verify(x => x.DefaultProfileAccount);
+            bestRateExludedAccountRepositoryMock.Verify(x => x.GetAll());
+            genericRepositoryMock.VerifyGet(x => x.Accounts);
+
+            IEnumerable<long> accountIDs = getRatesShipments.Select(x => x.Ups.UpsAccountID).Distinct();
+
+            Assert.Equal(expectedNumberOfAccountsReturned, accountIDs.Count());
         }
 
         [Fact]
@@ -176,7 +181,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.True(rates.Rates.Contains(result1));
-            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -193,7 +197,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.True(rates.Rates.Contains(result2));
-            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -211,7 +214,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             Assert.True(rates.Rates.Contains(result1));
             Assert.True(rates.Rates.Contains(result2));
-            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -229,7 +231,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             Assert.True(rates.Rates.Contains(result1));
             Assert.True(rates.Rates.Contains(result2));
-            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -319,9 +320,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
 
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 1));
+            Assert.True(getRatesShipments.Any(x => x.Ups.UpsAccountID == 1));
             Assert.True(getRatesShipments.Any(x => x.Ups.UpsAccountID == 2));
-            Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
+            Assert.True(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
             Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 999));
         }
 
@@ -405,8 +406,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip.BestRate
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
             Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
-            Assert.Equal(1, rates.Rates.Count);
         }
-
     }
 }

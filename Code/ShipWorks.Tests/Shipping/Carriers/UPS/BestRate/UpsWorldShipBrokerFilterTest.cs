@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                var bestRateBroker = new UpsBestRateBroker(mock.Create<UpsOltShipmentType>());
+                var bestRateBroker = mock.Create<UpsBestRateBroker>();
 
                 List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
                 {
