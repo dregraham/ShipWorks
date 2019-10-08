@@ -181,6 +181,11 @@ namespace ShipWorks.Data
                 bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
             }
 
+            if (ConnectionSensitiveScope.IsActive)
+            {
+                return;
+            }
+
             using (SqlAdapter adapter = SqlAdapter.Create(false))
             {
                 using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))

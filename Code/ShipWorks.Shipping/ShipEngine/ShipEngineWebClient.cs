@@ -1,20 +1,20 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System;
-using System.Net;
-using Interapptive.Shared.Extensions;
-using Newtonsoft.Json.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -116,15 +116,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // first we have to get the account id
-                HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
-                whoAmIRequest.Headers.Add($"Content-Type: application/json");
-                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
-                whoAmIRequest.Verb = HttpVerb.Get;
-                whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
-
-                EnumResult<HttpStatusCode> result =
-                    whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
-                string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
+                string accountId = await GetAccountID();
 
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
@@ -156,15 +148,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // first we have to get the account id
-                HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
-                whoAmIRequest.Headers.Add($"Content-Type: application/json");
-                whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
-                whoAmIRequest.Verb = HttpVerb.Get;
-                whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
-
-                EnumResult<HttpStatusCode> result =
-                    whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
-                string accountId = JObject.Parse(result.Message)["data"]["username"].ToString();
+                string accountId = await GetAccountID();
 
                 AmazonStoreEntity store = storeManager.GetEnabledStores()
                     .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
@@ -180,12 +164,19 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
-                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Asendia, "ConnectAmazonShippingAccount",
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
                 apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, apiKey.GetPartnerApiKey(), $"se-{accountId}"));
             }
             catch (ApiException ex)
             {
                 string error = GetErrorMessage(ex);
+
+                // If the account has already been connected, get the carrier ID and return it
+                if (error.Contains("already been connected", StringComparison.OrdinalIgnoreCase))
+                {
+                    return await GetAmazonShippingCarrierID();
+                }
+
                 return GenericResult.FromError<string>(error);
             }
         }
@@ -436,6 +427,44 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (Exception ex)
             {
                 throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Get an account ID from a WhoAmI request
+        /// </summary>
+        private async Task<string> GetAccountID()
+        {
+            HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
+            whoAmIRequest.Headers.Add($"Content-Type: application/json");
+            whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
+            whoAmIRequest.Verb = HttpVerb.Get;
+            whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
+
+            EnumResult<HttpStatusCode> result =
+                whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
+            return JObject.Parse(result.Message)["data"]["username"].ToString();
+        }
+
+        /// <summary>
+        /// Get the Amazon Shipping carrier ID. There can only ever be one connected per api key.
+        /// </summary>
+        private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
+        {
+            string key = await GetApiKey();
+            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
+            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"ListCarriers", LogActionType.Other);
+
+            try
+            {
+                CarrierListResponse result = await carrierApi.CarriersListAsync(key);
+                return result?.Carriers?.FirstOrDefault(c => c.CarrierCode.Equals("amazon_shipping_us", StringComparison.OrdinalIgnoreCase))?.CarrierId ?? string.Empty;
+            }
+            catch (ApiException ex)
+            {
+                string error = GetErrorMessage(ex);
+
+                return GenericResult.FromError<string>(error);
             }
         }
     }

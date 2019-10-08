@@ -147,8 +147,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             mock.Mock<IShipEngineRateGroupFactory>().Verify(r => r.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress,
                 It.Is<IEnumerable<string>>(apiValues =>
-                    apiValues.Contains("express_envelope") &&
-                    apiValues.Contains("express_worldwide"))));
+                    apiValues.Contains("express_envelope"))));
         }
 
         [Fact]
