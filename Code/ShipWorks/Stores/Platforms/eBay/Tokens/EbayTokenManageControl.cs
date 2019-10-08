@@ -1,18 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.UI;
 using System.IO;
-using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Platforms.Ebay.Requests;
-using ShipWorks.Stores.Platforms.Ebay.WebServices;
-using ShipWorks.ApplicationCore;
+using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Tokens
 {
