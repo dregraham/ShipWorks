@@ -123,6 +123,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Verified = source.Verified;
             VerifiedBy = source.VerifiedBy;
             VerifiedDate = source.VerifiedDate;
+            Custom6 = source.Custom6;
+            Custom7 = source.Custom7;
+            Custom8 = source.Custom8;
+            Custom9 = source.Custom9;
+            Custom10 = source.Custom10;
             
             
             Customer = (ICustomerEntity) source.Customer?.AsReadOnly(objectMap);
@@ -669,6 +674,36 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.DateTime> VerifiedDate { get; }
+        /// <summary> The Custom6 property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."Custom6"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom6 { get; }
+        /// <summary> The Custom7 property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."Custom7"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom7 { get; }
+        /// <summary> The Custom8 property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."Custom8"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom8 { get; }
+        /// <summary> The Custom9 property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."Custom9"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom9 { get; }
+        /// <summary> The Custom10 property of the Entity Order<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Order"."Custom10"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom10 { get; }
         
         
         public ICustomerEntity Customer { get; }

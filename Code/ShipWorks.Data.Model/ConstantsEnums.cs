@@ -366,6 +366,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -432,14 +442,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -448,8 +458,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -1066,14 +1086,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -1082,8 +1102,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>OrderAddressID. </summary>
@@ -1248,10 +1278,12 @@ namespace ShipWorks.Data.Model
 		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -1260,8 +1292,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ReceiptItemID. </summary>
@@ -1536,6 +1578,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CustomOrderIdentifier. </summary>
@@ -1612,10 +1664,12 @@ namespace ShipWorks.Data.Model
 		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -1624,8 +1678,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MarketplaceName. </summary>
@@ -1932,6 +1996,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ClickCartProOrderID. </summary>
@@ -2130,6 +2204,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>CommerceInterfaceOrderNumber. </summary>
@@ -2676,6 +2760,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>EbayOrderID. </summary>
@@ -2780,10 +2874,12 @@ namespace ShipWorks.Data.Model
 		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -2792,8 +2888,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LocalEbayOrderID. </summary>
@@ -3396,6 +3502,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WasPaid. </summary>
@@ -3452,14 +3568,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -3468,8 +3584,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ListingID. </summary>
@@ -4688,6 +4814,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>AmazonOrderID. </summary>
@@ -4748,14 +4884,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -4764,8 +4900,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>AmazonOrderItemCode. </summary>
@@ -5124,6 +5270,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>GrouponOrderID. </summary>
@@ -5180,14 +5336,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -5196,8 +5352,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Permalink. </summary>
@@ -5358,14 +5524,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -5374,8 +5540,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>Marketplace. </summary>
@@ -5798,6 +5974,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MerchantOrderId. </summary>
@@ -5852,14 +6038,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -5868,8 +6054,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>MerchantSku. </summary>
@@ -6182,6 +6378,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>LemonStandOrderID. </summary>
@@ -6236,14 +6442,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -6252,8 +6458,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>UrlName. </summary>
@@ -6538,6 +6754,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. Inherited from GenericModuleOrder</summary>
 		OrderID_GenericModuleOrder,
 		///<summary>AmazonOrderID. Inherited from GenericModuleOrder</summary>
@@ -6876,6 +7102,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>BuyerNumber. </summary>
@@ -7330,6 +7566,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>NetworkSolutionsOrderID. </summary>
@@ -7612,6 +7858,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>InvoiceNumber. </summary>
@@ -7670,14 +7926,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -7686,8 +7942,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SellerPartNumber. </summary>
@@ -8248,6 +8514,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. </summary>
 		VerifiedDate,
+		///<summary>Custom6. </summary>
+		Custom6,
+		///<summary>Custom7. </summary>
+		Custom7,
+		///<summary>Custom8. </summary>
+		Custom8,
+		///<summary>Custom9. </summary>
+		Custom9,
+		///<summary>Custom10. </summary>
+		Custom10,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8318,14 +8594,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. </summary>
 		Width,
-		///<summary>Height. </summary>
-		Height,
 		///<summary>Brand. </summary>
 		Brand,
-		///<summary>MPN. </summary>
-		MPN,
+		///<summary>Height. </summary>
+		Height,
 		///<summary>Custom1. </summary>
 		Custom1,
+		///<summary>MPN. </summary>
+		MPN,
 		///<summary>Custom2. </summary>
 		Custom2,
 		///<summary>Custom3. </summary>
@@ -8546,6 +8822,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>OrderMotionShipmentID. </summary>
@@ -8892,6 +9178,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>WarehouseCode. </summary>
@@ -8950,14 +9246,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -8966,8 +9262,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>SalesChannelLineNumber. </summary>
@@ -9272,6 +9578,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>TransactionID. </summary>
@@ -9922,6 +10238,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ConfirmationNumber. </summary>
@@ -10280,6 +10606,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PoNumber. </summary>
@@ -10342,14 +10678,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -10358,8 +10694,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -11210,6 +11556,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ShopifyOrderID. </summary>
@@ -11268,14 +11624,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -11284,8 +11640,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ShopifyOrderItemID. </summary>
@@ -12014,6 +12380,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>ThreeDCartOrderID. </summary>
@@ -12068,14 +12444,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -12084,8 +12460,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>ThreeDCartShipmentID. </summary>
@@ -13198,6 +13584,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>PurchaseOrderID. </summary>
@@ -13260,14 +13656,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -13276,8 +13672,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>LineNumber. </summary>
@@ -13868,6 +14274,16 @@ namespace ShipWorks.Data.Model
 		VerifiedBy,
 		///<summary>VerifiedDate. Inherited from Order</summary>
 		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>YahooOrderID. </summary>
@@ -13922,14 +14338,14 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
+		///<summary>Height. Inherited from OrderItem</summary>
+		Height,
 		///<summary>Custom1. Inherited from OrderItem</summary>
 		Custom1,
+		///<summary>MPN. Inherited from OrderItem</summary>
+		MPN,
 		///<summary>Custom2. Inherited from OrderItem</summary>
 		Custom2,
 		///<summary>Custom3. Inherited from OrderItem</summary>
@@ -13938,8 +14354,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. Inherited from OrderItem</summary>
 		Custom5,
+		///<summary>Custom6. Inherited from OrderItem</summary>
+		Custom6,
 		///<summary>HubItemID. Inherited from OrderItem</summary>
 		HubItemID,
+		///<summary>Custom7. Inherited from OrderItem</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from OrderItem</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from OrderItem</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from OrderItem</summary>
+		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
 		///<summary>YahooProductID. </summary>

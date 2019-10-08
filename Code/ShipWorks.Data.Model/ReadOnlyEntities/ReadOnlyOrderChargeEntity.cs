@@ -43,6 +43,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Description = source.Description;
             Amount = source.Amount;
             HubChargeID = source.HubChargeID;
+            HubChargeID_ = source.HubChargeID_;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -94,6 +95,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String HubChargeID { get; }
+        /// <summary> The HubChargeID_ property of the Entity OrderCharge<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderCharge"."HubChargeID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String HubChargeID_ { get; }
         
         
         public IOrderEntity Order { get; }

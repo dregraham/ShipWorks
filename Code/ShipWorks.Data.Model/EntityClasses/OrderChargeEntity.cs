@@ -360,6 +360,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Amount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubChargeID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubChargeID_", fieldHashtable);
 		}
 		#endregion
 
@@ -526,6 +528,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderChargeFieldIndex.HubChargeID, true); }
 			set	{ SetValue((int)OrderChargeFieldIndex.HubChargeID, value); }
+		}
+
+		/// <summary> The HubChargeID_ property of the Entity OrderCharge<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderCharge"."HubChargeID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String HubChargeID_
+		{
+			get { return (System.String)GetValue((int)OrderChargeFieldIndex.HubChargeID_, true); }
+			set	{ SetValue((int)OrderChargeFieldIndex.HubChargeID_, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'OrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

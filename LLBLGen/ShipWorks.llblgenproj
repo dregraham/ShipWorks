@@ -1994,10 +1994,15 @@
           <Field Name="ChannelOrderID" Type="string" MaxLength="50" FieldIndex="75" />
           <Field Name="CombineSplitStatus" Type="CombineSplitStatusType" FieldIndex="74" />
           <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="77" />
+          <Field Name="Custom10" Type="string" MaxLength="50" FieldIndex="91" />
           <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="78" />
           <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="79" />
           <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="80" />
           <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="81" />
+          <Field Name="Custom6" Type="string" MaxLength="50" FieldIndex="87" />
+          <Field Name="Custom7" Type="string" MaxLength="50" FieldIndex="88" />
+          <Field Name="Custom8" Type="string" MaxLength="50" FieldIndex="89" />
+          <Field Name="Custom9" Type="string" MaxLength="50" FieldIndex="90" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
           <Field Name="HubOrderID" Type="guid" IsOptional="true" FieldIndex="82" />
           <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="83" />
@@ -2061,6 +2066,7 @@
           <Field Name="Amount" Type="decimal" Precision="19" Scale="4" FieldIndex="5" />
           <Field Name="Description" Type="string" MaxLength="255" FieldIndex="4" />
           <Field Name="HubChargeID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="6" />
+          <Field Name="HubChargeID_" Type="string" IsOptional="true" MaxLength="50" FieldIndex="7" />
           <Field Name="OrderChargeID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
@@ -2072,25 +2078,30 @@
           <Field Name="Brand" Type="string" MaxLength="50" FieldIndex="22" />
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
           <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="24" />
+          <Field Name="Custom10" Type="string" MaxLength="50" FieldIndex="34" />
           <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="25" />
           <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="26" />
           <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="27" />
           <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="28" />
+          <Field Name="Custom6" Type="string" MaxLength="50" FieldIndex="30" />
+          <Field Name="Custom7" Type="string" MaxLength="50" FieldIndex="31" />
+          <Field Name="Custom8" Type="string" MaxLength="50" FieldIndex="32" />
+          <Field Name="Custom9" Type="string" MaxLength="50" FieldIndex="33" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
-          <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
-          <Field Name="HubItemID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="29" />
+          <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="22" />
+          <Field Name="HubItemID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="30" />
           <Field Name="Image" Type="string" MaxLength="2147483647" FieldIndex="10" />
           <Field Name="ISBN" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="IsManual" Type="bool" FieldIndex="17" />
-          <Field Name="Length" Type="decimal" Precision="10" Scale="2" FieldIndex="19" />
+          <Field Name="Length" Type="decimal" Precision="10" Scale="2" FieldIndex="20" />
           <Field Name="LocalStatus" Type="string" MaxLength="255" FieldIndex="16" />
           <Field Name="Location" Type="string" MaxLength="255" FieldIndex="9" />
-          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="23" />
+          <Field Name="MPN" Type="string" MaxLength="50" FieldIndex="24" />
           <Field Name="Name" Type="string" MaxLength="300" FieldIndex="3" />
           <Field Name="OrderID" Type="long" IsAutoCreated="true" FieldIndex="2" />
           <Field Name="OrderItemID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="18" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="19" />
           <Field Name="Quantity" Type="double" Precision="29" Scale="9" FieldIndex="15" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SKU" Type="string" MaxLength="100" FieldIndex="5" />
@@ -2099,7 +2110,7 @@
           <Field Name="UnitPrice" Type="decimal" Precision="19" Scale="4" FieldIndex="12" />
           <Field Name="UPC" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="Weight" Type="double" Precision="29" Scale="9" FieldIndex="14" />
-          <Field Name="Width" Type="decimal" Precision="10" Scale="2" FieldIndex="20" />
+          <Field Name="Width" Type="decimal" Precision="10" Scale="2" FieldIndex="21" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="OrderItemAttribute" ObjectID="0c056446-175a-4d4b-8b9d-73db5866acaa" InheritanceType="2">
@@ -4578,7 +4589,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-01T15:27:58.2818405Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-08T17:13:51.9079204Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7542,15 +7553,20 @@
                     <Field Name="Custom3" Ordinal="80" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom4" Ordinal="81" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="82" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="HubOrderID" Ordinal="83" IsOptional="true" DbType="25" />
-                    <Field Name="HubSequence" Ordinal="84" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="Verified" Ordinal="85" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
+                    <Field Name="Custom6" Ordinal="83" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="84" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="85" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="86" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="87" DbType="12" Length="50" />
+                    <Field Name="HubOrderID" Ordinal="88" IsOptional="true" DbType="25" />
+                    <Field Name="HubSequence" Ordinal="89" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="Verified" Ordinal="90" HasDefaultValue="true" DefaultValue="(0)" DbType="2">
                       <CustomProperties>
                         <CustomProperty Name="AuditName" Value="Verified" />
                       </CustomProperties>
                     </Field>
-                    <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
+                    <Field Name="VerifiedBy" Ordinal="91" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="VerifiedDate" Ordinal="92" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7566,6 +7582,7 @@
                         <CustomProperty Name="AuditFormat" Value="2" />
                       </CustomProperties>
                     </Field>
+                    <Field Name="HubChargeID" Ordinal="7" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItem">
@@ -7614,6 +7631,12 @@
                     <Field Name="Custom3" Ordinal="29" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom6" Ordinal="32" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="33" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="34" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="35" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="36" DbType="12" Length="50" />
+                    <Field Name="HubItemID" Ordinal="37" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -12795,10 +12818,15 @@
             <FieldMapping FieldName="ChannelOrderID" TargetFieldName="ChannelOrderID" />
             <FieldMapping FieldName="CombineSplitStatus" TargetFieldName="CombineSplitStatus" />
             <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom10" TargetFieldName="Custom10" />
             <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
             <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
             <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
             <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
+            <FieldMapping FieldName="Custom6" TargetFieldName="Custom6" />
+            <FieldMapping FieldName="Custom7" TargetFieldName="Custom7" />
+            <FieldMapping FieldName="Custom8" TargetFieldName="Custom8" />
+            <FieldMapping FieldName="Custom9" TargetFieldName="Custom9" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
             <FieldMapping FieldName="HubOrderID" TargetFieldName="HubOrderID" />
             <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
@@ -12861,6 +12889,8 @@
           <FieldMappings>
             <FieldMapping FieldName="Amount" TargetFieldName="Amount" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
+            <FieldMapping FieldName="HubChargeID" TargetFieldName="HubChargeID" />
+            <FieldMapping FieldName="HubChargeID_" TargetFieldName="HubChargeID" />
             <FieldMapping FieldName="OrderChargeID" TargetFieldName="OrderChargeID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
@@ -12872,13 +12902,19 @@
             <FieldMapping FieldName="Brand" TargetFieldName="Brand" />
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom10" TargetFieldName="Custom10" />
             <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
             <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
             <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
             <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
+            <FieldMapping FieldName="Custom6" TargetFieldName="Custom6" />
+            <FieldMapping FieldName="Custom7" TargetFieldName="Custom7" />
+            <FieldMapping FieldName="Custom8" TargetFieldName="Custom8" />
+            <FieldMapping FieldName="Custom9" TargetFieldName="Custom9" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="HubItemID" TargetFieldName="HubItemID" />
             <FieldMapping FieldName="Image" TargetFieldName="Image" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
             <FieldMapping FieldName="IsManual" TargetFieldName="IsManual" />
