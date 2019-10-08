@@ -82,6 +82,11 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Execute the request
         /// </summary>
+        IHttpResponseReader GetResponse(Action<Action<HttpWebRequest>, HttpWebRequest> wrapGetResponseAction);
+
+        /// <summary>
+        /// Execute the request
+        /// </summary>
         Task<IHttpResponseReader> GetResponseAsync();
 
         /// <summary>
