@@ -8228,8 +8228,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. </summary>
 		Custom5,
-		///<summary>HubOrderID. </summary>
-		HubOrderID,
+        ///<summary>Custom6. </summary>
+		Custom6,
+        ///<summary>Custom7. </summary>
+        Custom7,
+        ///<summary>Custom8. </summary>
+        Custom8,
+        ///<summary>Custom9. </summary>
+        Custom9,
+        ///<summary>Custom10. </summary>
+        Custom10,
+        ///<summary>HubOrderID. </summary>
+        HubOrderID,
 		///<summary>HubSequence. </summary>
 		HubSequence,
 		///<summary>Verified. </summary>

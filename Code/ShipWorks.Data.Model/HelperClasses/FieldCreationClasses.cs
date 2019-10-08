@@ -19282,8 +19282,33 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.Custom5);}
 		}
-		/// <summary>Creates a new OrderEntity.HubOrderID field instance</summary>
-		public static EntityField2 HubOrderID
+        /// <summary>Creates a new OrderEntity.Custom6 field instance</summary>
+		public static EntityField2 Custom6
+        {
+            get { return (EntityField2) EntityFieldFactory.Create(OrderFieldIndex.Custom6); }
+        }
+        /// <summary>Creates a new OrderEntity.Custom7 field instance</summary>
+        public static EntityField2 Custom7
+        {
+            get { return (EntityField2) EntityFieldFactory.Create(OrderFieldIndex.Custom7); }
+        }
+        /// <summary>Creates a new OrderEntity.Custom8 field instance</summary>
+        public static EntityField2 Custom8
+        {
+            get { return (EntityField2) EntityFieldFactory.Create(OrderFieldIndex.Custom8); }
+        }
+        /// <summary>Creates a new OrderEntity.Custom9 field instance</summary>
+        public static EntityField2 Custom9
+        {
+            get { return (EntityField2) EntityFieldFactory.Create(OrderFieldIndex.Custom9); }
+        }
+        /// <summary>Creates a new OrderEntity.Custom10 field instance</summary>
+        public static EntityField2 Custom10
+        {
+            get { return (EntityField2) EntityFieldFactory.Create(OrderFieldIndex.Custom10); }
+        }
+        /// <summary>Creates a new OrderEntity.HubOrderID field instance</summary>
+        public static EntityField2 HubOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderFieldIndex.HubOrderID);}
 		}

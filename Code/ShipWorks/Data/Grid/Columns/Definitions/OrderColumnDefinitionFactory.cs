@@ -824,6 +824,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}",
                         new GridTextDisplayType(), "Custom Field 5", "Custom Field 5", OrderFields.Custom5),
 
+                    new GridColumnDefinition("{E4E7DC99-5FC4-46B7-93FA-4FB983B84EBC}",
+                        new GridTextDisplayType(), "Custom Field 6", "Custom Field 6", OrderFields.Custom6),
+
+                    new GridColumnDefinition("{8D37F80C-A435-44A3-AD61-B3E66B99FE5B}",
+                        new GridTextDisplayType(), "Custom Field 7", "Custom Field 7", OrderFields.Custom7),
+
+                    new GridColumnDefinition("{B8F1A84C-4AF0-4A4E-9F6E-C9BB37E8B4FD}",
+                        new GridTextDisplayType(), "Custom Field 8", "Custom Field 8", OrderFields.Custom3),
+
+                    new GridColumnDefinition("{E676687E-EFFA-42CD-AD59-210F0F6E2071}",
+                        new GridTextDisplayType(), "Custom Field 9", "Custom Field 9", OrderFields.Custom4),
+
+                    new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}",
+                        new GridTextDisplayType(), "Custom Field 10", "Custom Field 10", OrderFields.Custom5),
+
                     new GridColumnDefinition("{386E5954-AEA6-4227-81C6-23767C72C31D}",
                         new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" },
                         "Verified", "No", OrderFields.Verified)
