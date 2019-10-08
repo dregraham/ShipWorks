@@ -163,7 +163,7 @@ namespace ShipWorks.Data.Connection
                         connectionLost = true;
                     }
 
-                    if (SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion())
+                    if (!connectionLost && SqlSchemaUpdater.GetInstalledSchemaVersion() > SqlSchemaUpdater.GetRequiredSchemaVersion())
                     {
                         // after reconnecting the database looks to have been updated
                         // we cant reconnect, show a dialog saying that database has been

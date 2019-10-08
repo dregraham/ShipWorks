@@ -2757,9 +2757,11 @@ namespace ShipWorks
         /// </summary>
         private void OnShowSettings(object sender, EventArgs e)
         {
-            UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
-            UserSession.User.Settings.ShowQAToolbarBelowRibbon = ribbon.ToolBarPosition == QuickAccessPosition.Below;
-
+            if (UserSession.IsLoggedOn)
+            {
+                UserSession.User.Settings.MinimizeRibbon = ribbon.Minimized;
+                UserSession.User.Settings.ShowQAToolbarBelowRibbon = ribbon.ToolBarPosition == QuickAccessPosition.Below;
+            }
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 using (ShipWorksSettings dlg = new ShipWorksSettings(scope))
@@ -2769,11 +2771,14 @@ namespace ShipWorks
                         ApplyDisplaySettings();
 
                         // Apply ribbon settings
-                        ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
+                        if (UserSession.IsLoggedOn)
+                        {
+                            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
                             QuickAccessPosition.Below :
                             QuickAccessPosition.Above;
 
-                        ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+                            ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
+                        }                      
                     }
                 }
             }

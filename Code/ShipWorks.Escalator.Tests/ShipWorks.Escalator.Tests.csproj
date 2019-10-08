@@ -52,4 +52,7 @@
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\net46\" />
+  </ItemGroup>
 </Project>
