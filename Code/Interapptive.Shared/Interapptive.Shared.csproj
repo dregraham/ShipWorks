@@ -569,6 +569,7 @@
     <Compile Include="Utility\CaseInsensitiveEqualityComparer.cs" />
     <Compile Include="Utility\TelemetricEventType.cs" />
     <Compile Include="Utility\TelemetricResult.cs" />
+    <Compile Include="Utility\TelemetricResultBaseName.cs" />
     <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />

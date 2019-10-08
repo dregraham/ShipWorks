@@ -3,10 +3,12 @@ using System.Data;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Stores.Content;
@@ -97,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             await labelService.Create(shipment);
 
             mock.Mock<IiParcelServiceGateway>()
-                .Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment), Times.Once);
+                .Verify(g => g.SubmitShipment(It.IsAny<iParcelCredentials>(), shipment, It.IsAny<TelemetricResult<IDownloadedLabelData>>()), Times.Once);
         }
 
         [Fact]
@@ -106,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             DataSet dataSet = new DataSet();
 
             mock.Mock<IiParcelServiceGateway>()
-                .Setup(x => x.SubmitShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>()))
+                .Setup(x => x.SubmitShipment(It.IsAny<iParcelCredentials>(), It.IsAny<ShipmentEntity>(), It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Returns(dataSet);
 
             var response = mock.Create<iParcelDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(dataSet));

@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
-        Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource);
+        Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult);
 
         /// <summary>
         /// Void a shipment label

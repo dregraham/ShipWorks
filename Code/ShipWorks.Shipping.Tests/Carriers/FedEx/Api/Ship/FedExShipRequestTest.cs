@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.FedEx.Api.Ship
         public void Submit_ReturnsResponseFromShipResult()
         {
             ProcessShipmentReply shipmentReply = new ProcessShipmentReply();
-            TelemetricResult<GenericResult<ProcessShipmentReply>> telemetricShipmentReply = new TelemetricResult<GenericResult<ProcessShipmentReply>>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<GenericResult<ProcessShipmentReply>> telemetricShipmentReply = new TelemetricResult<GenericResult<ProcessShipmentReply>>(TelemetricResultBaseName.ApiResponsetimeInMs);
             telemetricShipmentReply.SetValue(shipmentReply);
 
             var response = mock.CreateMock<IFedExShipResponse>();

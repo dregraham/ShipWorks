@@ -36,5 +36,10 @@ namespace Interapptive.Shared.Net
         /// The underlying web response that was received
         /// </summary>
         HttpWebResponse HttpWebResponse { get; }
+
+        /// <summary>
+        /// Time taken to get the response
+        /// </summary>
+        long ResponseTimeInMs { get; set; }
     }
 }

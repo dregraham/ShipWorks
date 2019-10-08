@@ -975,7 +975,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private async Task<TelemetricResult<UspsLabelResponse>> ProcessShipmentInternal(ShipmentEntity shipment,
             UspsAccountEntity account)
         {
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponsetimeInMs);
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
 
             RateV31 rate = CreateRateForProcessing(shipment, account);

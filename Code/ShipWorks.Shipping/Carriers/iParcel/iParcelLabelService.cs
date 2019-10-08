@@ -54,9 +54,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 // i-parcel requires that we upload item information, so fetch the order and order items
                 orderManager.PopulateOrderDetails(shipment);
 
-                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
                 DataSet dataSet = null;
-                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => dataSet = serviceGateway.SubmitShipment(credentials, shipment));
+                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => dataSet = serviceGateway.SubmitShipment(credentials, shipment, telemetricResult));
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, dataSet));
 
                 return Task.FromResult(telemetricResult);

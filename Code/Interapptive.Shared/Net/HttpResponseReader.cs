@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -11,21 +12,21 @@ namespace Interapptive.Shared.Net
     /// </summary>
     public sealed class HttpResponseReader : IHttpResponseReader
     {
-        string result = null;
-
-        HttpWebRequest webRequest;
-        HttpWebResponse webResponse;
+        private string result = null;
+        private HttpWebRequest webRequest;
+        private HttpWebResponse webResponse;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HttpResponseReader(HttpWebRequest webRequest, HttpWebResponse webResponse)
+        public HttpResponseReader(HttpWebRequest webRequest, HttpWebResponse webResponse, long responseTime)
         {
             MethodConditions.EnsureArgumentIsNotNull(webRequest, nameof(webRequest));
             MethodConditions.EnsureArgumentIsNotNull(webResponse, nameof(webResponse));
 
             this.webRequest = webRequest;
             this.webResponse = webResponse;
+            ResponseTimeInMs = responseTime;
         }
 
         /// <summary>
@@ -94,6 +95,11 @@ namespace Interapptive.Shared.Net
         {
             get { return webResponse; }
         }
+
+        /// <summary>
+        /// Time taken to get the response
+        /// </summary>
+        public long ResponseTimeInMs { get; set; }
 
         /// <summary>
         /// Dipose underlying objects

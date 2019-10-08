@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                 throw new ShippingException("No service is specified.");
             }
 
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
             telemetricResult.SetValue(new NullDownloadedLabelData());
             
             return Task.FromResult(telemetricResult);

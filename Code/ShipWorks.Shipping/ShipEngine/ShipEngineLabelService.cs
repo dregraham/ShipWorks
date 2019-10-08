@@ -48,21 +48,21 @@ namespace ShipWorks.Shipping.ShipEngine
         public virtual async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+
             return await CreateLabelInternal(shipment, 
-                () => shipEngineWebClient.PurchaseLabel(shipmentRequestFactory.CreatePurchaseLabelRequest(shipment), ApiLogSource));
+                () => shipEngineWebClient.PurchaseLabel(shipmentRequestFactory.CreatePurchaseLabelRequest(shipment), ApiLogSource, telemetricResult), telemetricResult);
         }
         
         /// <summary>
         /// Create the label
         /// </summary>
-        protected async Task<TelemetricResult<IDownloadedLabelData>> CreateLabelInternal(ShipmentEntity shipment, Func<Task<Label>> labelRetrievalFunc)
+        protected async Task<TelemetricResult<IDownloadedLabelData>> CreateLabelInternal(ShipmentEntity shipment, Func<Task<Label>> labelRetrievalFunc, 
+            TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             try
             {
-                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-                Label label = await telemetricResult.RunTimedEventAsync(
-                        TelemetricEventType.GetLabel, labelRetrievalFunc)
-                    .ConfigureAwait(false);
+                Label label = await labelRetrievalFunc().ConfigureAwait(false);
 
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, label));
 

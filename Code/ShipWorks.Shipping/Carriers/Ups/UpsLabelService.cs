@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
             TelemetricResult<IDownloadedLabelData> telemetricResult = 
-                new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
             telemetricResult.SetValue(new NullDownloadedLabelData());
             
             return Task.FromResult(telemetricResult);
