@@ -1722,7 +1722,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Status", "Status", false, "SmallInt", 0, 5, 0, false, "", null, typeof(System.Int16), 3);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "InitialCalculation", "InitialCalculation", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 4);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "UpdateCalculation", "UpdateCalculation", false, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 5);
-			this.AddElementFieldMapping("FilterNodeContentEntity", "ColumnMask", "ColumnMask", false, "VarBinary", 100, 0, 0, false, "", null, typeof(System.Byte[]), 6);
+			this.AddElementFieldMapping("FilterNodeContentEntity", "ColumnMask", "ColumnMask", false, "VarBinary", 150, 0, 0, false, "", null, typeof(System.Byte[]), 6);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "JoinMask", "JoinMask", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Cost", "Cost", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("FilterNodeContentEntity", "Count", "Count", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 9);

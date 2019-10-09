@@ -124,23 +124,23 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                          new GridColumnDefinition("{02870994-3692-4842-B59C-3624B9A4F97B}", false,
                              new GridTextDisplayType(), "Custom Field 5", "Custom Field 5",
                              OrderItemFields.Custom5),
-                         new GridColumnDefinition("{E44EE6C5-A97A-48DF-A459-46EBCE009ABF}", false,
+                         new GridColumnDefinition("{A289970B-0FFC-49D3-9FA3-6590ABD9C057}", false,
                              new GridTextDisplayType(), "Custom Field 6", "Custom Field 6",
                              OrderItemFields.Custom6),
 
-                         new GridColumnDefinition("{85240BD3-DDCC-4375-A135-6AC28D6A64D1}", false,
+                         new GridColumnDefinition("{3CBFB325-BCB5-4124-B3A8-283407349A59}", false,
                              new GridTextDisplayType(), "Custom Field 7", "Custom Field 7",
                              OrderItemFields.Custom7),
 
-                         new GridColumnDefinition("{D6B1FB86-1BCC-45FE-ACDD-28971D3B10EE}", false,
+                         new GridColumnDefinition("{A4D57683-C5F7-4F81-BD15-157C8A802C13}", false,
                              new GridTextDisplayType(), "Custom Field 8", "Custom Field 8",
                              OrderItemFields.Custom8),
 
-                         new GridColumnDefinition("{05379D78-B169-42E8-8182-42FC9D5305F9}", false,
+                         new GridColumnDefinition("{C33D334C-248C-4B3A-957F-1199F6317F54}", false,
                              new GridTextDisplayType(), "Custom Field 9", "Custom Field 9",
                              OrderItemFields.Custom9),
 
-                         new GridColumnDefinition("{02870994-3692-4842-B59C-3624B9A4F97B}", false,
+                         new GridColumnDefinition("{BA2C8978-4E47-442D-91E7-B3F5EBEAD447}", false,
                              new GridTextDisplayType(), "Custom Field 10", "Custom Field 10",
                              OrderItemFields.Custom10),
 

@@ -2327,7 +2327,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (100) NOT NULL,
+[ColumnMask] [varbinary] (150) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL,

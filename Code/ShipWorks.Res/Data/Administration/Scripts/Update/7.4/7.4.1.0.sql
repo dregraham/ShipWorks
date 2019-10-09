@@ -1,3 +1,7 @@
+PRINT N'Altering [dbo].[FilterNodeContent]'
+GO
+ALTER TABLE [FilterNodeContent] ALTER COLUMN ColumnMask VARBINARY(150) NOT NULL
+GO
 PRINT N'Altering [dbo].[Order]'
 GO
 IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Order' AND COLUMN_NAME = 'Custom6')
