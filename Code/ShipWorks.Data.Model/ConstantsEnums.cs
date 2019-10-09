@@ -1274,8 +1274,6 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
 		///<summary>Height. Inherited from OrderItem</summary>
@@ -1660,8 +1658,6 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
 		///<summary>Height. Inherited from OrderItem</summary>
@@ -2870,8 +2866,6 @@ namespace ShipWorks.Data.Model
 		Length,
 		///<summary>Width. Inherited from OrderItem</summary>
 		Width,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
 		///<summary>Brand. Inherited from OrderItem</summary>
 		Brand,
 		///<summary>Height. Inherited from OrderItem</summary>
@@ -8494,18 +8488,8 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. </summary>
 		Custom5,
-        ///<summary>Custom6. </summary>
-		Custom6,
-        ///<summary>Custom7. </summary>
-        Custom7,
-        ///<summary>Custom8. </summary>
-        Custom8,
-        ///<summary>Custom9. </summary>
-        Custom9,
-        ///<summary>Custom10. </summary>
-        Custom10,
-        ///<summary>HubOrderID. </summary>
-        HubOrderID,
+		///<summary>HubOrderID. </summary>
+		HubOrderID,
 		///<summary>HubSequence. </summary>
 		HubSequence,
 		///<summary>Verified. </summary>
@@ -8610,18 +8594,18 @@ namespace ShipWorks.Data.Model
 		Custom4,
 		///<summary>Custom5. </summary>
 		Custom5,
-        ///<summary>Custom6. </summary>
+		///<summary>Custom6. </summary>
 		Custom6,
-        ///<summary>Custom7. </summary>
-        Custom7,
-        ///<summary>Custom8. </summary>
-        Custom8,
-        ///<summary>Custom9. </summary>
-        Custom9,
-        ///<summary>Custom10. </summary>
-        Custom10,
-        ///<summary>HubItemID. </summary>
-        HubItemID,
+		///<summary>HubItemID. </summary>
+		HubItemID,
+		///<summary>Custom7. </summary>
+		Custom7,
+		///<summary>Custom8. </summary>
+		Custom8,
+		///<summary>Custom9. </summary>
+		Custom9,
+		///<summary>Custom10. </summary>
+		Custom10,
 		/// <summary></summary>
 		AmountOfFields
 	}

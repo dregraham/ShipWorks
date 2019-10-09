@@ -20022,11 +20022,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderChargeFieldIndex.HubChargeID);}
 		}
-		/// <summary>Creates a new OrderChargeEntity.HubChargeID_ field instance</summary>
-		public static EntityField2 HubChargeID_
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderChargeFieldIndex.HubChargeID_);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity OrderItemEntity</summary>

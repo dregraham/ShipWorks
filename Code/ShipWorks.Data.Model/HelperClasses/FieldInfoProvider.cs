@@ -2374,7 +2374,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderChargeEntity", "Description", typeof(System.String), false, false, false, false,  (int)OrderChargeFieldIndex.Description, 255, 0, 0);
 			this.AddElementFieldInfo("OrderChargeEntity", "Amount", typeof(System.Decimal), false, false, false, false,  (int)OrderChargeFieldIndex.Amount, 0, 4, 19);
 			this.AddElementFieldInfo("OrderChargeEntity", "HubChargeID", typeof(System.String), false, false, false, true,  (int)OrderChargeFieldIndex.HubChargeID, 50, 0, 0);
-			this.AddElementFieldInfo("OrderChargeEntity", "HubChargeID_", typeof(System.String), false, false, false, true,  (int)OrderChargeFieldIndex.HubChargeID_, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemEntity's FieldInfo objects</summary>
 		private void InitOrderItemEntityInfos()
