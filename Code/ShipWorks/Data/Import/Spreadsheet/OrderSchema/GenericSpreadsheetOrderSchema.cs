@@ -117,7 +117,12 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     new GenericSpreadsheetTargetField("Order.Custom2",              "Custom2",                typeof(string)),
                     new GenericSpreadsheetTargetField("Order.Custom3",              "Custom3",                typeof(string)),
                     new GenericSpreadsheetTargetField("Order.Custom4",              "Custom4",                typeof(string)),
-                    new GenericSpreadsheetTargetField("Order.Custom5",              "Custom5",                typeof(string))
+                    new GenericSpreadsheetTargetField("Order.Custom5",              "Custom5",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom6",              "Custom6",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom7",              "Custom7",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom8",              "Custom8",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom9",              "Custom9",                typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.Custom10",             "Custom10",               typeof(string))
                 });
         }
 
@@ -208,7 +213,12 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 new GenericSpreadsheetTargetField("Item.Custom2",               "Custom2", typeof(string)),
                 new GenericSpreadsheetTargetField("Item.Custom3",               "Custom3", typeof(string)),
                 new GenericSpreadsheetTargetField("Item.Custom4",               "Custom4", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Custom5",               "Custom5", typeof(string))
+                new GenericSpreadsheetTargetField("Item.Custom5",               "Custom5", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom6",               "Custom6", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom7",               "Custom7", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom8",               "Custom8", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom9",               "Custom9", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Custom10",              "Custom10", typeof(string))
             };
         }
 

@@ -4,7 +4,7 @@ using ShipWorks.Filters.Content.SqlGeneration;
 namespace ShipWorks.Filters.Content.Conditions.Orders
 {
     /// <summary>
-    /// Condition base on the Custom9 of an Order
+    /// Condition base on the Custom5 of an Order
     /// </summary>
     [ConditionElement("Custom Field 9", "Order.Custom9")]
     public class Custom9Condition : StringCondition
@@ -15,4 +15,3 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
         public override string GenerateSql(SqlGenerationContext context) => GenerateSql(context.GetColumnReference(OrderFields.Custom9), context);
     }
 }
-

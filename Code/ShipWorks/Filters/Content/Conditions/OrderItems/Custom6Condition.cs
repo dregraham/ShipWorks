@@ -12,6 +12,7 @@ namespace ShipWorks.Filters.Content.Conditions.OrderItems
         /// <summary>
         /// Generate the SQL for the element
         /// </summary>
-        public override string GenerateSql(SqlGenerationContext context) => GenerateSql(context.GetColumnReference(OrderItemFields.Custom6), context);
+        public override string GenerateSql(SqlGenerationContext context) =>
+            GenerateSql(context.GetColumnReference(OrderItemFields.Custom6), context);
     }
 }
