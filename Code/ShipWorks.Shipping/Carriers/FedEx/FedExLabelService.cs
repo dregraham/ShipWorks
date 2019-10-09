@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 TelemetricResult<GenericResult<IEnumerable<IFedExShipResponse>>> telemetricShipResult = clerk.Ship(shipment);
                 FedExDownloadedLabelData labelData = telemetricShipResult.Value.Map(createDownloadedLabelData).Match(x => x, ex => { throw ex; });
 
-                TelemetricResult<IDownloadedLabelData> telemetry = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+                TelemetricResult<IDownloadedLabelData> telemetry = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 telemetricShipResult.CopyTo(telemetry);
                 telemetry.SetValue(labelData);
                 return Task.FromResult(telemetry);

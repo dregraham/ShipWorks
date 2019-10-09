@@ -5,6 +5,6 @@
     /// </summary>
     public static class TelemetricResultBaseName
     {
-        public const string ApiResponsetimeInMs = "API.ResponseTimeInMilliseconds";
+        public const string ApiResponseTimeInMilliseconds = "API.ResponseTimeInMilliseconds";
     }
 }

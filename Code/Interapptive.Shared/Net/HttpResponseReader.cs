@@ -19,14 +19,14 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Constructor
         /// </summary>
-        public HttpResponseReader(HttpWebRequest webRequest, HttpWebResponse webResponse, long responseTime)
+        public HttpResponseReader(HttpWebRequest webRequest, HttpWebResponse webResponse, long responseTimeInMilliseconds)
         {
             MethodConditions.EnsureArgumentIsNotNull(webRequest, nameof(webRequest));
             MethodConditions.EnsureArgumentIsNotNull(webResponse, nameof(webResponse));
 
             this.webRequest = webRequest;
             this.webResponse = webResponse;
-            ResponseTimeInMs = responseTime;
+            ResponseTimeInMilliseconds = responseTimeInMilliseconds;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Time taken to get the response
         /// </summary>
-        public long ResponseTimeInMs { get; set; }
+        public long ResponseTimeInMilliseconds { get; set; }
 
         /// <summary>
         /// Dipose underlying objects

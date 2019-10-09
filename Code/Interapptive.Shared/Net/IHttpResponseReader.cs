@@ -40,6 +40,6 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Time taken to get the response
         /// </summary>
-        long ResponseTimeInMs { get; set; }
+        long ResponseTimeInMilliseconds { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 base.Create(shipment);
 
-                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 IDownloadedLabelData downloadedLabelData = createDownloadedLabelData(new UpsLabelResponse { Shipment = shipment });
                 telemetricResult.SetValue(downloadedLabelData);
                 

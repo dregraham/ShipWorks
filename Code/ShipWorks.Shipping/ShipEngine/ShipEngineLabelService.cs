@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.ShipEngine
         public virtual async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             return await CreateLabelInternal(shipment, 
                 () => shipEngineWebClient.PurchaseLabel(shipmentRequestFactory.CreatePurchaseLabelRequest(shipment), ApiLogSource, telemetricResult), telemetricResult);

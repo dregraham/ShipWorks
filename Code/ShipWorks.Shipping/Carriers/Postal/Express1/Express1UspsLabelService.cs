@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         {
             express1UspsShipmentType.ValidateShipment(shipment);
 
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
             try
             {
                 // Express1 for USPS requires that postage be hidden per their negotiated

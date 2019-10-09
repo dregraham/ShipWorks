@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
-using System.Net;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
@@ -289,20 +288,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             try
             {
-
-
-                TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>("API.ResponseTimeInMilliseconds");
-                //telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => acceptResponse = UpsWebClient.ProcessRequest(xmlWriter));
-
-                Action<Func<HttpWebRequest, WebResponse>, HttpWebRequest> wrappedGetResponseAction =
-                    (func, httpRequest) =>
-                    {
-                        telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => func(httpRequest));
-                    };
-
-
-
-                using (IHttpResponseReader response = request.GetResponse(wrappedGetResponseAction))
+                using (IHttpResponseReader response = request.GetResponse())
                 {
 
                     string responseXml = response.ReadResult(StringUtility.Iso8859Encoding);

@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     account.AccountNumber);
 
                 TelemetricResult<IDownloadedLabelData> telemetricResult =
-                    new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+                    new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 
                 // Get new shipment from OnTrac and save the shipment info
                 Schemas.ShipmentResponse.Shipment shipmentResponse = null;

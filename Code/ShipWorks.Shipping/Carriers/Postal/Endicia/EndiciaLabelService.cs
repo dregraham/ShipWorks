@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
 
             TelemetricResult<IDownloadedLabelData> telemetricResult =
-                new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+                new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             if (useExpress1)
             {

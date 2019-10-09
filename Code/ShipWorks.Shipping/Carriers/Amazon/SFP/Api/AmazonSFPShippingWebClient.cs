@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
 
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(shipment));
-            telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMs);
+            telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMilliseconds);
 
             // Deserialize
             CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());

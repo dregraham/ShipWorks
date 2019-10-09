@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponsetimeInMs);
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
             if (string.IsNullOrEmpty(shipment.AmazonSFP.ShippingServiceID))
             {
                 GenericResult<RateGroup> rateResult = new GenericResult<RateGroup>();
