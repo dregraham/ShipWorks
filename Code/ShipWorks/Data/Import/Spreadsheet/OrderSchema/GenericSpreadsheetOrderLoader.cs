@@ -149,6 +149,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             order.Custom3 = csv.ReadField("Order.Custom3", order.Custom3 ?? "");
             order.Custom4 = csv.ReadField("Order.Custom4", order.Custom4 ?? "");
             order.Custom5 = csv.ReadField("Order.Custom5", order.Custom5 ?? "");
+            order.Custom6 = csv.ReadField("Order.Custom6", order.Custom6 ?? "");
+            order.Custom7 = csv.ReadField("Order.Custom7", order.Custom7 ?? "");
+            order.Custom8 = csv.ReadField("Order.Custom8", order.Custom8 ?? "");
+            order.Custom9 = csv.ReadField("Order.Custom9", order.Custom9 ?? "");
+            order.Custom10 = csv.ReadField("Order.Custom10", order.Custom10 ?? "");
         }
 
         /// <summary>
