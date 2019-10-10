@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.IO;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
@@ -32,6 +33,8 @@ namespace ShipWorks.Products.Export
             this.dateTimeProvider = dateTimeProvider;
             this.productExporter = productExporter;
             this.fileSelector = fileSelector;
+
+            Telemetry.TrackButtonClick("ShipWorks.Button.Click.Products.Export");
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
@@ -251,6 +252,10 @@ namespace ShipWorks.Products.ProductEditor
             {
                 CreatedDate = DateTime.SpecifyKind(productVariant.CreatedDate, DateTimeKind.Utc)
                     .ToLocalTime();
+            }
+            else
+            {
+                Telemetry.TrackButtonClick("ShipWorks.Button.Click.Products.Edit");
             }
 
             BundleEditorViewModel.Load(productVariant);

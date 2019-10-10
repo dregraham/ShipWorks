@@ -102,11 +102,15 @@ namespace ShipWorks.Products.Tests.Import
         [Fact]
         public void CloseDialog_DelegatesToStateManager()
         {
+            var wasWalled = false;
+            mock.Mock<IProductImporterStateManager>()
+                .SetupGet(x => x.Close)
+                .Returns(() => wasWalled = true);
             var testObject = mock.Create<ImportFailedState>();
 
             testObject.CloseDialog.Execute(null);
 
-            mock.Mock<IProductImporterStateManager>().Verify(x => x.Close());
+            Assert.True(wasWalled);
         }
 
         public void Dispose()

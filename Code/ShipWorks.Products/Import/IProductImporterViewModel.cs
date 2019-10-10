@@ -11,5 +11,10 @@ namespace ShipWorks.Products.Import
         /// Import products
         /// </summary>
         Result ImportProducts();
+
+        /// <summary>
+        /// Import products
+        /// </summary>
+        Result ImportProducts(IProductImportState startingState);
     }
 }

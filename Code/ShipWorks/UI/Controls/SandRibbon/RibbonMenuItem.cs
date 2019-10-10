@@ -1,13 +1,13 @@
 ﻿using Divelements.SandRibbon;
 using Interapptive.Shared.Metrics;
+using MenuItem = Divelements.SandRibbon.MenuItem;
 
 namespace ShipWorks.UI.Controls.SandRibbon
 {
     /// <summary>
-    /// Interface implementation of the SandRibbon button
+    /// Interface implementation of the SandRibbon MenuItem
     /// </summary>
-    /// <remarks>The purpose of this is to help test methods that use these buttons</remarks>
-    public class RibbonButton : Button, IRibbonButton
+    public class RibbonMenuItem : MenuItem, IButtonTelemetry
     {
         /// <summary>
         /// On click event handler
@@ -16,15 +16,6 @@ namespace ShipWorks.UI.Controls.SandRibbon
         {
             Telemetry.TrackButtonClick(TelemetryEventName, string.Empty);
             return base.OnActivate(e);
-        }
-
-        /// <summary>
-        /// On activate dropdown event handler
-        /// </summary>
-        protected override WidgetBase OnActivateDropdown(bool keyboard)
-        {
-            Telemetry.TrackButtonClick(TelemetryEventName, string.Empty);
-            return base.OnActivateDropdown(keyboard);
         }
 
         /// <summary>

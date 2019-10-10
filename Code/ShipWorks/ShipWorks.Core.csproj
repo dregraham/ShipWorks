@@ -822,6 +822,7 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
+    <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
@@ -1373,6 +1374,14 @@
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
+    <Compile Include="UI\Controls\SandRibbon\IButtonTelemetry.cs" />
+    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
+    <Compile Include="UI\Controls\SandRibbon\RibbonMainMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\SandRibbon\RibbonMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
@@ -4398,7 +4407,6 @@
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
     <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
       <SubType>Component</SubType>
     </Compile>

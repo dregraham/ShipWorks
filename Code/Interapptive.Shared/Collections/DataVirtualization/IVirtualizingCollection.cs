@@ -31,5 +31,9 @@ namespace DataVirtualization
     /// <typeparam name="T"></typeparam>
     public interface IVirtualizingCollection<T> : IList<IDataWrapper<T>>, IList where T : class
     {
+        /// <summary>
+        /// Is the virtual collection empty
+        /// </summary>
+        bool IsEmpty { get; }
     }
 }
