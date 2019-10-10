@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Warehouse
             request.AddJsonBody(this);
 
             GenericResult<IRestResponse> response = await warehouseRequestClient
-                .MakeRequest(request, "Upload Order")
+                .MakeRequest(request, "Upload Orders")
                 .ConfigureAwait(true);
 
             if (response.Failure)
