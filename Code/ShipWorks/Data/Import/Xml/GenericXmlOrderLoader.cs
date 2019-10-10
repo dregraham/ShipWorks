@@ -112,6 +112,11 @@ namespace ShipWorks.Data.Import.Xml
             order.Custom3 = XPathUtility.Evaluate(xpath, "Custom3", "");
             order.Custom4 = XPathUtility.Evaluate(xpath, "Custom4", "");
             order.Custom5 = XPathUtility.Evaluate(xpath, "Custom5", "");
+            order.Custom6 = XPathUtility.Evaluate(xpath, "Custom6", "");
+            order.Custom7 = XPathUtility.Evaluate(xpath, "Custom7", "");
+            order.Custom8 = XPathUtility.Evaluate(xpath, "Custom8", "");
+            order.Custom9 = XPathUtility.Evaluate(xpath, "Custom9", "");
+            order.Custom10 = XPathUtility.Evaluate(xpath, "Custom10", "");
         }
 
         /// <summary>

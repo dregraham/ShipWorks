@@ -78,6 +78,31 @@
           <xs:documentation>Custom field for importing additional order data.</xs:documentation>
         </xs:annotation>
       </xs:element>
+      <xs:element name="Custom6" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom7" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom8" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom9" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom10" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
       <xs:element name="CustomerID" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>A value uniquely identifying the purchasing customer to ShipWorks.  Required when OnlineCustomerID is designated as supported.  See complexType Module.</xs:documentation>
@@ -372,6 +397,31 @@
         </xs:annotation>
       </xs:element>
       <xs:element name="Custom5" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom6" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom7" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom8" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom9" type="xs:string" minOccurs="0">
+        <xs:annotation>
+          <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="Custom10" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Custom field for importing additional order item data.</xs:documentation>
         </xs:annotation>
