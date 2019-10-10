@@ -125,6 +125,5 @@
         private ShipWorks.UI.Controls.LinkControl linkExportToken;
         private System.Windows.Forms.Label labelAdvanced;
         private ShipWorks.UI.Controls.LinkControl linkImportToken;
-
     }
 }
