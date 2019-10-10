@@ -15,13 +15,13 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
     /// <summary>
     /// Update excluded best rate account table
     /// </summary>
-    public class V_07_04_00_01 : IVersionSpecificUpdate
+    public class V_07_04_00_02 : IVersionSpecificUpdate
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IBestRateExcludedAccountRepository excludedAccountRepository;
 
-        public V_07_04_00_01(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory,
+        public V_07_04_00_02(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory,
             IShipmentTypeManager shipmentTypeManager,
             IBestRateExcludedAccountRepository excludedAccountRepository)
         {

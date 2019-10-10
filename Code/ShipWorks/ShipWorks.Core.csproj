@@ -855,7 +855,7 @@
     <Compile Include="Data\Administration\IUpdateService.cs" />
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
-    <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_01.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
