@@ -1,17 +1,8 @@
-PRINT N'Altering [dbo].[OrderItem]'
+PRINT N'Altering [dbo].[UserSettings]'
 GO
-IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'OrderItem' AND COLUMN_NAME = 'HubItemID')
-BEGIN
-	ALTER TABLE OrderItem
-		ADD HubItemID NVARCHAR(50) NULL
-END
-GO
+If(select COL_LENGTH('UserSettings','MinimizeRibbon'))IS NULL
+ALTER TABLE UserSettings ADD MinimizeRibbon BIT NOT NULL DEFAULT 0
 
-PRINT N'Altering [dbo].[OrderCharge]'
-GO
-IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'OrderCharge' AND COLUMN_NAME = 'HubChargeID')
-BEGIN
-	ALTER TABLE OrderCharge
-		ADD HubChargeID NVARCHAR(50) NULL
-END
+If(select COL_LENGTH('UserSettings','ShowQAToolbarBelowRibbon')) IS NULL
+ALTER TABLE UserSettings ADD ShowQAToolbarBelowRibbon BIT NOT NULL DEFAULT 0
 GO
