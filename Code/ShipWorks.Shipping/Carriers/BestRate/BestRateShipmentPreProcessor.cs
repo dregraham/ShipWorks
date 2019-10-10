@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <exception cref="ShippingException">An account must be created to process this shipment.</exception>
         public virtual IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
+            RateResult bestRate = null;
+
             BestRateShipmentType.AddBestRateEvent(shipment, BestRateEventTypes.RateAutoSelectedAndProcessed);
 
             shippingManager.EnsureShipmentLoaded(shipment);
@@ -74,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 // the first rate in the list (the best rate); this case could occur if multiple shipments
                 // are being processed in a batch or if the rates have not been fetched and displayed in
                 // the grid yet.
-                RateResult bestRate = filteredRates.Rates.FirstOrDefault();
+                bestRate = filteredRates.Rates.FirstOrDefault();
 
                 // The cheapest rate is not a counter rate, so compile a list of the possible
                 // rates to apply to the shipment during processing. This is basically a fail
@@ -94,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipmentsToReturn.Add(shipment);
             }
 
-            LogTelemetry(shipment, filteredRates, selectedRate);
+            LogTelemetry(shipment, filteredRates, selectedRate ?? bestRate);
 
             return shipmentsToReturn;
         }
@@ -162,6 +164,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private void LogTelemetry(ShipmentEntity shipment, RateGroup rateGroup, RateResult rateResult)
         {
+            if (rateResult == null || rateGroup == null || shipment == null)
+            {
+                return;
+            }
+
             using (ITrackedEvent telemetryEvent = telemetryEventFactory("Shipping.BestRate"))
             {
                 RateResult cheapestRate = rateGroup.Rates.Aggregate((curMin, x) => x.Amount < curMin.Amount ? x : curMin);
