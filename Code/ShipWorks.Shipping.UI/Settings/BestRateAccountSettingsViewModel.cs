@@ -30,6 +30,7 @@ namespace ShipWorks.Shipping.UI.Settings
             ShipmentTypeCode.Express1Usps,
             ShipmentTypeCode.UpsWorldShip,
             ShipmentTypeCode.AmazonSFP,
+            ShipmentTypeCode.AmazonSWA,
             ShipmentTypeCode.iParcel
         };
 
