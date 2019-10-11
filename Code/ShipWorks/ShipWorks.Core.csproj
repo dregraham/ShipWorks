@@ -2832,12 +2832,6 @@
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.Designer.cs">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.Designer.cs">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BrokerException.cs" />
@@ -8176,9 +8170,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
