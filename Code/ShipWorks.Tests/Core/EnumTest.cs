@@ -342,6 +342,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Users.UserServiceLogonResultType".ToUpperInvariant(),
                 "ShipWorks.Users.UserSettingsDlg+Section".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterState".ToUpperInvariant(),
+                "ShipWorks.ModeChangeBehavior".ToUpperInvariant(),
             };
     }
 }

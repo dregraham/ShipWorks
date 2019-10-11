@@ -93,8 +93,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
             var factory = new QueryFactory();
             var queryStarter = factory.ProcessedShipment
                     .Where(ProcessedShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date)
-                    .AndWhere(ProcessedShipmentFields.ProcessedUserID == userSession.User.UserID)
-                    .AndWhere(ProcessedShipmentFields.ProcessedWithUiMode == UIMode.OrderLookup);
+                    .AndWhere(ProcessedShipmentFields.ProcessedUserID == userSession.User.UserID);
 
             var sortedQuery = sortDefinition.SortExpression
                 .OfType<ISortClause>()
