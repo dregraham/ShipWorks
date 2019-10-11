@@ -206,10 +206,17 @@ namespace ShipWorks.Products
             {
                 if (Set(ref searchText, value))
                 {
+                    RaisePropertyChanged(nameof(IsSearchActive));
                     RefreshProductsAction();
                 }
             }
         }
+
+        /// <summary>
+        /// Is there a product search active
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSearchActive => !string.IsNullOrEmpty(SearchText);
 
         /// <summary>
         /// Splash view for importing products

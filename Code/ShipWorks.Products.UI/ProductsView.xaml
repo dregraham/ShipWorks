@@ -380,6 +380,10 @@
                         Mode="OneWay"
                         Path="Products.IsLoading" />
                     <Binding
+                        Converter="{StaticResource HideWhenTrue}"
+                        Mode="OneWay"
+                        Path="IsSearchActive" />
+                    <Binding
                         Converter="{StaticResource ShowWhenTrue}"
                         Mode="OneWay"
                         Path="Products.Data.IsEmpty" />
