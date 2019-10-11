@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Data.Import.Spreadsheet.Editing
 {
@@ -138,6 +139,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
             if (newMap != null)
             {
                 this.Map = newMap;
+                CollectTelemetry();
             }
         }
 
@@ -149,6 +151,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
             if (EditMap(Map))
             {
                 UpdateUI();
+                CollectTelemetry();
             }
         }
 
@@ -167,6 +170,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
                         if (loadedMap != null)
                         {
                             this.Map = loadedMap;
+                            CollectTelemetry();
                         }
                     }
                     catch (IOException ex)
@@ -208,6 +212,34 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Collect Telemetry Data
+        /// </summary>
+        private void CollectTelemetry()
+        {
+            TrackedEvent trackedEvent = new TrackedEvent("Import");
+            try
+            {
+                trackedEvent.AddMetric("CustomField.Count", GetCustomColumnUsedCount());
+            }
+            catch(Exception ex)
+            {
+                trackedEvent.AddProperty("Error", ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get the number of used Custom Columns 
+        /// </summary>
+        private int GetCustomColumnUsedCount()
+        {
+             return map.Mappings.Where(m => m.TargetField.Identifier == "Order.Custom6" ||
+                                            m.TargetField.Identifier == "Order.Custom7" ||
+                                            m.TargetField.Identifier == "Order.Custom8" ||
+                                            m.TargetField.Identifier == "Order.Custom9" ||
+                                            m.TargetField.Identifier == "Order.Custom10").Count();           
         }
     }
 }
