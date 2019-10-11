@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.Custom;
@@ -48,6 +49,7 @@ namespace ShipWorks.Shipping.UI.Settings
         /// <summary>
         /// The carriers (with their accounts) allowed for best rate
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ObservableCollection<BestRateCarrier> Carriers { get; set; }
 
         /// <summary>
