@@ -233,7 +233,7 @@
           <xs:documentation>Debugging and support data not processed by ShipWorks, but recorded in logs.</xs:documentation>
         </xs:annotation>
       </xs:element>
-      <xs:element name="OrderNumber" type="xs:string" minOccurs="0">
+      <xs:element name="RequestedWarehouse" type="xs:string" minOccurs="0">
         <xs:annotation>
           <xs:documentation>Requested warehouse to send the order to.</xs:documentation>
         </xs:annotation>
