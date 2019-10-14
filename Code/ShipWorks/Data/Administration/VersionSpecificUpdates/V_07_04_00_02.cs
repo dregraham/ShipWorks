@@ -20,14 +20,17 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         private readonly IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory;
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IBestRateExcludedAccountRepository excludedAccountRepository;
+        private readonly IShippingSettings shippingSettings;
 
         public V_07_04_00_02(IIndex<ShipmentTypeCode, ICarrierAccountRetriever> carrierAccountRetrieverFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IBestRateExcludedAccountRepository excludedAccountRepository)
+            IBestRateExcludedAccountRepository excludedAccountRepository,
+            IShippingSettings shippingSettings)
         {
             this.carrierAccountRetrieverFactory = carrierAccountRetrieverFactory;
             this.shipmentTypeManager = shipmentTypeManager;
             this.excludedAccountRepository = excludedAccountRepository;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -47,7 +50,9 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         {
             List<long> accountsToExclude = new List<long>();
 
-            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes)
+            var shippingSettingsEntity = shippingSettings.FetchReadOnly();
+
+            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shippingSettingsEntity.BestRateExcludedTypes))
             {
                 var accountRepository = carrierAccountRetrieverFactory[shipmentTypeCode];
                 if (accountRepository.AccountsReadOnly.Count() > 1)
