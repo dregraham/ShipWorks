@@ -88,5 +88,10 @@ namespace Interapptive.Shared.Net
         /// Prepare the URI of the request
         /// </summary>
         Uri GetPreparedRequestUri();
+
+        /// <summary>
+        /// The amount of time the request took
+        /// </summary>
+        long ResponseTimeInMs { get; set; }
     }
 }

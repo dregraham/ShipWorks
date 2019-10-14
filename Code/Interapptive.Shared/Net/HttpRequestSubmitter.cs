@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -117,6 +118,11 @@ namespace Interapptive.Shared.Net
         }
 
         /// <summary>
+        /// The amount of time the request took
+        /// </summary>
+        public long ResponseTimeInMs { get; set; }
+
+        /// <summary>
         /// Execute the request
         /// </summary>
         public virtual IHttpResponseReader GetResponse()
@@ -143,10 +149,12 @@ namespace Interapptive.Shared.Net
             }
 
             // Get the response
-            HttpWebResponse webResponse;
+            HttpWebResponse webResponse = null;
 
+            Stopwatch sw = new Stopwatch();
             try
             {
+                sw.Start();
                 webResponse = (HttpWebResponse) webRequest.GetResponse();
             }
             catch (WebException ex)
@@ -162,6 +170,11 @@ namespace Interapptive.Shared.Net
                 {
                     throw;
                 }
+            }
+            finally
+            {
+                sw.Stop();
+                ResponseTimeInMs = sw.ElapsedMilliseconds;
             }
 
             return ProcessResponse(webRequest, webResponse);
@@ -233,7 +246,7 @@ namespace Interapptive.Shared.Net
                 throw new WebException(statusDescription);
             }
 
-            return new HttpResponseReader(webRequest, webResponse);
+            return new HttpResponseReader(webRequest, webResponse, ResponseTimeInMs);
         }
 
         /// <summary>

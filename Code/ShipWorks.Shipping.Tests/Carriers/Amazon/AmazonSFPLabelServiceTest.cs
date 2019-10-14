@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP;
@@ -12,6 +13,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonSFPLabelServiceTest : IDisposable
     {
+        private TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("testing");
+
         readonly ShipmentEntity defaultShipment = new ShipmentEntity
         {
             Order = new AmazonOrderEntity(),
@@ -37,7 +40,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public async Task Create_ReturnsLabelData_WithShipmentAndApiResults()
         {
             var labelData = new AmazonShipment();
-            mock.Mock<IAmazonSFPCreateShipmentRequest>().Setup(x => x.Submit(It.IsAny<ShipmentEntity>()))
+            mock.Mock<IAmazonSFPCreateShipmentRequest>().Setup(x => x.Submit(It.IsAny<ShipmentEntity>(),
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()))
                 .Returns(labelData);
 
             var response = mock.Create<AmazonSFPDownloadedLabelData>(TypedParameter.From(defaultShipment));
