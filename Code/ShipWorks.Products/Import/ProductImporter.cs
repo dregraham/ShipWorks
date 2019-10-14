@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -141,14 +140,7 @@ namespace ShipWorks.Products.Import
             ImportProductsResult result,
             Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction)
         {
-
-            var telemetry = new TrackedEvent("ProductCatalog.Content.Modification");
-
-            telemetry.AddProperty("ProductCatalog.Content.Modification.Source", "Import");
-            double newSuccessCount = 0;
-            double newFailedCount = 0;
-            double existingSuccessCount = 0;
-            double existingFailedCount = 0;
+            var counts = new ProductTelemetryCounts();
 
             // Loop through each row after the header rows
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
@@ -158,14 +150,7 @@ namespace ShipWorks.Products.Import
                     .Do(isNew =>
                     {
                         result.ProductSucceeded(isNew);
-                        if (isNew)
-                        {
-                            newSuccessCount++;
-                        }
-                        else
-                        {
-                            existingSuccessCount++;
-                        }
+                        counts.AddSuccess(isNew);
                     }, ex =>
                     {
                         string message = ex.Message;
@@ -178,14 +163,7 @@ namespace ShipWorks.Products.Import
 
                         if (ex is ProductImporterException exception)
                         {
-                            if (exception.IsNew)
-                            {
-                                newFailedCount++;
-                            }
-                            else
-                            {
-                                existingFailedCount++;
-                            }
+                            counts.AddFailure(exception.IsNew);
                         }
                     })
                     .Recover(ex => true)
@@ -199,12 +177,7 @@ namespace ShipWorks.Products.Import
                 itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
             }
 
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Success", newSuccessCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Failure", newFailedCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Success", existingSuccessCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Failure", existingFailedCount);
-
-            telemetry.Dispose();
+            counts.SendTelemetry();
         }
 
         /// <summary>

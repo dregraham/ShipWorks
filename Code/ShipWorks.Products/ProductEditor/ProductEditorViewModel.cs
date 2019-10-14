@@ -288,13 +288,7 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
-            var telemetry = new TrackedEvent("ProductCatalog.Content.Modification");
-            telemetry.AddProperty("ProductCatalog.Content.Modification.Source", "InlineUI");
-
-            double newSuccessCount = 0;
-            double newFailedCount = 0;
-            double existingSuccessCount = 0;
-            double existingFailedCount = 0;
+            var counts = new ProductTelemetryCounts();
 
             productVariant.Product.IsBundle = IsBundle;
 
@@ -323,28 +317,14 @@ namespace ShipWorks.Products.ProductEditor
 
             if (saveResult.Success)
             {
-                if (IsNew)
-                {
-                    newSuccessCount++;
-                }
-                else
-                {
-                    existingSuccessCount++;
-                }
+                counts.AddSuccess(IsNew);
 
                 dialog.DialogResult = true;
                 dialog.Close();
             }
             else
             {
-                if (IsNew)
-                {
-                    newFailedCount++;
-                }
-                else
-                {
-                    existingFailedCount++;
-                }
+                counts.AddFailure(IsNew);
 
                 if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
@@ -356,12 +336,7 @@ namespace ShipWorks.Products.ProductEditor
                 }
             }
 
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Success", newSuccessCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Failure", newFailedCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Success", existingSuccessCount);
-            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Failure", existingFailedCount);
-
-            telemetry.Dispose();
+            counts.SendTelemetry();
         }
     }
 }
