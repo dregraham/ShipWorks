@@ -288,7 +288,7 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
-            var counts = new ProductTelemetryCounts();
+            var counts = new ProductTelemetryCounts("InlineUI");
 
             productVariant.Product.IsBundle = IsBundle;
 

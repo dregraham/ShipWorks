@@ -7,6 +7,8 @@ namespace ShipWorks.Products
     /// </summary>
     public class ProductTelemetryCounts
     {
+        private readonly string source;
+
         public double NewSuccessCount { get; private set; }
         public double NewFailureCount { get; private set; }
         public double ExistingSuccessCount { get; private set; }
@@ -15,12 +17,13 @@ namespace ShipWorks.Products
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductTelemetryCounts()
+        public ProductTelemetryCounts(string source)
         {
             NewSuccessCount = 0;
             NewFailureCount = 0;
             ExistingFailureCount = 0;
             ExistingSuccessCount = 0;
+            this.source = source;
         }
 
         /// <summary>
@@ -60,7 +63,7 @@ namespace ShipWorks.Products
         {
             using (var telemetry = new TrackedEvent("ProductCatalog.Content.Modification"))
             {
-                telemetry.AddProperty("ProductCatalog.Content.Modification.Source", "Import");
+                telemetry.AddProperty("ProductCatalog.Content.Modification.Source", source);
                 telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Success", NewSuccessCount);
                 telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Failure", NewFailureCount);
                 telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Success", ExistingSuccessCount);

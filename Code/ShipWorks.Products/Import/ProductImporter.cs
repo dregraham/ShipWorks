@@ -140,7 +140,7 @@ namespace ShipWorks.Products.Import
             ImportProductsResult result,
             Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction)
         {
-            var counts = new ProductTelemetryCounts();
+            var counts = new ProductTelemetryCounts("Import");
 
             // Loop through each row after the header rows
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
