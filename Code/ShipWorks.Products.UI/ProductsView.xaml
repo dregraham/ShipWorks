@@ -10,7 +10,8 @@
     xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.shipworks.com/ui"
-    d:DataContext="{d:DesignInstance local:DesignerProductsMode, IsDesignTimeCreatable=True}"
+    d:DataContext="{d:DesignInstance local:DesignerProductsMode,
+                                     IsDesignTimeCreatable=True}"
     d:DesignHeight="500"
     d:DesignWidth="1200"
     FontFamily="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"
@@ -335,17 +336,22 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ToggleButton
+                                Width="28"
+                                Height="13"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Style="{StaticResource Path.ActiveToggleButton}" Height="13" Width="28">
-                                <i:Interaction.Triggers>
+                                Command="{Binding DataContext.ToggleActivation, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Data.ProductVariantID}"
+                                IsChecked="{Binding Data.IsActive}"
+                                Style="{StaticResource Path.ActiveToggleButton}">
+                                <!--<i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding ActivateProductCommand}" />
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="Unchecked">
                                         <i:InvokeCommandAction Command="{Binding DeactivateProductCommand}" />
                                     </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                                </i:Interaction.Triggers>-->
                             </ToggleButton>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
