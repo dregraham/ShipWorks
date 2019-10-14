@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 try
                 {
-                    XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
+                    XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector).XmlDocument;
 
                     // Process the request
                     upsTransitTimes = ProcessApiResponse(xmlDocument, shipment);

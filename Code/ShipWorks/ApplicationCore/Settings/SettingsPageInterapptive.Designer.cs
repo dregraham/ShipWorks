@@ -77,6 +77,8 @@ namespace ShipWorks.ApplicationCore.Settings
             this.otherWarehouseUrlText = new System.Windows.Forms.TextBox();
             this.activationUrl = new System.Windows.Forms.Label();
             this.activataionUrlText = new System.Windows.Forms.TextBox();
+            this.flushTelemetry = new System.Windows.Forms.Button();
+            this.telemetrySectionTitle = new ShipWorks.UI.Controls.SectionTitle();
             this.panelBuyDotCom.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -574,11 +576,33 @@ namespace ShipWorks.ApplicationCore.Settings
             this.activataionUrlText.Size = new System.Drawing.Size(252, 21);
             this.activataionUrlText.TabIndex = 47;
             // 
+            // flushTelemetry
+            // 
+            this.flushTelemetry.Location = new System.Drawing.Point(27, 1100);
+            this.flushTelemetry.Name = "flushTelemetry";
+            this.flushTelemetry.Size = new System.Drawing.Size(92, 23);
+            this.flushTelemetry.TabIndex = 49;
+            this.flushTelemetry.Text = "Flush Telemetry";
+            this.flushTelemetry.UseVisualStyleBackColor = true;
+            this.flushTelemetry.Click += new System.EventHandler(this.OnFlushTelemetryClick);
+            // 
+            // telemetrySectionTitle
+            // 
+            this.telemetrySectionTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.telemetrySectionTitle.Location = new System.Drawing.Point(14, 1072);
+            this.telemetrySectionTitle.Name = "telemetrySectionTitle";
+            this.telemetrySectionTitle.Size = new System.Drawing.Size(350, 22);
+            this.telemetrySectionTitle.TabIndex = 42;
+            this.telemetrySectionTitle.Text = "Telemetry";
+            // 
             // SettingsPageInterapptive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.telemetrySectionTitle);
+            this.Controls.Add(this.flushTelemetry);
             this.Controls.Add(this.activationUrl);
             this.Controls.Add(this.activataionUrlText);
             this.Controls.Add(this.otherWarehouseUrl);
@@ -629,7 +653,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "SettingsPageInterapptive";
-            this.Size = new System.Drawing.Size(374, 1076);
+            this.Size = new System.Drawing.Size(374, 1124);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelBuyDotCom.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -687,5 +711,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private System.Windows.Forms.TextBox otherWarehouseUrlText;
         private System.Windows.Forms.Label activationUrl;
         private System.Windows.Forms.TextBox activataionUrlText;
+        private System.Windows.Forms.Button flushTelemetry;
+        private UI.Controls.SectionTitle telemetrySectionTitle;
     }
 }

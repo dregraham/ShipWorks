@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             string soapRequestText = BuildSoapRequest(fimsRequestXml).ToString();
 
             TelemetricResult<string> response = Submit(soapRequestText);
-            TelemetricResult<IFimsShipResponse> result = new TelemetricResult<IFimsShipResponse>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<IFimsShipResponse> result = new TelemetricResult<IFimsShipResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             response.CopyTo(result);
             result.SetValue(ProcessResponse(response.Value));
@@ -213,12 +213,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
             IApiLogEntry logger = apiLogEntryFactory.GetLogEntry(ApiLogSource.FedExFims, "Ship", LogActionType.Other);
             logger.LogRequest(requestSubmitter);
 
-            TelemetricResult<string> result = new TelemetricResult<string>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<string> result = new TelemetricResult<string>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             try
             {
                 IHttpResponseReader reader = null;
-                result.RunTimedEvent(TelemetricEventType.GetLabel, () => reader = requestSubmitter.GetResponse());
+                reader = requestSubmitter.GetResponse();
+                result.AddEntry(TelemetricEventType.GetLabel, reader.ResponseTimeInMilliseconds);
+
                 using (reader)
                 {
                     string responseText = reader.ReadResult();

@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -332,6 +333,16 @@ namespace ShipWorks.ApplicationCore.Settings
                 otherWarehouseUrlText.Text = selectedWebClientEnvironment.WarehouseUrl;
                 activataionUrlText.Text = selectedWebClientEnvironment.ActivationUrl;
             }
+        }
+
+        /// <summary>
+        /// Flush telemetry to Azure
+        /// </summary>
+        private void OnFlushTelemetryClick(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            Telemetry.Flush();
+            Cursor.Current = Cursors.Default;
         }
     }
 }
