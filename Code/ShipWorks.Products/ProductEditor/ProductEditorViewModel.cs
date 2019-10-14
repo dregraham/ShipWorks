@@ -232,7 +232,7 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string DialogTitle { get; private set; }
-		
+
         /// <summary>
         /// View model for the alias editor
         /// </summary>
@@ -261,7 +261,7 @@ namespace ShipWorks.Products.ProductEditor
             BundleEditorViewModel.Load(productVariant);
             await AttributeEditorViewModel.Load(productVariant).ConfigureAwait(true);
             AliasEditorViewModel.Load(productVariant);
-                    
+
             SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
             IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
@@ -288,6 +288,14 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
+            var telemetry = new TrackedEvent("ProductCatalog.Content.Modification");
+            telemetry.AddProperty("ProductCatalog.Content.Modification.Source", "InlineUI");
+
+            double newSuccessCount = 0;
+            double newFailedCount = 0;
+            double existingSuccessCount = 0;
+            double existingFailedCount = 0;
+
             productVariant.Product.IsBundle = IsBundle;
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
@@ -315,11 +323,29 @@ namespace ShipWorks.Products.ProductEditor
 
             if (saveResult.Success)
             {
+                if (IsNew)
+                {
+                    newSuccessCount++;
+                }
+                else
+                {
+                    existingSuccessCount++;
+                }
+
                 dialog.DialogResult = true;
                 dialog.Close();
             }
             else
             {
+                if (IsNew)
+                {
+                    newFailedCount++;
+                }
+                else
+                {
+                    existingFailedCount++;
+                }
+
                 if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
                     messageHelper.ShowError($"A specified SKU or Alias SKU already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
@@ -330,6 +356,12 @@ namespace ShipWorks.Products.ProductEditor
                 }
             }
 
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Success", newSuccessCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Failure", newFailedCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Success", existingSuccessCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Failure", existingFailedCount);
+
+            telemetry.Dispose();
         }
     }
 }

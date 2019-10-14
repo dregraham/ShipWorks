@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -140,12 +141,32 @@ namespace ShipWorks.Products.Import
             ImportProductsResult result,
             Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction)
         {
+
+            var telemetry = new TrackedEvent("ProductCatalog.Content.Modification");
+
+            telemetry.AddProperty("ProductCatalog.Content.Modification.Source", "Import");
+            double newSuccessCount = 0;
+            double newFailedCount = 0;
+            double existingSuccessCount = 0;
+            double existingFailedCount = 0;
+
             // Loop through each row after the header rows
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
             {
                 await sqlAdapterFactory
                     .WithPhysicalTransactionAsync(sqlAdapter => ImportProduct(updateProductAction, sqlAdapter, row))
-                    .Do(result.ProductSucceeded, ex =>
+                    .Do(isNew =>
+                    {
+                        result.ProductSucceeded(isNew);
+                        if (isNew)
+                        {
+                            newSuccessCount++;
+                        }
+                        else
+                        {
+                            existingSuccessCount++;
+                        }
+                    }, ex =>
                     {
                         string message = ex.Message;
                         if ((ex.InnerException as SqlException)?.Number == 2627)
@@ -154,6 +175,18 @@ namespace ShipWorks.Products.Import
                         }
 
                         result.ProductFailed(row.Sku, message);
+
+                        if (ex is ProductImporterException exception)
+                        {
+                            if (exception.IsNew)
+                            {
+                                newFailedCount++;
+                            }
+                            else
+                            {
+                                existingFailedCount++;
+                            }
+                        }
                     })
                     .Recover(ex => true)
                     .ConfigureAwait(false);
@@ -165,6 +198,13 @@ namespace ShipWorks.Products.Import
 
                 itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
             }
+
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Success", newSuccessCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.New.Quantity.Failure", newFailedCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Success", existingSuccessCount);
+            telemetry.AddMetric("ProductCatalog.Content.Modification.Product.Existing.Quantity.Failure", existingFailedCount);
+
+            telemetry.Dispose();
         }
 
         /// <summary>
@@ -175,17 +215,24 @@ namespace ShipWorks.Products.Import
             ProductVariantEntity productVariant = FindExistingProductVariant(sqlAdapter, row.Sku);
             var isNew = productVariant.IsNew;
 
-            await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Aliases).ConfigureAwait(false);
-            productVariant.Aliases.Clear();
+            try
+            {
+                await sqlAdapter.DeleteEntityCollectionAsync(productVariant.Aliases).ConfigureAwait(false);
+                productVariant.Aliases.Clear();
 
-            await updateProductAction(productVariant, row, sqlAdapter).ConfigureAwait(false);
+                await updateProductAction(productVariant, row, sqlAdapter).ConfigureAwait(false);
 
-            // Set the product to be uploaded to the warehouse
-            productVariant.Product.UploadToWarehouseNeeded = true;
+                // Set the product to be uploaded to the warehouse
+                productVariant.Product.UploadToWarehouseNeeded = true;
 
-            await sqlAdapter.SaveEntityAsync(productVariant.Product, true, true).ConfigureAwait(false);
-            sqlAdapter.Commit();
-            return isNew;
+                await sqlAdapter.SaveEntityAsync(productVariant.Product, true, true).ConfigureAwait(false);
+                sqlAdapter.Commit();
+                return isNew;
+            }
+            catch (Exception ex)
+            {
+                throw new ProductImporterException(ex, isNew);
+            }
         }
 
         /// <summary>
