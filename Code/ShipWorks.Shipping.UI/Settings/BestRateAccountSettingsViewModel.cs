@@ -6,6 +6,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 
@@ -125,19 +126,19 @@ namespace ShipWorks.Shipping.UI.Settings
         {
             switch (acccount)
             {
-                case UpsAccountEntity a:
+                case ReadOnlyUpsAccountEntity a:
                     return a.AccountNumber;
-                case UspsAccountEntity a:
+                case ReadOnlyUspsAccountEntity a:
                     return a.Username;
-                case EndiciaAccountEntity a:
+                case ReadOnlyEndiciaAccountEntity a:
                     return a.AccountNumber;
-                case FedExAccountEntity a:
+                case ReadOnlyFedExAccountEntity a:
                     return a.AccountNumber;
-                case OnTracAccountEntity a:
+                case ReadOnlyOnTracAccountEntity a:
                     return a.AccountNumber.ToString();
-                case DhlExpressAccountEntity a:
+                case ReadOnlyDhlExpressAccountEntity a:
                     return a.AccountNumber.ToString();
-                case AsendiaAccountEntity a:
+                case ReadOnlyAsendiaAccountEntity a:
                     return a.AccountNumber.ToString();
                 default:
                     return acccount.AccountDescription;
