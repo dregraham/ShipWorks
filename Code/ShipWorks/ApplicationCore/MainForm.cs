@@ -294,6 +294,8 @@ namespace ShipWorks
                     var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
                     buttonOrderLookupViewCreateLabel.Enabled = canProcess;
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
+
+                    buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
             });
         }
@@ -349,6 +351,14 @@ namespace ShipWorks
         private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
         {
             orderLookupControl.CreateLabel().Forget();
+        }
+
+        /// <summary>
+        /// User clicks the Ship Again button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
+        {
+            orderLookupControl.ShipAgain();
         }
 
         #region Initialization \ Shutdown
@@ -582,7 +592,7 @@ namespace ShipWorks
             {
                 return;
             }
-           
+
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -923,10 +933,10 @@ namespace ShipWorks
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
             ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
-            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?                                                                
+            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
                                                                 QuickAccessPosition.Below:
                                                                 QuickAccessPosition.Above;
-                                                                
+
             // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
@@ -1136,12 +1146,12 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Is the tab mode agnostic 
+        /// Is the tab mode agnostic
         /// </summary>
-        private bool IsModeAgnosticTab(RibbonTab selectedTab) => 
-            selectedTab == ribbonTabGridOutput || 
-            selectedTab == ribbonTabAdmin || 
-            selectedTab == ribbonTabView || 
+        private bool IsModeAgnosticTab(RibbonTab selectedTab) =>
+            selectedTab == ribbonTabGridOutput ||
+            selectedTab == ribbonTabAdmin ||
+            selectedTab == ribbonTabView ||
             selectedTab == ribbonTabHelp;
 
         /// <summary>
@@ -1938,7 +1948,7 @@ namespace ShipWorks
         /// </summary>
         private void SaveCurrentUserModeSpecificSettings(UserSettingsEntity settings)
         {
-            // Save the layout  
+            // Save the layout
             if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
@@ -2778,7 +2788,7 @@ namespace ShipWorks
                             QuickAccessPosition.Above;
 
                             ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
-                        }                      
+                        }
                     }
                 }
             }
