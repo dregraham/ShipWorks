@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// with the resources needed.
         /// </summary>
         /// <returns></returns>
-        public AmazonShipment Submit(ShipmentEntity shipment)
+        public AmazonShipment Submit(ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                     0 :
                     Math.Min(shipment.AmazonSFP.InsuranceValue, 100M);
 
-            return webClient.CreateShipment(requestDetails, shipment.AmazonSFP);
+            return webClient.CreateShipment(requestDetails, shipment.AmazonSFP, telemetricResult);
         }
 
         /// <summary>

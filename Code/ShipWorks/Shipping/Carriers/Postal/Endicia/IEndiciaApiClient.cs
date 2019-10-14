@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
@@ -43,7 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
-        LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType);
+        LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType, 
+            TelemetricResult<IDownloadedLabelData> telemetricResult);
 
         /// <summary>
         /// Track the given shipment

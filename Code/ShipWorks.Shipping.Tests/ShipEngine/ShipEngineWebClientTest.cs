@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         private readonly Mock<ICarriersApi> carriersApi;
         private readonly Mock<IRatesApi> ratesApi;
         private readonly Mock<ILabelsApi> labelsApi;
-
         private readonly ShipEngineWebClient testObject;
+        private TelemetricResult<IDownloadedLabelData> telemetricResult;
 
         public ShipEngineWebClientTest()
         {
@@ -54,6 +54,8 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             shipEngineApiFactory.Setup(c => c.CreateLabelsApi()).Returns(labelsApi);
 
             testObject = mock.Create<ShipEngineWebClient>();
+
+            telemetricResult = new TelemetricResult<IDownloadedLabelData>("testing");
         }
 
         [Fact]
@@ -168,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             apiKey.SetupGet(k => k.Value).Returns("");
 
-            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult);
 
             apiKey.Verify(i => i.Configure());
         }
@@ -176,7 +178,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         [Fact]
         public void PurchaseLabelRequest_DelegatesToIShipEngineApiFactory()
         {
-            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult);
 
             shipEngineApiFactory.Verify(i => i.CreateLabelsApi());
         }
@@ -191,7 +193,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 a.LabelsPurchaseLabelAsync(It.IsAny<PurchaseLabelRequest>(),
                     It.IsAny<string>(), It.IsAny<string>())).Throws(new ApiException(500, "", error));
 
-            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult));
         }
 
         [Fact]
@@ -199,7 +201,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             var apiEntry = mock.CreateMock<IApiLogEntry>();
             mock.MockFunc(apiEntry);
-            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine);
+            testObject.PurchaseLabel(new PurchaseLabelRequest(), ApiLogSource.ShipEngine, telemetricResult);
 
             // This does not work due to a bug in moq
             // https://github.com/moq/moq4/issues/430

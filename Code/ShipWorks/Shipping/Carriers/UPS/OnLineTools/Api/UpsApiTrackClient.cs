@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 }
 
                 // Process the XML request
-                xmlResponse = UpsWebClient.ProcessRequest(xmlWriter);
+                xmlResponse = UpsWebClient.ProcessRequest(xmlWriter).XmlDocument;
             }
             UpsApiTrackResponse response = new UpsApiTrackResponse();
             response.LoadResponse(xmlResponse, shipment);

@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SFP
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Submits the request
         /// </summary>
-        AmazonShipment Submit(ShipmentEntity shipment);
+        AmazonShipment Submit(ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult);
     }
 }

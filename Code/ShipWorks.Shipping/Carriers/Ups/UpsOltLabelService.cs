@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 UpsServicePackageTypeSetting.Validate(shipment);
 
-                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 
                 TelemetricResult<UpsLabelResponse> telemetricUpsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
                 

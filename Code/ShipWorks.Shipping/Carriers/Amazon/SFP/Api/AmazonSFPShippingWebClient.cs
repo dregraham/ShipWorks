@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Create a shipment for the given ShipmentRequestDetails
         /// </summary>
-        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment)
+        public AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             AmazonMwsApiCall call = AmazonMwsApiCall.CreateShipment;
 
@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
 
             // Get Response
             IHttpResponseReader response = ExecuteRequest(request, call, settingsFactory.Create(shipment));
+            telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMilliseconds);
 
             // Deserialize
             CreateShipmentResponse createShipmentResponse = DeserializeResponse<CreateShipmentResponse>(response.ReadResult());
@@ -123,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             }
             catch (AmazonSFPShippingException ex)
                 when (ex.Code == "InvalidState" &&
-                    amazonShipment.CarrierName.StartsWith("dynamex", StringComparison.InvariantCultureIgnoreCase))
+                      amazonShipment.CarrierName.StartsWith("dynamex", StringComparison.InvariantCultureIgnoreCase))
             {
                 throw new AmazonSFPShippingException("Dynamex shipments cannot be voided electronically. Please contact Dynamex at 855-DYNAMEX or https://www.dynamex.com/contact-us");
             }
@@ -260,10 +261,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Name", requestDetails.ShipFromAddress.Name);
             }
+
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine1))
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
             }
+
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine2))
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
@@ -282,6 +285,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Email", requestDetails.ShipFromAddress.Email);
             }
+
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Phone))
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
@@ -356,7 +360,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             // business logic failures are handled through status codes
             request.AllowHttpStatusCodes(HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Forbidden);
 
-            IHttpResponseReader response;
+            IHttpResponseReader response = null;
 
             try
             {
@@ -364,12 +368,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
 
                 // log the request
                 logger.LogRequest(request);
-
                 using (response = request.GetResponse())
                 {
                     // log the response
                     logger.LogResponse(response.ReadResult());
-                }
+                };
+
             }
             catch (Exception ex)
             {
