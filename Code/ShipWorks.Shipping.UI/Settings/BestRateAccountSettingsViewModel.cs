@@ -5,6 +5,7 @@ using System.Reflection;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 
@@ -104,7 +105,7 @@ namespace ShipWorks.Shipping.UI.Settings
                     BestRateAccount account = new BestRateAccount
                     {
                         AccountID = carrierAccount.AccountId,
-                        AccountDescription = carrierAccount.AccountDescription
+                        AccountDescription = AccountDescription(carrierAccount)
                     };
 
                     // if the account was successfully removed from the list, it should be excluded
@@ -115,6 +116,32 @@ namespace ShipWorks.Shipping.UI.Settings
             }
 
             return accounts;
+        }
+
+        /// <summary>
+        /// Get the accounts description
+        /// </summary>
+        private string AccountDescription(ICarrierAccount acccount)
+        {
+            switch (acccount)
+            {
+                case UpsAccountEntity a:
+                    return a.AccountNumber;
+                case UspsAccountEntity a:
+                    return a.Username;
+                case EndiciaAccountEntity a:
+                    return a.AccountNumber;
+                case FedExAccountEntity a:
+                    return a.AccountNumber;
+                case OnTracAccountEntity a:
+                    return a.AccountNumber.ToString();
+                case DhlExpressAccountEntity a:
+                    return a.AccountNumber.ToString();
+                case AsendiaAccountEntity a:
+                    return a.AccountNumber.ToString();
+                default:
+                    return acccount.AccountDescription;
+            }
         }
     }
 }
