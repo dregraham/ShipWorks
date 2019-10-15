@@ -111,6 +111,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                         EntityUtility.CopyChangedFields(shipment, dbShipment);
 
                         SaveSingleLabelTransacted(result, dbShipment);
+                        shipment = dbShipment;
                     }
 
                     using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
