@@ -283,26 +283,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private string GetTrackEventLocation(TrackingEvent trackEvent)
         {
-            string location = AddressCasing.Apply(trackEvent.City) ?? string.Empty;
+            var location = new[] { AddressCasing.Apply(trackEvent.City), trackEvent.State, Geography.GetCountryName(trackEvent.Country) };
 
-            if (!string.IsNullOrEmpty(trackEvent.State))
-            {
-                if (location.Length > 0)
-                {
-                    location += ", ";
-                }
-
-                location += trackEvent.State;
-            }
-
-            if (location.Length > 0)
-            {
-                location += ", ";
-            }
-
-            location += Geography.GetCountryName(trackEvent.Country);
-
-            return location;
+            return string.Join(", ", location.Where(x => !string.IsNullOrEmpty(x)));
         }
 
         /// <summary>
@@ -369,7 +352,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             return HasCapability(capabilities.CanPrintGP, GlobalPostServiceAvailability.GlobalPost) |
                 HasCapability(capabilities.CanPrintGPSmartSaver, GlobalPostServiceAvailability.SmartSaver) |
-                GetGlobalPostInternationalPresortAvailability(capabilities) | 
+                GetGlobalPostInternationalPresortAvailability(capabilities) |
                 GetGlobalPostPlusAvailability(capabilities);
         }
 
@@ -824,8 +807,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             List<Guid> uspsTransactions = uspsShipmentEntities.Select(s => s.UspsTransactionID).ToList();
             List<string> trackingNumbers = uspsShipmentEntities.Select(s => s.PostalShipment.Shipment.TrackingNumber).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
-            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());            
-  
+            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());
+
             string transactionID = Guid.NewGuid().ToString();
 
             EndOfDayManifest[] endOfDayManifests;
