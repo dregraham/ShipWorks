@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +15,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonSFPCreateShipmentRequestTest : IDisposable
     {
+        private TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("testing");
         readonly AutoMock mock;
         readonly ShipmentEntity defaultShipment = new ShipmentEntity
         {
@@ -43,12 +45,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             defaultShipment.AmazonSFP.CarrierName = carrier;
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP, 
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         [Theory]
@@ -64,12 +67,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             defaultShipment.AmazonSFP.CarrierName = carrier;
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 65),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP,
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         [Theory]
@@ -85,12 +89,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             defaultShipment.AmazonSFP.CarrierName = carrier;
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP,
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         [Theory]
@@ -106,12 +111,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             defaultShipment.AmazonSFP.CarrierName = carrier;
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 100),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP,
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         [Theory]
@@ -127,12 +133,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             defaultShipment.AmazonSFP.CarrierName = carrier;
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.DeclaredValue.Amount == 0),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP,
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         [Theory]
@@ -154,12 +161,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 });
 
             var testObject = mock.Create<AmazonSFPCreateShipmentRequest>();
-            testObject.Submit(defaultShipment);
+            testObject.Submit(defaultShipment, telemetricResult);
 
             mock.Mock<IAmazonSFPShippingWebClient>()
                 .Verify(x => x.CreateShipment(
                     It.Is<ShipmentRequestDetails>(s => s.ShippingServiceOptions.LabelFormat == expectedLabelFormat),
-                    defaultShipment.AmazonSFP));
+                    defaultShipment.AmazonSFP,
+                    It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
 
         public void Dispose()

@@ -215,6 +215,14 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Adds an entry to telemetry
         /// </summary>
+        public void AddEntry(TelemetricEventType eventType, long time)
+        {
+            AddEntry($"{baseTelemetryName}.{EnumHelper.GetDescription(eventType)}", time);
+        }
+
+        /// <summary>
+        /// Adds an entry to telemetry
+        /// </summary>
         public void AddEntry(string name, long time)
         {
             if (!telemetry.ContainsKey(name))

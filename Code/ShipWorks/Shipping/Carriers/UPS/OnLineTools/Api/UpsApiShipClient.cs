@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
+using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.UI;
 
@@ -35,12 +36,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static TelemetricResult<UpsLabelResponse> ProcessShipment(ShipmentEntity shipment)
         {
-            XmlDocument confirmResponse = ProcessShipConfirm(shipment);
+            TelemetricResult<XmlDocument> telemetricConfirmResponse = ProcessShipConfirm(shipment);
 
             // Create the XPath engine and get the digest
-            XPathNavigator xpath = confirmResponse.CreateNavigator();
+            XPathNavigator xpath = telemetricConfirmResponse.Value.CreateNavigator();
 
-            return CallShipAccept(shipment, xpath);
+            TelemetricResult<UpsLabelResponse> telemetricCallShipAccept = CallShipAccept(shipment, xpath);
+            telemetricConfirmResponse.CopyTo(telemetricCallShipAccept);
+            return telemetricCallShipAccept;
         }
 
         /// <summary>
@@ -48,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        private static XmlDocument ProcessShipConfirm(ShipmentEntity shipment)
+        private static TelemetricResult<XmlDocument> ProcessShipConfirm(ShipmentEntity shipment)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
@@ -309,7 +312,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 UpsApiCore.WritePackagesXml(ups, xmlWriter, true, new UpsPackageWeightElementWriter(xmlWriter), new UpsPackageServiceOptionsElementWriter(xmlWriter));
             }
 
-            return UpsWebClient.ProcessRequest(xmlWriter, new TrustingCertificateInspector());
+            TelemetricResult<XmlDocument> telemetricResult = new TelemetricResult<XmlDocument>($"UpsShipConfirm.{TelemetricResultBaseName.ApiResponseTimeInMilliseconds}");
+            UpsWebClientResponse response = UpsWebClient.ProcessRequest(xmlWriter, new TrustingCertificateInspector());
+            telemetricResult.SetValue(response.XmlDocument);
+            telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMs);
+
+            return telemetricResult;
         }
 
         /// <summary>
@@ -970,10 +978,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             string shipmentDigest = XPathUtility.Evaluate(shipConfirmNavigator, "//ShipmentDigest", "");
             xmlWriter.WriteElementString("ShipmentDigest", shipmentDigest);
 
-            TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>($"UpsShipAccept.{TelemetricResultBaseName.ApiResponseTimeInMilliseconds}");
             
-            XmlDocument acceptResponse = null;
-            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => acceptResponse = UpsWebClient.ProcessRequest(xmlWriter));
+            UpsWebClientResponse response = UpsWebClient.ProcessRequest(xmlWriter);
+            XmlDocument acceptResponse = response.XmlDocument;
 
             UpsLabelResponse upsLabelResponse = new UpsLabelResponse
             {
@@ -983,6 +991,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 Account = account
             };
             
+            telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMs);
             telemetricResult.SetValue(upsLabelResponse);
 
             return telemetricResult;

@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
         /// <summary>
         /// Create a shipment
         /// </summary>
-        AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment);
+        AmazonShipment CreateShipment(ShipmentRequestDetails requestDetails, AmazonSFPShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult);
 
         /// <summary>
         /// Voids the shipment

@@ -58,11 +58,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     account.AccountNumber);
 
                 TelemetricResult<IDownloadedLabelData> telemetricResult =
-                    new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                    new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 
                 // Get new shipment from OnTrac and save the shipment info
                 Schemas.ShipmentResponse.Shipment shipmentResponse = null;
-                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest));
+                shipmentResponse = onTracShipmentRequest.ProcessShipment(shipmentRequest, telemetricResult);
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, shipmentResponse));
 
                 return Task.FromResult(telemetricResult);

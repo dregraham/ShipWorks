@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
         /// or
         /// </exception>
-        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter)
+        public static UpsWebClientResponse ProcessRequest(XmlTextWriter xmlWriter)
         {
             return ProcessRequest(xmlWriter, LogActionType.Other, new TrustingCertificateInspector());
         }
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// UPS does not have a record for this shipment, and therefore cannot void the shipment.
         /// or
         /// </exception>
-        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, ICertificateInspector certificateInspector)
+        public static UpsWebClientResponse ProcessRequest(XmlTextWriter xmlWriter, ICertificateInspector certificateInspector)
         {
             return ProcessRequest(xmlWriter, LogActionType.Other, certificateInspector);
         }
@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// or
         /// </exception>
         [NDependIgnoreLongMethod]
-        public static XmlDocument ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
+        public static UpsWebClientResponse ProcessRequest(XmlTextWriter xmlWriter, LogActionType logActionType, ICertificateInspector certificateInspector)
         {
             // Close out the XML
             xmlWriter.WriteEndDocument();
@@ -290,6 +290,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             {
                 using (IHttpResponseReader response = request.GetResponse())
                 {
+
                     string responseXml = response.ReadResult(StringUtility.Iso8859Encoding);
 
                     // Log the response
@@ -333,7 +334,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         }
                     }
 
-                    return xmlResponse;
+                    return new UpsWebClientResponse()
+                    {
+                        XmlDocument = xmlResponse,
+                        ResponseTimeInMs = request.ResponseTimeInMs,
+                    };
                 }
             }
             catch (XmlException ex)

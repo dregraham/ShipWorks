@@ -261,6 +261,8 @@ namespace ShipWorks.Stores.Platforms.Miva
             request.Variables.Add("tracking", shipment.TrackingNumber);
             request.Variables.Add("carrier", ShippingManager.GetCarrierName((ShipmentTypeCode) shipment.ShipmentType));
             request.Variables.Add("shipdate", shipment.ShipDate.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds.ToString());
+            request.Variables.Add("weight", shipment.TotalWeight.ToString());
+            request.Variables.Add("cost", shipment.ShipmentCost.ToString());
 
             GenericModuleResponse response = await ProcessRequestAsync(request, "updateshipment").ConfigureAwait(false);
 

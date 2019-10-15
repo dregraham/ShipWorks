@@ -20,6 +20,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -69,6 +70,7 @@ namespace ShipWorks.Products
             CopyAsVariant = new RelayCommand(async () => await CopyAsVariantAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
+            ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
 
             DeactivateProductCommand =
                 new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
@@ -204,10 +206,23 @@ namespace ShipWorks.Products
             {
                 if (Set(ref searchText, value))
                 {
+                    RaisePropertyChanged(nameof(IsSearchActive));
                     RefreshProductsAction();
                 }
             }
         }
+
+        /// <summary>
+        /// Is there a product search active
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSearchActive => !string.IsNullOrEmpty(SearchText);
+
+        /// <summary>
+        /// Splash view for importing products
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IProductImporterSplashViewModel ImportProductsSplash { get; private set; }
 
         /// <summary>
         /// Initialize the mode
