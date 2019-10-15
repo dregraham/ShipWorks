@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </returns>
         protected TelemetricResult<GenericResult<ProcessShipmentReply>> Ship(ProcessShipmentRequest nativeShipmentRequest, ShipService service)
         {
-            TelemetricResult<GenericResult<ProcessShipmentReply>> result = new TelemetricResult<GenericResult<ProcessShipmentReply>>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<GenericResult<ProcessShipmentReply>> result = new TelemetricResult<GenericResult<ProcessShipmentReply>>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             try
             {   // Point the service to the correct endpoint

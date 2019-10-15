@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 xmlWriter.WriteEndElement();
 
                 // Process the XML request
-                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
+                XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter).XmlDocument;
 
                 // Now we can get the Access License number
                 string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
@@ -363,7 +363,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpsWebClient.AppendToolList(xmlWriter);
             
             // Process the XML request
-            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
+            XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter).XmlDocument;
 
             // Extract the license text and return it to be passed on to the next stage of the wizard
             return (string)upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseText)");

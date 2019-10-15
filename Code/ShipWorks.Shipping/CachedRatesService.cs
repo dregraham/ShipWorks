@@ -59,23 +59,9 @@ namespace ShipWorks.Shipping
             {
                 // This is a bad configuration on some level, so cache an empty rate group
                 // before throwing the exceptions
-                RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment.ShipmentTypeCode, rateHash, ex);
+                RateGroup invalidRateGroup = new InvalidRateGroup(shipment.ShipmentTypeCode, ex);
                 throw new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
             }
-        }
-
-        /// <summary>
-        /// This is intended to be used when there is (most likely) a bad configuration
-        /// with the shipment on some level, so an empty rate group with a exception footer
-        /// is cached.
-        /// </summary>
-        private RateGroup CacheInvalidRateGroup(ShipmentTypeCode shipmentType, string rateHash, Exception exception)
-        {
-            RateGroup rateGroup = new InvalidRateGroup(shipmentType, exception);
-
-            RateCache.Instance.Save(rateHash, rateGroup);
-
-            return rateGroup;
         }
     }
 }

@@ -123,7 +123,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public async Task Process()
         {
-            if (sqlSession == null)
+            if (sqlSession == null || ConnectionSensitiveScope.IsActive)
             {
                 return;
             }

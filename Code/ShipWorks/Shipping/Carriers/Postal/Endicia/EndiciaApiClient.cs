@@ -1111,7 +1111,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Process the given shipment
         /// </summary>
-        public LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
+        public LabelRequestResponse ProcessShipment(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType,
+            TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             PostalShipmentEntity postal = shipment.Postal;
             EndiciaAccountEntity account = GetAccount(postal);
@@ -1125,7 +1126,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     EnsureSecureRequest(service, shipment.ShipmentType);
 
-                    LabelRequestResponse response = service.GetPostageLabel(request);
+                    LabelRequestResponse response = null;
+                    telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = service.GetPostageLabel(request));
 
                     // Check for errors
                     if (response.Status != 0)

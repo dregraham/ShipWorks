@@ -612,7 +612,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         [NDependIgnoreLongMethod]
         private TelemetricResult<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             Guid uspsGuid = Guid.Empty;
             string tracking = string.Empty;

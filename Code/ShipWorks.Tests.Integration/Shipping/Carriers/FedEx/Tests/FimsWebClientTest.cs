@@ -4,15 +4,13 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Moq;
+using ShipWorks.ApplicationCore.Logging;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
 {
+    [Trait("Category", "ContinuousIntegration")]
     public class FimsWebClientTest
     {
         [Fact]
@@ -22,6 +20,10 @@ namespace ShipWorks.Tests.Integration.Shipping.Carriers.FedEx.Tests
             {
                 var apiLogEntry = mock.MockRepository.Create<IApiLogEntry>();
                 mock.Provide(apiLogEntry.Object);
+                var apiLogFactory = mock.MockRepository.Create<ILogEntryFactory>();
+                apiLogFactory.Setup(lf => lf.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
+                    .Returns(apiLogEntry.Object);
+                mock.Provide(apiLogFactory.Object);
 
                 mock.Provide<IHttpRequestSubmitterFactory>(new HttpRequestSubmitterFactory());
 

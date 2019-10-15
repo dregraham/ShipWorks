@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // Process the request
-            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector);
+            XmlDocument xmlDocument = UpsWebClient.ProcessRequest(xmlWriter, LogActionType.GetRates, certificateInspector).XmlDocument;
 
             return ProcessApiResponse(shipment, xmlDocument, (UpsRateType) account.RateType);
         }
