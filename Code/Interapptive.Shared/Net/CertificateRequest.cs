@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using log4net;
 
 namespace Interapptive.Shared.Net
 {
@@ -13,14 +12,16 @@ namespace Interapptive.Shared.Net
     /// </summary>
     public class CertificateRequest : ICertificateRequest
     {
+        // Logger
+        private static readonly ILog log = LogManager.GetLogger(typeof(CertificateRequest));
         private readonly HttpWebRequest webRequest;
         private readonly ICertificateInspector inspector;
+        private const int throttlePeriod = 15;
+        private static DateTime nextSecureConnectionValidation = DateTime.MinValue;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CertificateRequest"/> class.
         /// </summary>
-        /// <param name="uri">The URI.</param>
-        /// <param name="inspector">The inspector.</param>
         public CertificateRequest(Uri uri, ICertificateInspector inspector)
             : this(WebRequest.Create(uri) as HttpWebRequest, inspector)
         { }
@@ -28,8 +29,6 @@ namespace Interapptive.Shared.Net
         /// <summary>
         /// Initializes a new instance of the <see cref="CertificateRequest"/> class.
         /// </summary>
-        /// <param name="webRequest">The web request.</param>
-        /// <param name="inspector">The inspector.</param>
         public CertificateRequest(HttpWebRequest webRequest, ICertificateInspector inspector)
         {
             this.webRequest = webRequest;
@@ -58,18 +57,27 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public CertificateSecurityLevel Submit()
         {
-            try
+            if (nextSecureConnectionValidation < DateTime.UtcNow)
             {
-                using (WebResponse response = webRequest.GetResponse())
-                {}
-            }
-            catch (WebException)
-            {
-                // Do nothing here, so a request to a vendor that results in an error code
-                // (e.g. 404, 500, etc.) can still be inspected
+                log.Info("CertificateRequest.Submit: Checking the certificate.");
+
+                try
+                {
+                    using (WebResponse response = webRequest.GetResponse())
+                    { }
+
+                    nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(throttlePeriod);
+                }
+                catch (WebException)
+                {
+                    // Do nothing here, so a request to a vendor that results in an error code
+                    // (e.g. 404, 500, etc.) can still be inspected
+                }
+
+                return inspector.Inspect(this);
             }
 
-            return inspector.Inspect(this);
+            return CertificateSecurityLevel.Trusted;
         }
     }
 }

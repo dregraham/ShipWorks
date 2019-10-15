@@ -30,6 +30,8 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
         public ExecutionMode()
         {
+            ServicePointManager.DefaultConnectionLimit = 20;
+            ServicePointManager.Expect100Continue = false;
         }
 
         public virtual SynchronizationContext BaseSynchronizationContext => synchronizationContext;
