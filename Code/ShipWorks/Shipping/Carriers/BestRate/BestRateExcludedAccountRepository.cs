@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private static IEnumerable<BestRateExcludedAccountEntity> accounts;
 
         /// <summary>
-        /// Constructor
+        /// Initialize the repository
         /// </summary>
         public void InitializeForCurrentSession()
         {

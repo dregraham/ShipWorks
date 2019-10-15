@@ -30,7 +30,7 @@
 
             <TextBlock TextWrapping="Wrap"
                    Grid.Row="1"
-                   Margin="15 8 0 4"
+                   Margin="15 8 0 10"
                    Text="Choose the providers and accounts you would like to use with Best Rate. If multiple accounts are selected for a particular carrier, Best Rate will display the cheapest rate among all selected carrier accounts for each shipping service."/>
 
             <ItemsControl Grid.Row="2"

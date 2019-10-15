@@ -8,6 +8,12 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.OnTrac;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Data.Administration.VersionSpecificUpdates
@@ -48,11 +54,18 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// </summary>
         public void Update()
         {
+            UspsAccountManager.InitializeForCurrentSession();
+            EndiciaAccountManager.InitializeForCurrentSession();
+            FedExAccountManager.InitializeForCurrentSession();
+            UpsAccountManager.InitializeForCurrentSession();
+            OnTracAccountManager.InitializeForCurrentSession();
+            iParcelAccountManager.InitializeForCurrentSession();
+
             List<long> accountsToExclude = new List<long>();
 
             var shippingSettingsEntity = shippingSettings.FetchReadOnly();
 
-            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shippingSettingsEntity.BestRateExcludedTypes))
+            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shippingSettingsEntity.BestRateExcludedTypes.Union(new[] { ShipmentTypeCode.BestRate })))
             {
                 var accountRepository = carrierAccountRetrieverFactory[shipmentTypeCode];
                 if (accountRepository.AccountsReadOnly.Count() > 1)
@@ -67,7 +80,11 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
                 }
             }
 
-            excludedAccountRepository.Save(accountsToExclude);
+            if (accountsToExclude.Any())
+            {
+                excludedAccountRepository.InitializeForCurrentSession();
+                excludedAccountRepository.Save(accountsToExclude);
+            }
         }
     }
 }

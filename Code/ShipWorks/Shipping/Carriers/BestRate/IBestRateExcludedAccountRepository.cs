@@ -5,6 +5,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public interface IBestRateExcludedAccountRepository
     {
         /// <summary>
+        /// Initialize the repository
+        /// </summary>
+        void InitializeForCurrentSession();
+
+        /// <summary>
         /// Save the given accountIDs to the repository
         /// </summary>
         void Save(IEnumerable<long> accountIDs);
