@@ -57,27 +57,33 @@ namespace Interapptive.Shared.Net
         /// </summary>
         public CertificateSecurityLevel Submit()
         {
-            if (nextSecureConnectionValidation < DateTime.UtcNow)
+            CertificateSecurityLevel level = CertificateSecurityLevel.Trusted;
+
+            if (nextSecureConnectionValidation >= DateTime.UtcNow)
             {
-                log.Info("CertificateRequest.Submit: Checking the certificate.");
-
-                try
-                {
-                    using (WebResponse response = webRequest.GetResponse())
-                    { }
-
-                    nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(throttlePeriod);
-                }
-                catch (WebException)
-                {
-                    // Do nothing here, so a request to a vendor that results in an error code
-                    // (e.g. 404, 500, etc.) can still be inspected
-                }
-
-                return inspector.Inspect(this);
+                return level;
             }
 
-            return CertificateSecurityLevel.Trusted;
+            log.Info("CertificateRequest.Submit: Checking the certificate.");
+
+            try
+            {
+                using (WebResponse response = webRequest.GetResponse())
+                { }
+            }
+            catch (WebException)
+            {
+                // Do nothing here, so a request to a vendor that results in an error code
+                // (e.g. 404, 500, etc.) can still be inspected
+            }
+
+            level = inspector.Inspect(this);
+            if (level == CertificateSecurityLevel.Trusted)
+            {
+                nextSecureConnectionValidation = DateTime.UtcNow.AddMinutes(throttlePeriod);
+            }
+
+            return level;
         }
     }
 }
