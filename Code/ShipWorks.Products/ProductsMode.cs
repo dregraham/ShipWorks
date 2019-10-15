@@ -72,43 +72,10 @@ namespace ShipWorks.Products
                 items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
             ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
 
-            DeactivateProductCommand =
-                new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
-
-            ActivateProductCommand =
-                new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
-
             ExportProducts = new RelayCommand(ExportProductsAction);
             ImportProducts = new RelayCommand(ImportProductsAction);
             AddProduct = new RelayCommand(async () => await AddProductAction().ConfigureAwait(true));
-
             ToggleActivation = new RelayCommand<long>((entityId) => ToggleActivationAction(entityId).Forget());
-        }
-
-        private async Task ToggleActivationAction(long entityId)
-        {
-            var product = Products.Data.Where(x => x.EntityID == entityId).Select(x => x.Data).FirstOrDefault();
-            if (product == null)
-            {
-                return;
-            }
-
-            var makeItActive = !product.IsActive;
-            var text = (makeItActive ? "Activating" : "Deactivating") + " products";
-
-            using (var item = messageHelper.ShowProgressDialog(text, text))
-            {
-                try
-                {
-                    await productCatalog
-                    .SetActivation(new[] { entityId }, makeItActive, item.ProgressItem)
-                    .ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
-                }
-            }
         }
 
         /// <summary>
@@ -382,18 +349,27 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Activate a product
+        /// Toggle action to display whether a product is active or inactive.
         /// </summary>
-        private async Task SetProductActivation(bool makeItActive)
+        private async Task ToggleActivationAction(long entityId)
         {
-            var text = (makeItActive ? "Activating" : "Deactivating") + " products";
+            IProductListItemEntity product = Products.Data.Where(x => x.EntityID == entityId)
+                .Select(x => x.Data).FirstOrDefault();
+
+            if (product == null)
+            {
+                return;
+            }
+            
+            bool makeItActive = !product.IsActive;
+            string text = (makeItActive ? "Activating" : "Deactivating") + " products";
 
             using (var item = messageHelper.ShowProgressDialog(text, text))
             {
                 try
                 {
                     await productCatalog
-                    .SetActivation(SelectedProductIDs, makeItActive, item.ProgressItem)
+                    .SetActivation(new[] { entityId }, makeItActive, item.ProgressItem)
                     .ConfigureAwait(false);
                 }
                 catch (Exception ex)
@@ -402,6 +378,7 @@ namespace ShipWorks.Products
                 }
             }
 
+            // Refresh is required to show the active/inactive state of the row.
             RefreshProductsAction();
         }
 

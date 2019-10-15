@@ -50,7 +50,7 @@ namespace ShipWorks.Products
                 .Distinct()
                 .OrderBy(CreateSortClause(sortDefinition));
 
-            if (!includeInactiveProducts)
+            if (includeInactiveProducts)
             {
                 query = query.Where(ProductVariantFields.IsActive == true);
             }

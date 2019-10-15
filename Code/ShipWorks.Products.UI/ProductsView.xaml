@@ -80,21 +80,21 @@
                     Content="Add"
                     Style="{StaticResource PrimaryButton}" />
                 <Button
+                    Command="{Binding CopyAsVariant}"
+                    Content="Create Variant"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
                     Command="{Binding EditProductVariantButton}"
                     Content="Edit"
+                    Style="{StaticResource PrimaryButton}" />
+                <Button
+                    Command="{Binding ImportProducts}"
+                    Content="Import"
                     Style="{StaticResource PrimaryButton}" />
                 <Button
                     Command="{Binding ExportProducts}"
                     Content="Export"
                     Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ActivateProductCommand}"
-                    Content="Mark Active"
-                    Style="{StaticResource SecondaryButton}" />
-                <Button
-                    Command="{Binding DeactivateProductCommand}"
-                    Content="Mark Inactive"
-                    Style="{StaticResource SecondaryButton}" />
             </UniformGrid>
             <syncfusion:SfTextBoxExt
                 Grid.Column="3"
@@ -336,23 +336,20 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ToggleButton
+                                x:Name="Toggle1"
                                 Width="28"
                                 Height="13"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                Style="{StaticResource Path.ActiveToggleButton}"
                                 Command="{Binding DataContext.ToggleActivation, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding Data.ProductVariantID}"
-                                IsChecked="{Binding Data.IsActive}"
-                                Style="{StaticResource Path.ActiveToggleButton}">
-                                <!--<i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Checked">
-                                        <i:InvokeCommandAction Command="{Binding ActivateProductCommand}" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="Unchecked">
-                                        <i:InvokeCommandAction Command="{Binding DeactivateProductCommand}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>-->
+                                CommandParameter="{Binding Data.ProductVariantID}">
                             </ToggleButton>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=Data.IsActive, Mode=OneWay}" Value="False">
+                                    <Setter TargetName="Toggle1" Property="Style" Value="{StaticResource Path.InactiveToggleButton}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -400,7 +397,7 @@
                 VerticalAlignment="Center"
                 IsChecked="{Binding ShowInactiveProducts}"
                 Style="{StaticResource FormCheckBox}">
-                Show inactive products
+                Hide Inactive Products
             </CheckBox>
         </Grid>
     </Grid>
