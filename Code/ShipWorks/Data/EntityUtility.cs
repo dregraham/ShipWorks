@@ -905,8 +905,9 @@ namespace ShipWorks.Data
 
                 foreach (var childField in sourceChild.Value.Where(f => !f.IsReadOnly))
                 {
-                    destinationChildEntity.Fields[childField.FieldIndex].CurrentValue =
-                        sourceChild.Key.Fields[childField.FieldIndex].CurrentValue;
+                    var destinationField = destinationChildEntity.Fields[childField.FieldIndex];
+                    destinationField.CurrentValue = sourceChild.Key.Fields[childField.FieldIndex].CurrentValue;
+                    destinationChildEntity.IsDirty = true;
                 }
             }
         }
