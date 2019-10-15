@@ -65,7 +65,11 @@ namespace ShipWorks.Products.Import
                 return GenericResult.FromError("No records found in file.", result);
             }
 
-            result = await ProcessRows(fileLoadResults.Value.SkuRows, fileLoadResults.Value.BundleRows).ConfigureAwait(false);
+            var counts = new ProductTelemetryCounts("Import");
+
+            result = await ProcessRows(fileLoadResults.Value.SkuRows, fileLoadResults.Value.BundleRows, counts).ConfigureAwait(false);
+
+            counts.SendTelemetry();
 
             if (result.FailedCount > 0 || result.FailureResults.Any())
             {
@@ -92,13 +96,13 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Process each product row
         /// </summary>
-        private async Task<ImportProductsResult> ProcessRows(List<ProductToImportDto> skuRows, List<ProductToImportDto> bundleRows)
+        private async Task<ImportProductsResult> ProcessRows(List<ProductToImportDto> skuRows, List<ProductToImportDto> bundleRows, ProductTelemetryCounts counts)
         {
             ImportProductsResult results = new ImportProductsResult(skuRows.Count + bundleRows.Count, 0, 0);
 
-            await ProcessSkus(skuRows, results).ConfigureAwait(false);
+            await ProcessSkus(skuRows, results, counts).ConfigureAwait(false);
 
-            await ProcessBundles(bundleRows, results).ConfigureAwait(false);
+            await ProcessBundles(bundleRows, results, counts).ConfigureAwait(false);
 
             return results;
         }
@@ -106,7 +110,7 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import each non-bundle sku into the database
         /// </summary>
-        private async Task ProcessSkus(List<ProductToImportDto> rows, ImportProductsResult result) =>
+        private async Task ProcessSkus(List<ProductToImportDto> rows, ImportProductsResult result, ProductTelemetryCounts counts) =>
             await PerformImport(rows, result,
                 async (productVariant, row, sqlAdapter) =>
                 {
@@ -117,19 +121,19 @@ namespace ShipWorks.Products.Import
                     }
 
                     CopyCsvDataToProduct(productVariant, row);
-                }).ConfigureAwait(false);
+                }, counts).ConfigureAwait(false);
 
         /// <summary>
         /// Import each bundle sku into the database
         /// </summary>
-        private async Task ProcessBundles(List<ProductToImportDto> rows, ImportProductsResult result) =>
+        private async Task ProcessBundles(List<ProductToImportDto> rows, ImportProductsResult result, ProductTelemetryCounts counts) =>
             await PerformImport(rows, result,
                 async (productVariant, row, sqlAdapter) =>
                 {
                     CopyCsvDataToProduct(productVariant, row);
 
                     await ImportProductVariantBundles(productVariant, row, sqlAdapter).ConfigureAwait(false);
-                })
+                }, counts)
                 .ConfigureAwait(false);
 
         /// <summary>
@@ -138,10 +142,9 @@ namespace ShipWorks.Products.Import
         private async Task PerformImport(
             List<ProductToImportDto> rows,
             ImportProductsResult result,
-            Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction)
+            Func<ProductVariantEntity, ProductToImportDto, ISqlAdapter, Task> updateProductAction,
+            ProductTelemetryCounts counts)
         {
-            var counts = new ProductTelemetryCounts("Import");
-
             // Loop through each row after the header rows
             foreach (ProductToImportDto row in rows.Where(x => !x.Sku.IsNullOrWhiteSpace()))
             {
@@ -176,8 +179,6 @@ namespace ShipWorks.Products.Import
 
                 itemProgressReporter.PercentComplete = (int) Math.Round(100 * (((decimal) result.SuccessCount + result.FailedCount) / result.TotalCount));
             }
-
-            counts.SendTelemetry();
         }
 
         /// <summary>
