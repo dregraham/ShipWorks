@@ -13,10 +13,8 @@ namespace ShipWorks.Products.Import
         public bool IsNew { get; }
 
         /// <summary>
-        /// 
+        /// Constructor
         /// </summary>
-        /// <param name="innerException"></param>
-        /// <param name="isNew"></param>
         public ProductImporterException(Exception innerException, bool isNew) : base(innerException.Message, innerException)
         {
             IsNew = isNew;
