@@ -54,21 +54,21 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         /// </summary>
         public void Update()
         {
-            UspsAccountManager.InitializeForCurrentSession();
-            EndiciaAccountManager.InitializeForCurrentSession();
-            FedExAccountManager.InitializeForCurrentSession();
-            UpsAccountManager.InitializeForCurrentSession();
-            OnTracAccountManager.InitializeForCurrentSession();
-            iParcelAccountManager.InitializeForCurrentSession();
-
             List<long> accountsToExclude = new List<long>();
 
             var shippingSettingsEntity = shippingSettings.FetchReadOnly();
 
-            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shippingSettingsEntity.BestRateExcludedTypes.Union(new[] { ShipmentTypeCode.BestRate })))
+            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(new[] { ShipmentTypeCode.BestRate}))
             {
                 var accountRepository = carrierAccountRetrieverFactory[shipmentTypeCode];
-                if (accountRepository.AccountsReadOnly.Count() > 1)
+                accountRepository.Initialize();
+
+                // if the carrier has been excluded, exclude all of its accounts
+                if (shippingSettingsEntity.BestRateExcludedTypes.Contains(shipmentTypeCode))
+                {
+                    accountsToExclude.AddRange(accountRepository.AccountsReadOnly.Select(a => a.AccountId));
+                }
+                else if (accountRepository.AccountsReadOnly.Count() > 1)
                 {
                     long defaultAccountId = accountRepository.DefaultProfileAccount.AccountId;
 

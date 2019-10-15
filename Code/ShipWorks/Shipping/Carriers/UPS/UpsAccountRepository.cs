@@ -95,5 +95,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
             shipment?.Ups?.UpsAccountID;
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            UpsAccountManager.InitializeForCurrentSession();
+        }
     }
 }

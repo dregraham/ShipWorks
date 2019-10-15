@@ -26,6 +26,11 @@ namespace ShipWorks.Shipping.Carriers
         public abstract void CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize the repository
+        /// </summary>
+        public abstract void Initialize();
+
+        /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
         public abstract IEnumerable<T> Accounts { get; }
@@ -57,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers
         ///  Returns the default account as defined by the primary profile
         ///  </summary>
         ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
-        
+
         /// <summary>
         /// Readonly list of accounts
         /// </summary>

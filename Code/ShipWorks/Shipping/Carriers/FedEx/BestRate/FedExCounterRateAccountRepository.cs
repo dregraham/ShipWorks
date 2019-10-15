@@ -66,6 +66,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         public IEnumerable<IFedExAccountEntity> AccountsReadOnly => lazyAccounts.Value;
 
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public void Initialize()
+        {
+        }
 
         /// <summary>
         /// Saves the specified account.
@@ -146,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// used to get counter rates.
         /// </summary>
         public FedExAccountEntity DefaultProfileAccount => Accounts.First();
-        
+
         /// <summary>
         /// Gets the default profile account. This will always return the same account that is
         /// used to get counter rates.

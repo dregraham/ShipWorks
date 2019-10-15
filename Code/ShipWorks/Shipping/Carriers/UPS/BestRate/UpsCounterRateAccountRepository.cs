@@ -171,6 +171,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
             GetAccountReadOnly(shipment);
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public void Initialize()
+        {
+        }
+
+        /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>

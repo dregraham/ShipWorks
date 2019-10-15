@@ -37,6 +37,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override void CheckForChangesNeeded() => UspsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize the repository
+        /// </summary>
+        public override void Initialize() => UspsAccountManager.InitializeForCurrentSession();
+
+        /// <summary>
         /// Returns a USPS account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>

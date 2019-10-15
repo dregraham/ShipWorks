@@ -115,6 +115,13 @@ namespace ShipWorks.Shipping.Carriers
             GetAccountReadOnly(accountID);
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public void Initialize()
+        {
+        }
+
+        /// <summary>
         /// Returns a list of accounts for the carrier.
         /// </summary>
         IEnumerable<ICarrierAccount> ICarrierAccountRetriever.AccountsReadOnly =>
