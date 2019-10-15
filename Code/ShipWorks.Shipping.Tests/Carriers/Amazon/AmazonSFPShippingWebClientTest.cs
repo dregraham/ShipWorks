@@ -18,6 +18,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     public class AmazonSFPShippingWebClientTest : IDisposable
     {
+        private TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("testing");
         readonly AutoMock mock;
         readonly ShipmentRequestDetails request;
         readonly CreateShipmentResponse response;
@@ -83,14 +84,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
 
-            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, new AmazonSFPShipmentEntity()));
+            Assert.Throws<AmazonSFPShippingException>(() => testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult));
         }
 
         [Fact]
         public void CreateShipment_ReturnsShipment_WhenResponseIsValid()
         {
             var testObject = mock.Create<AmazonSFPShippingWebClient>();
-            var result = testObject.CreateShipment(request, new AmazonSFPShipmentEntity());
+            var result = testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult);
 
             Assert.NotNull(result);
         }

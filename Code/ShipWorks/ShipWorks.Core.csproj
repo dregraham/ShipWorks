@@ -1134,6 +1134,7 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\FedExUploadImagesResponse.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\AmazonSWAServiceType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />

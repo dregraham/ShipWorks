@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 endiciaShipmentType.LogEntryFactory, endiciaShipmentType.CertificateInspector);
 
             TelemetricResult<IDownloadedLabelData> telemetricResult =
-                new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+                new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             if (useExpress1)
             {
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             try
             {
                 LabelRequestResponse response = null;
-                telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType));
+                response = endiciaApiClient.ProcessShipment(shipment, endiciaShipmentType, telemetricResult);
                 telemetricResult.SetValue(createDownloadedLabelData(shipment, response));
 
                 return Task.FromResult(telemetricResult);

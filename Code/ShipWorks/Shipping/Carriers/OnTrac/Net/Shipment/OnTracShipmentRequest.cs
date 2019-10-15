@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <param name="shipmentRequest">Shipment request DTO based on OnTrac XSD</param>
         /// <returns> Shipment response DTO based on OnTrac XSD </returns>
         /// <exception cref="OnTracException">Thrown if error from OnTrac</exception>
-        public Schemas.ShipmentResponse.Shipment ProcessShipment(Schemas.ShipmentRequest.OnTracShipmentRequest shipmentRequest)
+        public Schemas.ShipmentResponse.Shipment ProcessShipment(Schemas.ShipmentRequest.OnTracShipmentRequest shipmentRequest, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             //serialize object for http transmission
             string shipmentRequestListString = SerializationUtility.SerializeToXml(shipmentRequest);
@@ -53,6 +53,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
             shipmentRequestSubmitter.Uri = new Uri(url);
 
             Schemas.ShipmentResponse.OnTracShipmentResponse shipmentResponseList = ExecuteLoggedRequest<Schemas.ShipmentResponse.OnTracShipmentResponse>(shipmentRequestSubmitter);
+            telemetricResult.AddEntry(TelemetricEventType.GetLabel, shipmentRequestSubmitter.ResponseTimeInMs);
 
             // OnTrac may not return any shipments
             if (shipmentResponseList.Shipments == null || shipmentResponseList.Shipments.Length == 0)
