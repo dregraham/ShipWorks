@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -21,20 +22,6 @@ namespace ShipWorks.Shipping.UI.Settings
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
         private readonly IBestRateExcludedAccountRepository excludedAccountRepository;
         private readonly IShipmentTypeManager shipmentTypeManager;
-
-        private static readonly List<ShipmentTypeCode> excludedShipmentTypes = new List<ShipmentTypeCode>
-        {
-            ShipmentTypeCode.None,
-            ShipmentTypeCode.BestRate,
-            ShipmentTypeCode.Other,
-            ShipmentTypeCode.PostalWebTools,
-            ShipmentTypeCode.Express1Endicia,
-            ShipmentTypeCode.Express1Usps,
-            ShipmentTypeCode.UpsWorldShip,
-            ShipmentTypeCode.AmazonSFP,
-            ShipmentTypeCode.AmazonSWA,
-            ShipmentTypeCode.iParcel
-        };
 
         /// <summary>
         /// Constructor
@@ -60,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Settings
         public void Load()
         {
             // Get the shipment types allowed for best rate
-            IEnumerable<ShipmentTypeCode> bestRateShipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(excludedShipmentTypes);
+            IEnumerable<ShipmentTypeCode> bestRateShipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes);
 
             foreach (ShipmentTypeCode shipmentType in bestRateShipmentTypes)
             {
