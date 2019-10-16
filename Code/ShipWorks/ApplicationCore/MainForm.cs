@@ -799,6 +799,9 @@ namespace ShipWorks
 
             currentUserSettings.SetUIMode(UIMode.Batch);
 
+            //The Grid can be already initilized at this point. Make sure its clean.
+            gridControl.Reset();
+
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
             UpdateUIMode(user, false, ModeChangeBehavior.ChangeTabAlways);
 
