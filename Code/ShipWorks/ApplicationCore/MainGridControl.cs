@@ -213,7 +213,7 @@ namespace ShipWorks.ApplicationCore
         {
             if (entityGrids.ContainsKey(filterTarget))
             {
-                throw new InvalidOperationException("Already initialized for target {0}.  Use Reset first if you need to reinitialize.");
+                throw new InvalidOperationException($"Already initialized for target {filterTarget}.  Use Reset first if you need to reinitialize.");
             }
 
             entityGrids[filterTarget] = CreateGrid(filterTarget);
