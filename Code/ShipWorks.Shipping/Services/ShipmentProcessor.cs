@@ -235,7 +235,7 @@ namespace ShipWorks.Shipping.Services
             // If any accounts were out of funds we show that instead of the errors
             if (workflowResult.OutOfFundsException != null)
             {
-                HandleOutOfFundsException(workflowResult);
+                await HandleOutOfFundsException(workflowResult);
             }
             else if (workflowResult.TermsAndConditionsException != null)
             {
