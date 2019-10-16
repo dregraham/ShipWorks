@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Services
         private readonly ILifetimeScope lifetimeScope;
         private readonly ILicenseService licenseService;
         private readonly IProcessShipmentsWorkflowFactory workflowFactory;
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
         private readonly IShippingSettings shippingSettings;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IActionDispatcher actionDispatcher;
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Services
             IShippingErrorManager errorManager,
             ILifetimeScope lifetimeScope,
             ILicenseService licenseService,
-            IMessageHelper messageHelper,
+            IAsyncMessageHelper messageHelper,
             IProcessShipmentsWorkflowFactory workflowFactory,
             IShippingSettings shippingSettings,
             ISqlAdapterFactory sqlAdapterFactory,
@@ -265,9 +265,9 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handles Out Of Funds Exception
         /// </summary>
-        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
+        private async Task HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
         {
-            DialogResult answer = messageHelper.ShowQuestion(
+            DialogResult answer = await messageHelper.ShowQuestion(
                                 $"You do not have sufficient funds in {workflowResult.OutOfFundsException.Provider} account {workflowResult.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
                                 "Would you like to purchase more now?");
 

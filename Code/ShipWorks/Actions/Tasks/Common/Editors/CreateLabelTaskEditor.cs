@@ -31,8 +31,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         {
             allowMultiShipments.Checked = task.AllowMultiShipments;
             allowMultiShipments.CheckedChanged += new EventHandler(MultiShipmentsChanged);
-            allowProcessedShipments.Checked = task.AllowProcessedShipments;
-            allowProcessedShipments.CheckedChanged += new EventHandler(ProcessedShipmentsChanged);
         }
 
         /// <summary>
@@ -41,14 +39,6 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         void MultiShipmentsChanged(object sender, EventArgs e)
         {
             task.AllowMultiShipments = allowMultiShipments.Checked;
-        }
-
-        /// <summary>
-        /// The allowMultiShipments checkbox was changed
-        /// </summary>
-        void ProcessedShipmentsChanged(object sender, EventArgs e)
-        {
-            task.AllowProcessedShipments = allowProcessedShipments.Checked;
         }
     }
 }

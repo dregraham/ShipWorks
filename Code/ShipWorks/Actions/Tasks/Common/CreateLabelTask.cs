@@ -4,25 +4,30 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
+using ShipWorks.Actions.Triggers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
-using ShipWorks.Users.Security;
+using ShipWorks.UI;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
     /// <summary>
     /// Task for creating a label
     /// </summary>
-    [ActionTask("Create label", "CreateLabel", ActionTaskCategory.Output)]
+    [ActionTask("Create a label", "CreateLabel", ActionTaskCategory.Output)]
     public class CreateLabelTask : ActionTask
     {
         private readonly IOrderLoader orderLoader;
-        private readonly Func<ISecurityContext> securityContext;
         private readonly IShipmentFactory shipmentFactory;
+        private readonly BackgroundAsyncMessageHelper messageHelper;
+        private readonly Func<IAsyncMessageHelper, IShipmentProcessor> shipmentProcessorFactory;
+        private readonly Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory;
 
         /// <summary>
         /// Whether or not to create labels for orders with multiple unprocessed shipments
@@ -30,20 +35,19 @@ namespace ShipWorks.Actions.Tasks.Common
         public bool AllowMultiShipments { get; set; }
 
         /// <summary>
-        /// Whether or not to create labels for orders with both processed and unprocessed shipments
-        /// </summary>
-        public bool AllowProcessedShipments { get; set; }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public CreateLabelTask(IOrderLoader orderLoader,
-            Func<ISecurityContext> securityContext,
-            IShipmentFactory shipmentFactory)
+            IShipmentFactory shipmentFactory,
+            BackgroundAsyncMessageHelper messageHelper,
+            Func<IAsyncMessageHelper, IShipmentProcessor> shipmentProcessorFactory,
+            Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory)
         {
             this.orderLoader = orderLoader;
-            this.securityContext = securityContext;
             this.shipmentFactory = shipmentFactory;
+            this.messageHelper = messageHelper;
+            this.shipmentProcessorFactory = shipmentProcessorFactory;
+            this.shipmentRefresherFactory = shipmentRefresherFactory;
         }
 
         /// <summary>
@@ -59,7 +63,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public override string InputLabel
         {
-            get { return "Create label for:"; }
+            get { return "Create a label for:"; }
         }
 
         /// <summary>
@@ -76,29 +80,68 @@ namespace ShipWorks.Actions.Tasks.Common
         public override bool IsAsync => true;
 
         /// <summary>
+        /// Is the task allowed to be run using the specified trigger type?
+        /// </summary>
+        /// <param name="triggerType">Type of trigger that should be tested</param>
+        /// <returns></returns>
+        public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
+        {
+            return triggerType == ActionTriggerType.OrderDownloaded ||
+                triggerType == ActionTriggerType.FilterContentChanged ||
+                triggerType == ActionTriggerType.UserInitiated;
+        }
+
+        /// <summary>
         /// Run the task over the given input
         /// </summary>
         public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
         {
-            var errors = new Dictionary<string, Exception>();
+            var errors = new Dictionary<string, string>();
+
+            var shipmentsToProcess = new List<ShipmentEntity>();
 
             foreach (long orderID in inputKeys)
             {
-                // Get the order
                 OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
 
+                // The order was deleted
                 if (order == null)
                 {
                     continue;
                 }
 
-                var result = await GetShipments(order.OrderID);
+                var shipments = await GetShipments(order.OrderID);
 
-                if (result.Failure)
+                if (shipments.Failure)
                 {
-                    errors.Add(order.OrderNumberComplete, result.Exception);
+                    errors.Add(order.OrderNumberComplete, shipments.Exception.Message);
                     continue;
                 }
+
+                shipmentsToProcess.AddRange(shipments.Value);
+            }
+
+            if (shipmentsToProcess.Any())
+            {
+                IEnumerable<ProcessShipmentResult> results;
+
+                using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+                {
+                    refresher.RetrieveShipments = () => shipmentsToProcess;
+
+                    var shipmentProcessor = shipmentProcessorFactory(messageHelper);
+
+                    results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+                }
+
+                // Add any errors from processing
+                results.Where(x => !x.IsSuccessful).ForEach(x => errors.Add(x.Shipment.Order.OrderNumberComplete, x.Error.Message));
+            }
+
+            if (errors.Any())
+            {
+                // Return a list of errors with the order numbers
+                throw new ActionTaskRunException($"Some errors occured during processing:\n\n{string.Join("\n", errors.Select(x => $"{x.Key}: {x.Value}"))}");
             }
         }
 
@@ -107,20 +150,20 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         private async Task<GenericResult<IEnumerable<ShipmentEntity>>> GetShipments(long orderId)
         {
-            if (!securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, orderId))
-            {
-                return new ActionTaskRunException("You do not have permission to auto print");
-            }
-
             // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
             ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
 
-            ShipmentEntity[] shipments = loadedOrders?.Shipments.Where(s => !s.Voided).ToArray();
-            ShipmentEntity[] confirmedShipments = GetConfirmedShipments(orderId, shipments);
+            IEnumerable<ShipmentEntity> shipments = loadedOrders?.Shipments.Where(s => !s.Voided);
+            IEnumerable<ShipmentEntity> confirmedShipments = GetConfirmedShipments(orderId, shipments);
 
             if (confirmedShipments.None())
             {
                 return new ActionTaskRunException("No processable shipments");
+            }
+
+            if (confirmedShipments.Count() > 1 && !AllowMultiShipments)
+            {
+                return new ActionTaskRunException("More than one unprocessed shipment");
             }
 
             if (HasDisqualifyingShipmentTypes(confirmedShipments))
@@ -128,27 +171,21 @@ namespace ShipWorks.Actions.Tasks.Common
                 return new ActionTaskRunException("Cannot process shipments of type 'None'");
             }
 
-            return confirmedShipments;
+            return GenericResult.FromSuccess(confirmedShipments);
         }
 
         /// <summary>
         /// Gets Confirmed Shipments
         /// </summary>
         /// <remarks>
-        /// If the order has a single unprocessed shipment, we return that shipment
         /// If the order has no shipments we create and return a shipment
-        /// If the order only has processed shipments, we return an empty list
-        /// If the order has multiple unprocessed shipments, we return them
+        /// If the order only has processed shipments, create a new shipment, or return an empty array, depending on their settings
+        /// If the order has unprocessed shipments, we return them
         /// </remarks>
-        private ShipmentEntity[] GetConfirmedShipments(long orderId, ShipmentEntity[] shipments)
+        private IEnumerable<ShipmentEntity> GetConfirmedShipments(long orderId, IEnumerable<ShipmentEntity> shipments)
         {
             if (shipments != null)
             {
-                if (shipments.IsCountEqualTo(1) && shipments.All(s => !s.Processed))
-                {
-                    return shipments;
-                }
-
                 if (shipments.None())
                 {
                     return new[] { shipmentFactory.Create(orderId) };
@@ -158,34 +195,11 @@ namespace ShipWorks.Actions.Tasks.Common
                 {
                     return new ShipmentEntity[0];
                 }
-                else if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
-                {
-                    // If all of the shipments are processed and the user confirms they want to process again add a shipment
-                    if (shipments.All(s => s.Processed))
-                    {
-                        confirmedShipments = new[] { shipmentFactory.Create(orderId) };
-                    }
 
-                    // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-                    if (shipments.Any(s => !s.Processed))
-                    {
-                        confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
-                    }
-                }
-
-                if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
-                {
-                    ShipmentEntity confirmedShipment = confirmedShipments.SingleOrDefault();
-                    int packageCount = shipmentAdapterFactory.Get(confirmedShipment).GetPackageAdaptersAndEnsureShipmentIsLoaded().Count();
-
-                    if (packageCount > 1 && !ShouldPrintAndProcessShipmentWithMultiplePackages(packageCount, scannedBarcode))
-                    {
-                        confirmedShipments = new ShipmentEntity[0];
-                    }
-                }
+                return shipments.Where(s => !s.Processed);
             }
 
-            return confirmedShipments;
+            return new ShipmentEntity[0];
         }
 
         /// <summary>

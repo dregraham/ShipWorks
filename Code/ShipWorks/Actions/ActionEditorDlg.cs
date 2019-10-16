@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Triggers.Editors;
 using ShipWorks.Data.Connection;
@@ -662,6 +663,7 @@ namespace ShipWorks.Actions
 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
+
                 if (invalidTasks.Any())
                 {
                     var invalidTaskNames = invalidTasks.Select(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
@@ -672,6 +674,16 @@ namespace ShipWorks.Actions
                         invalidTaskNames.Count() == 1 ? "" : "s",
                         invalidTasksMsg,
                         EnumHelper.GetDescription(actionTriggerType)));
+                    return;
+                }
+
+                // If the trigger is an OrderDownloadedTrigger, and there is a CreateLabel task,
+                // force the user to use 'when an order first downloads'
+                if (trigger is OrderDownloadedTrigger orderDownloadedTrigger &&
+                    orderDownloadedTrigger.Restriction != OrderDownloadedRestriction.OnlyInitial &&
+                    tasksToSave.Any(x => x is CreateLabelTask))
+                {
+                    MessageHelper.ShowError(this, "The 'Create a label' task can only be performed on download when downloading an order for the first time.");
                     return;
                 }
 
