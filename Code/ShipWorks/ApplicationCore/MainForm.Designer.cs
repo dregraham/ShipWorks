@@ -3321,7 +3321,8 @@ namespace ShipWorks
             buttonOrderLookupViewManageProfiles.TelemetryEventName = "OrderLookup.Profiles.Manage";
             buttonOrderLookupViewVoid.TelemetryEventName = "OrderLookup.Order.Void";
             buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
-            buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.ShipAgain";
+            buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.History.ShipAgain";
+            buttonOrderLookupViewShipShipAgain.TelemetryEventName = "OrderLookup.Ship.ShipAgain";
             buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
             buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
             buttonCreateLabel.TelemetryEventName = "CreateLabel";
