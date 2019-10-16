@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Common.Logging;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -47,6 +48,7 @@ namespace ShipWorks.Data
 
         private static ILog log = LogManager.GetLogger(typeof(EntityUtility));
         private static Dictionary<EntityType, int> entitySeedValues = new Dictionary<EntityType, int>();
+        private static LruCache<string, RelationCollection> relationsCache = new LruCache<string, RelationCollection>(2000);
 
         /// <summary>
         /// Static constructor
@@ -362,8 +364,30 @@ namespace ShipWorks.Data
         /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
         /// Many to Many relationships are never considered.
         /// </summary>
-        [NDependIgnoreLongMethod]
         public static RelationCollection FindRelationChain(EntityType fromEntityType, EntityType toEntityType, bool allowOneToMany)
+        {
+            string relationKey = $"{fromEntityType}-{toEntityType}-{allowOneToMany}";
+
+            RelationCollection relations = relationsCache[relationKey];
+
+            if (relations?.Count > 0)
+            {
+                return relations;
+            }
+
+            relations = FindRelationChainInternal(fromEntityType, toEntityType, allowOneToMany);
+
+            relationsCache[relationKey] = relations;
+
+            return relations;
+        }
+
+        /// <summary>
+        /// Find a chain of relations that goes from the given entity to the given entity. Returns null if no such chain is found.
+        /// Many to Many relationships are never considered.
+        /// </summary>
+        [NDependIgnoreLongMethod]
+        private static RelationCollection FindRelationChainInternal(EntityType fromEntityType, EntityType toEntityType, bool allowOneToMany)
         {
             // Try it bottom-to-top with the given entities
             RelationCollection relations = FindRelationChain(fromEntityType, toEntityType, new List<EntityType>());

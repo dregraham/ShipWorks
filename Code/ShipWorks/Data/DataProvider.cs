@@ -253,7 +253,11 @@ namespace ShipWorks.Data
         /// </summary>
         public static List<long> GetRelatedKeys(List<long> idList, EntityType relateToType, bool fetchIfMissing = true, SortDefinition sort = null)
         {
-            return relationCache.GetRelatedKeys(idList, relateToType, fetchIfMissing, sort);
+            // EntityRelationCache.GetRelatedKeys calls recursively, so we don't want it creating a new SqlAdapter every time, so
+            // the adapter function will reuse the given one if it's not null, otherwise it will create a new one.
+            ISqlAdapter adapter = null;
+            return relationCache.GetRelatedKeys(idList, relateToType, fetchIfMissing, sort, 
+                () => adapter ?? (adapter = SqlAdapter.Create(false)));
         }
 
         /// <summary>
