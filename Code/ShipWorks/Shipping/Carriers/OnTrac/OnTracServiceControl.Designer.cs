@@ -466,7 +466,8 @@
             this.dimensionsControl.Size = new System.Drawing.Size(210, 74);
             this.dimensionsControl.TabIndex = 7;			
             this.dimensionsControl.DimensionsChanged += OnShipSenseFieldChanged;
-			// 
+            this.dimensionsControl.DimensionsChanged += OnRateCriteriaChanged;
+            // 
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.TabIndex = 6;			
@@ -504,6 +505,7 @@
             this.weight.TabIndex = 5;
             this.weight.Weight = 0D;
             this.weight.WeightChanged += OnShipSenseFieldChanged;
+            this.weight.WeightChanged += OnRateCriteriaChanged;
             this.weight.ShowShortcutInfo = true;
             //
             // packagingType

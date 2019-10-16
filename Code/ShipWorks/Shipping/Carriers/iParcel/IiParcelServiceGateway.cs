@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
@@ -21,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="credentials">The credentials.</param>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A DataSet containing the label image data and tracking information.</returns>
-        DataSet SubmitShipment(iParcelCredentials credentials, ShipmentEntity shipment);
+        DataSet SubmitShipment(iParcelCredentials credentials, ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult);
 
         /// <summary>
         /// Gets the shipping rates from i-parcel.
