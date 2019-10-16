@@ -50,10 +50,13 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
             <ui:VisibilityMultiConverter x:Key="VisibilityMulti" />
+            <ui:WpfViewTemplateSelector x:Key="WpfViewTemplateSelector" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
