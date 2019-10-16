@@ -58,7 +58,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
 
             var shippingSettingsEntity = shippingSettings.FetchReadOnly();
 
-            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes))
+            foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes()))
             {
                 var accountRepository = carrierAccountRetrieverFactory[shipmentTypeCode];
                 accountRepository.Initialize();

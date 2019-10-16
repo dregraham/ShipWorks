@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.UI.Settings
         public void Load()
         {
             // Get the shipment types allowed for best rate
-            IEnumerable<ShipmentTypeCode> bestRateShipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes);
+            IEnumerable<ShipmentTypeCode> bestRateShipmentTypes = shipmentTypeManager.ShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes());
 
             foreach (ShipmentTypeCode shipmentType in bestRateShipmentTypes)
             {

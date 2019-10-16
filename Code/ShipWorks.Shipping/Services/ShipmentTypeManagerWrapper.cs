@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// List of shipment types excluded by best rate
         /// </summary>
-        public static List<ShipmentTypeCode> BestRateExcludedShipmentTypes => new List<ShipmentTypeCode>() {
+        public List<ShipmentTypeCode> BestRateExcludedShipmentTypes() => new List<ShipmentTypeCode>() {
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
             ShipmentTypeCode.Other,
