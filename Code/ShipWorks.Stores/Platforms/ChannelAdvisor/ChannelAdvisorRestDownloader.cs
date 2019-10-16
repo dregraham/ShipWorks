@@ -136,7 +136,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
                 // because filtering slows down the download significantly
-                if (!caOrder.PaymentStatus?.Equals("Cleared", StringComparison.OrdinalIgnoreCase) ?? false)
+                if (!caOrder.PaymentStatus?.Equals("Cleared", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     continue;
                 }
@@ -147,8 +147,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
 
-                // If the order has already been shipped, mark it as exported so we don't re-download it
-                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
+                // If the order has already been shipped, or is an FBA order, mark it as exported so we don't re-download it
+                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) == true ||
+                    caOrder.DistributionCenterTypeRollup?.Equals("ExternallyManaged", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     restClient.MarkOrderExported(caOrder.ID, refreshToken);
                 }
