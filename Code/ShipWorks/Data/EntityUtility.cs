@@ -888,6 +888,45 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
+        /// Copy any changed fields, including child entity fields, to the destination entity
+        /// </summary>
+        public static void CopyChangedFields(IEntity2 sourceEntity, IEntity2 destinationEntity)
+        {
+            var sourceGraph = GetObjectGraph(sourceEntity, true, true);
+            var destinationGraph = GetObjectGraph(destinationEntity, null, null);
+
+            foreach (var sourceChild in sourceGraph)
+            {
+                IEntity2 destinationChildEntity = destinationGraph.Keys.FirstOrDefault(k => k.LLBLGenProEntityName == sourceChild.Key.LLBLGenProEntityName);
+                if (destinationChildEntity == null)
+                {
+                    continue;
+                }
+
+                foreach (var childField in sourceChild.Value.Where(f => !f.IsReadOnly))
+                {
+                    var destinationField = destinationChildEntity.Fields[childField.FieldIndex];
+                    destinationField.CurrentValue = sourceChild.Key.Fields[childField.FieldIndex].CurrentValue;
+                    destinationChildEntity.IsDirty = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get an object graph based on IsDirty and/or IsChanged
+        /// </summary>
+        public static IDictionary<IEntity2, IEnumerable<IEntityField2>> GetObjectGraph(this IEntity2 entity, bool? isDirty, bool? isChanged)
+        {
+            return new ObjectGraphUtils()
+                .ProduceTopologyOrderedList(entity)
+                .Where(x => !isDirty.HasValue || x.IsDirty == isDirty.Value)
+                .ToDictionary(x => x,
+                    x => x.Fields.OfType<IEntityField2>()
+                        .Where(field => !isChanged.HasValue || field.IsChanged == isChanged.Value)
+                        .ToList() as IEnumerable<IEntityField2>);
+        }
+
+        /// <summary>
         /// Get a graph of dirty entities and fields using the passed entity as the root
         /// </summary>
         public static IDictionary<IEntity2, IEnumerable<IEntityField2>> GetDirtyGraph(this IEntity2 entity)
