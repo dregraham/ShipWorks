@@ -334,8 +334,7 @@
                     Width="Auto"
                     CanUserSort="True"
                     Header="Active"
-                    SortMemberPath="IsActive"
-                    Visibility="Visible">
+                    SortMemberPath="IsActive">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ToggleButton
