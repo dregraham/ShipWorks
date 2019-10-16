@@ -189,99 +189,6 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Set button telemetry values
-        /// </summary>
-        private void SetButtonTelemetry()
-        {
-            buttonShowPanels.TelemetryEventName = "ShowPanels";
-            buttonSaveEnvironment.TelemetryEventName = "Environment.Save";
-            buttonLoadEnvironment.TelemetryEventName = "Environment.Load";
-            buttonResetEnvironment.TelemetryEventName = "Environment.Reset";
-            buttonManageStores.TelemetryEventName = "Stores.Manage";
-            buttonBackup.TelemetryEventName = "Database.Backup";
-            buttonRestore.TelemetryEventName = "Database.Restore";
-            buttonArchive.TelemetryEventName = "Database.Archive";
-            buttonSetupDatabase.TelemetryEventName = "Database.Setup";
-            buttonChangeConnection.TelemetryEventName = "Database.ChangeConnection";
-            buttonManageUsers.TelemetryEventName = "Users.Manage";
-            buttonFirewall.TelemetryEventName = "Firewall";
-            buttonDownload.TelemetryEventName = "Download";
-            buttonPickList.TelemetryEventName = "PickList";
-            buttonManageFilters.TelemetryEventName = "Filters.Manage";
-            buttonManageTemplates.TelemetryEventName = "Templates.Manage";
-            buttonManageActions.TelemetryEventName = "Actions.Manage";
-            buttonPrint.TelemetryEventName = "Print";
-            buttonPreview.TelemetryEventName = "Preview";
-            buttonEmailSend.TelemetryEventName = "Email.Send";
-            buttonEmailCompose.TelemetryEventName = "Email.Compose";
-            buttonSave.TelemetryEventName = "Save";
-            buttonSaveOpen.TelemetryEventName = "SaveOpen";
-            buttonNewOrder.TelemetryEventName = "Order.New";
-            buttonEditOrder.TelemetryEventName = "Order.Edit";
-            buttonDeleteOrders.TelemetryEventName = "Order.Delete";
-            buttonCombine.TelemetryEventName = "Order.Combine";
-            buttonSplit.TelemetryEventName = "Order.Split";
-            buttonNewCustomer.TelemetryEventName = "Customer.New";
-            buttonEditCustomer.TelemetryEventName = "Customer.Edit";
-            buttonDeleteCustomer.TelemetryEventName = "Customer.Delete";
-            buttonShipOrders.TelemetryEventName = "Order.Ship";
-            buttonTrackOrders.TelemetryEventName = "Order.Track";
-            buttonSettings.TelemetryEventName = "Settings.";
-            buttonEditGridColumns.TelemetryEventName = "GridColumns.Edit";
-            buttonLocalStatus.TelemetryEventName = "Order.LocalStatus";
-            buttonUpdateOnline.TelemetryEventName = "Order.UpdateOnline";
-            buttonEditGridMenus.TelemetryEventName = "GridMenus.Edit";
-            buttonDetailViewDetail.TelemetryEventName = "DetailView.Detail";
-            buttonDetailViewNormal.TelemetryEventName = "DetailView.Normal";
-            buttonDetailViewNormalDetail.TelemetryEventName = "DetailView.NormalDetail";
-            buttonDetailViewHeightIncrease.TelemetryEventName = "DetailView.Height.Increase";
-            buttonDetailViewHeightDecrease.TelemetryEventName = "DetailView.Height.Decrease";
-            buttonQuickPrint.TelemetryEventName = "QuickPrint";
-            buttonEmailAccounts.TelemetryEventName = "Email.Accounts";
-            buttonDownloadHistory.TelemetryEventName = "DownloadHistory";
-            buttonEmailMessages.TelemetryEventName = "Email.Messages";
-            buttonAudit.TelemetryEventName = "Audit";
-            buttonShippingSettings.TelemetryEventName = "Shipping.Settings";
-            buttonShippingProfiles.TelemetryEventName = "Shipping.Profiles";
-            buttonFedExClose.TelemetryEventName = "FedExClose";
-            buttonEndiciaSCAN.TelemetryEventName = "EndiciaScan";
-            buttonHelpForum.TelemetryEventName = "Help.Forum";
-            buttonHelpRemote.TelemetryEventName = "Help.Remote";
-            buttonHelpView.TelemetryEventName = "Help.View";
-            buttonHelpAbout.TelemetryEventName = "Help.About";
-            buttonRequestHelp.TelemetryEventName = "Help.Request";
-            buttonBuySupplies.TelemetryEventName = "Supplies.Buy";
-            buttonUship.TelemetryEventName = "Uship";
-            buttonInsuranceClaim.TelemetryEventName = "Insurance.Claim";
-            buttonOrderLookupViewCreateLabel.TelemetryEventName = "OrderLookup.Label.Create";
-            buttonOrderLookupViewManualOrder.TelemetryEventName = "OrderLookup.Order.Manual";
-            buttonOrderLookupViewApplyProfile.TelemetryEventName = "OrderLookup.Profiles.Apply";
-            buttonOrderLookupViewManageProfiles.TelemetryEventName = "OrderLookup.Profiles.Manage";
-            buttonOrderLookupViewVoid.TelemetryEventName = "OrderLookup.Order.Void";
-            buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
-            buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.ShipAgain";
-            buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
-            buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
-            buttonCreateLabel.TelemetryEventName = "CreateLabel";
-            buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
-
-            menuItemViewHelp.TelemetryEventName = "Logo.Help.View";
-            menuItemSupportForum.TelemetryEventName = "Logo.Support.Forum";
-            menuItemRequestHelp.TelemetryEventName = "Logo.Help.Request";
-            menuItemRemoteAssistance.TelemetryEventName = "Logo.RemoteAssistance";
-            menuItemBuySupplies.TelemetryEventName = "Logo.Supplies.Buy";
-            menuItemHelpAbout.TelemetryEventName = "Logo.Help.About";
-
-            mainMenuItemOptions.TelemetryEventName = "Logo.Settings";
-            mainMenuItemSetupDatabase.TelemetryEventName = "Logo.Database.Setup";
-            mainMenuItemBackupDatabase.TelemetryEventName = "Logo.Database.Backup";
-
-            mainMenuItemProducts.TelemetryEventName = "Logo.Mode.Switch.Products";
-            mainMenuItemBatchGrid.TelemetryEventName = "Logo.Mode.Switch.Batch";
-            mainMenuItemOrderLookup.TelemetryEventName = "Logo.Mode.Switch.OrderLookup";
-        }
-
-        /// <summary>
         /// Wire up updating the CreateLabel and ApplyProfile enabled state
         /// </summary>
         private void SetShipmentButonEnabledState()
@@ -294,6 +201,8 @@ namespace ShipWorks
                     var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
                     buttonOrderLookupViewCreateLabel.Enabled = canProcess;
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
+
+                    buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
             });
         }
@@ -349,6 +258,14 @@ namespace ShipWorks
         private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
         {
             orderLookupControl.CreateLabel().Forget();
+        }
+
+        /// <summary>
+        /// User clicks the Ship Again button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
+        {
+            orderLookupControl.ShipAgain();
         }
 
         #region Initialization \ Shutdown
@@ -582,7 +499,7 @@ namespace ShipWorks
             {
                 return;
             }
-           
+
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("close ShipWorks", this))
             {
                 if (!scope.Acquired)
@@ -923,10 +840,10 @@ namespace ShipWorks
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
             ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
-            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?                                                                
-                                                                QuickAccessPosition.Below:
+            ribbon.ToolBarPosition = UserSession.User.Settings.ShowQAToolbarBelowRibbon ?
+                                                                QuickAccessPosition.Below :
                                                                 QuickAccessPosition.Above;
-                                                                
+
             // Then, if we are downloading any stores for the very first time, auto-show the progress
             if (StoreManager.GetLastDownloadTimes().Any(pair => pair.Value == null && DownloadManager.IsDownloading(pair.Key)))
             {
@@ -1014,12 +931,12 @@ namespace ShipWorks
         /// <summary>
         /// Show the order lookup view
         /// </summary>
-        private void OnShowOrderLookupView(object sender, EventArgs e)  => ChangeUIMode(UIMode.OrderLookup);
+        private void OnShowOrderLookupView(object sender, EventArgs e) => ChangeUIMode(UIMode.OrderLookup);
 
         /// <summary>
         /// Show the products view
         /// </summary>
-        private void OnShowProductsView(object sender, EventArgs e)  => ChangeUIMode(UIMode.Products);
+        private void OnShowProductsView(object sender, EventArgs e) => ChangeUIMode(UIMode.Products);
 
 
         /// <summary>
@@ -1136,12 +1053,12 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Is the tab mode agnostic 
+        /// Is the tab mode agnostic
         /// </summary>
-        private bool IsModeAgnosticTab(RibbonTab selectedTab) => 
-            selectedTab == ribbonTabGridOutput || 
-            selectedTab == ribbonTabAdmin || 
-            selectedTab == ribbonTabView || 
+        private bool IsModeAgnosticTab(RibbonTab selectedTab) =>
+            selectedTab == ribbonTabGridOutput ||
+            selectedTab == ribbonTabAdmin ||
+            selectedTab == ribbonTabView ||
             selectedTab == ribbonTabHelp;
 
         /// <summary>
@@ -1938,7 +1855,7 @@ namespace ShipWorks
         /// </summary>
         private void SaveCurrentUserModeSpecificSettings(UserSettingsEntity settings)
         {
-            // Save the layout  
+            // Save the layout
             if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
@@ -2778,7 +2695,7 @@ namespace ShipWorks
                             QuickAccessPosition.Above;
 
                             ribbon.Minimized = UserSession.User.Settings.MinimizeRibbon;
-                        }                      
+                        }
                     }
                 }
             }
