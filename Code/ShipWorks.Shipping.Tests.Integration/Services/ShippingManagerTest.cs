@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         }
 
         [Fact]
-        public void CreateShipment_SetsShipDateToMidnightToday()
+        public void CreateShipment_SetsShipDateToNoonToday()
         {
             mock.Override<IDateTimeProvider>()
                 .Setup(x => x.Now)
