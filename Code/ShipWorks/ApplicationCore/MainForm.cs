@@ -201,6 +201,8 @@ namespace ShipWorks
                     var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
                     buttonOrderLookupViewCreateLabel.Enabled = canProcess;
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
+
+                    buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
             });
         }
@@ -256,6 +258,14 @@ namespace ShipWorks
         private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
         {
             orderLookupControl.CreateLabel().Forget();
+        }
+
+        /// <summary>
+        /// User clicks the Ship Again button in Order Lookup Mode
+        /// </summary>
+        private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
+        {
+            orderLookupControl.ShipAgain();
         }
 
         #region Initialization \ Shutdown
@@ -1043,7 +1053,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Is the tab mode agnostic 
+        /// Is the tab mode agnostic
         /// </summary>
         private bool IsModeAgnosticTab(RibbonTab selectedTab) =>
             selectedTab == ribbonTabGridOutput ||
@@ -1845,7 +1855,7 @@ namespace ShipWorks
         /// </summary>
         private void SaveCurrentUserModeSpecificSettings(UserSettingsEntity settings)
         {
-            // Save the layout  
+            // Save the layout
             if (UIMode == UIMode.Batch)
             {
                 settings.WindowLayout = windowLayoutProvider.SerializeLayout();
