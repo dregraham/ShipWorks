@@ -76,6 +76,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// List of shipment types excluded by best rate
         /// </summary>
-        List<ShipmentTypeCode> BestRateExcludedShipmentTypes;
+        List<ShipmentTypeCode> BestRateExcludedShipmentTypes();
     }
 }
