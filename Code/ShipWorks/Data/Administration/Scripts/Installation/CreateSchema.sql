@@ -525,16 +525,16 @@ CREATE TABLE [dbo].[Order]
 [Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom3] DEFAULT (''),
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom4] DEFAULT (''),
 [Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom5] DEFAULT (''),
-[Custom6] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom6] DEFAULT (''),
-[Custom7] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom7] DEFAULT (''),
-[Custom8] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom8] DEFAULT (''),
-[Custom9] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom9] DEFAULT (''),
-[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT (''),
 [HubOrderID] [uniqueidentifier] NULL,
 [HubSequence] [bigint] NULL,
 [Verified] [bit] NOT NULL CONSTRAINT [DF_Order_Verified] DEFAULT (0),
 [VerifiedBy] [bigint] NULL,
-[VerifiedDate] [datetime] NULL
+[VerifiedDate] [datetime] NULL,
+[Custom6] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom6] DEFAULT (''),
+[Custom7] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom7] DEFAULT (''),
+[Custom8] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom8] DEFAULT (''),
+[Custom9] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom9] DEFAULT (''),
+[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_Order_Custom10] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_Order] on [dbo].[Order]'
@@ -814,12 +814,12 @@ CREATE TABLE [dbo].[OrderItem]
 [Custom3] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom3] DEFAULT (''),
 [Custom4] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom4] DEFAULT (''),
 [Custom5] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom5] DEFAULT (''),
+[HubItemID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Custom6] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom6] DEFAULT (''),
 [Custom7] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom7] DEFAULT (''),
 [Custom8] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom8] DEFAULT (''),
 [Custom9] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom9] DEFAULT (''),
-[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom10] DEFAULT (''),
-[HubItemID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Custom10] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_OrderItem_Custom10] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_OrderItem] on [dbo].[OrderItem]'
