@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Services
 
             if (!clonedShipments.Any())
             {
-                messageHelper.ShowMessage("There are no shipments to process.");
+                await messageHelper.ShowMessage("There are no shipments to process.");
 
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Services
 
             result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
 
-            HandleProcessingException(result);
+            await HandleProcessingException(result);
 
             // See if we are supposed to open WorldShip
             if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)
@@ -228,7 +228,7 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
+        private async Task HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
             workflowResult.LocalRateValidationResult.HandleValidationFailure(workflowResult);
 
