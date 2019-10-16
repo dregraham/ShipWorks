@@ -64,11 +64,7 @@ namespace ShipWorks.Tests.Data
             Assert.Null(second);
         }
 
-        /// <summary>
-        /// This was just to test caching vs no caching, but leaving it in case we want to use in the future.  But,
-        /// not leaving the Fact attribute so that it is no run with the other unit tests.
-        /// </summary>
-        //[Fact]
+        [Fact]
         public void FindRelationChain_Timing_And_ReturnsCorrectValues_ForAllCombinations()
         {
             List<EntityType> entityTypes = new List<EntityType>()
