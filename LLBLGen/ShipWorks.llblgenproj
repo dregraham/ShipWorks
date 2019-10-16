@@ -4588,7 +4588,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-16T13:18:24.4890586Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-16T13:56:44.2639266Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9373,8 +9373,8 @@
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
                     <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
-                    <Field Name="MinimizeRibbon" Ordinal="23" DbType="2" />
-                    <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" DbType="2" />
+                    <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
