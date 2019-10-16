@@ -364,18 +364,15 @@ namespace ShipWorks.Products
             bool makeItActive = !product.IsActive;
             string text = (makeItActive ? "Activating" : "Deactivating") + " products";
 
-            using (var item = messageHelper.ShowProgressDialog(text, text))
+            try
             {
-                try
-                {
-                    await productCatalog
-                    .SetActivation(new[] { entityId }, makeItActive, item.ProgressItem)
-                    .ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
-                }
+                await productCatalog
+                .SetActivation(new[] { entityId }, makeItActive)
+                .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
             }
 
             // Refresh is required to show the active/inactive state of the row.
