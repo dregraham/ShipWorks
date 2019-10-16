@@ -39,10 +39,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             using (var adapter = new SqlAdapter())
             {
-                foreach (var account in accounts)
-                {
-                    adapter.DeleteEntity(account);
-                }
+                // delete the existing excluded accounts
+                adapter.DeleteEntitiesDirectly(typeof(BestRateExcludedAccountEntity), null);
 
                 foreach (long accountID in accountIDs)
                 {
