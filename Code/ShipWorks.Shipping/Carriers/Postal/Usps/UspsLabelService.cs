@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
             uspsShipmentType.ValidateShipment(shipment);
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Check Endicia amount
             // Per John: We don't differentiate between Express1 and Endicia rates because
             // 5800 out of 3,600,000+ shipments that went through Express1 for the month of June.
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             IUspsShipmentType uspsShipmentType = uspsShipmentTypes[ShipmentTypeCode.Usps];
 

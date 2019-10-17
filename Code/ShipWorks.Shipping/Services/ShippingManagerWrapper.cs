@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -158,7 +159,7 @@ namespace ShipWorks.Shipping.Services
                 .GetPackageAdapters(shipment)
                 .ToList();
 
-            if (DimensionsAreEmpty(newDimensions) && newDimensions.Count() == originalDimensions.Count())
+            if (DimensionsAreDefaults(newDimensions, shipment) && newDimensions.Count() == originalDimensions.Count())
             {
                 foreach (var (package, dimensions) in newDimensions.Zip(originalDimensions, (x, y) => (package: x, dimensions: y)))
                 {
@@ -171,10 +172,31 @@ namespace ShipWorks.Shipping.Services
         }
 
         /// <summary>
-        /// Are all the dimensions in the list empty
+        /// Are all the dimensions in the list empty or item defaults
         /// </summary>
-        private static bool DimensionsAreEmpty(List<IPackageAdapter> dimensions) =>
-            dimensions.All(x => x.DimsLength.IsEquivalentTo(0) && x.DimsWidth.IsEquivalentTo(0) && x.DimsHeight.IsEquivalentTo(0));
+        public static bool DimensionsAreDefaults(List<IPackageAdapter> dimensions, ShipmentEntity shipment)
+        {
+            bool areDefaults = dimensions.All(x => x.DimsLength.IsEquivalentTo(0) && x.DimsWidth.IsEquivalentTo(0) && x.DimsHeight.IsEquivalentTo(0));
+
+            if (areDefaults || shipment.Order?.OrderItems?.CompareCountTo(1) != ComparisonResult.Equal)
+            {
+                return areDefaults;
+            }
+
+            var orderItemDims = shipment.Order.OrderItems.Select(o => new
+            {
+                Length = (double) o.Length,
+                Width = (double) o.Width,
+                Height = (double) o.Height
+            }).FirstOrDefault();
+
+            areDefaults = orderItemDims != null && 
+                          dimensions.All(x => x.DimsLength.IsEquivalentTo(orderItemDims.Length) && 
+                                              x.DimsWidth.IsEquivalentTo(orderItemDims.Width) && 
+                                              x.DimsHeight.IsEquivalentTo(orderItemDims.Height));
+
+            return areDefaults;
+        }
 
         /// <summary>
         /// Get a list of dimensions from a shipment

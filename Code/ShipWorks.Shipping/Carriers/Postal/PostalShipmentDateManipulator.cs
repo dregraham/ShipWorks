@@ -56,20 +56,24 @@ namespace ShipWorks.Shipping.Carriers.Postal
             DateTime now = dateTimeProvider.Now;
 
             // Bring the past up to now
-            if (shipment.ShipDate.Date < now.Date)
+            var shipDateTime = shipment.ShipDate.ToLocalTime();
+
+            if (shipDateTime.Date < now.Date)
             {
                 shipment.ShipDate = now;
+                shipDateTime = now;
             }
 
-            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipment.ShipDate.Date ||
-                shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
+            if (now.TimeOfDay >= shipDateCutoff && now.Date == shipDateTime.Date ||
+                shipDateTime.DayOfWeek == DayOfWeek.Sunday)
             {
                 shipment.ShipDate = shipment.ShipDate.AddDays(1);
+                shipDateTime = shipDateTime.AddDays(1);
 
-                if (shipment.ShipDate.DayOfWeek == DayOfWeek.Sunday)
+                if (shipDateTime.DayOfWeek == DayOfWeek.Sunday)
                 {
                     shipment.ShipDate = shipment.ShipDate.AddDays(1);
-                }
+                }             
             }
         }
     }

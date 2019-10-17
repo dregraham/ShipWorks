@@ -299,13 +299,20 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Purchases a label from ShipEngine using the given request
         /// </summary>
-        public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource)
+        public async Task<Label> PurchaseLabel(PurchaseLabelRequest request, ApiLogSource apiLogSource, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
             ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
             try
             {
-                return await labelsApi.LabelsPurchaseLabelAsync(request, await GetApiKey());
+                string localApiKey = await GetApiKey();
+
+                Label label = await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel,
+                        () => labelsApi.LabelsPurchaseLabelAsync(request, localApiKey)
+                        )
+                    .ConfigureAwait(false);
+
+                return label;
             }
             catch (ApiException ex)
             {

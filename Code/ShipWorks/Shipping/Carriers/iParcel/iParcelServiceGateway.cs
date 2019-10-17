@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Authentication;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
@@ -42,10 +43,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <param name="credentials">The credentials.</param>
         /// <param name="shipment">The shipment.</param>
         /// <returns>A DataSet containing the label image data and tracking information.</returns>
-        public DataSet SubmitShipment(iParcelCredentials credentials, ShipmentEntity shipment)
+        public DataSet SubmitShipment(iParcelCredentials credentials, ShipmentEntity shipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
+            DataSet response = null;
             iParcelShipRequest request = new iParcelShipRequest(credentials, shipment);
-            return request.Submit();
+            
+            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = request.Submit());
+
+            return response;
         }
 
         /// <summary>

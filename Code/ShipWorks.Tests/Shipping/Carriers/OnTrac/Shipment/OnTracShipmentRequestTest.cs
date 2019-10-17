@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment;
@@ -112,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(fakedResponseXml);
 
             //Get result
-            var shippingResult = testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest());
+            var shippingResult = testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest(), new TelemetricResult<IDownloadedLabelData>("testing"));
             return shippingResult;
         }
 
@@ -126,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(fakedResponseXml);
 
             //Get result
-            Assert.Throws<OnTracException>(() => testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest()));
+            Assert.Throws<OnTracException>(() => testObject.ProcessShipment(new ShipmentRequest.OnTracShipmentRequest(), new TelemetricResult<IDownloadedLabelData>("testing")));
         }
     }
 }

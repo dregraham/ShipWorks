@@ -44,9 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
             
-            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>("API.ResponseTimeInMilliseconds");
-            PostalWebToolsLabelResponse response = null;
-            telemetricResult.RunTimedEvent(TelemetricEventType.GetLabel, () => response = PostalWebClientShipping.ProcessShipment(shipment.Postal));
+            TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+            PostalWebToolsLabelResponse response = PostalWebClientShipping.ProcessShipment(shipment.Postal, telemetricResult);
             telemetricResult.SetValue(createDownloadedLabelData(response));
             
             // Process the shipment

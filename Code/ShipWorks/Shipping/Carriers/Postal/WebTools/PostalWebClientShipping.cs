@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Process the given shipment and download a USPS label for it.
         /// </summary>
-        public static PostalWebToolsLabelResponse ProcessShipment(PostalShipmentEntity postalShipment)
+        public static PostalWebToolsLabelResponse ProcessShipment(PostalShipmentEntity postalShipment, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             PostalPackagingType packaging = (PostalPackagingType)postalShipment.PackagingType;
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             logger.LogRequest(xmlRequest);
 
             // Process the request
-            string xmlResponse = ProcessXmlRequest(postalShipment, xmlRequest);
+            string xmlResponse = ProcessXmlRequest(postalShipment, xmlRequest, telemetricResult);
 
             // Log the response
             logger.LogResponse(xmlResponse);
@@ -489,7 +489,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <param name="xmlRequest">The XML request.</param>
         /// <returns></returns>
         /// <exception cref="System.Net.WebException"></exception>
-        private static string ProcessXmlRequest(PostalShipmentEntity postalShipment, string xmlRequest)
+        private static string ProcessXmlRequest(PostalShipmentEntity postalShipment, string xmlRequest, TelemetricResult<IDownloadedLabelData> telemetricResult)
         {
             // The production server URL
             string serverUrl = PostalWebUtility.ServerUrl;
@@ -523,7 +523,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             try
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(serverUrl + HttpUtility.UrlEncode(xmlRequest));
+                
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                sw.Stop();
+
+                telemetricResult.AddEntry(TelemetricEventType.GetLabel, sw.ElapsedMilliseconds);
 
                 // See if we got a valid response
                 if (response.StatusCode != HttpStatusCode.OK)

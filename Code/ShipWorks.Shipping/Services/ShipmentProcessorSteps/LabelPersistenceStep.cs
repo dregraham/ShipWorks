@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 {
                     bool insureShipSucceeded = EnsureShipmentIsInsured(shipment);
 
-                    using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+                    try
                     {
                         log.Info("LabelPersistenceStep.SaveSingleLabel: LabelData.Save");
                         result.LabelData.Save();
@@ -100,12 +100,18 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         shipmentForTango = ResetTemporaryAddressChanges(result, shipment);
 
-                        SaveShipment(shipment, adapter);
+                        SaveSingleLabelTransacted(result, shipment);
+                    }
+                    catch (ORMConcurrencyException)
+                    {
+                        // Try to get the shipment from the db and make the changes to it, and re-save.
+                        ShipmentEntity dbShipment = ShippingManager.GetShipment(shipment.ShipmentID);
+                        ShippingManager.EnsureShipmentLoaded(dbShipment);
 
-                        DispatchShipmentProcessedActions(shipment, adapter);
+                        EntityUtility.CopyChangedFields(shipment, dbShipment);
 
-                        log.Info("LabelPersistenceStep.SaveSingleLabel: adapter.Commit()");
-                        adapter.Commit();
+                        SaveSingleLabelTransacted(result, dbShipment);
+                        shipment = dbShipment;
                     }
 
                     using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser, new AuditReason(AuditReasonType.Default), AuditState.Disabled))
@@ -131,6 +137,22 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             }
 
             return new LabelPersistenceResult(result, shipmentForTango);
+        }
+
+        /// <summary>
+        /// Save the shipment to the db using a transaction
+        /// </summary>
+        private void SaveSingleLabelTransacted(ILabelRetrievalResult result, ShipmentEntity shipment)
+        {
+            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            {
+                SaveShipment(shipment, adapter);
+
+                DispatchShipmentProcessedActions(shipment, adapter);
+
+                log.Info("LabelPersistenceStep.SaveSingleLabel: adapter.Commit()");
+                adapter.Commit();
+            }
         }
 
         /// <summary>
