@@ -56,6 +56,7 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         {
             List<long> accountsToExclude = new List<long>();
 
+            shippingSettings.InitializeForCurrentDatabase();
             var shippingSettingsEntity = shippingSettings.FetchReadOnly();
 
             foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes()))
