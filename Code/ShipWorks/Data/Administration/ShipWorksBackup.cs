@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
-using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -339,17 +338,17 @@ namespace ShipWorks.Data.Administration
                       or -1534726760 = @EditionTypeId 
                       or  284895786  = @EditionTypeId 
                       or -2117995310 = @EditionTypeId
-	                    BEGIN
-		                    BACKUP DATABASE @Database 
-		                    TO DISK = @FilePath      
-		                    WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 2
-	                    END
+                        BEGIN
+                            BACKUP DATABASE @Database 
+                            TO DISK = @FilePath      
+                            WITH FORMAT, INIT, SKIP, NOREWIND, NOUNLOAD, COMPRESSION,  STATS = 2
+                        END
                     ELSE
-	                    BEGIN
-		                    BACKUP DATABASE @Database 
-		                    TO DISK = @FilePath      
-		                    WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
-	                    END
+                        BEGIN
+                            BACKUP DATABASE @Database 
+                            TO DISK = @FilePath      
+                            WITH INIT, NOUNLOAD, SKIP, STATS = 2, FORMAT
+                        END
 
                     SELECT serverproperty('EditionID')";
 
@@ -630,7 +629,8 @@ namespace ShipWorks.Data.Administration
 
             using (DbConnection masterConnection = SqlSession.OpenConnectionToMaster())
             {
-                DbCommand cmdRestore = CreateRestoreCommand(sourceDb, sourceLog, targetDb, targetLog, masterConnection, database.DatabaseName);
+                string restoreSqlString = CreateRestoreSqlString(sourceDb, sourceLog, targetDb, targetLog);
+                DbCommand cmdRestore = CreateRestoreCommand(restoreSqlString, masterConnection, database.DatabaseName);
                 SetupRestoreParameters(database, cmdRestore);
                 ExecuteSqlRestore(masterConnection, cmdRestore, database.DatabaseName, progress);
             }
@@ -713,20 +713,28 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Creates the Restore DbCommand
+        /// Creates the initial sql string needed for a DbCommand
         /// </summary>
-        private static DbCommand CreateRestoreCommand(string sourceDb, string sourceLog, string targetDb, string targetLog, DbConnection con, string databaseName)
+        private static string CreateRestoreSqlString(string sourceDb, string sourceLog, string targetDb, string targetLog)
         {
-            DbCommand cmdRestore = DbCommandProvider.Create(con);
-            string sql =
-                $@"RESTORE DATABASE @Database
+            return $@"RESTORE DATABASE @Database
                     FROM DISK = @FilePath 
                     WITH NOUNLOAD, STATS = 3, RECOVERY, REPLACE,   
                     MOVE '{sourceDb}' TO '{targetDb}',   
-                    MOVE '{sourceLog}' TO '{targetLog}';
+                    MOVE '{sourceLog}' TO '{targetLog}';";
+        }
+
+        /// <summary>
+        /// Creates the Restore DbCommand
+        /// </summary>
+        private static DbCommand CreateRestoreCommand(string sqlString, DbConnection con, string databaseName)
+        {
+            DbCommand cmdRestore = DbCommandProvider.Create(con);
+            string sql = $@"{sqlString}
+                
 
                 {SqlUtility.ConfigureSqlServerForClrSql(databaseName, SqlUtility.GetUsername(con))}";
-            
+
             cmdRestore.CommandText = SqlUtility.WrapSqlInSingleUserMode(sql, databaseName);
 
             cmdRestore.CommandTimeout = 1800;

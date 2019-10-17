@@ -81,6 +81,24 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public Task CreateLabel() =>
             orderLookupViewModel.ShipmentModel.CreateLabel();
 
+        /// <summary>
+        /// Allow reshipping an order
+        /// </summary>
+        public bool ShipAgainAllowed() =>
+            orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
+
+        /// <summary>
+        /// Ship the shipment again
+        /// </summary>
+        public void ShipAgain()
+        {
+            long? shipmentId = orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
+
+            if (shipmentId != 0 && shipmentId != null)
+            {
+                messenger.Send(new OrderLookupShipAgainMessage(this, shipmentId.Value));
+            }
+        }
 
         /// <summary>
         /// Register the profile handler

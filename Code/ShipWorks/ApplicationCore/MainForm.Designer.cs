@@ -1,3 +1,4 @@
+using System;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks
@@ -259,6 +260,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipping = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewShipping = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewShipShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewManualOrder = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -2587,6 +2589,7 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
+            this.buttonOrderLookupViewShipShipAgain,
             this.buttonOrderLookupViewManualOrder
             });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
@@ -2600,6 +2603,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewCreateLabel.Text = "Create\r\nLabel";
             this.buttonOrderLookupViewCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewCreateLabel.Activate += OnButtonOrderLookupViewCreateLabel;
+            //
+            // buttonOrderLookupViewShipShipAgain
+            //
+            this.buttonOrderLookupViewShipShipAgain.Guid = new System.Guid("edb00c75-1df8-43e1-9d27-cf949d5fe8e2");
+            this.buttonOrderLookupViewShipShipAgain.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewShipShipAgain, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewShipShipAgain.QuickAccessKey = "C";
+            this.buttonOrderLookupViewShipShipAgain.Text = "Ship\r\nAgain";
+            this.buttonOrderLookupViewShipShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewShipShipAgain.Activate += OnButtonOrderLookupViewShipAgain;
             //
             // buttonOrderLookupViewManualOrder
             //
@@ -3237,6 +3250,100 @@ namespace ShipWorks
         }
         #endregion
 
+        /// <summary>
+        /// Set button telemetry values
+        /// </summary>
+        private void SetButtonTelemetry()
+        {
+            buttonShowPanels.TelemetryEventName = "ShowPanels";
+            buttonSaveEnvironment.TelemetryEventName = "Environment.Save";
+            buttonLoadEnvironment.TelemetryEventName = "Environment.Load";
+            buttonResetEnvironment.TelemetryEventName = "Environment.Reset";
+            buttonManageStores.TelemetryEventName = "Stores.Manage";
+            buttonBackup.TelemetryEventName = "Database.Backup";
+            buttonRestore.TelemetryEventName = "Database.Restore";
+            buttonArchive.TelemetryEventName = "Database.Archive";
+            buttonSetupDatabase.TelemetryEventName = "Database.Setup";
+            buttonChangeConnection.TelemetryEventName = "Database.ChangeConnection";
+            buttonManageUsers.TelemetryEventName = "Users.Manage";
+            buttonFirewall.TelemetryEventName = "Firewall";
+            buttonDownload.TelemetryEventName = "Download";
+            buttonPickList.TelemetryEventName = "PickList";
+            buttonManageFilters.TelemetryEventName = "Filters.Manage";
+            buttonManageTemplates.TelemetryEventName = "Templates.Manage";
+            buttonManageActions.TelemetryEventName = "Actions.Manage";
+            buttonPrint.TelemetryEventName = "Print";
+            buttonPreview.TelemetryEventName = "Preview";
+            buttonEmailSend.TelemetryEventName = "Email.Send";
+            buttonEmailCompose.TelemetryEventName = "Email.Compose";
+            buttonSave.TelemetryEventName = "Save";
+            buttonSaveOpen.TelemetryEventName = "SaveOpen";
+            buttonNewOrder.TelemetryEventName = "Order.New";
+            buttonEditOrder.TelemetryEventName = "Order.Edit";
+            buttonDeleteOrders.TelemetryEventName = "Order.Delete";
+            buttonCombine.TelemetryEventName = "Order.Combine";
+            buttonSplit.TelemetryEventName = "Order.Split";
+            buttonNewCustomer.TelemetryEventName = "Customer.New";
+            buttonEditCustomer.TelemetryEventName = "Customer.Edit";
+            buttonDeleteCustomer.TelemetryEventName = "Customer.Delete";
+            buttonShipOrders.TelemetryEventName = "Order.Ship";
+            buttonTrackOrders.TelemetryEventName = "Order.Track";
+            buttonSettings.TelemetryEventName = "Settings.";
+            buttonEditGridColumns.TelemetryEventName = "GridColumns.Edit";
+            buttonLocalStatus.TelemetryEventName = "Order.LocalStatus";
+            buttonUpdateOnline.TelemetryEventName = "Order.UpdateOnline";
+            buttonEditGridMenus.TelemetryEventName = "GridMenus.Edit";
+            buttonDetailViewDetail.TelemetryEventName = "DetailView.Detail";
+            buttonDetailViewNormal.TelemetryEventName = "DetailView.Normal";
+            buttonDetailViewNormalDetail.TelemetryEventName = "DetailView.NormalDetail";
+            buttonDetailViewHeightIncrease.TelemetryEventName = "DetailView.Height.Increase";
+            buttonDetailViewHeightDecrease.TelemetryEventName = "DetailView.Height.Decrease";
+            buttonQuickPrint.TelemetryEventName = "QuickPrint";
+            buttonEmailAccounts.TelemetryEventName = "Email.Accounts";
+            buttonDownloadHistory.TelemetryEventName = "DownloadHistory";
+            buttonEmailMessages.TelemetryEventName = "Email.Messages";
+            buttonAudit.TelemetryEventName = "Audit";
+            buttonShippingSettings.TelemetryEventName = "Shipping.Settings";
+            buttonShippingProfiles.TelemetryEventName = "Shipping.Profiles";
+            buttonFedExClose.TelemetryEventName = "FedExClose";
+            buttonEndiciaSCAN.TelemetryEventName = "EndiciaScan";
+            buttonHelpForum.TelemetryEventName = "Help.Forum";
+            buttonHelpRemote.TelemetryEventName = "Help.Remote";
+            buttonHelpView.TelemetryEventName = "Help.View";
+            buttonHelpAbout.TelemetryEventName = "Help.About";
+            buttonRequestHelp.TelemetryEventName = "Help.Request";
+            buttonBuySupplies.TelemetryEventName = "Supplies.Buy";
+            buttonUship.TelemetryEventName = "Uship";
+            buttonInsuranceClaim.TelemetryEventName = "Insurance.Claim";
+            buttonOrderLookupViewCreateLabel.TelemetryEventName = "OrderLookup.Label.Create";
+            buttonOrderLookupViewManualOrder.TelemetryEventName = "OrderLookup.Order.Manual";
+            buttonOrderLookupViewApplyProfile.TelemetryEventName = "OrderLookup.Profiles.Apply";
+            buttonOrderLookupViewManageProfiles.TelemetryEventName = "OrderLookup.Profiles.Manage";
+            buttonOrderLookupViewVoid.TelemetryEventName = "OrderLookup.Order.Void";
+            buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
+            buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.History.ShipAgain";
+            buttonOrderLookupViewShipShipAgain.TelemetryEventName = "OrderLookup.Ship.ShipAgain";
+            buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
+            buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
+            buttonCreateLabel.TelemetryEventName = "CreateLabel";
+            buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
+
+            menuItemViewHelp.TelemetryEventName = "Logo.Help.View";
+            menuItemSupportForum.TelemetryEventName = "Logo.Support.Forum";
+            menuItemRequestHelp.TelemetryEventName = "Logo.Help.Request";
+            menuItemRemoteAssistance.TelemetryEventName = "Logo.RemoteAssistance";
+            menuItemBuySupplies.TelemetryEventName = "Logo.Supplies.Buy";
+            menuItemHelpAbout.TelemetryEventName = "Logo.Help.About";
+
+            mainMenuItemOptions.TelemetryEventName = "Logo.Settings";
+            mainMenuItemSetupDatabase.TelemetryEventName = "Logo.Database.Setup";
+            mainMenuItemBackupDatabase.TelemetryEventName = "Logo.Database.Backup";
+
+            mainMenuItemProducts.TelemetryEventName = "Logo.Mode.Switch.Products";
+            mainMenuItemBatchGrid.TelemetryEventName = "Logo.Mode.Switch.Batch";
+            mainMenuItemOrderLookup.TelemetryEventName = "Logo.Mode.Switch.OrderLookup";
+        }
+
         private Divelements.SandRibbon.RibbonManager ribbonManager;
         private Divelements.SandRibbon.Ribbon ribbon;
         private Divelements.SandRibbon.ApplicationMenu applicationMenu;
@@ -3512,6 +3619,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewProfiles;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewActions;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewCreateLabel;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipShipAgain;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManualOrder;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewApplyProfile;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManageProfiles;
