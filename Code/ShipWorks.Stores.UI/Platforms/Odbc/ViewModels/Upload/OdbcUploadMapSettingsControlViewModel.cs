@@ -183,7 +183,11 @@ namespace ShipWorks.Stores.UI.Platforms.Odbc.ViewModels.Upload
             MapName = fieldMap.Name;
             fieldMap.Load(odbcStore.UploadMap);
             
-            ColumnSourceIsTable = odbcStore.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;            
+            ColumnSourceIsTable = odbcStore.UploadColumnSourceType == (int) OdbcColumnSourceType.Table;
+            if (!String.IsNullOrEmpty(odbcStore.UploadColumnSource))
+            {
+                customQuery = odbcStore.UploadColumnSource;
+            }
         }
 
         /// <summary>
