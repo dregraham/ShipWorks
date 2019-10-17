@@ -94,7 +94,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Run the task over the given input
         /// </summary>
-        public override async Task RunAsync(List<long> inputKeys, IActionStepContext context)
+        protected override async Task RunAsync(List<long> inputKeys)
         {
             var errors = new Dictionary<string, string>();
 

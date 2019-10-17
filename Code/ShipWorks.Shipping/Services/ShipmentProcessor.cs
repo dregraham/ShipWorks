@@ -29,6 +29,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -129,13 +130,21 @@ namespace ShipWorks.Shipping.Services
 
             using (CancellationTokenSource cancellationSource = new CancellationTokenSource())
             {
-                IProgressProvider progressProvider = new CancellationTokenProgressProvider(cancellationSource);
-
-                // Progress Item
+                IProgressProvider progressProvider;
                 IProgressReporter workProgress = new ProgressItem("Processing Shipments");
-                progressProvider.ProgressItems.Add(workProgress);
 
-                using (messageHelper.ShowProgressDialog("Processing Shipments",
+                // Use a background progress provider when processing in the background
+                if (messageHelper is BackgroundAsyncMessageHelper)
+                {
+                    progressProvider = new BackgroundProgressProvider(workProgress);
+                }
+                else
+                {
+                    progressProvider = new CancellationTokenProgressProvider(cancellationSource);
+                    progressProvider.ProgressItems.Add(workProgress);
+                }
+
+                using (await messageHelper.ShowProgressDialog("Processing Shipments",
                     "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
                 {
                     result = await workflow.Process(clonedShipments, chosenRateResult, workProgress,
@@ -239,7 +248,7 @@ namespace ShipWorks.Shipping.Services
             }
             else if (workflowResult.TermsAndConditionsException != null)
             {
-                messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
+                await messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
                 ITermsAndConditionsException termsAndConditionsException = workflowResult.TermsAndConditionsException;
                 termsAndConditionsException.TermsAndConditions.Show();
             }
@@ -258,7 +267,7 @@ namespace ShipWorks.Shipping.Services
                     message += "\n\nSee the shipment list for all errors.";
                 }
 
-                messageHelper.ShowError(message);
+                await messageHelper.ShowError(message);
             }
         }
 
