@@ -32,6 +32,16 @@ namespace ShipWorks.UI.Controls
         bool CreateLabelAllowed();
 
         /// <summary>
+        /// Allow reshipping an order
+        /// </summary>
+        bool ShipAgainAllowed();
+
+        /// <summary>
+        /// Ship the shipment again
+        /// </summary>
+        void ShipAgain();
+
+        /// <summary>
         /// Register the profile handler
         /// </summary>
         void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration);

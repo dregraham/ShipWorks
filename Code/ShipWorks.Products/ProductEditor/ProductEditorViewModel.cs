@@ -232,7 +232,7 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string DialogTitle { get; private set; }
-		
+
         /// <summary>
         /// View model for the alias editor
         /// </summary>
@@ -261,7 +261,7 @@ namespace ShipWorks.Products.ProductEditor
             BundleEditorViewModel.Load(productVariant);
             await AttributeEditorViewModel.Load(productVariant).ConfigureAwait(true);
             AliasEditorViewModel.Load(productVariant);
-                    
+
             SKU = productVariant.DefaultSku ?? string.Empty;
             IsActive = productVariant.IsNew || productVariant.IsActive;
             IsBundle = !productVariant.IsNew && productVariant.Product.IsBundle;
@@ -288,6 +288,8 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
+            var counts = new ProductTelemetryCounts("InlineUI");
+
             productVariant.Product.IsBundle = IsBundle;
 
             productVariant.Aliases.First(a => a.IsDefault).Sku = SKU.Trim();
@@ -315,11 +317,15 @@ namespace ShipWorks.Products.ProductEditor
 
             if (saveResult.Success)
             {
+                counts.AddSuccess(IsNew);
+
                 dialog.DialogResult = true;
                 dialog.Close();
             }
             else
             {
+                counts.AddFailure(IsNew);
+
                 if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
                 {
                     messageHelper.ShowError($"A specified SKU or Alias SKU already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
@@ -330,6 +336,7 @@ namespace ShipWorks.Products.ProductEditor
                 }
             }
 
+            counts.SendTelemetry();
         }
     }
 }
