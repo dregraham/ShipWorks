@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Other
                     carrier.ApplyMultiText(shipment.Other.Carrier);
                     service.ApplyMultiText(shipment.Other.Service);
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     weight.ApplyMultiWeight(shipment.ContentWeight);
                     cost.ApplyMultiText(shipment.ShipmentCost.ToString(CultureInfo.InvariantCulture));
                     tracking.ApplyMultiText(shipment.TrackingNumber);
@@ -107,12 +107,11 @@ namespace ShipWorks.Shipping.Carriers.Other
                 carrier.ReadMultiText(s => shipment.Other.Carrier = s);
                 service.ReadMultiText(s => shipment.Other.Service = s);
 
-                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.AddHours(12));
+                shipDate.ReadMultiDate(d => shipment.ShipDate = d.Date.ToUniversalTime());
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
                 cost.ReadMultiText(s => shipment.ShipmentCost = cost.Amount);
                 tracking.ReadMultiText(s => shipment.TrackingNumber = s);
             }
-
             insuranceControl.SaveToInsuranceChoices();
 
             ResumeRateCriteriaChangeEvent();
