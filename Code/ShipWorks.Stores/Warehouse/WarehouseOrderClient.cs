@@ -2,23 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
-using RestSharp.Serializers;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -41,12 +37,10 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParamsAttribute]
         public WarehouseOrderClient(
             IWarehouseRequestClient warehouseRequestClient,
             ILicenseService licenseService,
             ShipmentDtoFactory shipmentDtoFactory,
-            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
             Func<IUploadOrdersRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {

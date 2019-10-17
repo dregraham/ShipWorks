@@ -50,10 +50,11 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
             <ui:VisibilityMultiConverter x:Key="VisibilityMulti" />
+            <ui:WpfViewTemplateSelector x:Key="WpfViewTemplateSelector" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -253,13 +254,13 @@
                                     Command="{Binding DataContext.EditProductVariantLink, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
                                     CommandParameter="{Binding Data.ProductVariantID}"
                                     Style="{StaticResource Link}"
-                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
+                                    Visibility="{Binding IsLoading, Converter={StaticResource HideWhenTrue}}">
                                     <TextBlock FontSize="{StaticResource BaseFontSize}" Text="{Binding Data.Name}" />
                                 </Button>
                                 <TextBlock
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibility}}">
+                                    Visibility="{Binding IsLoading, Converter={StaticResource ShowWhenTrue}}">
                                     Loading...
                                 </TextBlock>
                             </Grid>
@@ -278,7 +279,7 @@
                     Header="Dimensions (L x W x H)">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Grid Margin="8,0" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityInverted}}">
+                            <Grid Margin="8,0" Visibility="{Binding IsLoading, Converter={StaticResource HideWhenTrue}}">
                                 <Grid.Resources>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="VerticalAlignment" Value="Center" />
@@ -343,7 +344,7 @@
                     CanUserSort="True"
                     Header="Active"
                     SortMemberPath="IsActive"
-                    Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
+                    Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource ShowWhenTrue}}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Path
@@ -353,8 +354,8 @@
                                 Style="{StaticResource Path.Checkmark}">
                                 <Path.Visibility>
                                     <MultiBinding Converter="{StaticResource VisibilityMulti}">
-                                        <Binding Converter="{StaticResource BooleanToVisibilityInverted}" Path="IsLoading" />
-                                        <Binding Converter="{StaticResource BooleanToVisibility}" Path="Data.IsActive" />
+                                        <Binding Converter="{StaticResource HideWhenTrue}" Path="IsLoading" />
+                                        <Binding Converter="{StaticResource ShowWhenTrue}" Path="Data.IsActive" />
                                     </MultiBinding>
                                 </Path.Visibility>
                             </Path>
@@ -363,7 +364,34 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <ui:WaitSpinner Grid.Row="1" Visibility="{Binding Products.IsLoading, Converter={StaticResource BooleanToVisibility}}">
+        <Border
+            Grid.Row="1"
+            Margin="24"
+            Padding="16"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            BorderBrush="Black"
+            BorderThickness="2"
+            TextBlock.FontSize="{StaticResource BaseFontSize}">
+            <Border.Visibility>
+                <MultiBinding Converter="{StaticResource VisibilityMulti}">
+                    <Binding
+                        Converter="{StaticResource HideWhenTrue}"
+                        Mode="OneWay"
+                        Path="Products.IsLoading" />
+                    <Binding
+                        Converter="{StaticResource HideWhenTrue}"
+                        Mode="OneWay"
+                        Path="IsSearchActive" />
+                    <Binding
+                        Converter="{StaticResource ShowWhenTrue}"
+                        Mode="OneWay"
+                        Path="Products.Data.IsEmpty" />
+                </MultiBinding>
+            </Border.Visibility>
+            <ContentPresenter Content="{Binding ImportProductsSplash.CurrentState}" ContentTemplateSelector="{StaticResource WpfViewTemplateSelector}" />
+        </Border>
+        <ui:WaitSpinner Grid.Row="1" Visibility="{Binding Products.IsLoading, Converter={StaticResource ShowWhenTrue}}">
             <TextBlock FontSize="{StaticResource BaseFontSize}">Loading products...</TextBlock>
         </ui:WaitSpinner>
         <Grid

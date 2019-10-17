@@ -205,6 +205,15 @@ namespace Interapptive.Shared.Metrics
         }
 
         /// <summary>
+        /// Track button click
+        /// </summary>
+        public static void TrackButtonClick(string eventName, string postfix = "")
+        {
+            postfix = postfix.IsNullOrWhiteSpace() ? string.Empty : $".{postfix}".Replace(" ", string.Empty);
+            TrackEvent(new EventTelemetry($"ShipWorks.Button.Click.{eventName}{postfix}"));
+        }
+
+        /// <summary>
         /// Flush any stored telemetry information
         /// </summary>
         public static void Flush()

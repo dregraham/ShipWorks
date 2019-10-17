@@ -56,6 +56,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         };
         private readonly string[] numericSystemTypes = { "byte", "int16", "int", "int32", "int64" };
 
+        private const int UploadOrdersBatchSize = 50;
+
+
         /// <summary>
         /// Initializes a new instance of the <see cref="OdbcStoreDownloader"/> class.
         /// </summary>
@@ -364,10 +367,19 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
 
             if (ordersToSendToHub.Any())
             {
-                await UploadOrdersToHub(ordersToSendToHub).ConfigureAwait(false);
+                int ordersUploaded = 0;
+                List<OrderEntity> batchToUpload = ordersToSendToHub.Take(UploadOrdersBatchSize).ToList();
 
-                store.WarehouseLastModified = ordersToSendToHub.Max(x => x.OnlineLastModified);
-                storeManager.SaveStore(store);                
+                while (batchToUpload.Any())
+                {
+                    await UploadOrdersToHub(batchToUpload).ConfigureAwait(false);
+
+                    store.WarehouseLastModified = batchToUpload.Max(x => x.OnlineLastModified);
+                    storeManager.SaveStore(store);
+
+                    ordersUploaded += batchToUpload.Count;
+                    batchToUpload = ordersToSendToHub.Skip(ordersUploaded).Take(UploadOrdersBatchSize).ToList();
+                }
             }
         }
 
