@@ -18,7 +18,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
 
             if (task == null)
             {
-                throw new ArgumentNullException("task");
+                throw new ArgumentNullException(nameof(task));
             }
 
             this.task = task;

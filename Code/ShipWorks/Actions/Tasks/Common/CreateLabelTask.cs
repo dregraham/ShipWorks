@@ -141,12 +141,14 @@ namespace ShipWorks.Actions.Tasks.Common
             if (errors.Any())
             {
                 // Return a list of errors with the order numbers
-                throw new ActionTaskRunException($"Some errors occured during processing:\n\n{string.Join("\n", errors.Select(x => $"{x.Key}: {x.Value}"))}");
+                string errorList = string.Join("\n", errors.Select(x => $"{x.Key}: {x.Value}"));
+
+                throw new ActionTaskRunException($"Some errors occured during processing:\n\n{errorList}");
             }
         }
 
         /// <summary>
-        /// Gets the Shipments that should be auto print/process
+        /// Gets the shipments that should be auto processed
         /// </summary>
         private async Task<GenericResult<IEnumerable<ShipmentEntity>>> GetShipments(long orderId)
         {
@@ -179,7 +181,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         /// <remarks>
         /// If the order has no shipments we create and return a shipment
-        /// If the order only has processed shipments, create a new shipment, or return an empty array, depending on their settings
+        /// If the order only has processed shipments, return no shipments
         /// If the order has unprocessed shipments, we return them
         /// </remarks>
         private IEnumerable<ShipmentEntity> GetConfirmedShipments(long orderId, IEnumerable<ShipmentEntity> shipments)
