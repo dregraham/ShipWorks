@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             ShipmentEntity shipment = CreateShipment(context.Order, mock.Container);
 
-            Assert.Equal(new DateTime(2015, 12, 28, 00, 00, 00), shipment.ShipDate.ToLocalTime());
+            Assert.Equal(new DateTime(2015, 12, 28, 12, 00, 00), shipment.ShipDate.ToLocalTime());
         }
 
         [Fact]
