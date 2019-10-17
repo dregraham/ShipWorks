@@ -677,14 +677,23 @@ namespace ShipWorks.Actions
                     return;
                 }
 
-                // If the trigger is an OrderDownloadedTrigger, and there is a CreateLabel task,
-                // force the user to use 'when an order first downloads'
-                if (trigger is OrderDownloadedTrigger orderDownloadedTrigger &&
-                    orderDownloadedTrigger.Restriction != OrderDownloadedRestriction.OnlyInitial &&
-                    tasksToSave.Any(x => x is CreateLabelTask))
+                // Check error states specific to the 'Create a label' task
+                if (tasksToSave.Any(x => x is CreateLabelTask))
                 {
-                    MessageHelper.ShowError(this, "The 'Create a label' task can only be performed on download when downloading an order for the first time.");
-                    return;
+                    // If the trigger is an OrderDownloadedTrigger force the user to use 'when an order first downloads'
+                    if (trigger is OrderDownloadedTrigger orderDownloadedTrigger &&
+                        orderDownloadedTrigger.Restriction != OrderDownloadedRestriction.OnlyInitial)
+                    {
+                        MessageHelper.ShowError(this, "The 'Create a label' task can only be performed on download when downloading an order for the first time.");
+                        return;
+                    }
+
+                    // Only allow the create label task if the user has permission to create labels
+                    if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess))
+                    {
+                        MessageHelper.ShowError(this, "The 'Create a label' task requires permission to create/edit/process shipments.");
+                        return;
+                    }
                 }
 
                 // Don't close the form if any of the bubbles have invalid data
