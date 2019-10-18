@@ -495,6 +495,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> LoggedVoidToHub { get; }
+        /// <summary> The CarrierAccountID property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."CarrierAccountID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> CarrierAccountID { get; }
         
         IAmazonSFPShipmentEntity AmazonSFP { get; }
         IAmazonSWAShipmentEntity AmazonSWA { get; }

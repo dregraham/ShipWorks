@@ -400,7 +400,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                 }
 
                 SaveToDatabase();
-
+                ShipmentAdapter.Shipment.CarrierAccountID = AccountId;
                 AllowEditing = false;
 
                 messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment },

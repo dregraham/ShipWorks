@@ -94,7 +94,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ColumnMask property of the Entity FilterNodeContent<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "FilterNodeContent"."ColumnMask"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 100<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 150<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte[] ColumnMask { get; }
         /// <summary> The JoinMask property of the Entity FilterNodeContent<br/><br/>

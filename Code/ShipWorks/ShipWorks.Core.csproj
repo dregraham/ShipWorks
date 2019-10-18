@@ -874,6 +874,7 @@
     <Compile Include="Common\Threading\ProgressFactory.cs" />
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
@@ -1131,6 +1132,8 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\FedExUploadImagesResponse.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\AmazonSWAServiceType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />

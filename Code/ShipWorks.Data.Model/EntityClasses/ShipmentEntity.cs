@@ -1097,6 +1097,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LoggedShippedToHub", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("LoggedVoidToHub", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CarrierAccountID", fieldHashtable);
 		}
 		#endregion
 
@@ -2497,6 +2499,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShipmentFieldIndex.LoggedVoidToHub, false); }
 			set	{ SetValue((int)ShipmentFieldIndex.LoggedVoidToHub, value); }
+		}
+
+		/// <summary> The CarrierAccountID property of the Entity Shipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Shipment"."CarrierAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> CarrierAccountID
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ShipmentFieldIndex.CarrierAccountID, false); }
+			set	{ SetValue((int)ShipmentFieldIndex.CarrierAccountID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

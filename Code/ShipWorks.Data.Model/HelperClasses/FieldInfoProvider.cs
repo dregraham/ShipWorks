@@ -1651,7 +1651,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)FilterNodeContentFieldIndex.Status, 0, 0, 5);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "InitialCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.InitialCalculation, 2147483647, 0, 0);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "UpdateCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.UpdateCalculation, 2147483647, 0, 0);
-			this.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 100, 0, 0);
+			this.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 150, 0, 0);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
@@ -3006,6 +3006,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "ReturnProfileID", typeof(System.Int64), false, false, false, false,  (int)ShipmentFieldIndex.ReturnProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
+			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccountID, 0, 0, 19);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

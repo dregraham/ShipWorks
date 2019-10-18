@@ -465,6 +465,7 @@
       <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />
       <Condition identifier="Shipment.RequestedLabelFormat" />
       <Condition identifier="Shipment.LabelFormat" />
+      <Condition identifier="Shipment.Account" displayAs="Account"/>
       <Separator/>
       <Group name="Postal">
         <Condition identifier="Shipment.Postal.ServiceType" displayAs="Service" />

@@ -10694,6 +10694,8 @@ namespace ShipWorks.Data.Model
 		LoggedShippedToHub,
 		///<summary>LoggedVoidToHub. </summary>
 		LoggedVoidToHub,
+		///<summary>CarrierAccountID. </summary>
+		CarrierAccountID,
 		/// <summary></summary>
 		AmountOfFields
 	}
