@@ -694,6 +694,10 @@ namespace ShipWorks.Actions
                         MessageHelper.ShowError(this, "The 'Create a label' task requires permission to create/edit/process shipments.");
                         return;
                     }
+
+                    // Warn the user that this task could cost them money
+                    MessageHelper.ShowWarning(this, "The 'Create a label' task creates and processes shipments which could result in charges to your shipping accounts. " +
+                        "Please ensure that your settings are properly configured before enabling this action.");
                 }
 
                 // Don't close the form if any of the bubbles have invalid data

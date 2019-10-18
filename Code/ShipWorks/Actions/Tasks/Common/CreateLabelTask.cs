@@ -165,7 +165,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
             if (confirmedShipments.Count() > 1 && !AllowMultiShipments)
             {
-                return new ActionTaskRunException("More than one unprocessed shipment");
+                return new ActionTaskRunException("More than one unprocessed shipment. To process multiple shipments, enable the option in the action editor.");
             }
 
             if (HasDisqualifyingShipmentTypes(confirmedShipments))
