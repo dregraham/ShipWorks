@@ -8,7 +8,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Actions.Triggers;
-using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -100,17 +99,20 @@ namespace ShipWorks.Actions.Tasks.Common
 
             var shipmentsToProcess = new List<ShipmentEntity>();
 
-            foreach (long orderID in inputKeys)
+            // Get all of the shipments for the order given order IDs. This will add a new shipment if the order currently has no shipments
+            ShipmentsLoadedEventArgs loadedShipments = await orderLoader.LoadAsync(inputKeys.ToArray(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
+
+            // All of the orders were deleted. Do nothing.
+            if (loadedShipments == null)
             {
-                OrderEntity order = (OrderEntity) DataProvider.GetEntity(orderID);
+                return;
+            }
 
-                // The order was deleted
-                if (order == null)
-                {
-                    continue;
-                }
+            IEnumerable<OrderEntity> orders = loadedShipments.Shipments.Select(x => x.Order).Distinct();
 
-                var shipments = await GetShipments(order.OrderID);
+            foreach (OrderEntity order in orders)
+            {
+                var shipments = await VerifyShipments(order.Shipments);
 
                 if (shipments.Failure)
                 {
@@ -134,8 +136,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
                 }
 
-                // Add any errors from processing
-                results.Where(x => !x.IsSuccessful).ForEach(x => errors.Add(x.Shipment.Order.OrderNumberComplete, x.Error.Message));
+                // Add any errors from processing. Uses indexer instead of .Add so that we always get the last error for a given order
+                results.Where(x => !x.IsSuccessful).ForEach(x => errors[x.Shipment.Order.OrderNumberComplete] = x.Error.Message);
             }
 
             if (errors.Any())
@@ -150,13 +152,9 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the shipments that should be auto processed
         /// </summary>
-        private async Task<GenericResult<IEnumerable<ShipmentEntity>>> GetShipments(long orderId)
+        private async Task<GenericResult<IEnumerable<ShipmentEntity>>> VerifyShipments(IEnumerable<ShipmentEntity> shipments)
         {
-            // Get all of the shipments for the order id that are not voided, this will add a new shipment if the order currently has no shipments
-            ShipmentsLoadedEventArgs loadedOrders = await orderLoader.LoadAsync(new[] { orderId }, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
-
-            IEnumerable<ShipmentEntity> shipments = loadedOrders?.Shipments.Where(s => !s.Voided);
-            IEnumerable<ShipmentEntity> confirmedShipments = GetConfirmedShipments(orderId, shipments);
+            IEnumerable<ShipmentEntity> confirmedShipments = GetConfirmedShipments(shipments.Where(s => !s.Voided));
 
             if (confirmedShipments.None())
             {
@@ -180,28 +178,17 @@ namespace ShipWorks.Actions.Tasks.Common
         /// Gets Confirmed Shipments
         /// </summary>
         /// <remarks>
-        /// If the order has no shipments we create and return a shipment
         /// If the order only has processed shipments, return no shipments
         /// If the order has unprocessed shipments, we return them
         /// </remarks>
-        private IEnumerable<ShipmentEntity> GetConfirmedShipments(long orderId, IEnumerable<ShipmentEntity> shipments)
+        private IEnumerable<ShipmentEntity> GetConfirmedShipments(IEnumerable<ShipmentEntity> shipments)
         {
-            if (shipments != null)
+            if (shipments.All(s => s.Processed))
             {
-                if (shipments.None())
-                {
-                    return new[] { shipmentFactory.Create(orderId) };
-                }
-
-                if (shipments.All(s => s.Processed))
-                {
-                    return new ShipmentEntity[0];
-                }
-
-                return shipments.Where(s => !s.Processed);
+                return new ShipmentEntity[0];
             }
 
-            return new ShipmentEntity[0];
+            return shipments.Where(s => !s.Processed);
         }
 
         /// <summary>
