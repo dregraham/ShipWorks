@@ -30,6 +30,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override void CheckForChangesNeeded() => EndiciaAccountManager.CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            EndiciaAccountManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
         /// Returns a Endicia account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>

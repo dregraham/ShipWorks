@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -130,6 +131,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             return PostalWebClientTracking.TrackShipment(shipment.TrackingNumber);
+        }
+
+        /// <summary>
+        /// Gets an instance to the best rate shipping broker for the Express1 for USPS shipment type based on the shipment configuration.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>An instance of an Express1UspsBestRateBroker.</returns>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
+        {
+            return new NullShippingBroker();
         }
     }
 }

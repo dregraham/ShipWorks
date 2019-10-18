@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(239);
+			this.InitClass(240);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -71,6 +71,7 @@ namespace ShipWorks.Data.Model
 			InitAuditEntityMappings();
 			InitAuditChangeEntityMappings();
 			InitAuditChangeDetailEntityMappings();
+			InitBestRateExcludedAccountEntityMappings();
 			InitBestRateProfileEntityMappings();
 			InitBestRateShipmentEntityMappings();
 			InitBigCommerceOrderItemEntityMappings();
@@ -657,6 +658,13 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("AuditChangeDetailEntity", "TextNew", "TextNew", true, "NVarChar", 2147483647, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("AuditChangeDetailEntity", "VariantOld", "VariantOld", true, "Variant", 0, 0, 0, false, "", null, typeof(System.Object), 8);
 			this.AddElementFieldMapping("AuditChangeDetailEntity", "VariantNew", "VariantNew", true, "Variant", 0, 0, 0, false, "", null, typeof(System.Object), 9);
+		}
+
+		/// <summary>Inits BestRateExcludedAccountEntity's mappings</summary>
+		private void InitBestRateExcludedAccountEntityMappings()
+		{
+			this.AddElementMapping("BestRateExcludedAccountEntity", @"ShipWorksLocal", @"dbo", "BestRateExcludedAccount", 1, 0);
+			this.AddElementFieldMapping("BestRateExcludedAccountEntity", "AccountID", "AccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 		}
 
 		/// <summary>Inits BestRateProfileEntity's mappings</summary>
