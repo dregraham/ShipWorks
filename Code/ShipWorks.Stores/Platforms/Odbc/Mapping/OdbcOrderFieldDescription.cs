@@ -190,6 +190,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         ItemCustom4,
 
         [Description("Custom Field 5")]
-        ItemCustom5
+        ItemCustom5,
+
+        [Description("Custom Field 6")]
+        ItemCustom6,
+
+        [Description("Custom Field 7")]
+        ItemCustom7,
+
+        [Description("Custom Field 8")]
+        ItemCustom8,
+
+        [Description("Custom Field 9")]
+        ItemCustom9,
+
+        [Description("Custom Field 10")]
+        ItemCustom10
     }
 }

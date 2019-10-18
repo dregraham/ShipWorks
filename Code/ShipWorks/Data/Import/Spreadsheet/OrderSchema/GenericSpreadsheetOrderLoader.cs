@@ -334,6 +334,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 item.Custom3 = csv.ReadField("Item.Custom3", "");
                 item.Custom4 = csv.ReadField("Item.Custom4", "");
                 item.Custom5 = csv.ReadField("Item.Custom5", "");
+                item.Custom6 = csv.ReadField("Item.Custom6", "");
+                item.Custom7 = csv.ReadField("Item.Custom7", "");
+                item.Custom8 = csv.ReadField("Item.Custom8", "");
+                item.Custom9 = csv.ReadField("Item.Custom9", "");
+                item.Custom10 = csv.ReadField("Item.Custom10", "");
 
                 // Load Item Attributes
                 LoadAttributes(item, csv, factory);
