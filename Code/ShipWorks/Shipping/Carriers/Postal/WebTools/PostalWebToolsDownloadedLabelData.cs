@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                         {
                             bitmapImage.Save(imageStream, ImageFormat.Png);
 
-                            DataResourceManager.CreateFromBytes(imageStream.ToArray(), postalShipment.ShipmentID, name);
+                            DataResourceManager.CreateFromBytes(imageStream.ToArray(), postalShipment.ShipmentID, name, true);
                         }
                     }
                 }

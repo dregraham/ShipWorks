@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             using (MemoryStream imageStream = new MemoryStream())
             {
                 originalImage.Save(imageStream, ImageFormat.Png);
-                dataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
+                dataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name, true);
             }
         }
 

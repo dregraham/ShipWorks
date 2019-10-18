@@ -13,7 +13,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Create database resource from PDF
         /// </summary>
-        IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID, string label);
+        IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID, string label, bool forceCreateNew = false);
 
         /// <summary>
         /// Create database resource from PDF
@@ -23,17 +23,18 @@ namespace ShipWorks.Data
         /// <param name="consumerID">Id of the consumer</param>
         /// <param name="createLabelFromIndex">Function that creates a label given the index of the page</param>
         /// <param name="getBytesFromStream">Function that gets a byte array from the given image stream</param>
+        /// <param name="forceCreateNew">This will create </param>
         IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID,
-            Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream);
+            Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream, bool forceCreateNew = false);
 
         /// <summary>
         /// Create database resource from bytes
         /// </summary>
-        DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label);
+        DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label, bool forceCreateNew = false);
 
         /// <summary>
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
-        DataResourceReference CreateFromText(string text, long consumerID);
+        DataResourceReference CreateFromText(string text, long consumerID, bool forceCreateNew = false);
     }
 }
