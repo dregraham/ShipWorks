@@ -2392,7 +2392,7 @@
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="8" />
           <Field Name="IsActive" Type="bool" FieldIndex="9" />
           <Field Name="Length" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="3" />
-          <Field Name="Name" Type="string" IsOptional="true" MaxLength="300" FieldIndex="2" />
+          <Field Name="Name" Type="string" MaxLength="300" FieldIndex="2" />
           <Field Name="ProductVariantID" Type="long" Precision="19" FieldIndex="0" />
           <Field Name="SKU" Type="string" MaxLength="300" FieldIndex="1" />
           <Field Name="Weight" Type="decimal" IsOptional="true" Precision="29" Scale="9" FieldIndex="6" />
@@ -9721,7 +9721,7 @@
                   <Fields>
                     <Field Name="ProductVariantID" Ordinal="1" DbType="0" Precision="19" />
                     <Field Name="SKU" Ordinal="2" DbType="12" Length="300" />
-                    <Field Name="Name" Ordinal="3" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="Name" Ordinal="3" DbType="12" Length="300" />
                     <Field Name="Length" Ordinal="4" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="5" IsOptional="true" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="6" IsOptional="true" DbType="5" Precision="10" Scale="2" />
@@ -9783,7 +9783,7 @@
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
                     <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
-                </StoredProcedure>               
+                </StoredProcedure>
                 <StoredProcedure Name="PurgeLabels">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
