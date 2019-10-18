@@ -90,7 +90,7 @@ namespace ShipWorks.Data.Caching
         /// </summary>
         [NDependIgnoreLongMethod]
         [NDependIgnoreComplexMethodAttribute]
-        public List<long> GetRelatedKeys(List<long> idList, EntityType relateToType, bool fetchIfMissing, SortDefinition sort, Func<ISqlAdapter> adapterFactory)
+        public List<long> GetRelatedKeys(List<long> idList, EntityType relateToType, bool fetchIfMissing, SortDefinition sort)
         {
             if (idList == null)
             {
@@ -197,13 +197,17 @@ namespace ShipWorks.Data.Caching
                             {
                                 bucket.Relations.AddRange(sort.Relations);
                             }
-                            
-                            using (IDataReader reader = adapterFactory()
-                                .FetchDataReader(resultFields, bucket, CommandBehavior.Default, 0, sort?.SortExpression, false))
+
+                            using (SqlAdapter adapter = SqlAdapter.Create(false))
                             {
-                                while (reader.Read())
+                                // Don't close the connection when the reader closes. If the connection should be closed,
+                                // it will be closed when the adapter is disposed.
+                                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, (sort != null ? sort.SortExpression : null), false))
                                 {
-                                    resultRows.Add(Tuple.Create(reader.GetInt64(0), needFetchEntityID ? reader.GetInt64(1) : 0));
+                                    while (reader.Read())
+                                    {
+                                        resultRows.Add(Tuple.Create(reader.GetInt64(0), needFetchEntityID ? reader.GetInt64(1) : 0));
+                                    }
                                 }
                             }
                         }
