@@ -54,10 +54,8 @@ namespace ShipWorks.Tests.Data.Caching
         public void GetRelatedKeys_ReturnsCorrectValues_ForCustomerToOrderItem()
         {
             int createAdapterCount = 0;
-            ISqlAdapter adapter = null;
             var ids = new List<long>() { context.Order.CustomerID };
-            var keys = relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null,
-                () => adapter ?? (adapter = CreateAdapter(ref createAdapterCount)));
+            var keys = relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null);
 
             var orderItems = context.Order.OrderItems;
             Assert.True(orderItems.Select(oi => oi.OrderItemID).Except(keys).None());
@@ -68,10 +66,8 @@ namespace ShipWorks.Tests.Data.Caching
         public void GetRelatedKeys_ReturnsCorrectValues_ForCustomerToShipment()
         {
             int createAdapterCount = 0;
-            ISqlAdapter adapter = null;
             var ids = new List<long>() { context.Order.CustomerID };
-            var keys = relationCache.GetRelatedKeys(ids, EntityType.ShipmentEntity, true, null,
-                () => adapter ?? (adapter = CreateAdapter(ref createAdapterCount)));
+            var keys = relationCache.GetRelatedKeys(ids, EntityType.ShipmentEntity, true, null);
             var shipments = context.Order.Shipments;
             Assert.True(shipments.Select(x => x.ShipmentID).Except(keys).None());
             Assert.Equal(1, createAdapterCount);
@@ -81,7 +77,6 @@ namespace ShipWorks.Tests.Data.Caching
         public void GetRelatedKeys_Timing_ForCustomerToShipment()
         {
             int createAdapterCount = 0;
-            ISqlAdapter adapter = null;
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -89,8 +84,7 @@ namespace ShipWorks.Tests.Data.Caching
             for (int i = 0; i < 1000; i++)
             {
                 var ids = new List<long>() { context.Order.CustomerID };
-                var keys = relationCache.GetRelatedKeys(ids, EntityType.ShipmentEntity, true, null,
-                    () => adapter ?? (adapter = CreateAdapter(ref createAdapterCount)));
+                var keys = relationCache.GetRelatedKeys(ids, EntityType.ShipmentEntity, true, null);
                 var shipments = context.Order.Shipments;
                 Assert.True(shipments.Select(x => x.ShipmentID).Except(keys).None());
                 Assert.Equal(1, createAdapterCount);
@@ -104,7 +98,6 @@ namespace ShipWorks.Tests.Data.Caching
         public void GetRelatedKeys_Timing_ForCustomerToOrderItem()
         {
             int createAdapterCount = 0;
-            ISqlAdapter adapter = null;
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
@@ -112,8 +105,7 @@ namespace ShipWorks.Tests.Data.Caching
             for (int i = 0; i < 1000; i++)
             {
                 var ids = new List<long>() { context.Order.CustomerID };
-                var keys = relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null,
-                    () => adapter ?? (adapter = CreateAdapter(ref createAdapterCount)));
+                var keys = relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null);
                 var orderItems = context.Order.OrderItems;
                 Assert.True(orderItems.Select(oi => oi.OrderItemID).Except(keys).None());
                 Assert.Equal(1, createAdapterCount);

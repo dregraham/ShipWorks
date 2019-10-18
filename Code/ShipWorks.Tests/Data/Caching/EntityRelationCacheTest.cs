@@ -52,12 +52,10 @@ namespace ShipWorks.Tests.Data.Caching
             var entityCache = new EntityCache(changeMonitoredEntityTypes);
             var relationCache = new EntityRelationCache(entityCache, new TestExecutionMode());
 
-            ISqlAdapter adapter = null;
             var ids = new List<long>() { 1012 };
             int createAdapterCount = 0;
 
-            relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null,
-                () => adapter ?? (adapter = CreateAdapter(ref createAdapterCount)));
+            relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null);
 
             Assert.Equal(1, createAdapterCount);
 
