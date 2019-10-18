@@ -8028,69 +8028,6 @@
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
                   </Fields>
                 </Table>
-                <Table Name="QuickFilterNodeContentDirty">
-                  <PkConstraintName Name="PK_QuickFilterNodeContentDirty" />
-                  <Fields>
-                    <Field Name="FilterNodeContentDirtyID" Ordinal="1" IsIdentity="true" DbType="0" Precision="19" />
-                    <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ObjectID" Ordinal="3" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ParentID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="ObjectType" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="ComputerID" Ordinal="6" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="7" IsPrimaryKey="true" DbType="23" Length="100" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdateCheckpoint">
-                  <PkConstraintName Name="PK_QuickFilterNodeUpdateCheckpoint" />
-                  <Fields>
-                    <Field Name="CheckpointID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="MaxDirtyID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="DirtyCount" Ordinal="3" DbType="8" Precision="10" />
-                    <Field Name="State" Ordinal="4" DbType="8" Precision="10" />
-                    <Field Name="Duration" Ordinal="5" DbType="8" Precision="10" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdateCustomer">
-                  <PkConstraintName Name="PK_QuickFilterNodeUpdateCustomer" />
-                  <Fields>
-                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdateItem">
-                  <PkConstraintName Name="PK_QuickFilterNodeUpdateItem" />
-                  <Fields>
-                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdateOrder">
-                  <PkConstraintName Name="PK_QuickFilterNodeUpdateOrder" />
-                  <Fields>
-                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdatePending">
-                  <Fields>
-                    <Field Name="FilterNodeContentID" Ordinal="1" DbType="0" Precision="19" />
-                    <Field Name="FilterTarget" Ordinal="2" DbType="8" Precision="10" />
-                    <Field Name="ColumnMask" Ordinal="3" DbType="23" Length="100" />
-                    <Field Name="JoinMask" Ordinal="4" DbType="8" Precision="10" />
-                    <Field Name="Position" Ordinal="5" DbType="8" Precision="10" />
-                  </Fields>
-                </Table>
-                <Table Name="QuickFilterNodeUpdateShipment">
-                  <PkConstraintName Name="PK_QuickFilterNodeUpdateShipment" />
-                  <Fields>
-                    <Field Name="ObjectID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="ComputerID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="ColumnsUpdated" Ordinal="3" IsPrimaryKey="true" DbType="23" Length="100" />
-                  </Fields>
-                </Table>
                 <Table Name="Resource">
                   <PkConstraintName Name="PK_Resource" />
                   <Fields>
@@ -9746,27 +9683,6 @@
                 </Table>
               </Tables>
               <Views>
-                <View Name="FilterInfo">
-                  <Fields>
-                    <Field Name="Name" Ordinal="1" DbType="12" Length="50" />
-                    <Field Name="FilterID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="IsFolder" Ordinal="3" DbType="2" />
-                    <Field Name="State" Ordinal="4" DbType="22" Precision="3" />
-                    <Field Name="Definition" Ordinal="5" IsOptional="true" DbType="26" Length="2147483647" />
-                    <Field Name="FilterNodeID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="FilterNodeContentID" Ordinal="7" DbType="0" Precision="19" />
-                    <Field Name="RowVersion" Ordinal="8" IsTimestamp="true" DbType="21" />
-                    <Field Name="CountVersion" Ordinal="9" DbType="0" Precision="19" />
-                    <Field Name="Status" Ordinal="10" DbType="16" Precision="5" />
-                    <Field Name="InitialCalculation" Ordinal="11" DbType="12" Length="2147483647" />
-                    <Field Name="UpdateCalculation" Ordinal="12" DbType="12" Length="2147483647" />
-                    <Field Name="ColumnMask" Ordinal="13" DbType="23" Length="100" />
-                    <Field Name="JoinMask" Ordinal="14" DbType="8" Precision="10" />
-                    <Field Name="Cost" Ordinal="15" DbType="8" Precision="10" />
-                    <Field Name="Count" Ordinal="16" DbType="8" Precision="10" />
-                    <Field Name="EntityExistsQuery" Ordinal="17" DbType="12" Length="2147483647" />
-                  </Fields>
-                </View>
                 <View Name="ProcessedShipmentsView">
                   <Fields>
                     <Field Name="ShipmentID" Ordinal="1" DbType="0" Precision="19" />
@@ -9826,22 +9742,6 @@
                     <Field Name="IsIncluded" Ordinal="7" IsOptional="true" DbType="2" />
                   </Fields>
                 </View>
-                <View Name="ShipWorksIndexUsage">
-                  <Fields>
-                    <Field Name="TableName" Ordinal="1" DbType="12" Length="128" />
-                    <Field Name="IndexName" Ordinal="2" IsOptional="true" DbType="12" Length="128" />
-                    <Field Name="IsPrimaryKey" Ordinal="3" IsOptional="true" DbType="2" />
-                    <Field Name="IsUnique" Ordinal="4" IsOptional="true" DbType="2" />
-                    <Field Name="index_id" Ordinal="5" DbType="8" Precision="10" />
-                    <Field Name="object_id" Ordinal="6" DbType="8" Precision="10" />
-                    <Field Name="IsEnabled" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="HasConstraintColumn" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="UserQueries" Ordinal="9" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="MaxLastQueryDate" Ordinal="10" IsOptional="true" DbType="4" />
-                    <Field Name="DisableIndex" Ordinal="11" IsOptional="true" DbType="12" Length="824" />
-                    <Field Name="EnableIndex" Ordinal="12" IsOptional="true" DbType="12" Length="825" />
-                  </Fields>
-                </View>
                 <View Name="ShipWorksMissingIndexRequests">
                   <Fields>
                     <Field Name="IndexHandle" Ordinal="1" DbType="8" Precision="10" />
@@ -9863,21 +9763,6 @@
                 <StoredProcedure Name="CalculateUpdateFilterCounts" />
                 <StoredProcedure Name="CalculateUpdateQuickFilterCounts" />
                 <StoredProcedure Name="DeleteAbandonedFilterCounts" />
-                <StoredProcedure Name="DisableUnusedIndexes">
-                  <Parameters>
-                    <Parameter Name="@daysBack" Direction="1" Ordinal="1" DbType="16" Precision="5" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="DoesFilterNodeApplyToEntity">
-                  <Parameters>
-                    <Parameter Name="@entityID" Direction="1" Ordinal="1" DbType="0" Precision="19" />
-                    <Parameter Name="@filterNodeID" Direction="1" Ordinal="2" DbType="0" Precision="19" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="GetAssemblySchemaVersion" />
-                <StoredProcedure Name="GetBuildVersion" />
-                <StoredProcedure Name="GetDatabaseGuid" />
-                <StoredProcedure Name="GetSchemaVersion" />
                 <StoredProcedure Name="PurgeAbandonedResources">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
@@ -9892,27 +9777,14 @@
                     <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
                   </Parameters>
                 </StoredProcedure>
-                <StoredProcedure Name="PurgeDownloads">
-                  <Parameters>
-                    <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
-                    <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
-                    <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
-                  </Parameters>
-                </StoredProcedure>
                 <StoredProcedure Name="PurgeEmailOutbound">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
                     <Parameter Name="@runUntil" Direction="1" Ordinal="2" DbType="4" />
                     <Parameter Name="@softDelete" Direction="1" Ordinal="3" DbType="2" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="PurgeEntities">
-                  <Parameters>
-                    <Parameter Name="@tableName" Direction="1" Ordinal="1" DbType="12" Length="4000" />
-                    <Parameter Name="@tableColumnName" Direction="1" Ordinal="2" DbType="12" Length="4000" />
-                    <Parameter Name="@tablePrimaryKeyName" Direction="1" Ordinal="3" DbType="12" Length="4000" />
-                  </Parameters>
-                </StoredProcedure>
+		  </Parameters>
+		</StoredProcedure>
+                  
                 <StoredProcedure Name="PurgeLabels">
                   <Parameters>
                     <Parameter Name="@olderThan" Direction="1" Ordinal="1" DbType="4" />
@@ -9932,154 +9804,8 @@
                   <Parameters>
                     <Parameter Name="@hashKey" Direction="1" Ordinal="1" DbType="12" Length="4000" />
                     <Parameter Name="@excludedShipmentXml" Direction="1" Ordinal="2" DbType="26" Length="2147483647" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_Blitz">
-                  <Parameters>
-                    <Parameter Name="@Help" Direction="1" Ordinal="1" DbType="22" Precision="3" />
-                    <Parameter Name="@CheckUserDatabaseObjects" Direction="1" Ordinal="2" DbType="22" Precision="3" />
-                    <Parameter Name="@CheckProcedureCache" Direction="1" Ordinal="3" DbType="22" Precision="3" />
-                    <Parameter Name="@OutputType" Direction="1" Ordinal="4" DbType="24" Length="20" />
-                    <Parameter Name="@OutputProcedureCache" Direction="1" Ordinal="5" DbType="22" Precision="3" />
-                    <Parameter Name="@CheckProcedureCacheFilter" Direction="1" Ordinal="6" DbType="24" Length="10" />
-                    <Parameter Name="@CheckServerInfo" Direction="1" Ordinal="7" DbType="22" Precision="3" />
-                    <Parameter Name="@SkipChecksServer" Direction="1" Ordinal="8" DbType="12" Length="256" />
-                    <Parameter Name="@SkipChecksDatabase" Direction="1" Ordinal="9" DbType="12" Length="256" />
-                    <Parameter Name="@SkipChecksSchema" Direction="1" Ordinal="10" DbType="12" Length="256" />
-                    <Parameter Name="@SkipChecksTable" Direction="1" Ordinal="11" DbType="12" Length="256" />
-                    <Parameter Name="@IgnorePrioritiesBelow" Direction="1" Ordinal="12" DbType="8" Precision="10" />
-                    <Parameter Name="@IgnorePrioritiesAbove" Direction="1" Ordinal="13" DbType="8" Precision="10" />
-                    <Parameter Name="@OutputServerName" Direction="1" Ordinal="14" DbType="12" Length="256" />
-                    <Parameter Name="@OutputDatabaseName" Direction="1" Ordinal="15" DbType="12" Length="256" />
-                    <Parameter Name="@OutputSchemaName" Direction="1" Ordinal="16" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableName" Direction="1" Ordinal="17" DbType="12" Length="256" />
-                    <Parameter Name="@OutputXMLasNVARCHAR" Direction="1" Ordinal="18" DbType="22" Precision="3" />
-                    <Parameter Name="@EmailRecipients" Direction="1" Ordinal="19" DbType="24" Length="2147483647" />
-                    <Parameter Name="@EmailProfile" Direction="1" Ordinal="20" DbType="12" Length="128" />
-                    <Parameter Name="@SummaryMode" Direction="1" Ordinal="21" DbType="22" Precision="3" />
-                    <Parameter Name="@BringThePain" Direction="1" Ordinal="22" DbType="22" Precision="3" />
-                    <Parameter Name="@Debug" Direction="1" Ordinal="23" DbType="22" Precision="3" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="24" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_BlitzCache">
-                  <Parameters>
-                    <Parameter Name="@Help" Direction="1" Ordinal="1" DbType="2" />
-                    <Parameter Name="@Top" Direction="1" Ordinal="2" DbType="8" Precision="10" />
-                    <Parameter Name="@SortOrder" Direction="1" Ordinal="3" DbType="24" Length="50" />
-                    <Parameter Name="@UseTriggersAnyway" Direction="1" Ordinal="4" DbType="2" />
-                    <Parameter Name="@ExportToExcel" Direction="1" Ordinal="5" DbType="2" />
-                    <Parameter Name="@ExpertMode" Direction="1" Ordinal="6" DbType="22" Precision="3" />
-                    <Parameter Name="@OutputServerName" Direction="1" Ordinal="7" DbType="12" Length="258" />
-                    <Parameter Name="@OutputDatabaseName" Direction="1" Ordinal="8" DbType="12" Length="258" />
-                    <Parameter Name="@OutputSchemaName" Direction="1" Ordinal="9" DbType="12" Length="258" />
-                    <Parameter Name="@OutputTableName" Direction="1" Ordinal="10" DbType="12" Length="258" />
-                    <Parameter Name="@ConfigurationDatabaseName" Direction="1" Ordinal="11" DbType="12" Length="128" />
-                    <Parameter Name="@ConfigurationSchemaName" Direction="1" Ordinal="12" DbType="12" Length="258" />
-                    <Parameter Name="@ConfigurationTableName" Direction="1" Ordinal="13" DbType="12" Length="258" />
-                    <Parameter Name="@DurationFilter" Direction="1" Ordinal="14" DbType="5" Precision="38" Scale="4" />
-                    <Parameter Name="@HideSummary" Direction="1" Ordinal="15" DbType="2" />
-                    <Parameter Name="@IgnoreSystemDBs" Direction="1" Ordinal="16" DbType="2" />
-                    <Parameter Name="@OnlyQueryHashes" Direction="1" Ordinal="17" DbType="24" Length="2147483647" />
-                    <Parameter Name="@IgnoreQueryHashes" Direction="1" Ordinal="18" DbType="24" Length="2147483647" />
-                    <Parameter Name="@OnlySqlHandles" Direction="1" Ordinal="19" DbType="24" Length="2147483647" />
-                    <Parameter Name="@IgnoreSqlHandles" Direction="1" Ordinal="20" DbType="24" Length="2147483647" />
-                    <Parameter Name="@QueryFilter" Direction="1" Ordinal="21" DbType="24" Length="10" />
-                    <Parameter Name="@DatabaseName" Direction="1" Ordinal="22" DbType="12" Length="128" />
-                    <Parameter Name="@StoredProcName" Direction="1" Ordinal="23" DbType="12" Length="128" />
-                    <Parameter Name="@Reanalyze" Direction="1" Ordinal="24" DbType="2" />
-                    <Parameter Name="@SkipAnalysis" Direction="1" Ordinal="25" DbType="2" />
-                    <Parameter Name="@BringThePain" Direction="1" Ordinal="26" DbType="2" />
-                    <Parameter Name="@MinimumExecutionCount" Direction="1" Ordinal="27" DbType="8" Precision="10" />
-                    <Parameter Name="@Debug" Direction="1" Ordinal="28" DbType="2" />
-                    <Parameter Name="@CheckDateOverride" Direction="1" Ordinal="29" DbType="30" />
-                    <Parameter Name="@MinutesBack" Direction="1" Ordinal="30" DbType="8" Precision="10" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="31" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_BlitzFirst">
-                  <Parameters>
-                    <Parameter Name="@LogMessage" Direction="1" Ordinal="1" DbType="12" Length="4000" />
-                    <Parameter Name="@Help" Direction="1" Ordinal="2" DbType="22" Precision="3" />
-                    <Parameter Name="@AsOf" Direction="1" Ordinal="3" DbType="30" />
-                    <Parameter Name="@ExpertMode" Direction="1" Ordinal="4" DbType="22" Precision="3" />
-                    <Parameter Name="@Seconds" Direction="1" Ordinal="5" DbType="8" Precision="10" />
-                    <Parameter Name="@OutputType" Direction="1" Ordinal="6" DbType="24" Length="20" />
-                    <Parameter Name="@OutputServerName" Direction="1" Ordinal="7" DbType="12" Length="256" />
-                    <Parameter Name="@OutputDatabaseName" Direction="1" Ordinal="8" DbType="12" Length="256" />
-                    <Parameter Name="@OutputSchemaName" Direction="1" Ordinal="9" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableName" Direction="1" Ordinal="10" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableNameFileStats" Direction="1" Ordinal="11" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableNamePerfmonStats" Direction="1" Ordinal="12" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableNameWaitStats" Direction="1" Ordinal="13" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableNameBlitzCache" Direction="1" Ordinal="14" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableRetentionDays" Direction="1" Ordinal="15" DbType="22" Precision="3" />
-                    <Parameter Name="@OutputXMLasNVARCHAR" Direction="1" Ordinal="16" DbType="22" Precision="3" />
-                    <Parameter Name="@FilterPlansByDatabase" Direction="1" Ordinal="17" DbType="24" Length="2147483647" />
-                    <Parameter Name="@CheckProcedureCache" Direction="1" Ordinal="18" DbType="22" Precision="3" />
-                    <Parameter Name="@FileLatencyThresholdMS" Direction="1" Ordinal="19" DbType="8" Precision="10" />
-                    <Parameter Name="@SinceStartup" Direction="1" Ordinal="20" DbType="22" Precision="3" />
-                    <Parameter Name="@ShowSleepingSPIDs" Direction="1" Ordinal="21" DbType="22" Precision="3" />
-                    <Parameter Name="@LogMessageCheckID" Direction="1" Ordinal="22" DbType="8" Precision="10" />
-                    <Parameter Name="@LogMessagePriority" Direction="1" Ordinal="23" DbType="22" Precision="3" />
-                    <Parameter Name="@LogMessageFindingsGroup" Direction="1" Ordinal="24" DbType="24" Length="50" />
-                    <Parameter Name="@LogMessageFinding" Direction="1" Ordinal="25" DbType="24" Length="200" />
-                    <Parameter Name="@LogMessageURL" Direction="1" Ordinal="26" DbType="24" Length="200" />
-                    <Parameter Name="@LogMessageCheckDate" Direction="1" Ordinal="27" DbType="30" />
-                    <Parameter Name="@Debug" Direction="1" Ordinal="28" DbType="2" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="29" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_BlitzIndex">
-                  <Parameters>
-                    <Parameter Name="@DatabaseName" Direction="1" Ordinal="1" DbType="12" Length="128" />
-                    <Parameter Name="@SchemaName" Direction="1" Ordinal="2" DbType="12" Length="128" />
-                    <Parameter Name="@TableName" Direction="1" Ordinal="3" DbType="12" Length="128" />
-                    <Parameter Name="@Mode" Direction="1" Ordinal="4" DbType="22" Precision="3" />
-                    <Parameter Name="@Filter" Direction="1" Ordinal="5" DbType="22" Precision="3" />
-                    <Parameter Name="@SkipPartitions" Direction="1" Ordinal="6" DbType="2" />
-                    <Parameter Name="@SkipStatistics" Direction="1" Ordinal="7" DbType="2" />
-                    <Parameter Name="@GetAllDatabases" Direction="1" Ordinal="8" DbType="2" />
-                    <Parameter Name="@BringThePain" Direction="1" Ordinal="9" DbType="2" />
-                    <Parameter Name="@ThresholdMB" Direction="1" Ordinal="10" DbType="8" Precision="10" />
-                    <Parameter Name="@OutputServerName" Direction="1" Ordinal="11" DbType="12" Length="256" />
-                    <Parameter Name="@OutputDatabaseName" Direction="1" Ordinal="12" DbType="12" Length="256" />
-                    <Parameter Name="@OutputSchemaName" Direction="1" Ordinal="13" DbType="12" Length="256" />
-                    <Parameter Name="@OutputTableName" Direction="1" Ordinal="14" DbType="12" Length="256" />
-                    <Parameter Name="@Help" Direction="1" Ordinal="15" DbType="22" Precision="3" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="16" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_BlitzQueryStore">
-                  <Parameters>
-                    <Parameter Name="@Help" Direction="1" Ordinal="1" DbType="2" />
-                    <Parameter Name="@DatabaseName" Direction="1" Ordinal="2" DbType="12" Length="128" />
-                    <Parameter Name="@Top" Direction="1" Ordinal="3" DbType="8" Precision="10" />
-                    <Parameter Name="@StartDate" Direction="1" Ordinal="4" DbType="29" Precision="7" />
-                    <Parameter Name="@EndDate" Direction="1" Ordinal="5" DbType="29" Precision="7" />
-                    <Parameter Name="@MinimumExecutionCount" Direction="1" Ordinal="6" DbType="8" Precision="10" />
-                    <Parameter Name="@DurationFilter" Direction="1" Ordinal="7" DbType="5" Precision="38" Scale="4" />
-                    <Parameter Name="@StoredProcName" Direction="1" Ordinal="8" DbType="12" Length="128" />
-                    <Parameter Name="@Failed" Direction="1" Ordinal="9" DbType="2" />
-                    <Parameter Name="@PlanIdFilter" Direction="1" Ordinal="10" DbType="8" Precision="10" />
-                    <Parameter Name="@QueryIdFilter" Direction="1" Ordinal="11" DbType="8" Precision="10" />
-                    <Parameter Name="@ExportToExcel" Direction="1" Ordinal="12" DbType="2" />
-                    <Parameter Name="@HideSummary" Direction="1" Ordinal="13" DbType="2" />
-                    <Parameter Name="@SkipXML" Direction="1" Ordinal="14" DbType="2" />
-                    <Parameter Name="@Debug" Direction="1" Ordinal="15" DbType="2" />
-                    <Parameter Name="@ExpertMode" Direction="1" Ordinal="16" DbType="2" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="17" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
-                <StoredProcedure Name="sp_BlitzWho">
-                  <Parameters>
-                    <Parameter Name="@Help" Direction="1" Ordinal="1" DbType="22" Precision="3" />
-                    <Parameter Name="@ShowSleepingSPIDs" Direction="1" Ordinal="2" DbType="22" Precision="3" />
-                    <Parameter Name="@ExpertMode" Direction="1" Ordinal="3" DbType="2" />
-                    <Parameter Name="@Debug" Direction="1" Ordinal="4" DbType="2" />
-                    <Parameter Name="@VersionDate" Direction="3" Ordinal="5" DbType="4" />
-                  </Parameters>
-                </StoredProcedure>
+		  </Parameters>
+		</StoredProcedure>
                 <StoredProcedure Name="ValidateFilterLayouts" />
                 <StoredProcedure Name="ValidateGridLayouts" />
               </StoredProcedures>
