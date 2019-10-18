@@ -178,7 +178,8 @@ namespace ShipWorks.Shipping
             OrderUtility.PopulateOrderDetails(shipment);
 
             // Set some defaults
-            shipment.ShipDate = lifetimeScope.Resolve<IDateTimeProvider>().Now.Date.AddHours(12);
+            shipment.ShipDate = lifetimeScope.Resolve<IDateTimeProvider>().Now.Date.ToUniversalTime();
+
             shipment.ShipmentType = (int) ShipmentTypeCode.None;
             shipment.Processed = false;
             shipment.Voided = false;
@@ -363,7 +364,7 @@ namespace ShipWorks.Shipping
             clonedShipment.VoidedDate = null;
             clonedShipment.VoidedUserID = null;
             clonedShipment.ActualLabelFormat = null;
-            clonedShipment.ShipDate = DateTime.Now.Date.AddHours(12);
+            clonedShipment.ShipDate = DateTime.UtcNow;
             clonedShipment.BestRateEvents = 0;
             clonedShipment.OnlineShipmentID = string.Empty;
             clonedShipment.LoggedShippedToHub = false;

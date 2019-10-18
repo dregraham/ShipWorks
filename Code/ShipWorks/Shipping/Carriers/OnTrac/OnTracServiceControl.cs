@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                         service.ApplyMultiValue(onTracServiceType);
                     }
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     saturdayDelivery.ApplyMultiCheck(shipment.OnTrac.SaturdayDelivery);
                     signatureRequired.ApplyMultiCheck(shipment.OnTrac.SignatureRequired);
 
