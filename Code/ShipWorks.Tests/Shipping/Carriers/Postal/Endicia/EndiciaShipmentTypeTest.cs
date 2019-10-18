@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         [Fact]
         public void GetShippingBroker_ReturnsEndiciaShippingBroker_WhenEndiciaAccountsExist()
         {
-            accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>() { new EndiciaAccountEntity(1) });
+            accountRepository.Setup(r => r.AccountsReadOnly).Returns(new List<EndiciaAccountEntity>() { new EndiciaAccountEntity(1) });
             testObject.AccountRepository = accountRepository.Object;
 
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepositoryMock.Object);
@@ -153,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             };
 
             ShipmentParcel parcel = new EndiciaShipmentType().GetParcelDetail(shipment, 0);
-            
+
             Assert.Equal(insured, parcel.Insurance.Insured);
             Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
         }

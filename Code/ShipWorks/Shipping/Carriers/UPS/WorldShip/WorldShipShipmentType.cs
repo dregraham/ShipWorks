@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.UpsWorldShip;
 
         /// <summary>
-        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
+        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
         /// Create settings control for WorldShip
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
-            IEnumerable<IUpsAccountEntity> nonExcludedUpsAccounts = UpsAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+            IEnumerable<IUpsAccountEntity> nonExcludedUpsAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
 
             if (nonExcludedUpsAccounts.Any())
             {

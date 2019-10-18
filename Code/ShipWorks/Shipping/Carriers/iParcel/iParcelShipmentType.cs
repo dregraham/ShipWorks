@@ -713,8 +713,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
-            IEnumerable<IIParcelAccountEntity> nonExcludedAccounts = iParcelAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
-            
+            IEnumerable<IIParcelAccountEntity> nonExcludedAccounts = accountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+
             // There was a conscious decision made with input from Rich that for now we can assume the origin
             // country will always be US when the shipment is configured to ship from the account address
             string originCountryCode = (ShipmentOriginSource) shipment.OriginOriginID == ShipmentOriginSource.Account ?

@@ -30,6 +30,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             shipment = Create.Shipment(new OrderEntity()).AsIParcel(x => x.WithPackage()).Build();
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+                .Setup(x => x.AccountsReadOnly)
+                .Returns(new[]
+                {
+                                new IParcelAccountEntity { IParcelAccountID = 6 },
+                                new IParcelAccountEntity { IParcelAccountID = 9 }
+                });
+
             testObject = mock.Create<iParcelShipmentType>();
             bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
             bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
@@ -190,6 +199,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         [Fact]
         public void ConfigurePrimaryProfile_SetsAccountIDToZero_WithNoAccounts()
         {
+            mock.Mock<ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity>>()
+                .Setup(x => x.AccountsReadOnly)
+                .Returns(new List<IParcelAccountEntity>());
+
             var profile = new ShippingProfileEntity { IParcel = new IParcelProfileEntity() };
             var testObject = mock.Create<iParcelShipmentType>();
 

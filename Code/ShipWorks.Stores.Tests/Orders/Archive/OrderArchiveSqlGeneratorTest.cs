@@ -244,6 +244,7 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(EndiciaAccountEntity),
                     typeof(EndiciaProfileEntity),
                     typeof(EndiciaScanFormEntity),
+                    typeof(BestRateExcludedAccountEntity),
                     typeof(EtsyStoreEntity),
                     typeof(ExcludedPackageTypeEntity),
                     typeof(ExcludedServiceTypeEntity),
