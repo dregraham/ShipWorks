@@ -513,7 +513,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">The shipment.</param>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (AccountRepository.Accounts.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IEndiciaAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+            
+            if (nonExcludedAccounts.Any())
             {
                 return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);
             }
