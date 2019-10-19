@@ -460,12 +460,12 @@
       <Condition identifier="Shipment.VoidedDate" />
       <Condition identifier="Shipment.VoidedUser" />
       <Condition identifier="Shipment.ReturnStatus" />
+      <Condition identifier="Shipment.Account" displayAs="Account"/>
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />
       <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />
       <Condition identifier="Shipment.RequestedLabelFormat" />
       <Condition identifier="Shipment.LabelFormat" />
-      <Condition identifier="Shipment.Account" displayAs="Account"/>
       <Separator/>
       <Group name="Postal">
         <Condition identifier="Shipment.Postal.ServiceType" displayAs="Service" />

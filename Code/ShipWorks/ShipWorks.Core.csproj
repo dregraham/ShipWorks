@@ -1135,6 +1135,7 @@
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
+    <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />

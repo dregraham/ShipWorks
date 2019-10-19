@@ -14,6 +14,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Users;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -76,6 +77,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             AddElement("ShippedDate", () => Shipment.ShipDate);
             AddElement("ServiceUsed", () => ShippingManager.GetActualServiceUsed(Shipment));
+            AddElement("Account", () => ShippingManager.GetCarrierAccount(Shipment)?.AccountDescription);
             AddElement("ReturnShipment", () => Shipment.ReturnShipment);
             AddElement("TrackingNumber", () => Shipment.TrackingNumber);
             AddElement("TotalCharges", () => Shipment.ShipmentCost);

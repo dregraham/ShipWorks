@@ -49,6 +49,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridProviderDisplayType(EnumSortMethod.Value), "Provider", ShipmentTypeCode.Endicia,
                     ShipmentFields.ShipmentType),
 
+                new GridColumnDefinition("{09CECE37-814F-4166-9AE5-CD3641D731E4}", true,
+                    new ShipmentCarrierAccountDisplayType(), "Account", "123456,1 Memorial Dr, 63102",
+                    ShipmentFields.CarrierAccountID),
+
                 new GridColumnDefinition("{98038AB5-AA95-4778-9801-574C2B723DD4}", true,
                     new ShipmentServiceUsedDisplayType(), "Service", "First Class",
                     ShipmentFields.ShipmentType),
