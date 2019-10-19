@@ -2657,6 +2657,8 @@ namespace ShipWorks
             // This is down here so its outside of the scope
             if (needLogon)
             {
+                //Make sure the user is logged off so that we dont crash when updating
+                UserSession.Logoff(false);
                 InitiateLogon();
             }
         }
