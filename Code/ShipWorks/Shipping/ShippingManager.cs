@@ -1176,5 +1176,38 @@ namespace ShipWorks.Shipping
             }
             return account;
         }
+
+        public static long GetAccountID(ShipmentEntity shipment)
+        {
+            var type = shipment.ShipmentTypeCode;
+            switch (type)
+            {
+                case ShipmentTypeCode.FedEx:
+                    return shipment.FedEx.FedExAccountID;
+                case ShipmentTypeCode.Usps:
+                    return shipment.Postal.Usps.UspsAccountID;
+                case ShipmentTypeCode.UpsWorldShip:
+                    return shipment.Ups.UpsAccountID;
+                case ShipmentTypeCode.UpsOnLineTools:
+                    return shipment.Ups.UpsAccountID;
+                case ShipmentTypeCode.AmazonSWA:
+                    return shipment.AmazonSWA.AmazonSWAAccountID;
+                case ShipmentTypeCode.DhlExpress:
+                    return shipment.DhlExpress.DhlExpressAccountID;
+                case ShipmentTypeCode.Endicia:
+                    return shipment.Postal.Endicia.EndiciaAccountID;
+                case ShipmentTypeCode.Express1Endicia:
+                    return shipment.Postal.Endicia.EndiciaAccountID;
+                case ShipmentTypeCode.Express1Usps:
+                    return shipment.Postal.Usps.UspsAccountID;
+                case ShipmentTypeCode.iParcel:
+                    return shipment.IParcel.IParcelAccountID;
+                case ShipmentTypeCode.OnTrac:
+                    return shipment.OnTrac.OnTracAccountID;
+                case ShipmentTypeCode.PostalWebTools:
+                    return shipment.Postal.Usps.UspsAccountID;
+            }
+            return 0;
+        }
     }
 }

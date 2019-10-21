@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Editing
         readonly ShipmentTypeCode shipmentTypeCode;
 
         private BindingList<KeyValuePair<long, string>> includeReturnProfiles = new BindingList<KeyValuePair<long, string>>();
-        private BindingSource bindingSource = new BindingSource();
+        private BindingSource bindingSource = new BindingSource();      
 
         bool enableEditing;
         bool isLoading;
@@ -531,7 +531,6 @@ namespace ShipWorks.Shipping.Editing
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
-
                 if (sectionLabelOptions.Visible)
                 {
                     labelFormat.ReadMultiValue(v => shipmentType.SaveRequestedLabelFormat((ThermalLanguage) v, shipment));

@@ -192,6 +192,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             {
                 telemetricResult.WriteTo(telemetryEvent);
                 prepareShipmentResult?.EntityLock?.Dispose();
+                prepareShipmentResult.OriginalShipment.CarrierAccountID = ShippingManager.GetAccountID(prepareShipmentResult.OriginalShipment);
             }
         }
 

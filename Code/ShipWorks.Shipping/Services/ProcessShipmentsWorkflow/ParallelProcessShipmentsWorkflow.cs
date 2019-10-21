@@ -109,6 +109,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 }
 
                 await dataflow.SendAsync(shipment);
+                shipment.OriginalShipment.CarrierAccountID = ShippingManager.GetAccountID(shipment.OriginalShipment);
             }
 
             dataflow.Complete();

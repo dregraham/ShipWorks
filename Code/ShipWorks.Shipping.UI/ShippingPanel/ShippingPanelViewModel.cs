@@ -399,7 +399,6 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     return;
                 }
 
-                ShipmentAdapter.Shipment.CarrierAccountID = AccountId;
                 SaveToDatabase();                
                 AllowEditing = false;
 
