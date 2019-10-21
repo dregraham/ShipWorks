@@ -88,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 Progress.Detail = $"Downloading orders...";
 
-                while (ordersResult?.Orders?.Any() ?? false)
+                while (ordersResult?.Orders?.Any() == true)
                 {
                     // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
                     // the same "next link" causing ShipWorks to download forever

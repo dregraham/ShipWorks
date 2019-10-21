@@ -211,9 +211,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public void AddProductsToCache(IEnumerable<int> productIds, string refreshToken)
         {
-            ILookup<bool, int> isCached = productIds.ToLookup(x => productCache.Contains(x));
+            var uncachedIds = productIds.Where(x => !productCache.Contains(x));
 
-            if (!isCached[false].Any())
+            if (uncachedIds.None())
             {
                 return;
             }
@@ -222,9 +222,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 string previousLink = string.Empty;
 
-                ChannelAdvisorProductList productBatch = GetProductBatch(isCached[false], refreshToken);
+                ChannelAdvisorProductList productBatch = GetProductBatch(uncachedIds, refreshToken);
 
-                while (productBatch?.Products?.Any() ?? false)
+                while (productBatch?.Products?.Any() == true)
                 {
                     if (productBatch.OdataNextLink.Equals(previousLink, StringComparison.OrdinalIgnoreCase))
                     {

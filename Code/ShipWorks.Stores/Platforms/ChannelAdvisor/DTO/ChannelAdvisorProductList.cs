@@ -16,6 +16,5 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
 
         [JsonProperty("@odata.nextLink")]
         public string OdataNextLink { get; set; }
-
     }
 }
