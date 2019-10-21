@@ -209,12 +209,7 @@ namespace ShipWorks.Data
             // See if we can find an existing resource
             ResourceCollection resources = new ResourceCollection();
             adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object) checksum), 1, null, null, excludeDataFields);
-            if (resources.Any())
-            {
-                return resources[0];
-            }
-
-            return null;
+            return resources.FirstOrDefault();
         }
 
         /// <summary>
