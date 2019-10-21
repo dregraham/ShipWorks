@@ -219,7 +219,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
         /// </summary>
         private void CollectTelemetry()
         {
-            using (ITrackedEvent trackedEvent = new TrackedEvent("Import"))
+            using (ITrackedEvent trackedEvent = new TrackedEvent("Import.CustomField.Count"))
             {
                 try
                 {
