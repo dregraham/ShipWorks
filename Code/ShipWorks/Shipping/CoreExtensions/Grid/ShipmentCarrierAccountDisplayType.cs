@@ -1,6 +1,7 @@
 ﻿using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.CoreExtensions.Grid
@@ -31,7 +32,17 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            var account = ShippingManager.GetCarrierAccount((ShipmentEntity) value);
+            ICarrierAccount account = null;
+            if (value is ShipmentEntity shipment && shipment.Processed)
+            {
+                account = ShippingManager.GetCarrierAccount(shipment);
+            }
+
+            if (value is ProcessedShipmentEntity processedShipment)
+            {
+                account = ShippingManager.GetCarrierAccount(processedShipment);
+            }
+            
             return account != null ? account.AccountDescription : string.Empty;
         }
     }

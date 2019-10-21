@@ -1153,16 +1153,25 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ICarrierAccount GetCarrierAccount(ShipmentEntity shipment)
         {
-            var accountID = shipment.CarrierAccountID;
+            return GetCarrierAccount(shipment.CarrierAccountID, shipment.ShipmentTypeCode);
+        }
+
+        public static ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment)
+        {
+            var shipment = GetShipment(processedShipment.ShipmentID);
+            return GetCarrierAccount(shipment.CarrierAccountID, shipment.ShipmentTypeCode);
+        }
+
+        private static ICarrierAccount GetCarrierAccount(long? accountID, ShipmentTypeCode shipmentType)
+        {
             ICarrierAccount account = null;
             if (accountID != null)
             {
-                var shipType = ShipmentTypeManager.GetType(shipment).ShipmentTypeCode;
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
                     IShippingAccountListProvider accountListProvider = scope.Resolve<IShippingAccountListProvider>();
-                    account = accountListProvider.GetAvailableAccounts(shipType).Where(s => s.AccountId == accountID)
-                                                            .FirstOrDefault();
+                    account = accountListProvider.GetAvailableAccounts(shipmentType).Where(s => s.AccountId == accountID)
+                                                                                                        .FirstOrDefault();
                 }
             }
             return account;
