@@ -13,6 +13,8 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using ShipWorks.Data.Import.Spreadsheet.Types.Excel;
 using log4net;
+using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
 {
@@ -51,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
                 log.Error("Failed to load import map", ex);
             }
 
-            fileSourceControl.LoadStore(generic);
+            fileSourceControl.LoadStore(generic, false);
         }
 
         /// <summary>
@@ -61,11 +63,22 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
         {
             GenericFileStoreEntity generic = (GenericFileStoreEntity) store;
 
-            generic.FlatImportMap = excelMapChooser.Map.SerializeToXml();
-
             if (!fileSourceControl.SaveToEntity(generic))
             {
                 return false;
+            }
+
+            if (generic.FileSource != (int) GenericFileSourceTypeCode.Warehouse)
+            {
+                string map = excelMapChooser?.Map?.SerializeToXml() ?? string.Empty;
+
+                if (map == string.Empty)
+                {
+                    MessageHelper.ShowError(this, "Please specify an import map.");
+                    return false;
+                }
+
+                generic.FlatImportMap = map;
             }
 
             return true;

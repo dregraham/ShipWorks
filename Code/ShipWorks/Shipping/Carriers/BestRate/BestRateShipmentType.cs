@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Autofac.Features.Indexed;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -23,28 +24,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShipmentType : ShipmentType
     {
         private readonly ILog log;
-        private readonly IBestRateBrokerRatingService brokerRatingService;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        protected BestRateShipmentType()
-        {
-        }
+        private readonly IIndex<ShipmentTypeCode, SettingsControlBase> settingsControlFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType" /> class. This version of
         /// the constructor is primarily for testing purposes.
         /// </summary>
-        /// <param name="brokerFactory">The broker factory.</param>
-        /// <param name="brokerRatingService"></param>
-        /// <param name="log">The log.</param>
-        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, IBestRateBrokerRatingService brokerRatingService, Func<Type, ILog> createLogger)
+        public BestRateShipmentType(IBestRateShippingBrokerFactory brokerFactory, Func<Type, ILog> createLogger,
+                                    IIndex<ShipmentTypeCode, SettingsControlBase> settingsControlFactory)
         {
             this.brokerFactory = brokerFactory;
-            this.brokerRatingService = brokerRatingService;
-            this.log = createLogger(typeof(BestRateShipmentType));
+            log = createLogger(typeof(BestRateShipmentType));
+            this.settingsControlFactory = settingsControlFactory;
         }
 
         /// <summary>
@@ -155,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker since this is not applicable to the best rate shipment type.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             return new NullShippingBroker();
         }
@@ -163,10 +155,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Creates the UserControl that is used to edit the defaults\settings for the service
         /// </summary>
-        protected override SettingsControlBase CreateSettingsControl()
-        {
-            return new BestRateSettingsControl();
-        }
+        protected override SettingsControlBase CreateSettingsControl() => settingsControlFactory[ShipmentTypeCode.BestRate];
 
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the

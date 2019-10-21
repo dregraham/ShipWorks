@@ -21,6 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepository;
         private readonly List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private readonly List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
+        private readonly Mock<IBestRateExcludedAccountRepository> bestRateExcludedAccountRepositoryMock;
 
         public UspsShipmentTypeTest()
         {
@@ -31,6 +32,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             LoadAdultSignatureServiceAndPackagingCombinations();
 
             LoadAllPostalServicePackageTypes();
+
+            bestRateExcludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExcludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
         }
 
         [Fact]
@@ -39,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
             testObject.AccountRepository = accountRepository.Object;
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepositoryMock.Object);
 
             Assert.IsType<NullShippingBroker>(broker);
         }
@@ -51,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             testObject.AccountRepository = accountRepository.Object;
 
-            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
+            IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity(), bestRateExcludedAccountRepositoryMock.Object);
 
             Assert.IsType<UspsBestRateBroker>(broker);
         }

@@ -27,6 +27,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
         public EBayAccountPage()
         {
             InitializeComponent();
+
+            if (InterapptiveOnly.IsInterapptiveUser && !EbayUrlUtilities.UseLiveServer && !String.IsNullOrWhiteSpace(EbayUrlUtilities.SandboxEndpointOverride))
+            {
+                this.createTokenControl.Size = new System.Drawing.Size(411, 60);
+                this.panelCreate.Size = new System.Drawing.Size(479, 100);
+                this.label7.Location = new System.Drawing.Point(8, 80);
+                this.linkImportTokenFile.Location = new System.Drawing.Point(402, 80);
+            }
         }
 
         /// <summary>
@@ -101,6 +109,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.WizardPages
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
+            if (InterapptiveOnly.IsInterapptiveUser && !String.IsNullOrWhiteSpace(createTokenControl.fakeToken.Text))
+            {
+                EbayStoreEntity store = GetStore<EbayStoreEntity>();
+                store.EBayToken = createTokenControl.fakeToken.Text;
+                store.EBayTokenExpire = DateTime.Now.AddYears(3);
+                store.EBayUserID = createTokenControl.fakeToken.Text;
+            }
+
             EbayStoreEntity ebayStore = (EbayStoreEntity) ((AddStoreWizard) Wizard).Store;
 
             if (ebayStore.EBayToken.Length == 0)

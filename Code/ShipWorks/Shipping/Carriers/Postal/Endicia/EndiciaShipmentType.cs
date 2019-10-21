@@ -336,6 +336,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 throw new ShippingException("The shipment weight cannot be zero.");
             }
 
+            PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
+            if (packaging == PostalPackagingType.CubicSoftPack && shipment.Postal.DimsHeight > 0.75)
+            {
+                throw new ShippingException(string.Format("{0} may only have a Height of 0.75\" or less.", EnumHelper.GetDescription(packaging)));
+            }
+
             // Validate that scan based payment returns is allowed.
             // This method throws if not allowed.
             ValidateScanBasedReturns(shipment);
@@ -505,11 +511,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Gets an instance to the best rate shipping broker for the Endicia shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (AccountRepository.Accounts.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IEndiciaAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+            
+            if (nonExcludedAccounts.Any())
             {
-                return new EndiciaBestRateBroker(this, AccountRepository);
+                return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);
             }
 
             // We want to be able to show counter rates to users that don't have

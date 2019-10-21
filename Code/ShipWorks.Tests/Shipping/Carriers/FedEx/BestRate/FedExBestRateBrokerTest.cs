@@ -24,6 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private readonly FedExBestRateBroker testObject;
         private readonly Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>> genericRepositoryMock;
         private readonly Mock<FedExShipmentType> genericShipmentTypeMock;
+        private readonly Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
         private readonly AutoMock mock;
 
         public FedExBestRateBrokerTest()
@@ -33,8 +34,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 
             genericRepositoryMock = new Mock<ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity>>();
             genericShipmentTypeMock = new Mock<FedExShipmentType>();
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
 
-            testObject = new FedExBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testObject = new FedExBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, bestRateExludedAccountRepositoryMock.Object);
         }
 
         [Fact]

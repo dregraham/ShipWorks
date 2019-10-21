@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 
@@ -11,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
     /// <summary>
     /// Packaging types for the postal service
     /// </summary>
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false, ApplyToMembers = true)]
     public enum PostalPackagingType
     {
         [Description("Package")]
@@ -58,6 +54,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         RateRegionalBoxC = 11,
 
         [Description("Cubic")]
-        Cubic = 12
+        Cubic = 12,
+
+        [Description("Cubic Soft Pack")]
+        CubicSoftPack = 13
     }
 }

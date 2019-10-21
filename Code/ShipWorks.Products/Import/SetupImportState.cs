@@ -58,6 +58,12 @@ namespace ShipWorks.Products.Import
         public bool ShouldReloadProducts => false;
 
         /// <summary>
+        /// Can the view be closed
+        /// </summary>
+        [Obfuscation]
+        public bool CanClose => stateManager.Close != null;
+
+        /// <summary>
         /// Save the sample file
         /// </summary>
         private void SaveSampleAction() => productImportFileSelector.SaveSample();
@@ -71,6 +77,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Close the dialog
         /// </summary>
-        private void CloseDialogAction() => stateManager.Close();
+        private void CloseDialogAction() => stateManager.Close?.Invoke();
     }
 }

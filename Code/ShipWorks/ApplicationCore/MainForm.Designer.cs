@@ -1,3 +1,6 @@
+using System;
+using ShipWorks.UI.Controls.SandRibbon;
+
 namespace ShipWorks
 {
     partial class MainForm
@@ -35,59 +38,59 @@ namespace ShipWorks
             this.statusStretcherPlaceholder = new Divelements.SandRibbon.Label();
             this.downloadingStatusLabel = new ShipWorks.UI.Controls.SandRibbon.ImageLabel();
             this.emailingStatusLabel = new ShipWorks.UI.Controls.SandRibbon.ImageLabel();
-            this.buttonNewCustomer = new Divelements.SandRibbon.Button();
-            this.buttonDeleteCustomer = new Divelements.SandRibbon.Button();
-            this.buttonChangeConnection = new Divelements.SandRibbon.Button();
-            this.buttonFirewall = new Divelements.SandRibbon.Button();
+            this.buttonNewCustomer = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDeleteCustomer = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonChangeConnection = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonFirewall = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.labelDetailViewDetailView = new Divelements.SandRibbon.Label();
             this.detailViewDetailTemplate = new Divelements.SandRibbon.ComboBox();
             this.detailViewDetailHeight = new Divelements.SandRibbon.WindowsComboBox();
             this.dataViewHeightButtons = new Divelements.SandRibbon.ButtonGroup();
-            this.buttonDetailViewHeightIncrease = new Divelements.SandRibbon.Button();
-            this.buttonDetailViewHeightDecrease = new Divelements.SandRibbon.Button();
-            this.buttonManageFilters = new Divelements.SandRibbon.Button();
-            this.buttonManageTemplates = new Divelements.SandRibbon.Button();
-            this.buttonManageActions = new Divelements.SandRibbon.Button();
-            this.buttonShippingSettings = new Divelements.SandRibbon.Button();
-            this.buttonShippingProfiles = new Divelements.SandRibbon.Button();
-            this.buttonSettings = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewFields = new Divelements.SandRibbon.Button();
-            this.buttonManageStores = new Divelements.SandRibbon.Button();
-            this.buttonManageUsers = new Divelements.SandRibbon.Button();
-            this.buttonEmailAccounts = new Divelements.SandRibbon.Button();
+            this.buttonDetailViewHeightIncrease = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDetailViewHeightDecrease = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonManageFilters = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonManageTemplates = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonManageActions = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonShippingSettings = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonShippingProfiles = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonSettings = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewFields = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonManageStores = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonManageUsers = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonEmailAccounts = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.menuFedExEndDayClose = new Divelements.SandRibbon.MenuItem();
             this.menuFedExEndDayPrint = new Divelements.SandRibbon.MenuItem();
             this.menuFedExPrintReports = new Divelements.SandRibbon.Menu();
             this.menuFedExEndDayPrintPlaceholder = new Divelements.SandRibbon.MenuItem();
             this.menuFedExSmartPostClose = new Divelements.SandRibbon.MenuItem();
-            this.menuItemViewHelp = new Divelements.SandRibbon.MenuItem();
-            this.menuItemSupportForum = new Divelements.SandRibbon.MenuItem();
-            this.menuItemRequestHelp = new Divelements.SandRibbon.MenuItem();
-            this.menuItemRemoteAssistance = new Divelements.SandRibbon.MenuItem();
-            this.menuItemBuySupplies = new Divelements.SandRibbon.MenuItem();
-            this.menuItemHelpAbout = new Divelements.SandRibbon.MenuItem();
-            this.mainMenuItemSetupDatabase = new Divelements.SandRibbon.MainMenuItem();
-            this.mainMenuItemBackupDatabase = new Divelements.SandRibbon.MainMenuItem();
+            this.menuItemViewHelp = new RibbonMenuItem();
+            this.menuItemSupportForum = new RibbonMenuItem();
+            this.menuItemRequestHelp = new RibbonMenuItem();
+            this.menuItemRemoteAssistance = new RibbonMenuItem();
+            this.menuItemBuySupplies = new RibbonMenuItem();
+            this.menuItemHelpAbout = new RibbonMenuItem();
+            this.mainMenuItemSetupDatabase = new RibbonMainMenuItem();
+            this.mainMenuItemBackupDatabase = new RibbonMainMenuItem();
             this.uiModeMenu = new Divelements.SandRibbon.Menu();
-            this.mainMenuItemOrderLookup = new Divelements.SandRibbon.MainMenuItem();
-            this.mainMenuItemBatchGrid = new Divelements.SandRibbon.MainMenuItem();
-            this.mainMenuItemProducts = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemOrderLookup = new RibbonMainMenuItem();
+            this.mainMenuItemBatchGrid = new RibbonMainMenuItem();
+            this.mainMenuItemProducts = new RibbonMainMenuItem();
             this.menuOrderLookupViewFedExEndDayClose = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewFedExEndDayPrint = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewFedExPrintReports = new Divelements.SandRibbon.Menu();
             this.menuOrderLookupViewFedExEndDayPrintPlaceholder = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewFedExSmartPostClose = new Divelements.SandRibbon.MenuItem();
-            this.buttonRestore = new Divelements.SandRibbon.Button();
-            this.buttonArchive = new Divelements.SandRibbon.Button();
-            this.buttonSetupDatabase = new Divelements.SandRibbon.Button();
+            this.buttonRestore = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonArchive = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonSetupDatabase = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.stripLayoutModifyOrders = new Divelements.SandRibbon.StripLayout();
-            this.buttonNewOrder = new Divelements.SandRibbon.Button();
-            this.buttonDeleteOrders = new Divelements.SandRibbon.Button();
+            this.buttonNewOrder = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDeleteOrders = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.stripLayoutCombineSplitOrders = new Divelements.SandRibbon.StripLayout();
-            this.buttonCombine = new Divelements.SandRibbon.Button();
-            this.buttonSplit = new Divelements.SandRibbon.Button();
-            this.buttonEditCustomer = new Divelements.SandRibbon.Button();
-            this.buttonEditOrder = new Divelements.SandRibbon.Button();
+            this.buttonCombine = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonSplit = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonEditCustomer = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonEditOrder = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.panelArchiveNotification = new System.Windows.Forms.Panel();
             this.dashboardBarSample = new ShipWorks.ApplicationCore.Dashboard.DashboardBar();
             this.panelDockingArea = new System.Windows.Forms.Panel();
@@ -195,30 +198,30 @@ namespace ShipWorks
             this.gridMenuLayoutProvider = new ShipWorks.ApplicationCore.Appearance.GridMenuLayoutProvider(this.components);
             this.windowLayoutProvider = new ShipWorks.ApplicationCore.Appearance.WindowLayoutProvider(this.components);
             this.selectionDependentEnabler = new ShipWorks.ApplicationCore.Interaction.SelectionDependentEnabler(this.components);
-            this.buttonShipOrders = new Divelements.SandRibbon.Button();
-            this.buttonTrackOrders = new Divelements.SandRibbon.Button();
-            this.buttonLocalStatus = new Divelements.SandRibbon.Button();
+            this.buttonShipOrders = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonTrackOrders = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonLocalStatus = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupLocalStatus = new Divelements.SandRibbon.Popup();
-            this.buttonUpdateOnline = new Divelements.SandRibbon.Button();
+            this.buttonUpdateOnline = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupUpdateOnline = new Divelements.SandRibbon.Popup();
-            this.buttonPrint = new Divelements.SandRibbon.Button();
+            this.buttonPrint = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupPrint = new Divelements.SandRibbon.Popup();
-            this.buttonPreview = new Divelements.SandRibbon.Button();
+            this.buttonPreview = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupPreview = new Divelements.SandRibbon.Popup();
-            this.buttonEmailSend = new Divelements.SandRibbon.Button();
+            this.buttonEmailSend = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupEmailSend = new Divelements.SandRibbon.Popup();
-            this.buttonEmailCompose = new Divelements.SandRibbon.Button();
+            this.buttonEmailCompose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupEmailCompose = new Divelements.SandRibbon.Popup();
-            this.buttonSave = new Divelements.SandRibbon.Button();
+            this.buttonSave = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupSave = new Divelements.SandRibbon.Popup();
-            this.buttonSaveOpen = new Divelements.SandRibbon.Button();
+            this.buttonSaveOpen = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupSaveOpen = new Divelements.SandRibbon.Popup();
-            this.buttonQuickPrint = new Divelements.SandRibbon.Button();
+            this.buttonQuickPrint = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupQuickPrint = new Divelements.SandRibbon.Popup();
-            this.buttonInsuranceClaim = new Divelements.SandRibbon.Button();
+            this.buttonInsuranceClaim = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbon = new Divelements.SandRibbon.Ribbon();
             this.applicationMenu = new Divelements.SandRibbon.ApplicationMenu();
-            this.mainMenuItemOptions = new Divelements.SandRibbon.MainMenuItem();
+            this.mainMenuItemOptions = new RibbonMainMenuItem();
             this.mainMenuItemSupport = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemDatabase = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemViewMode = new Divelements.SandRibbon.MainMenuItem();
@@ -228,9 +231,9 @@ namespace ShipWorks
             this.ribbonChunkOrdersSep1 = new Divelements.SandRibbon.Separator();
             this.ribbonChunkCustomers = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkShipping = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonFedExClose = new Divelements.SandRibbon.Button();
+            this.buttonFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupFedExEndOfDay = new Divelements.SandRibbon.Popup();
-            this.buttonEndiciaSCAN = new Divelements.SandRibbon.Button();
+            this.buttonEndiciaSCAN = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupPostalScanForm = new Divelements.SandRibbon.Popup();
             this.menuEndiciaScanForm = new Divelements.SandRibbon.Menu();
             this.menuOrderLookupViewEndiciaScanForm = new Divelements.SandRibbon.Menu();
@@ -243,70 +246,72 @@ namespace ShipWorks
             this.menuEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
             this.menuOrderLookupViewEndiciaScanFormNone = new Divelements.SandRibbon.MenuItem();
             this.ribbonChunkManageEmail = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonEmailMessages = new Divelements.SandRibbon.Button();
+            this.buttonEmailMessages = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkDownload = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonDownload = new Divelements.SandRibbon.Button();
+            this.buttonDownload = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkPickList = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonPickList = new Divelements.SandRibbon.Button();
-            this.ribbonTabGridViewCreate = new Divelements.SandRibbon.RibbonTab();
+            this.buttonPickList = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.ribbonTabGridOutput = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkPrint = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkSendEmail = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkFile = new Divelements.SandRibbon.RibbonChunk();
+            this.ribbonTabProducts = new Divelements.SandRibbon.RibbonTab();
             this.ribbonTabOrderLookupViewScanPack = new Divelements.SandRibbon.RibbonTab();
             this.ribbonTabOrderLookupViewShipping = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewShipping = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonOrderLookupViewCreateLabel = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewManualOrder = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewShipShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewManualOrder = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonOrderLookupViewApplyProfile = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewManageProfiles = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewApplyProfile = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewManageProfiles = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonTabOrderLookupViewShipmentHistory = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewActions = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonOrderLookupViewVoid = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewReprint = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewShipAgain = new Divelements.SandRibbon.Button();
-            this.buttonOrderLookupViewSCANForm = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewVoid = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewReprint = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewSCANForm = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
-            this.buttonOrderLookupViewFedExClose = new Divelements.SandRibbon.Button();
+            this.buttonOrderLookupViewFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkConfiguration = new Divelements.SandRibbon.RibbonChunk();
             this.ribbonChunkHistory = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonAudit = new Divelements.SandRibbon.Button();
-            this.buttonDownloadHistory = new Divelements.SandRibbon.Button();
+            this.buttonAudit = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDownloadHistory = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkAdminDatabase = new Divelements.SandRibbon.RibbonChunk();
             this.separator2 = new Divelements.SandRibbon.Separator();
-            this.buttonBackup = new Divelements.SandRibbon.Button();
+            this.buttonBackup = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonTabView = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkDataViews = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonDetailViewNormal = new Divelements.SandRibbon.Button();
-            this.buttonDetailViewNormalDetail = new Divelements.SandRibbon.Button();
-            this.buttonDetailViewDetail = new Divelements.SandRibbon.Button();
+            this.buttonDetailViewNormal = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDetailViewNormalDetail = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonDetailViewDetail = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.separatorDataViews = new Divelements.SandRibbon.Separator();
             this.ribbonChunkGridSettings = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonEditGridColumns = new Divelements.SandRibbon.Button();
-            this.buttonEditGridMenus = new Divelements.SandRibbon.Button();
+            this.buttonEditGridColumns = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonEditGridMenus = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkPanels = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonShowPanels = new Divelements.SandRibbon.Button();
+            this.buttonShowPanels = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupShowPanels = new Divelements.SandRibbon.Popup();
             this.menuShowPanels = new Divelements.SandRibbon.Menu();
             this.menuItemShowFiltersPanel = new Divelements.SandRibbon.MenuItem();
             this.ribbonChunkEnvironment = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonSaveEnvironment = new Divelements.SandRibbon.Button();
-            this.buttonLoadEnvironment = new Divelements.SandRibbon.Button();
-            this.buttonResetEnvironment = new Divelements.SandRibbon.Button();
+            this.buttonSaveEnvironment = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonLoadEnvironment = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonResetEnvironment = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonTabHelp = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkSupport = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonHelpView = new Divelements.SandRibbon.Button();
-            this.buttonHelpForum = new Divelements.SandRibbon.Button();
-            this.buttonRequestHelp = new Divelements.SandRibbon.Button();
+            this.buttonHelpView = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonHelpForum = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonRequestHelp = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.separator1 = new Divelements.SandRibbon.Separator();
-            this.buttonHelpRemote = new Divelements.SandRibbon.Button();
+            this.buttonHelpRemote = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkSupplies = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonUship = new Divelements.SandRibbon.Button();
-            this.buttonBuySupplies = new Divelements.SandRibbon.Button();
+            this.buttonUship = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonBuySupplies = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkAbout = new Divelements.SandRibbon.RibbonChunk();
-            this.buttonHelpAbout = new Divelements.SandRibbon.Button();
+            this.buttonHelpAbout = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.quickAccessToolBar = new Divelements.SandRibbon.QuickAccessToolBar();
             this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.pictureBox7 = new System.Windows.Forms.PictureBox();
@@ -317,7 +322,7 @@ namespace ShipWorks
             this.menuItem1 = new Divelements.SandRibbon.MenuItem();
             this.popup1 = new Divelements.SandRibbon.Popup();
             this.popup2 = new Divelements.SandRibbon.Popup();
-            this.button2 = new Divelements.SandRibbon.Button();
+            this.buttonCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             statusBarStrip = new Divelements.SandRibbon.StatusBarStrip();
             stripLayout6 = new Divelements.SandRibbon.StripLayout();
             stripLayoutDatabase = new Divelements.SandRibbon.StripLayout();
@@ -602,7 +607,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewFields.Guid = new System.Guid("A9CE2A60-E87B-4D22-B5E6-A3D02BF5ECCB");
             this.buttonOrderLookupViewFields.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewFields, ShipWorks.Users.Security.PermissionType.ManageFields);
-            this.buttonOrderLookupViewFields.QuickAccessKey = "F";
+            this.buttonOrderLookupViewFields.QuickAccessKey = "I";
             this.buttonOrderLookupViewFields.Text = "Fields";
             this.buttonOrderLookupViewFields.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewFields.Activate += new System.EventHandler(this.OnManageOrderLookupFields);
@@ -620,7 +625,7 @@ namespace ShipWorks
             this.buttonManageStores.Guid = new System.Guid("c76be2e7-9f6d-41dc-9fd3-7027357cd54d");
             this.buttonManageStores.Image = global::ShipWorks.Properties.Resources.school32;
             this.ribbonSecurityProvider.SetPermission(this.buttonManageStores, ShipWorks.Users.Security.PermissionType.ManageStores);
-            this.buttonManageStores.QuickAccessKey = "S";
+            this.buttonManageStores.QuickAccessKey = "ST";
             this.buttonManageStores.Text = "Stores";
             this.buttonManageStores.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonManageStores.Activate += new System.EventHandler(this.OnManageStores);
@@ -2247,10 +2252,11 @@ namespace ShipWorks
             this.ribbon.ApplicationMenu = this.applicationMenu;
             this.ribbon.ApplicationToolTip = new Divelements.SandRibbon.SuperToolTip("Application", "Click here to manage ShipWorks.", null, false);
             this.ribbon.Controls.Add(this.ribbonTabGridViewHome);
-            this.ribbon.Controls.Add(this.ribbonTabGridViewCreate);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewScanPack);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipping);
             this.ribbon.Controls.Add(this.ribbonTabOrderLookupViewShipmentHistory);
+            this.ribbon.Controls.Add(this.ribbonTabProducts);
+            this.ribbon.Controls.Add(this.ribbonTabGridOutput);
             this.ribbon.Controls.Add(this.ribbonTabAdmin);
             this.ribbon.Controls.Add(this.ribbonTabView);
             this.ribbon.Controls.Add(this.ribbonTabHelp);
@@ -2507,16 +2513,16 @@ namespace ShipWorks
             //
             // ribbonTabGridViewCreate
             //
-            this.ribbonTabGridViewCreate.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonTabGridOutput.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.ribbonChunkPrint,
             this.ribbonChunkSendEmail,
             this.ribbonChunkFile});
-            this.ribbonTabGridViewCreate.Location = new System.Drawing.Point(1, 53);
-            this.ribbonTabGridViewCreate.Manager = this.ribbonManager;
-            this.ribbonTabGridViewCreate.Name = "ribbonTabGridViewCreate";
-            this.ribbonTabGridViewCreate.Size = new System.Drawing.Size(967, 90);
-            this.ribbonTabGridViewCreate.TabIndex = 5;
-            this.ribbonTabGridViewCreate.Text = "&Output";
+            this.ribbonTabGridOutput.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabGridOutput.Manager = this.ribbonManager;
+            this.ribbonTabGridOutput.Name = "ribbonTabGridViewCreate";
+            this.ribbonTabGridOutput.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabGridOutput.TabIndex = 5;
+            this.ribbonTabGridOutput.Text = "&Output";
             //
             // ribbonChunkPrint
             //
@@ -2546,6 +2552,15 @@ namespace ShipWorks
             this.buttonSaveOpen});
             this.ribbonChunkFile.Text = "File";
             //
+            // ribbonTabProducts
+            //
+            this.ribbonTabProducts.Location = new System.Drawing.Point(1, 53);
+            this.ribbonTabProducts.Manager = this.ribbonManager;
+            this.ribbonTabProducts.Name = "ribbonTabProducts";
+            this.ribbonTabProducts.Size = new System.Drawing.Size(967, 90);
+            this.ribbonTabProducts.TabIndex = 0;
+            this.ribbonTabProducts.Text = "Prod&ucts";
+            //
             // ribbonTabOrderLookupViewScanPack
             //
             this.ribbonTabOrderLookupViewScanPack.Location = new System.Drawing.Point(1, 53);
@@ -2574,6 +2589,7 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
+            this.buttonOrderLookupViewShipShipAgain,
             this.buttonOrderLookupViewManualOrder
             });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
@@ -2587,6 +2603,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewCreateLabel.Text = "Create\r\nLabel";
             this.buttonOrderLookupViewCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewCreateLabel.Activate += OnButtonOrderLookupViewCreateLabel;
+            //
+            // buttonOrderLookupViewShipShipAgain
+            //
+            this.buttonOrderLookupViewShipShipAgain.Guid = new System.Guid("edb00c75-1df8-43e1-9d27-cf949d5fe8e2");
+            this.buttonOrderLookupViewShipShipAgain.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewShipShipAgain, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewShipShipAgain.QuickAccessKey = "C";
+            this.buttonOrderLookupViewShipShipAgain.Text = "Ship\r\nAgain";
+            this.buttonOrderLookupViewShipShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewShipShipAgain.Activate += OnButtonOrderLookupViewShipAgain;
             //
             // buttonOrderLookupViewManualOrder
             //
@@ -2637,7 +2663,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipmentHistory.Name = "ribbonTabOrderLookupViewShipmentHistory";
             this.ribbonTabOrderLookupViewShipmentHistory.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabOrderLookupViewShipmentHistory.TabIndex = 0;
-            this.ribbonTabOrderLookupViewShipmentHistory.Text = "Shipment &History";
+            this.ribbonTabOrderLookupViewShipmentHistory.Text = "H&istory";
             //
             // ribbonChunkOrderLookupViewActions
             //
@@ -3007,7 +3033,7 @@ namespace ShipWorks
             this.ribbonTabHelp.Name = "ribbonTabHelp";
             this.ribbonTabHelp.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabHelp.TabIndex = 6;
-            this.ribbonTabHelp.Text = "Help";
+            this.ribbonTabHelp.Text = "He&lp";
             //
             // ribbonChunkSupport
             //
@@ -3027,6 +3053,7 @@ namespace ShipWorks
             this.buttonHelpView.Guid = new System.Guid("191a7d17-9f82-48e0-8ce6-7d81843a04b9");
             this.buttonHelpView.Image = global::ShipWorks.Properties.Resources.help2;
             this.buttonHelpView.Text = "View Help";
+            this.buttonHelpView.QuickAccessKey = "L";
             this.buttonHelpView.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpView.Activate += new System.EventHandler(this.OnViewHelp);
             //
@@ -3034,6 +3061,7 @@ namespace ShipWorks
             //
             this.buttonHelpForum.Guid = new System.Guid("cf72da78-5b7c-463f-85e6-cbf919891936");
             this.buttonHelpForum.Image = global::ShipWorks.Properties.Resources.help_earth;
+            this.buttonHelpForum.QuickAccessKey = "F";
             this.buttonHelpForum.Text = "Visit Forum";
             this.buttonHelpForum.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpForum.Activate += new System.EventHandler(this.OnSupportForum);
@@ -3042,6 +3070,7 @@ namespace ShipWorks
             //
             this.buttonRequestHelp.Guid = new System.Guid("774ff044-900b-4b99-93bb-a52469b4bebe");
             this.buttonRequestHelp.Image = global::ShipWorks.Properties.Resources.user_headset;
+            this.buttonRequestHelp.QuickAccessKey = "S";
             this.buttonRequestHelp.Text = "Submit Support \r\nRequest";
             this.buttonRequestHelp.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonRequestHelp.Activate += new System.EventHandler(this.OnRequestHelp);
@@ -3055,6 +3084,7 @@ namespace ShipWorks
             //
             this.buttonHelpRemote.Guid = new System.Guid("6cf9bab1-98a8-42ca-b15f-0bf198f5f6ff");
             this.buttonHelpRemote.Image = global::ShipWorks.Properties.Resources.remote_assist32;
+            this.buttonHelpRemote.QuickAccessKey = "P";
             this.buttonHelpRemote.Text = "Generate PIN";
             this.buttonHelpRemote.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpRemote.Activate += new System.EventHandler(this.OnRemoteAssistance);
@@ -3071,6 +3101,7 @@ namespace ShipWorks
             //
             this.buttonUship.Guid = new System.Guid("d81ade92-db8c-4f88-9f00-ea3bd217f280");
             this.buttonUship.Image = ((System.Drawing.Image) (resources.GetObject("buttonUship.Image")));
+            this.buttonUship.QuickAccessKey = "I";
             this.buttonUship.Text = "uShip LTL Rates";
             this.buttonUship.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonUship.Activate += new System.EventHandler(this.OnUShip);
@@ -3079,6 +3110,7 @@ namespace ShipWorks
             //
             this.buttonBuySupplies.Guid = new System.Guid("b40dbc3d-62af-45f4-88a8-38dc1e2f6c0d");
             this.buttonBuySupplies.Image = global::ShipWorks.Properties.Resources.shoppingcart_full;
+            this.buttonBuySupplies.QuickAccessKey = "U";
             this.buttonBuySupplies.Text = "Buy Supplies";
             this.buttonBuySupplies.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonBuySupplies.Activate += new System.EventHandler(this.OnBuySupplies);
@@ -3094,6 +3126,7 @@ namespace ShipWorks
             //
             this.buttonHelpAbout.Guid = new System.Guid("f09c2eca-c334-4d7c-bc16-9e34d6452ce4");
             this.buttonHelpAbout.Image = global::ShipWorks.Properties.Resources.about;
+            this.buttonHelpAbout.QuickAccessKey = "A";
             this.buttonHelpAbout.Text = "About ShipWorks";
             this.buttonHelpAbout.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonHelpAbout.Activate += new System.EventHandler(this.OnAboutShipWorks);
@@ -3157,12 +3190,12 @@ namespace ShipWorks
             this.menuItem1.Padding = new Divelements.SandRibbon.WidgetEdges(40, 3, 20, 3);
             this.menuItem1.Text = "Support Forum";
             //
-            // button2
+            // buttonCreateLabel
             //
-            this.button2.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
-            this.button2.QuickAccessKey = "OE";
-            this.button2.Text = "Create\r\nLabel";
-            this.button2.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonCreateLabel.Image = global::ShipWorks.Properties.Resources.box_next_32_32;
+            this.buttonCreateLabel.QuickAccessKey = "OE";
+            this.buttonCreateLabel.Text = "Create\r\nLabel";
+            this.buttonCreateLabel.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // MainForm
             //
@@ -3217,6 +3250,100 @@ namespace ShipWorks
         }
         #endregion
 
+        /// <summary>
+        /// Set button telemetry values
+        /// </summary>
+        private void SetButtonTelemetry()
+        {
+            buttonShowPanels.TelemetryEventName = "ShowPanels";
+            buttonSaveEnvironment.TelemetryEventName = "Environment.Save";
+            buttonLoadEnvironment.TelemetryEventName = "Environment.Load";
+            buttonResetEnvironment.TelemetryEventName = "Environment.Reset";
+            buttonManageStores.TelemetryEventName = "Stores.Manage";
+            buttonBackup.TelemetryEventName = "Database.Backup";
+            buttonRestore.TelemetryEventName = "Database.Restore";
+            buttonArchive.TelemetryEventName = "Database.Archive";
+            buttonSetupDatabase.TelemetryEventName = "Database.Setup";
+            buttonChangeConnection.TelemetryEventName = "Database.ChangeConnection";
+            buttonManageUsers.TelemetryEventName = "Users.Manage";
+            buttonFirewall.TelemetryEventName = "Firewall";
+            buttonDownload.TelemetryEventName = "Download";
+            buttonPickList.TelemetryEventName = "PickList";
+            buttonManageFilters.TelemetryEventName = "Filters.Manage";
+            buttonManageTemplates.TelemetryEventName = "Templates.Manage";
+            buttonManageActions.TelemetryEventName = "Actions.Manage";
+            buttonPrint.TelemetryEventName = "Print";
+            buttonPreview.TelemetryEventName = "Preview";
+            buttonEmailSend.TelemetryEventName = "Email.Send";
+            buttonEmailCompose.TelemetryEventName = "Email.Compose";
+            buttonSave.TelemetryEventName = "Save";
+            buttonSaveOpen.TelemetryEventName = "SaveOpen";
+            buttonNewOrder.TelemetryEventName = "Order.New";
+            buttonEditOrder.TelemetryEventName = "Order.Edit";
+            buttonDeleteOrders.TelemetryEventName = "Order.Delete";
+            buttonCombine.TelemetryEventName = "Order.Combine";
+            buttonSplit.TelemetryEventName = "Order.Split";
+            buttonNewCustomer.TelemetryEventName = "Customer.New";
+            buttonEditCustomer.TelemetryEventName = "Customer.Edit";
+            buttonDeleteCustomer.TelemetryEventName = "Customer.Delete";
+            buttonShipOrders.TelemetryEventName = "Order.Ship";
+            buttonTrackOrders.TelemetryEventName = "Order.Track";
+            buttonSettings.TelemetryEventName = "Settings.";
+            buttonEditGridColumns.TelemetryEventName = "GridColumns.Edit";
+            buttonLocalStatus.TelemetryEventName = "Order.LocalStatus";
+            buttonUpdateOnline.TelemetryEventName = "Order.UpdateOnline";
+            buttonEditGridMenus.TelemetryEventName = "GridMenus.Edit";
+            buttonDetailViewDetail.TelemetryEventName = "DetailView.Detail";
+            buttonDetailViewNormal.TelemetryEventName = "DetailView.Normal";
+            buttonDetailViewNormalDetail.TelemetryEventName = "DetailView.NormalDetail";
+            buttonDetailViewHeightIncrease.TelemetryEventName = "DetailView.Height.Increase";
+            buttonDetailViewHeightDecrease.TelemetryEventName = "DetailView.Height.Decrease";
+            buttonQuickPrint.TelemetryEventName = "QuickPrint";
+            buttonEmailAccounts.TelemetryEventName = "Email.Accounts";
+            buttonDownloadHistory.TelemetryEventName = "DownloadHistory";
+            buttonEmailMessages.TelemetryEventName = "Email.Messages";
+            buttonAudit.TelemetryEventName = "Audit";
+            buttonShippingSettings.TelemetryEventName = "Shipping.Settings";
+            buttonShippingProfiles.TelemetryEventName = "Shipping.Profiles";
+            buttonFedExClose.TelemetryEventName = "FedExClose";
+            buttonEndiciaSCAN.TelemetryEventName = "EndiciaScan";
+            buttonHelpForum.TelemetryEventName = "Help.Forum";
+            buttonHelpRemote.TelemetryEventName = "Help.Remote";
+            buttonHelpView.TelemetryEventName = "Help.View";
+            buttonHelpAbout.TelemetryEventName = "Help.About";
+            buttonRequestHelp.TelemetryEventName = "Help.Request";
+            buttonBuySupplies.TelemetryEventName = "Supplies.Buy";
+            buttonUship.TelemetryEventName = "Uship";
+            buttonInsuranceClaim.TelemetryEventName = "Insurance.Claim";
+            buttonOrderLookupViewCreateLabel.TelemetryEventName = "OrderLookup.Label.Create";
+            buttonOrderLookupViewManualOrder.TelemetryEventName = "OrderLookup.Order.Manual";
+            buttonOrderLookupViewApplyProfile.TelemetryEventName = "OrderLookup.Profiles.Apply";
+            buttonOrderLookupViewManageProfiles.TelemetryEventName = "OrderLookup.Profiles.Manage";
+            buttonOrderLookupViewVoid.TelemetryEventName = "OrderLookup.Order.Void";
+            buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
+            buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.History.ShipAgain";
+            buttonOrderLookupViewShipShipAgain.TelemetryEventName = "OrderLookup.Ship.ShipAgain";
+            buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
+            buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
+            buttonCreateLabel.TelemetryEventName = "CreateLabel";
+            buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
+
+            menuItemViewHelp.TelemetryEventName = "Logo.Help.View";
+            menuItemSupportForum.TelemetryEventName = "Logo.Support.Forum";
+            menuItemRequestHelp.TelemetryEventName = "Logo.Help.Request";
+            menuItemRemoteAssistance.TelemetryEventName = "Logo.RemoteAssistance";
+            menuItemBuySupplies.TelemetryEventName = "Logo.Supplies.Buy";
+            menuItemHelpAbout.TelemetryEventName = "Logo.Help.About";
+
+            mainMenuItemOptions.TelemetryEventName = "Logo.Settings";
+            mainMenuItemSetupDatabase.TelemetryEventName = "Logo.Database.Setup";
+            mainMenuItemBackupDatabase.TelemetryEventName = "Logo.Database.Backup";
+
+            mainMenuItemProducts.TelemetryEventName = "Logo.Mode.Switch.Products";
+            mainMenuItemBatchGrid.TelemetryEventName = "Logo.Mode.Switch.Batch";
+            mainMenuItemOrderLookup.TelemetryEventName = "Logo.Mode.Switch.OrderLookup";
+        }
+
         private Divelements.SandRibbon.RibbonManager ribbonManager;
         private Divelements.SandRibbon.Ribbon ribbon;
         private Divelements.SandRibbon.ApplicationMenu applicationMenu;
@@ -3224,22 +3351,23 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipping;
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewShipmentHistory;
         private Divelements.SandRibbon.RibbonTab ribbonTabOrderLookupViewScanPack;
+        private Divelements.SandRibbon.RibbonTab ribbonTabProducts;
         private Divelements.SandRibbon.RibbonTab ribbonTabGridViewHome;
         private Divelements.SandRibbon.StatusBar statusBar;
         private Divelements.SandRibbon.RibbonTab ribbonTabView;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPanels;
         private Divelements.SandRibbon.RibbonTab ribbonTabAdmin;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkConfiguration;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemSetupDatabase;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemOrderLookup;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemBatchGrid;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemProducts;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemBackupDatabase;
+        private RibbonMainMenuItem mainMenuItemSetupDatabase;
+        private RibbonMainMenuItem mainMenuItemOrderLookup;
+        private RibbonMainMenuItem mainMenuItemBatchGrid;
+        private RibbonMainMenuItem mainMenuItemProducts;
+        private RibbonMainMenuItem mainMenuItemBackupDatabase;
         private Divelements.SandRibbon.QuickAccessToolBar quickAccessToolBar;
-        private Divelements.SandRibbon.Button buttonShowPanels;
-        private Divelements.SandRibbon.Button buttonSaveEnvironment;
-        private Divelements.SandRibbon.Button buttonLoadEnvironment;
-        private Divelements.SandRibbon.Button buttonResetEnvironment;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonShowPanels;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSaveEnvironment;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonLoadEnvironment;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonResetEnvironment;
         private Divelements.SandRibbon.Popup popupShowPanels;
         private Divelements.SandRibbon.MenuItem menuItemShowFiltersPanel;
         private Divelements.SandRibbon.Menu menuShowPanels;
@@ -3248,57 +3376,57 @@ namespace ShipWorks
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ContextMenuStrip notifyIconMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemOpenShipWorks;
-        private Divelements.SandRibbon.Button buttonManageStores;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonManageStores;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkAdminDatabase;
-        private Divelements.SandRibbon.Button buttonBackup;
-        private Divelements.SandRibbon.Button buttonRestore;
-        private Divelements.SandRibbon.Button buttonArchive;
-        private Divelements.SandRibbon.Button buttonSetupDatabase;
-        private Divelements.SandRibbon.Button buttonChangeConnection;
-        private Divelements.SandRibbon.Button buttonManageUsers;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonBackup;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonRestore;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonArchive;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSetupDatabase;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonChangeConnection;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonManageUsers;
         private ShipWorks.Filters.Controls.FilterTree orderFilterTree;
         private ShipWorks.Filters.Controls.FilterTree customerFilterTree;
-        private Divelements.SandRibbon.Button buttonFirewall;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonFirewall;
         private ShipWorks.ApplicationCore.MainGridControl gridControl;
         private Divelements.SandRibbon.Label labelStatusTotal;
         private Divelements.SandRibbon.Label labelStatusSelected;
         private ComponentFactory.Krypton.Toolkit.KryptonManager kryptonManager;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkDownload;
-        private Divelements.SandRibbon.Button buttonDownload;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDownload;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPickList;
-        private Divelements.SandRibbon.Button buttonPickList;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemOptions;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonPickList;
+        private RibbonMainMenuItem mainMenuItemOptions;
         private Divelements.SandRibbon.Label statusStretcherPlaceholder;
         private ShipWorks.UI.Controls.SandRibbon.ImageLabel downloadingStatusLabel;
-        private Divelements.SandRibbon.Button buttonManageFilters;
-        private Divelements.SandRibbon.Button buttonManageTemplates;
-        private Divelements.SandRibbon.Button buttonManageActions;
-        private Divelements.SandRibbon.RibbonTab ribbonTabGridViewCreate;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonManageFilters;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonManageTemplates;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonManageActions;
+        private Divelements.SandRibbon.RibbonTab ribbonTabGridOutput;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPrint;
-        private Divelements.SandRibbon.Button buttonPrint;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonPrint;
         private Divelements.SandRibbon.Popup popupPrint;
-        private Divelements.SandRibbon.Button buttonPreview;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonPreview;
         private Divelements.SandRibbon.Popup popupPreview;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkSendEmail;
-        private Divelements.SandRibbon.Button buttonEmailSend;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEmailSend;
         private Divelements.SandRibbon.Popup popupEmailSend;
-        private Divelements.SandRibbon.Button buttonEmailCompose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEmailCompose;
         private Divelements.SandRibbon.Popup popupEmailCompose;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkFile;
-        private Divelements.SandRibbon.Button buttonSave;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSave;
         private Divelements.SandRibbon.Popup popupSave;
-        private Divelements.SandRibbon.Button buttonSaveOpen;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSaveOpen;
         private Divelements.SandRibbon.Popup popupSaveOpen;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrders;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkCustomers;
-        private Divelements.SandRibbon.Button buttonNewOrder;
-        private Divelements.SandRibbon.Button buttonEditOrder;
-        private Divelements.SandRibbon.Button buttonDeleteOrders;
-        private Divelements.SandRibbon.Button buttonCombine;
-        private Divelements.SandRibbon.Button buttonSplit;
-        private Divelements.SandRibbon.Button buttonNewCustomer;
-        private Divelements.SandRibbon.Button buttonEditCustomer;
-        private Divelements.SandRibbon.Button buttonDeleteCustomer;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonNewOrder;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEditOrder;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDeleteOrders;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonCombine;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSplit;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonNewCustomer;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEditCustomer;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDeleteCustomer;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.PictureBox pictureBox6;
@@ -3309,9 +3437,9 @@ namespace ShipWorks
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.PictureBox pictureBox8;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkShipping;
-        private Divelements.SandRibbon.Button buttonShipOrders;
-        private Divelements.SandRibbon.Button buttonTrackOrders;
-        private Divelements.SandRibbon.Button buttonSettings;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonShipOrders;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonTrackOrders;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSettings;
         private TD.SandDock.DockableWindow dockableWindowOrderFilters;
         private TD.SandDock.DockableWindow dockableWindowCustomerFilters;
         private TD.SandDock.SandDockManager sandDockManager;
@@ -3354,10 +3482,10 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem contextCustomerSaveOpen;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkEnvironment;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkDataViews;
-        private Divelements.SandRibbon.Button buttonEditGridColumns;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEditGridColumns;
         private ShipWorks.ApplicationCore.Appearance.GridMenuLayoutProvider gridMenuLayoutProvider;
-        private Divelements.SandRibbon.Button buttonLocalStatus;
-        private Divelements.SandRibbon.Button buttonUpdateOnline;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonLocalStatus;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonUpdateOnline;
         private Divelements.SandRibbon.Popup popupLocalStatus;
         private Divelements.SandRibbon.Popup popupUpdateOnline;
         private System.Windows.Forms.ToolStripMenuItem stuffToolStripMenuItem;
@@ -3379,29 +3507,29 @@ namespace ShipWorks
         private System.Windows.Forms.ToolStripMenuItem commonYToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem storeAToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specificZToolStripMenuItem;
-        private Divelements.SandRibbon.Button buttonEditGridMenus;
-        private Divelements.SandRibbon.Button buttonDetailViewDetail;
-        private Divelements.SandRibbon.Button buttonDetailViewNormal;
-        private Divelements.SandRibbon.Button buttonDetailViewNormalDetail;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEditGridMenus;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDetailViewDetail;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDetailViewNormal;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDetailViewNormalDetail;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkGridSettings;
         private Divelements.SandRibbon.Separator separatorDataViews;
         private Divelements.SandRibbon.Label labelDetailViewDetailView;
         private Divelements.SandRibbon.ComboBox detailViewDetailTemplate;
         private Divelements.SandRibbon.WindowsComboBox detailViewDetailHeight;
         private Divelements.SandRibbon.ButtonGroup dataViewHeightButtons;
-        private Divelements.SandRibbon.Button buttonDetailViewHeightIncrease;
-        private Divelements.SandRibbon.Button buttonDetailViewHeightDecrease;
-        private Divelements.SandRibbon.Button buttonQuickPrint;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDetailViewHeightIncrease;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDetailViewHeightDecrease;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonQuickPrint;
         private Divelements.SandRibbon.Popup popupQuickPrint;
         private System.Windows.Forms.ToolStripMenuItem contextOrderQuickPrint;
         private ShipWorks.UI.Controls.SandRibbon.ImageLabel emailingStatusLabel;
         private System.Windows.Forms.Panel dashboardArea;
         private ShipWorks.ApplicationCore.Dashboard.DashboardBar dashboardBarSample;
-        private Divelements.SandRibbon.Button buttonEmailAccounts;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEmailAccounts;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkHistory;
-        private Divelements.SandRibbon.Button buttonDownloadHistory;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDownloadHistory;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkManageEmail;
-        private Divelements.SandRibbon.Button buttonEmailMessages;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEmailMessages;
         private TD.SandDock.DockableWindow dockableWindowNotes;
         private TD.SandDock.DockableWindow dockableWindowItems;
         private TD.SandDock.DockableWindow dockableWindowCharges;
@@ -3430,16 +3558,16 @@ namespace ShipWorks
         private Divelements.SandRibbon.StripLayout stripLayoutModifyOrders;
         private Divelements.SandRibbon.StripLayout stripLayoutCombineSplitOrders;
         private ShipWorks.Users.Security.RibbonSecurityProvider ribbonSecurityProvider;
-        private Divelements.SandRibbon.Button buttonAudit;
-        private Divelements.SandRibbon.Button buttonShippingSettings;
-        private Divelements.SandRibbon.Button buttonShippingProfiles;
-        private Divelements.SandRibbon.Button buttonFedExClose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonAudit;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonShippingSettings;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonShippingProfiles;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonFedExClose;
         private Divelements.SandRibbon.Popup popupFedExEndOfDay;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayClose;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayPrint;
         private Divelements.SandRibbon.MenuItem menuFedExEndDayPrintPlaceholder;
         private Divelements.SandRibbon.Menu menuFedExPrintReports;
-        private Divelements.SandRibbon.Button buttonEndiciaSCAN;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonEndiciaSCAN;
         private Divelements.SandRibbon.Popup popupPostalScanForm;
         private Divelements.SandRibbon.MenuItem menuCreateEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuOrderLookupViewCreateEndiciaScanForm;
@@ -3453,8 +3581,8 @@ namespace ShipWorks
         private Divelements.SandRibbon.Menu menuOrderLookupViewPrintEndiciaScanForm;
         private Divelements.SandRibbon.MenuItem menuFedExSmartPostClose;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemSupport;
-        private Divelements.SandRibbon.MenuItem menuItemSupportForum;
-        private Divelements.SandRibbon.MenuItem menuItemRemoteAssistance;
+        private RibbonMenuItem menuItemSupportForum;
+        private RibbonMenuItem menuItemRemoteAssistance;
         private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayClose;
         private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrint;
         private Divelements.SandRibbon.MenuItem menuOrderLookupViewFedExEndDayPrintPlaceholder;
@@ -3462,49 +3590,50 @@ namespace ShipWorks
         private Divelements.SandRibbon.Menu menuOrderLookupViewFedExPrintReports;
         private Editions.EditionGuiHelper editionGuiHelper;
         private Divelements.SandRibbon.RibbonTab ribbonTabHelp;
-        private Divelements.SandRibbon.Button buttonHelpForum;
-        private Divelements.SandRibbon.Button buttonHelpRemote;
-        private Divelements.SandRibbon.Button buttonHelpView;
-        private Divelements.SandRibbon.Button buttonHelpAbout;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonHelpForum;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonHelpRemote;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonHelpView;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonHelpAbout;
         private Divelements.SandRibbon.MenuItem menuItem1;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkSupport;
-        private Divelements.SandRibbon.MenuItem menuItemViewHelp;
-        private Divelements.SandRibbon.MenuItem menuItemHelpAbout;
-        private Divelements.SandRibbon.Button buttonRequestHelp;
-        private Divelements.SandRibbon.MenuItem menuItemRequestHelp;
+        private RibbonMenuItem menuItemViewHelp;
+        private RibbonMenuItem menuItemHelpAbout;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonRequestHelp;
+        private RibbonMenuItem menuItemRequestHelp;
         private Divelements.SandRibbon.Separator separator1;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkAbout;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkSupplies;
-        private Divelements.SandRibbon.Button buttonBuySupplies;
-        private Divelements.SandRibbon.MenuItem menuItemBuySupplies;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonBuySupplies;
+        private RibbonMenuItem menuItemBuySupplies;
         private Divelements.SandRibbon.Separator separator2;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemDatabase;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemViewMode;
         private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;
-        private Divelements.SandRibbon.Button buttonUship;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonUship;
         private System.Windows.Forms.ToolStripMenuItem contextOrderInsuranceClaim;
-        private Divelements.SandRibbon.Button buttonInsuranceClaim;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonInsuranceClaim;
         private Divelements.SandRibbon.Menu uiModeMenu;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewShipping;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewProfiles;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewActions;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewCreateLabel;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewManualOrder;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewApplyProfile;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewManageProfiles;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewCreateLabel;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipShipAgain;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManualOrder;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewApplyProfile;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManageProfiles;
         private Divelements.SandRibbon.Popup popup1;
         private Divelements.SandRibbon.Popup popup2;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewVoid;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewReprint;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewShipAgain;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewSCANForm;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewFedExClose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewVoid;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewReprint;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipAgain;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewSCANForm;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFedExClose;
         private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
-        private Divelements.SandRibbon.Button button2;
-        private Divelements.SandRibbon.Button buttonOrderLookupViewFields;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonCreateLabel;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFields;
     }
 }
 

@@ -5,7 +5,7 @@ namespace ShipWorks.UI.Controls.SandRibbon
     /// <summary>
     /// Interface to make testing button usage easier
     /// </summary>
-    public interface IRibbonButton
+    public interface IRibbonButton : IButtonTelemetry
     {
         /// <summary>
         /// Is the button enabled

@@ -543,7 +543,6 @@
     <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporterTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCodeTest.cs" />

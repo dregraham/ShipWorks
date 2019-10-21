@@ -3,6 +3,8 @@ using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
@@ -90,9 +92,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     return GenericResult.FromSuccess(restResponse);
                 }
 
-                string error = string.IsNullOrWhiteSpace(restResponse.Content) ? restResponse.StatusCode.ToString() : restResponse.Content;
-
-                return GenericResult.FromError<IRestResponse>($"Unable to make warehouse request.{Environment.NewLine}{error}");
+                return GenericResult.FromError<IRestResponse>(HubApiException.FromResponse(restResponse));
             }
             catch (Exception e)
             {

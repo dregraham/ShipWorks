@@ -1,16 +1,16 @@
 ﻿using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Orders.Split
+namespace ShipWorks.Stores.Orders.Split.Hub
 {
     /// <summary>
     /// Interface for auditing split orders
     /// </summary>
-    public interface IOrderSplitAudit
+    public interface IOrderSplitAuditHub
     {
         /// <summary>
-        /// Audit the original order and split order.
+        /// Audit the original order.
         /// </summary>
-        Task Audit(IOrderEntity originalOrder, IOrderEntity splitOrder);
+        Task Audit(IOrderEntity originalOrder);
     }
 }

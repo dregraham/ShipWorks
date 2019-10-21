@@ -13,6 +13,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
             <Style BasedOn="{StaticResource SmallPrimaryButton}" TargetType="Button" />
             <Style BasedOn="{StaticResource FormTextBox}" TargetType="TextBox" />
         </ResourceDictionary>
@@ -23,7 +24,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <StackPanel>
+        <StackPanel Margin="0,0,0,16">
             <StackPanel.Resources>
                 <Style TargetType="TextBlock">
                     <Setter Property="Margin" Value="0,2" />
@@ -50,7 +51,8 @@
             <Button
                 Grid.Column="0"
                 Command="{Binding CloseDialog}"
-                Style="{StaticResource SmallSecondaryButton}">
+                Style="{StaticResource SmallSecondaryButton}"
+                Visibility="{Binding CanClose, Converter={StaticResource ShowWhenTrue}}">
                 Close
             </Button>
             <Button

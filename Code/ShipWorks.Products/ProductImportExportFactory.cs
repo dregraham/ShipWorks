@@ -13,6 +13,7 @@ namespace ShipWorks.Products
     {
         private readonly Func<IProductExporterViewModel> createExportViewModel;
         private readonly Func<IProductImporterViewModel> createImportViewModel;
+        private readonly Func<Action, IProductImporterSplashViewModel> createImportSplashViewModel;
         private readonly Func<IProductEditorViewModel> createEditorViewModel;
 
         /// <summary>
@@ -21,11 +22,13 @@ namespace ShipWorks.Products
         public ProductViewModelFactory(
             Func<IProductExporterViewModel> createExportViewModel,
             Func<IProductImporterViewModel> createImportViewModel,
+            Func<Action, IProductImporterSplashViewModel> createImportSplashViewModel,
             Func<IProductEditorViewModel> createEditorViewModel)
         {
             this.createExportViewModel = createExportViewModel;
             this.createEditorViewModel = createEditorViewModel;
             this.createImportViewModel = createImportViewModel;
+            this.createImportSplashViewModel = createImportSplashViewModel;
         }
 
         /// <summary>
@@ -37,6 +40,11 @@ namespace ShipWorks.Products
         /// Create an Import view model
         /// </summary>
         public IProductImporterViewModel CreateImport() => createImportViewModel();
+
+        /// <summary>
+        /// Create an Import view model
+        /// </summary>
+        public IProductImporterSplashViewModel CreateImportSplash(Action refreshProducts) => createImportSplashViewModel(refreshProducts);
 
         /// <summary>
         /// Create an editor view model

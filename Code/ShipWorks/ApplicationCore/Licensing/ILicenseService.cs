@@ -19,6 +19,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         bool IsLegacy { get; }
 
         /// <summary>
+        /// True if Hub customer
+        /// </summary>
+        bool IsHub { get; }
+
+        /// <summary>
         /// Gets all licenses for ShipWorks
         /// </summary>
         /// <returns></returns>

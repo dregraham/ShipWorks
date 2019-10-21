@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
     /// Factory for creating Odbc orders from warehouse orders
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Odbc)]
+    [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.GenericFile)]
     public class OdbcWarehouseOrderFactory : WarehouseOrderFactory
     {
         private readonly ILog log;
@@ -40,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Odbc
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AlphaNumericOrderIdentifier(orderNumber)).ConfigureAwait(false);
 
-            
+
             if (result.Failure)
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", orderNumber, result.Message);

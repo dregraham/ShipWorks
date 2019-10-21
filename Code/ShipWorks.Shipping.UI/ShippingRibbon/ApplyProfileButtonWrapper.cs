@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls.SandRibbon;
 
@@ -25,6 +26,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         /// </summary>
         public void ApplyProfile(IShippingProfile profile)
         {
+            Telemetry.TrackButtonClick(actualApplyProfileButton.TelemetryEventName, profile.ShippingProfileEntity.Name);
             actualApplyProfileButton.Tag = profile;
             Activate?.Invoke(this, EventArgs.Empty);
         }
@@ -44,6 +46,15 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         public object Tag
         {
             get { return actualApplyProfileButton.Tag; }
+        }
+
+        /// <summary>
+        /// The event name to send to telemetry
+        /// </summary>
+        public string TelemetryEventName
+        {
+            get => actualApplyProfileButton.TelemetryEventName;
+            set { /* Setting not allowed in the wrapper.  Code analysis requires this comment.*/ }
         }
 
         /// <summary>
