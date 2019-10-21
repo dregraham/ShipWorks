@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                     dutyPaid.ApplyMultiCheck(shipment.DhlExpress.DeliveredDutyPaid);
                     saturdayDelivery.ApplyMultiCheck(shipment.DhlExpress.SaturdayDelivery);
                     nonMachinable.ApplyMultiCheck(shipment.DhlExpress.NonMachinable);
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                 }
             }
         }

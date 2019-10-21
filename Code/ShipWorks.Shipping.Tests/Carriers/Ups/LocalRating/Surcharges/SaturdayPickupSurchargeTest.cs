@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
-                Shipment = new ShipmentEntity() {ShipDate = new DateTime(2017, 5, 13)},
+                Shipment = new ShipmentEntity() {ShipDate = new DateTime(2017, 5, 13, 0, 0, 0, DateTimeKind.Local) },
                 Packages = {new UpsPackageEntity()}
             };
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating.Surcharges
         {
             UpsShipmentEntity shipment = new UpsShipmentEntity
             {
-                Shipment = new ShipmentEntity() {ShipDate = new DateTime(2017, 5, 13)},
+                Shipment = new ShipmentEntity() {ShipDate = new DateTime(2017, 5, 13, 0, 0, 0,DateTimeKind.Local)},
                 Packages = {new UpsPackageEntity(), new UpsPackageEntity()}
             };
             Mock<IUpsLocalServiceRate> serviceRate = mock.Mock<IUpsLocalServiceRate>();
