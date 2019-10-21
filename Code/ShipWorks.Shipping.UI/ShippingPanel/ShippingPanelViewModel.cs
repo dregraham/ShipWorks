@@ -399,8 +399,8 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     return;
                 }
 
-                SaveToDatabase();
                 ShipmentAdapter.Shipment.CarrierAccountID = AccountId;
+                SaveToDatabase();                
                 AllowEditing = false;
 
                 messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment },

@@ -85,8 +85,14 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         /// <summary>
         /// Generate the sql
         /// </summary>
-        public override string GenerateSql(SqlGenerationContext context) =>
-            GenerateSql(context.GetColumnReference(ShipmentFields.CarrierAccountID), context);
+        public override string GenerateSql(SqlGenerationContext context)
+        {
+            // Register the parameters
+            string accountParam = context.RegisterParameter(Value);
+            string processedParam = context.RegisterParameter(true);
+
+            return $"{context.GetColumnReference(ShipmentFields.CarrierAccountID)} {GetSqlOperator()} {accountParam} and {context.GetColumnReference(ShipmentFields.Processed)} = {processedParam}";
+        }       
     }
 }
 
