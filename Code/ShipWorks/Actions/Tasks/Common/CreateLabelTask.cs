@@ -97,47 +97,52 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             var errors = new Dictionary<string, string>();
 
-            var shipmentsToProcess = new List<ShipmentEntity>();
+            var batches = inputKeys.SplitIntoChunksOf(25);
 
-            // Get all of the shipments for the order given order IDs. This will add a new shipment if the order currently has no shipments
-            ShipmentsLoadedEventArgs loadedShipments = await orderLoader.LoadAsync(inputKeys.ToArray(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
-
-            // All of the orders were deleted. Do nothing.
-            if (loadedShipments == null)
+            foreach (var batch in batches)
             {
-                return;
-            }
+                var shipmentsToProcess = new List<ShipmentEntity>();
 
-            IEnumerable<OrderEntity> orders = loadedShipments.Shipments.Select(x => x.Order).Distinct();
+                // Get all of the shipments for the order given order IDs. This will add a new shipment if the order currently has no shipments
+                ShipmentsLoadedEventArgs loadedShipments = await orderLoader.LoadAsync(batch.ToArray(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite);
 
-            foreach (OrderEntity order in orders)
-            {
-                var shipments = await VerifyShipments(order.Shipments);
-
-                if (shipments.Failure)
+                // All of the orders were deleted. Do nothing.
+                if (loadedShipments == null)
                 {
-                    errors.Add(order.OrderNumberComplete, shipments.Exception.Message);
-                    continue;
+                    return;
                 }
 
-                shipmentsToProcess.AddRange(shipments.Value);
-            }
+                IEnumerable<OrderEntity> orders = loadedShipments.Shipments.Select(x => x.Order).Distinct();
 
-            if (shipmentsToProcess.Any())
-            {
-                IEnumerable<ProcessShipmentResult> results;
-
-                using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+                foreach (OrderEntity order in orders)
                 {
-                    refresher.RetrieveShipments = () => shipmentsToProcess;
+                    var shipments = await VerifyShipments(order.Shipments);
 
-                    var shipmentProcessor = shipmentProcessorFactory(messageHelper);
+                    if (shipments.Failure)
+                    {
+                        errors.Add(order.OrderNumberComplete, shipments.Exception.Message);
+                        continue;
+                    }
 
-                    results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+                    shipmentsToProcess.AddRange(shipments.Value);
                 }
 
-                // Add any errors from processing. Uses indexer instead of .Add so that we always get the last error for a given order
-                results.Where(x => !x.IsSuccessful).ForEach(x => errors[x.Shipment.Order.OrderNumberComplete] = x.Error.Message);
+                if (shipmentsToProcess.Any())
+                {
+                    IEnumerable<ProcessShipmentResult> results;
+
+                    using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+                    {
+                        refresher.RetrieveShipments = () => shipmentsToProcess;
+
+                        var shipmentProcessor = shipmentProcessorFactory(messageHelper);
+
+                        results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+                    }
+
+                    // Add any errors from processing. Uses indexer instead of .Add so that we always get the last error for a given order
+                    results.Where(x => !x.IsSuccessful).ForEach(x => errors[x.Shipment.Order.OrderNumberComplete] = x.Error.Message);
+                }
             }
 
             if (errors.Any())
@@ -154,47 +159,25 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         private async Task<GenericResult<IEnumerable<ShipmentEntity>>> VerifyShipments(IEnumerable<ShipmentEntity> shipments)
         {
-            IEnumerable<ShipmentEntity> confirmedShipments = GetConfirmedShipments(shipments.Where(s => !s.Voided));
+            IEnumerable<ShipmentEntity> validShipments = GetValidShipments(shipments);
 
-            if (confirmedShipments.None())
+            if (validShipments.None())
             {
                 return new ActionTaskRunException("No processable shipments");
             }
 
-            if (confirmedShipments.Count() > 1 && !AllowMultiShipments)
+            if (validShipments.Count() > 1 && !AllowMultiShipments)
             {
                 return new ActionTaskRunException("More than one unprocessed shipment. To process multiple shipments, enable the option in the action editor.");
             }
 
-            if (HasDisqualifyingShipmentTypes(confirmedShipments))
-            {
-                return new ActionTaskRunException("Cannot process shipments of type 'None'");
-            }
-
-            return GenericResult.FromSuccess(confirmedShipments);
+            return GenericResult.FromSuccess(validShipments);
         }
 
         /// <summary>
-        /// Gets Confirmed Shipments
+        /// Returns all unprocessed, non-voided shipments with a type other than none
         /// </summary>
-        /// <remarks>
-        /// If the order only has processed shipments, return no shipments
-        /// If the order has unprocessed shipments, we return them
-        /// </remarks>
-        private IEnumerable<ShipmentEntity> GetConfirmedShipments(IEnumerable<ShipmentEntity> shipments)
-        {
-            if (shipments.All(s => s.Processed))
-            {
-                return new ShipmentEntity[0];
-            }
-
-            return shipments.Where(s => !s.Processed);
-        }
-
-        /// <summary>
-        /// Determines whether any shipment has a ShipmentTypeCode of "None".
-        /// </summary>
-        private static bool HasDisqualifyingShipmentTypes(IEnumerable<ShipmentEntity> shipments) =>
-            shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
+        private IEnumerable<ShipmentEntity> GetValidShipments(IEnumerable<ShipmentEntity> shipments) =>
+            shipments.Where(s => s.ShipmentTypeCode != ShipmentTypeCode.None && !(s.Voided || s.Processed));
     }
 }
