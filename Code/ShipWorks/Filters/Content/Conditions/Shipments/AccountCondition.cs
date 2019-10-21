@@ -58,7 +58,8 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                     {
                         if(account.AccountId != 0)
                         {
-                            choices.Add(new ValueChoice<long>(account.AccountDescription, account.AccountId));
+                            var userID = account.AccountDescription.Split(',')[0];
+                            choices.Add(new ValueChoice<long>(userID, account.AccountId));
                         }                     
                     }
                 }

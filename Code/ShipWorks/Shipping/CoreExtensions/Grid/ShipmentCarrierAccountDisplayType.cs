@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
                 account = ShippingManager.GetCarrierAccount(processedShipment);
             }
             
-            return account != null ? account.AccountDescription : string.Empty;
+            return account != null ? account.AccountDescription.Split(',')[0] : string.Empty;
         }
     }
 }
