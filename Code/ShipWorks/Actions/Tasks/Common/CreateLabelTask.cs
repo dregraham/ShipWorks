@@ -109,14 +109,14 @@ namespace ShipWorks.Actions.Tasks.Common
                 // All of the orders were deleted. Do nothing.
                 if (loadedShipments == null)
                 {
-                    return;
+                    continue;
                 }
 
                 IEnumerable<OrderEntity> orders = loadedShipments.Shipments.Select(x => x.Order).Distinct();
 
                 foreach (OrderEntity order in orders)
                 {
-                    var shipments = await VerifyShipments(order.Shipments);
+                    var shipments = VerifyShipments(order.Shipments);
 
                     if (shipments.Failure)
                     {
@@ -157,7 +157,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <summary>
         /// Gets the shipments that should be auto processed
         /// </summary>
-        private async Task<GenericResult<IEnumerable<ShipmentEntity>>> VerifyShipments(IEnumerable<ShipmentEntity> shipments)
+        private GenericResult<IEnumerable<ShipmentEntity>> VerifyShipments(IEnumerable<ShipmentEntity> shipments)
         {
             IEnumerable<ShipmentEntity> validShipments = GetValidShipments(shipments);
 

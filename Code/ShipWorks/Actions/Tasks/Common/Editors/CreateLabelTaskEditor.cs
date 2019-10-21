@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Actions.Tasks.Common.Editors
 {
@@ -12,6 +13,8 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// <summary>
         /// Constructor
         /// </summary>
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+        Justification = "Identifier is not being used for data binding")]
         public CreateLabelTaskEditor(CreateLabelTask task)
         {
             InitializeComponent();
