@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -37,6 +38,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the next batch of distribution centers.
         /// </summary>
         ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string nextToken, string refreshToken);
+
+        /// <summary>
+        /// Fetches the given products and adds them to the cache if they aren't already in it
+        /// </summary>
+        void AddProductsToCache(IEnumerable<int> productIds, string refreshToken);
 
         /// <summary>
         /// Gets the product.

@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 if (Store.InitialDownloadDays.HasValue && Store.InitialDownloadDays > 30)
                 {
-                    daysback = Store.InitialDownloadDays ?? 30;
+                    daysback = Store.InitialDownloadDays.Value;
                 }
 
                 var oldestDownload = DateTime.UtcNow.AddDays(-daysback);
@@ -99,7 +99,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     previousLink = ordersResult.OdataNextLink;
 
-                    if (!await ProcessOrders(ordersResult, previousLink).ConfigureAwait(false))
+                    AddProductsToCache(ordersResult);
+
+                    if (!await ProcessOrders(ordersResult).ConfigureAwait(false))
                     {
                         break;
                     }
@@ -124,8 +126,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.Detail = "Done";
         }
 
-        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult, string previousLink)
+        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult)
         {
+
             foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
             {
                 // Check if it has been canceled
@@ -245,6 +248,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Fetch all products for the given orders, and add them to the cache
+        /// </summary>
+        private void AddProductsToCache(ChannelAdvisorOrderResult orderResult)
+        {
+            Progress.Detail = "Fetching Products...";
+
+            IEnumerable<int> productIds = orderResult.Orders.SelectMany(x => x.Items).Select(x => x.ProductID);
+
+            restClient.AddProductsToCache(productIds, refreshToken);
         }
     }
 }

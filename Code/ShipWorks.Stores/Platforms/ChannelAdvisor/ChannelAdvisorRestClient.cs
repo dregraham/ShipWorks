@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
@@ -202,6 +203,78 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             return Functional
                 .Retry(() => ProcessRequest<ChannelAdvisorOrderItemsResult>(submitter, "GetOrders", refreshToken), 10, ShouldRetryRequest)
+                .Match(x => x, ex => throw ex);
+        }
+
+        /// <summary>
+        /// Fetches the given products and adds them to the cache if they aren't already in it
+        /// </summary>
+        public void AddProductsToCache(IEnumerable<int> productIds, string refreshToken)
+        {
+            ILookup<bool, int> isCached = productIds.ToLookup(x => productCache.Contains(x));
+
+            if (!isCached[false].Any())
+            {
+                return;
+            }
+
+            try
+            {
+                string previousLink = string.Empty;
+
+                ChannelAdvisorProductList productBatch = GetProductBatch(isCached[false], refreshToken);
+
+                while (productBatch?.Products?.Any() ?? false)
+                {
+                    if (productBatch.OdataNextLink.Equals(previousLink, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+
+                    previousLink = productBatch.OdataNextLink;
+
+                    productBatch.Products.ForEach(x => productCache[x.ID] = x);
+
+                    productBatch = GetProductBatch(previousLink, refreshToken);
+                }
+            }
+            catch (ChannelAdvisorException)
+            {
+                // Log should already be written.
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Get a batch of products
+        /// </summary>
+        private ChannelAdvisorProductList GetProductBatch(IEnumerable<int> productIds, string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(productEndpoint, HttpVerb.Get);
+
+            submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+            submitter.Variables.Add("$filter", $"ID eq {string.Join(" or ", productIds)}");
+            submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
+
+            return SubmitGetProductBatch(submitter, refreshToken);
+        }
+
+        /// <summary>
+        /// Get a batch of products
+        /// </summary>
+        private ChannelAdvisorProductList GetProductBatch(string link, string refreshToken)
+        {
+            IHttpVariableRequestSubmitter submitter = CreateRequest(link, HttpVerb.Get);
+
+            return SubmitGetProductBatch(submitter, refreshToken);
+        }
+
+        /// <summary>
+        /// Submit the get product batch request
+        /// </summary>
+        private ChannelAdvisorProductList SubmitGetProductBatch(IHttpVariableRequestSubmitter submitter, string refreshToken)
+        {
+            return Functional.Retry(() => ProcessRequest<ChannelAdvisorProductList>(submitter, "GetProduct", refreshToken), 10, ShouldRetryRequest)
                 .Match(x => x, ex => throw ex);
         }
 
