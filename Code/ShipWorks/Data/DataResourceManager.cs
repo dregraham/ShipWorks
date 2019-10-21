@@ -328,11 +328,15 @@ namespace ShipWorks.Data
                         catch (ORMQueryExecutionException e) when (e.Message.Contains("Cannot insert duplicate key row", StringComparison.InvariantCultureIgnoreCase))
                         {
                             // If force create new was true, we don't check for existence before creating.  If we get the duplicate exception, just go fetch it.
-                            return FetchResource(adapter, resource.Checksum).ResourceID;
+                            resource = FetchResource(adapter, resource.Checksum);
+
+                            // resourceFilename is an out param, so update it too.
+                            resourceFilename = resource.Filename;
+
+                            return resource.ResourceID;
                         }
                     }
                 }
-
             }
 
             return resourceID;
