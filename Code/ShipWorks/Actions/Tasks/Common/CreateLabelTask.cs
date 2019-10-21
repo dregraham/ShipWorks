@@ -96,7 +96,6 @@ namespace ShipWorks.Actions.Tasks.Common
         protected override async Task RunAsync(List<long> inputKeys)
         {
             var errors = new Dictionary<string, string>();
-
             var batches = inputKeys.SplitIntoChunksOf(25);
 
             foreach (var batch in batches)
@@ -129,16 +128,7 @@ namespace ShipWorks.Actions.Tasks.Common
 
                 if (shipmentsToProcess.Any())
                 {
-                    IEnumerable<ProcessShipmentResult> results;
-
-                    using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
-                    {
-                        refresher.RetrieveShipments = () => shipmentsToProcess;
-
-                        var shipmentProcessor = shipmentProcessorFactory(messageHelper);
-
-                        results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
-                    }
+                    var results = await ProcessShipments(shipmentsToProcess);
 
                     // Add any errors from processing. Uses indexer instead of .Add so that we always get the last error for a given order
                     results.Where(x => !x.IsSuccessful).ForEach(x => errors[x.Shipment.Order.OrderNumberComplete] = x.Error.Message);
@@ -179,5 +169,21 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         private IEnumerable<ShipmentEntity> GetValidShipments(IEnumerable<ShipmentEntity> shipments) =>
             shipments.Where(s => s.ShipmentTypeCode != ShipmentTypeCode.None && !(s.Voided || s.Processed));
+
+        private async Task<IEnumerable<ProcessShipmentResult>> ProcessShipments(IEnumerable<ShipmentEntity> shipmentsToProcess)
+        {
+            IEnumerable<ProcessShipmentResult> results;
+
+            using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+            {
+                refresher.RetrieveShipments = () => shipmentsToProcess;
+
+                var shipmentProcessor = shipmentProcessorFactory(messageHelper);
+
+                results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+            }
+
+            return results;
+        }
     }
 }
