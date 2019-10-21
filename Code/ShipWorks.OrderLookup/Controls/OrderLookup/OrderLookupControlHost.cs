@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
@@ -21,21 +22,22 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
     [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
     public partial class OrderLookupControlHost : UserControl, IOrderLookup
     {
-        private readonly MainOrderLookupViewModel orderLookupViewModel;
-        private MainOrderLookupControl mainOrderLookupControl;
+        private ScanToShipControl mainOrderLookupControl;
+        private readonly ScanToShipViewModel scanToShipViewModel;
         private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, IMessenger messenger)
+        public OrderLookupControlHost(ScanToShipViewModel scanToShipViewModel, IMessenger messenger)
         {
             this.messenger = messenger;
             InitializeComponent();
-            this.orderLookupViewModel = orderLookupViewModel;
-            orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
-            orderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
-            orderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
+
+            this.scanToShipViewModel = scanToShipViewModel;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
         }
 
         /// <summary>
@@ -52,9 +54,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             base.OnLoad(e);
 
-            mainOrderLookupControl = new MainOrderLookupControl()
+            mainOrderLookupControl = new ScanToShipControl()
             {
-                DataContext = orderLookupViewModel
+                DataContext = scanToShipViewModel
             };
 
             ElementHost host = new ElementHost
@@ -72,27 +74,27 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public void Unload()
         {
             CommitBindingsOnFocusedControl();
-            orderLookupViewModel.ShipmentModel.Unload();
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.Unload();
         }
 
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
         public Task CreateLabel() =>
-            orderLookupViewModel.ShipmentModel.CreateLabel();
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabel();
 
         /// <summary>
         /// Allow reshipping an order
         /// </summary>
         public bool ShipAgainAllowed() =>
-            orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
 
         /// <summary>
         /// Ship the shipment again
         /// </summary>
         public void ShipAgain()
         {
-            long? shipmentId = orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
+            long? shipmentId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
 
             if (shipmentId != 0 && shipmentId != null)
             {
@@ -103,20 +105,25 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
-            orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
+        public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration)
+        {
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
+        }
 
         /// <summary>
         /// Save the order
         /// </summary>
-        public void Save() => orderLookupViewModel.ShipmentModel.SaveToDatabase();
+        public void Save()
+        {
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SaveToDatabase();
+        }
 
         /// <summary>
         /// Allow the creation of a label
         /// </summary>
         public bool CreateLabelAllowed()
-        {
-            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        {            
+            return scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
         }
 
         /// <summary>

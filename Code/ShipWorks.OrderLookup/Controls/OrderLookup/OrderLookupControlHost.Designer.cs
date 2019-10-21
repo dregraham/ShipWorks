@@ -17,7 +17,7 @@
             {
                 components.Dispose();
 
-                orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding -= OnShipmentModelShipmentSaving;
+                scanToShipViewModel.OrderLookupViewModel.ShipmentModel.ShipmentNeedsBinding -= OnShipmentModelShipmentSaving;
             }
             base.Dispose(disposing);
         }

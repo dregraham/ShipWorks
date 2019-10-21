@@ -364,6 +364,10 @@
     <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\VerifiedOrderService.cs" />
+    <Compile Include="ScanToShipControl.xaml.cs">
+      <DependentUpon>ScanToShipControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScanToShipViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
@@ -637,6 +641,10 @@
     <Page Include="ScanPack\ScanControl.xaml" />
     <Page Include="ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\ScanPackItemControl.xaml" />
+    <Page Include="ScanToShipControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="RobotoFontLicense.txt">
