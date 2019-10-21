@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
                     }
 
                     nonMachinable.ApplyMultiCheck(shipment.Asendia.NonMachinable);
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     dimensions.Add(new DimensionsAdapter(shipment.Asendia));
                 }
             }

@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers
 
             if (!shipment.Processed && shipment.ShipDate.Date < now.Date)
             {
-                shipment.ShipDate = now.Date.AddHours(12);
+                shipment.ShipDate = now.Date.ToUniversalTime();
             }
         }
     }

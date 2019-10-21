@@ -579,6 +579,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty BestRateExcludedAccountEntity objects.</summary>
+	[Serializable]
+	public partial class BestRateExcludedAccountEntityFactory : EntityFactoryBase2<BestRateExcludedAccountEntity> {
+		/// <summary>CTor</summary>
+		public BestRateExcludedAccountEntityFactory() : base("BestRateExcludedAccountEntity", ShipWorks.Data.Model.EntityType.BestRateExcludedAccountEntity, false) { }
+		
+		/// <summary>Creates a new BestRateExcludedAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new BestRateExcludedAccountEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewBestRateExcludedAccountUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty BestRateProfileEntity objects.</summary>
 	[Serializable]
 	public partial class BestRateProfileEntityFactory : EntityFactoryBase2<BestRateProfileEntity> {
@@ -4922,6 +4943,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity:
 					factoryToUse = new AuditChangeDetailEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.BestRateExcludedAccountEntity:
+					factoryToUse = new BestRateExcludedAccountEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.BestRateProfileEntity:
 					factoryToUse = new BestRateProfileEntityFactory();

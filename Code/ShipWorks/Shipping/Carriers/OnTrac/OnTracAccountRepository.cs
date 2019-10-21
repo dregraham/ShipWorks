@@ -93,5 +93,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         protected override long? GetAccountIDFromShipment(IShipmentEntity shipment) =>
             shipment?.OnTrac?.OnTracAccountID;
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            OnTracAccountManager.InitializeForCurrentSession();
+        }
     }
 }

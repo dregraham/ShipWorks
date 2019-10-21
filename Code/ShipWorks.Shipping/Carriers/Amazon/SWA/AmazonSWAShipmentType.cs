@@ -227,7 +227,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         /// <summary>
         /// Gets the best rate shipping broker for AmazonSWA
         /// </summary>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             return new NullShippingBroker();
         }

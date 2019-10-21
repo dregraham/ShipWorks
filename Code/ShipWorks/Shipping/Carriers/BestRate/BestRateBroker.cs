@@ -25,14 +25,19 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         where TAccount : TAccountInterface where TAccountInterface : ICarrierAccount
     {
         private readonly string carrierDescription;
+        private readonly IBestRateExcludedAccountRepository bestRateExcludedAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        protected BestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository, string carrierDescription)
+        protected BestRateBroker(ShipmentType shipmentType, 
+            ICarrierAccountRepository<TAccount, TAccountInterface> accountRepository,
+            string carrierDescription, 
+            IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
+            this.bestRateExcludedAccountRepository = bestRateExcludedAccountRepository;
             shipmentType.ShouldApplyShipSense = false;
             ShipmentType = shipmentType;
             GetRatesAction = ShippingManager.GetRates;
@@ -216,11 +221,13 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private static Dictionary<RateResult, TAccount> CreateRateAccountDictionary(IDictionary<TAccount, RateGroup> accountRateGroups)
         {
-            return accountRateGroups
+            var preDictionary = accountRateGroups
                 .Select(ar => ar.Value.Rates.Select(r => new KeyValuePair<RateResult, TAccount>(r, ar.Key)))
                 .SelectMany(x => x)
                 .Where(x => x.Key != null)
-                .ToDictionary(x => x.Key, x => x.Value);
+                .ToList();
+            
+            return preDictionary.ToDictionary(x => x.Key, x => x.Value);
         }
 
         /// <summary>
@@ -243,21 +250,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// </summary>
         private List<TAccount> AccountsForRates(ShipmentEntity shipment)
         {
-            // Only add the account to the account list if it's not null
-            TAccount accountForRating = AccountRepository.Accounts.Count() == 1 ? AccountRepository.Accounts.First() : AccountRepository.DefaultProfileAccount;
-            IEnumerable<TAccount> accounts = Object.Equals(accountForRating, default(TAccount)) ? new List<TAccount>() : new List<TAccount> { accountForRating };
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
 
+            // Only add the account to the account list if it's not null         
+            IEnumerable<TAccount> accounts = AccountRepository.Accounts.Where(account => !excludedAccounts.Any(e=>e==account.AccountId));
+            
             // Filter the list to be the default profile account, and that it's other properties are valid
-            accounts = accounts.Where(account =>
-            {
-                if (account is NullEntity ||
-                    (shipment.OriginOriginID == (int) ShipmentOriginSource.Account && Equals(account, accountForRating)))
-                {
-                    return true;
-                }
-
-                return account.Address.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
-            });
+            ShipmentTypeCode shipmentType = (ShipmentTypeCode) shipment.ShipmentType;
+            accounts = accounts.Where(a => a.Address.AdjustedCountryCode(shipmentType) == shipment.AdjustedOriginCountryCode());
 
             return accounts.ToList();
         }

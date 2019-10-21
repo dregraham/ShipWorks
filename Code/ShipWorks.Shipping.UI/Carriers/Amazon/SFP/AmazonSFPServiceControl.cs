@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                         service.ApplyMultiText(serviceType.Description);
                     }
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     dimensions.Add(new DimensionsAdapter(shipment.AmazonSFP));
 
                     referenceTemplateToken.ApplyMultiText(shipment.AmazonSFP.Reference1);

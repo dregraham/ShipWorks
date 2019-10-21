@@ -863,6 +863,7 @@
     <Compile Include="Data\Administration\IUpdateService.cs" />
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
@@ -1129,6 +1130,8 @@
     <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesClientDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesImageDetailManipulator.cs" />
@@ -1608,7 +1611,6 @@
     <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountDescription.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountEditorDlg.cs" />
-    <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
@@ -2841,12 +2843,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.Designer.cs">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.Designer.cs">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
@@ -8186,9 +8182,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>

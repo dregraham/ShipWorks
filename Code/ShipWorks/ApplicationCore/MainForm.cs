@@ -809,6 +809,9 @@ namespace ShipWorks
 
             currentUserSettings.SetUIMode(UIMode.Batch);
 
+            //The Grid can be already initilized at this point. Make sure its clean.
+            gridControl.Reset();
+
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
             UpdateUIMode(user, false, ModeChangeBehavior.ChangeTabAlways);
 
@@ -2627,7 +2630,7 @@ namespace ShipWorks
                 return;
             }
 
-            bool needLogon = false;
+            bool needReLogon = false;
 
             using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("restore a backup", this))
             {
@@ -2646,14 +2649,16 @@ namespace ShipWorks
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK || scope.DatabaseChanged)
                     {
-                        needLogon = true;
+                        needReLogon = true;
                     }
                 }
             }
 
             // This is down here so its outside of the scope
-            if (needLogon)
+            if (needReLogon)
             {
+                //Make sure the user is logged off so that we dont crash when updating
+                UserSession.Logoff(false);
                 InitiateLogon();
             }
         }

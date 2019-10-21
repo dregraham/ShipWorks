@@ -634,9 +634,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an UpsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (UpsAccountManager.Accounts.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<UpsAccountEntity> nonExcludedUpsAccounts = UpsAccountManager.Accounts.Where(a => !excludedAccounts.Contains(a.AccountId));
+            
+            if (nonExcludedUpsAccounts.Any())
             {
                 return new UpsBestRateBroker(this);
             }
