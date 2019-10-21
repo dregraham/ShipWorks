@@ -130,7 +130,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                         service.ApplyMultiValue(AmazonSWAServiceType);
                     }
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     dimensions.Add(new DimensionsAdapter(shipment.AmazonSWA));
                 }
             }
