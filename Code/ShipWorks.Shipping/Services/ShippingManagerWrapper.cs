@@ -9,6 +9,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing;
@@ -378,5 +379,22 @@ namespace ShipWorks.Shipping.Services
         /// </remarks>
         public Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache) =>
             ShippingManager.ValidateLicense(store, licenseCheckCache);
+
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
+        public ICarrierAccount GetCarrierAccount(ShipmentEntity shipment) =>
+            ShippingManager.GetCarrierAccount(shipment);
+
+        /// <summary>
+        /// Get the carrier account associated with a processed shipment.
+        /// </summary>
+        public ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment) =>
+            ShippingManager.GetCarrierAccount(processedShipment);
+
+        /// <summary>
+        /// Get the carrier account id of a shipment
+        /// </summary>
+        public long GetAccountID(ShipmentEntity shipment) => GetShipmentAdapter(shipment).AccountId ?? 0;
     }
 }

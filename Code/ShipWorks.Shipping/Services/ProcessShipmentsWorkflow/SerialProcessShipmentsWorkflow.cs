@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -157,7 +160,10 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
-                shipment.CarrierAccountID = ShippingManager.GetAccountID(shipment);
+                using (var scope = IoC.BeginLifetimeScope())
+                {
+                    shipment.CarrierAccountID = scope.Resolve<IShippingManager>().GetAccountID(shipment);
+                }
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);

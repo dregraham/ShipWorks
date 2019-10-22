@@ -42,7 +42,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         }
 
         ///// <summary>
-        ///// Provides the choices for the user to choose from  This is a list of all store-types that currently
+        ///// Provides the choices for the user to choose from  This is a list of all shipping accounts that currently
         ///// exist in the system.
         ///// </summary>
         public override ICollection<ValueChoice<long>> ValueChoices
@@ -50,10 +50,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             get
             {
                 List<ValueChoice<long>> choices = new List<ValueChoice<long>>();
-                var carriers = GetCarriers();
-                foreach(var carrier in carriers)
+                var shipTypes = GetShipmentTypes();
+                foreach(var type in shipTypes)
                 {
-                    IEnumerable<ICarrierAccount> availableAccounts = shippingAccountListProvider.GetAvailableAccounts(carrier);
+                    IEnumerable<ICarrierAccount> availableAccounts = shippingAccountListProvider.GetAvailableAccounts(type);
                     foreach(var account in availableAccounts)
                     {
                         if(account.AccountId != 0)
@@ -67,7 +67,10 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             }
         }
 
-        private ShipmentTypeCode[] GetCarriers()
+        ///// <summary>
+        ///// Gets the list of shipment types that can selected for the filter
+        ///// </summary>
+        private ShipmentTypeCode[] GetShipmentTypes()
         {
             var result = shipmentTypeManager.ShipmentTypes
                      .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)

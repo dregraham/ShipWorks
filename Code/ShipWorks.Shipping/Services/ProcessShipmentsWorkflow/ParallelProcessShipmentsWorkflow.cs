@@ -4,9 +4,12 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
@@ -79,16 +82,19 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             // Get shipment count with automatic returns
             int shipmentCount = 0;
-            foreach (ShipmentEntity shipment in shipments)
+            using(var scope = IoC.BeginLifetimeScope())
             {
-                shipmentCount++;
-                if (shipment.IncludeReturn)
+                foreach (ShipmentEntity shipment in shipments)
                 {
                     shipmentCount++;
+                    if (shipment.IncludeReturn)
+                    {
+                        shipmentCount++;
+                    }
+                    shipment.CarrierAccountID = scope.Resolve<IShippingManager>().GetAccountID(shipment);
                 }
-                shipment.CarrierAccountID = ShippingManager.GetAccountID(shipment);
             }
-
+            
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";
 
             var results = Consume(

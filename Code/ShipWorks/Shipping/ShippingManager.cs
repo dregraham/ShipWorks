@@ -1177,46 +1177,11 @@ namespace ShipWorks.Shipping
                 {
                     IShippingAccountListProvider accountListProvider = scope.Resolve<IShippingAccountListProvider>();
                     account = accountListProvider.GetAvailableAccounts(shipmentType).Where(s => s.AccountId == accountID)
-                                                                                                        .FirstOrDefault();
+                                                                                    .FirstOrDefault();
                 }
             }
             return account;
         }
-
-        /// <summary>
-        /// Get the carrier account id of a shipment
-        /// </summary>
-        public static long GetAccountID(ShipmentEntity shipment)
-        {
-            var type = shipment.ShipmentTypeCode;
-            switch (type)
-            {
-                case ShipmentTypeCode.FedEx:
-                    return shipment.FedEx.FedExAccountID;
-                case ShipmentTypeCode.Usps:
-                    return shipment.Postal.Usps.UspsAccountID;
-                case ShipmentTypeCode.UpsWorldShip:
-                    return shipment.Ups.UpsAccountID;
-                case ShipmentTypeCode.UpsOnLineTools:
-                    return shipment.Ups.UpsAccountID;
-                case ShipmentTypeCode.AmazonSWA:
-                    return shipment.AmazonSWA.AmazonSWAAccountID;
-                case ShipmentTypeCode.DhlExpress:
-                    return shipment.DhlExpress.DhlExpressAccountID;
-                case ShipmentTypeCode.Endicia:
-                    return shipment.Postal.Endicia.EndiciaAccountID;
-                case ShipmentTypeCode.Express1Endicia:
-                    return shipment.Postal.Endicia.EndiciaAccountID;
-                case ShipmentTypeCode.Express1Usps:
-                    return shipment.Postal.Usps.UspsAccountID;
-                case ShipmentTypeCode.iParcel:
-                    return shipment.IParcel.IParcelAccountID;
-                case ShipmentTypeCode.OnTrac:
-                    return shipment.OnTrac.OnTracAccountID;
-                case ShipmentTypeCode.PostalWebTools:
-                    return shipment.Postal.Usps.UspsAccountID;
-            }
-            return 0;
-        }
+        
     }
 }
