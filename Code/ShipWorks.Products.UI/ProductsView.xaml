@@ -78,7 +78,7 @@
                 Grid.Row="0"
                 Columns="7"
                 Rows="1">
-                <syncfusion:SplitButtonAdv Name="AddProduct"
+                <syncfusion:DropDownButtonAdv Name="AddProduct"
                                            Label="Add"
                                            Margin="0,0,10,0"
                                            Height="30"
@@ -98,7 +98,7 @@
                                                      Height="30"
                                                      Width="200"/>
                     </syncfusion:DropDownMenuGroup>
-                </syncfusion:SplitButtonAdv>
+                </syncfusion:DropDownButtonAdv>
                 <Button
                     Command="{Binding EditProductVariantButton}"
                     Content="Edit"
