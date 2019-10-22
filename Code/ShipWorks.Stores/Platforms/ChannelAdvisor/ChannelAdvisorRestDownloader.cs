@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken);
 
                 string previousLink = String.Empty;
                 double daysback = 30;
@@ -106,11 +106,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         break;
                     }
 
-                    // Don't download orders older than oldestDownload. With each download, we will be marking one page of old shipped orders
-                    // as exported, so eventually all of the orders will be marked
-                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) || ordersResult.Orders.FirstOrDefault()?.CreatedDateUtc < oldestDownload
-                        ? null
-                        : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
+                    // Don't download orders older than oldestDownload.
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) ? null : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -137,25 +134,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return false;
                 }
 
-                // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
-                // because filtering slows down the download significantly
-                if (!caOrder.PaymentStatus?.Equals("Cleared", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    continue;
-                }
-
                 DownloadOtherLineItems(caOrder);
 
                 List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                 await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
-
-                // If the order has already been shipped, or is an FBA order, mark it as exported so we don't re-download it
-                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) == true ||
-                    caOrder.DistributionCenterTypeRollup?.Equals("ExternallyManaged", StringComparison.OrdinalIgnoreCase) == true)
-                {
-                    restClient.MarkOrderExported(caOrder.ID, refreshToken);
-                }
             }
 
             return true;
@@ -255,7 +238,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private void AddProductsToCache(ChannelAdvisorOrderResult orderResult)
         {
-            Progress.Detail = "Fetching Products...";
+            Progress.Detail = "Fetching products...";
 
             IEnumerable<int> productIds = orderResult.Orders.SelectMany(x => x.Items).Select(x => x.ProductID);
 

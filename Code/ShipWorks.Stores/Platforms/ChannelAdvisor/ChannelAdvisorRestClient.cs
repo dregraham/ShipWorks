@@ -172,12 +172,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(string refreshToken)
+        public ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken)
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
+            var downloadStartDate = DateTime.UtcNow.AddDays(daysBack == 0 ? -4 : -daysBack);
+
+            string time = $"{ downloadStartDate:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}";
+
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            getOrdersRequestSubmitter.Variables.Add("exported", "false");
+            getOrdersRequestSubmitter.Variables.Add("$filter", "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped') AND " +
+                "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
+                "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited') AND " +
+                $"(CreatedDateUtc ge {time})");
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
@@ -226,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 while (productBatch?.Products?.Any() == true)
                 {
-                    if (productBatch.OdataNextLink.Equals(previousLink, StringComparison.OrdinalIgnoreCase))
+                    if (productBatch.OdataNextLink?.Equals(previousLink, StringComparison.OrdinalIgnoreCase) == true)
                     {
                         return;
                     }
@@ -235,7 +242,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     productBatch.Products.ForEach(x => productCache[x.ID] = x);
 
-                    productBatch = GetProductBatch(previousLink, refreshToken);
+                    productBatch = string.IsNullOrEmpty(productBatch.OdataNextLink) ? null : GetProductBatch(previousLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException)
@@ -253,7 +260,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IHttpVariableRequestSubmitter submitter = CreateRequest(productEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            submitter.Variables.Add("$filter", $"ID eq {string.Join(" or ", productIds)}");
+            submitter.Variables.Add("$filter", $"ID eq {string.Join(" or ID eq ", productIds)}");
             submitter.Variables.Add("$expand", "Attributes, Images, DCQuantities");
 
             return SubmitGetProductBatch(submitter, refreshToken);
@@ -311,56 +318,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 // Log should already be written. Return null
                 return null;
-            }
-        }
-
-        /// <summary>
-        /// Mark an order as Exported
-        /// </summary>
-        public void MarkOrderExported(long orderID, string refreshToken) =>
-            MarkOrderExported(orderID, refreshToken, false);
-
-        /// <summary>
-        /// Mark an order as Exported
-        /// </summary>
-        private void MarkOrderExported(long orderID, string refreshToken, bool isRetry)
-        {
-            var baseEndpoint = UseFakeApi ?
-                $"{ordersEndpoint}/{orderID}" :
-                $"{ordersEndpoint}({orderID})";
-            var endpoint = baseEndpoint + "/Export?access_token={GetAccessToken(refreshToken, isRetry)}";
-
-            IHttpResponseReader httpResponseReader = null;
-            string result = String.Empty;
-            string unknownError = "Error communicating with ChannelAdvisor REST API";
-            IHttpVariableRequestSubmitter submitter = CreateRequest(endpoint, HttpVerb.Post);
-
-            submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.BadRequest);
-            submitter.ContentType = "application/json";
-
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ChannelAdvisor, "Export");
-            apiLogEntry.LogRequest(submitter);
-
-            try
-            {
-                httpResponseReader = submitter.GetResponse();
-                result = httpResponseReader.ReadResult();
-                apiLogEntry.LogResponse(result);
-            }
-            catch (WebException ex) when (((HttpWebResponse) ex.Response).StatusCode == HttpStatusCode.Unauthorized && !isRetry)
-            {
-                apiLogEntry.LogResponse(ex);
-                MarkOrderExported(orderID, refreshToken, true);
-            }
-            catch (Exception ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                throw new ChannelAdvisorException(unknownError, ex);
-            }
-
-            if (httpResponseReader?.HttpWebResponse.StatusCode == HttpStatusCode.BadRequest)
-            {
-                throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
             }
         }
 
@@ -452,9 +409,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             {
                 throw new ChannelAdvisorException(GetErrorMessage(result) ?? unknownError);
             }
-
-            // Mark shipped order as exported
-            MarkOrderExported(Int64.Parse(channelAdvisorOrderID), refreshToken);
         }
 
         /// <summary>
