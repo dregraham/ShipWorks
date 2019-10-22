@@ -13,7 +13,7 @@ namespace ShipWorks.Products.Import
     /// <summary>
     /// View model for the product importer
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self | RegistrationType.SpecificService, Service = typeof(IProductImporterViewModel))]
     public class ProductImporterViewModel : ViewModelBase, IProductImporterViewModel, IProductImporterStateManager
     {
         private readonly IMessageHelper messageHelper;
@@ -62,11 +62,16 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Import products
         /// </summary>
-        public Result ImportProducts()
-        {
-            dialog = createDialog(this);
+        public Result ImportProducts() => ImportProducts(createInitialState(this));
 
-            CurrentState = createInitialState(this);
+        /// <summary>
+        /// Import products
+        /// </summary>
+        public Result ImportProducts(IProductImportState startingState)
+        {
+            CurrentState = startingState;
+
+            dialog = createDialog(this);
 
             messageHelper.ShowDialog(dialog);
 
@@ -83,6 +88,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Close the dialog
         /// </summary>
-        public void Close() => dialog.Close();
+        public Action Close => dialog.Close;
     }
 }

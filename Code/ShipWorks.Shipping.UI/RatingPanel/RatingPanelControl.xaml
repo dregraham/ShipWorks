@@ -83,11 +83,19 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Header="Account"
+                                        Width="*"
+                                        Binding="{Binding Tag.AccountDescription}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}"
+                                        Visibility="{Binding DataContext.ShowAccount,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"/>
+
                     <DataGridTextColumn Header="Service"
                                         Width="*"
                                         Binding="{Binding Description}"
-                                        ElementStyle="{StaticResource DataGrid.Element.Default}">
-                    </DataGridTextColumn>
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}"/>
                     <DataGridTextColumn Header="Days"
                                         Binding="{Binding Days}"
                                         ElementStyle="{StaticResource DataGrid.Element.Default}" />

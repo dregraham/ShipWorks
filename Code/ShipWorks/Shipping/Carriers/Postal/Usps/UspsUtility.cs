@@ -94,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalPackagingType.RateRegionalBoxA: return PackageTypeV9.RegionalRateBoxA;
                 case PostalPackagingType.RateRegionalBoxB: return PackageTypeV9.RegionalRateBoxB;
                 case PostalPackagingType.RateRegionalBoxC: return PackageTypeV9.RegionalRateBoxC;
+                case PostalPackagingType.CubicSoftPack: return PackageTypeV9.LargeEnvelopeorFlat;
 
                 default:
                     throw new InvalidOperationException(string.Format("Invalid USPS packaging type {0}", packagingType));

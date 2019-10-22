@@ -19,29 +19,29 @@ using ShipWorks.Stores.Orders.Split.Actions;
 using ShipWorks.Stores.Orders.Split.Errors;
 using static Interapptive.Shared.Utility.Functional;
 
-namespace ShipWorks.Stores.Orders.Split
+namespace ShipWorks.Stores.Orders.Split.Local
 {
     /// <summary>
     /// Split an order
     /// </summary>
-    [Component]
-    public class OrderSplitter : IOrderSplitter
+    [KeyedComponent(typeof(IOrderSplitter), OrderSplitterType.Local)]
+    public class OrderSplitterLocal : IOrderSplitter
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IOrderSplitGateway orderSplitGateway;
-        private readonly IEnumerable<IOrderDetailSplitter> orderDetailSplitters;
-        private readonly IOrderSplitAudit splitOrderAudit;
+        private readonly IEnumerable<IOrderDetailSplitterLocal> orderDetailSplitters;
+        private readonly IOrderSplitAuditLocal splitOrderAudit;
         private CombineSplitStatusType originalOrderCombineSplitStatus = CombineSplitStatusType.None;
         private readonly IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitter(
+        public OrderSplitterLocal(
             ISqlAdapterFactory sqlAdapterFactory,
-            IEnumerable<IOrderDetailSplitter> orderDetailSplitters,
+            IEnumerable<IOrderDetailSplitterLocal> orderDetailSplitters,
             IOrderSplitGateway orderSplitGateway,
-            IOrderSplitAudit splitOrderAudit,
+            IOrderSplitAuditLocal splitOrderAudit,
             IIndex<StoreTypeCode, IStoreSpecificSplitOrderAction> storeSpecificOrderSplitter
             )
         {
@@ -94,6 +94,7 @@ namespace ShipWorks.Stores.Orders.Split
                     trackedDurationEvent.AddProperty("Orders.Split.StoreType", EnumHelper.GetDescription(order.Store.StoreTypeCode));
                     trackedDurationEvent.AddProperty("Orders.Split.StoreId", order.StoreID.ToString());
                     trackedDurationEvent.AddProperty("Orders.Split.OriginalOrder", order.OrderNumberComplete);
+                    trackedDurationEvent.AddProperty("Orders.Split.OrderSplitterType", EnumHelper.GetDescription(definition.OrderSplitterType));
                 }
             }
             catch
@@ -261,7 +262,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             newOrderEntity.OnlineLastModified = originalOrder.OnlineLastModified;
 
-            foreach (IOrderDetailSplitter orderDetailSplitter in orderDetailSplitters)
+            foreach (IOrderDetailSplitterLocal orderDetailSplitter in orderDetailSplitters)
             {
                 orderDetailSplitter.Split(definition, originalOrder, newOrderEntity);
             }

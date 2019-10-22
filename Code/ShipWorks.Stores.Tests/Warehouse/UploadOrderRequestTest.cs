@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         {
             await testObject.Submit(orders, store, false);
 
-            requestClient.Verify(r => r.MakeRequest(It.IsAny<IRestRequest>(), "Upload Order"));
+            requestClient.Verify(r => r.MakeRequest(It.IsAny<IRestRequest>(), "Upload Orders"));
         }
 
         [Fact]

@@ -35,6 +35,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             DhlExpressAccountManager.CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            DhlExpressAccountManager.Initialize();
+        }
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         public override DhlExpressAccountEntity GetAccount(long accountID) =>

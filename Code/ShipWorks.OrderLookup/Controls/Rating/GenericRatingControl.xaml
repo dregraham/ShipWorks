@@ -8,11 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sw="http://schemas.shipworks.com/sw"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:rating="clr-namespace:ShipWorks.OrderLookup.Controls.Rating"
     Margin="-14,-16,-14,-14"
     d:DesignHeight="450"
     d:DesignWidth="800"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance rating:GenericRatingViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -96,6 +98,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Account"
+                                        Width="*"
+                                        Binding="{Binding Tag.AccountDescription}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}"
+                                        Visibility="{Binding DataContext.ShowAccount,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"/>
+
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding Description}"

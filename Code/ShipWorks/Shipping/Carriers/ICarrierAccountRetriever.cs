@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers
         /// Get a read only version of the account on the given shipment
         /// </summary>
         ICarrierAccount GetAccountReadOnly(IShipmentEntity shipment);
-        
+
         /// <summary>
         /// Get a collection of read only accounts
         /// </summary>
@@ -30,9 +30,19 @@ namespace ShipWorks.Shipping.Carriers
         IEnumerable<ICarrierAccount> AccountsReadOnly { get; }
 
         /// <summary>
+        /// Gets the default profile account
+        /// </summary>
+        ICarrierAccount DefaultProfileAccount { get; }
+
+        /// <summary>
         /// Force a check for changes
         /// </summary>
         void CheckForChangesNeeded();
+
+        /// <summary>
+        /// Initialize the repository
+        /// </summary>
+        void Initialize();
 
         /// <summary>
         /// Saves the specified account.

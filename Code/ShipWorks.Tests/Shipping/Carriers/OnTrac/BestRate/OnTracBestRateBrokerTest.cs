@@ -1,7 +1,9 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.BestRate;
 using ShipWorks.Shipping.Insurance;
@@ -14,13 +16,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
         private OnTracBestRateBroker testObject;
         private Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>> genericRepositoryMock;
         private Mock<OnTracShipmentType> genericShipmentTypeMock;
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
         public OnTracBestRateBrokerTest()
         {
             genericRepositoryMock = new Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
             genericShipmentTypeMock = new Mock<OnTracShipmentType>();
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
 
-            testObject = new OnTracBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object);
+            testObject = new OnTracBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, bestRateExludedAccountRepositoryMock.Object);
         }
 
         [Fact]

@@ -34,15 +34,21 @@ namespace ShipWorks.UI.ValueConverters
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (DesignModeDetector.IsDesignerHosted())
-            {
-                // Just return a generic check mark
-                return Imaging.CreateBitmapSourceFromHBitmap(Resources.check16.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
 
             if (value is Image image)
             {
                 return CreateBitmapSource(image);
+            }
+
+            if (value is Icon icon)
+            {
+                return CreateBitmapSource(icon);
+            }
+
+            if (DesignModeDetector.IsDesignerHosted())
+            {
+                // Just return a generic check mark
+                return Imaging.CreateBitmapSourceFromHBitmap(Resources.check16.GetHbitmap(), IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
             }
 
             if (value is string imageName)
@@ -59,6 +65,12 @@ namespace ShipWorks.UI.ValueConverters
 
             return defaultImage.Value;
         }
+
+        /// <summary>
+        /// Create a bitmap source from an icon
+        /// </summary>
+        private object CreateBitmapSource(Icon icon) =>
+            Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
 
         /// <summary>
         /// Create a bitmap source from an image

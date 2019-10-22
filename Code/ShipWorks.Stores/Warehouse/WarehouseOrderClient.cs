@@ -2,23 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
-using RestSharp.Serializers;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Platforms.Odbc.Warehouse;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -41,12 +37,10 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParamsAttribute]
         public WarehouseOrderClient(
             IWarehouseRequestClient warehouseRequestClient,
             ILicenseService licenseService,
             ShipmentDtoFactory shipmentDtoFactory,
-            IWarehouseOrderDtoFactory warehouseOrderDtoFactory,
             Func<IUploadOrdersRequest> uploadOrderRequestCreator,
             Func<Type, ILog> logFactory)
         {
@@ -211,6 +205,45 @@ namespace ShipWorks.Stores.Warehouse
             {
                 log.Error($"Failed to upload shipment {shipmentID} to hub.", ex);
                 return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
+        /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
+        /// </summary>
+        public async Task<Result> RerouteOrderItems(Guid hubOrderID, ItemsToReroute itemsToReroute)
+        {
+            try
+            {
+                if (licenseService.IsHub)
+                {
+                    IRestRequest request =
+                        new RestRequest(WarehouseEndpoints.RerouteOrderItems(hubOrderID.ToString("N")), Method.PUT);
+
+                    request.AddJsonBody(JsonConvert.SerializeObject(itemsToReroute));
+
+                    GenericResult<IRestResponse> response = await warehouseRequestClient
+                        .MakeRequest(request, "Reroute Order items")
+                        .ConfigureAwait(true);
+
+                    if (response.Failure)
+                    {
+                        log.Error($"Failed to reroute order items for order {hubOrderID} to hub. {response.Message}",
+                            response.Exception);
+                        throw response.Exception;
+                    }
+
+                    return Result.FromSuccess();
+                }
+
+                string restrictedErrorMessage = "Attempted to reroute order items to hub for a non warehouse customer";
+                log.Error(restrictedErrorMessage);
+                throw new InvalidOperationException(restrictedErrorMessage);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to reroute order items for order {hubOrderID} to hub.", ex);
+                throw;
             }
         }
     }

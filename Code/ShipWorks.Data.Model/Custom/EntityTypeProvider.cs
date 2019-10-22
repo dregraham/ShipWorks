@@ -44,6 +44,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "AuditEntity": return EntityType.AuditEntity;
 				case "AuditChangeEntity": return EntityType.AuditChangeEntity;
 				case "AuditChangeDetailEntity": return EntityType.AuditChangeDetailEntity;
+				case "BestRateExcludedAccountEntity": return EntityType.BestRateExcludedAccountEntity;
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
 				case "BestRateShipmentEntity": return EntityType.BestRateShipmentEntity;
 				case "BigCommerceOrderItemEntity": return EntityType.BigCommerceOrderItemEntity;

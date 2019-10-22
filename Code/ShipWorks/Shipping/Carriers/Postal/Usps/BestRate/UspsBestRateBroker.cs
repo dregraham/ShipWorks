@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Insurance;
 
@@ -15,8 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository) :
-            this(shipmentType, accountRepository, "USPS")
+        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            this(shipmentType, accountRepository, "USPS", bestRateExcludedAccountRepository)
         { }
 
         /// <summary>
@@ -25,8 +26,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="carrierDescription">The carrier description.</param>
-        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, string carrierDescription) :
-            base(shipmentType, accountRepository, carrierDescription)
+        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, 
+            string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
         {
             GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
         }
@@ -64,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         protected override string AccountDescription(UspsAccountEntity account)
         {
-            return account.Description;
+            return account.Username;
         }
 
         /// <summary>
@@ -76,7 +78,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, UspsAccountEntity account)
         {
             base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
+
             currentShipment.Postal.Usps.Insurance = originalShipment.BestRate.Insurance;
+            currentShipment.Postal.Usps.RateShop = false;
         }
     }
 }

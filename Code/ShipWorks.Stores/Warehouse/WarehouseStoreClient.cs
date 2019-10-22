@@ -46,9 +46,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             try
             {
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                if (restrictionLevel == EditionRestrictionLevel.None)
+                if (licenseService.IsHub)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.UpdateStoreCredentials(store.WarehouseStoreID?.ToString("D")), Method.POST);
                     request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
@@ -91,9 +89,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             try
             {
-                EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                if (restrictionLevel == EditionRestrictionLevel.None)
+                if (licenseService.IsHub)
                 {
                     IRestRequest request = new RestRequest(WarehouseEndpoints.Stores, Method.POST);
                     request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings

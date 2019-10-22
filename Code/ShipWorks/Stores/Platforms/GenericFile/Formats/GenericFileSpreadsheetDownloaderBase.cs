@@ -3,8 +3,10 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Recovery;
@@ -14,6 +16,7 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
+using ShipWorks.Warehouse;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats
 {
@@ -27,11 +30,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         protected GenericFileSpreadsheetDownloaderBase(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
-            ISqlAdapterFactory sqlAdapterFactory)
-            : base(store, getStoreType, configurationData, sqlAdapterFactory)
+            ISqlAdapterFactory sqlAdapterFactory,
+            IWarehouseOrderClient warehouseOrderClient,
+            ILicenseService licenseService)
+            : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, licenseService)
         {
         }
 

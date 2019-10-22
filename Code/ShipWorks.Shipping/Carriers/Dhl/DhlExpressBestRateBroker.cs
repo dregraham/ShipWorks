@@ -18,8 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "")
+        public DhlExpressBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "", bestRateExcludedAccountRepository)
         {
 
         }
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override string AccountDescription(DhlExpressAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber.ToString();
         }
     }
 }

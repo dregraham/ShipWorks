@@ -1375,7 +1375,12 @@ namespace ShipWorks.Stores.Communication
                         OrderEntity orderEntity = await orderFactory.CreateOrder(Store, StoreType, warehouseOrder).ConfigureAwait(false);
 
                         // the order factory returns null if the order has been combined
-                        if (orderEntity != null)
+                        if (orderEntity == null)
+                        {
+                            // We return null when the order should be skipped, like if it was split or combined
+                            UpdateSkippedOrderSequence(warehouseOrder);
+                        }
+                        else
                         {
                             await SaveDownloadedOrder(orderEntity).ConfigureAwait(false);
                         }
@@ -1391,6 +1396,20 @@ namespace ShipWorks.Stores.Communication
                 {
                     throw new DownloadException("ShipWorks Hub is not able to import orders from the store: " + importError);
                 }
+            }
+        }
+
+        /// <summary>
+        /// We still need to update the last seen sequence when skipping an order
+        /// </summary>
+        private void UpdateSkippedOrderSequence(WarehouseOrder warehouseOrder)
+        {
+            var orderToUpdate = new OrderEntity { HubSequence = warehouseOrder.HubSequence };
+
+            using (var adapter = sqlAdapterFactory.Create())
+            {
+                adapter.UpdateEntitiesDirectly(orderToUpdate,
+                    new RelationPredicateBucket(OrderFields.HubOrderID == Guid.Parse(warehouseOrder.HubOrderId)));
             }
         }
 

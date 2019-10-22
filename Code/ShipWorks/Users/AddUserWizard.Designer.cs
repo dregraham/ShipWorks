@@ -30,8 +30,6 @@ namespace ShipWorks.Users
         {
             this.components = new System.ComponentModel.Container();
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.label3 = new System.Windows.Forms.Label();
-            this.uiModeSelectionControl = new ShipWorks.Users.UIModeSelectionControl();
             this.helpUserEmail = new ShipWorks.UI.Controls.InfoTip();
             this.panelAccountType = new System.Windows.Forms.Panel();
             this.accountAdmin = new System.Windows.Forms.RadioButton();
@@ -105,8 +103,6 @@ namespace ShipWorks.Users
             // 
             // wizardPageAccount
             // 
-            this.wizardPageAccount.Controls.Add(this.label3);
-            this.wizardPageAccount.Controls.Add(this.uiModeSelectionControl);
             this.wizardPageAccount.Controls.Add(this.helpUserEmail);
             this.wizardPageAccount.Controls.Add(this.panelAccountType);
             this.wizardPageAccount.Controls.Add(this.labelAccountType);
@@ -128,23 +124,6 @@ namespace ShipWorks.Users
             this.wizardPageAccount.TabIndex = 0;
             this.wizardPageAccount.Title = "Add New User";
             this.wizardPageAccount.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountPage);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(21, 224);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
-            this.label3.TabIndex = 191;
-            this.label3.Text = "UI Mode";
-            // 
-            // uiModeSelectionControl
-            // 
-            this.uiModeSelectionControl.Location = new System.Drawing.Point(32, 239);
-            this.uiModeSelectionControl.Name = "uiModeSelectionControl";
-            this.uiModeSelectionControl.Size = new System.Drawing.Size(235, 56);
-            this.uiModeSelectionControl.TabIndex = 190;
             // 
             // helpUserEmail
             // 
@@ -470,7 +449,5 @@ namespace ShipWorks.Users
         private System.Windows.Forms.ToolStripMenuItem asdfToolStripMenuItem1;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip helpUserEmail;
-        private UIModeSelectionControl uiModeSelectionControl;
-        private System.Windows.Forms.Label label3;
     }
 }

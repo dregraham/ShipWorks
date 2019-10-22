@@ -1,4 +1,5 @@
-﻿using ShipWorks.Products.Export;
+﻿using System;
+using ShipWorks.Products.Export;
 using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
@@ -22,5 +23,10 @@ namespace ShipWorks.Products
         /// Create an Import view model
         /// </summary>
         IProductImporterViewModel CreateImport();
+
+        /// <summary>
+        /// Create an Import view model
+        /// </summary>
+        IProductImporterSplashViewModel CreateImportSplash(Action refreshProducts);
     }
 }
