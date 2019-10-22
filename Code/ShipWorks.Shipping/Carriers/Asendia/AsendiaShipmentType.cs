@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Gets the best rate shipping broker for Asendia
         /// </summary>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             return new NullShippingBroker();
         }

@@ -21,6 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     public class BestRateBrokerTest : IDisposable
     {
         private readonly AutoMock mock;
+        private Mock<IBestRateExcludedAccountRepository> bestRateExludedAccountRepositoryMock;
 
         public BestRateBrokerTest()
         {
@@ -63,7 +64,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = new RateGroup(new List<RateResult>());
             rateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(ShipmentTypeCode.Usps, new Exception("blah")));
 
-            var testObject = new FakeBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, "blah")
+            bestRateExludedAccountRepositoryMock = new Mock<IBestRateExcludedAccountRepository>();
+            bestRateExludedAccountRepositoryMock.Setup(r => r.GetAll()).Returns(new List<long>());
+
+            var testObject = new FakeBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object, "blah", bestRateExludedAccountRepositoryMock.Object)
             {
                 GetRatesAction = (shipment, type) => rateGroup
             };

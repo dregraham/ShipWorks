@@ -250,6 +250,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<AuditChangeDetailEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the BestRateExcludedAccount entity</summary>
+		public EntityQuery<BestRateExcludedAccountEntity> BestRateExcludedAccount
+		{
+			get { return Create<BestRateExcludedAccountEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the BestRateProfile entity</summary>
 		public EntityQuery<BestRateProfileEntity> BestRateProfile
 		{

@@ -398,9 +398,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an OnTracBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            return new OnTracBestRateBroker();
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IOnTracAccountEntity> nonExcludedAccounts = OnTracAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+
+            if (nonExcludedAccounts.Any())
+            {
+                return new OnTracBestRateBroker();
+            }
+
+            return new NullShippingBroker();
         }
 
         /// <summary>

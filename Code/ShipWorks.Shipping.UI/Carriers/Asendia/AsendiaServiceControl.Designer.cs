@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.UI.Carriers.Asendia
+﻿using ShipWorks.Shipping.Settings.Origin;
+
+namespace ShipWorks.Shipping.UI.Carriers.Asendia
 {
     partial class AsendiaServiceControl
     {
@@ -400,7 +402,7 @@
         private System.Windows.Forms.Label accountLabel;
         private ShipWorks.UI.Controls.MultiValueComboBox asendiaAccount;
         private System.Windows.Forms.Label accountSectionLabel;
-        private Settings.Origin.ShipmentOriginControl originControl;
+        private ShipmentOriginControl originControl;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private System.Windows.Forms.Label labelService;
         private ShipWorks.UI.Controls.MultiValueComboBox service;

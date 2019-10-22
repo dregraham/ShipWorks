@@ -24,6 +24,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override void CheckForChangesNeeded() => FedExAccountManager.CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            FedExAccountManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
         /// Returns a carrier account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>

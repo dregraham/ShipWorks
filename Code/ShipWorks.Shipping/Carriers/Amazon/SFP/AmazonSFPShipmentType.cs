@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) =>
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) =>
             new NullShippingBroker();
 
         /// <summary>
