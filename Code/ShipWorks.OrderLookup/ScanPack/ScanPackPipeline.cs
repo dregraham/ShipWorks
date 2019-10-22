@@ -25,7 +25,7 @@ namespace ShipWorks.OrderLookup.ScanPack
     {
         private readonly IMessenger messenger;
         private readonly IMainForm mainForm;
-        private readonly IScanPackViewModel scanPackViewModel;
+        private readonly ScanToShipViewModel scanToShipViewModel;
         private readonly ILicenseService licenseService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IShortcutManager shortcutManager;
@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         public ScanPackPipeline(
             IMessenger messenger,
             IMainForm mainForm,
-            IScanPackViewModel scanPackViewModel,
+            ScanToShipViewModel scanToShipViewModel,
             ILicenseService licenseService,
             ISchedulerProvider schedulerProvider,
             IShortcutManager shortcutManager,
@@ -47,7 +47,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
-            this.scanPackViewModel = scanPackViewModel;
+            this.scanToShipViewModel = scanToShipViewModel;
             this.licenseService = licenseService;
             this.schedulerProvider = schedulerProvider;
             this.shortcutManager = shortcutManager;
@@ -64,29 +64,29 @@ namespace ShipWorks.OrderLookup.ScanPack
             EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
             if (restrictionLevel != EditionRestrictionLevel.None)
             {
-                scanPackViewModel.Enabled = false;
+                scanToShipViewModel.ScanPackViewModel.Enabled = false;
                 return;
             }
 
-            scanPackViewModel.Enabled = true;
+            scanToShipViewModel.ScanPackViewModel.Enabled = true;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => ShouldProcessScan() && mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && scanToShipViewModel.IsPackTabActive)
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupSearch(x.ScannedText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => ShouldProcessScan() && mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && scanToShipViewModel.IsPackTabActive)
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupSearch(x.SearchText).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => ShouldProcessScan() && !mainForm.IsScanPackActive())
+                .Where(x => ShouldProcessScan() && !scanToShipViewModel.IsPackTabActive)
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
@@ -95,14 +95,14 @@ namespace ShipWorks.OrderLookup.ScanPack
                 messenger.OfType<OrderLookupClearOrderMessage>()
                 .Where(x => ShouldProcessScan())
                 .Where(x => x.Reason == OrderClearReason.Reset)
-                .Do(x => scanPackViewModel.Reset())
+                .Do(x => scanToShipViewModel.ScanPackViewModel.Reset())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
                 messenger.OfType<ShortcutMessage>()
                 .Where(m => m.AppliesTo(KeyboardShortcutCommand.ClearQuickSearch))
                 .ObserveOn(schedulerProvider.WindowsFormsEventLoop)
-                .Where(_ => scanPackViewModel.CanAcceptFocus())
+                .Where(_ => scanToShipViewModel.ScanPackViewModel.CanAcceptFocus())
                 .Do(_ => messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset)))
                 .Do(shortcutManager.ShowShortcutIndicator)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
@@ -132,7 +132,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             try
             {
-                await scanPackViewModel.LoadOrder(message.Order).ConfigureAwait(true);
+                await scanToShipViewModel.ScanPackViewModel.LoadOrder(message.Order).ConfigureAwait(true);
             }
             finally
             {
@@ -147,7 +147,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             try
             {
-                await scanPackViewModel.ProcessScan(searchText).ConfigureAwait(true);
+                await scanToShipViewModel.ScanPackViewModel.ProcessScan(searchText).ConfigureAwait(true);
             }
             finally
             {

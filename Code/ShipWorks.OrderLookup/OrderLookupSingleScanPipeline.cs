@@ -37,6 +37,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
+        private readonly ScanToShipViewModel scanToShipViewModel;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -63,7 +64,8 @@ namespace ShipWorks.OrderLookup
             Func<Type, ILog> createLogger,
             IOrderLookupConfirmationService orderLookupConfirmationService,
             Func<string, ITrackedDurationEvent> telemetryFactory,
-            IOrderLookupOrderIDRetriever orderIDRetriever)
+            IOrderLookupOrderIDRetriever orderIDRetriever,
+            ScanToShipViewModel scanToShipViewModel)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -75,6 +77,7 @@ namespace ShipWorks.OrderLookup
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             this.telemetryFactory = telemetryFactory;
             this.orderIDRetriever = orderIDRetriever;
+            this.scanToShipViewModel = scanToShipViewModel;
             log = createLogger(GetType());
         }
 
@@ -103,7 +106,7 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && scanToShipViewModel.IsPackTabActive)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => LoadOrder(x.Order))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
@@ -135,7 +138,7 @@ namespace ShipWorks.OrderLookup
             !mainForm.AdditionalFormsOpen() &&
             mainForm.UIMode == UIMode.OrderLookup &&
             !mainForm.IsShipmentHistoryActive() &&
-            !mainForm.IsScanPackActive();
+            !scanToShipViewModel.IsPackTabActive;
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.
