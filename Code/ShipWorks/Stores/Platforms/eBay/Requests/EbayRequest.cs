@@ -234,12 +234,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 service.RequesterCredentials.Credentials.AuthCert = EbayUtility.SandboxCertificateCredential;
             }
 
-            string requestURL = EbayUrlUtilities.SoapUrl
-                + "?callname=" + configuration.RequestName
+            string requestURL = EbayUrlUtilities.SoapUrl;
+
+            if (EbayUrlUtilities.UseSandboxEndpointOverride)
+            {
+                // Reformat the request when using fake stores
+                requestURL += $"/{token.Token}/{configuration.RequestName}";
+            }
+            else
+            {
+                requestURL += "?callname=" + configuration.RequestName
                 + "&siteid=0"
                 + "&appid=" + service.RequesterCredentials.Credentials.AppId
                 + "&version=" + configuration.ApiVersion
                 + "&routing=default";
+            }
 
             service.Url = requestURL;
 

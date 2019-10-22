@@ -14,13 +14,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string UploadSkus = "api/skus/import";
         public const string GenerateDataKey = "api/store/generateDataKey";
         public const string Stores = "api/stores";
-        public const string OdbcStores = "api/stores/{0}/odbc";        
-		public const string UploadOrders = "api/orders";
-        
+        public const string OdbcStores = "api/stores/{0}/odbc";
+        public const string GenericFile = "api/stores/{0}/genericFile";
+        public const string UploadOrders = "api/orders";
+
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
         private const string shipOrder = "api/orders/{0}/ship";
         private const string voidShipment = "api/orders/{0}/void";
+        private const string rerouteOrderItems = "api/orders/{0}/rerouteItems";
 
         /// <summary>
         /// Create a link warehouse endpoint
@@ -32,6 +34,12 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public static string GetOdbcStore(string warehouseStoreID) =>
             string.Format(OdbcStores, warehouseStoreID);
+
+        /// <summary>
+        /// Get an GenericFile store
+        /// </summary>
+        public static string GetGenericFileStore(string warehouseStoreID) =>
+            string.Format(GenericFile, warehouseStoreID);
 
         /// <summary>
         /// Create a Stores endpoint
@@ -50,8 +58,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public static string ShipOrder(string warehouseOrderID) => string.Format(shipOrder, warehouseOrderID);
 
         /// <summary>
-        /// Create void order endpoint with given warehouseOrderid
+        /// Create void order endpoint with given warehouseOrderID
         /// </summary>
         public static string VoidShipment(string warehouseOrderID) => string.Format(voidShipment, warehouseOrderID);
+
+        /// <summary>
+        /// Create a reroute order items endpoint with an warehouseOrderID
+        /// </summary>
+        public static string RerouteOrderItems(string warehouseOrderID) => string.Format(rerouteOrderItems, warehouseOrderID);
     }
 }

@@ -68,10 +68,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private IBestRateShippingBrokerFactory GenerateBestRateBrokerFactory(IComponentContext c, IEnumerable<Parameter> p)
         {
             // return BestRateShippingBrokerFactory with default behavior
-            return new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>
-            {
-                new UpsWorldShipBrokerFilter()
-            });
+            return new BestRateShippingBrokerFactory(
+                new List<IShippingBrokerFilter>{new UpsWorldShipBrokerFilter()}, 
+                BestRateExcludedAccountRepository.Current);
         }
     }
 }

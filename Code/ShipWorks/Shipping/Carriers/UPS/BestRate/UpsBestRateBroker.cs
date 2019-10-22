@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
         public UpsBestRateBroker(ShipmentType shipmentType)
-            : this(shipmentType, new UpsAccountRepository(), new UpsSettingsRepository())
+            : this(shipmentType, new UpsAccountRepository(), new UpsSettingsRepository(), BestRateExcludedAccountRepository.Current)
         {
         }
 
@@ -41,8 +41,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <param name="upsSettingsRepository">The ups settings repository.</param>
         /// <remarks>This is designed to be used by tests</remarks>
         public UpsBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
-            ICarrierSettingsRepository upsSettingsRepository) :
-            base(shipmentType, accountRepository, "UPS")
+            ICarrierSettingsRepository upsSettingsRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "UPS", bestRateExcludedAccountRepository)
         {
             SettingsRepository = upsSettingsRepository;
             GetRatesAction = (shipment, type) => GetUpsRates(shipment);
@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// </summary>
         protected override string AccountDescription(UpsAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber;
         }
         
         /// <summary>

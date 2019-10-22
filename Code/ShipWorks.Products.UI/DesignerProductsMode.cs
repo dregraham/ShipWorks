@@ -151,6 +151,8 @@ namespace ShipWorks.Products.UI
 
         public int Count => list.Count;
 
+        public bool IsEmpty => Count == 0;
+
         public bool IsReadOnly => true;
 
         public bool IsFixedSize => false;

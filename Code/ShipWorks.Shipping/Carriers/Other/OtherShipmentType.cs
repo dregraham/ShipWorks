@@ -136,6 +136,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) => new NullShippingBroker();
     }
 }

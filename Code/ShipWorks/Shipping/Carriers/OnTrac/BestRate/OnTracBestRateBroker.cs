@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// Initializes a new instance of the <see cref="OnTracBestRateBroker"/> class.
         /// </summary>
         public OnTracBestRateBroker()
-            : this(new OnTracShipmentType(), new OnTracAccountRepository())
+            : this(new OnTracShipmentType(), new OnTracAccountRepository(), BestRateExcludedAccountRepository.Current)
         {
 
         }
@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, OnTracCarrierDescription)
+        public OnTracBestRateBroker(OnTracShipmentType shipmentType, ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, OnTracCarrierDescription, bestRateExcludedAccountRepository)
         {
 
         }
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
         /// </summary>
         protected override string AccountDescription(OnTracAccountEntity account)
         {
-            return account.Description;
+            return account.AccountNumber.ToString();
         }
     }
 }

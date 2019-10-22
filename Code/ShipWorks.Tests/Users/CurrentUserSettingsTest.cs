@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
 using Moq;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Settings;
 using ShipWorks.Shared.Users;
@@ -188,29 +186,6 @@ namespace ShipWorks.Tests.Users
             testObject.SetUIMode(UIMode.Batch);
 
             Assert.Equal(UIMode.Batch, userSettings.UIMode);
-        }
-
-        [Fact]
-        public void SetUIMode_SavesUserEntity()
-        {
-            Mock<ISqlAdapter> sqlAdapter = mock.FromFactory<ISqlAdapterFactory>().Mock(f => f.Create());
-
-            var userSettings = new UserSettingsEntity
-            {
-                UIMode = UIMode.OrderLookup
-            };
-
-            mock.Mock<IUserSession>()
-                .Setup(x => x.User)
-                .Returns(new UserEntity
-                {
-                    Settings = userSettings
-                });
-
-            var testObject = mock.Create<CurrentUserSettings>();
-            testObject.SetUIMode(UIMode.Batch);
-
-            sqlAdapter.Verify(a=>a.SaveAndRefetch(userSettings));
         }
 
         public void Dispose()

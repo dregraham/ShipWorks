@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         public IEnumerable<ICarrierAccount> AccountsReadOnly => new List<NullCarrierAccount> { new NullCarrierAccount() };
 
-
         /// <summary>
         /// Saves the specified account.
         /// </summary>
@@ -87,6 +86,11 @@ namespace ShipWorks.Shipping.Carriers
         public NullCarrierAccount DefaultProfileAccount => new NullCarrierAccount();
 
         /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
+
+        /// <summary>
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
@@ -109,6 +113,13 @@ namespace ShipWorks.Shipping.Carriers
         /// </summary>
         ICarrierAccount ICarrierAccountRetriever.GetAccountReadOnly(long accountID) =>
             GetAccountReadOnly(accountID);
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public void Initialize()
+        {
+        }
 
         /// <summary>
         /// Returns a list of accounts for the carrier.

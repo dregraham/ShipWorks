@@ -4,8 +4,11 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Orders.Split.Errors;
+using ShipWorks.Stores.Orders.Split.Hub;
+using ShipWorks.Stores.Orders.Split.Local;
 using ShipWorks.Users.Security;
 using static Interapptive.Shared.Utility.Functional;
 
@@ -17,7 +20,7 @@ namespace ShipWorks.Stores.Orders.Split
     [Component]
     public class OrderSplitOrchestrator : IOrderSplitOrchestrator
     {
-        private readonly IOrderSplitter orderSplitter;
+        private readonly IOrderSplitterFactory orderSplitterFactory;
         private readonly IOrderSplitGateway orderSplitGateway;
         private readonly IOrderSplitUserInteraction userInteraction;
         private readonly ISecurityContext securityContext;
@@ -27,7 +30,7 @@ namespace ShipWorks.Stores.Orders.Split
         /// Constructor
         /// </summary>
         public OrderSplitOrchestrator(
-            IOrderSplitter orderSplitter,
+            IOrderSplitterFactory orderSplitterFactory,
             IOrderSplitGateway orderSplitGateway,
             IOrderSplitUserInteraction userInteraction,
             ISecurityContext securityContext,
@@ -37,7 +40,7 @@ namespace ShipWorks.Stores.Orders.Split
             this.securityContext = securityContext;
             this.userInteraction = userInteraction;
             this.orderSplitGateway = orderSplitGateway;
-            this.orderSplitter = orderSplitter;
+            this.orderSplitterFactory = orderSplitterFactory;
         }
 
         /// <summary>
@@ -83,7 +86,7 @@ namespace ShipWorks.Stores.Orders.Split
         private Task<IDictionary<long, string>> SplitOrder(OrderSplitDefinition definition) =>
             UsingAsync(
                 messageHelper.ShowProgressDialog("Split Order", "Splitting order..."),
-                progress => orderSplitter.Split(definition, progress.ProgressItem));
+                progress => orderSplitterFactory.Create(definition.OrderSplitterType).Split(definition, progress.ProgressItem));
 
         /// <summary>
         /// Show a success dialog
@@ -95,7 +98,13 @@ namespace ShipWorks.Stores.Orders.Split
         /// Show an error message
         /// </summary>
         private Task DisplayErrorMessage(Exception ex) =>
-            ex == Error.Canceled ? Task.CompletedTask : messageHelper.ShowError(ex.Message);
+            ex == Error.Canceled ? Task.CompletedTask : DisplayErrorMessageForException(ex);
+
+        /// <summary>
+        /// Get a more friendly error depending on the exception we got
+        /// </summary>
+        private Task DisplayErrorMessageForException(Exception ex) =>
+            ex is OrderSplitterHubException ? userInteraction.ShowError(ex.InnerException) : messageHelper.ShowError(ex.Message);
 
         /// <summary>
         /// Get order IDs from the split results

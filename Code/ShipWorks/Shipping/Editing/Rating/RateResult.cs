@@ -15,10 +15,6 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public class RateResult
     {
-        //bool selectable;
-        //string days;
-        //decimal amount;
-        //object tag;
         private readonly RateAmountComponents rateAmountComponents;
 
         /// <summary>
@@ -93,14 +89,10 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// A helper property to get the original tag of a rate to handle cases where the
         /// rate is a cached rate best rate result.
         /// </summary>
-        public object OriginalTag
-        {
-            get
-            {
-                // Account for the rate being a previously cached rate where the tag is already a best rate tag
-                return Tag is BestRateResultTag ? ((BestRateResultTag) Tag).OriginalTag : Tag;
-            }
-        }
+        /// <remarks>
+        /// Account for the rate being a previously cached rate where the tag is already a best rate tag
+        /// </remarks>
+        public object OriginalTag => Tag is BestRateResultTag tag ? tag.OriginalTag : Tag;
 
         /// <summary>
         /// Transit time description could be "2" or "2 - 3 standard" or whatever
@@ -211,26 +203,5 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// The provider logo.
         /// </value>
         public Image ProviderLogo { get; set; }
-
-        /// <summary>
-        /// Copies this instance.
-        /// </summary>
-        public RateResult Copy()
-        {
-            //Description,days,amount, tag
-            RateResult copiedRate = new RateResult(Description, Days, AmountOrDefault, rateAmountComponents, Tag)
-            {
-                AmountFootnote = AmountFootnote,
-                CarrierDescription = CarrierDescription,
-                ExpectedDeliveryDate = ExpectedDeliveryDate,
-                Selectable = Selectable,
-                RateID = RateID,
-                ServiceLevel = ServiceLevel,
-                ShipmentType = ShipmentType,
-                ProviderLogo = ProviderLogo
-            };
-
-            return copiedRate;
-        }
     }
 }

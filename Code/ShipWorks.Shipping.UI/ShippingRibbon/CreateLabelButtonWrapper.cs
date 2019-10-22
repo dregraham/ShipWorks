@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using Divelements.SandRibbon;
 using ShipWorks.Common.IO.KeyboardShortcuts;
-using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks.Shipping.UI.ShippingRibbon
@@ -48,6 +46,15 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
         public void CreateLabel()
         {
             Activate?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// The event name to send to telemetry
+        /// </summary>
+        public string TelemetryEventName
+        {
+            get => actualCreateLabelButton.TelemetryEventName;
+            set { /* Setting not allowed in the wrapper.  Code analysis requires this comment.*/ }
         }
 
         /// <summary>

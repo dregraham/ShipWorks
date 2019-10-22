@@ -14,8 +14,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Fake
 {
     public class FakeBestRateBroker : BestRateBroker<UspsAccountEntity, IUspsAccountEntity>
     {
-        public FakeBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, string carrierDescription) : 
-            base(shipmentType, accountRepository, carrierDescription)
+        public FakeBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) : 
+            base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
         {
         }
 

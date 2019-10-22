@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             var searchSql = context.Mock.Create<EbayQuickSearchSql>()
                 .GenerateSql(builder.Object, "Foo")
-                .Single(x => x.Contains("[EbayOrder]"));
+                .Single(x => x.Contains("[EbayOrder] WHERE EbayBuyerID"));
 
             TestQuery(searchSql,
                 command => command.AddParameterWithValue("p1", "Foo"),
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
 
             var searchSql = context.Mock.Create<EbayQuickSearchSql>()
                 .GenerateSql(builder.Object, "Foo")
-                .Single(x => x.Contains("[EbayOrderSearch]"));
+                .Single(x => x.Contains("[EbayOrderSearch] WHERE EbayBuyerID"));
 
             TestQuery(searchSql,
                 command => command.AddParameterWithValue("p1", "Foo"),

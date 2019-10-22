@@ -20,6 +20,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Products.Import;
 
 namespace ShipWorks.Products
 {
@@ -69,16 +70,12 @@ namespace ShipWorks.Products
             CopyAsVariant = new RelayCommand(async () => await CopyAsVariantAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
                 items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
-
-            DeactivateProductCommand =
-                new RelayCommand(() => SetProductActivation(false).Forget(), () => SelectedProductIDs?.Any() == true);
-
-            ActivateProductCommand =
-                new RelayCommand(() => SetProductActivation(true).Forget(), () => SelectedProductIDs?.Any() == true);
+            ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
 
             ExportProducts = new RelayCommand(ExportProductsAction);
             ImportProducts = new RelayCommand(ImportProductsAction);
             AddProduct = new RelayCommand(async () => await AddProductAction().ConfigureAwait(true));
+            ToggleActivation = new RelayCommand<long>((entityId) => ToggleActivationAction(entityId).Forget());
         }
 
         /// <summary>
@@ -140,6 +137,12 @@ namespace ShipWorks.Products
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand SelectedProductsChanged { get; }
+
+        /// <summary>
+        /// Toggle the active status of a product
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ToggleActivation { get; }
 
         /// <summary>
         /// List of products
@@ -204,10 +207,23 @@ namespace ShipWorks.Products
             {
                 if (Set(ref searchText, value))
                 {
+                    RaisePropertyChanged(nameof(IsSearchActive));
                     RefreshProductsAction();
                 }
             }
         }
+
+        /// <summary>
+        /// Is there a product search active
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSearchActive => !string.IsNullOrEmpty(SearchText);
+
+        /// <summary>
+        /// Splash view for importing products
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IProductImporterSplashViewModel ImportProductsSplash { get; private set; }
 
         /// <summary>
         /// Initialize the mode
@@ -333,26 +349,33 @@ namespace ShipWorks.Products
         }
 
         /// <summary>
-        /// Activate a product
+        /// Toggle action to display whether a product is active or inactive.
         /// </summary>
-        private async Task SetProductActivation(bool makeItActive)
+        private async Task ToggleActivationAction(long entityId)
         {
-            var text = (makeItActive ? "Activating" : "Deactivating") + " products";
+            IProductListItemEntity product = Products.Data.Where(x => x.EntityID == entityId)
+                .Select(x => x.Data).FirstOrDefault();
 
-            using (var item = messageHelper.ShowProgressDialog(text, text))
+            if (product == null)
             {
-                try
-                {
-                    await productCatalog
-                    .SetActivation(SelectedProductIDs, makeItActive, item.ProgressItem)
-                    .ConfigureAwait(false);
-                }
-                catch (Exception ex)
-                {
-                    messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
-                }
+                return;
+            }
+            
+            bool makeItActive = !product.IsActive;
+            string text = (makeItActive ? "Activating" : "Deactivating") + " products";
+
+            try
+            {
+                await productCatalog
+                .SetActivation(new[] { entityId }, makeItActive)
+                .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                messageHelper.ShowError($"There was a problem {text.ToLower()}:\n\n{ex.Message}");
             }
 
+            // Refresh is required to show the active/inactive state of the row.
             RefreshProductsAction();
         }
 

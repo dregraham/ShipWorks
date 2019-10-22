@@ -252,7 +252,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         private void MarkOrderExported(long orderID, string refreshToken, bool isRetry)
         {
-            string endpoint = $"{ordersEndpoint}({orderID})/Export?access_token={GetAccessToken(refreshToken, isRetry)}";
+            var baseEndpoint = UseFakeApi ?
+                $"{ordersEndpoint}/{orderID}" :
+                $"{ordersEndpoint}({orderID})";
+            var endpoint = baseEndpoint + "/Export?access_token={GetAccessToken(refreshToken, isRetry)}";
 
             IHttpResponseReader httpResponseReader = null;
             string result = String.Empty;

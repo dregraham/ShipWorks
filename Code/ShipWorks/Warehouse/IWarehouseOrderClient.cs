@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
@@ -34,5 +35,10 @@ namespace ShipWorks.Warehouse
         /// Send void to the hub
         /// </summary>
         Task<Result> UploadVoid(long shipmentID, Guid hubOrderID, string tangoShipmentID);
+
+        /// <summary>
+        /// Reroute order items for the given warehouse ID from the ShipWorks Warehouse app
+        /// </summary>
+        Task<Result> RerouteOrderItems(Guid hubOrderID, ItemsToReroute itemsToReroute);
     }
 }

@@ -864,9 +864,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a FedExBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (FedExAccountManager.Accounts.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IFedExAccountEntity> nonExcludedUpsAccounts = FedExAccountManager.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+
+            if (nonExcludedUpsAccounts.Any())
             {
                 return new FedExBestRateBroker();
             }

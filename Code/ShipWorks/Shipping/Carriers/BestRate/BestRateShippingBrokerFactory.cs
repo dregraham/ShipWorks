@@ -13,14 +13,16 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateShippingBrokerFactory : IBestRateShippingBrokerFactory
     {
         private readonly IEnumerable<IShippingBrokerFilter> filters;
+        private readonly IBestRateExcludedAccountRepository bestRateExcludedAccountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShippingBrokerFactory"/> class.
         /// </summary>
         /// <param name="filters">The filters.</param>
-        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters)
+        public BestRateShippingBrokerFactory(IEnumerable<IShippingBrokerFilter> filters, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
             this.filters = filters;
+            this.bestRateExcludedAccountRepository = bestRateExcludedAccountRepository;
         }
 
         /// <summary>
@@ -36,14 +38,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>();
             foreach (ShipmentType shipmentType in shipmentTypes)
             {
-                if (!IsShipmentTypeExcluded(shippingSettings, shipmentType.ShipmentTypeCode))
+                // Disregard the counter rate brokers
+                IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment, bestRateExcludedAccountRepository);
+                if (broker.HasAccounts)
                 {
-                    // Disregard the counter rate brokers
-                    IBestRateShippingBroker broker = shipmentType.GetShippingBroker(shipment);
-                    if (broker.HasAccounts)
-                    {
-                        brokers.Add(broker);
-                    }
+                    brokers.Add(broker);
                 }
             }
 
@@ -61,16 +60,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             }
 
             return brokers;
-        }
-
-        /// <summary>
-        /// Determines if a Shipment Type Code is not a globally excluded shipment type and not a shipment type
-        /// that has been excluded from being used with the best rate shipment type.
-        /// </summary>
-        private static bool IsShipmentTypeExcluded(ShippingSettingsEntity shippingSettings, ShipmentTypeCode shipmentTypeCode)
-        {
-            // Always include web tools, so we get USPS counter rates as needed
-            return (shippingSettings.BestRateExcludedTypes.Contains(shipmentTypeCode) && shipmentTypeCode != ShipmentTypeCode.PostalWebTools);
         }
     }
 }
