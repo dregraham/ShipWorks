@@ -114,16 +114,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// Image for the scan panel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ScanImageUrl
-        {
-            get => scanImageUrl;
-            set => Set(ref scanImageUrl, value);
-        }
-
-        /// <summary>
         /// Learn More
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -159,14 +149,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             set => Set(ref error, value);
         }
 
-        #region SearchControl Properties
-
-        /// <summary>
-        /// Don't show the Create Label button in the search control
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowCreateLabel => false;
-
         /// <summary>
         /// Command for getting orders
         /// </summary>
@@ -178,12 +160,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ResetCommand { get; set; }
-
-        /// <summary>
-        /// False so that search control doesn't leave a space for error message.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SearchError => false;
 
         /// <summary>
         /// Is Scan Pack enabled
@@ -199,8 +175,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Can the view accept focus
         /// </summary>
         public Func<bool> CanAcceptFocus { get; set; }
-
-        #endregion
 
         /// <summary>
         /// Process the scanned text based on the current state
