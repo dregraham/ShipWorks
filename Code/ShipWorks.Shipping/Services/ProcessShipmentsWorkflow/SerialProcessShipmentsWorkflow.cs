@@ -157,6 +157,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
+                shipment.CarrierAccountID = ShippingManager.GetAccountID(shipment);
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
@@ -192,7 +193,6 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             {
                 telemetricResult.WriteTo(telemetryEvent);
                 prepareShipmentResult?.EntityLock?.Dispose();
-                prepareShipmentResult.OriginalShipment.CarrierAccountID = ShippingManager.GetAccountID(prepareShipmentResult.OriginalShipment);
             }
         }
 

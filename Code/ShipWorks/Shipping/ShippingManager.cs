@@ -1156,12 +1156,18 @@ namespace ShipWorks.Shipping
             return GetCarrierAccount(shipment.CarrierAccountID, shipment.ShipmentTypeCode);
         }
 
+        /// <summary>
+        /// Get the carrier account associated with a processed shipment.
+        /// </summary>
         public static ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment)
         {
             var shipment = GetShipment(processedShipment.ShipmentID);
             return GetCarrierAccount(shipment.CarrierAccountID, shipment.ShipmentTypeCode);
         }
 
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
         private static ICarrierAccount GetCarrierAccount(long? accountID, ShipmentTypeCode shipmentType)
         {
             ICarrierAccount account = null;
@@ -1177,6 +1183,9 @@ namespace ShipWorks.Shipping
             return account;
         }
 
+        /// <summary>
+        /// Get the carrier account id of a shipment
+        /// </summary>
         public static long GetAccountID(ShipmentEntity shipment)
         {
             var type = shipment.ShipmentTypeCode;

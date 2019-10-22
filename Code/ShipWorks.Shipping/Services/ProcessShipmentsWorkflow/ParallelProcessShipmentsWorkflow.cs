@@ -86,6 +86,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 {
                     shipmentCount++;
                 }
+                shipment.CarrierAccountID = ShippingManager.GetAccountID(shipment);
             }
 
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";
@@ -109,7 +110,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 }
 
                 await dataflow.SendAsync(shipment);
-                shipment.OriginalShipment.CarrierAccountID = ShippingManager.GetAccountID(shipment.OriginalShipment);
+                
             }
 
             dataflow.Complete();
