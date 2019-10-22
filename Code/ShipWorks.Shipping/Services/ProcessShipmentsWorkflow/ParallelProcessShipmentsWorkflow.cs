@@ -109,8 +109,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     break;
                 }
 
-                await dataflow.SendAsync(shipment);
-                
+                await dataflow.SendAsync(shipment);         
             }
 
             dataflow.Complete();
