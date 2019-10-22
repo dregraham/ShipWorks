@@ -6,7 +6,7 @@ using ShipWorks.Data.Model.Custom.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using Xunit;
 
-namespace ShipWorks.Shipping.Carriers
+namespace ShipWorks.Shipping.Tests.Carriers
 {
     public class ShippingAccountListProviderTest
     {
