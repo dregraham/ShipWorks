@@ -19,8 +19,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// <param name="shipmentType">Instance of a IParcel shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get IParcel accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public iParcelBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "iParcel")
+        public iParcelBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<IParcelAccountEntity, IIParcelAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "iParcel", bestRateExcludedAccountRepository)
         {
 
         }
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
         /// </summary>
         protected override string AccountDescription(IParcelAccountEntity account)
         {
-            return account.Description;
+            return account.Username;
         }
     }
 }

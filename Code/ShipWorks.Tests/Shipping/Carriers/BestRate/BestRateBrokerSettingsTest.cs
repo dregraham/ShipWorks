@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -66,8 +67,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsEnabledAndAccountExists()
         {
-            brokers.Add(new Express1UspsBestRateBroker());
-            Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                brokers.Add(mock.Create<Express1UspsBestRateBroker>());
+                Assert.Equal(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
+            }
         }
 
         [Fact]
@@ -96,8 +100,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [Fact]
         public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1IsEnabledAndAccountExists()
         {
-            brokers.Add(new Express1EndiciaBestRateBroker());
-            Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
+            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
+            {
+                brokers.Add(mock.Create<Express1EndiciaBestRateBroker>());
+                Assert.Equal(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
+            }
         }
 
         [Fact]

@@ -32,6 +32,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         public override void CheckForChangesNeeded() => UspsAccountManager.CheckForChangesNeeded();
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            UspsAccountManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
         /// Gets the Express1 Usps account with the specified id
         /// </summary>
         /// <param name="accountID">Id of the account to retrieve</param>

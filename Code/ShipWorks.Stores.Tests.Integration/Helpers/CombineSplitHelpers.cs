@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
             splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
                 .ReturnsAsync(new OrderSplitDefinition(order, itemQuantities,
                     new Dictionary<long, decimal>(),
-                    order.OrderNumberComplete + "-1"));
+                    order.OrderNumberComplete + "-1", OrderSplitterType.Local));
 
             var result = await orchestrator.Split(order.OrderID);
             var original = await orderSplitGateway.LoadOrder(result.First());
@@ -71,7 +71,7 @@ namespace ShipWorks.Stores.Tests.Integration.Helpers
             OrderSplitDefinition orderSplitDefinition = new OrderSplitDefinition(order,
                 items,
                 new Dictionary<long, decimal>(),
-                order.OrderNumberComplete + "-1");
+                order.OrderNumberComplete + "-1", OrderSplitterType.Local);
 
             splitInteraction.Setup(x => x.GetSplitDetailsFromUser(AnyOrder, AnyString))
                 .ReturnsAsync(orderSplitDefinition);

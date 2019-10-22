@@ -183,6 +183,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
+
+            PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
+            if (packaging == PostalPackagingType.CubicSoftPack && shipment.Postal.DimsHeight > 0.75)
+            {
+                throw new ShippingException(string.Format("{0} may only have a Height of 0.75\" or less.", EnumHelper.GetDescription(packaging)));
+            }
         }
 
         /// <summary>
@@ -264,12 +270,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a UspsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (AccountRepository.AccountsReadOnly.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IUspsAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+            
+            if (nonExcludedAccounts.Any())
             {
                 // We have an account that is completely setup, so use the normal broker
-                return new UspsBestRateBroker(this, AccountRepository);
+                return new UspsBestRateBroker(this, AccountRepository, bestRateExcludedAccountRepository);
             }
 
             // Use the null broker for Best Rate. No accounts are in ShipWorks

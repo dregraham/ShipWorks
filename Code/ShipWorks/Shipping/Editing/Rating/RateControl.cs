@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 rateGrid.Rows.Clear();
 
                 gridColumnSelect.Visible = ActionLinkVisible;
-
+                
                 List<RateResult> ratesToShow = ShowAllRates ? rateGroup.Rates : rateGroup.Rates.Take(RestrictedRateCount).ToList();
 
                 foreach (RateResult rate in ratesToShow)
@@ -292,6 +292,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     GridRow row = new GridRow(new[]
                     {
                         new GridCell(rate.ProviderLogo),
+                        new GridCell((rate.Tag as BestRateResultTag)?.AccountDescription ?? ""),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
                         new GridCell(rate.Selectable && rate.Shipping.HasValue ? rate.Shipping.Value.ToString("c") : ""),
@@ -341,6 +342,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             gridColumnDuty.Visible = ratesToShow.Any(x => x.Duties.HasValue);
             gridColumnTax.Visible = ratesToShow.Any(x => x.Taxes.HasValue);
             gridColumnShipping.Visible = ratesToShow.Any(x => x.Shipping.HasValue);
+            gridColumnAccountDescription.Visible = ratesToShow.Any(x => x.Tag is BestRateResultTag);
         }
 
         /// <summary>
@@ -404,6 +406,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                     // Create the row with the "More" link
                     GridRow row = new GridRow(new[]
                     {
+                        new GridCell(""),
                         new GridCell(""),
                         new GridCell(showMoreRatesRateResult.Description),
                         new GridCell(""),

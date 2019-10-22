@@ -808,8 +808,12 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Shipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\SkusToUploadDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\RerouteOrderItems.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiError.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiException.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubErrorCode.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
@@ -827,6 +831,7 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
+    <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
@@ -860,6 +865,7 @@
     <Compile Include="Data\Administration\IUpdateService.cs" />
     <Compile Include="Data\Administration\SqlSchemaUpdaterWrapper.cs" />
     <Compile Include="Data\Administration\UpdateService.cs" />
+    <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
@@ -1126,6 +1132,8 @@
     <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesClientDetailManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\Manipulators\FedExUploadImagesImageDetailManipulator.cs" />
@@ -1370,9 +1378,23 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\Warehouse\IGenericFileStoreClient.cs" />
+    <Compile Include="Stores\Platforms\GenericFile\WizardPages\IGenericStoreHubPage.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
+    <Compile Include="UI\Controls\SandRibbon\IButtonTelemetry.cs" />
+    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
+    <Compile Include="UI\Controls\SandRibbon\RibbonMainMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\SandRibbon\RibbonMenuItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
@@ -1587,7 +1609,6 @@
     <Compile Include="Shipping\Carriers\Dhl\IDhlExpressAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountDescription.cs" />
     <Compile Include="Shipping\Carriers\ICarrierAccountEditorDlg.cs" />
-    <Compile Include="Shipping\Carriers\ICarrierAccountRepositoryFactory.cs" />
     <Compile Include="Shipping\Carriers\IRateHashingService.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchPath.cs" />
     <Compile Include="Shipping\Carriers\IShipmentTypePrefetchProvider.cs" />
@@ -2820,12 +2841,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateServiceControl.Designer.cs">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\BestRate\BestRateSettingsControl.Designer.cs">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\BestRate\BestRateShipmentType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateShippingBrokerFactory.cs" />
@@ -4398,7 +4413,6 @@
     <Compile Include="UI\Controls\NameValueGrid.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
     <Compile Include="UI\Controls\SandRibbon\RibbonButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -8167,9 +8181,6 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateServiceControl.resx">
       <DependentUpon>BestRateServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateSettingsControl.resx">
-      <DependentUpon>BestRateSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteControl.resx">
       <DependentUpon>ShippingAccountRequiredForRatingFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10603,7 +10614,9 @@
     <Resource Include="Resources\delete.png" />
     <None Include="Resources\branch_element_top.png" />
     <None Include="Resources\branch_element_bottom.png" />
-    <EmbeddedResource Include="Filters\Content\ConditionTree.xml" />
+    <EmbeddedResource Include="Filters\Content\ConditionTree.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Resources\Progress\indicator_blue.gif" />
     <None Include="Resources\Progress\circling_ball.gif" />
     <None Include="Resources\Progress\arrows_blue.gif" />

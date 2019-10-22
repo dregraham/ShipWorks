@@ -36,6 +36,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 EbayItemID = Int64.Parse(match.Groups[1].Value);
                 TransactionID = Int64.Parse(match.Groups[2].Value);
+                EbayOrderID = EbayItemID;
             }
             else
             {

@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1UspsBestRateBroker() : this(new Express1UspsShipmentType(), new Express1UspsAccountRepository())
+        public Express1UspsBestRateBroker() : this(new Express1UspsShipmentType(), new Express1UspsAccountRepository(), BestRateExcludedAccountRepository.Current)
         {
 
         }
@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "USPS")
+        public Express1UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "USPS", bestRateExcludedAccountRepository)
         {
 
         }

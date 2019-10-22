@@ -56,6 +56,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Image = Properties.Resources.box_void_32_32,
                 Text = "Void",
                 TextContentRelation = TextContentRelation.Underneath,
+                TelemetryEventName = "ShippingRibbon.Void",
             };
 
             returnButton = new RibbonButton
@@ -64,6 +65,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Image = Properties.Resources.box_previous_32_32,
                 Text = "Return",
                 TextContentRelation = TextContentRelation.Underneath,
+                TelemetryEventName = "ShippingRibbon.Return",
             };
 
             reprintButton = new RibbonButton
@@ -71,6 +73,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Guid = new Guid("ccc7cca3-4a1e-4975-a736-7a6449ece5c1"),
                 Image = Properties.Resources.printer_redo_16_16,
                 Text = "Reprint",
+                TelemetryEventName = "ShippingRibbon.Reprint",
             };
 
             shipAgainButton = new RibbonButton
@@ -78,6 +81,7 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Guid = new Guid("8584db42-473a-4adf-a089-047e781d8728"),
                 Image = Properties.Resources.box_closed_redo_16_16,
                 Text = "Ship Again",
+                TelemetryEventName = "ShippingRibbon.ShipAgain",
             };
 
             RibbonButton actualApplyProfileButton = new RibbonButton
@@ -86,7 +90,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Guid = new Guid("D2AF2859-5B48-4CA1-AA6B-649A033462BB"),
                 Image = Properties.Resources.document_out1,
                 Text = "Apply",
-                TextContentRelation = TextContentRelation.Underneath
+                TextContentRelation = TextContentRelation.Underneath,
+                TelemetryEventName = "ShippingRibbon.ApplyProfile",
             };
 
             applyProfileButton = new ApplyProfileButtonWrapper(actualApplyProfileButton);
@@ -101,7 +106,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Guid = new Guid("0E7A63DD-0BDB-4AF4-BC24-05666022EF75"),
                 Image = Properties.Resources.box_closed_with_label_32_32,
                 Text = "Manage",
-                TextContentRelation = TextContentRelation.Underneath
+                TextContentRelation = TextContentRelation.Underneath,
+                TelemetryEventName = "ShippingRibbon.ManageProfiles",
             };
 
             StripLayout stripLayoutReprint = new StripLayout
@@ -160,7 +166,8 @@ namespace ShipWorks.Shipping.UI.ShippingRibbon
                 Image = Properties.Resources.box_next_32_32,
                 Padding = new WidgetEdges(10, 2, 10, 2),
                 Text = "Create\r\nLabel",
-                TextContentRelation = TextContentRelation.Underneath
+                TextContentRelation = TextContentRelation.Underneath,
+                TelemetryEventName = "ShippingRibbon.CreateLabel"
             };
 
             actualCreateLabelButton.Activate += (s, evt) => createLabelButton.CreateLabel();

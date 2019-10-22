@@ -50,10 +50,13 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <ui:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+            <ui:BooleanToVisibilityConverter x:Key="HideWhenTrue" Invert="True" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityInverted" Invert="True" />
             <ui:NumberToWeightStringConverter x:Key="NumberToWeightString" />
             <ui:VisibilityMultiConverter x:Key="VisibilityMulti" />
+            <ui:WpfViewTemplateSelector x:Key="WpfViewTemplateSelector" />
             <sys:Double x:Key="BaseFontSize">14</sys:Double>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -95,18 +98,7 @@
                     Command="{Binding ExportProducts}"
                     Content="Export"
                     Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ActivateProductCommand}"
-                    Content="Mark Active"
-                    Style="{StaticResource SecondaryButton}" />
-                <Button
-                    Command="{Binding DeactivateProductCommand}"
-                    Content="Mark Inactive"
-                    Style="{StaticResource SecondaryButton}" />
             </UniformGrid>
-
-
-
             <syncfusion:SfTextBoxExt
                 Grid.Column="3"
                 MinWidth="300"
@@ -175,29 +167,6 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
-            <DataGrid.RowHeaderStyle>
-                <Style BasedOn="{StaticResource {x:Type DataGridRowHeader}}" TargetType="{x:Type DataGridRowHeader}">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate>
-                                <Border
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Background="Transparent"
-                                    BorderBrush="{StaticResource BorderColor}"
-                                    BorderThickness="0,0,1,1">
-                                    <CheckBox
-                                        Margin="3,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        IsChecked="{Binding Path=IsSelected, Mode=TwoWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" />
-                                </Border>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.RowHeaderStyle>
             <DataGrid.Columns>
                 <DataGridTemplateColumn
                     Width="Auto"
@@ -342,22 +311,24 @@
                     Width="Auto"
                     CanUserSort="True"
                     Header="Active"
-                    SortMemberPath="IsActive"
-                    Visibility="{Binding Data.ShowInactiveProducts, Source={StaticResource proxy}, Converter={StaticResource BooleanToVisibility}}">
+                    SortMemberPath="IsActive">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Path
+                            <ToggleButton
+                                x:Name="Toggle1"
+                                Width="28"
+                                Height="13"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Stroke="Gray"
-                                Style="{StaticResource Path.Checkmark}">
-                                <Path.Visibility>
-                                    <MultiBinding Converter="{StaticResource VisibilityMulti}">
-                                        <Binding Converter="{StaticResource BooleanToVisibilityInverted}" Path="IsLoading" />
-                                        <Binding Converter="{StaticResource BooleanToVisibility}" Path="Data.IsActive" />
-                                    </MultiBinding>
-                                </Path.Visibility>
-                            </Path>
+                                Style="{StaticResource Path.ActiveToggleButton}"
+                                Command="{Binding DataContext.ToggleActivation, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Data.ProductVariantID}">
+                            </ToggleButton>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=Data.IsActive, Mode=OneWay}" Value="False">
+                                    <Setter TargetName="Toggle1" Property="Style" Value="{StaticResource Path.InactiveToggleButton}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -405,7 +376,7 @@
                 VerticalAlignment="Center"
                 IsChecked="{Binding ShowInactiveProducts}"
                 Style="{StaticResource FormCheckBox}">
-                Show inactive products
+                Hide Inactive Products
             </CheckBox>
         </Grid>
     </Grid>

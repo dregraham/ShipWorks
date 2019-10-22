@@ -32,8 +32,8 @@ namespace ShipWorks.Products.Import
         public void ChooseFileToImport(IProductImporterStateManager stateManager) =>
             fileSelector.GetFilePathToOpen("Comma Separated|*.csv|Excel|*.xls;*.xlsx|Tab Delimited|*.tab|All Files|*.*")
                 .Map(x => (FilePath: x, State: createImportingState(stateManager)))
-                .Do(x => stateManager.ChangeState(x.State))
-                .Do(x => x.State.StartImport(x.FilePath).Forget());
+                .Do(x => x.State.StartImport(x.FilePath).Forget())
+                .Do(x => stateManager.ChangeState(x.State));
 
         /// <summary>
         /// Save the sample file

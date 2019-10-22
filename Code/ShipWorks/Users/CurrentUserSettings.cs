@@ -137,12 +137,6 @@ namespace ShipWorks.Users
         public void SetUIMode(UIMode uiMode)
         {
             userSession.User.Settings.UIMode = uiMode;
-
-            // Save the settings
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                adapter.SaveAndRefetch(userSession.User.Settings);
-            }
         }
 
         /// <summary>

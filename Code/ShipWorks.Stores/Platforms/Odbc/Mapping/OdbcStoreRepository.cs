@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         {
             if (WarehouseUser && store.WarehouseStoreID.HasValue)
             {
-                if(storeCache.TryGetValue(store, out RefreshingOdbcStore refreshingOdbcStore))
+                if (storeCache.TryGetValue(store, out RefreshingOdbcStore refreshingOdbcStore))
                 {
                     // If there was a store in the cache return it
                     return refreshingOdbcStore.Store;

@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Services
         /// Indicates if the shipment type is DHL
         /// </summary>
         public bool IsDhl(PostalServiceType serviceType) => ShipmentTypeManager.IsDhl(serviceType);
-        
+
         /// <summary>
         /// Get the last rule that is applicable for the given shipment
         /// </summary>
@@ -141,5 +141,21 @@ namespace ShipWorks.Shipping.Services
         /// </summary>
         public void LoadShipmentData(ShipmentEntity shipmentEntity, bool refreshIfPresent) =>
             Get(shipmentEntity.ShipmentTypeCode).LoadShipmentData(shipmentEntity, refreshIfPresent);
+
+        /// <summary>
+        /// List of shipment types excluded by best rate
+        /// </summary>
+        public List<ShipmentTypeCode> BestRateExcludedShipmentTypes() => new List<ShipmentTypeCode>() {
+            ShipmentTypeCode.None,
+            ShipmentTypeCode.BestRate,
+            ShipmentTypeCode.Other,
+            ShipmentTypeCode.PostalWebTools,
+            ShipmentTypeCode.Express1Endicia,
+            ShipmentTypeCode.Express1Usps,
+            ShipmentTypeCode.UpsWorldShip,
+            ShipmentTypeCode.AmazonSFP,
+            ShipmentTypeCode.AmazonSWA,
+            ShipmentTypeCode.iParcel
+        };
     }
 }

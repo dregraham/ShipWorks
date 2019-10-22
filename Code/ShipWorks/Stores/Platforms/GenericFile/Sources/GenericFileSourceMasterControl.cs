@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
         /// <summary>
         /// Initialize
         /// </summary>
-        private void Initialize()
+        private void Initialize(GenericFileStoreEntity store, bool newStore)
         {
             fileSource.DisplayMember = "Display";
             fileSource.ValueMember = "Value";
@@ -60,7 +60,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
             }
 
             list.AddRange(
-                GenericFileSourceTypeManager.FileSources.Select(source =>
+                GenericFileSourceTypeManager.GetFileSources(store, newStore).Select(source =>
                     new { Display = source.Description, Value = (GenericFileSourceTypeCode?) source.FileSourceTypeCode }).ToList());
 
             fileSource.DataSource = list;
@@ -69,16 +69,16 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources
         /// <summary>
         /// Load the data from the given store
         /// </summary>
-        public void LoadStore(GenericFileStoreEntity store)
+        public void LoadStore(GenericFileStoreEntity store, bool newStore)
         {
             // Lazy initialize
             if (fileSource.DataSource == null)
             {
-                Initialize();
+                Initialize(store, newStore);
             }
 
             // Ensure all possible settings controls are created and loaded
-            GenericFileSourceTypeManager.FileSources.ForEach(sourcType => GetSettingsControl(sourcType).LoadStore(store));
+            GenericFileSourceTypeManager.GetFileSources(store, newStore).ForEach(sourcType => GetSettingsControl(sourcType).LoadStore(store));
 
             if (store.FileSource == -1 && showChooseOption)
             {

@@ -117,6 +117,6 @@ namespace ShipWorks.Products.Import
         /// <summary>
         /// Action to close the dialog
         /// </summary>
-        private void CloseDialogAction() => stateManager.Close();
+        private void CloseDialogAction() => stateManager.Close?.Invoke();
     }
 }

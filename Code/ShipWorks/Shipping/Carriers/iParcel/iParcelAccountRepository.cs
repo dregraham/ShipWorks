@@ -61,6 +61,14 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            iParcelAccountManager.InitializeForCurrentSession();
+        }
+
+        /// <summary>
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
