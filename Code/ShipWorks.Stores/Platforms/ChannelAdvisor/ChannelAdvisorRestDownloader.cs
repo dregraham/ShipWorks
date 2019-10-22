@@ -77,14 +77,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken);
 
                 string previousLink = String.Empty;
-                double daysback = 30;
-
-                if (Store.InitialDownloadDays.HasValue && Store.InitialDownloadDays > 30)
-                {
-                    daysback = Store.InitialDownloadDays.Value;
-                }
-
-                var oldestDownload = DateTime.UtcNow.AddDays(-daysback);
 
                 Progress.Detail = $"Downloading orders...";
 
@@ -92,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
                     // the same "next link" causing ShipWorks to download forever
-                    if (ordersResult.OdataNextLink == previousLink)
+                    if (ordersResult.OdataNextLink.Equals(previousLink))
                     {
                         break;
                     }

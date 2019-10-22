@@ -7,6 +7,7 @@ using System.Text;
 using System.Web;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -176,15 +177,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
-            var downloadStartDate = DateTime.UtcNow.AddDays(daysBack == 0 ? -4 : -daysBack);
+            daysBack.Clamp(1, 30);
 
-            string time = $"{ downloadStartDate:yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffffff'Z'}";
+            var downloadStartDate = DateTime.UtcNow.AddDays(-daysBack);
 
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             getOrdersRequestSubmitter.Variables.Add("$filter", "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped') AND " +
                 "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
                 "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited') AND " +
-                $"(CreatedDateUtc ge {time})");
+                $"(CreatedDateUtc ge {downloadStartDate.ToIsoString()})");
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
@@ -233,7 +234,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 while (productBatch?.Products?.Any() == true)
                 {
-                    if (productBatch.OdataNextLink?.Equals(previousLink, StringComparison.OrdinalIgnoreCase) == true)
+                    if (productBatch.OdataNextLink?.Equals(previousLink) == true)
                     {
                         return;
                     }

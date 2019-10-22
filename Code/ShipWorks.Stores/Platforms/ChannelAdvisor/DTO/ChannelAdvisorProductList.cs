@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
     /// <summary>
     /// List of products returned by ChannelAdvisor
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ChannelAdvisorProductList
     {
         [JsonProperty("@odata.context")]

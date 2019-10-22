@@ -1518,7 +1518,7 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadDaysBack] [tinyint] NOT NULL
+[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4))
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
