@@ -78,21 +78,30 @@
                 Grid.Row="0"
                 Columns="7"
                 Rows="1">
-                <Button
-                    Command="{Binding AddProduct}"
-                    Content="Add"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding CopyAsVariant}"
-                    Content="Create Variant"
-                    Style="{StaticResource PrimaryButton}" />
+                <syncfusion:SplitButtonAdv Name="AddProduct"
+                                           Label="Add"
+                                           Margin="0,0,10,0"
+                                           Height="30"
+                                           Width="200"
+                                           IconHeight="0">
+                    <syncfusion:DropDownMenuGroup>
+                        <syncfusion:DropDownMenuItem Header="New Product"
+                                                     Command="{Binding AddProduct}"
+                                                     Height="30"
+                                                     Width="200"/>
+                        <syncfusion:DropDownMenuItem Header="From File"
+                                                     Command="{Binding ImportProducts}"
+                                                     Height="30"
+                                                     Width="200"/>
+                        <syncfusion:DropDownMenuItem Header="Variant"
+                                                     Command="{Binding CopyAsVariant}"
+                                                     Height="30"
+                                                     Width="200"/>
+                    </syncfusion:DropDownMenuGroup>
+                </syncfusion:SplitButtonAdv>
                 <Button
                     Command="{Binding EditProductVariantButton}"
                     Content="Edit"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ImportProducts}"
-                    Content="Import"
                     Style="{StaticResource PrimaryButton}" />
                 <Button
                     Command="{Binding ExportProducts}"
