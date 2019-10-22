@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -33,6 +34,8 @@ namespace ShipWorks.Stores.Platforms.GenericFile
         private int fileCount = 0;
         private readonly ILicenseService licenseService;
         private List<OrderEntity> ordersToSendToHub;
+
+        private const int UploadOrdersBatchSize = 5;
 
         /// <summary>
         /// Constructor
@@ -122,9 +125,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                     // keep going until none are left
                     while (true)
                     {
-                        ordersToSendToHub = new List<OrderEntity>();
                         bool morePages = await ImportNextFile(fileSource).ConfigureAwait(false);
-                        await UploadOrdersToHub(ordersToSendToHub).ConfigureAwait(false);
                         if (!morePages)
                         {
                             if (fileCount == 0)
@@ -178,6 +179,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
 
             try
             {
+                ordersToSendToHub = new List<OrderEntity>();
 
                 // Return of false means canceled before completed
                 bool continueProcessing = await ImportFile(file).ConfigureAwait(false);
@@ -185,6 +187,15 @@ namespace ShipWorks.Stores.Platforms.GenericFile
                 {
                     // We still return true to caller b\c there ARE more (or could be).. the caller will check the Canceled flag.
                     return false;
+                }
+
+                // orders have been added to this collection in the SaveDownloadedOrder method.
+                if (ordersToSendToHub.Any())
+                {
+                    foreach (var batch in ordersToSendToHub.SplitIntoChunksOf(UploadOrdersBatchSize))
+                    {
+                        await UploadOrdersToHub(batch).ConfigureAwait(false);
+                    }
                 }
             }
             catch (GenericFileStoreException ex)

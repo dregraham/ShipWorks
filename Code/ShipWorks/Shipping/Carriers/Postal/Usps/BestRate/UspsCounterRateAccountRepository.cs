@@ -85,6 +85,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         /// <summary>
+        /// Force a initialize
+        /// </summary>
+        public void Initialize()
+        {
+            // Since this is for counter rates, we don't need to worry about this
+        }
+
+        /// <summary>
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
@@ -109,10 +117,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <summary>
         /// Gets the default profile account.
         /// </summary>
-        public UspsAccountEntity DefaultProfileAccount
-        {
-            get { return Accounts.First(); }
-        }
+        public UspsAccountEntity DefaultProfileAccount => Accounts.First();
+
+        /// <summary>
+        /// Gets the default profile account.
+        /// </summary>
+        ICarrierAccount ICarrierAccountRetriever.DefaultProfileAccount => DefaultProfileAccount;
 
         /// <summary>
         /// Saves the specified account.

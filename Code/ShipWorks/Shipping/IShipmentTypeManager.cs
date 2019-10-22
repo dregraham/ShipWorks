@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping
         /// Returns a list of Configured ShipmentTypeCodes
         /// </summary>
         IEnumerable<ShipmentTypeCode> ConfiguredShipmentTypeCodes { get; }
-        
+
         /// <summary>
         /// Determine what the initial shipment type for the given order should be, given the shipping settings rules
         /// </summary>
@@ -72,5 +72,10 @@ namespace ShipWorks.Shipping
         /// Indicates if the shipment type is DHL
         /// </summary>
         bool IsDhl(PostalServiceType serviceType);
+
+        /// <summary>
+        /// List of shipment types excluded by best rate
+        /// </summary>
+        List<ShipmentTypeCode> BestRateExcludedShipmentTypes();
     }
 }

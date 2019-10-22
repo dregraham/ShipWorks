@@ -66,4 +66,207 @@
     <Style x:Key="Path.Material.Refresh" TargetType="Path">
         <Setter Property="Data" Value="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
     </Style>
+    
+    <Style x:Key="Path.ActiveToggleButton" TargetType="{x:Type ToggleButton}">
+        <Style.Resources>
+            <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
+            <Color x:Key="Color.Additional.MediumGrey">#61656B</Color>
+            <Color x:Key="Color.Additional.LightGreen">#33FF83</Color>
+            <SolidColorBrush x:Key="ToggleButtonTrueForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
+            <SolidColorBrush x:Key="ToggleButtonTrueBackground" Color="{StaticResource Color.Additional.LightGreen}" />
+            <SolidColorBrush x:Key="ToggleButtonFalseForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
+            <SolidColorBrush x:Key="ToggleButtonFalseBackground" Color="{StaticResource Color.Additional.LightGrey}" />
+            <Style x:Key="OnContentControl" TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="OffContentControl" TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid x:Name="MainRow">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=TopRow, Path=ActualHeight}" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="{Binding ElementName=TopRow, Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="TopRow" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Ellipse x:Name="BackgroundEllipse1"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Width="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     HorizontalAlignment="Left"
+                                     Fill="{StaticResource ToggleButtonTrueBackground}" />
+                            <Ellipse x:Name="BackgroundEllipse2"
+                                     Grid.Row="0"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Width="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     HorizontalAlignment="Right"
+                                     Fill="{StaticResource ToggleButtonFalseBackground}" />
+                            <Border x:Name="BackgroundBorder"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Background="{StaticResource ToggleButtonTrueBackground}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="AnimationWidth" />
+                                <ColumnDefinition Width="{Binding ElementName=MainRow, Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="AnimationSizeBorder"
+                                    Grid.Column="0" />
+                            <ContentControl Grid.Column="0"
+                                            Style="{StaticResource OnContentControl}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=MainRow, Path=ActualHeight}" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Grid.Column="1" Style="{StaticResource OffContentControl}" />
+                        </Grid>
+                        <Grid Background="Transparent">
+                            <StackPanel HorizontalAlignment="Left"
+                                        Orientation="Horizontal">
+                                <Border Width="{Binding ElementName=AnimationSizeBorder, Path=ActualWidth}" />
+                                <Ellipse x:Name="ForegroundEllipse"
+                                         Width="{Binding ElementName=MainRow,
+                                                         Path=ActualHeight}"
+                                         Height="{Binding ElementName=MainRow,
+                                                          Path=ActualHeight}"
+                                         HorizontalAlignment="Right"
+                                         Fill="{StaticResource ToggleButtonTrueForeground}" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource ToggleButtonFalseBackground}" />
+                            <Setter TargetName="ForegroundEllipse" Property="Fill" Value="{StaticResource ToggleButtonFalseForeground}" />
+                            <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="Path.InactiveToggleButton" TargetType="{x:Type ToggleButton}">
+        <Style.Resources>
+            <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
+            <Color x:Key="Color.Additional.MediumGrey">#61656B</Color>
+            <Color x:Key="Color.Additional.LightGreen">#33FF83</Color>
+            <SolidColorBrush x:Key="ToggleButtonTrueForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
+            <SolidColorBrush x:Key="ToggleButtonTrueBackground" Color="{StaticResource Color.Additional.LightGreen}" />
+            <SolidColorBrush x:Key="ToggleButtonFalseForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
+            <SolidColorBrush x:Key="ToggleButtonFalseBackground" Color="{StaticResource Color.Additional.LightGrey}" />
+            <Style x:Key="OnContentControl" TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="OffContentControl" TargetType="ContentControl">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+        </Style.Resources>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid x:Name="MainRow">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=TopRow, Path=ActualHeight}" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="{Binding ElementName=TopRow, Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="TopRow" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Ellipse x:Name="BackgroundEllipse1"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Width="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     HorizontalAlignment="Left"
+                                     Fill="{StaticResource ToggleButtonTrueBackground}" />
+                            <Ellipse x:Name="BackgroundEllipse2"
+                                     Grid.Row="0"
+                                     Grid.RowSpan="2"
+                                     Grid.Column="0"
+                                     Grid.ColumnSpan="3"
+                                     Width="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     Height="{Binding ElementName=MainRow, Path=ActualHeight}"
+                                     HorizontalAlignment="Right"
+                                     Fill="{StaticResource ToggleButtonFalseBackground}" />
+                            <Border x:Name="BackgroundBorder"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    Background="{StaticResource ToggleButtonTrueBackground}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="AnimationWidth" />
+                                <ColumnDefinition Width="{Binding ElementName=MainRow, Path=ActualHeight}" />
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="AnimationSizeBorder"
+                                    Grid.Column="0" />
+                            <ContentControl Grid.Column="0"
+                                            Style="{StaticResource OnContentControl}" />
+                        </Grid>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{Binding ElementName=MainRow, Path=ActualHeight}" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Grid.Column="1" Style="{StaticResource OffContentControl}" />
+                        </Grid>
+                        <Grid Background="Transparent">
+                            <StackPanel HorizontalAlignment="Left"
+                                        Orientation="Horizontal">
+                                <Border Width="{Binding ElementName=AnimationSizeBorder, Path=ActualWidth}" />
+                                <Ellipse x:Name="ForegroundEllipse"
+                                         Width="{Binding ElementName=MainRow,
+                                                         Path=ActualHeight}"
+                                         Height="{Binding ElementName=MainRow,
+                                                          Path=ActualHeight}"
+                                         HorizontalAlignment="Right"
+                                         Fill="{StaticResource ToggleButtonTrueForeground}" />
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="BackgroundBorder" Property="Background" Value="{StaticResource ToggleButtonFalseBackground}" />
+                            <Setter TargetName="ForegroundEllipse" Property="Fill" Value="{StaticResource ToggleButtonFalseForeground}" />
+                            <Setter TargetName="AnimationSizeBorder" Property="Width" Value="0" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

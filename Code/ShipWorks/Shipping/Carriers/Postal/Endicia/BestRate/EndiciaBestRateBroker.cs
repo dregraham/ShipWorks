@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// Constructor
         /// </summary>
         public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository) :
-            this(shipmentType, accountRepository, "USPS")
+            this(shipmentType, accountRepository, "USPS", BestRateExcludedAccountRepository.Current)
         {
 
         }
@@ -36,8 +36,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        protected EndiciaBestRateBroker(EndiciaShipmentType shipmentType, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository, string carrierDescription) :
-            base(shipmentType, accountRepository, carrierDescription)
+        public EndiciaBestRateBroker(EndiciaShipmentType shipmentType, 
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository, 
+            string carrierDescription, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, carrierDescription, bestRateExcludedAccountRepository)
         {
             GetRatesAction = (shipment, type) => GetRatesFunction(shipment);
         }

@@ -49,13 +49,10 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        public async Task SetActivation(IEnumerable<long> productIDs, bool activation, IProgressReporter progressReporter)
+        public async Task SetActivation(IEnumerable<long> productIDs, bool activation)
         {
             int chunkSize = 100;
             List<IEnumerable<long>> chunks = productIDs.SplitIntoChunksOf(chunkSize).ToList();
-            int chunkCount = chunks.Count();
-
-            progressReporter.PercentComplete = 0;
 
             using (DbConnection conn = sqlSession.OpenConnection())
             {
@@ -89,13 +86,6 @@ namespace ShipWorks.Products
                         transaction.Rollback();
                         throw;
                     }
-
-                    if (progressReporter.IsCancelRequested)
-                    {
-                        break;
-                    }
-
-                    progressReporter.PercentComplete = (int) Math.Round(100 * ((index + 1M) / chunkCount));
                 }
             }
         }

@@ -83,5 +83,13 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         {
             return shipment.Asendia.AsendiaAccountID;
         }
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            AsendiaAccountManager.Initialize();
+        }
     }
 }

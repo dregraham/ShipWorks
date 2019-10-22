@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.UpsWorldShip;
 
         /// <summary>
-        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed 
+        /// Created specifically for WorldShip.  A WorldShip shipment is processed in two phases - first it's processed
         /// Create settings control for WorldShip
         /// </summary>
         protected override SettingsControlBase CreateSettingsControl()
@@ -99,9 +100,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a WorldShipBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            return new WorldShipBestRateBroker(this);
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IUpsAccountEntity> nonExcludedUpsAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+
+            if (nonExcludedUpsAccounts.Any())
+            {
+                return new WorldShipBestRateBroker(this);
+            }
+
+            return new NullShippingBroker();
         }
     }
 }
