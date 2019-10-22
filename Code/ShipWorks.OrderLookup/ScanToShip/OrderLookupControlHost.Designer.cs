@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.OrderLookup.Controls.OrderLookup
+﻿namespace ShipWorks.OrderLookup.ScanToShip
 {
-    partial class OrderLookupControlHost
+    partial class ScanToShipControlHost
     {
         /// <summary>
         /// Required designer variable.

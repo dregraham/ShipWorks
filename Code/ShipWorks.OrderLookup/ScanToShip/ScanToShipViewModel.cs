@@ -3,7 +3,7 @@ using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
 
-namespace ShipWorks.OrderLookup
+namespace ShipWorks.OrderLookup.ScanToShip
 {
     [Component(RegistrationType.Self, SingleInstance = true)]
     public class ScanToShipViewModel

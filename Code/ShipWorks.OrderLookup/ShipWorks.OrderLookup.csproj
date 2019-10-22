@@ -301,12 +301,6 @@
     <Compile Include="Controls\LabelOptions\PostalLabelOptionsControl.xaml.cs">
       <DependentUpon>PostalLabelOptionsControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\OrderLookup\OrderLookupControlHost.Designer.cs">
-      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\OrderLookup\MainOrderLookupControl.xaml.cs">
       <DependentUpon>MainOrderLookupControl.xaml</DependentUpon>
     </Compile>
@@ -364,10 +358,16 @@
     <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\VerifiedOrderService.cs" />
-    <Compile Include="ScanToShipControl.xaml.cs">
+    <Compile Include="ScanToShip\OrderLookupControlHost.Designer.cs">
+      <DependentUpon>ScanToShipControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ScanToShip\ScanToShipControl.xaml.cs">
       <DependentUpon>ScanToShipControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScanToShipViewModel.cs" />
+    <Compile Include="ScanToShip\ScanToShipControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ScanToShip\ScanToShipViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
@@ -425,8 +425,8 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\OrderLookup\OrderLookupControlHost.resx">
-      <DependentUpon>OrderLookupControlHost.cs</DependentUpon>
+    <EmbeddedResource Include="ScanToShip\OrderLookupControlHost.resx">
+      <DependentUpon>ScanToShipControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShipmentHistory\Controls\ShipmentHistoryPanel.resx">
       <DependentUpon>ShipmentHistoryPanel.cs</DependentUpon>
@@ -641,7 +641,7 @@
     <Page Include="ScanPack\ScanControl.xaml" />
     <Page Include="ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\ScanPackItemControl.xaml" />
-    <Page Include="ScanToShipControl.xaml">
+    <Page Include="ScanToShip\ScanToShipControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

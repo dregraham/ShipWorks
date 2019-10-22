@@ -14,6 +14,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Editions;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 
 namespace ShipWorks.OrderLookup.ScanPack

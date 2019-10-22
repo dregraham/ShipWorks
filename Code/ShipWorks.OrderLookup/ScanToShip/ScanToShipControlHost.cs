@@ -10,26 +10,25 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
-namespace ShipWorks.OrderLookup.Controls.OrderLookup
+namespace ShipWorks.OrderLookup.ScanToShip
 {
     /// <summary>
     /// Control to look up orders for single scan mode
     /// </summary>
     [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
-    public partial class OrderLookupControlHost : UserControl, IOrderLookup
+    public partial class ScanToShipControlHost : UserControl, IOrderLookup
     {
-        private ScanToShipControl mainOrderLookupControl;
+        private ScanToShipControl scanToShipControl;
         private readonly ScanToShipViewModel scanToShipViewModel;
         private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(ScanToShipViewModel scanToShipViewModel, IMessenger messenger)
+        public ScanToShipControlHost(ScanToShipViewModel scanToShipViewModel, IMessenger messenger)
         {
             this.messenger = messenger;
             InitializeComponent();
@@ -54,7 +53,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             base.OnLoad(e);
 
-            mainOrderLookupControl = new ScanToShipControl()
+            scanToShipControl = new ScanToShipControl()
             {
                 DataContext = scanToShipViewModel
             };
@@ -62,7 +61,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ElementHost host = new ElementHost
             {
                 Dock = DockStyle.Fill,
-                Child = mainOrderLookupControl
+                Child = scanToShipControl
             };
 
             Controls.Add(host);
@@ -162,7 +161,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private void CommitBindingsOnFocusedControl()
         {
-            IInputElement focusedElement = FindFocusedInputElement(mainOrderLookupControl);
+            IInputElement focusedElement = FindFocusedInputElement(scanToShipControl);
             if (!IsNonKeyboardInputElement(focusedElement))
             {
                 CommitBindings(focusedElement);
@@ -174,7 +173,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private IInputElement FindFocusedInputElement(DependencyObject container)
         {
-            DependencyObject focusScope = FocusManager.GetFocusScope(mainOrderLookupControl);
+            DependencyObject focusScope = FocusManager.GetFocusScope(scanToShipControl);
             return focusScope == null ?
                 null :
                 FocusManager.GetFocusedElement(focusScope);
