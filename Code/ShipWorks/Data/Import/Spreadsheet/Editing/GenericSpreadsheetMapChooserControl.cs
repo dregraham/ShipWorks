@@ -237,16 +237,26 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
         /// </summary>
         private int GetCustomColumnUsedCount()
         {
-             return map.Mappings.Where(m => m.TargetField.Identifier == "Order.Custom1" ||
-                                            m.TargetField.Identifier == "Order.Custom2" ||
-                                            m.TargetField.Identifier == "Order.Custom3" ||
-                                            m.TargetField.Identifier == "Order.Custom4" ||
-                                            m.TargetField.Identifier == "Order.Custom5" ||
-                                            m.TargetField.Identifier == "Order.Custom6" ||
-                                            m.TargetField.Identifier == "Order.Custom7" ||
-                                            m.TargetField.Identifier == "Order.Custom8" ||
-                                            m.TargetField.Identifier == "Order.Custom9" ||
-                                            m.TargetField.Identifier == "Order.Custom10").Count();           
+            int count = 0;
+            List<string> knownFields = new List<string>();
+            foreach(var m in map.Mappings)
+            {
+                if(m.TargetField.Identifier.Contains("Order.Custom"))
+                {
+                    count++;
+                }
+
+                else if (m.TargetField.Identifier.Contains("Item.Custom"))
+                {
+                    var id = m.TargetField.Identifier.Substring(0, m.TargetField.Identifier.Length - 2);
+                    if (!knownFields.Contains(id))
+                    {
+                        count++;
+                        knownFields.Add(id);
+                    }
+                }
+            }
+            return count;
         }
     }
 }
