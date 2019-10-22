@@ -2581,7 +2581,7 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewShipping.Name = "ribbonTabOrderLookupViewShipping";
             this.ribbonTabOrderLookupViewShipping.Size = new System.Drawing.Size(967, 90);
             this.ribbonTabOrderLookupViewShipping.TabIndex = 0;
-            this.ribbonTabOrderLookupViewShipping.Text = "&Ship";
+            this.ribbonTabOrderLookupViewShipping.Text = "&Scan-to-Ship";
             //
             // ribbonChunkOrderLookupViewShipping
             //
