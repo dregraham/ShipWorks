@@ -182,7 +182,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Disable if on scanPackAllowed and 
+        /// Disable if on scanPackAllowed and scanpack is restricted
         /// </summary>
         private void DetermineEnabled()
         {
