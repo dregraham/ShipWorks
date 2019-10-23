@@ -85,9 +85,7 @@ namespace ShipWorks.Actions.Tasks.Common
         /// <returns></returns>
         public override bool IsAllowedForTrigger(ActionTriggerType triggerType)
         {
-            return triggerType == ActionTriggerType.OrderDownloaded ||
-                triggerType == ActionTriggerType.FilterContentChanged ||
-                triggerType == ActionTriggerType.UserInitiated;
+            return triggerType != ActionTriggerType.ShipmentProcessed;
         }
 
         /// <summary>
