@@ -37,7 +37,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
-        private string scanImageUrl;
         private string scanFooter;
         private string orderNumber;
         private ScanPackState state;
