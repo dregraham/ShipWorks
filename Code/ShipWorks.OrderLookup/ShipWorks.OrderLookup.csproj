@@ -358,7 +358,7 @@
     <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\VerifiedOrderService.cs" />
-    <Compile Include="ScanToShip\OrderLookupControlHost.Designer.cs">
+    <Compile Include="ScanToShip\ScanToShipControlHost.Designer.cs">
       <DependentUpon>ScanToShipControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="ScanToShip\ScanToShipControl.xaml.cs">
@@ -425,7 +425,7 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ScanToShip\OrderLookupControlHost.resx">
+    <EmbeddedResource Include="ScanToShip\ScanToShipControlHost.resx">
       <DependentUpon>ScanToShipControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShipmentHistory\Controls\ShipmentHistoryPanel.resx">
