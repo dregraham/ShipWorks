@@ -1,5 +1,5 @@
 using System.Reflection;
-using Interapptive.Shared.ComponentRegistration;
+using GalaSoft.MvvmLight;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
@@ -9,11 +9,12 @@ namespace ShipWorks.OrderLookup.ScanToShip
     /// <summary>
     /// ScanToShip ViewModel
     /// </summary>
-    public class ScanToShipViewModel : IScanToShipViewModel
+    public class ScanToShipViewModel : ViewModelBase, IScanToShipViewModel
     {
         private const int PackTabIndex = 0;
         private const int ShipTabIndex = 1;
         private int selectedTab;
+        private object searchViewModel;
 
         /// <summary>
         /// Constructor
@@ -45,6 +46,16 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; }
 
         /// <summary>
+        /// OrderLookupSearch ViewModel
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public object SearchViewModel
+        {
+            get => searchViewModel;
+            set => Set(ref searchViewModel, value);
+        }
+
+        /// <summary>
         /// IsPackTabActive
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -59,7 +70,17 @@ namespace ShipWorks.OrderLookup.ScanToShip
             get => selectedTab;
             set
             {
-                selectedTab = value;
+                Set(ref selectedTab, value);
+
+                if (value == PackTabIndex)
+                {
+                    SearchViewModel = ScanPackViewModel;
+                }
+                else if(value == ShipTabIndex)
+                {
+                    SearchViewModel = OrderLookupSearchViewModel;
+                }
+
                 OrderLookupSearchViewModel.ScanPackTabActive = IsPackTabActive;
             }
         }

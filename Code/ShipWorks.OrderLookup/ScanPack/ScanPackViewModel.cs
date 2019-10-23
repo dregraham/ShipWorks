@@ -160,6 +160,18 @@ namespace ShipWorks.OrderLookup.ScanPack
         public ICommand ResetCommand { get; set; }
 
         /// <summary>
+        /// Don't show the Create Label button in the search control
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowCreateLabel => false;
+
+        /// <summary>
+        /// False so that search control doesn't leave a space for error message.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool SearchError => false;
+
+        /// <summary>
         /// Is Scan Pack enabled
         /// </summary>
         [Obfuscation(Exclude = true)]
