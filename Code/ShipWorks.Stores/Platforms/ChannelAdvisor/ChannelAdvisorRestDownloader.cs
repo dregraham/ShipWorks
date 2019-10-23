@@ -74,41 +74,32 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken);
 
                 string previousLink = String.Empty;
-                double daysback = 30;
-
-                if (Store.InitialDownloadDays.HasValue && Store.InitialDownloadDays > 30)
-                {
-                    daysback = Store.InitialDownloadDays ?? 30;
-                }
-
-                var oldestDownload = DateTime.UtcNow.AddDays(-daysback);
 
                 Progress.Detail = $"Downloading orders...";
 
-                while (ordersResult?.Orders?.Any() ?? false)
+                while (ordersResult?.Orders?.Any() == true)
                 {
                     // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
                     // the same "next link" causing ShipWorks to download forever
-                    if (ordersResult.OdataNextLink == previousLink)
+                    if (ordersResult.OdataNextLink.Equals(previousLink))
                     {
                         break;
                     }
 
                     previousLink = ordersResult.OdataNextLink;
 
-                    if (!await ProcessOrders(ordersResult, previousLink).ConfigureAwait(false))
+                    AddProductsToCache(ordersResult);
+
+                    if (!await ProcessOrders(ordersResult).ConfigureAwait(false))
                     {
                         break;
                     }
 
-                    // Don't download orders older than oldestDownload. With each download, we will be marking one page of old shipped orders
-                    // as exported, so eventually all of the orders will be marked
-                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) || ordersResult.Orders.FirstOrDefault()?.CreatedDateUtc < oldestDownload
-                        ? null
-                        : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
+                    // Don't download orders older than oldestDownload.
+                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) ? null : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
                 }
             }
             catch (ChannelAdvisorException ex)
@@ -124,8 +115,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.Detail = "Done";
         }
 
-        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult, string previousLink)
+        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult)
         {
+
             foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
             {
                 // Check if it has been canceled
@@ -134,24 +126,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return false;
                 }
 
-                // Skip any orders that haven't been paid yet. We do this instead of filtering in the request
-                // because filtering slows down the download significantly
-                if (!caOrder.PaymentStatus?.Equals("Cleared", StringComparison.OrdinalIgnoreCase) ?? false)
-                {
-                    continue;
-                }
-
                 DownloadOtherLineItems(caOrder);
 
                 List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
                 await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
-
-                // If the order has already been shipped, mark it as exported so we don't re-download it
-                if (caOrder.ShippingStatus?.Equals("Shipped", StringComparison.OrdinalIgnoreCase) ?? false)
-                {
-                    restClient.MarkOrderExported(caOrder.ID, refreshToken);
-                }
             }
 
             return true;
@@ -244,6 +223,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
             }
+        }
+
+        /// <summary>
+        /// Fetch all products for the given orders, and add them to the cache
+        /// </summary>
+        private void AddProductsToCache(ChannelAdvisorOrderResult orderResult)
+        {
+            Progress.Detail = "Fetching products...";
+
+            IEnumerable<int> productIds = orderResult.Orders.SelectMany(x => x.Items).Select(x => x.ProductID);
+
+            restClient.AddProductsToCache(productIds, refreshToken);
         }
     }
 }
