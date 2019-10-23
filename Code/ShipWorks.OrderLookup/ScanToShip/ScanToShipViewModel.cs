@@ -9,7 +9,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
     /// <summary>
     /// ScanToShip ViewModel
     /// </summary>
-    public class ScanToShipViewModel
+    public class ScanToShipViewModel : IScanToShipViewModel
     {
         private const int PackTabIndex = 0;
         private const int ShipTabIndex = 1;

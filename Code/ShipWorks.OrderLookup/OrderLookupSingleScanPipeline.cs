@@ -35,7 +35,7 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
-        private readonly ScanToShipViewModel scanToShipViewModel;
+        private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -63,7 +63,7 @@ namespace ShipWorks.OrderLookup
             IOrderLookupConfirmationService orderLookupConfirmationService,
             Func<string, ITrackedDurationEvent> telemetryFactory,
             IOrderLookupOrderIDRetriever orderIDRetriever,
-            ScanToShipViewModel scanToShipViewModel)
+            IScanToShipViewModel scanToShipViewModel)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;

@@ -26,7 +26,7 @@ namespace ShipWorks.OrderLookup.ScanPack
     {
         private readonly IMessenger messenger;
         private readonly IMainForm mainForm;
-        private readonly ScanToShipViewModel scanToShipViewModel;
+        private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly ILicenseService licenseService;
         private readonly ISchedulerProvider schedulerProvider;
         private readonly IShortcutManager shortcutManager;
@@ -40,7 +40,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         public ScanPackPipeline(
             IMessenger messenger,
             IMainForm mainForm,
-            ScanToShipViewModel scanToShipViewModel,
+            IScanToShipViewModel scanToShipViewModel,
             ILicenseService licenseService,
             ISchedulerProvider schedulerProvider,
             IShortcutManager shortcutManager,

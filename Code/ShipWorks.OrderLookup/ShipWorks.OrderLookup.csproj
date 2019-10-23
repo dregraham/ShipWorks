@@ -358,6 +358,7 @@
     <Compile Include="ScanPack\ScanPackState.cs" />
     <Compile Include="ScanPack\ScanPackViewModel.cs" />
     <Compile Include="ScanPack\VerifiedOrderService.cs" />
+    <Compile Include="ScanToShip\IScanToShipViewModel.cs" />
     <Compile Include="ScanToShip\ScanToShipControlHost.Designer.cs">
       <DependentUpon>ScanToShipControlHost.cs</DependentUpon>
     </Compile>

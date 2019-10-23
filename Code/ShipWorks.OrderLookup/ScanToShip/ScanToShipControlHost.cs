@@ -22,13 +22,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
     public partial class ScanToShipControlHost : UserControl, IOrderLookup
     {
         private ScanToShipControl scanToShipControl;
-        private readonly ScanToShipViewModel scanToShipViewModel;
+        private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanToShipControlHost(ScanToShipViewModel scanToShipViewModel, IMessenger messenger)
+        public ScanToShipControlHost(IScanToShipViewModel scanToShipViewModel, IMessenger messenger)
         {
             this.messenger = messenger;
             InitializeComponent();

@@ -15,7 +15,7 @@ namespace ShipWorks.OrderLookup
         public void Register(ContainerBuilder builder)
         {
             builder.RegisterType<OrderLookupShipmentModel>().As<IOrderLookupShipmentModel>().SingleInstance();
-            builder.RegisterType<ScanToShipViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<ScanToShipViewModel>().As<IScanToShipViewModel>().SingleInstance();
             builder.RegisterType<ScanPackViewModel>().As<IScanPackViewModel>().SingleInstance();
         }
     }

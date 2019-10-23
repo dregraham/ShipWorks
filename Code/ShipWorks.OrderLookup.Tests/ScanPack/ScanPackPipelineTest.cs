@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.OrderLookup.ScanPack;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -25,6 +26,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         private readonly Mock<IScanPackViewModel> scanPackViewModel;
         private readonly Mock<IMainForm> mainForm;
         private readonly ScanPackPipeline testObject;
+        private bool isPackTabActive = true;
 
         public ScanPackPipelineTest()
         {
@@ -37,10 +39,14 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             licenseService = mock.Mock<ILicenseService>();
             scanPackViewModel = mock.Mock<IScanPackViewModel>();
 
+
             mainForm = mock.Mock<IMainForm>();
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
             mainForm.SetupGet(m => m.UIMode).Returns(UIMode.OrderLookup);
+
+            var scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
+            scanToShipViewModel.SetupGet(m => m.IsPackTabActive).Returns(() => isPackTabActive);
+            scanToShipViewModel.SetupGet(m=> m.ScanPackViewModel).Returns(scanPackViewModel.Object);
 
             testMessenger = new TestMessenger();
             mock.Provide<IMessenger>(testMessenger);
@@ -76,7 +82,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsNotActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+            isPackTabActive = false;
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
 
@@ -88,7 +94,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+            isPackTabActive = true;
 
             testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
 
@@ -100,7 +106,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsNotActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+            isPackTabActive = false;
 
             testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
 
@@ -112,8 +118,8 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
-
+            isPackTabActive = true;
+            
             testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
 
             scheduler.Start();
@@ -124,7 +130,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(false);
+            isPackTabActive = false;
 
             var order = new OrderEntity()
             {
@@ -141,7 +147,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void InitializeForCurrentScope_DoesNotHandlesOrderLookupLoadOrderMessage_WhenScanPackIsActive()
         {
-            mainForm.Setup(m => m.IsScanPackActive()).Returns(true);
+            isPackTabActive = true;
 
             var order = new OrderEntity()
             {
