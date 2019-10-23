@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Warehouse
                 .ConfigureAwait(false);
             store.CountryCode = storeEntity.CountryCode;
             store.ItemAttributesToImport = storeEntity.ParsedAttributesToDownload;
-            store.DaysBack = storeEntity.InitialDownloadDays ?? 1;
+            store.DaysBack = storeEntity.DownloadDaysBack;
 
             return store;
         }
