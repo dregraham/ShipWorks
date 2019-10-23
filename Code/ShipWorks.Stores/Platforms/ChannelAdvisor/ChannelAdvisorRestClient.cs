@@ -185,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             getOrdersRequestSubmitter.Variables.Add("$filter", "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped') AND " +
                 "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
                 "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited') AND " +
-                $"(CreatedDateUtc ge {downloadStartDate.ToIsoString()})");
+                $"(CreatedDateUtc ge {downloadStartDate.ToString("o")})");
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
