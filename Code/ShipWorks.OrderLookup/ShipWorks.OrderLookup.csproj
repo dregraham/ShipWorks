@@ -342,12 +342,6 @@
     <Compile Include="ScanPack\ScanPackControl.xaml.cs">
       <DependentUpon>ScanPackControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ScanPack\ScanPackControlHost.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ScanPack\ScanPackControlHost.Designer.cs">
-      <DependentUpon>ScanPackControlHost.cs</DependentUpon>
-    </Compile>
     <Compile Include="ScanPack\ScanPackItem.cs" />
     <Compile Include="ScanPack\ScanPackItemControl.xaml.cs">
       <DependentUpon>ScanPackItemControl.xaml</DependentUpon>
