@@ -80,8 +80,6 @@ namespace ShipWorks.OrderLookup.ScanToShip
                 {
                     SearchViewModel = OrderLookupSearchViewModel;
                 }
-
-                OrderLookupSearchViewModel.ScanPackTabActive = IsPackTabActive;
             }
         }
     }

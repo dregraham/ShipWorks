@@ -15,8 +15,7 @@
     FontSize="20px"
     Foreground="Black"
     Loaded="OnLoad"
-    mc:Ignorable="d"
-    IsEnabled="{Binding Enabled}">
+    mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -34,6 +33,7 @@
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />

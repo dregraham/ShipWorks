@@ -27,9 +27,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         private bool showCreateLabel = false;
         private string searchErrorMessage = string.Empty;
         private bool searchError;
-        private bool enabled;
-        private bool scanPackTabActive;
-        private bool scanPackAllowed;
 
         /// <summary>
         /// Constructor
@@ -144,50 +141,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
-
-        /// <summary>
-        /// Command to create a label
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Enabled
-        {
-            get => enabled;
-            private set => handler.Set(nameof(Enabled), ref enabled, value);
-        }
-
-        /// <summary>
-        /// Is ScanPackAllowed
-        /// </summary>
-        public bool ScanPackAllowed
-        {
-            get => scanPackAllowed;
-            set
-            {
-                scanPackAllowed = value;
-                DetermineEnabled();
-            }
-        }
-
-        /// <summary>
-        /// Is ScanPackTabActive
-        /// </summary>
-        public bool ScanPackTabActive
-        {
-            get => scanPackTabActive;
-            set
-            {
-                scanPackTabActive = value;
-                DetermineEnabled();
-            }
-        }
-
-        /// <summary>
-        /// Disable if on scanPackAllowed and scanpack is restricted
-        /// </summary>
-        private void DetermineEnabled()
-        {
-            Enabled = scanPackAllowed || !ScanPackTabActive;
-        }
 
         /// <summary>
         /// Update when the shipment model changes

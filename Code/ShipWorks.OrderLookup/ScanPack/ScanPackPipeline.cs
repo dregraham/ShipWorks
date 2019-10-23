@@ -66,12 +66,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (restrictionLevel != EditionRestrictionLevel.None)
             {
                 scanToShipViewModel.ScanPackViewModel.Enabled = false;
-                scanToShipViewModel.OrderLookupSearchViewModel.ScanPackAllowed = false;
                 return;
             }
 
             scanToShipViewModel.ScanPackViewModel.Enabled = true;
-            scanToShipViewModel.OrderLookupSearchViewModel.ScanPackAllowed = true;
 
             subscriptions = new CompositeDisposable(
                 messenger.OfType<SingleScanMessage>()
