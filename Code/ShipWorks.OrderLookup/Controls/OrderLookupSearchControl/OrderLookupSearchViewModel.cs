@@ -214,6 +214,10 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Dispose
         /// </summary>
-        public void Dispose() => subscription.Dispose();
+        public void Dispose()
+        {
+            subscription.Dispose();
+            ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
+        }
     }
 }

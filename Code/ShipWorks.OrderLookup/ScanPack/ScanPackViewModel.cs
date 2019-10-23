@@ -26,7 +26,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// <summary>
     /// View model for the ScanPackControl
     /// </summary>
-    [Component(SingleInstance = true)]
     public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;

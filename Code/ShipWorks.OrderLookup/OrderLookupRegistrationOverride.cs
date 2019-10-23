@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.OrderLookup.ScanPack;
+using ShipWorks.OrderLookup.ScanToShip;
 
 namespace ShipWorks.OrderLookup
 {
@@ -12,7 +14,9 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public void Register(ContainerBuilder builder)
         {
-            builder.RegisterType<OrderLookupShipmentModel>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<OrderLookupShipmentModel>().As<IOrderLookupShipmentModel>().SingleInstance();
+            builder.RegisterType<ScanToShipViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<ScanPackViewModel>().As<IScanPackViewModel>().SingleInstance();
         }
     }
 }
