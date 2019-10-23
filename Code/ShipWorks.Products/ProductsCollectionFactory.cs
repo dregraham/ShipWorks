@@ -34,7 +34,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Create a collection of products
         /// </summary>
-        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool includeInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
+        public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Create(bool hideInactiveProducts, string searchText, IBasicSortDefinition sortDefinition)
         {
             searchText = searchText?.Trim();
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Products
                 .Distinct()
                 .OrderBy(CreateSortClause(sortDefinition));
 
-            if (!includeInactiveProducts)
+            if (hideInactiveProducts)
             {
                 query = query.Where(ProductVariantFields.IsActive == true);
             }
