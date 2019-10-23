@@ -371,7 +371,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => true;
+        protected override bool IsCustomsRequiredByShipment(IShipmentEntity shipment) => shipment.CustomsItems.Count() > 0;
 
         /// <summary>
         /// Gets a ShippingBroker
