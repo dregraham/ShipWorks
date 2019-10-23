@@ -13,6 +13,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
     {
         private const int PackTabIndex = 0;
         private const int ShipTabIndex = 1;
+        private int selectedTab;
 
         /// <summary>
         /// Constructor
@@ -22,6 +23,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             OrderLookupViewModel = orderLookupViewModel;
             ScanPackViewModel = scanScanPackViewModel;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
+            SelectedTab = 0;
         }
 
         /// <summary>
@@ -46,12 +48,20 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// IsPackTabActive
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsPackTabActive => SelectedTab == PackTabIndex;
+        public bool IsPackTabActive => selectedTab == PackTabIndex;
 
         /// <summary>
         /// Returns the numeric value of the selected tab
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public int SelectedTab { get; set; }
+        public int SelectedTab
+        {
+            get => selectedTab;
+            set
+            {
+                selectedTab = value;
+                OrderLookupSearchViewModel.ScanPackTabActive = IsPackTabActive;
+            }
+        }
     }
 }
