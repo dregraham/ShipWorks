@@ -11,11 +11,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -28,6 +25,8 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
+        public event EventHandler OrderVerified;
+
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
@@ -128,13 +127,21 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// Footer for the scan panel
+        /// Current state of the view model
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ScanPackState State
         {
             get => state;
-            set => Set(ref state, value);
+            set
+            {
+                Set(ref state, value);
+
+                if (value == ScanPackState.OrderVerified)
+                {
+                    OrderVerified?.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
 
         /// <summary>

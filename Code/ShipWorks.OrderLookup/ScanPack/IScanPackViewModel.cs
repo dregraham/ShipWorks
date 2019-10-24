@@ -33,5 +33,15 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Reset the control
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Current state of the view model
+        /// </summary>
+        ScanPackState State { get; set; }
+
+        /// <summary>
+        /// Event handler for when state changes
+        /// </summary>
+        event EventHandler OrderVerified;
     }
 }
