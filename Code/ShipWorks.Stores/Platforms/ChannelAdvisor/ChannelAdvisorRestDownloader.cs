@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 {
                     // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
                     // the same "next link" causing ShipWorks to download forever
-                    if (ordersResult.OdataNextLink.Equals(previousLink))
+                    if (ordersResult.OdataNextLink?.Equals(previousLink) == true)
                     {
                         break;
                     }
