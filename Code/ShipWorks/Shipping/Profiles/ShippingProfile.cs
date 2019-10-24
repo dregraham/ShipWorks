@@ -142,9 +142,9 @@ namespace ShipWorks.Shipping.Profiles
         {
             bool isAllowed = true;
 
-            IEnumerable<ShipmentEntity> NonNullShipments = shipments.Where(s => s != null);
+            IEnumerable<ShipmentEntity> shipmentsToCheck = shipments.Where(s => s != null);
 
-            if (NonNullShipments.None())
+            if (shipmentsToCheck.None())
             {
                 return false;
             }
@@ -153,11 +153,11 @@ namespace ShipWorks.Shipping.Profiles
             {
                 ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType.Value);
 
-                isAllowed = NonNullShipments.All(s => profileShipmentType.IsAllowedFor(s));
+                isAllowed = shipmentsToCheck.All(s => profileShipmentType.IsAllowedFor(s));
             }
 
-            return NonNullShipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
-                   NonNullShipments.All(s => IsApplicable(s.ShipmentTypeCode)) && isAllowed;
+            return shipmentsToCheck.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
+                   shipmentsToCheck.All(s => IsApplicable(s.ShipmentTypeCode)) && isAllowed;
         }
 
         /// <summary>
