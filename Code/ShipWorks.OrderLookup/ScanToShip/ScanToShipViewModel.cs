@@ -34,8 +34,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
             this.userSession = userSession;
 
             shipmentModel = orderLookupViewModel.ShipmentModel;
-            ScanPackViewModel.OrderVerified += OrderVerified;
-            shipmentModel.ShipmentLoaded += ShipmentLoaded;
+            ScanPackViewModel.OrderVerified += OnOrderVerified;
+            shipmentModel.ShipmentLoaded += OnShipmentLoaded;
             SelectedTab = 0;
         }
 
@@ -98,7 +98,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// When an order has been verified,
         /// </summary>
-        private void OrderVerified(object sender, EventArgs e)
+        private void OnOrderVerified(object sender, EventArgs e)
         {
             // If the selected order is null, that means we are still in the process of loading the order, so don't
             // change tabs yet. It will get picked up by the shipment loaded event.
@@ -113,7 +113,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// When a shipment is loaded, if we are currently on the pack tab and the order has already been verified,
         /// switch to ship tab.
         /// </summary>
-        private void ShipmentLoaded(object sender, EventArgs e)
+        private void OnShipmentLoaded(object sender, EventArgs e)
         {
             if (userSession?.Settings?.ScanToShipAutoAdvance == true &&
                 IsPackTabActive && ScanPackViewModel.State == ScanPackState.OrderVerified)
@@ -127,8 +127,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         public void Dispose()
         {
-            ScanPackViewModel.OrderVerified -= OrderVerified;
-            shipmentModel.ShipmentLoaded -= ShipmentLoaded;
+            ScanPackViewModel.OrderVerified -= OnOrderVerified;
+            shipmentModel.ShipmentLoaded -= OnShipmentLoaded;
 
             shipmentModel?.Dispose();
             OrderLookupViewModel?.Dispose();
