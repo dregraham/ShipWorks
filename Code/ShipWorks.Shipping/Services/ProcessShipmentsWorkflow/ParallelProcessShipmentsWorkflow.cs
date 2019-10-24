@@ -82,17 +82,15 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             // Get shipment count with automatic returns
             int shipmentCount = 0;
-            using(var scope = IoC.BeginLifetimeScope())
+
+            foreach (ShipmentEntity shipment in shipments)
             {
-                foreach (ShipmentEntity shipment in shipments)
+                shipmentCount++;
+                if (shipment.IncludeReturn)
                 {
                     shipmentCount++;
-                    if (shipment.IncludeReturn)
-                    {
-                        shipmentCount++;
-                    }
-                    shipment.CarrierAccountID = scope.Resolve<IShippingManager>().GetAccountID(shipment);
                 }
+                shipment.CarrierAccountID = shippingManager.GetAccountID(shipment);
             }
             
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";

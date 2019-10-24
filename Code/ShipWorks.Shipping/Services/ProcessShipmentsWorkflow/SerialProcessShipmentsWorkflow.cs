@@ -160,10 +160,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
-                using (var scope = IoC.BeginLifetimeScope())
-                {
-                    shipment.CarrierAccountID = scope.Resolve<IShippingManager>().GetAccountID(shipment);
-                }
+                shipment.CarrierAccountID = shippingManager.GetAccountID(shipment);
+
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
