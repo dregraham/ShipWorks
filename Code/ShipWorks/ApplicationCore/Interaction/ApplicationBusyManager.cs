@@ -43,8 +43,6 @@ namespace ShipWorks.ApplicationCore.Interaction
         /// </summary>
         public static bool WaitForOperations(IWin32Window owner, string uiUserGoalText, Action acquireAction)
         {
-            Debug.Assert(!Program.ExecutionMode.IsUISupported || !Program.MainForm.InvokeRequired);
-
             lock (activeOperations)
             {
                 if (activeOperations.Count == 0)
