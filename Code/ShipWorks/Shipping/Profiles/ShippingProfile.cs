@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Core.Messaging;
@@ -141,15 +142,22 @@ namespace ShipWorks.Shipping.Profiles
         {
             bool isAllowed = true;
 
+            IEnumerable<ShipmentEntity> NonNullShipments = shipments.Where(s => s != null);
+
+            if (NonNullShipments.None())
+            {
+                return false;
+            }
+
             if (ShippingProfileEntity.ShipmentType != null)
             {
                 ShipmentType profileShipmentType = shipmentTypeManager.Get(ShippingProfileEntity.ShipmentType.Value);
 
-                isAllowed = shipments.All(s => profileShipmentType.IsAllowedFor(s));
+                isAllowed = NonNullShipments.All(s => profileShipmentType.IsAllowedFor(s));
             }
 
-            return shipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
-                shipments.All(s => IsApplicable(s.ShipmentTypeCode)) && isAllowed;
+            return NonNullShipments.All(s => securityContext().HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID)) &&
+                   NonNullShipments.All(s => IsApplicable(s.ShipmentTypeCode)) && isAllowed;
         }
 
         /// <summary>
