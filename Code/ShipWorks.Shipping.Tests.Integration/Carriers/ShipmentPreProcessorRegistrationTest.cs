@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
         public ShipmentPreProcessorRegistrationTest()
         {
             container = ContainerInitializer.Build();
+            IoC.InitializeForUnitTests(container);
         }
 
         [Fact]
