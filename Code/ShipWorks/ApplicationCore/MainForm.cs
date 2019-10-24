@@ -1865,10 +1865,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            else if (UIMode == UIMode.OrderLookup)
-            {
-                shipmentHistory.SaveGridColumnState();
-            }
+            
+            shipmentHistory?.SaveGridColumnState();            
         }
 
         /// <summary>
