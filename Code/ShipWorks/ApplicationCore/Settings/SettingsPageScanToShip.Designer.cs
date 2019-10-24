@@ -214,7 +214,7 @@
             // autoAdvance
             // 
             this.autoAdvance.AutoSize = true;
-            this.autoAdvance.Location = new System.Drawing.Point(39, 199);
+            this.autoAdvance.Location = new System.Drawing.Point(20, 199);
             this.autoAdvance.Name = "autoAdvance";
             this.autoAdvance.Size = new System.Drawing.Size(316, 17);
             this.autoAdvance.TabIndex = 49;
