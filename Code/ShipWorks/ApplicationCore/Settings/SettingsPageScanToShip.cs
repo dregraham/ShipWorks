@@ -236,12 +236,19 @@ namespace ShipWorks.ApplicationCore.Settings
             if (autoPrint.Checked && warehouseEnabled)
             {
                 requireVerificationForAutoPrint.Enabled = true;
-                autoAdvance.Enabled = true;
             }
             else
             {
                 requireVerificationForAutoPrint.Checked = false;
                 requireVerificationForAutoPrint.Enabled = false;
+            }
+
+            if (warehouseEnabled)
+            {
+                autoAdvance.Enabled = true;
+            }
+            else
+            {
                 autoAdvance.Enabled = false;
                 autoAdvance.Checked = false;
             }
