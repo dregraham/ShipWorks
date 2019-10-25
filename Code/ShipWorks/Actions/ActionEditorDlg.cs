@@ -696,8 +696,8 @@ namespace ShipWorks.Actions
                     }
 
                     // Warn the user that this task could cost them money
-                    MessageHelper.ShowWarning(this, "The 'Create a label' task creates and processes shipments which could result in charges to your shipping accounts. " +
-                        "Please ensure that your settings are properly configured before enabling this action.");
+                    MessageHelper.ShowWarning(this, "The 'Create a label' task creates and processes shipments automatically which could result in charges to your carrier postage accounts. " +
+                        "Please carefully ensure that your shipping settings are properly configured before enabling or editing this action to avoid any mistakes.");
                 }
 
                 // Don't close the form if any of the bubbles have invalid data
