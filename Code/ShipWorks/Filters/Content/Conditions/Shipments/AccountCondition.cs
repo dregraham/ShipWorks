@@ -63,6 +63,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                         }                     
                     }
                 }
+                scope?.Dispose();
                 return choices;
             }
         }
@@ -80,8 +81,6 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                              shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
                      .Select(t => t.ShipmentTypeCode)
                      .ToArray();
-
-            scope?.Dispose();
 
             return result;
         }
