@@ -76,6 +76,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         {
             CommitBindingsOnFocusedControl();
             scanToShipViewModel.OrderLookupViewModel.ShipmentModel.Unload();
+            scanToShipViewModel.ScanPackViewModel.Reset();
         }
 
         /// <summary>
