@@ -87,7 +87,6 @@ namespace ShipWorks.OrderLookup.ScanPack
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => ShouldProcessScan() && !scanToShipViewModel.IsPackTabActive)
                 .Do(x => processingScan = true)
                 .Do(x => OnOrderLookupLoadOrderMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))

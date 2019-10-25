@@ -122,6 +122,11 @@ namespace ShipWorks.OrderLookup
         public event EventHandler ShipmentLoaded;
 
         /// <summary>
+        /// Called after ShipmentLoaded events have fired (quick and dirty)
+        /// </summary>
+        public event EventHandler ShipmentLoadedComplete;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public OrderLookupShipmentModel(
@@ -222,7 +227,7 @@ namespace ShipWorks.OrderLookup
             get => totalCost;
             set => handler.Set(nameof(TotalCost), ref totalCost, value, true);
         }
-
+        
         /// <summary>
         /// Invoked when a property on the order object changes
         /// </summary>
@@ -369,6 +374,7 @@ namespace ShipWorks.OrderLookup
             {
                 ShipmentLoaded?.Invoke(this, EventArgs.Empty);
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -573,6 +579,7 @@ namespace ShipWorks.OrderLookup
 
             ShipmentLoaded?.Invoke(this, EventArgs.Empty);
             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+            ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

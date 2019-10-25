@@ -218,6 +218,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
 
                 await LoadOrder(order).ConfigureAwait(true);
+                //messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
@@ -289,8 +290,6 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
-
-            messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
         }
 
         /// <summary>

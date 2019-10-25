@@ -43,7 +43,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
 
             shipmentModel = orderLookupViewModel.ShipmentModel;
             ScanPackViewModel.OrderVerified += OnOrderVerified;
-            shipmentModel.ShipmentLoaded += OnShipmentLoaded;
+            shipmentModel.ShipmentLoadedComplete += OnShipmentLoadedComplete;
 
             OrderLookupSearchViewModel.ResetCommand = new RelayCommand(Reset);
             ScanPackViewModel.ResetCommand = new RelayCommand(Reset);
@@ -139,11 +139,11 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// When a shipment is loaded, if we are currently on the pack tab and the order has already been verified,
         /// switch to ship tab.
         /// </summary>
-        private void OnShipmentLoaded(object sender, EventArgs e)
+        private void OnShipmentLoadedComplete(object sender, EventArgs e)
         {
             if (ShouldAutoAdvance)
             {
-                SelectedTab = shipmentModel.SelectedOrder.Verified ? ShipTabIndex : PackTabIndex;
+                SelectedTab = shipmentModel.SelectedOrder.Verified? ShipTabIndex : PackTabIndex;
             }
         }
 
@@ -164,7 +164,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public void Dispose()
         {
             ScanPackViewModel.OrderVerified -= OnOrderVerified;
-            shipmentModel.ShipmentLoaded -= OnShipmentLoaded;
+            shipmentModel.ShipmentLoadedComplete -= OnShipmentLoadedComplete;
 
             shipmentModel?.Dispose();
             OrderLookupViewModel?.Dispose();

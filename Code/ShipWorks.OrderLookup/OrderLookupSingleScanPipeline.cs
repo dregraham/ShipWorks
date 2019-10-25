@@ -104,7 +104,7 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && scanToShipViewModel.IsPackTabActive)
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => LoadOrder(x.Order))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
@@ -120,7 +120,9 @@ namespace ShipWorks.OrderLookup
             !mainForm.AdditionalFormsOpen() &&
             mainForm.UIMode == UIMode.OrderLookup &&
             !mainForm.IsShipmentHistoryActive() &&
-            !scanToShipViewModel.IsPackTabActive;
+            (!scanToShipViewModel.IsPackTabActive ||
+            scanToShipViewModel.ScanPackViewModel.State == ScanPack.ScanPackState.ListeningForOrderScan ||
+             scanToShipViewModel.ScanPackViewModel.State == ScanPack.ScanPackState.OrderVerified);
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.
@@ -213,11 +215,6 @@ namespace ShipWorks.OrderLookup
         {
             lock (loadingOrderLock)
             {
-                if (processingScan)
-                {
-                    return;
-                }
-
                 processingScan = true;
 
                 shipmentModel.LoadOrder(order);
