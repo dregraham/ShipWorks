@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
 using GalaSoft.MvvmLight;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Editions;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
@@ -14,6 +16,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
     public class ScanToShipViewModel : ViewModelBase, IScanToShipViewModel, IDisposable
     {
         private readonly IUserSession userSession;
+        private readonly ILicenseService licenseService;
         private readonly IOrderLookupShipmentModel shipmentModel;
         private const int PackTabIndex = 0;
         private const int ShipTabIndex = 1;
@@ -26,17 +29,20 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public ScanToShipViewModel(MainOrderLookupViewModel orderLookupViewModel,
                                    IScanPackViewModel scanScanPackViewModel,
                                    OrderLookupSearchViewModel orderLookupSearchViewModel,
-                                   IUserSession userSession)
+                                   IUserSession userSession,
+                                   ILicenseService licenseService)
         {
             OrderLookupViewModel = orderLookupViewModel;
             ScanPackViewModel = scanScanPackViewModel;
             OrderLookupSearchViewModel = orderLookupSearchViewModel;
             this.userSession = userSession;
+            this.licenseService = licenseService;
 
             shipmentModel = orderLookupViewModel.ShipmentModel;
             ScanPackViewModel.OrderVerified += OnOrderVerified;
             shipmentModel.ShipmentLoaded += OnShipmentLoaded;
-            SelectedTab = 0;
+
+            SelectedTab = IsWarehouseCustomer ? PackTabIndex : ShipTabIndex;
         }
 
         /// <summary>
@@ -102,8 +108,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         {
             // If the selected order is null, that means we are still in the process of loading the order, so don't
             // change tabs yet. It will get picked up by the shipment loaded event.
-            if (userSession?.Settings?.ScanToShipAutoAdvance == true &&
-                shipmentModel.SelectedOrder != null && IsPackTabActive)
+            if (ShouldAutoAdvance && shipmentModel.SelectedOrder != null && IsPackTabActive)
             {
                 SelectedTab = ShipTabIndex;
             }
@@ -115,12 +120,22 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         private void OnShipmentLoaded(object sender, EventArgs e)
         {
-            if (userSession?.Settings?.ScanToShipAutoAdvance == true &&
-                IsPackTabActive && ScanPackViewModel.State == ScanPackState.OrderVerified)
+            if (ShouldAutoAdvance)
             {
-                SelectedTab = ShipTabIndex;
+                SelectedTab = shipmentModel.SelectedOrder.Verified ? ShipTabIndex : PackTabIndex;
             }
         }
+
+        /// <summary>
+        /// Is the customer allowed to use warehouse features
+        /// </summary>
+        private bool IsWarehouseCustomer => licenseService.CheckRestriction(EditionFeature.Warehouse, null) ==
+                                            EditionRestrictionLevel.None;
+
+        /// <summary>
+        /// Does the user have the auto advance setting enabled
+        /// </summary>
+        private bool ShouldAutoAdvance => IsWarehouseCustomer && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         /// <summary>
         /// Dispose
