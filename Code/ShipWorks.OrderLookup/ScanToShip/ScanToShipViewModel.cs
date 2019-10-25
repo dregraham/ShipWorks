@@ -1,6 +1,9 @@
 using System;
 using System.Reflection;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.Metrics;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Editions;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
@@ -41,6 +44,9 @@ namespace ShipWorks.OrderLookup.ScanToShip
             shipmentModel = orderLookupViewModel.ShipmentModel;
             ScanPackViewModel.OrderVerified += OnOrderVerified;
             shipmentModel.ShipmentLoaded += OnShipmentLoaded;
+
+            OrderLookupSearchViewModel.ResetCommand = new RelayCommand(Reset);
+            ScanPackViewModel.ResetCommand = new RelayCommand(Reset);
 
             SelectedTab = IsWarehouseCustomer ? PackTabIndex : ShipTabIndex;
         }
@@ -99,6 +105,21 @@ namespace ShipWorks.OrderLookup.ScanToShip
                     SearchViewModel = OrderLookupSearchViewModel;
                 }
             }
+        }
+
+        /// <summary>
+        /// Clear the order in both tabs
+        /// </summary>
+        private void Reset()
+        {
+            if (IsPackTabActive)
+            {
+                new TrackedEvent("PickAndPack.ResetClicked").Dispose();
+            }
+
+            OrderLookupSearchViewModel.ShipmentModel.Unload();
+            OrderLookupSearchViewModel.ClearOrderError(OrderClearReason.Reset);
+            OrderLookupSearchViewModel.OrderNumber = string.Empty;
         }
 
         /// <summary>

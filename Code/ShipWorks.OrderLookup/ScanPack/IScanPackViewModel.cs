@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -43,5 +44,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Event handler for when state changes
         /// </summary>
         event EventHandler OrderVerified;
+
+        /// <summary>
+        /// Command for resetting the order
+        /// </summary>
+        ICommand ResetCommand { get; set; }
     }
 }

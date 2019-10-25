@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Media;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,7 +66,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             PackedItems = new ObservableCollection<ScanPackItem>();
 
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(ResetClicked);
 
             Update();
         }
@@ -362,16 +362,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             Reset(false);
 
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
-        }
-
-        /// <summary>
-        /// Clear the order as the user clicked reset
-        /// </summary>
-        private void ResetClicked()
-        {
-            new TrackedEvent("PickAndPack.ResetClicked").Dispose();
-
-            messenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
         }
 
         /// <summary>

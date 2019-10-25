@@ -43,7 +43,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             shipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
-            ResetCommand = new RelayCommand(Reset);
             CreateLabelCommand = new RelayCommand(CreateLabel);
             shipmentModel.OnSearchOrder += (s, e) => ClearOrderError(OrderClearReason.NewSearch);
 
@@ -59,7 +58,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Clears the order error
         /// </summary>
-        private void ClearOrderError(OrderClearReason reason)
+        public void ClearOrderError(OrderClearReason reason)
         {
             if (reason == OrderClearReason.NewSearch)
             {
@@ -193,16 +192,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             ShipmentModel.TotalCost = 0;
             ShowCreateLabel = false;
             messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
-        }
-
-        /// <summary>
-        /// Reset the order
-        /// </summary>
-        private void Reset()
-        {
-            ShipmentModel.Unload();
-            ClearOrderError(OrderClearReason.Reset);
-            OrderNumber = string.Empty;
         }
 
         /// <summary>

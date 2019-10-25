@@ -108,24 +108,8 @@ namespace ShipWorks.OrderLookup
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => LoadOrder(x.Order))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe(),
-
-                messenger.OfType<OrderLookupClearOrderMessage>()
-                .Do(OnOrderLookupClearOrderMessage)
-                .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe()
             );
-        }
-
-        /// <summary>
-        /// Handle clear message
-        /// </summary>
-        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
-        {
-            if (message.Reason == OrderClearReason.Reset)
-            {
-                LoadOrder(null);
-            }
         }
 
         /// <summary>
