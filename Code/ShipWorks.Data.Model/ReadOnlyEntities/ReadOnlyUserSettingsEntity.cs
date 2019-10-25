@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AutoPrintRequireValidation = source.AutoPrintRequireValidation;
             MinimizeRibbon = source.MinimizeRibbon;
             ShowQAToolbarBelowRibbon = source.ShowQAToolbarBelowRibbon;
+            ScanToShipAutoAdvance = source.ScanToShipAutoAdvance;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -213,6 +214,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ShowQAToolbarBelowRibbon { get; }
+        /// <summary> The ScanToShipAutoAdvance property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."ScanToShipAutoAdvance"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ScanToShipAutoAdvance { get; }
         
         public IUserEntity User { get; }
         

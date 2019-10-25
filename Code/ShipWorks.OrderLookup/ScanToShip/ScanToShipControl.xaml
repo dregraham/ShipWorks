@@ -57,7 +57,7 @@
         <orderLookupSearchControl:OrderLookupSearchControl
             Grid.Row="0"
             Margin="10"
-            DataContext="{Binding SearchViewModel}" IsEnabled="{Binding Enabled}"/>
+            DataContext="{Binding SearchViewModel}"/>
         <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}">
             <TabItem Header="Scan">
                 <scanpack:ScanPackControl DataContext="{Binding ScanPackViewModel}"/>
