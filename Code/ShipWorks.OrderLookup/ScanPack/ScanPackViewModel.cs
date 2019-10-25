@@ -217,7 +217,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     return;
                 }
 
-                await LoadOrder(order).ConfigureAwait(true);
+                //await LoadOrder(order).ConfigureAwait(true);
                 //messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
