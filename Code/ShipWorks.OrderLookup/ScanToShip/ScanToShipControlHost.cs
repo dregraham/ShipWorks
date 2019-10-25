@@ -37,6 +37,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
             this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
             this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
             this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
+
+            this.scanToShipViewModel.ScanPackViewModel.CanAcceptFocus = () => Visible && CanFocus;
         }
 
         /// <summary>
