@@ -511,11 +511,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// Gets an instance to the best rate shipping broker for the Endicia shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository)
         {
-            if (AccountRepository.Accounts.Any())
+            IEnumerable<long> excludedAccounts = bestRateExcludedAccountRepository.GetAll();
+            IEnumerable<IEndiciaAccountEntity> nonExcludedAccounts = AccountRepository.AccountsReadOnly.Where(a => !excludedAccounts.Contains(a.AccountId));
+            
+            if (nonExcludedAccounts.Any())
             {
-                return new EndiciaBestRateBroker(this, AccountRepository);
+                return new EndiciaBestRateBroker(this, AccountRepository, "USPS", bestRateExcludedAccountRepository);
             }
 
             // We want to be able to show counter rates to users that don't have

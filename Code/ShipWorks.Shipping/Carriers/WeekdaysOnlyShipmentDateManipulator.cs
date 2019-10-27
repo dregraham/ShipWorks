@@ -57,7 +57,9 @@ namespace ShipWorks.Shipping.Carriers
             DateTime now = dateTimeProvider.Now;
 
             // Bring the past up to now
-            if (shipment.ShipDate.Date < now.Date)
+            var shipDateTime = shipment.ShipDate.ToLocalTime();
+
+            if (shipDateTime.Date < now.Date)
             {
                 shipment.ShipDate = now;
             }

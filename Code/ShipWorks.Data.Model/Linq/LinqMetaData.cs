@@ -134,6 +134,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.AuditChangeDetailEntity:
 					toReturn = this.AuditChangeDetail;
 					break;
+				case ShipWorks.Data.Model.EntityType.BestRateExcludedAccountEntity:
+					toReturn = this.BestRateExcludedAccount;
+					break;
 				case ShipWorks.Data.Model.EntityType.BestRateProfileEntity:
 					toReturn = this.BestRateProfile;
 					break;
@@ -931,6 +934,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<AuditChangeDetailEntity> AuditChangeDetail
 		{
 			get { return new DataSource2<AuditChangeDetailEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting BestRateExcludedAccountEntity instances in the database.</summary>
+		public DataSource2<BestRateExcludedAccountEntity> BestRateExcludedAccount
+		{
+			get { return new DataSource2<BestRateExcludedAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting BestRateProfileEntity instances in the database.</summary>

@@ -219,8 +219,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
             {
                 service.RequesterCredentials.Credentials = new UserIdPasswordType();
 
-                // I was getting "Certificate Mistmatch" errors.  I initiated a eBay Live Chat on the eBay
-                // site and Bruce Thomson on 05/27/05 recomended leaving these properties out, as they are actually
+                // I was getting "Certificate Mismatch" errors.  I initiated a eBay Live Chat on the eBay
+                // site and Bruce Thomson on 05/27/05 recommended leaving these properties out, as they are actually
                 // also known by eBay through the auth token.  Seems to fix the problem.
                 //  service.RequesterCredentials.Credentials.AppId = SecureText.Decrypt(liveApplication, "apptive");
                 //  service.RequesterCredentials.Credentials.DevId = SecureText.Decrypt(liveDeveloper,   "apptive");
@@ -234,23 +234,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Requests
                 service.RequesterCredentials.Credentials.AuthCert = EbayUtility.SandboxCertificateCredential;
             }
 
-            string requestURL = EbayUrlUtilities.SoapUrl;
-
-            if (EbayUrlUtilities.UseSandboxEndpointOverride)
-            {
-                // Reformat the request when using fake stores
-                requestURL += $"/{token.Token}/{configuration.RequestName}";
-            }
-            else
-            {
-                requestURL += "?callname=" + configuration.RequestName
+            service.Url = EbayUrlUtilities.SoapUrl + "?callname=" + configuration.RequestName
                 + "&siteid=0"
                 + "&appid=" + service.RequesterCredentials.Credentials.AppId
                 + "&version=" + configuration.ApiVersion
                 + "&routing=default";
-            }
-
-            service.Url = requestURL;
 
             return service;
         }

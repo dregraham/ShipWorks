@@ -8124,3 +8124,15 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_ProductAttribute_Product]', 'F') AND parent_object_id = OBJECT_ID(N'[dbo].[ProductAttribute]', 'U'))
 ALTER TABLE [dbo].[ProductAttribute] ADD CONSTRAINT [FK_ProductAttribute_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ProductID])
 GO
+PRINT N'Creating [dbo].[BestRateExcludedAccount]'
+GO
+CREATE TABLE [dbo].[BestRateExcludedAccount]
+(
+[AccountID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_AccountID] on [dbo].[BestRateExcludedAccount]'
+GO
+ALTER TABLE [dbo].[BestRateExcludedAccount] ADD CONSTRAINT [PK_AccountID] PRIMARY KEY CLUSTERED ([AccountID])
+GO
+

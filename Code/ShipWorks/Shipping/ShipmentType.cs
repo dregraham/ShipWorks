@@ -1027,7 +1027,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
+        public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository);
 
         /// <summary>
         /// Clear any data that should not be part of a shipment after it has been copied.

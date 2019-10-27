@@ -323,6 +323,7 @@
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_01_Test.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_13_00_02_Test.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_05_16_01_00_Test.cs" />
+    <Compile Include="Data\EntityUtilityTest.cs" />
     <Compile Include="Data\Connection\ConnectionMonitorExceptionLoggerTest.cs" />
     <Compile Include="Data\Connection\ConnectionMonitorTest.cs" />
     <Compile Include="Editions\EditionManagerTest.cs" />
@@ -542,7 +543,6 @@
     <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipPackageImporterTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
     <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCodeTest.cs" />

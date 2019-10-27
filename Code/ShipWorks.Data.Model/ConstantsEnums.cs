@@ -981,6 +981,14 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateExcludedAccount.</summary>
+	public enum BestRateExcludedAccountFieldIndex
+	{
+		///<summary>AccountID. </summary>
+		AccountID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: BestRateProfile.</summary>
 	public enum BestRateProfileFieldIndex
 	{
@@ -14137,6 +14145,8 @@ namespace ShipWorks.Data.Model
 		AuditChangeEntity,
 		///<summary>AuditChangeDetail</summary>
 		AuditChangeDetailEntity,
+		///<summary>BestRateExcludedAccount</summary>
+		BestRateExcludedAccountEntity,
 		///<summary>BestRateProfile</summary>
 		BestRateProfileEntity,
 		///<summary>BestRateShipment</summary>

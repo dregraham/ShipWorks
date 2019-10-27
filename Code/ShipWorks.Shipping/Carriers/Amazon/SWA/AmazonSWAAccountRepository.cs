@@ -84,5 +84,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
         {
             return shipment.AmazonSWA.AmazonSWAAccountID;
         }
+
+        /// <summary>
+        /// Initialize
+        /// </summary>
+        public override void Initialize()
+        {
+            AmazonSWAAccountManager.Initialize();
+        }
     }
 }

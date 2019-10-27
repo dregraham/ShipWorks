@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     weight.ApplyMultiWeight(shipment.ContentWeight);
                     dimensions.Add(new DimensionsAdapter(shipment.BestRate));
 

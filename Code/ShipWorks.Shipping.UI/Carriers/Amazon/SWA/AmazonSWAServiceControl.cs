@@ -45,7 +45,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
             LoadAccounts();
 
             dimensionsControl.DimensionsChanged += (s, a) => RaiseShipSenseFieldChanged();
+            dimensionsControl.DimensionsChanged += (s, e) => RaiseRateCriteriaChanged();
             weight.WeightChanged += (s, a) => RaiseShipSenseFieldChanged();
+            weight.WeightChanged += (s, a) => RaiseRateCriteriaChanged();
             ShipSenseFieldChanged += (s, a) => SaveToShipments();
 
             weight.ConfigureTelemetryEntityCounts = telemetryEvent =>
@@ -128,7 +130,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                         service.ApplyMultiValue(AmazonSWAServiceType);
                     }
 
-                    shipDate.ApplyMultiDate(shipment.ShipDate);
+                    shipDate.ApplyMultiDate(shipment.ShipDate.ToLocalTime());
                     dimensions.Add(new DimensionsAdapter(shipment.AmazonSWA));
                 }
             }
