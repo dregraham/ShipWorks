@@ -83,6 +83,21 @@ namespace ShipWorks.Warehouse.DTO.Orders
         [JsonProperty("custom_5")]
         public string Custom5 { get; set; }
 
+        [JsonProperty("custom_6")]
+        public string Custom6 { get; set; }
+
+        [JsonProperty("custom_7")]
+        public string Custom7 { get; set; }
+
+        [JsonProperty("custom_8")]
+        public string Custom8 { get; set; }
+
+        [JsonProperty("custom_9")]
+        public string Custom9 { get; set; }
+
+        [JsonProperty("custom_10")]
+        public string Custom10 { get; set; }
+
         public List<WarehouseOrderCharge> Charges { get; set; }
         public List<WarehouseOrderPaymentDetail> PaymentDetails { get; set; }
         public List<WarehouseOrderNote> Notes { get; set; }
