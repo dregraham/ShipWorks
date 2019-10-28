@@ -237,5 +237,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         {
             return new ThreeDCartStoreSettingsControl();
         }
+
+        /// <summary>
+        /// Support Hub download
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }
