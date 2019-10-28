@@ -8,10 +8,14 @@ using Interapptive.Shared.Utility;
 using Microsoft.Reactive.Testing;
 using Moq;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.ScanPack;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
@@ -25,6 +29,7 @@ namespace ShipWorks.OrderLookup.Tests
     {
         private readonly AutoMock mock;
         readonly TestMessenger testMessenger;
+        private readonly Mock<ILicenseService> licenseService;
         private readonly Mock<IOrderLookupOrderRepository> orderRepository;
         private readonly Mock<IMainForm> mainForm;
         private readonly Mock<IOrderLookupOrderIDRetriever> orderIdRetriever;
@@ -33,7 +38,9 @@ namespace ShipWorks.OrderLookup.Tests
         private readonly Mock<IOnDemandDownloader> downloader;
         private readonly Mock<IOrderLookupAutoPrintService> autoPrintService;
         private readonly OrderEntity order;
-
+        private readonly Mock<IScanPackViewModel> scanPackViewModel;
+        private bool isPackTabActive = true;
+               
         public OrderLookupSingleScanPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -45,6 +52,10 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler = new TestScheduler();
             scheduleProvider.Setup(s => s.Default).Returns(scheduler);
+            scheduleProvider.Setup(s => s.WindowsFormsEventLoop).Returns(scheduler);
+
+            licenseService = mock.Mock<ILicenseService>();
+
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
             orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
@@ -70,6 +81,11 @@ namespace ShipWorks.OrderLookup.Tests
                 .ReturnsAsync(printResult);
 
             orderIdRetriever = mock.Mock<IOrderLookupOrderIDRetriever>();
+
+            scanPackViewModel = mock.Mock<IScanPackViewModel>();
+            var scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
+            scanToShipViewModel.SetupGet(m => m.IsPackTabActive).Returns(() => isPackTabActive);
+            scanToShipViewModel.SetupGet(m => m.ScanPackViewModel).Returns(scanPackViewModel.Object);
 
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
         }
@@ -157,6 +173,114 @@ namespace ShipWorks.OrderLookup.Tests
             testMessenger.Send(singleScanMessage);
 
             RetryAssertion(() => orderRepository.Verify(o => o.GetOrderIDs("Foo")));
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_DisablesScanPack_WhenFeatureRestricted()
+        {
+            licenseService
+                .Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
+                .Returns(EditionRestrictionLevel.Forbidden);
+
+            testObject.InitializeForCurrentScope();
+
+            scanPackViewModel.VerifySet(s => s.Enabled = false);
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_EnablesScanPack_WhenFeatureRestricted()
+        {
+            licenseService
+                .Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
+                .Returns(EditionRestrictionLevel.None);
+
+            testObject.InitializeForCurrentScope();
+
+            scanPackViewModel.VerifySet(s => s.Enabled = true);
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsNotActive()
+        {
+            isPackTabActive = false;
+
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.ProcessScan("foobar"), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsActive()
+        {
+            isPackTabActive = true;
+
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.ProcessScan("foobar"));
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsNotActive()
+        {
+            isPackTabActive = false;
+
+            testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.ProcessScan("blah"), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesOrderLookupSearchMessage_WhenScanPackIsActive()
+        {
+            isPackTabActive = true;
+
+            testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.ProcessScan("blah"));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void InitializeForCurrentScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive(bool isPackTabActive)
+        {
+            this.isPackTabActive = isPackTabActive;
+
+            order.OrderNumber = 123;
+
+            testMessenger.Send(new OrderLookupLoadOrderMessage(this, order));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.LoadOrder(order));
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
+        {
+            testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Reset());
+        }
+
+        [Fact]
+        public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsNotReset()
+        {
+            testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.OrderNotFound));
+
+            scheduler.Start();
+
+            scanPackViewModel.Verify(s => s.Reset(), Times.Never);
         }
 
         /// <summary>
