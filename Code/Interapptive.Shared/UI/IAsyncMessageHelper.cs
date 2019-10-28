@@ -62,5 +62,10 @@ namespace Interapptive.Shared.UI
         /// Create a progress provider
         /// </summary>
         IProgressProvider CreateProgressProvider();
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        Task<DialogResult> ShowQuestion(string text);
     }
 }

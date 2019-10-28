@@ -30,6 +30,9 @@ namespace ShipWorks.Users.Security
             instance.IsNew = false;
             instance.IsDirty = false;
             instance.Fields.State = EntityState.Fetched;
+            instance.Settings = new UserSettingsEntity();
+            instance.Settings.UIMode = Settings.UIMode.Batch;
+
 
             securityContext = new SecurityContext(null, true);
         }

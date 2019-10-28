@@ -69,5 +69,10 @@ namespace ShipWorks.UI
         /// Create a progress provider
         /// </summary>
         public IProgressProvider CreateProgressProvider() => new ProgressProvider();
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        public Task<DialogResult> ShowQuestion(string message) => Task.FromResult<DialogResult>(DialogResult.No);
     }
 }
