@@ -3,6 +3,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
@@ -38,6 +39,7 @@ namespace ShipWorks.OrderLookup.Tests
             orderLookupShipmentModel.Setup(d => d.ShipmentAdapter).Returns(shipmentAdapter.Object);
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.SelectedTab = ScanToShipTab.ShipTab;
 
             orderLookupShipmentModel.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
@@ -120,6 +122,7 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.SelectedTab = ScanToShipTab.ShipTab;
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
