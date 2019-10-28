@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
@@ -16,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// GetOrders from the given start time
         /// </summary>
-        ChannelAdvisorOrderResult GetOrders(string refreshToken);
+        ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken);
 
         /// <summary>
         /// GetOrders from the given next token
@@ -39,14 +40,14 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         ChannelAdvisorDistributionCenterResponse GetDistributionCenters(string nextToken, string refreshToken);
 
         /// <summary>
+        /// Fetches the given products and adds them to the cache if they aren't already in it
+        /// </summary>
+        void AddProductsToCache(IEnumerable<int> productIds, string refreshToken);
+
+        /// <summary>
         /// Gets the product.
         /// </summary>
         ChannelAdvisorProduct GetProduct(int productID, string refreshToken);
-
-        /// <summary>
-        /// Mark an order as Exported
-        /// </summary>
-        void MarkOrderExported(long orderID, string refreshToken);
 
         /// <summary>
         /// Uploads the shipment details.
