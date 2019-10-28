@@ -71,7 +71,7 @@
         <Style.Resources>
             <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
             <Color x:Key="Color.Additional.MediumGrey">#61656B</Color>
-            <Color x:Key="Color.Additional.LightGreen">#33FF83</Color>
+            <Color x:Key="Color.Additional.LightGreen">#53AB4C</Color>
             <SolidColorBrush x:Key="ToggleButtonTrueForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
             <SolidColorBrush x:Key="ToggleButtonTrueBackground" Color="{StaticResource Color.Additional.LightGreen}" />
             <SolidColorBrush x:Key="ToggleButtonFalseForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
@@ -172,7 +172,7 @@
         <Style.Resources>
             <Color x:Key="Color.Additional.LightGrey">#989EA8</Color>
             <Color x:Key="Color.Additional.MediumGrey">#61656B</Color>
-            <Color x:Key="Color.Additional.LightGreen">#33FF83</Color>
+            <Color x:Key="Color.Additional.LightGreen">#53AB4C</Color>
             <SolidColorBrush x:Key="ToggleButtonTrueForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
             <SolidColorBrush x:Key="ToggleButtonTrueBackground" Color="{StaticResource Color.Additional.LightGreen}" />
             <SolidColorBrush x:Key="ToggleButtonFalseForeground" Color="{StaticResource Color.Additional.MediumGrey}" />
