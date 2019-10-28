@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         {
             var testObject = mock.Create<AmazonSFPDownloadedLabelData>(TypedParameter.From(defaultShipment), TypedParameter.From(defaultLabel));
             testObject.Save();
-            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(It.IsAny<byte[]>(), defaultShipment.ShipmentID, "LabelPrimary"));
+            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(It.IsAny<byte[]>(), defaultShipment.ShipmentID, "LabelPrimary", true));
         }
 
         [Fact]
@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             testObject.Save();
             mock.Mock<IDataResourceManager>().Verify(x =>
                 x.CreateFromPdf(It.IsAny<PdfDocumentType>(), It.IsAny<Stream>(), defaultShipment.ShipmentID,
-                    It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
+                    It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>(), true));
         }
 
         public void Dispose()

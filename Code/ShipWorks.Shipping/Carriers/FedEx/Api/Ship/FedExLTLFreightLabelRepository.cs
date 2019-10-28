@@ -67,11 +67,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
             {
                 if (labelDocument.ImageType == ShippingDocumentImageType.PDF)
                 {
-                    dataResourceManager.CreateFromPdf(PdfDocumentType.Color, stream, shipmentID, i => $"{labelName}-{i}", s => s.ToArray());
+                    dataResourceManager.CreateFromPdf(PdfDocumentType.Color, stream, shipmentID, i => $"{labelName}-{i}", s => s.ToArray(), true);
                 }
                 else
                 {
-                    dataResourceManager.CreateFromBytes(stream.ToArray(), ownerID, labelName);
+                    dataResourceManager.CreateFromBytes(stream.ToArray(), ownerID, labelName, true);
                 }
             }
 

@@ -83,7 +83,7 @@ namespace ShipWorks.Email
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var dataResourceManager = lifetimeScope.Resolve<IDataResourceManager>();
-                emailOutbound.PlainPartResourceID = dataResourceManager.CreateFromText(plainContent, emailOutbound.EmailOutboundID).ReferenceID;
+                emailOutbound.PlainPartResourceID = dataResourceManager.CreateFromText(plainContent, emailOutbound.EmailOutboundID, false).ReferenceID;
             }
 
             if (htmlContent != null)
