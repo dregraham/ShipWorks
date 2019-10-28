@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanToShip;
@@ -144,5 +145,40 @@ namespace ShipWorks.OrderLookup.Tests
             Assert.Equal(string.Empty, testObject.OrderNumber);
             Assert.Equal(string.Empty, testObject.SearchMessage);
         }
+
+        [Fact]
+        public void GetOrderCommand_SendsOrderLookupSearchMessage()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.GetOrderCommand.Execute(null);
+
+            mock.Mock<IMessenger>().Verify(x => x.Send(It.IsAny<OrderLookupSearchMessage>(), It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void GetOrderCommand_DoesNotResetOrderNumber()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.OrderNumber = "1";
+
+            testObject.GetOrderCommand.Execute(null);
+
+            Assert.Equal("1", testObject.OrderNumber);
+        }
+
+        [Fact]
+        public void Reset_ClearsOrderNumber()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.OrderNumber = "1";
+
+            testObject.ResetCommand.Execute(null);
+
+            Assert.Equal(string.Empty, testObject.OrderNumber);
+        }
+
     }
 }
