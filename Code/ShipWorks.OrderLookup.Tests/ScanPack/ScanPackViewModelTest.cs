@@ -157,18 +157,6 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Theory]
         [InlineData(ScanPackState.ListeningForOrderScan)]
         [InlineData(ScanPackState.OrderVerified)]
-        public async Task LoadOrder_SetsOrderNumberToOrdersOrderNumberComplete(ScanPackState state)
-        {
-            OrderEntity order = SetupLoadOrder(state);
-
-            await testObject.LoadOrder(order).ConfigureAwait(false);
-
-            Assert.Equal(order.OrderNumberComplete, testObject.OrderNumber);
-        }
-
-        [Theory]
-        [InlineData(ScanPackState.ListeningForOrderScan)]
-        [InlineData(ScanPackState.OrderVerified)]
         public async Task LoadOrder_LoadsOrderItemsIntoItemsToScan_WhenOrderContainsItems(ScanPackState state)
         {
             OrderEntity order = SetupLoadOrder(state);
@@ -213,42 +201,6 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             await testObject.LoadOrder(order).ConfigureAwait(false);
 
             messenger.Verify(x => x.Send(It.IsAny<OrderLookupLoadOrderMessage>(), It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void GetOrderCommand_SendsOrderLookupSearchMessage()
-        {
-            testObject.GetOrderCommand.Execute(null);
-
-            messenger.Verify(x => x.Send(It.IsAny<OrderLookupSearchMessage>(), It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void GetOrderCommand_DoesNotResetOrderNumber()
-        {
-            testObject.OrderNumber = "1";
-
-            testObject.GetOrderCommand.Execute(null);
-
-            Assert.Equal("1", testObject.OrderNumber);
-        }
-
-        [Fact]
-        public void ResetCommand_SendsOrderLookupClearOrderMessage()
-        {
-            testObject.ResetCommand.Execute(null);
-
-            messenger.Verify(x => x.Send(It.IsAny<OrderLookupClearOrderMessage>(), It.IsAny<string>()));
-        }
-
-        [Fact]
-        public void Reset_ClearsOrderNumber()
-        {
-            testObject.OrderNumber = "1";
-
-            testObject.Reset();
-
-            Assert.Equal(string.Empty, testObject.OrderNumber);
         }
 
         [Fact]
