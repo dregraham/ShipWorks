@@ -68,34 +68,24 @@ namespace ShipWorks.Warehouse.DTO.Orders
         public string ChannelOrderId { get; set; }
         public DateTime? ShipByDate { get; set; }
 
-        [JsonProperty("custom_1")]
         public string Custom1 { get; set; }
 
-        [JsonProperty("custom_2")]
         public string Custom2 { get; set; }
 
-        [JsonProperty("custom_3")]
         public string Custom3 { get; set; }
 
-        [JsonProperty("custom_4")]
         public string Custom4 { get; set; }
 
-        [JsonProperty("custom_5")]
         public string Custom5 { get; set; }
 
-        [JsonProperty("custom_6")]
         public string Custom6 { get; set; }
 
-        [JsonProperty("custom_7")]
         public string Custom7 { get; set; }
 
-        [JsonProperty("custom_8")]
         public string Custom8 { get; set; }
 
-        [JsonProperty("custom_9")]
         public string Custom9 { get; set; }
 
-        [JsonProperty("custom_10")]
         public string Custom10 { get; set; }
 
         public List<WarehouseOrderCharge> Charges { get; set; }

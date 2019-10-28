@@ -107,6 +107,11 @@ namespace ShipWorks.Warehouse
             orderEntity.Custom3 = warehouseOrder.Custom3;
             orderEntity.Custom4 = warehouseOrder.Custom4;
             orderEntity.Custom5 = warehouseOrder.Custom5;
+            orderEntity.Custom6 = warehouseOrder.Custom6;
+            orderEntity.Custom7 = warehouseOrder.Custom7;
+            orderEntity.Custom8 = warehouseOrder.Custom8;
+            orderEntity.Custom9 = warehouseOrder.Custom9;
+            orderEntity.Custom10 = warehouseOrder.Custom10;
         }
 
         /// <summary>
@@ -204,6 +209,11 @@ namespace ShipWorks.Warehouse
             itemEntity.Custom3 = warehouseItem.Custom3;
             itemEntity.Custom4 = warehouseItem.Custom4;
             itemEntity.Custom5 = warehouseItem.Custom5;
+            itemEntity.Custom6 = warehouseItem.Custom6;
+            itemEntity.Custom7 = warehouseItem.Custom7;
+            itemEntity.Custom8 = warehouseItem.Custom8;
+            itemEntity.Custom9 = warehouseItem.Custom9;
+            itemEntity.Custom10 = warehouseItem.Custom10;
 
             LoadItemAttributes(itemEntity, warehouseItem);
 
