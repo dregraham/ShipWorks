@@ -48,7 +48,7 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
-        Task<DialogResult> ShowForm(Func<IForm> createDialog);
+        Task<DialogResult> ShowDialog(Func<IForm> createDialog);
 
         /// <summary>
         /// Show a dialog and get the results

@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
-                    .Returns(Task.FromResult<IEnumerable<ShipmentEntity>>(shipments)));
+                    .ReturnsAsync(shipments));
             mock.Mock<IShipmentPreProcessorFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>())).Returns(preProcessor);
 

@@ -83,7 +83,9 @@ namespace ShipWorks.Shipping.Carriers
             }
 
             // Invoke the counter rates callback
-            if (await CounterRatesProcessing(shipment, configurationCallback) != DialogResult.OK)
+            var counterRatesResult = await CounterRatesProcessing(shipment, configurationCallback).ConfigureAwait(true);
+
+            if (counterRatesResult != DialogResult.OK)
             {
                 // The user canceled, so we need to stop processing
                 return null;
@@ -141,11 +143,11 @@ namespace ShipWorks.Shipping.Carriers
             // If this shipment type is not allowed to have new registrations, cancel out.
             if (!shipmentType.IsAccountRegistrationAllowed)
             {
-                await messageHelper.ShowWarning($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}");
+                await messageHelper.ShowWarning($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}").ConfigureAwait(true);
                 return DialogResult.Cancel;
             }
 
-            result = await messageHelper.ShowForm(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing));
+            result = await messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing)).ConfigureAwait(true);
 
             if (result == DialogResult.OK)
             {

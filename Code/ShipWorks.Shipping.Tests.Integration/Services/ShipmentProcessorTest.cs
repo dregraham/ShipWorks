@@ -286,9 +286,9 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             Func<IForm> dialogCreator = null;
             messageHelper
-                .Setup(x => x.ShowForm(It.IsAny<Func<IForm>>()))
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
                 .Callback((Func<IForm> x) => dialogCreator = x)
-                .Returns(Task.FromResult(DialogResult.Cancel));
+                .ReturnsAsync(DialogResult.Cancel);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 

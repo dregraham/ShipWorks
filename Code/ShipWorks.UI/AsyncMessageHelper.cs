@@ -70,7 +70,7 @@ namespace ShipWorks.UI
         /// <summary>
         /// Show a dialog and get the results
         /// </summary>
-        public Task<DialogResult> ShowForm(Func<IForm> createDialog)
+        public Task<DialogResult> ShowDialog(Func<IForm> createDialog)
         {
             var owner = ownerFactory();
             return owner.InvokeAsync(() => ShowDialog(owner, createDialog));
