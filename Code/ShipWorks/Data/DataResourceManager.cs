@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.HashFunction.CityHash;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Transactions;
-using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.IO.Zip;
 using Interapptive.Shared.Utility;
@@ -19,7 +19,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.Custom;
@@ -67,7 +66,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Register the file as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
-        public static DataResourceReference CreateFromFile(string filename, long consumerID)
+        public static DataResourceReference CreateFromFile(string filename, long consumerID, bool forceCreateNew = false)
         {
             if (string.IsNullOrEmpty(filename))
             {
@@ -81,37 +80,37 @@ namespace ShipWorks.Data
 
             byte[] data = File.ReadAllBytes(filename);
 
-            return InstantiateResource(data, consumerID, Path.GetFileName(filename), false);
+            return InstantiateResource(data, consumerID, Path.GetFileName(filename), false, forceCreateNew);
         }
 
         /// <summary>
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
-        public static DataResourceReference CreateFromText(string text, long consumerID)
+        public static DataResourceReference CreateFromText(string text, long consumerID, bool forceCreateNew = false)
         {
             if (text == null)
             {
                 throw new ArgumentNullException("text");
             }
 
-            return InstantiateResource(Encoding.UTF8.GetBytes(text), consumerID, null, true);
+            return InstantiateResource(Encoding.UTF8.GetBytes(text), consumerID, null, true, forceCreateNew);
         }
 
         /// <summary>
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
-        public static DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label)
+        public static DataResourceReference CreateFromBytes(byte[] data, long consumerID, string label, bool forceCreateNew = false)
         {
-            return InstantiateResource(data, consumerID, label, false);
+            return InstantiateResource(data, consumerID, label, false, forceCreateNew);
         }
 
         /// <summary>
         /// Instantiate a new resource with the given properties
         /// </summary>
-        private static DataResourceReference InstantiateResource(byte[] data, long consumerID, string label, bool compress)
+        private static DataResourceReference InstantiateResource(byte[] data, long consumerID, string label, bool compress, bool forceCreateNew = false)
         {
             string resourceFilename;
-            long resourceID = EnsureResourceDataWithRetry(data, label, compress, out resourceFilename);
+            long resourceID = EnsureResourceDataWithRetry(data, label, compress, out resourceFilename, forceCreateNew);
 
             // The key is the data itself - in other words one reference per unique type of resource data.  We can use
             // the ResourceID as a key in that case.
@@ -146,32 +145,108 @@ namespace ShipWorks.Data
         /// Despite the lock, we were still getting an ORMQueryExecutionException when saving the new resource. I assume this was due to another machine inserting a resource
         /// record before we save the record here but after we check to see if the record exists.
         /// </remarks>
-        private static long EnsureResourceDataWithRetry(byte[] data, string label, bool compress, out string resourceFilename)
+        private static long EnsureResourceDataWithRetry(byte[] data, string label, bool compress, out string resourceFilename, bool forceCreateNew)
         {
             try
             {
-                return EnsureResourceData(data, label, compress, out resourceFilename);
+                return EnsureResourceData(data, label, compress, out resourceFilename, forceCreateNew);
             }
             catch (ORMQueryExecutionException ex)
             {
                 log.Error("EnsureResourceDataWithRetry failed first time. Retrying....", ex);
-                return EnsureResourceData(data, label, compress, out resourceFilename);
+                return EnsureResourceData(data, label, compress, out resourceFilename, forceCreateNew);
             }
         }
 
         /// <summary>
-        /// Ensure a Resource row exists for the given data.  If 'label' contains a filename and the resource does not yet exist, the extension of the filename is used
-        /// as the new resource filename extension.
+        /// Find a resource by data
         /// </summary>
-        [NDependIgnoreLongMethod]
-        private static long EnsureResourceData(byte[] data, string label, bool compress, out string resourceFilename)
+        private static ResourceEntity BuildResourceEntityShell(byte[] data, ISqlAdapter adapter, bool forceCreateNew)
         {
             if (data == null)
             {
                 throw new ArgumentNullException("data");
             }
 
-            log.InfoFormat("Ensuring resource ({0})", label);
+            byte[] cityChecksum = CalculateHash(data, false);
+            if (forceCreateNew)
+            {
+                // A forceful create was requested, create it
+                return new ResourceEntity
+                {
+                    //Data = data,
+                    Checksum = cityChecksum
+                };
+            }
+
+            // See if we can find an existing resource
+            ResourceEntity resource = FetchResource(adapter, cityChecksum);
+            if (resource != null)
+            {
+                return resource;
+            }
+
+            byte[] oldChecksum = CalculateHash(data, true);
+            resource = FetchResource(adapter, oldChecksum);
+            if (resource != null)
+            {
+                return resource;
+            }
+
+            // Doesn't exist, create it using new hash
+            return new ResourceEntity
+            {
+                //Data = data, 
+                Checksum = cityChecksum
+            };
+        }
+
+        /// <summary>
+        /// Fetch a resource by checksum
+        /// </summary>
+        private static ResourceEntity FetchResource(ISqlAdapter adapter, byte[] checksum)
+        {
+            // See if we can find an existing resource
+            ResourceCollection resources = new ResourceCollection();
+            adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object) checksum), 1, null, null, excludeDataFields);
+            return resources.FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Get data hash
+        /// </summary>
+        public static byte[] CalculateHash(byte[] data, bool legacyHashMethod)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
+
+            byte[] hash;
+
+            if (legacyHashMethod)
+            {
+                hash = SHA256.Create().ComputeHash(data);
+            }
+            else
+            {
+                ICityHash hasher = CityHashFactory.Instance.Create(new CityHashConfig() { HashSizeInBits = 128 });
+                hash = hasher.ComputeHash(data).Hash;
+            }
+
+            return hash;
+        }
+
+        /// <summary>
+        /// Ensure a Resource row exists for the given data.  If 'label' contains a filename and the resource does not yet exist, the extension of the filename is used
+        /// as the new resource filename extension.
+        /// </summary>
+        private static long EnsureResourceData(byte[] data, string label, bool compress, out string resourceFilename, bool forceCreateNew = false)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException("data");
+            }
 
             long resourceID;
 
@@ -179,20 +254,13 @@ namespace ShipWorks.Data
             {
                 using (SqlAdapter adapter = new SqlAdapter(false))
                 {
-                    SHA256 sha = SHA256.Create();
-                    byte[] checksum = sha.ComputeHash(data);
-
-                    // See if we can find an existing resource
-                    ResourceCollection resources = new ResourceCollection();
-                    adapter.FetchEntityCollection(resources, new RelationPredicateBucket(ResourceFields.Checksum == (object) checksum), 1, null, null, excludeDataFields);
+                    ResourceEntity resource = BuildResourceEntityShell(data, adapter, forceCreateNew);
 
                     // The resource already exists, just use it
-                    if (resources.Count > 0)
+                    if (!resource.IsNew && resource.ResourceID > 0)
                     {
-                        resourceID = resources[0].ResourceID;
-                        resourceFilename = resources[0].Filename;
-
-                        log.InfoFormat("Found existing resource {0}", resourceFilename);
+                        resourceID = resource.ResourceID;
+                        resourceFilename = resource.Filename;
                     }
                     else
                     {
@@ -212,9 +280,7 @@ namespace ShipWorks.Data
                             }
                         }
 
-                        ResourceEntity resource = new ResourceEntity();
                         resource.Data = compress ? GZipUtility.Compress(data) : data;
-                        resource.Checksum = checksum;
                         resource.Compressed = compress;
                         resource.Filename = resourceFilename;
 
@@ -241,7 +307,7 @@ namespace ShipWorks.Data
                             log.Warn(string.Format("Unable to access file {0}", filePath), ex);
                         }
 
-                        using (new LoggedStopwatch(log, "DataResourceManager.EnsureResourceData - committed: "))
+                        try
                         {
                             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                             {
@@ -251,13 +317,21 @@ namespace ShipWorks.Data
                                 // Get the resource id
                                 resourceID = (long) resource.GetCurrentFieldValue((int) ResourceFieldIndex.ResourceID);
 
-                                log.InfoFormat("Created new resource {0}", resourceFilename);
                                 scope.Complete();
                             }
                         }
+                        catch (ORMQueryExecutionException e) when (e.Message.Contains("Cannot insert duplicate key row", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            // If force create new was true, we don't check for existence before creating.  If we get the duplicate exception, just go fetch it.
+                            resource = FetchResource(adapter, resource.Checksum);
+
+                            // resourceFilename is an out param, so update it too.
+                            resourceFilename = resource.Filename;
+
+                            return resource.ResourceID;
+                        }
                     }
                 }
-
             }
 
             return resourceID;
@@ -275,7 +349,6 @@ namespace ShipWorks.Data
             // If we couldn't get it, no such resource exists.
             if (resourceReference == null)
             {
-                log.InfoFormat("Resource reference {0} does not exist in the database.", referenceID);
                 return null;
             }
 
@@ -290,12 +363,8 @@ namespace ShipWorks.Data
         /// </summary>
         public static List<DataResourceReference> LoadConsumerResourceReferences(long consumerID)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-
             List<DataResourceReference> resources = GetConsumerResourceReferences(consumerID);
             resources.ForEach(resource => resource.GetCachedFilename());
-
-            log.DebugFormat("LoadConsumerResources: {0}", sw.Elapsed.TotalSeconds);
 
             return resources;
         }
@@ -305,8 +374,6 @@ namespace ShipWorks.Data
         /// </summary>
         public static List<DataResourceReference> GetConsumerResourceReferences(long consumerID)
         {
-            Stopwatch sw = Stopwatch.StartNew();
-
             List<DataResourceReference> resources = new List<DataResourceReference>();
 
             foreach (long referenceID in GetConsumerResourceReferenceIDs(consumerID))
@@ -317,14 +384,11 @@ namespace ShipWorks.Data
                 // If we couldn't get it, no such resource exists.
                 if (resourceReference == null)
                 {
-                    log.InfoFormat("Resource reference {0} does not exist in the database.", referenceID);
                     continue;
                 }
 
                 resources.Add(resourceReference);
             }
-
-            log.DebugFormat("GetConsumerResources: {0}", sw.Elapsed.TotalSeconds);
 
             return resources;
         }
@@ -424,48 +488,45 @@ namespace ShipWorks.Data
         /// </summary>
         public static void DeleteAbandonedResourceData()
         {
-            using (new LoggedStopwatch(log, "Delete abandoned resources."))
+            // Set the timeout to unlimited.  The stored procedure will take care of it's run time.
+            const int timeoutSeconds = 0;
+            string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
+
+            try
             {
-                // Set the timeout to unlimited.  The stored procedure will take care of it's run time.
-                const int timeoutSeconds = 0;
-                string scriptName = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
-
-                try
+                // we always want this call to be the deadlock victim
+                using (new SqlDeadlockPriorityScope(-5))
                 {
-                    // we always want this call to be the deadlock victim
-                    using (new SqlDeadlockPriorityScope(-5))
+                    using (DbConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
                     {
-                        using (DbConnection connection = SqlSession.Current.OpenConnection(timeoutSeconds))
+                        try
                         {
-                            try
+                            using (DbCommand command = connection.CreateCommand())
                             {
-                                using (DbCommand command = connection.CreateCommand())
-                                {
-                                    command.CommandType = CommandType.StoredProcedure;
-                                    command.CommandText = scriptName;
-                                    // Disable the command timeout since the scripts should take care of timing themselves out
-                                    command.CommandTimeout = timeoutSeconds;
-                                    command.AddParameterWithValue("@olderThan", DateTime.UtcNow);
-                                    command.AddParameterWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
-                                    command.AddParameterWithValue("@softDelete", 1);
+                                command.CommandType = CommandType.StoredProcedure;
+                                command.CommandText = scriptName;
+                                // Disable the command timeout since the scripts should take care of timing themselves out
+                                command.CommandTimeout = timeoutSeconds;
+                                command.AddParameterWithValue("@olderThan", DateTime.UtcNow);
+                                command.AddParameterWithValue("@runUntil", DateTime.UtcNow.AddMinutes(15));
+                                command.AddParameterWithValue("@softDelete", 1);
 
-                                    command.ExecuteNonQuery();
-                                }
+                                command.ExecuteNonQuery();
                             }
-                            catch (SqlException ex)
-                            {
-                                // An error occurred, but this gets called by the idle worker every 2ish hours or so,
-                                // so if it's a recoverable error, it will finish then.
-                                log.Error($"An error occurred while attempting to delete abandoned resources.  ", ex);
-                            }
+                        }
+                        catch (SqlException ex)
+                        {
+                            // An error occurred, but this gets called by the idle worker every 2ish hours or so,
+                            // so if it's a recoverable error, it will finish then.
+                            log.Error($"An error occurred while attempting to delete abandoned resources.  ", ex);
                         }
                     }
                 }
-                catch (SqlDeadlockException ex)
-                {
-                    // don't let it crash, we'll just try to cleanup the next go-around
-                    log.Error("Deadlock detected trying to deleted abandoned resource data.", ex);
-                }
+            }
+            catch (SqlDeadlockException ex)
+            {
+                // don't let it crash, we'll just try to cleanup the next go-around
+                log.Error("Deadlock detected trying to deleted abandoned resource data.", ex);
             }
         }
 
@@ -474,8 +535,6 @@ namespace ShipWorks.Data
         /// </summary>
         private static void CleanupThread()
         {
-            log.InfoFormat("Running resource manager cleanup...");
-
             try
             {
                 foreach (string resourcePath in DataPath.AllResources)
@@ -495,8 +554,6 @@ namespace ShipWorks.Data
                         {
                             if (fi.LastWriteTime < DateTime.Now - resourceTimeToLive)
                             {
-                                log.InfoFormat("Deleting cached resource '{0}'", fsi.Name);
-
                                 File.Delete(fsi.FullName);
                             }
 

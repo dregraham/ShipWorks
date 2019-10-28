@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                         File.WriteAllBytes(fileName, labelDocument.Parts[0].Image);
                     }
 
-                    dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, ownerID, name);
+                    dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, ownerID, name, true);
                 }
             }
             else
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Ship
                 using (MemoryStream imageStream = new MemoryStream(labelDocument.Parts[0].Image))
                 {
                     // Save the label image
-                    dataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name);
+                    dataResourceManager.CreateFromBytes(imageStream.ToArray(), ownerID, name, true);
 
                     if (InterapptiveOnly.IsInterapptiveUser)
                     {

@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             mock.Mock<IDataResourceManager>()
                 .Verify(r => r.CreateFromPdf(
-                    PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(), 123, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
+                    PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(), 123, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>(), true));
         }
 
 
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             testObject.Save();
 
-            mock.Mock<IDataResourceManager>().Verify(r => r.CreateFromBytes(resource, 123, "LabelPrimary"));
+            mock.Mock<IDataResourceManager>().Verify(r => r.CreateFromBytes(resource, 123, "LabelPrimary", true));
         }
 
         [Fact]
