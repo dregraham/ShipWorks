@@ -219,11 +219,18 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public async Task LoadOrder(OrderEntity order)
         {
+            Error = false;
+
             orderBeingPacked = order;
             ItemsToScan.Clear();
             PackedItems.Clear();
-
-            if (orderBeingPacked.OrderItems.Any())
+            if (order == null)
+            {
+                ScanHeader = "No matching orders were found.";
+                Error = true;
+                ScanFooter = string.Empty;
+            }
+            else if (orderBeingPacked.OrderItems.Any())
             {
                 var items = await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true);
                 if (order.Verified)

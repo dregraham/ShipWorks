@@ -255,7 +255,7 @@ namespace ShipWorks.OrderLookup
                     }
                     else
                     {
-                        shipmentModel.LoadOrder(null);
+                        messenger.Send(new OrderLookupLoadOrderMessage(this, null));
                     }
                 }
             }
