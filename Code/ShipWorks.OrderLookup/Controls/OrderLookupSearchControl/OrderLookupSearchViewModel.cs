@@ -22,7 +22,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     {
         private readonly IMessenger messenger;
         private readonly ISecurityContext securityContext;
-        private readonly IDisposable subscription;
         private string orderNumber = string.Empty;
         private bool showCreateLabel = false;
         private string searchMessage = string.Empty;
@@ -37,7 +36,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             IMessenger messenger,
             ISecurityContext securityContext)
         {
-            this.ShipmentModel = shipmentModel;
+            ShipmentModel = shipmentModel;
             this.messenger = messenger;
             this.securityContext = securityContext;
 
@@ -46,8 +45,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             CreateLabelCommand = new RelayCommand(CreateLabel);
             ResetCommand = new RelayCommand(Reset);
             shipmentModel.OnSearchOrder += (s, e) => ClearOrderError(OrderClearReason.NewSearch);
-
-
         }
 
         /// <summary>
@@ -228,7 +225,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// </summary>
         public void Dispose()
         {
-            subscription.Dispose();
             ShipmentModel.PropertyChanged -= ShipmentModelPropertyChanged;
         }
     }
