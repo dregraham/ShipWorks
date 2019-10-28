@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
+using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
@@ -283,10 +284,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(shipmentType);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(shipmentType, shipment);
 
-            Func<IDialog> dialogCreator = null;
+            Func<IForm> dialogCreator = null;
             messageHelper
-                .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
-                .Callback((Func<IDialog> x) => dialogCreator = x);
+                .Setup(x => x.ShowForm(It.IsAny<Func<IForm>>()))
+                .Callback((Func<IForm> x) => dialogCreator = x)
+                .Returns(Task.FromResult(DialogResult.Cancel));
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
