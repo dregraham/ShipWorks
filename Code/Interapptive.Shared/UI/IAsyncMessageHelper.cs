@@ -23,6 +23,11 @@ namespace Interapptive.Shared.UI
         Task ShowMessage(string message);
 
         /// <summary>
+        /// Show a warning box with the given text
+        /// </summary>
+        Task ShowWarning(string message);
+
+        /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
         /// <param name="message">Error message that should be displayed</param>
@@ -39,6 +44,11 @@ namespace Interapptive.Shared.UI
         /// Disposable that will restore the original cursor when disposed
         /// </returns>
         Task<IDisposable> SetCursor(Cursor waitCursor);
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        Task<DialogResult> ShowForm(Func<IForm> createDialog);
 
         /// <summary>
         /// Show a dialog and get the results

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -53,11 +54,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
+        public async Task PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
         {
             var input = new ProcessShipmentState(0, new ShipmentEntity(), new ShippingException(), new CancellationTokenSource());
 
-            var result = testObject.PrepareShipment(input);
+            var result = await testObject.PrepareShipment(input);
 
             Assert.False(result.Success);
             Assert.Equal(input.Exception, result.Exception);
@@ -201,7 +202,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
+        public async Task PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
         {
             StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
@@ -209,11 +210,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
-                    .Returns(shipments));
+                    .Returns(Task.FromResult<IEnumerable<ShipmentEntity>>(shipments)));
             mock.Mock<IShipmentPreProcessorFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>())).Returns(preProcessor);
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.Equal(shipments, result.Shipments);
         }

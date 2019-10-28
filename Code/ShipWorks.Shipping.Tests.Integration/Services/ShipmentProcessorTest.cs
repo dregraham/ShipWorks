@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private readonly DataContext context;
         private ShipmentEntity shipment;
         private Mock<IUspsWebServiceFactory> webServiceFactory;
-        private Mock<IMessageHelper> messageHelper;
+        private Mock<IAsyncMessageHelper> messageHelper;
         private Mock<IMessenger> messenger;
         private Mock<IDateTimeProvider> dateTimeProvider;
         private Mock<IUserSession> userSession;
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             context = db.CreateDataContext((mock, builder) =>
                 {
                     webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
-                    messageHelper = builder.RegisterMock<IMessageHelper>(mock);
+                    messageHelper = builder.RegisterMock<IAsyncMessageHelper>(mock);
                     messenger = builder.RegisterMock<IMessenger>(mock);
                     dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
                     builder.RegisterMock<IActionDispatcher>(mock);
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             shipment = Create.Shipment(context.Order)
                 .AsOther()
-                .Save();            
+                .Save();
         }
 
         [Fact]
@@ -127,7 +127,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             string errorMessage = string.Empty;
             messageHelper
                 .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
+                .Callback((string x) => errorMessage = x)
+                .Returns(Task.CompletedTask);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
@@ -282,10 +283,10 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(shipmentType);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(shipmentType, shipment);
 
-            Func<IForm> dialogCreator = null;
+            Func<IDialog> dialogCreator = null;
             messageHelper
-                .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
-                .Callback((Func<IForm> x) => dialogCreator = x);
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
+                .Callback((Func<IDialog> x) => dialogCreator = x);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 

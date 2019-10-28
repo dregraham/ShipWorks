@@ -46,6 +46,15 @@ namespace ShipWorks.UI
         }
 
         /// <summary>
+        /// Show a warning box with the given text
+        /// </summary>
+        public Task ShowWarning(string message)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => messageHelper.ShowWarning(owner, message));
+        }
+
+        /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
         /// <param name="message">Error message that should be displayed</param>
@@ -56,6 +65,15 @@ namespace ShipWorks.UI
         {
             var owner = ownerFactory();
             return owner.InvokeAsync(() => messageHelper.ShowError(owner, message));
+        }
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public Task<DialogResult> ShowForm(Func<IForm> createDialog)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => ShowDialog(owner, createDialog));
         }
 
         /// <summary>
@@ -96,6 +114,17 @@ namespace ShipWorks.UI
         /// Create a progress provider
         /// </summary>
         public IProgressProvider CreateProgressProvider() => new ProgressProvider();
+
+        /// <summary>
+        /// Show a dialog
+        /// </summary>
+        private DialogResult ShowDialog(Control owner, Func<IForm> createDialog)
+        {
+            using (IForm dialog = createDialog())
+            {
+                return dialog.ShowDialog(owner);
+            }
+        }
 
         /// <summary>
         /// Show a dialog

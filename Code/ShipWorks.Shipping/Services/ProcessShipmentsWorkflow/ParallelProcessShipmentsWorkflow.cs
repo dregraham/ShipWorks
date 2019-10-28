@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         {
             int taskCount = ConcurrencyCount;
 
-            var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(x => prepareShipmentTask.PrepareShipment(x),
+            var prepareShipmentBlock = new TransformBlock<ProcessShipmentState, IShipmentPreparationResult>(async x => await prepareShipmentTask.PrepareShipment(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = 1, BoundedCapacity = 1, CancellationToken = cancellationSource.Token });
             var getLabelBlock = new TransformBlock<IShipmentPreparationResult, IEnumerable<ILabelRetrievalResult>>(x => getLabelTask.GetLabels(x),
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = taskCount, BoundedCapacity = 8 });

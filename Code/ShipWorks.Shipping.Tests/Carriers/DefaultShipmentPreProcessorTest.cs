@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
@@ -52,9 +53,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ReturnsShipment_WhenCarrierIsReadyToShip()
+            public async Task Run_ReturnsShipment_WhenCarrierIsReadyToShip()
             {
-                var results = testObject.Run(shipment, null, null);
+                var results = await testObject.Run(shipment, null, null);
 
                 Assert.Equal(new[] { shipment }, results);
             }
@@ -200,9 +201,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ReturnsOriginalShipment_WhenDialogIsFinished()
+            public async Task Run_ReturnsOriginalShipment_WhenDialogIsFinished()
             {
-                var result = testObject.Run(shipment, null, null);
+                var result = await testObject.Run(shipment, null, null);
 
                 Assert.Equal(new[] { shipment }, result);
             }

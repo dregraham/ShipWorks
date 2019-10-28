@@ -106,6 +106,11 @@ namespace Interapptive.Shared.UI
         void ShowWarning(string message);
 
         /// <summary>
+        /// Show a warning message
+        /// </summary>
+        void ShowWarning(IWin32Window owner, string message);
+
+        /// <summary>
         /// Show a message
         /// </summary>
         void ShowMessage(string message);
