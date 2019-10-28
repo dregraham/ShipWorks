@@ -109,5 +109,15 @@ namespace ShipWorks.UI
             dialog.LoadOwner(owner);
             return dialog.ShowDialog();
         }
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        public Task<DialogResult> ShowQuestion(string message)
+        {
+            var owner = ownerFactory();
+
+            return owner.InvokeAsync(() => messageHelper.ShowQuestion(message));
+        }
     }
 }

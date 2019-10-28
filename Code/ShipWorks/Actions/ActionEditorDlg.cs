@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Tasks;
+using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Triggers.Editors;
 using ShipWorks.Data.Connection;
@@ -662,6 +663,7 @@ namespace ShipWorks.Actions
 
                 // Check to see if there are any tasks that aren't allowed to be used in a scheduled action.
                 List<ActionTask> invalidTasks = tasksToSave.Where(at => !at.IsAllowedForTrigger(actionTriggerType)).ToList();
+
                 if (invalidTasks.Any())
                 {
                     var invalidTaskNames = invalidTasks.Select(t => ActionTaskManager.GetDescriptor(t.GetType()).BaseName).Distinct();
@@ -673,6 +675,29 @@ namespace ShipWorks.Actions
                         invalidTasksMsg,
                         EnumHelper.GetDescription(actionTriggerType)));
                     return;
+                }
+
+                // Check error states specific to the 'Create a label' task
+                if (tasksToSave.Any(x => x is CreateLabelTask))
+                {
+                    // If the trigger is an OrderDownloadedTrigger force the user to use 'when an order first downloads'
+                    if (trigger is OrderDownloadedTrigger orderDownloadedTrigger &&
+                        orderDownloadedTrigger.Restriction != OrderDownloadedRestriction.OnlyInitial)
+                    {
+                        MessageHelper.ShowError(this, "The 'Create a label' task can only be performed on download when downloading an order for the first time.");
+                        return;
+                    }
+
+                    // Only allow the create label task if the user has permission to create labels
+                    if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess))
+                    {
+                        MessageHelper.ShowError(this, "The 'Create a label' task requires permission to create/edit/process shipments.");
+                        return;
+                    }
+
+                    // Warn the user that this task could cost them money
+                    MessageHelper.ShowWarning(this, "The 'Create a label' task creates and processes shipments automatically which could result in charges to your carrier postage accounts. " +
+                        "Please carefully ensure that your shipping settings are properly configured before enabling or editing this action to avoid any mistakes.");
                 }
 
                 // Don't close the form if any of the bubbles have invalid data
