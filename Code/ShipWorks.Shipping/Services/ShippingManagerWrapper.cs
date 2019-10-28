@@ -13,7 +13,6 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -234,7 +233,7 @@ namespace ShipWorks.Shipping.Services
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)
                     {
-                        shipment.Fields[(int) ShipmentFieldIndex.OriginWebsite].IsChanged = true;
+                        shipment.Fields[(int) ShipmentFieldIndex.BestRateEvents].IsChanged = true;
                         shipment.Fields.IsDirty = true;
                     }
 
