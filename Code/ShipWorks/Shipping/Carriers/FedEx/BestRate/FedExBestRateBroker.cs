@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         /// <remarks>This is designed to be used within ShipWorks</remarks>
         public FedExBestRateBroker()
-            : this(new FedExShipmentType(), new FedExAccountRepository())
+            : this(new FedExShipmentType(), new FedExAccountRepository(), BestRateExcludedAccountRepository.Current)
         {
 
         }
@@ -33,8 +33,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// <param name="shipmentType">Instance of a FedEx shipment type that will be used to get rates</param>
         /// <param name="accountRepository">Instance of an account repository that will get FedEx accounts</param>
         /// <remarks>This is designed to be used by tests</remarks>
-        public FedExBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> accountRepository) :
-            base(shipmentType, accountRepository, "FedEx")
+        public FedExBestRateBroker(ShipmentType shipmentType, ICarrierAccountRepository<FedExAccountEntity, IFedExAccountEntity> accountRepository, IBestRateExcludedAccountRepository bestRateExcludedAccountRepository) :
+            base(shipmentType, accountRepository, "FedEx", bestRateExcludedAccountRepository)
         {
 
         }
