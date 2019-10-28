@@ -165,16 +165,6 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         }
 
         [Fact]
-        public void GetOrders_SetsExportedVariable()
-        {
-            var testObject = mock.Create<ChannelAdvisorRestClient>();
-
-            testObject.GetOrders(1, "token");
-
-            variableRequestSubmitter.Verify(s => s.Variables.Add("exported", "false"));
-        }
-
-        [Fact]
         public void GetOrders_SetsExpandVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
