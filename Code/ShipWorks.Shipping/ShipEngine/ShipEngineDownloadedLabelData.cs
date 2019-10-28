@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private void SaveZplLabel(byte[] labelResource)
         {
-            resourceManager.CreateFromBytes(labelResource, shipment.ShipmentID, "LabelPrimary");
+            resourceManager.CreateFromBytes(labelResource, shipment.ShipmentID, "LabelPrimary", true);
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.ShipEngine
             using (MemoryStream pdfData = new MemoryStream(labelResource))
             {
                 resourceManager.CreateFromPdf(
-                    PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray());
+                    PdfDocumentType.BlackAndWhite, pdfData, shipment.ShipmentID, i => i == 0 ? "LabelPrimary" : $"LabelPart{i}", (m) => m.ToArray(), true);
             }
         }
 
