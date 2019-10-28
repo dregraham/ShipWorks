@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Autofac.Features.Indexed;
+using Interapptive.Shared;
 using Interapptive.Shared.Pdf;
 
 namespace ShipWorks.Data
@@ -24,12 +25,14 @@ namespace ShipWorks.Data
         /// <summary>
         /// Saves PDF to database
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID, string label, bool forceCreateNew = false) =>
             CreateFromPdf(pdfDocumentType, pdfStream, consumerID, i => i == 0 ? label : $"{label}-{i}", s => s.ToArray(), forceCreateNew);
 
         /// <summary>
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public IEnumerable<DataResourceReference> CreateFromPdf(PdfDocumentType pdfDocumentType, Stream pdfStream, long consumerID,
             Func<int, string> createLabelFromIndex, Func<MemoryStream, byte[]> getBytesFromStream, bool forceCreateNew = false)
         {

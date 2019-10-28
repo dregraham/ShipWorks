@@ -264,21 +264,7 @@ namespace ShipWorks.Data
                     }
                     else
                     {
-                        // If "label" is a file path, use it's extension for our resource file extension.  Otherwise default to our own.
-                        string fileExtension = (!string.IsNullOrEmpty(label) && Path.HasExtension(label)) ? Path.GetExtension(label).ToLowerInvariant() : ".swr";
-
-                        // Find an available filename
-                        while (true)
-                        {
-                            resourceFilename = string.Format("{0}{1}",
-                                Guid.NewGuid().ToString("D").Substring(0, 8),
-                                fileExtension);
-
-                            if (ResourceCollection.GetCount(adapter, ResourceFields.Filename == resourceFilename) == 0)
-                            {
-                                break;
-                            }
-                        }
+                        resourceFilename = GetUniqueFilename(label, adapter);
 
                         resource.Data = compress ? GZipUtility.Compress(data) : data;
                         resource.Compressed = compress;
@@ -335,6 +321,32 @@ namespace ShipWorks.Data
             }
 
             return resourceID;
+        }
+
+        /// <summary>
+        /// Get a unique name for the given label.
+        /// </summary>
+        private static string GetUniqueFilename(string label, SqlAdapter adapter)
+        {
+            string resourceFilename = string.Empty;
+
+            // If "label" is a file path, use it's extension for our resource file extension.  Otherwise default to our own.
+            string fileExtension = (!string.IsNullOrEmpty(label) && Path.HasExtension(label)) ? Path.GetExtension(label).ToLowerInvariant() : ".swr";
+
+            // Find an available filename
+            while (true)
+            {
+                resourceFilename = string.Format("{0}{1}",
+                    Guid.NewGuid().ToString("D").Substring(0, 8),
+                    fileExtension);
+
+                if (ResourceCollection.GetCount(adapter, ResourceFields.Filename == resourceFilename) == 0)
+                {
+                    break;
+                }
+            }
+
+            return resourceFilename;
         }
 
         /// <summary>
