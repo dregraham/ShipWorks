@@ -26,6 +26,11 @@ namespace ShipWorks.OrderLookup.ScanPack
         Task ProcessScan(string scannedText);
 
         /// <summary>
+        /// Process a line item
+        /// </summary>
+        void ProcessItemScan(string scannedText);
+
+        /// <summary>
         /// Load an order
         /// </summary>
         Task LoadOrder(OrderEntity order);

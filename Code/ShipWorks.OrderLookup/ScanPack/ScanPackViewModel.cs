@@ -174,43 +174,45 @@ namespace ShipWorks.OrderLookup.ScanPack
                     ScanFooter = string.Empty;
                 }
             }
-			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
+        }
+
+        public void ProcessItemScan(string scannedText)
+        {
+            ScanPackItem itemScanned = GetScanPackItem(scannedText, ItemsToScan);
+
+            if (itemScanned != null)
             {
-                ScanPackItem itemScanned = GetScanPackItem(scannedText, ItemsToScan);
-
-                if (itemScanned != null)
+                ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
+            }
+            else
+            {
+                // only play the sound if a user is logged in
+                // this will ensure that the sound does not play during unit tests
+                if (UserSession.IsLoggedOn)
                 {
-                    ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
+                    SystemSounds.Asterisk.Play();
                 }
-                else
+
+                ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
+
+                using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
                 {
-                    // only play the sound if a user is logged in
-                    // this will ensure that the sound does not play during unit tests
-                    if (UserSession.IsLoggedOn)
+                    if (packedItem == null)
                     {
-                        SystemSounds.Asterisk.Play();
+                        trackedEvent.AddProperty("Reason", "NotPacked");
+                        ScanHeader = "Last scan did not match. Scan another item to continue.";
                     }
-
-                    ScanPackItem packedItem = GetScanPackItem(scannedText, PackedItems);
-
-                    using (TrackedEvent trackedEvent = new TrackedEvent("PickAndPack.ItemNotFound"))
+                    else
                     {
-                        if (packedItem == null)
-                        {
-                            trackedEvent.AddProperty("Reason", "NotPacked");
-                            ScanHeader = "Last scan did not match. Scan another item to continue.";
-                        }
-                        else
-                        {
-                            trackedEvent.AddProperty("Reason", "AlreadyPacked");
-                            ScanHeader = "Item has already been packed";
-                        }
+                        trackedEvent.AddProperty("Reason", "AlreadyPacked");
+                        ScanHeader = "Item has already been packed";
                     }
-
-                    Error = true;
                 }
+
+                Error = true;
             }
         }
+        
 
         /// <summary>
         /// Load the given order
