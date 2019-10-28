@@ -15,7 +15,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
     /// Condition base on the carrier account of an shipment
     /// </summary>
     [ConditionElement("Account", "Shipment.Account")]
-    public class AccountCondition : ValueChoiceCondition<long>
+    public class AccountCondition : ValueChoiceCondition<string>
     {
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingManager shippingManager;
@@ -28,7 +28,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             shipmentTypeManager = scope.Resolve<IShipmentTypeManager>();
             shippingManager = scope.Resolve<IShippingManager>();
             shippingAccountListProvider = scope.Resolve<IShippingAccountListProvider>();
-            Value = -1;
+            Value = string.Empty;
         }
 
         /// <summary>
@@ -38,18 +38,18 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             this.shipmentTypeManager = shipmentTypeManager;
             this.shippingManager = shippingManager;
-            Value = -1;
+            Value = string.Empty;
         }
 
         ///// <summary>
         ///// Provides the choices for the user to choose from  This is a list of all shipping accounts that currently
         ///// exist in the system.
         ///// </summary>
-        public override ICollection<ValueChoice<long>> ValueChoices
+        public override ICollection<ValueChoice<string>> ValueChoices
         {
             get
             {
-                List<ValueChoice<long>> choices = new List<ValueChoice<long>>();
+                List<ValueChoice<string>> choices = new List<ValueChoice<string>>();
                 var shipTypes = GetShipmentTypes();
                 foreach(var type in shipTypes)
                 {
@@ -59,7 +59,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
                         if(account.AccountId != 0)
                         {
                             var userID = account.AccountDescription.Split(',')[0];
-                            choices.Add(new ValueChoice<long>(userID, account.AccountId));
+                            choices.Add(new ValueChoice<string>(userID, userID));
                         }                     
                     }
                 }
@@ -94,7 +94,7 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
             string accountParam = context.RegisterParameter(Value);
             string processedParam = context.RegisterParameter(true);
 
-            return $"{context.GetColumnReference(ShipmentFields.CarrierAccountID)} {GetSqlOperator()} {accountParam} and {context.GetColumnReference(ShipmentFields.Processed)} = {processedParam}";
+            return $"{context.GetColumnReference(ShipmentFields.CarrierAccount)} {GetSqlOperator()} {accountParam} and {context.GetColumnReference(ShipmentFields.Processed)} = {processedParam}";
         }       
     }
 }

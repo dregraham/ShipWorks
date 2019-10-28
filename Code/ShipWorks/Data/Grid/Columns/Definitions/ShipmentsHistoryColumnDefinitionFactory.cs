@@ -44,7 +44,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{7317220B-22CD-41E4-9BE4-4E25D0E3431E}", true,
                     new ShipmentCarrierAccountDisplayType(), "Account", "123456789",
-                    ShipmentFields.CarrierAccountID),
+                    ShipmentFields.CarrierAccount),
 
                 new GridColumnDefinition("{B8497103-6434-4DAE-A0E1-D75A4C27560E}", true,
                     new ShipmentServiceUsedDisplayType(), "Service", "First Class",

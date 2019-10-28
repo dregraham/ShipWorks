@@ -3013,7 +3013,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShipmentEntity", "ReturnProfileID", typeof(System.Int64), false, false, false, false,  (int)ShipmentFieldIndex.ReturnProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedShippedToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedShippedToHub, 0, 0, 0);
 			this.AddElementFieldInfo("ShipmentEntity", "LoggedVoidToHub", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)ShipmentFieldIndex.LoggedVoidToHub, 0, 0, 0);
-			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccountID, 0, 0, 19);
+			this.AddElementFieldInfo("ShipmentEntity", "CarrierAccount", typeof(System.String), false, false, false, true,  (int)ShipmentFieldIndex.CarrierAccount, 25, 0, 0);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

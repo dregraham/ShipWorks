@@ -25017,10 +25017,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.LoggedVoidToHub);}
 		}
-		/// <summary>Creates a new ShipmentEntity.CarrierAccountID field instance</summary>
-		public static EntityField2 CarrierAccountID
+		/// <summary>Creates a new ShipmentEntity.CarrierAccount field instance</summary>
+		public static EntityField2 CarrierAccount
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccountID);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.CarrierAccount);}
 		}
 	}
 

@@ -406,17 +406,15 @@ namespace ShipWorks.Shipping.Services
         /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
         /// </summary>
         public ICarrierAccount GetCarrierAccount(ShipmentEntity shipment) =>
-            ShippingManager.GetCarrierAccount(shipment);
+            ShippingManager.GetCarrierAccount(shipment, GetShipmentAdapter(shipment).AccountId);
 
         /// <summary>
         /// Get the carrier account associated with a processed shipment.
         /// </summary>
-        public ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment) =>
-            ShippingManager.GetCarrierAccount(processedShipment);
-
-        /// <summary>
-        /// Get the carrier account id of a shipment
-        /// </summary>
-        public long GetAccountID(ShipmentEntity shipment) => GetShipmentAdapter(shipment).AccountId ?? 0;
+        public ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment)
+        {
+            var id = GetShipment(processedShipment.ShipmentID).AccountId;
+            return ShippingManager.GetCarrierAccount(processedShipment, id);
+        }
     }
 }

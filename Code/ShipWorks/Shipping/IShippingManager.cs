@@ -139,11 +139,6 @@ namespace ShipWorks.Shipping
         Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache);
 
         /// <summary>
-        /// Get a shipments carrier account id
-        /// </summary>
-        long GetAccountID(ShipmentEntity shipment);
-
-        /// <summary>
         /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
         /// </summary>
         ICarrierAccount GetCarrierAccount(ShipmentEntity shipment);
