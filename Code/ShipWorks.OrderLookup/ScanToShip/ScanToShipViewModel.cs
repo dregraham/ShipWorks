@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Metrics;
@@ -21,23 +20,21 @@ namespace ShipWorks.OrderLookup.ScanToShip
         private readonly IUserSession userSession;
         private readonly ILicenseService licenseService;
         private readonly IOrderLookupShipmentModel shipmentModel;
-        private const int PackTabIndex = 0;
-        private const int ShipTabIndex = 1;
-        private int selectedTab;
-        private object searchViewModel;
+
+        private ScanToShipTab selectedTab;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ScanToShipViewModel(MainOrderLookupViewModel orderLookupViewModel,
                                    IScanPackViewModel scanScanPackViewModel,
-                                   OrderLookupSearchViewModel orderLookupSearchViewModel,
+                                   OrderLookupSearchViewModel searchViewModel,
                                    IUserSession userSession,
                                    ILicenseService licenseService)
         {
             OrderLookupViewModel = orderLookupViewModel;
             ScanPackViewModel = scanScanPackViewModel;
-            OrderLookupSearchViewModel = orderLookupSearchViewModel;
+            SearchViewModel = searchViewModel;
             this.userSession = userSession;
             this.licenseService = licenseService;
 
@@ -45,10 +42,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             ScanPackViewModel.OrderVerified += OnOrderVerified;
             shipmentModel.ShipmentLoadedComplete += OnShipmentLoadedComplete;
 
-            OrderLookupSearchViewModel.ResetCommand = new RelayCommand(Reset);
-            ScanPackViewModel.ResetCommand = new RelayCommand(Reset);
-
-            SelectedTab = IsWarehouseCustomer ? PackTabIndex : ShipTabIndex;
+            SelectedTab = (int) (IsWarehouseCustomer ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
         }
 
         /// <summary>
@@ -67,23 +61,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// OrderLookupSearch ViewModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; }
-
-        /// <summary>
-        /// OrderLookupSearch ViewModel
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public object SearchViewModel
-        {
-            get => searchViewModel;
-            set => Set(ref searchViewModel, value);
-        }
+        public OrderLookupSearchViewModel SearchViewModel { get; }
 
         /// <summary>
         /// IsPackTabActive
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsPackTabActive => selectedTab == PackTabIndex;
+        public bool IsPackTabActive => selectedTab == ScanToShipTab.PackTab;
 
         /// <summary>
         /// Returns the numeric value of the selected tab
@@ -91,35 +75,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
         [Obfuscation(Exclude = true)]
         public int SelectedTab
         {
-            get => selectedTab;
+            get => (int) selectedTab;
             set
             {
-                Set(ref selectedTab, value);
+                Set(ref selectedTab, (ScanToShipTab) value);
 
-                if (value == PackTabIndex)
-                {
-                    SearchViewModel = ScanPackViewModel;
-                }
-                else if (value == ShipTabIndex)
-                {
-                    SearchViewModel = OrderLookupSearchViewModel;
-                }
+                SearchViewModel.SelectedTab = (ScanToShipTab) value;
             }
-        }
-
-        /// <summary>
-        /// Clear the order in both tabs
-        /// </summary>
-        private void Reset()
-        {
-            if (IsPackTabActive)
-            {
-                new TrackedEvent("PickAndPack.ResetClicked").Dispose();
-            }
-
-            OrderLookupSearchViewModel.ShipmentModel.Unload();
-            OrderLookupSearchViewModel.ClearOrderError(OrderClearReason.Reset);
-            OrderLookupSearchViewModel.OrderNumber = string.Empty;
         }
 
         /// <summary>
@@ -131,7 +93,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             // change tabs yet. It will get picked up by the shipment loaded event.
             if (ShouldAutoAdvance && shipmentModel.SelectedOrder != null && IsPackTabActive)
             {
-                SelectedTab = ShipTabIndex;
+                SelectedTab = (int) ScanToShipTab.ShipTab;
             }
         }
 
@@ -143,7 +105,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         {
             if (ShouldAutoAdvance)
             {
-                SelectedTab = shipmentModel.SelectedOrder.Verified? ShipTabIndex : PackTabIndex;
+                SelectedTab = (int) (shipmentModel.SelectedOrder.Verified ? ScanToShipTab.ShipTab : ScanToShipTab.PackTab);
             }
         }
 
@@ -168,7 +130,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
 
             shipmentModel?.Dispose();
             OrderLookupViewModel?.Dispose();
-            OrderLookupSearchViewModel?.Dispose();
+            SearchViewModel?.Dispose();
         }
     }
 }

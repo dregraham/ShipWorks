@@ -71,7 +71,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.Equal(string.Empty, testObject.SearchErrorMessage);
+            Assert.Equal(string.Empty, testObject.SearchMessage);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.False(testObject.SearchError);
+            Assert.False(testObject.ShowSearchMessage);
         }
 
         [Fact]
@@ -110,7 +110,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.Equal("No matching orders were found.", testObject.SearchErrorMessage);
+            Assert.Equal("No matching orders were found.", testObject.SearchMessage);
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.True(testObject.SearchError);
+            Assert.True(testObject.ShowSearchMessage);
         }
 
         [Fact]
@@ -139,7 +139,7 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Foo"));
 
             Assert.Equal(string.Empty, testObject.OrderNumber);
-            Assert.Equal(string.Empty, testObject.SearchErrorMessage);
+            Assert.Equal(string.Empty, testObject.SearchMessage);
         }
     }
 }

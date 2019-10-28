@@ -44,10 +44,5 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Event handler for when state changes
         /// </summary>
         event EventHandler OrderVerified;
-
-        /// <summary>
-        /// Command for resetting the order
-        /// </summary>
-        ICommand ResetCommand { get; set; }
     }
 }

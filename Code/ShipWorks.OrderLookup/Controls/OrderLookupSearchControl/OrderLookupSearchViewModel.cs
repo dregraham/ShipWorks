@@ -3,11 +3,13 @@ using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
-using ShipWorks.Core.UI;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
@@ -16,17 +18,16 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     /// View model for the OrderLookupSearchControl
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class OrderLookupSearchViewModel : INotifyPropertyChanged, IDisposable
+    public class OrderLookupSearchViewModel : ViewModelBase, IDisposable
     {
         private readonly IMessenger messenger;
         private readonly ISecurityContext securityContext;
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly PropertyChangedHandler handler;
         private readonly IDisposable subscription;
         private string orderNumber = string.Empty;
         private bool showCreateLabel = false;
-        private string searchErrorMessage = string.Empty;
-        private bool searchError;
+        private string searchMessage = string.Empty;
+        private bool showSearchMessage;
+        private ScanToShipTab selectedTab;
 
         /// <summary>
         /// Constructor
@@ -41,9 +42,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             this.securityContext = securityContext;
 
             shipmentModel.PropertyChanged += ShipmentModelPropertyChanged;
-            handler = new PropertyChangedHandler(this, () => PropertyChanged);
             GetOrderCommand = new RelayCommand(GetOrder);
             CreateLabelCommand = new RelayCommand(CreateLabel);
+            ResetCommand = new RelayCommand(Reset);
             shipmentModel.OnSearchOrder += (s, e) => ClearOrderError(OrderClearReason.NewSearch);
 
             subscription = messenger
@@ -56,35 +57,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         }
 
         /// <summary>
-        /// Clears the order error
-        /// </summary>
-        public void ClearOrderError(OrderClearReason reason)
-        {
-            if (reason == OrderClearReason.NewSearch)
-            {
-                SearchError = true;
-                SearchErrorMessage = "Loading Order...";
-            }
-            else if (reason == OrderClearReason.ErrorLoadingOrder)
-            {
-                SearchError = true;
-                SearchErrorMessage = "There was an error loading the shipment. Please try again.";
-            }
-            else
-            {
-                SearchError = false;
-                SearchErrorMessage = string.Empty;
-            }
-        }
-
-        /// <summary>
         /// Order Number to search for
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string OrderNumber
         {
             get => orderNumber;
-            set => handler.Set(nameof(OrderNumber), ref orderNumber, value);
+            set => Set(ref orderNumber, value);
         }
 
         /// <summary>
@@ -94,33 +73,33 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         public IOrderLookupShipmentModel ShipmentModel { get; }
 
         /// <summary>
-        /// Show the create label button?
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowCreateLabel
-        {
-            get => showCreateLabel;
-            set => handler.Set(nameof(ShowCreateLabel), ref showCreateLabel, value);
-        }
-
-        /// <summary>
         /// Error message to display when a error occurs while searching
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string SearchErrorMessage
+        public string SearchMessage
         {
-            get => searchErrorMessage;
-            set => handler.Set(nameof(SearchErrorMessage), ref searchErrorMessage, value);
+            get => searchMessage;
+            set => Set(ref searchMessage, value);
         }
 
         /// <summary>
         /// Indicates whether or not an error has occurred while searching.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool SearchError
+        public bool ShowSearchMessage
         {
-            get => searchError;
-            set => handler.Set(nameof(SearchError), ref searchError, value);
+            get => SelectedTab != ScanToShipTab.PackTab && showSearchMessage;
+            set => Set(ref showSearchMessage, value);
+        }
+
+        /// <summary>
+        /// Show the create label button?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowCreateLabel
+        {
+            get => SelectedTab != ScanToShipTab.PackTab && showCreateLabel;
+            set => Set(ref showCreateLabel, value);
         }
 
         /// <summary>
@@ -141,6 +120,42 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
 
+        [Obfuscation(Exclude = true)]
+        public ScanToShipTab SelectedTab
+        {
+            get => selectedTab;
+            set
+            {
+                Set(ref selectedTab, value);
+
+                // Since these properties depend on the SelectedTab, update them
+                RaisePropertyChanged(nameof(ShowCreateLabel));
+                RaisePropertyChanged(nameof(ShowSearchMessage));
+            }
+        }
+
+        /// <summary>
+        /// Clears the order error
+        /// </summary>
+        public void ClearOrderError(OrderClearReason reason)
+        {
+            if (reason == OrderClearReason.NewSearch)
+            {
+                ShowSearchMessage = true;
+                SearchMessage = "Loading Order...";
+            }
+            else if (reason == OrderClearReason.ErrorLoadingOrder)
+            {
+                ShowSearchMessage = true;
+                SearchMessage = "There was an error loading the shipment. Please try again.";
+            }
+            else
+            {
+                ShowSearchMessage = false;
+                SearchMessage = string.Empty;
+            }
+        }
+
         /// <summary>
         /// Update when the shipment model changes
         /// </summary>
@@ -150,20 +165,20 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             {
                 if (ShipmentModel.SelectedOrder == null)
                 {
-                    SearchErrorMessage = "No matching orders were found.";
-                    SearchError = true;
+                    SearchMessage = "No matching orders were found.";
+                    ShowSearchMessage = true;
                     OrderNumber = string.Empty;
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Voided == true)
                 {
-                    SearchErrorMessage = "This order's shipment has been voided.";
-                    SearchError = true;
+                    SearchMessage = "This order's shipment has been voided.";
+                    ShowSearchMessage = true;
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else if (ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
                 {
-                    SearchErrorMessage = "This order's shipment has been processed.";
-                    SearchError = true;
+                    SearchMessage = "This order's shipment has been processed.";
+                    ShowSearchMessage = true;
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
                 else
@@ -197,8 +212,22 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Create a label for the current order
         /// </summary>
-        private void CreateLabel() =>
-            ShipmentModel.CreateLabel().Forget();
+        private void CreateLabel() => ShipmentModel.CreateLabel().Forget();
+
+        /// <summary>
+        /// Clear the order in both tabs
+        /// </summary>
+        private void Reset()
+        {
+            if (SelectedTab == ScanToShipTab.PackTab)
+            {
+                new TrackedEvent("PickAndPack.ResetClicked").Dispose();
+            }
+
+            ShipmentModel.Unload();
+            ClearOrderError(OrderClearReason.Reset);
+            OrderNumber = string.Empty;
+        }
 
         /// <summary>
         /// Dispose

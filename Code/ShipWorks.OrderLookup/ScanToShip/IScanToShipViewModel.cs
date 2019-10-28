@@ -17,7 +17,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// OrderLookupSearch ViewModel
         /// </summary>
-        OrderLookupSearchViewModel OrderLookupSearchViewModel { get; }
+        OrderLookupSearchViewModel SearchViewModel { get; }
         
         /// <summary>
         /// OrderLookup ViewModel

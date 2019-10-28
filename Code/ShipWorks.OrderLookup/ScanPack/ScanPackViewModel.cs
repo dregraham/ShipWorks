@@ -31,14 +31,12 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
-        private readonly IMessenger messenger;
         private readonly IVerifiedOrderService verifiedOrderService;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
         private ObservableCollection<ScanPackItem> itemsToScan;
         private ObservableCollection<ScanPackItem> packedItems;
         private string scanHeader;
         private string scanFooter;
-        private string orderNumber;
         private ScanPackState state;
         private bool error;
         private bool enabled;
@@ -51,33 +49,19 @@ namespace ShipWorks.OrderLookup.ScanPack
             IOrderLookupOrderIDRetriever orderIDRetriever,
             IOrderLoader orderLoader,
             IScanPackItemFactory scanPackItemFactory,
-            IMessenger messenger,
             IVerifiedOrderService verifiedOrderService,
             IOrderLookupAutoPrintService orderLookupAutoPrintService)
         {
             this.orderIDRetriever = orderIDRetriever;
             this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
-            this.messenger = messenger;
             this.verifiedOrderService = verifiedOrderService;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
 
             ItemsToScan = new ObservableCollection<ScanPackItem>();
             PackedItems = new ObservableCollection<ScanPackItem>();
 
-            GetOrderCommand = new RelayCommand(GetOrder);
-
             Update();
-        }
-
-        /// <summary>
-        /// Order number for order being packed
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string OrderNumber
-        {
-            get => orderNumber;
-            set => Set(ref orderNumber, value);
         }
 
         /// <summary>
@@ -155,30 +139,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// Command for getting orders
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand GetOrderCommand { get; set; }
-
-        /// <summary>
-        /// Command for resetting the order
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand ResetCommand { get; set; }
-
-        /// <summary>
-        /// Don't show the Create Label button in the search control
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowCreateLabel => false;
-
-        /// <summary>
-        /// False so that search control doesn't leave a space for error message.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool SearchError => false;
-
-        /// <summary>
         /// Is Scan Pack enabled
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -212,13 +172,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     ScanHeader = "No matching orders were found.";
                     Error = true;
                     ScanFooter = string.Empty;
-                    OrderNumber = string.Empty;
-
-                    return;
                 }
-
-                //await LoadOrder(order).ConfigureAwait(true);
-                //messenger.Send(new OrderLookupLoadOrderMessage(this, orderBeingPacked));
             }
 			else if(State == ScanPackState.OrderLoaded || State == ScanPackState.ScanningItems)
             {
@@ -267,11 +221,9 @@ namespace ShipWorks.OrderLookup.ScanPack
             ItemsToScan.Clear();
             PackedItems.Clear();
 
-            OrderNumber = orderBeingPacked.OrderNumberComplete;
-
             if (orderBeingPacked.OrderItems.Any())
             {
-                var items = (await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true));
+                var items = await scanPackItemFactory.Create(orderBeingPacked).ConfigureAwait(true);
                 if (order.Verified)
                 {
                     items.ForEach(PackedItems.Add);
@@ -290,6 +242,22 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
+        }
+
+        /// <summary>
+        /// Reset the view model
+        /// </summary>
+        public void Reset()
+        {
+            orderBeingPacked = null;
+            ItemsToScan.Clear();
+            PackedItems.Clear();
+
+            State = ScanPackState.ListeningForOrderScan;
+
+            Error = false;
+
+            Update();
         }
 
         /// <summary>
@@ -351,42 +319,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             }
 
             return order;
-        }
-
-        /// <summary>
-        /// Get the order with the current order number
-        /// </summary>
-        private void GetOrder()
-        {
-            Reset(false);
-
-            messenger.Send(new OrderLookupSearchMessage(this, OrderNumber));
-        }
-
-        /// <summary>
-        /// Reset the view model
-        /// </summary>
-        public void Reset() => Reset(true);
-
-        /// <summary>
-        /// Reset the order
-        /// </summary>
-        private void Reset(bool resetOrderNumber)
-        {
-            if (resetOrderNumber)
-            {
-                OrderNumber = string.Empty;
-            }
-
-            orderBeingPacked = null;
-            ItemsToScan.Clear();
-            PackedItems.Clear();
-
-            State = ScanPackState.ListeningForOrderScan;
-
-            Error = false;
-
-            Update();
         }
 
         /// <summary>
