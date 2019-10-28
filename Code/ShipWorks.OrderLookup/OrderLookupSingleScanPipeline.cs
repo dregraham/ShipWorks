@@ -108,7 +108,7 @@ namespace ShipWorks.OrderLookup
 
                 // Process manual order seach (non-barcode scan)
                 messenger.OfType<OrderLookupSearchMessage>()
-                .Where(x => CanProcessSearchMessage() && !IsVerifyingOrder())
+                .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnOrderLookupSearchMessage(x).Forget())
