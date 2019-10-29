@@ -214,7 +214,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         {
             if (SelectedTab == ScanToShipTab.PackTab)
             {
-                new TrackedEvent("PickAndPack.ResetClicked").Dispose();
+                TrackedEvent.SendSingleEvent("PickAndPack.ResetClicked");
             }
 
             ShipmentModel.Unload();
