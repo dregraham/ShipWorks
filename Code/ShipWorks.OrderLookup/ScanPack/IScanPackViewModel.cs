@@ -11,6 +11,16 @@ namespace ShipWorks.OrderLookup.ScanPack
     public interface IScanPackViewModel
     {
         /// <summary>
+        /// The Scan Header
+        /// </summary>
+        string ScanHeader { get; set; }
+
+        /// <summary>
+        /// The Scan Footer
+        /// </summary>
+        string ScanFooter { get; set; }
+
+        /// <summary>
         /// Is the view enabled
         /// </summary>
         bool Enabled { get; set; }

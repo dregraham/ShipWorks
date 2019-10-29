@@ -62,7 +62,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
             orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
-            orderRepository.Setup(o => o.GetOrder(123)).ReturnsAsync(order);
+            orderRepository.Setup(o => o.GetOrder(123, true)).ReturnsAsync(order);
 
             mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(AnyString, It.IsAny<List<long>>())).ReturnsAsync(123);
 

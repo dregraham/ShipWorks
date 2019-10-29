@@ -227,7 +227,7 @@ namespace ShipWorks.OrderLookup
                         {
                             if (order == null)
                             {
-                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                                order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true);
                             }
 
                             loadOrder = order?.Shipments.Any() == true;
@@ -292,6 +292,9 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
+            scanToShipViewModel.ScanPackViewModel.ScanHeader = "Loading order...";
+            scanToShipViewModel.ScanPackViewModel.ScanFooter = string.Empty;
+
             try
             {
                 using (ITrackedDurationEvent telemetryEvent = telemetryFactory("SingleScan.Search.OrderLookup"))
@@ -333,7 +336,7 @@ namespace ShipWorks.OrderLookup
 
                         if (orderId.HasValue)
                         {
-                            order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                            order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true);
                         }
 
                         messenger.Send(new OrderLookupLoadOrderMessage(this, order));
