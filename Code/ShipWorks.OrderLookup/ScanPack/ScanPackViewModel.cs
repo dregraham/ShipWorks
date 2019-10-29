@@ -153,28 +153,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public Func<bool> CanAcceptFocus { get; set; }
 
-        /// <summary>
-        /// Process the scanned text based on the current state
-        /// </summary>
-        public async Task ProcessScan(string scannedText)
-        {
-            Error = false;
-
-            if (State == ScanPackState.ListeningForOrderScan || State == ScanPackState.OrderVerified)
-            {
-                ItemsToScan.Clear();
-                PackedItems.Clear();
-
-                OrderEntity order = await GetOrder(scannedText).ConfigureAwait(true);
-
-                if (order == null)
-                {
-                    ScanHeader = "No matching orders were found.";
-                    Error = true;
-                    ScanFooter = string.Empty;
-                }
-            }
-        }
 
         public void ProcessItemScan(string scannedText)
         {
