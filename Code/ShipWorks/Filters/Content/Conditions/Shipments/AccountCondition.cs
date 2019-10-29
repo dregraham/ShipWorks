@@ -1,9 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.SqlGeneration;
 using ShipWorks.Shipping;
@@ -17,27 +22,27 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
     [ConditionElement("Account", "Shipment.Account")]
     public class AccountCondition : ValueChoiceCondition<string>
     {
-        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IShippingManager shippingManager;
-        private readonly IShippingAccountListProvider shippingAccountListProvider;
         private readonly ILifetimeScope scope;
+        private readonly ISqlAdapterFactory sqlAdapter;
 
         public AccountCondition()
         {
             scope = IoC.BeginLifetimeScope();
-            shipmentTypeManager = scope.Resolve<IShipmentTypeManager>();
             shippingManager = scope.Resolve<IShippingManager>();
-            shippingAccountListProvider = scope.Resolve<IShippingAccountListProvider>();
+            sqlAdapter = new SqlAdapterFactory();
+
             Value = string.Empty;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AccountCondition(IShipmentTypeManager shipmentTypeManager, IShippingManager shippingManager)
+        public AccountCondition(IShippingManager shippingManager, ISqlAdapterFactory sqlAdapter)
         {
-            this.shipmentTypeManager = shipmentTypeManager;
+
             this.shippingManager = shippingManager;
+            this.sqlAdapter = sqlAdapter;
             Value = string.Empty;
         }
 
@@ -49,40 +54,24 @@ namespace ShipWorks.Filters.Content.Conditions.Shipments
         {
             get
             {
+                var sort = ShipmentFields.CarrierAccount.Ascending();
+                var query = new QueryFactory().Shipment
+                    .Select(() => ShipmentFields.CarrierAccount.ToValue<string>())
+                    .Distinct()
+                    .OrderBy(sort);
+                var values = sqlAdapter.Create().FetchQuery(query);
+
                 List<ValueChoice<string>> choices = new List<ValueChoice<string>>();
-                var shipTypes = GetShipmentTypes();
-                foreach(var type in shipTypes)
+                foreach(var account in values)
                 {
-                    IEnumerable<ICarrierAccount> availableAccounts = shippingAccountListProvider.GetAvailableAccounts(type);
-                    foreach(var account in availableAccounts)
+                    if (!string.IsNullOrEmpty(account))
                     {
-                        if(account.AccountId != 0)
-                        {
-                            var userID = account.AccountDescription.Split(',')[0];
-                            choices.Add(new ValueChoice<string>(userID, userID));
-                        }                     
-                    }
+                        choices.Add(new ValueChoice<string>(account, account));
+                    }                    
                 }
                 scope?.Dispose();
                 return choices;
             }
-        }
-
-        ///// <summary>
-        ///// Gets the list of shipment types that can selected for the filter
-        ///// </summary>
-        private ShipmentTypeCode[] GetShipmentTypes()
-        {
-            var result = shipmentTypeManager.ShipmentTypes
-                     .Where(t => t.ShipmentTypeCode != ShipmentTypeCode.BestRate)
-                     .Where(
-                         t =>
-                             t.ShipmentTypeCode != ShipmentTypeCode.AmazonSFP ||
-                             shippingManager.IsShipmentTypeConfigured(t.ShipmentTypeCode))
-                     .Select(t => t.ShipmentTypeCode)
-                     .ToArray();
-
-            return result;
         }
 
         /// <summary>
