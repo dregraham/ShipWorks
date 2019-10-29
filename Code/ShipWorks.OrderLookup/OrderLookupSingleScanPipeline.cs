@@ -208,7 +208,7 @@ namespace ShipWorks.OrderLookup
                     telemetryEvent.AddProperty(InputTextTelemetryPropertyName, message.ScannedText);
 
                     TelemetricResult<long?> orderLookupTelemetricResult = await orderIDRetriever
-                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(true);
+                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(false);
                     orderLookupTelemetricResult.WriteTo(telemetryEvent);
 
                     long? orderId = orderLookupTelemetricResult.Value;
