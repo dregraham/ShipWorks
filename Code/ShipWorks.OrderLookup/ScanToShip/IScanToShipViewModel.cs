@@ -1,4 +1,5 @@
-﻿using ShipWorks.OrderLookup.Controls.OrderLookup;
+﻿using System;
+using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
 
@@ -17,7 +18,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// OrderLookupSearch ViewModel
         /// </summary>
-        OrderLookupSearchViewModel SearchViewModel { get; }
+        IOrderLookupSearchViewModel SearchViewModel { get; }
         
         /// <summary>
         /// OrderLookup ViewModel

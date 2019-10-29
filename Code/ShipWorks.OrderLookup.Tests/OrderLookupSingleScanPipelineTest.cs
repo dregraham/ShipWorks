@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
@@ -14,6 +15,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
@@ -56,9 +58,11 @@ namespace ShipWorks.OrderLookup.Tests
 
             licenseService = mock.Mock<ILicenseService>();
 
+            order = new OrderEntity(123);
 
             orderRepository = mock.Mock<IOrderLookupOrderRepository>();
             orderRepository.Setup(o => o.GetOrderIDs(AnyString)).Returns(new List<long> { 123 });
+            orderRepository.Setup(o => o.GetOrder(123)).ReturnsAsync(order);
 
             mock.Mock<IOrderLookupConfirmationService>().Setup(o => o.ConfirmOrder(AnyString, It.IsAny<List<long>>())).ReturnsAsync(123);
 
@@ -71,8 +75,6 @@ namespace ShipWorks.OrderLookup.Tests
             mainForm.Setup(m => m.AdditionalFormsOpen()).Returns(false);
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
 
-            order = new OrderEntity(123);
-
             var processShipmentResult = new ProcessShipmentResult(new ShipmentEntity() { Order = order });
             var printResult = new AutoPrintCompletionResult(123, new List<ProcessShipmentResult> { processShipmentResult });
             autoPrintService = mock.Mock<IOrderLookupAutoPrintService>();
@@ -80,12 +82,19 @@ namespace ShipWorks.OrderLookup.Tests
                 .Setup(p => p.AutoPrintShipment(AnyLong, It.IsAny<string>()))
                 .ReturnsAsync(printResult);
 
-            orderIdRetriever = mock.Mock<IOrderLookupOrderIDRetriever>();
 
             scanPackViewModel = mock.Mock<IScanPackViewModel>();
             var scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
+            
             scanToShipViewModel.SetupGet(m => m.IsPackTabActive).Returns(() => isPackTabActive);
             scanToShipViewModel.SetupGet(m => m.ScanPackViewModel).Returns(scanPackViewModel.Object);
+            scanToShipViewModel.SetupGet(m => m.SearchViewModel).Returns(mock.Mock<IOrderLookupSearchViewModel>().Object);
+
+            var telemetricResult = new TelemetricResult<long?>("");
+            telemetricResult.SetValue(123);
+
+            orderIdRetriever = mock.Mock<IOrderLookupOrderIDRetriever>();
+            orderIdRetriever.Setup(o => o.GetOrderID("Foo", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => telemetricResult);
 
             testObject = mock.Create<OrderLookupSingleScanPipeline>();
         }
@@ -137,11 +146,6 @@ namespace ShipWorks.OrderLookup.Tests
         {
             mainForm.SetupGet(u => u.UIMode).Returns(UIMode.OrderLookup);
             orderRepository.Setup(o => o.GetOrderIDs("Foo")).Returns(new List<long> { 123 });
-
-            var telemetricResult = new TelemetricResult<long?>("");
-            telemetricResult.SetValue(123);
-
-            orderIdRetriever.Setup(o => o.GetOrderID("Foo", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => telemetricResult);
 
             SingleScanMessage singleScanMessage = new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero));
 
@@ -204,23 +208,27 @@ namespace ShipWorks.OrderLookup.Tests
         {
             isPackTabActive = false;
 
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+            testObject.InitializeForCurrentScope();
+
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.ProcessScan("foobar"), Times.Never);
+            Assert.True(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>().Any(m => m.Order.Equals(order)));
         }
 
         [Fact]
         public void InitializeForCurrentScope_HandlesSingleScanMessage_WhenScanPackIsActive()
         {
+            testObject.InitializeForCurrentScope();
+
             isPackTabActive = true;
 
-            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "foobar", IntPtr.Zero)));
+            testMessenger.Send(new SingleScanMessage(this, new ScanMessage(this, "Foo", IntPtr.Zero)));
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.ProcessScan("foobar"));
+            Assert.True(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>().Any(m => m.Order.Equals(order)));
         }
 
         [Fact]
@@ -232,7 +240,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.ProcessScan("blah"), Times.Never);
+            Assert.Empty(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>());
         }
 
         [Fact]
@@ -240,11 +248,13 @@ namespace ShipWorks.OrderLookup.Tests
         {
             isPackTabActive = true;
 
+            testObject.InitializeForCurrentScope();
+
             testMessenger.Send(new OrderLookupSearchMessage(this, "blah"));
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.ProcessScan("blah"));
+            Assert.True(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>().Any(m => m.Order.Equals(order)));
         }
 
         [Theory]
@@ -252,6 +262,8 @@ namespace ShipWorks.OrderLookup.Tests
         [InlineData(false)]
         public void InitializeForCurrentScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive(bool isPackTabActive)
         {
+            testObject.InitializeForCurrentScope();
+
             this.isPackTabActive = isPackTabActive;
 
             order.OrderNumber = 123;
@@ -266,6 +278,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsReset()
         {
+            testObject.InitializeForCurrentScope();
             testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.Reset));
 
             scheduler.Start();
@@ -276,6 +289,8 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentScope_HandlesOrderLookupClearOrderMessage_WhenClearReasonIsNotReset()
         {
+            testObject.InitializeForCurrentScope();
+
             testMessenger.Send(new OrderLookupClearOrderMessage(this, OrderClearReason.OrderNotFound));
 
             scheduler.Start();

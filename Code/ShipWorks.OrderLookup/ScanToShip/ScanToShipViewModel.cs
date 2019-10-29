@@ -61,7 +61,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// OrderLookupSearch ViewModel
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public OrderLookupSearchViewModel SearchViewModel { get; }
+        public IOrderLookupSearchViewModel SearchViewModel { get; }
 
         /// <summary>
         /// IsPackTabActive

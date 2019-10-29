@@ -111,7 +111,7 @@ namespace ShipWorks.OrderLookup
                 .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Do(x => OnOrderLookupSearchMessage(x).Forget())
+                .Do(x => OnOrderLookupSearchMessage(x).Wait())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
@@ -127,7 +127,7 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<OrderLookupLoadOrderMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Do(x => LoadOrder(x.Order).Forget())
+                .Do(x => LoadOrder(x.Order).Wait())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
@@ -172,11 +172,13 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Can we process an order search message from the scanner or searchbar
         /// </summary>
-        private bool CanProcessSearchMessage() =>
-            !processingScan &&
-            !mainForm.AdditionalFormsOpen() &&
-            mainForm.UIMode == UIMode.OrderLookup &&
-            !mainForm.IsShipmentHistoryActive();
+        private bool CanProcessSearchMessage()
+        {
+            return !processingScan &&
+                !mainForm.AdditionalFormsOpen() &&
+                mainForm.UIMode == UIMode.OrderLookup &&
+                !mainForm.IsShipmentHistoryActive();
+        }
 
         /// <summary>
         /// Are we in the process of verifying an order?

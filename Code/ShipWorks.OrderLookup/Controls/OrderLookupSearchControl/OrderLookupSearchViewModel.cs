@@ -18,7 +18,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
     /// View model for the OrderLookupSearchControl
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class OrderLookupSearchViewModel : ViewModelBase, IDisposable
+    public class OrderLookupSearchViewModel : ViewModelBase, IOrderLookupSearchViewModel
     {
         private readonly IMessenger messenger;
         private readonly ISecurityContext securityContext;

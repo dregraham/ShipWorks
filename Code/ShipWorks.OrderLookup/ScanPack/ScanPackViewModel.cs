@@ -153,7 +153,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public Func<bool> CanAcceptFocus { get; set; }
 
-
+        /// <summary>
+        /// Process a scan for verifying a line item
+        /// </summary>
         public void ProcessItemScan(string scannedText)
         {
             ScanPackItem itemScanned = GetScanPackItem(scannedText, ItemsToScan);

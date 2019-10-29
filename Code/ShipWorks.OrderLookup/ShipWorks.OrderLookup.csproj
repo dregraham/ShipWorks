@@ -222,6 +222,7 @@
     <Compile Include="Controls\EmailNotifications\QuantumViewNotifyControl.xaml.cs">
       <DependentUpon>QuantumViewNotifyControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\OrderLookupSearchControl\IOrderLookupSearchViewModel.cs" />
     <Compile Include="Controls\OrderLookup\IMainOrderLookupViewModel.cs" />
     <Compile Include="Controls\Rating\IRatingViewModel.cs" />
     <Compile Include="Controls\Reference\AmazonReferenceControl.xaml.cs">
