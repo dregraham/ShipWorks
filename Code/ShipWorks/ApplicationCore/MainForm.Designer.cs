@@ -259,9 +259,13 @@ namespace ShipWorks
             this.ribbonTabOrderLookupViewScanPack = new Divelements.SandRibbon.RibbonTab();
             this.ribbonTabOrderLookupViewShipping = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrderLookupViewShipping = new Divelements.SandRibbon.RibbonChunk();
+            this.ribbonChunkProductCatalogViewActions = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewShipShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewManualOrder = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonProductCatalogAddProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonProductCatalogEditProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonProductCatalogExportProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewManageProfiles = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -2213,7 +2217,7 @@ namespace ShipWorks
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonSaveOpen.Guid = new System.Guid("2e88ebc9-2b6a-4b87-8136-89fb142a9658");
             this.buttonSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window;
-            this.buttonSaveOpen.PopupWidget = this.popupSaveOpen;
+            //this.buttonSaveOpen.PopupWidget = this.popupSaveOpen;
             this.buttonSaveOpen.QuickAccessKey = "O";
             this.buttonSaveOpen.Text = "Save && Open";
             this.buttonSaveOpen.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
@@ -2554,6 +2558,8 @@ namespace ShipWorks
             //
             // ribbonTabProducts
             //
+            this.ribbonTabProducts.Chunks.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.ribbonChunkProductCatalogViewActions});
             this.ribbonTabProducts.Location = new System.Drawing.Point(1, 53);
             this.ribbonTabProducts.Manager = this.ribbonManager;
             this.ribbonTabProducts.Name = "ribbonTabProducts";
@@ -2593,6 +2599,41 @@ namespace ShipWorks
             this.buttonOrderLookupViewManualOrder
             });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
+            //
+            // ribbonChunkProductCatalogViewActions
+            //
+            this.ribbonChunkProductCatalogViewActions.FurtherOptions = false;
+            this.ribbonChunkProductCatalogViewActions.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkProductCatalogViewActions.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+            this.buttonProductCatalogAddProduct,
+            this.buttonProductCatalogEditProduct,
+            this.buttonProductCatalogExportProduct
+            });
+            this.ribbonChunkProductCatalogViewActions.Text = "Actions";
+            //
+            // buttonProductCatalogAddProduct
+            //
+            this.buttonProductCatalogAddProduct.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonProductCatalogAddProduct.Guid = new System.Guid("A7AFBDD6-4ED2-447C-90BD-309131882332");
+            this.buttonProductCatalogAddProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonProductCatalogAddProduct.PopupWidget = this.popupSaveOpen;
+            this.buttonOrderLookupViewApplyProfile.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
+            this.buttonProductCatalogAddProduct.Text = "Add";
+            this.buttonProductCatalogAddProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonProductCatalogEditProduct
+            //
+            this.buttonProductCatalogEditProduct.Guid = new System.Guid("268C999B-A2A6-4D02-B2F8-40669284C08A");
+            this.buttonProductCatalogEditProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonProductCatalogEditProduct.Text = "Edit";
+            this.buttonProductCatalogEditProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonProductCatalogExportProduct
+            //
+            this.buttonProductCatalogExportProduct.Guid = new System.Guid("822773F9-51DD-4699-A3E7-18E9BE40FAF6");
+            this.buttonProductCatalogExportProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonProductCatalogExportProduct.Text = "Export";
+            this.buttonProductCatalogExportProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonOrderLookupViewCreateLabel
             //
@@ -3618,6 +3659,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewShipping;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewProfiles;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrderLookupViewActions;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkProductCatalogViewActions;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewCreateLabel;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipShipAgain;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManualOrder;
@@ -3634,6 +3676,9 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonCreateLabel;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFields;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogAddProduct;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogEditProduct;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogExportProduct;
     }
 }
 

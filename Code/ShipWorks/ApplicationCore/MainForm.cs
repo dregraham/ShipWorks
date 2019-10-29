@@ -183,7 +183,7 @@ namespace ShipWorks
 
             InitializeCustomEnablerComponents();
 
-            SetShipmentButonEnabledState();
+            SetShipmentButtonEnabledState();
 
             SetButtonTelemetry();
         }
@@ -191,7 +191,7 @@ namespace ShipWorks
         /// <summary>
         /// Wire up updating the CreateLabel and ApplyProfile enabled state
         /// </summary>
-        private void SetShipmentButonEnabledState()
+        private void SetShipmentButtonEnabledState()
         {
             // Listen for message to enable Create Label button
             Messenger.Current.Subscribe(x =>
