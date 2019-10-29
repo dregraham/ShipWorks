@@ -66,7 +66,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -74,51 +73,6 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <UniformGrid
-                Grid.Row="0"
-                Columns="7"
-                Rows="1">
-                <syncfusion:DropDownButtonAdv Name="AddProduct"
-                                              Label="Add"
-                                              Foreground="White"
-                                              Background="{StaticResource LargePrimaryButtonGradient}"
-                                              BorderBrush="#0e497f"
-                                              BorderThickness="0"
-                                              Margin="0,0,10,0"
-                                              Height="30"
-                                              Width="200"
-                                              IconHeight="0"
-                                              TextBlock.FontSize="12"
-                                              TextBlock.FontWeight="Bold"
-                                              TextBlock.TextAlignment="Justify">
-                    <syncfusion:DropDownMenuGroup>
-                        <syncfusion:DropDownMenuItem Header="New Product"
-                                                     Name="Item1"
-                                                     Command="{Binding AddProduct}"
-                                                     Width="200"
-                                                     Padding="3"
-                                                     />
-                        <syncfusion:DropDownMenuItem Header="From File"
-                                                     Name="Item2"
-                                                     Command="{Binding ImportProducts}"
-                                                     Width="200"
-                                                     Padding="3"/>
-                        <syncfusion:DropDownMenuItem Header="Variant"
-                                                     Name="Item3"
-                                                     Command="{Binding CopyAsVariant}"
-                                                     Width="200"
-                                                     Padding="3"/>
-                    </syncfusion:DropDownMenuGroup>
-                </syncfusion:DropDownButtonAdv>
-                <Button
-                    Command="{Binding EditProductVariantButton}"
-                    Content="Edit"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ExportProducts}"
-                    Content="Export"
-                    Style="{StaticResource PrimaryButton}" />
-            </UniformGrid>
             <syncfusion:SfTextBoxExt
                 Grid.Column="3"
                 MinWidth="300"
