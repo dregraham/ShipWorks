@@ -179,6 +179,26 @@ namespace ShipWorks.OrderLookup.Tests
 
             Assert.Equal(string.Empty, testObject.OrderNumber);
         }
+		
+        [Fact]
+        public void ShowCreateLabel_ReturnsFalse_WhenSelectedTabIsPack()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.ShowCreateLabel = true;
+            testObject.SelectedTab = ScanToShipTab.PackTab;
+
+            Assert.False(testObject.ShowCreateLabel);
+        }
+
+        [Fact]
+        public void ShowSearchMessage_ReturnsFalse_WhenSelectedTabIsPack()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.ShowSearchMessage = true;
+            testObject.SelectedTab = ScanToShipTab.PackTab;
+
+            Assert.False(testObject.ShowSearchMessage);
+        }
 
     }
 }
