@@ -111,7 +111,7 @@ namespace ShipWorks.OrderLookup
                 .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Do(x => OnOrderLookupSearchMessage(x).Wait())
+                .Do(x => OnOrderLookupSearchMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
@@ -127,7 +127,7 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<OrderLookupLoadOrderMessage>()
                 .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Do(x => LoadOrder(x.Order).Wait())
+                .Do(x => LoadOrder(x.Order).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 

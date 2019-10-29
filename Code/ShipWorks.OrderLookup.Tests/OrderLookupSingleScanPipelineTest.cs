@@ -254,7 +254,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler.Start();
 
-            Assert.True(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>().Any(m => m.Order.Equals(order)));
+            RetryAssertion(() => Assert.True(testMessenger.SentMessages.OfType<OrderLookupLoadOrderMessage>().Any(m => m.Order.Equals(order))));
         }
 
         [Theory]
