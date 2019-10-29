@@ -1179,6 +1179,11 @@ namespace ShipWorks
 
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
+
+            // Since no order will be selected when they change modes, set these to false.
+            buttonOrderLookupViewCreateLabel.Enabled = false;
+            buttonOrderLookupViewApplyProfile.Enabled = false;
+            buttonOrderLookupViewShipShipAgain.Enabled = false;
         }
 
         /// <summary>
