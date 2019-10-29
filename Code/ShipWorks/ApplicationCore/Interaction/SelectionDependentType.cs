@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.ApplicationCore.Interaction
+﻿namespace ShipWorks.ApplicationCore.Interaction
 {
     /// <summary>
     /// Controls when a command will be enabled
@@ -21,6 +16,9 @@ namespace ShipWorks.ApplicationCore.Interaction
         OneRow,
         OneOrMoreRows,
 
-        AppliesFunction
+        AppliesFunction,
+
+        OneProduct,
+        OneOrMoreProducts
     }
 }

@@ -44,6 +44,11 @@ namespace ShipWorks.Products
         ICommand AddProduct { get; }
 
         /// <summary>
+        /// Import a list of products
+        /// </summary>
+        ICommand ImportProducts { get; }
+
+        /// <summary>
         /// List of products
         /// </summary>
         [Obfuscation(Exclude = true)]

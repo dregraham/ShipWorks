@@ -1,4 +1,3 @@
-using System;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks
@@ -216,6 +215,7 @@ namespace ShipWorks
             this.popupSave = new Divelements.SandRibbon.Popup();
             this.buttonSaveOpen = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupSaveOpen = new Divelements.SandRibbon.Popup();
+            this.popupAddProduct = new Divelements.SandRibbon.Popup();
             this.buttonQuickPrint = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupQuickPrint = new Divelements.SandRibbon.Popup();
             this.buttonInsuranceClaim = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -266,6 +266,10 @@ namespace ShipWorks
             this.buttonProductCatalogAddProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogEditProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogExportProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.menuAddProduct = new Divelements.SandRibbon.Menu();
+            this.addProductMenuItemFromFile = new Divelements.SandRibbon.MenuItem();
+            this.addProductMenuItemNewProduct = new Divelements.SandRibbon.MenuItem();
+            this.addProductMenuItemVariant = new Divelements.SandRibbon.MenuItem();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewManageProfiles = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -2217,7 +2221,7 @@ namespace ShipWorks
             this.selectionDependentEnabler.SetEnabledWhen(this.buttonSaveOpen, ShipWorks.ApplicationCore.Interaction.SelectionDependentType.OneOrMoreRows);
             this.buttonSaveOpen.Guid = new System.Guid("2e88ebc9-2b6a-4b87-8136-89fb142a9658");
             this.buttonSaveOpen.Image = global::ShipWorks.Properties.Resources.disk_blue_window;
-            //this.buttonSaveOpen.PopupWidget = this.popupSaveOpen;
+            this.buttonSaveOpen.PopupWidget = this.popupSaveOpen;
             this.buttonSaveOpen.QuickAccessKey = "O";
             this.buttonSaveOpen.Text = "Save && Open";
             this.buttonSaveOpen.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
@@ -2616,11 +2620,34 @@ namespace ShipWorks
             this.buttonProductCatalogAddProduct.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
             this.buttonProductCatalogAddProduct.Guid = new System.Guid("A7AFBDD6-4ED2-447C-90BD-309131882332");
             this.buttonProductCatalogAddProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
-            this.buttonProductCatalogAddProduct.PopupWidget = this.popupSaveOpen;
-            this.buttonOrderLookupViewApplyProfile.Padding = new Divelements.SandRibbon.WidgetEdges(8, 2, 8, 14);
+            this.buttonProductCatalogAddProduct.PopupWidget = this.popupAddProduct;
             this.buttonProductCatalogAddProduct.Text = "Add";
             this.buttonProductCatalogAddProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
+            // addProductMenuItemNewProduct
+            //
+            this.addProductMenuItemNewProduct.Text = "New Product";
+            //
+            // addProductMenuItemFromFile
+            //
+            this.addProductMenuItemFromFile.Text = "From File";
+            //
+            //
+            //
+            this.addProductMenuItemVariant.Text = "Variant";
+            //
+            // menuAddProduct
+            //
+            this.menuAddProduct.Items.AddRange(new Divelements.SandRibbon.WidgetBase[]
+            {
+                this.addProductMenuItemNewProduct,
+                this.addProductMenuItemFromFile,
+                this.addProductMenuItemVariant
+            });
+            //
+            // popupAddProduct
+            //
+            this.popupAddProduct.Items.Add(menuAddProduct);
             // buttonProductCatalogEditProduct
             //
             this.buttonProductCatalogEditProduct.Guid = new System.Guid("268C999B-A2A6-4D02-B2F8-40669284C08A");
@@ -2671,7 +2698,8 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewProfiles.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewProfiles.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewApplyProfile,
-            this.buttonOrderLookupViewManageProfiles});
+            this.buttonOrderLookupViewManageProfiles
+    });
             this.ribbonChunkOrderLookupViewProfiles.Text = "Profiles";
             //
             // buttonOrderLookupViewApplyProfile
@@ -2773,7 +2801,8 @@ namespace ShipWorks
             //
             // popupOrderLookupViewFedExEndOfDay
             //
-            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { menuOrderLookupViewFedExEndOfDay });
+            this.popupOrderLookupViewFedExEndOfDay.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] { menuOrderLookupViewFedExEndOfDay
+});
             this.popupOrderLookupViewFedExEndOfDay.BeforePopup += new Divelements.SandRibbon.BeforePopupEventHandler(this.OnOrderLookupViewFedExClosePopupOpening);
             //
             // popupPostalScanForm
@@ -3458,6 +3487,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.Popup popupSave;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSaveOpen;
         private Divelements.SandRibbon.Popup popupSaveOpen;
+        private Divelements.SandRibbon.Popup popupAddProduct;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrders;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkCustomers;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonNewOrder;
@@ -3679,6 +3709,10 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogAddProduct;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogEditProduct;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogExportProduct;
+        private Divelements.SandRibbon.Menu menuAddProduct;
+        private Divelements.SandRibbon.MenuItem addProductMenuItemNewProduct;
+        private Divelements.SandRibbon.MenuItem addProductMenuItemFromFile;
+        private Divelements.SandRibbon.MenuItem addProductMenuItemVariant;
     }
 }
 

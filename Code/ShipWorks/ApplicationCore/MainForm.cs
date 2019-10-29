@@ -151,6 +151,7 @@ namespace ShipWorks
         private IShipmentHistory shipmentHistory;
         private IScanPack scanPackControl;
         private IUpdateService updateService;
+        private IProductsMode productsMode;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         // Is ShipWorks currently changing modes
@@ -1145,8 +1146,54 @@ namespace ShipWorks
 
             productsLifetimeScope = IoC.BeginLifetimeScope();
 
-            productsLifetimeScope.Resolve<IProductsMode>()
-                .Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
+            productsMode = productsLifetimeScope.Resolve<IProductsMode>();
+
+            productsMode.Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
+
+            AttachProductEventHandlers();
+        }
+
+        /// <summary>
+        /// Attach event handlers to product mode buttons
+        /// </summary>
+        private void AttachProductEventHandlers()
+        {
+            addProductMenuItemNewProduct.Activate += OnAddNewProduct;
+            addProductMenuItemFromFile.Activate += OnAddProductFromFile;
+            addProductMenuItemVariant.Activate += OnAddProductVariant;
+        }
+
+        /// <summary>
+        /// Add New Product event handler
+        /// </summary>
+        private void OnAddNewProduct(object sender, EventArgs e)
+        {
+            if (productsMode != null)
+            {
+                productsMode.AddProduct.Execute(null);
+            }
+        }
+
+        /// <summary>
+        /// Add Product From File event handler
+        /// </summary>
+        private void OnAddProductFromFile(object sender, EventArgs e)
+        {
+            if (productsMode != null)
+            {
+                productsMode.ImportProducts.Execute(null);
+            }
+        }
+
+        /// <summary>
+        /// Add Product Variant event handler
+        /// </summary>
+        private void OnAddProductVariant(object sender, EventArgs e)
+        {
+            if (productsMode != null)
+            {
+                productsMode.CopyAsVariant.Execute(null);
+            }
         }
 
         /// <summary>
@@ -1205,10 +1252,20 @@ namespace ShipWorks
         /// </summary>
         private void UnloadProductsMode()
         {
+            DetachProductEventHandlers();
             productsLifetimeScope?.Dispose();
             productsLifetimeScope = null;
         }
 
+        /// <summary>
+        /// Detach event handlers from product mode buttons
+        /// </summary>
+        private void DetachProductEventHandlers()
+        {
+            addProductMenuItemNewProduct.Activate -= OnAddNewProduct;
+            addProductMenuItemFromFile.Activate -= OnAddProductFromFile;
+            addProductMenuItemVariant.Activate -= OnAddProductVariant;
+        }
         /// <summary>
         /// Disable the main batch mode controls
         /// </summary>

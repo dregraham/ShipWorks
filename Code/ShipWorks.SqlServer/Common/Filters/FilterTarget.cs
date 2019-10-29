@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 using System.Reflection;
 
@@ -22,6 +19,9 @@ namespace ShipWorks.Filters
         Shipments = 2,
 
         [Description("Order Items")]
-        Items = 3
+        Items = 3,
+
+        [Description("Products")]
+        Products = 4
     }
 }
