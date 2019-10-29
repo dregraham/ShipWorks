@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 {
                     shipmentCount++;
                 }
-                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment).AccountDescription.Split(',')[0];
+                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
             }
             
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";

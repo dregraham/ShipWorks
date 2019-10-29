@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
-                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment).AccountDescription.Split(',')[0];
+                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
 
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
