@@ -35,18 +35,18 @@ namespace ShipWorks.Shipping.CoreExtensions.Grid
         /// </summary>
         protected override string GetDisplayText(object value)
         {
-            string account = null;
+            string account = string.Empty;
             using (var scope = IoC.BeginLifetimeScope())
             {
                 var shippingManager = scope.Resolve<IShippingManager>();
                 if (value is ShipmentEntity shipment && shipment.Processed)
                 {
-                    account = shipment.CarrierAccount;
+                    account = shipment.CarrierAccount ?? string.Empty;
                 }
 
                 if (value is ProcessedShipmentEntity processedShipment)
                 {
-                    account = shippingManager.GetCarrierAccount(processedShipment).AccountDescription.Split(',')[0];
+                    account = shippingManager.GetShipment(processedShipment.ShipmentID).Shipment.CarrierAccount ?? string.Empty;
                 }
             }
 
