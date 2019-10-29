@@ -1820,6 +1820,8 @@ namespace ShipWorks.Data.Model
 		AmazonApiRegion,
 		///<summary>RefreshToken. </summary>
 		RefreshToken,
+		///<summary>DownloadDaysBack. </summary>
+		DownloadDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}

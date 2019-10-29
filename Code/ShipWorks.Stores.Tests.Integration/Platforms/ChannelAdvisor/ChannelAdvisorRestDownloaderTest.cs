@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             };
 
             client = mock.Mock<IChannelAdvisorRestClient>();
-            client.Setup(c => c.GetOrders(It.IsAny<string>()))
+            client.Setup(c => c.GetOrders(It.IsAny<int>(), It.IsAny<string>()))
                 .Returns(() => firstBatch);
             client.Setup(c => c.GetDistributionCenters(It.IsAny<string>()))
                 .Returns(new ChannelAdvisorDistributionCenterResponse() { DistributionCenters = distributionCenters });
