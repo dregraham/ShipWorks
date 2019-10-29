@@ -199,7 +199,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public async Task LoadOrder(OrderEntity order)
         {
-            Error = false;
+            bool errorLoading = false;
 
             orderBeingPacked = order;
             ItemsToScan.Clear();
@@ -207,7 +207,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (order == null)
             {
                 ScanHeader = "No matching orders were found.";
-                Error = true;
+                errorLoading = true;
                 ScanFooter = string.Empty;
             }
             else if (orderBeingPacked.OrderItems.Any())
@@ -231,6 +231,8 @@ namespace ShipWorks.OrderLookup.ScanPack
                 ScanHeader = "This order does not contain any items";
                 ScanFooter = "Scan another order to continue";
             }
+
+            Error = errorLoading;
         }
 
         /// <summary>

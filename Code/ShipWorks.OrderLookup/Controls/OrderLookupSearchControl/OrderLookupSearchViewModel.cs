@@ -1,6 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -111,17 +109,21 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         [Obfuscation(Exclude = true)]
         public ICommand CreateLabelCommand { get; set; }
 
+        /// <summary>
+        /// Currently selected Scan to Ship tab
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public ScanToShipTab SelectedTab
         {
             get => selectedTab;
             set
             {
-                Set(ref selectedTab, value);
-
-                // Since these properties depend on the SelectedTab, update them
-                RaisePropertyChanged(nameof(ShowCreateLabel));
-                RaisePropertyChanged(nameof(ShowSearchMessage));
+                if (Set(ref selectedTab, value))
+                {
+                    // Since these properties depend on the SelectedTab, update them
+                    RaisePropertyChanged(nameof(ShowCreateLabel));
+                    RaisePropertyChanged(nameof(ShowSearchMessage));
+                }
             }
         }
 

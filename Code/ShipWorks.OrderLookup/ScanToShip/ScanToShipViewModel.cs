@@ -42,7 +42,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             ScanPackViewModel.OrderVerified += OnOrderVerified;
             shipmentModel.ShipmentLoadedComplete += OnShipmentLoadedComplete;
 
-            SelectedTab = (int) (IsWarehouseCustomer ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
+            SelectedTab = (int) (licenseService.IsHub ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
         }
 
         /// <summary>
@@ -110,15 +110,9 @@ namespace ShipWorks.OrderLookup.ScanToShip
         }
 
         /// <summary>
-        /// Is the customer allowed to use warehouse features
-        /// </summary>
-        private bool IsWarehouseCustomer => licenseService.CheckRestriction(EditionFeature.Warehouse, null) ==
-                                            EditionRestrictionLevel.None;
-
-        /// <summary>
         /// Does the user have the auto advance setting enabled
         /// </summary>
-        private bool ShouldAutoAdvance => IsWarehouseCustomer && userSession?.Settings?.ScanToShipAutoAdvance == true;
+        private bool ShouldAutoAdvance => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         /// <summary>
         /// Dispose

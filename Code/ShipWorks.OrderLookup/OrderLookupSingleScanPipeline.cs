@@ -92,8 +92,8 @@ namespace ShipWorks.OrderLookup
         {
             EndSession();
 
-            allowScanPack = (EditionRestrictionLevel.None == licenseService.CheckRestriction(EditionFeature.Warehouse, null));            
-            scanToShipViewModel.ScanPackViewModel.Enabled=allowScanPack;
+            allowScanPack = licenseService.IsHub;
+            scanToShipViewModel.ScanPackViewModel.Enabled = allowScanPack;
 
             subscriptions = new CompositeDisposable(
 
@@ -106,7 +106,7 @@ namespace ShipWorks.OrderLookup
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
-                // Process manual order seach (non-barcode scan)
+                // Process manual order search (non-barcode scan)
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
@@ -172,13 +172,11 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Can we process an order search message from the scanner or searchbar
         /// </summary>
-        private bool CanProcessSearchMessage()
-        {
-            return !processingScan &&
-                !mainForm.AdditionalFormsOpen() &&
-                mainForm.UIMode == UIMode.OrderLookup &&
-                !mainForm.IsShipmentHistoryActive();
-        }
+        private bool CanProcessSearchMessage() =>
+            !processingScan &&
+            !mainForm.AdditionalFormsOpen() &&
+            mainForm.UIMode == UIMode.OrderLookup &&
+            !mainForm.IsShipmentHistoryActive();
 
         /// <summary>
         /// Are we in the process of verifying an order?
