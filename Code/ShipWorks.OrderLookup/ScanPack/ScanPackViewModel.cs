@@ -343,13 +343,13 @@ namespace ShipWorks.OrderLookup.ScanPack
                 matchingTargetItem.Quantity += quantityPacked;
             }
 
-            Update();
+            Update(true);
         }
 
         /// <summary>
         /// Update properties
         /// </summary>
-        private void Update()
+        private void Update(bool itemScanned = false)
         {
             double scannedItemCount = PackedItems.Select(GetUnitCount).Sum();
             double totalItemCount = ItemsToScan.Select(GetUnitCount).Sum() + scannedItemCount;
@@ -382,7 +382,10 @@ namespace ShipWorks.OrderLookup.ScanPack
                 {
                     verifiedOrderService.Save(orderBeingPacked);
 
-                    orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
+                    if (itemScanned)
+                    {
+                        orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
+                    }
 
                     // Order has been scanned, all items have been scanned
                     ScanHeader = "This order has been verified!";
