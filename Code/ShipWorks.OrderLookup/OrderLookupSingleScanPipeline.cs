@@ -206,7 +206,7 @@ namespace ShipWorks.OrderLookup
                     telemetryEvent.AddProperty(InputTextTelemetryPropertyName, message.ScannedText);
 
                     TelemetricResult<long?> orderLookupTelemetricResult = await orderIDRetriever
-                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(false);
+                        .GetOrderID(message.ScannedText, UserInputTelemetryTimeSliceName, DataLoadingTelemetryTimeSliceName, OrderCountTelemetryPropertyName).ConfigureAwait(true);
                     orderLookupTelemetricResult.WriteTo(telemetryEvent);
 
                     long? orderId = orderLookupTelemetricResult.Value;
@@ -220,14 +220,15 @@ namespace ShipWorks.OrderLookup
                         {
                             AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message.ScannedText).ConfigureAwait(false);
                             return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
-                        }).ConfigureAwait(true);
+                        }).ConfigureAwait(true); // setting this to false will cause problems
 
                         // Capture the time required for loading the shipment data
                         await shipmentLoadTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                         {
                             if (order == null)
                             {
-                                order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true);
+                                // setting ConfigureAwait to false will cause problems
+                                order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true); 
                             }
 
                             loadOrder = order?.Shipments.Any() == true;
@@ -249,7 +250,7 @@ namespace ShipWorks.OrderLookup
                             {
                                 shipmentModel.Unload();
                             }
-                        }).ConfigureAwait(true);
+                        }).ConfigureAwait(true); // setting ConfigureAwait to false will cause problems
 
                         shipmentLoadTelemetricResult.WriteTo(telemetryEvent);
                     }
