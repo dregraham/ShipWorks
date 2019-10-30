@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -12,7 +13,6 @@ using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Common.Threading;
@@ -33,7 +33,7 @@ namespace ShipWorks.Products
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductsViewHost view;
         private IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
-        private BindingList<long> selectedProductIDs = new BindingList<long>();
+        private IList<long> selectedProductIDs = new BindingList<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
         private bool showInactiveProducts;
@@ -42,6 +42,7 @@ namespace ShipWorks.Products
         private readonly IProductCatalog productCatalog;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductViewModelFactory viewModelFactory;
+        public event ProductSelectionChangedEventHandler ProductSelectionChanged;
 
         /// <summary>
         /// Constructor
@@ -71,8 +72,8 @@ namespace ShipWorks.Products
             SelectedProductsChanged = new RelayCommand<IList>(
                 items =>
                 {
-                    SelectedProductIDs.Clear();
-                    items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ForEach(x => selectedProductIDs.Add(x));
+                    SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList();
+                    RaiseProductSelectionChanged();
                 });
 
             ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
@@ -163,7 +164,7 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public BindingList<long> SelectedProductIDs
+        public IList<long> SelectedProductIDs
         {
             get => selectedProductIDs;
             set => Set(ref selectedProductIDs, value);
@@ -317,7 +318,7 @@ namespace ShipWorks.Products
             {
                 await EditProduct(productVariantAlias.ProductVariant, "Edit Product").ConfigureAwait(true);
             }
-        }S
+        }
 
         /// <summary>
         /// Add a product
@@ -382,6 +383,19 @@ namespace ShipWorks.Products
 
             // Refresh is required to show the active/inactive state of the row.
             RefreshProductsAction();
+        }
+
+        /// <summary>
+        /// Raise the ProductSelectionChanged event
+        /// </summary>
+        private void RaiseProductSelectionChanged()
+        {
+            if (ProductSelectionChanged != null)
+            {
+                bool singleSelection = SelectedProductIDs.IsCountEqualTo(1) ? true : false;
+                var args = new ProductSelectionChangedEventArgs(singleSelection);
+                ProductSelectionChanged(this, args);
+            }
         }
 
         /// <summary>

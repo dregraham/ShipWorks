@@ -1167,7 +1167,7 @@ namespace ShipWorks
 
             if (productsMode != null)
             {
-                productsMode.SelectedProductIDs.ListChanged += OnProductSelectionChanged;
+                productsMode.ProductSelectionChanged += OnProductSelectionChanged;
             }
         }
 
@@ -1214,9 +1214,9 @@ namespace ShipWorks
         /// <summary>
         /// Product selection event handler
         /// </summary>
-        private void OnProductSelectionChanged(object sender, EventArgs e)
+        private void OnProductSelectionChanged(object sender, ProductSelectionChangedEventArgs e)
         {
-            if (productsMode != null && productsMode.SelectedProductIDs.IsCountEqualTo(1))
+            if (e.SingleSelection)
             {
                 addProductMenuItemVariant.Enabled = true;
                 buttonProductCatalogEditProduct.Enabled = true;

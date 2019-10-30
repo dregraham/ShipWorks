@@ -1,5 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -14,6 +14,8 @@ namespace ShipWorks.Products
     /// </summary>
     public interface IProductsMode : IDisposable
     {
+        event ProductSelectionChangedEventHandler ProductSelectionChanged;
+
         /// <summary>
         /// Command to refresh the products list
         /// </summary>
@@ -63,7 +65,7 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        BindingList<long> SelectedProductIDs { get; set; }
+        IList<long> SelectedProductIDs { get; set; }
 
         /// <summary>
         /// The list of selected products has changed
