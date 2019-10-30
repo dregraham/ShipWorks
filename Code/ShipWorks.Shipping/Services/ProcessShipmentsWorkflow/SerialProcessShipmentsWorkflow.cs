@@ -12,6 +12,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
 
@@ -160,8 +161,17 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
-                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
+                if(shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+                {
+                    var tag = chosenRateResult.Tag as BestRateResultTag;
+                    shipment.CarrierAccount = tag?.AccountDescription;
+                }
 
+                else
+                {
+                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
+                }
+                
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
