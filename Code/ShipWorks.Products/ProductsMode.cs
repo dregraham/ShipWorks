@@ -390,12 +390,9 @@ namespace ShipWorks.Products
         /// </summary>
         private void RaiseProductSelectionChanged()
         {
-            if (ProductSelectionChanged != null)
-            {
-                bool singleSelection = SelectedProductIDs.IsCountEqualTo(1) ? true : false;
-                var args = new ProductSelectionChangedEventArgs(singleSelection);
-                ProductSelectionChanged(this, args);
-            }
+            bool singleSelection = SelectedProductIDs.IsCountEqualTo(1) ? true : false;
+            var args = new ProductSelectionChangedEventArgs(singleSelection);
+            ProductSelectionChanged?.Invoke(this, args);
         }
 
         /// <summary>
