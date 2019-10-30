@@ -99,6 +99,10 @@ namespace ShipWorks.Products.UI
             throw new NotImplementedException();
         }
 
+
+        /// <summary>
+        /// Non-invokable implementation of the ProductSelectionChanged event handler
+        /// </summary>
         public event ProductSelectionChangedEventHandler ProductSelectionChanged
         {
             add { throw new NotImplementedException(); }
