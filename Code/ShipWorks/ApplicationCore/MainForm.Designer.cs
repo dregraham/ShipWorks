@@ -2653,7 +2653,7 @@ namespace ShipWorks
             // buttonProductCatalogEditProduct
             //
             this.buttonProductCatalogEditProduct.Guid = new System.Guid("268C999B-A2A6-4D02-B2F8-40669284C08A");
-            this.buttonProductCatalogEditProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonProductCatalogEditProduct.Image = global::ShipWorks.Properties.Resources.form_blue_edit;
             this.buttonProductCatalogEditProduct.Text = "Edit";
             this.buttonProductCatalogEditProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonProductCatalogEditProduct.Enabled = false;
@@ -2661,7 +2661,7 @@ namespace ShipWorks
             // buttonProductCatalogExportProduct
             //
             this.buttonProductCatalogExportProduct.Guid = new System.Guid("822773F9-51DD-4699-A3E7-18E9BE40FAF6");
-            this.buttonProductCatalogExportProduct.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonProductCatalogExportProduct.Image = global::ShipWorks.Properties.Resources.document_out1;
             this.buttonProductCatalogExportProduct.Text = "Export";
             this.buttonProductCatalogExportProduct.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
