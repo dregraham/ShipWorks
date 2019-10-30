@@ -2648,6 +2648,7 @@ namespace ShipWorks
             // popupAddProduct
             //
             this.popupAddProduct.Items.Add(menuAddProduct);
+            //
             // buttonProductCatalogEditProduct
             //
             this.buttonProductCatalogEditProduct.Guid = new System.Guid("268C999B-A2A6-4D02-B2F8-40669284C08A");
@@ -3488,6 +3489,7 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonSaveOpen;
         private Divelements.SandRibbon.Popup popupSaveOpen;
         private Divelements.SandRibbon.Popup popupAddProduct;
+        private Divelements.SandRibbon.Popup popupEditProduct;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkOrders;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkCustomers;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonNewOrder;

@@ -1161,6 +1161,9 @@ namespace ShipWorks
             addProductMenuItemNewProduct.Activate += OnAddNewProduct;
             addProductMenuItemFromFile.Activate += OnAddProductFromFile;
             addProductMenuItemVariant.Activate += OnAddProductVariant;
+
+            buttonProductCatalogEditProduct.Activate += OnEditProduct;
+            buttonProductCatalogExportProduct.Activate += OnExportProduct;
         }
 
         /// <summary>
@@ -1193,6 +1196,22 @@ namespace ShipWorks
             if (productsMode != null)
             {
                 productsMode.CopyAsVariant.Execute(null);
+            }
+        }
+
+        private void OnEditProduct(object sender, EventArgs e)
+        {
+            if (productsMode != null)
+            {
+                productsMode.EditProductVariantButton.Execute(null);
+            }
+        }
+
+        private void OnExportProduct(object sender, EventArgs e)
+        {
+            if (productsMode != null)
+            {
+                productsMode.ExportProducts.Execute(null);
             }
         }
 
@@ -1265,6 +1284,9 @@ namespace ShipWorks
             addProductMenuItemNewProduct.Activate -= OnAddNewProduct;
             addProductMenuItemFromFile.Activate -= OnAddProductFromFile;
             addProductMenuItemVariant.Activate -= OnAddProductVariant;
+
+            buttonProductCatalogEditProduct.Activate -= OnEditProduct;
+            buttonProductCatalogExportProduct.Activate -= OnExportProduct;
         }
         /// <summary>
         /// Disable the main batch mode controls
