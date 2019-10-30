@@ -293,8 +293,6 @@ namespace ShipWorks.Products
                         await EditProduct(result.Value, "New Variant").ConfigureAwait(false);
                     }
                 }
-
-                Telemetry.TrackButtonClick("ShipWorks.Button.Click.Variant");
             }
         }
 
@@ -319,9 +317,7 @@ namespace ShipWorks.Products
             {
                 await EditProduct(productVariantAlias.ProductVariant, "Edit Product").ConfigureAwait(true);
             }
-
-            Telemetry.TrackButtonClick("ShipWorks.Button.Click.Products.Import");
-        }
+        }S
 
         /// <summary>
         /// Add a product
@@ -344,8 +340,6 @@ namespace ShipWorks.Products
             });
 
             await EditProduct(productVariant, "New Product").ConfigureAwait(true);
-
-            Telemetry.TrackButtonClick("ShipWorks.Click.Products.Add");
         }
 
         /// <summary>

@@ -267,9 +267,9 @@ namespace ShipWorks
             this.buttonProductCatalogEditProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogExportProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.menuAddProduct = new Divelements.SandRibbon.Menu();
-            this.addProductMenuItemFromFile = new Divelements.SandRibbon.MenuItem();
-            this.addProductMenuItemNewProduct = new Divelements.SandRibbon.MenuItem();
-            this.addProductMenuItemVariant = new Divelements.SandRibbon.MenuItem();
+            this.addProductMenuItemFromFile = new ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem(); 
+            this.addProductMenuItemNewProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem();
+            this.addProductMenuItemVariant = new ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem();
             this.ribbonChunkOrderLookupViewProfiles = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewApplyProfile = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewManageProfiles = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -3401,6 +3401,12 @@ namespace ShipWorks
             buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
             buttonCreateLabel.TelemetryEventName = "CreateLabel";
             buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
+            buttonProductCatalogEditProduct.TelemetryEventName = "Product.Edit";
+            buttonProductCatalogExportProduct.TelemetryEventName = "Product.Export";
+
+            addProductMenuItemNewProduct.TelemetryEventName = "Product.New";
+            addProductMenuItemFromFile.TelemetryEventName = "Product.Import";
+            addProductMenuItemVariant.TelemetryEventName = "Product.Variant";
 
             menuItemViewHelp.TelemetryEventName = "Logo.Help.View";
             menuItemSupportForum.TelemetryEventName = "Logo.Support.Forum";
@@ -3714,9 +3720,9 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogEditProduct;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonProductCatalogExportProduct;
         private Divelements.SandRibbon.Menu menuAddProduct;
-        private Divelements.SandRibbon.MenuItem addProductMenuItemNewProduct;
-        private Divelements.SandRibbon.MenuItem addProductMenuItemFromFile;
-        private Divelements.SandRibbon.MenuItem addProductMenuItemVariant;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem addProductMenuItemNewProduct;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem addProductMenuItemFromFile;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonMainMenuItem addProductMenuItemVariant;
     }
 }
 
