@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
                 else
                 {
-                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
+                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
                 }
                 
                 return concurrencyErrors.ContainsKey(shipment) ?

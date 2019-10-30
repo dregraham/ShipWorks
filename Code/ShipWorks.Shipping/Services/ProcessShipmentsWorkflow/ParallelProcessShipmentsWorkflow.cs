@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             // Get shipment count with automatic returns
             int shipmentCount = 0;
-
+            
             foreach (ShipmentEntity shipment in shipments)
             {
                 shipmentCount++;
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
                 else
                 {
-                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.AccountDescription.Split(',')[0];
+                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
                 }
             }
             

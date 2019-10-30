@@ -230,6 +230,9 @@ namespace ShipWorks.Data.Model.EntityClasses
             return new ReadOnlyUspsAccountEntity(this, objectMap);
         }
 
-        
+        /// <summary>
+        /// Gets the shortened account description.
+        /// </summary>
+        public string ShortAccountDescription => Username;
     }
 }
