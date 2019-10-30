@@ -1176,10 +1176,7 @@ namespace ShipWorks
         /// </summary>
         private void OnAddNewProduct(object sender, EventArgs e)
         {
-            if (productsMode != null)
-            {
-                productsMode.AddProduct.Execute(null);
-            }
+            productsMode?.AddProduct.Execute(null);
         }
 
         /// <summary>
@@ -1187,10 +1184,7 @@ namespace ShipWorks
         /// </summary>
         private void OnAddProductFromFile(object sender, EventArgs e)
         {
-            if (productsMode != null)
-            {
-                productsMode.ImportProducts.Execute(null);
-            }
+            productsMode?.ImportProducts.Execute(null);
         }
 
         /// <summary>
@@ -1198,10 +1192,7 @@ namespace ShipWorks
         /// </summary>
         private void OnAddProductVariant(object sender, EventArgs e)
         {
-            if (productsMode != null)
-            {
-                productsMode.CopyAsVariant.Execute(null);
-            }
+            productsMode?.CopyAsVariant.Execute(null);
         }
 
         /// <summary>
@@ -1209,10 +1200,7 @@ namespace ShipWorks
         /// </summary>
         private void OnEditProduct(object sender, EventArgs e)
         {
-            if (productsMode != null)
-            {
-                productsMode.EditProductVariantButton.Execute(null);
-            }
+            productsMode?.EditProductVariantButton.Execute(null);
         }
 
         /// <summary>
@@ -1220,10 +1208,7 @@ namespace ShipWorks
         /// </summary>
         private void OnExportProduct(object sender, EventArgs e)
         {
-            if (productsMode != null)
-            {
-                productsMode.ExportProducts.Execute(null);
-            }
+            productsMode?.ExportProducts.Execute(null);
         }
 
         /// <summary>
