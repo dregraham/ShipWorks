@@ -33,7 +33,7 @@ namespace ShipWorks.Products
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductsViewHost view;
         private IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
-        private IList<long> selectedProductIDs = new BindingList<long>();
+        private IList<long> selectedProductIDs = new List<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
         private bool showInactiveProducts;
