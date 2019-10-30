@@ -1289,6 +1289,7 @@ namespace ShipWorks
             buttonProductCatalogEditProduct.Enabled = false;
             productsLifetimeScope?.Dispose();
             productsLifetimeScope = null;
+            productsMode = null;
         }
 
         /// <summary>
@@ -1302,11 +1303,6 @@ namespace ShipWorks
 
             buttonProductCatalogEditProduct.Activate -= OnEditProduct;
             buttonProductCatalogExportProduct.Activate -= OnExportProduct;
-
-            if (productsMode != null)
-            {
-                productsMode.SelectedProductIDs.ListChanged -= OnProductSelectionChanged;
-            }
         }
         /// <summary>
         /// Disable the main batch mode controls
