@@ -194,9 +194,7 @@ namespace ShipWorks.OrderLookup.Tests
         [Fact]
         public void InitializeForCurrentScope_EnablesScanPack_WhenFeatureRestricted()
         {
-            licenseService
-                .Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
-                .Returns(EditionRestrictionLevel.None);
+            licenseService.SetupGet(l => l.IsHub).Returns(true);
 
             testObject.InitializeForCurrentScope();
 
@@ -262,6 +260,8 @@ namespace ShipWorks.OrderLookup.Tests
         [InlineData(false)]
         public void InitializeForCurrentScope_HandlesOrderLookupLoadOrderMessage_WhenScanPackIsNotActive(bool isPackTabActive)
         {
+            licenseService.SetupGet(l => l.IsHub).Returns(true);
+
             testObject.InitializeForCurrentScope();
 
             this.isPackTabActive = isPackTabActive;
