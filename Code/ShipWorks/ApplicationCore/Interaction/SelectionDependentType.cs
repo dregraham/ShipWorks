@@ -16,9 +16,6 @@
         OneRow,
         OneOrMoreRows,
 
-        AppliesFunction,
-
-        OneProduct,
-        OneOrMoreProducts
+        AppliesFunction
     }
 }

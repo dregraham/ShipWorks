@@ -1164,6 +1164,11 @@ namespace ShipWorks
 
             buttonProductCatalogEditProduct.Activate += OnEditProduct;
             buttonProductCatalogExportProduct.Activate += OnExportProduct;
+
+            if (productsMode != null)
+            {
+                productsMode.SelectedProductIDs.ListChanged += OnProductSelectionChanged;
+            }
         }
 
         /// <summary>
@@ -1199,6 +1204,9 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Edit Product event handler
+        /// </summary>
         private void OnEditProduct(object sender, EventArgs e)
         {
             if (productsMode != null)
@@ -1207,11 +1215,31 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Export product event handler
+        /// </summary>
         private void OnExportProduct(object sender, EventArgs e)
         {
             if (productsMode != null)
             {
                 productsMode.ExportProducts.Execute(null);
+            }
+        }
+
+        /// <summary>
+        /// Product selection event handler
+        /// </summary>
+        private void OnProductSelectionChanged(object sender, EventArgs e)
+        {
+            if (productsMode != null && productsMode.SelectedProductIDs.IsCountEqualTo(1))
+            {
+                addProductMenuItemVariant.Enabled = true;
+                buttonProductCatalogEditProduct.Enabled = true;
+            }
+            else
+            {
+                addProductMenuItemVariant.Enabled = false;
+                buttonProductCatalogEditProduct.Enabled = false;
             }
         }
 
@@ -1272,6 +1300,8 @@ namespace ShipWorks
         private void UnloadProductsMode()
         {
             DetachProductEventHandlers();
+            addProductMenuItemVariant.Enabled = false;
+            buttonProductCatalogEditProduct.Enabled = false;
             productsLifetimeScope?.Dispose();
             productsLifetimeScope = null;
         }
@@ -1287,6 +1317,11 @@ namespace ShipWorks
 
             buttonProductCatalogEditProduct.Activate -= OnEditProduct;
             buttonProductCatalogExportProduct.Activate -= OnExportProduct;
+
+            if (productsMode != null)
+            {
+                productsMode.SelectedProductIDs.ListChanged -= OnProductSelectionChanged;
+            }
         }
         /// <summary>
         /// Disable the main batch mode controls

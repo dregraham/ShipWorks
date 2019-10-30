@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -78,7 +79,7 @@ namespace ShipWorks.Products.UI
         public ICommand SelectedProductsChanged => throw new NotImplementedException();
 
         public IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> Products { get; private set; }
-        public IList<long> SelectedProductIDs { get; set; }
+        public BindingList<long> SelectedProductIDs { get; set; }
         public IBasicSortDefinition CurrentSort { get; set; }
         public bool ShowInactiveProducts { get; set; }
         public string SearchText { get; set; }

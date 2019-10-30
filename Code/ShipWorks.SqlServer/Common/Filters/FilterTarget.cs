@@ -19,9 +19,6 @@ namespace ShipWorks.Filters
         Shipments = 2,
 
         [Description("Order Items")]
-        Items = 3,
-
-        [Description("Products")]
-        Products = 4
+        Items = 3
     }
 }

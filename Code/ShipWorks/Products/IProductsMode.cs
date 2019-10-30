@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -63,7 +63,7 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        IList<long> SelectedProductIDs { get; set; }
+        BindingList<long> SelectedProductIDs { get; set; }
 
         /// <summary>
         /// The list of selected products has changed

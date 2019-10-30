@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +33,7 @@ namespace ShipWorks.Products
         private readonly Func<IProductEditorViewModel> productEditorViewModelFunc;
         private readonly IProductsViewHost view;
         private IDataWrapper<IVirtualizingCollection<IProductListItemEntity>> products;
-        private IList<long> selectedProductIDs = new List<long>();
+        private BindingList<long> selectedProductIDs = new BindingList<long>();
         private IBasicSortDefinition currentSort;
         private string searchText;
         private bool showInactiveProducts;
@@ -70,7 +69,12 @@ namespace ShipWorks.Products
             EditProductVariantButton = new RelayCommand(async () => await EditProductVariantButtonAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             CopyAsVariant = new RelayCommand(async () => await CopyAsVariantAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
-                items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
+                items =>
+                {
+                    SelectedProductIDs.Clear();
+                    items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ForEach(x => selectedProductIDs.Add(x));
+                });
+
             ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
 
             ExportProducts = new RelayCommand(ExportProductsAction);
@@ -159,7 +163,7 @@ namespace ShipWorks.Products
         /// Collection of selected products
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IList<long> SelectedProductIDs
+        public BindingList<long> SelectedProductIDs
         {
             get => selectedProductIDs;
             set => Set(ref selectedProductIDs, value);
@@ -367,7 +371,7 @@ namespace ShipWorks.Products
             {
                 return;
             }
-            
+
             bool makeItActive = !product.IsActive;
             string text = (makeItActive ? "Activating" : "Deactivating") + " products";
 
