@@ -163,6 +163,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             if (itemScanned != null)
             {
                 ProcessItemScan(itemScanned, ItemsToScan, PackedItems);
+                Error = false;
             }
             else
             {
