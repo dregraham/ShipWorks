@@ -235,7 +235,8 @@ namespace ShipWorks.OrderLookup
 
                             if (loadOrder)
                             {
-                                if (!order.Shipments.Last().Processed)
+                                // only auto weigh if auto print is disabled because auto print would have auto weigh already otherwise
+                                if (!order.Shipments.Last().Processed && !orderLookupAutoPrintService.AllowAutoPrint(message.ScannedText))
                                 {
                                     using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
                                     {
