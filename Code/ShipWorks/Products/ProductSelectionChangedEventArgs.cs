@@ -3,12 +3,12 @@
 namespace ShipWorks.Products
 {
     /// <summary>
-    /// Delegate for the TaskChanging event
+    /// Delegate for the ProductSelectionChanged event
     /// </summary>
     public delegate void ProductSelectionChangedEventHandler(object sender, ProductSelectionChangedEventArgs e);
 
     /// <summary>
-    /// Event data for the TaskChanging event
+    /// Event data for the ProductSelectionChanged event
     /// </summary>
     public class ProductSelectionChangedEventArgs : EventArgs
     {
