@@ -1,6 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -41,8 +42,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             iParcelShipment = new IParcelShipmentEntity { Service = (int) iParcelServiceType.Immediate };
 
             shippingManager.Setup(x => x.EnsureShipmentLoaded(shipment));
+            var interapptiveOnly = new Mock<IInterapptiveOnly>();
 
-            testObject = new ThreeDCartRestOnlineUpdater(store.Object, (x => new ThreeDCartRestWebClient(store.Object)));
+            testObject = new ThreeDCartRestOnlineUpdater(store.Object, (x => new ThreeDCartRestWebClient(store.Object, interapptiveOnly.Object)));
         }
 
         [Fact]
