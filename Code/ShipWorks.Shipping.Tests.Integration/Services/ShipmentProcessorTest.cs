@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
+using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
@@ -57,7 +58,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         private readonly DataContext context;
         private ShipmentEntity shipment;
         private Mock<IUspsWebServiceFactory> webServiceFactory;
-        private Mock<IMessageHelper> messageHelper;
+        private Mock<IAsyncMessageHelper> messageHelper;
         private Mock<IMessenger> messenger;
         private Mock<IDateTimeProvider> dateTimeProvider;
         private Mock<IUserSession> userSession;
@@ -68,7 +69,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             context = db.CreateDataContext((mock, builder) =>
                 {
                     webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
-                    messageHelper = builder.RegisterMock<IMessageHelper>(mock);
+                    messageHelper = builder.RegisterMock<IAsyncMessageHelper>(mock);
                     messenger = builder.RegisterMock<IMessenger>(mock);
                     dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
                     builder.RegisterMock<IActionDispatcher>(mock);
@@ -96,7 +97,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             shipment = Create.Shipment(context.Order)
                 .AsOther()
-                .Save();            
+                .Save();
         }
 
         [Fact]
@@ -127,7 +128,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             string errorMessage = string.Empty;
             messageHelper
                 .Setup(x => x.ShowError(It.IsAny<string>()))
-                .Callback((string x) => errorMessage = x);
+                .Callback((string x) => errorMessage = x)
+                .Returns(Task.CompletedTask);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
@@ -285,7 +287,8 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             Func<IForm> dialogCreator = null;
             messageHelper
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
-                .Callback((Func<IForm> x) => dialogCreator = x);
+                .Callback((Func<IForm> x) => dialogCreator = x)
+                .ReturnsAsync(DialogResult.Cancel);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 
