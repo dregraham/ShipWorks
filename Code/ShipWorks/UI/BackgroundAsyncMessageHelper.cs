@@ -37,6 +37,16 @@ namespace ShipWorks.UI
         public Task ShowError(string message) => Task.CompletedTask;
 
         /// <summary>
+        /// Show a warning box with the given text.
+        /// </summary>
+        public Task ShowWarning(string message) => Task.CompletedTask;
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public Task<DialogResult> ShowDialog(Func<IForm> createDialog) => Task.FromResult(DialogResult.Cancel);
+
+        /// <summary>
         /// Show a dialog and get the results
         /// </summary>
         /// <param name="createDialog">Create the dialog that should be shown</param>

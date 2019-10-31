@@ -147,7 +147,7 @@ namespace ShipWorks.Stores.Orders.Archive
         /// </summary>
         public Task<(bool result, bool enabled, int numberOfDaysToKeep)> Show() =>
             messageHelper
-                .ShowDialog(SetupDialog)
+                .ShowDialog(() => SetupDialog())
                 .Map(result => (result.GetValueOrDefault(), Enabled, NumberOfDaysToKeep));
 
         /// <summary>
