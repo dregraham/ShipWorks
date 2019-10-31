@@ -11,7 +11,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
@@ -87,8 +86,8 @@ namespace ShipWorks.Shipping.Carriers
 
             if (counterRatesResult != DialogResult.OK)
             {
-                // The user canceled, so we need to stop processing
-                return null;
+                // The user didn't add an account, so add an error to this shipment
+                throw new ShippingException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
             }
 
             // The user created an account, so try to grab the account and use it
@@ -101,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers
                 ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
                 if (carrierAccount == null)
                 {
-                    throw new CarrierException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
+                    throw new ShippingException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
                 }
 
                 carrierAccount.ApplyTo(shipment);
