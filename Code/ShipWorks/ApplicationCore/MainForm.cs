@@ -149,7 +149,6 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-        private IScanPack scanPackControl;
         private IUpdateService updateService;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
@@ -1169,7 +1168,6 @@ namespace ShipWorks
             }
 
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
-            scanPackControl = orderLookupLifetimeScope.Resolve<IScanPack>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
@@ -1181,6 +1179,11 @@ namespace ShipWorks
 
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
+
+            // Since no order will be selected when they change modes, set these to false.
+            buttonOrderLookupViewCreateLabel.Enabled = false;
+            buttonOrderLookupViewApplyProfile.Enabled = false;
+            buttonOrderLookupViewShipShipAgain.Enabled = false;
         }
 
         /// <summary>
@@ -1191,10 +1194,8 @@ namespace ShipWorks
             if (orderLookupLifetimeScope != null)
             {
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-                panelDockingArea.Controls.Remove(scanPackControl?.Control);
                 panelDockingArea.Controls.Remove(shipmentHistory?.Control);
                 orderLookupControl.Unload();
-                scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }
@@ -1238,7 +1239,6 @@ namespace ShipWorks
         /// Is the specified tab an order lookup mode specific tab
         /// </summary>
         private bool IsOrderLookupSpecificTab(RibbonTab tab) =>
-            tab == ribbonTabOrderLookupViewScanPack ||
             tab == ribbonTabOrderLookupViewShipmentHistory ||
             tab == ribbonTabOrderLookupViewShipping;
 
@@ -1272,14 +1272,7 @@ namespace ShipWorks
                 ChangeUIMode(UIMode.Products);
             }
 
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
-            {
-                // Save the order in case changes were made before switching to this tab
-                orderLookupControl?.Save();
-                ToggleVisiblePanel(scanPackControl?.Control);
-                shipmentHistory?.Deactivate();
-            }
-            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
                 ToggleVisiblePanel(orderLookupControl?.Control);
                 shipmentHistory?.Deactivate();
@@ -1304,14 +1297,6 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// True if scan pack control is active
-        /// </summary>
-        public bool IsScanPackActive()
-        {
-            return scanPackControl != null && panelDockingArea.Controls.Contains(scanPackControl.Control);
-        }
-
-        /// <summary>
         /// Toggle which control is visible in the panel docking area
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd)
@@ -1319,7 +1304,6 @@ namespace ShipWorks
             // first remove everything
             panelDockingArea.Controls.Remove(shipmentHistory?.Control);
             panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-            panelDockingArea.Controls.Remove(scanPackControl?.Control);
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
@@ -1707,11 +1691,6 @@ namespace ShipWorks
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                     EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                    if (restrictionLevel == EditionRestrictionLevel.None)
-                    {
-                        ribbonTabOrderLookupViewScanPack.Enabled = true;
-                    }
                 }
             }
         }
@@ -1891,10 +1870,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            else if (UIMode == UIMode.OrderLookup)
-            {
-                shipmentHistory.SaveGridColumnState();
-            }
+            
+            shipmentHistory?.SaveGridColumnState();            
         }
 
         /// <summary>
@@ -3645,20 +3622,6 @@ namespace ShipWorks
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LookupOrder(dlg.OrderID);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Create a manual order from the order lookup panel
-        /// </summary>
-        private void OnOrderLookupManualOrder(object sender, EventArgs e)
-        {
-            using (AddOrderWizard dlg = new AddOrderWizard(null, null))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderNmberComplete));
                 }
             }
         }

@@ -26,16 +26,10 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <orderLookupSearchControl:OrderLookupSearchControl
-            Grid.Row="0"
-            Margin="10"
-            DataContext="{Binding .}" IsEnabled="{Binding Enabled}"/>
         <ScrollViewer
-            Grid.Row="1"
+            Grid.Row="0"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Disabled">
             <Grid x:Name="ColumnGrid" SizeChanged="OnGridControlSizeChanged"

@@ -6,16 +6,16 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Common.Threading;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Filters.Search;
+using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
@@ -37,10 +37,13 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupConfirmationService orderLookupConfirmationService;
         private readonly Func<string, ITrackedDurationEvent> telemetryFactory;
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
+        private readonly IScanToShipViewModel scanToShipViewModel;
+        private readonly ILicenseService licenseService;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
         private object loadingOrderLock = new object();
+        bool allowScanPack = true;
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -63,7 +66,9 @@ namespace ShipWorks.OrderLookup
             Func<Type, ILog> createLogger,
             IOrderLookupConfirmationService orderLookupConfirmationService,
             Func<string, ITrackedDurationEvent> telemetryFactory,
-            IOrderLookupOrderIDRetriever orderIDRetriever)
+            IOrderLookupOrderIDRetriever orderIDRetriever,
+            IScanToShipViewModel scanToShipViewModel,
+            ILicenseService licenseService)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -75,6 +80,8 @@ namespace ShipWorks.OrderLookup
             this.orderLookupConfirmationService = orderLookupConfirmationService;
             this.telemetryFactory = telemetryFactory;
             this.orderIDRetriever = orderIDRetriever;
+            this.scanToShipViewModel = scanToShipViewModel;
+            this.licenseService = licenseService;
             log = createLogger(GetType());
         }
 
@@ -85,15 +92,21 @@ namespace ShipWorks.OrderLookup
         {
             EndSession();
 
+            allowScanPack = licenseService.IsHub;
+            scanToShipViewModel.ScanPackViewModel.Enabled = allowScanPack;
+
             subscriptions = new CompositeDisposable(
+
+                // Process a barcode scan
                 messenger.OfType<SingleScanMessage>()
-                .Where(x => CanProcessSearchMessage())
+                .Where(x => CanProcessSearchMessage() && !IsVerifyingOrder())
                 .Do(_ => processingScan = true)
                 .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
                 .Do(x => OnSingleScanMessage(x).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
+                // Process manual order search (non-barcode scan)
                 messenger.OfType<OrderLookupSearchMessage>()
                 .Where(x => CanProcessSearchMessage())
                 .Do(_ => processingScan = true)
@@ -102,28 +115,57 @@ namespace ShipWorks.OrderLookup
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
-                messenger.OfType<OrderLookupLoadOrderMessage>()
-                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup && mainForm.IsScanPackActive())
-                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
-                .Do(x => LoadOrder(x.Order))
+                // Validate order line item scan
+                messenger.OfType<SingleScanMessage>()
+                .Where(x => CanProcessSearchMessage() && IsVerifyingOrder())
+                .Do(x => processingScan = true)
+                .Do(x => ValidateLineItem(x.ScannedText))
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
-                messenger.OfType<OrderLookupClearOrderMessage>()
-                .Do(OnOrderLookupClearOrderMessage)
+                // Load the order in the UI
+                messenger.OfType<OrderLookupLoadOrderMessage>()
+                .Where(x => !mainForm.AdditionalFormsOpen() && mainForm.UIMode == UIMode.OrderLookup)
+                .Do(_ => shipmentModel.Unload(OrderClearReason.NewSearch))
+                .Do(x => LoadOrder(x.Order).Forget())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe()
+                .Subscribe(),
+
+                // Clear 
+                messenger.OfType<OrderLookupClearOrderMessage>()
+                .Where(x => CanProcessSearchMessage())
+                .Where(x => x.Reason == OrderClearReason.Reset)
+                .Do(x => scanToShipViewModel.ScanPackViewModel.Reset())
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe(),
+
+                messenger
+                .OfType<OrderLookupClearOrderMessage>()
+                .Where(x =>
+                        x.Reason == OrderClearReason.Reset ||
+                        x.Reason == OrderClearReason.NewSearch ||
+                        x.Reason == OrderClearReason.ErrorLoadingOrder)
+                .Subscribe(x => ClearOrderError(x.Reason))
             );
         }
 
-        /// <summary>
-        /// Handle clear message
-        /// </summary>
-        private void OnOrderLookupClearOrderMessage(OrderLookupClearOrderMessage message)
+        private void ClearOrderError(OrderClearReason reason)
         {
-            if (message.Reason == OrderClearReason.Reset)
+            scanToShipViewModel.SearchViewModel.ClearOrderError(reason);
+        }
+
+        /// <summary>
+        /// When validating an order, call this to validate a line item
+        /// </summary>
+        private void ValidateLineItem(string searchText)
+        {
+            try
             {
-                LoadOrder(null);
+                scanToShipViewModel.ScanPackViewModel.ProcessItemScan(searchText);
+            }
+            finally
+            {
+                processingScan = false;
             }
         }
 
@@ -134,8 +176,16 @@ namespace ShipWorks.OrderLookup
             !processingScan &&
             !mainForm.AdditionalFormsOpen() &&
             mainForm.UIMode == UIMode.OrderLookup &&
-            !mainForm.IsShipmentHistoryActive() &&
-            !mainForm.IsScanPackActive();
+            !mainForm.IsShipmentHistoryActive();
+
+        /// <summary>
+        /// Are we in the process of verifying an order?
+        /// </summary>
+        private bool IsVerifyingOrder() => 
+            allowScanPack && 
+            scanToShipViewModel.IsPackTabActive &&
+            (scanToShipViewModel.ScanPackViewModel.State == ScanPack.ScanPackState.OrderLoaded ||
+             scanToShipViewModel.ScanPackViewModel.State == ScanPack.ScanPackState.ScanningItems);
 
         /// <summary>
         /// Logs the exception and reconnect pipeline.
@@ -170,21 +220,23 @@ namespace ShipWorks.OrderLookup
                         {
                             AutoPrintCompletionResult result = await orderLookupAutoPrintService.AutoPrintShipment(orderId.Value, message.ScannedText).ConfigureAwait(false);
                             return result.ProcessShipmentResults?.Select(x => x.Shipment.Order).FirstOrDefault();
-                        }).ConfigureAwait(true);
+                        }).ConfigureAwait(true); // setting this to false will cause problems
 
                         // Capture the time required for loading the shipment data
                         await shipmentLoadTelemetricResult.RunTimedEventAsync(DataLoadingTelemetryTimeSliceName, async () =>
                         {
                             if (order == null)
                             {
-                                order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                                // setting ConfigureAwait to false will cause problems
+                                order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true); 
                             }
 
                             loadOrder = order?.Shipments.Any() == true;
 
                             if (loadOrder)
                             {
-                                if (!order.Shipments.Last().Processed)
+                                // only auto weigh if auto print is disabled because auto print would have auto weigh already otherwise
+                                if (!order.Shipments.Last().Processed && !orderLookupAutoPrintService.AllowAutoPrint(message.ScannedText))
                                 {
                                     using (ITrackedEvent telemetry = new TrackedEvent("OrderLookup.Search.AutoWeigh"))
                                     {
@@ -192,7 +244,6 @@ namespace ShipWorks.OrderLookup
                                     }
                                 }
 
-                                shipmentModel.LoadOrder(order);
                                 messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                             }
 
@@ -200,13 +251,13 @@ namespace ShipWorks.OrderLookup
                             {
                                 shipmentModel.Unload();
                             }
-                        }).ConfigureAwait(true);
+                        }).ConfigureAwait(true); // setting ConfigureAwait to false will cause problems
 
                         shipmentLoadTelemetricResult.WriteTo(telemetryEvent);
                     }
                     else
                     {
-                        shipmentModel.LoadOrder(null);
+                        messenger.Send(new OrderLookupLoadOrderMessage(this, null));
                     }
                 }
             }
@@ -224,21 +275,18 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Load the order
         /// </summary>
-        public void LoadOrder(OrderEntity order)
+        public async Task LoadOrder(OrderEntity order)
         {
-            lock (loadingOrderLock)
+            processingScan = true;
+
+            shipmentModel.LoadOrder(order);
+
+            if (allowScanPack)
             {
-                if (processingScan)
-                {
-                    return;
-                }
-
-                processingScan = true;
-
-                shipmentModel.LoadOrder(order);
-
-                processingScan = false;
+                await scanToShipViewModel.ScanPackViewModel.LoadOrder(order).ConfigureAwait(true);
             }
+
+            processingScan = false;
         }
 
         /// <summary>
@@ -246,6 +294,9 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         public async Task OnOrderLookupSearchMessage(OrderLookupSearchMessage message)
         {
+            scanToShipViewModel.ScanPackViewModel.ScanHeader = "Loading order...";
+            scanToShipViewModel.ScanPackViewModel.ScanFooter = string.Empty;
+
             try
             {
                 using (ITrackedDurationEvent telemetryEvent = telemetryFactory("SingleScan.Search.OrderLookup"))
@@ -287,10 +338,9 @@ namespace ShipWorks.OrderLookup
 
                         if (orderId.HasValue)
                         {
-                            order = await orderRepository.GetOrder(orderId.Value).ConfigureAwait(true);
+                            order = await orderRepository.GetOrder(orderId.Value, true).ConfigureAwait(true);
                         }
 
-                        shipmentModel.LoadOrder(order);
                         messenger.Send(new OrderLookupLoadOrderMessage(this, order));
                     }).ConfigureAwait(true);
 

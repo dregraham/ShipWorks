@@ -3930,7 +3930,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 24, 0);
+			this.AddElementMapping("UserSettingsEntity", @"ShipWorksLocal", @"dbo", "UserSettings", 25, 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "UserID", "UserID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
@@ -3955,6 +3955,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UserSettingsEntity", "AutoPrintRequireValidation", "AutoPrintRequireValidation", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 21);
 			this.AddElementFieldMapping("UserSettingsEntity", "MinimizeRibbon", "MinimizeRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 22);
 			this.AddElementFieldMapping("UserSettingsEntity", "ShowQAToolbarBelowRibbon", "ShowQAToolbarBelowRibbon", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
+			this.AddElementFieldMapping("UserSettingsEntity", "ScanToShipAutoAdvance", "ScanToShipAutoAdvance", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 24);
 		}
 
 		/// <summary>Inits UspsAccountEntity's mappings</summary>

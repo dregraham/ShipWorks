@@ -37,9 +37,9 @@ namespace ShipWorks.OrderLookup.Tests
 
             Mock<IOrderLookupOrderRepository> repo = mock.Mock<IOrderLookupOrderRepository>();
 
-            repo.Verify(r => r.GetOrder(123));
-            repo.Verify(r => r.GetOrder(456));
-            repo.Verify(r => r.GetOrder(789));
+            repo.Verify(r => r.GetOrder(123, false));
+            repo.Verify(r => r.GetOrder(456, false));
+            repo.Verify(r => r.GetOrder(789, false));
         }
     }
 }

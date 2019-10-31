@@ -154,6 +154,11 @@ namespace ShipWorks.OrderLookup
         event EventHandler ShipmentLoaded;
 
         /// <summary>
+        /// Raise after the shipment is loaded
+        /// </summary>
+        event EventHandler ShipmentLoadedComplete;
+
+        /// <summary>
         /// Apply the profile to the current shipment
         /// </summary>
         bool ApplyProfile(IShippingProfile profile);

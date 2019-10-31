@@ -49,6 +49,12 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
+        /// Is Auto Print allowed
+        /// </summary>
+        public bool AllowAutoPrint(string scanText) =>
+            autoPrintService.AllowAutoPrint(scanText);
+
+        /// <summary>
         /// Auto print shipments for the given orderid
         /// </summary>
         public async Task<AutoPrintCompletionResult> AutoPrintShipment(long orderId, string message)
