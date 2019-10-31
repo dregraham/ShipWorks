@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Orders.Split
             (Message, MoreInfoUrl) = GetErrorDetails(exception);
             ShowMoreInfoUrl = !string.IsNullOrEmpty(MoreInfoUrl);
 
-            await messageHelper.ShowDialog(SetupDialog);
+            await messageHelper.ShowDialog(() => SetupDialog());
         }
 
         /// <summary>

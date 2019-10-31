@@ -18,7 +18,6 @@ using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Orders.Split.Errors;
-using ShipWorks.Users;
 
 namespace ShipWorks.Stores.Orders.Split
 {
@@ -169,7 +168,7 @@ namespace ShipWorks.Stores.Orders.Split
             Load(order, suggestedOrderNumber);
 
             return messageHelper
-                .ShowDialog(SetupDialog)
+                .ShowDialog(() => SetupDialog())
                 .Bind(x => x == true ?
                     Task.FromResult(new OrderSplitDefinition(order, BuildItemQuantities(), BuildItemCharges(), SelectedOrderNumber + OrderNumberPostfix, SplitType)) :
                     Task.FromException<OrderSplitDefinition>(Error.Canceled));
@@ -191,7 +190,7 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
-            CanChangeSplitType = licenseService.IsHub && 
+            CanChangeSplitType = licenseService.IsHub &&
                 (order.CombineSplitStatus == CombineSplitStatusType.None || order.CombineSplitStatus == CombineSplitStatusType.Split);
             SplitType = CanChangeSplitType ? OrderSplitterType.Reroute : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
