@@ -46,6 +46,15 @@ namespace ShipWorks.UI
         }
 
         /// <summary>
+        /// Show a warning box with the given text
+        /// </summary>
+        public Task ShowWarning(string message)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => messageHelper.ShowWarning(owner, message));
+        }
+
+        /// <summary>
         /// Show an error message box with the given error text.
         /// </summary>
         /// <param name="message">Error message that should be displayed</param>
@@ -56,6 +65,15 @@ namespace ShipWorks.UI
         {
             var owner = ownerFactory();
             return owner.InvokeAsync(() => messageHelper.ShowError(owner, message));
+        }
+
+        /// <summary>
+        /// Show a dialog and get the results
+        /// </summary>
+        public Task<DialogResult> ShowDialog(Func<IForm> createDialog)
+        {
+            var owner = ownerFactory();
+            return owner.InvokeAsync(() => ShowDialog(owner, createDialog));
         }
 
         /// <summary>
@@ -100,6 +118,17 @@ namespace ShipWorks.UI
         /// <summary>
         /// Show a dialog
         /// </summary>
+        private DialogResult ShowDialog(Control owner, Func<IForm> createDialog)
+        {
+            using (IForm dialog = createDialog())
+            {
+                return dialog.ShowDialog(owner);
+            }
+        }
+
+        /// <summary>
+        /// Show a dialog
+        /// </summary>
         /// <param name="owner">Owner of the dialog</param>
         /// <param name="createDialog">Func that creates the dialog that should be shown</param>
         /// <returns></returns>
@@ -108,6 +137,16 @@ namespace ShipWorks.UI
             var dialog = createDialog();
             dialog.LoadOwner(owner);
             return dialog.ShowDialog();
+        }
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        public Task<DialogResult> ShowQuestion(string message)
+        {
+            var owner = ownerFactory();
+
+            return owner.InvokeAsync(() => messageHelper.ShowQuestion(message));
         }
     }
 }

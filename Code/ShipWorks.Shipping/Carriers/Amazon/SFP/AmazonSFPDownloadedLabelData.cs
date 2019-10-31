@@ -85,18 +85,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 {
                     resourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, pdfBytes, shipmentID,
                         i => i == 0 ? "LabelPrimary" : $"LabelPart{i}",
-                        SaveCroppedLabel);
+                        SaveCroppedLabel, true);
                 }
             }
             else if (fileContents.FileType == "application/zpl")
             {
-                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+                resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary", true);
             }
             else
             {
                 // Save the label to the database
                 DataResourceReference resourceReference =
-                    resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary");
+                    resourceManager.CreateFromBytes(labelBytes, shipmentID, "LabelPrimary", true);
 
                 try
                 {

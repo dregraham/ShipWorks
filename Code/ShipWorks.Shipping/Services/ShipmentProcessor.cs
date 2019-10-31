@@ -29,6 +29,7 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.UI;
 
 namespace ShipWorks.Shipping.Services
 {
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Services
         private readonly ILifetimeScope lifetimeScope;
         private readonly ILicenseService licenseService;
         private readonly IProcessShipmentsWorkflowFactory workflowFactory;
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
         private readonly IShippingSettings shippingSettings;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IActionDispatcher actionDispatcher;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Services
             IShippingErrorManager errorManager,
             ILifetimeScope lifetimeScope,
             ILicenseService licenseService,
-            IMessageHelper messageHelper,
+            IAsyncMessageHelper messageHelper,
             IProcessShipmentsWorkflowFactory workflowFactory,
             IShippingSettings shippingSettings,
             ISqlAdapterFactory sqlAdapterFactory,
@@ -110,7 +111,7 @@ namespace ShipWorks.Shipping.Services
 
             if (!clonedShipments.Any())
             {
-                messageHelper.ShowMessage("There are no shipments to process.");
+                await messageHelper.ShowMessage("There are no shipments to process.");
 
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
@@ -129,13 +130,21 @@ namespace ShipWorks.Shipping.Services
 
             using (CancellationTokenSource cancellationSource = new CancellationTokenSource())
             {
-                IProgressProvider progressProvider = new CancellationTokenProgressProvider(cancellationSource);
-
-                // Progress Item
+                IProgressProvider progressProvider;
                 IProgressReporter workProgress = new ProgressItem("Processing Shipments");
-                progressProvider.ProgressItems.Add(workProgress);
 
-                using (messageHelper.ShowProgressDialog("Processing Shipments",
+                // Use a background progress provider when processing in the background
+                if (messageHelper is BackgroundAsyncMessageHelper)
+                {
+                    progressProvider = new BackgroundProgressProvider(workProgress);
+                }
+                else
+                {
+                    progressProvider = new CancellationTokenProgressProvider(cancellationSource);
+                    progressProvider.ProgressItems.Add(workProgress);
+                }
+
+                using (await messageHelper.ShowProgressDialog("Processing Shipments",
                     "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
                 {
                     result = await workflow.Process(clonedShipments, chosenRateResult, workProgress,
@@ -145,7 +154,7 @@ namespace ShipWorks.Shipping.Services
 
             result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
 
-            HandleProcessingException(result);
+            await HandleProcessingException(result);
 
             // See if we are supposed to open WorldShip
             if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)
@@ -228,18 +237,18 @@ namespace ShipWorks.Shipping.Services
         /// <summary>
         /// Handle an exception raised during processing, if possible
         /// </summary>
-        private void HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
+        private async Task HandleProcessingException(IProcessShipmentsWorkflowResult workflowResult)
         {
             workflowResult.LocalRateValidationResult.HandleValidationFailure(workflowResult);
 
             // If any accounts were out of funds we show that instead of the errors
             if (workflowResult.OutOfFundsException != null)
             {
-                HandleOutOfFundsException(workflowResult);
+                await HandleOutOfFundsException(workflowResult);
             }
             else if (workflowResult.TermsAndConditionsException != null)
             {
-                messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
+                await messageHelper.ShowError(workflowResult.NewErrors.FirstOrDefault());
                 ITermsAndConditionsException termsAndConditionsException = workflowResult.TermsAndConditionsException;
                 termsAndConditionsException.TermsAndConditions.Show();
             }
@@ -258,16 +267,16 @@ namespace ShipWorks.Shipping.Services
                     message += "\n\nSee the shipment list for all errors.";
                 }
 
-                messageHelper.ShowError(message);
+                await messageHelper.ShowError(message);
             }
         }
 
         /// <summary>
         /// Handles Out Of Funds Exception
         /// </summary>
-        private void HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
+        private async Task HandleOutOfFundsException(IProcessShipmentsWorkflowResult workflowResult)
         {
-            DialogResult answer = messageHelper.ShowQuestion(
+            DialogResult answer = await messageHelper.ShowQuestion(
                                 $"You do not have sufficient funds in {workflowResult.OutOfFundsException.Provider} account {workflowResult.OutOfFundsException.AccountIdentifier} to continue shipping.\n\n" +
                                 "Would you like to purchase more now?");
 

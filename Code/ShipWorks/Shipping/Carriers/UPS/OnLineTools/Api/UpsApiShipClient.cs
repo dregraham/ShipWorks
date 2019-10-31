@@ -20,7 +20,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
-using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.UI;
 
@@ -167,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("Name", origin.Company);
             xmlWriter.WriteElementString("AttentionName", new PersonName(origin).FullName);
             xmlWriter.WriteElementString("ShipperNumber", account.AccountNumber);
-            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", ""));
+            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", "").Truncate(15));
             xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(origin.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
@@ -185,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 isResidentialAddress = string.IsNullOrEmpty(recipient.Company);
                 shipment.ResidentialResult = isResidentialAddress;
             }
-           
+
             #region Determine name, company, and attention
 
             string companyOrName = "";
@@ -220,11 +219,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("ShipTo");
             xmlWriter.WriteElementString("CompanyName", StringUtility.Truncate(companyOrName, 35));
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attention, 35));
-            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", ""));
+            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(recipient.Phone, @"\D", "").Truncate(15));
             xmlWriter.WriteElementString("EMailAddress", UpsUtility.GetCorrectedEmailAddress(recipient.Email));
             UpsApiCore.WriteAddressXml(xmlWriter, recipient, isResidentialAddress ? "ResidentialAddress" : (string) null);
             xmlWriter.WriteEndElement();
-            
+
 
             // ShipFrom
             string attentionName = new PersonName(origin).FullName;
@@ -237,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("ShipFrom");
             xmlWriter.WriteElementString("CompanyName", StringUtility.Truncate(fromCompany, 35));
             xmlWriter.WriteElementString("AttentionName", StringUtility.Truncate(attentionName, 35));
-            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", ""));
+            xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(origin.Phone, @"\D", "").Truncate(15));
             UpsApiCore.WriteAddressXml(xmlWriter, origin);
             xmlWriter.WriteEndElement();
 
@@ -267,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteStartElement("SoldTo");
                 xmlWriter.WriteElementString("CompanyName", companyOrName);
                 xmlWriter.WriteElementString("AttentionName", attention);
-                xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(soldTo.Phone, @"\D", ""));
+                xmlWriter.WriteElementString("PhoneNumber", Regex.Replace(soldTo.Phone, @"\D", "").Truncate(15));
                 UpsApiCore.WriteAddressXml(xmlWriter, soldTo);
                 xmlWriter.WriteEndElement();
             }
@@ -587,7 +586,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
                     // Need to translate UK to GB for customs country of origin
                     string productCountryOfOrigin = product.CountryOfOrigin != "UK" ? product.CountryOfOrigin : "GB";
-                    
+
                     xmlWriter.WriteElementString("OriginCountryCode", productCountryOfOrigin);
 
                     xmlWriter.WriteEndElement();
@@ -979,7 +978,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("ShipmentDigest", shipmentDigest);
 
             TelemetricResult<UpsLabelResponse> telemetricResult = new TelemetricResult<UpsLabelResponse>($"UpsShipAccept.{TelemetricResultBaseName.ApiResponseTimeInMilliseconds}");
-            
+
             UpsWebClientResponse response = UpsWebClient.ProcessRequest(xmlWriter);
             XmlDocument acceptResponse = response.XmlDocument;
 
@@ -990,7 +989,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 AcceptResponse = acceptResponse,
                 Account = account
             };
-            
+
             telemetricResult.AddEntry(TelemetricEventType.GetLabel, response.ResponseTimeInMs);
             telemetricResult.SetValue(upsLabelResponse);
 
@@ -1132,7 +1131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(cn22Label)))
             {
-                DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs");
+                DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs", true);
             }
         }
 
@@ -1166,7 +1165,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                                 {
                                     imageCrop.Save(imageStream, ImageFormat.Gif);
 
-                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, "LabelImage");
+                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, "LabelImage", true);
 
                                     // imageCrop.Save(, ImageFormat.Gif);
                                 }
@@ -1175,7 +1174,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     }
                     else
                     {
-                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, "LabelImage");
+                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, "LabelImage", true);
                     }
                 }
             }

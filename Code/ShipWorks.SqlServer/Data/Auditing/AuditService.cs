@@ -40,6 +40,15 @@ namespace ShipWorks.SqlServer.Data.Auditing
                     return;
                 }
 
+                // Get the currently executing context
+                UserContext userContext = UtilityFunctions.GetUserContext(con);
+
+                // Quit if auditing is not enable
+                if (DetermineAuditState(tableName, userContext, con) == AuditState.Disabled)
+                {
+                    return;
+                }
+
                 AuditTableInfo tableInfo = GetAuditTableInfo(con, tableName);
 
                 // Determine which columns we need to audit
@@ -47,15 +56,6 @@ namespace ShipWorks.SqlServer.Data.Auditing
 
                 // If there are no audit table columns, then get out
                 if (auditColumns.Count == 0)
-                {
-                    return;
-                }
-
-                // Get the currently executing context
-                UserContext userContext = UtilityFunctions.GetUserContext(con);
-
-                // Quit if auditing is not enable
-                if (DetermineAuditState(tableName, userContext, con) == AuditState.Disabled)
                 {
                     return;
                 }

@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // If not cropping, or if it is thermal, just save it as-is
                 if (!crop || shipment.ActualLabelFormat != null)
                 {
-                    dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name);
+                    dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, name, true);
                 }
                 else
                 {
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         imageLabelCrop.Save(imageStream, ImageFormat.Png);
 
-                        dataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name);
+                        dataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name, true);
                     }
                 }
             }

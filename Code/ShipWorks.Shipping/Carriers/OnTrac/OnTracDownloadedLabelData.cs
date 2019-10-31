@@ -71,11 +71,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                     {
                         dataResourceManager.CreateFromPdf(PdfDocumentType.BlackAndWhite, stream, shipment.ShipmentID,
                                                           i => i == 0 ? labelName : $"{labelName}-{i}",
-                                                          SaveCroppedLabel);
+                                                          SaveCroppedLabel, true);
                     }
                     else
                     {
-                        dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, labelName);
+                        dataResourceManager.CreateFromBytes(stream.ToArray(), shipment.ShipmentID, labelName, true);
                     }
                 }
             }

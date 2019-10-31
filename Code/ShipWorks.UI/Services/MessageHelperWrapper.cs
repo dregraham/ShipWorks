@@ -296,6 +296,11 @@ namespace ShipWorks.UI.Services
         public void ShowWarning(string message) => MessageHelper.ShowWarning(ownerFactory(), message);
 
         /// <summary>
+        /// Show a warning message
+        /// </summary>
+        public void ShowWarning(IWin32Window owner, string message) => MessageHelper.ShowWarning(owner, message);
+
+        /// <summary>
         /// Close the given progress dialog
         /// </summary>
         private IDisposable OpenProgressDialog(IScheduler scheduler, Tuple<ProgressDlg, Control> state)

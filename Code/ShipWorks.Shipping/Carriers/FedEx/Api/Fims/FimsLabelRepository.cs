@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 throw new ArgumentNullException("fimsShipResponse", "The FIMS Label data is required");
             }
 
-            dataResourceManager.CreateFromBytes(fimsShipResponse.LabelData, ownerID, "LabelImage");
+            dataResourceManager.CreateFromBytes(fimsShipResponse.LabelData, ownerID, "LabelImage", true);
         }
 
         /// <summary>
