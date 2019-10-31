@@ -1,58 +1,135 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Interapptive.Shared.Collections;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
+using ShipWorks.Data.Model;
 using Xunit;
 
 namespace ShipWorks.Tests.Data
 {
     public class EntityUtilityTest
     {
+        [Fact]
+        public void FindRelationChain_ReturnsCorrectValues_WhenAllowOneToMany_IsTrue()
+        {
+            var first = EntityUtility.FindRelationChain(EntityType.ShipmentEntity, EntityType.OrderItemEntity, true);
+            var second = EntityUtility.FindRelationChain(EntityType.ShipmentEntity, EntityType.OrderItemEntity, true);
+
+            var firstStrings = new List<string>();
+            foreach (IRelation relation in first)
+            {
+                firstStrings.Add(relation.ToString());
+            }
+
+            var secondStrings = new List<string>();
+            foreach (IRelation relation in second)
+            {
+                secondStrings.Add(relation.ToString());
+            }
+
+            Assert.True(firstStrings.Except(secondStrings).None());
+        }
 
         [Fact]
-        public void CopyChangedFields_CopiesNewValuesToDestination()
+        public void FindRelationChain_ReturnsCorrectValues_WhenNotKnownRelations()
         {
-            ShipmentEntity source = new ShipmentEntity(1234)
+            var first = EntityUtility.FindRelationChain(EntityType.StoreEntity, EntityType.OrderItemEntity, true);
+            var second = EntityUtility.FindRelationChain(EntityType.StoreEntity, EntityType.OrderItemEntity, true);
+
+            var firstStrings = new List<string>();
+            foreach (IRelation relation in first)
             {
-                Processed = true,
-                ShipmentType = (int) ShipmentTypeCode.Usps,
-                Postal = new PostalShipmentEntity(1234)
-                {
-                    Service = 2,
-                    Usps = new UspsShipmentEntity(1234)
-                    {
-                        UspsTransactionID = Guid.NewGuid()
-                    }
-                }
+                firstStrings.Add(relation.ToString());
+            }
+
+            var secondStrings = new List<string>();
+            foreach (IRelation relation in second)
+            {
+                secondStrings.Add(relation.ToString());
+            }
+
+            Assert.True(firstStrings.Except(secondStrings).None());
+        }
+
+        [Fact]
+        public void FindRelationChain_ReturnsNull_WhenAllowOneToMany_IsFalse()
+        {
+            var first = EntityUtility.FindRelationChain(EntityType.ShipmentEntity, EntityType.OrderItemEntity, false);
+
+            var second = EntityUtility.FindRelationChain(EntityType.ShipmentEntity, EntityType.OrderItemEntity, false);
+
+            Assert.Null(first);
+            Assert.Null(second);
+        }
+
+        [Fact]
+        public void FindRelationChain_Timing_And_ReturnsCorrectValues_ForAllCombinations()
+        {
+            List<EntityType> entityTypes = new List<EntityType>()
+            {
+                EntityType.CustomerEntity,
+                EntityType.StoreEntity,
+                EntityType.OrderEntity,
+                EntityType.OrderItemEntity,
+                EntityType.ShipmentEntity,
+                EntityType.UpsShipmentEntity,
+                EntityType.UpsPackageEntity,
+                EntityType.FedExShipmentEntity,
+                EntityType.FedExPackageEntity,
+                EntityType.NoteEntity
             };
 
-            // Force shipment type code to not be changed so that we can verify that it is NOT copied over.
-            source.Fields[ShipmentFields.ShipmentType.FieldIndex].IsChanged = false;
+            var errors = new List<string>();
+            var fromEntityTypes = entityTypes.ToList();
+            fromEntityTypes.AddRange(entityTypes);
+            fromEntityTypes.AddRange(entityTypes);
 
-            ShipmentEntity destination = new ShipmentEntity(1234)
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+
+            foreach (var from in fromEntityTypes)
             {
-                Processed = false,
-                ShipmentType = (int) ShipmentTypeCode.UpsOnLineTools,
-                Postal = new PostalShipmentEntity(1234)
+                foreach (var to in entityTypes)
                 {
-                    Service = 2,
-                    Usps = new UspsShipmentEntity(1234)
+                    try
                     {
-                        UspsTransactionID = Guid.NewGuid()
+                        var first = EntityUtility.FindRelationChain(from, to, true);
+                        var second = EntityUtility.FindRelationChain(from, to, true);
+
+                        var firstStrings = new List<string>();
+                        if (first != null)
+                        {
+                            foreach (IRelation relation in first)
+                            {
+                                firstStrings.Add(relation.ToString());
+                            }
+                        }
+
+                        var secondStrings = new List<string>();
+                        if (second != null)
+                        {
+                            foreach (IRelation relation in second)
+                            {
+                                secondStrings.Add(relation.ToString());
+                            }
+                        }
+
+                        Assert.True(firstStrings.Except(secondStrings).None());
+                    }
+                    catch
+                    {
+                        string err = $"from:{from}, to:{to}";
+                        Debug.WriteLine(err);
+                        errors.Add(err);
                     }
                 }
-            };
+            }
+            sw.Stop();
 
-            EntityUtility.CopyChangedFields(source, destination);
-
-            Assert.Equal(source.Processed, destination.Processed);
-            Assert.Equal(source.Postal.Service, destination.Postal.Service);
-            Assert.Equal(source.Postal.Usps.UspsTransactionID, destination.Postal.Usps.UspsTransactionID);
-            Assert.Equal(source.ShipmentID, destination.ShipmentID);
-
-            Assert.Equal((int) ShipmentTypeCode.Usps, source.ShipmentType);
-            Assert.Equal((int) ShipmentTypeCode.UpsOnLineTools, destination.ShipmentType);
+            errors.ForEach(s => Debug.WriteLine(s));
+            Debug.WriteLine("Time to run: " + sw.ElapsedMilliseconds);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.ApplicationCore.Settings
 {
-    partial class SettingsPageShortcuts
+    partial class SettingsPageScanToShip
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPageShortcuts));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsPageScanToShip));
             this.infoTipSingleScan = new ShipWorks.UI.Controls.InfoTip();
             this.infoTipAutoPrint = new ShipWorks.UI.Controls.InfoTip();
             this.infoTipAutoWeigh = new ShipWorks.UI.Controls.InfoTip();
@@ -40,11 +40,12 @@
             this.sectionTitleDisplay = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionTitleShipping = new ShipWorks.UI.Controls.SectionTitle();
             this.displayShortcutIndicator = new System.Windows.Forms.CheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.instructionsLabel = new System.Windows.Forms.Label();
+            this.manageProfilesButton = new System.Windows.Forms.Button();
+            this.printBarcodeButton = new System.Windows.Forms.Button();
             this.requireVerificationForAutoPrint = new System.Windows.Forms.CheckBox();
             this.infoTipRequireVerification = new ShipWorks.UI.Controls.InfoTip();
+            this.autoAdvance = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // infoTipSingleScan
@@ -149,7 +150,7 @@
             this.sectionTitleShipping.Name = "sectionTitleShipping";
             this.sectionTitleShipping.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleShipping.TabIndex = 42;
-            this.sectionTitleShipping.Text = "Shipping";
+            this.sectionTitleShipping.Text = "Shipping Automation";
             // 
             // displayShortcutIndicator
             // 
@@ -161,33 +162,33 @@
             this.displayShortcutIndicator.Text = "Show Keyboard && Barcode Shortcut Indicator";
             this.displayShortcutIndicator.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // instructionsLabel
             // 
-            this.label1.Location = new System.Drawing.Point(17, 203);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(523, 50);
-            this.label1.TabIndex = 44;
-            this.label1.Text = resources.GetString("label1.Text");
+            this.instructionsLabel.Location = new System.Drawing.Point(17, 228);
+            this.instructionsLabel.Name = "instructionsLabel";
+            this.instructionsLabel.Size = new System.Drawing.Size(523, 50);
+            this.instructionsLabel.TabIndex = 44;
+            this.instructionsLabel.Text = resources.GetString("instructionsLabel.Text");
             // 
-            // button1
+            // manageProfilesButton
             // 
-            this.button1.Location = new System.Drawing.Point(20, 256);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 23);
-            this.button1.TabIndex = 45;
-            this.button1.Text = "Manage Profiles...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.OnClickManageProfiles);
+            this.manageProfilesButton.Location = new System.Drawing.Point(20, 281);
+            this.manageProfilesButton.Name = "manageProfilesButton";
+            this.manageProfilesButton.Size = new System.Drawing.Size(110, 23);
+            this.manageProfilesButton.TabIndex = 45;
+            this.manageProfilesButton.Text = "Manage Profiles...";
+            this.manageProfilesButton.UseVisualStyleBackColor = true;
+            this.manageProfilesButton.Click += new System.EventHandler(this.OnClickManageProfiles);
             // 
-            // button2
+            // printBarcodeButton
             // 
-            this.button2.Location = new System.Drawing.Point(140, 256);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(220, 23);
-            this.button2.TabIndex = 46;
-            this.button2.Text = "Print All Keyboard && Barcode Shortcuts...";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.OnClickPrintShortcuts);
+            this.printBarcodeButton.Location = new System.Drawing.Point(140, 281);
+            this.printBarcodeButton.Name = "printBarcodeButton";
+            this.printBarcodeButton.Size = new System.Drawing.Size(220, 23);
+            this.printBarcodeButton.TabIndex = 46;
+            this.printBarcodeButton.Text = "Print All Keyboard && Barcode Shortcuts...";
+            this.printBarcodeButton.UseVisualStyleBackColor = true;
+            this.printBarcodeButton.Click += new System.EventHandler(this.OnClickPrintShortcuts);
             // 
             // requireVerificationForAutoPrint
             // 
@@ -203,23 +204,33 @@
             // 
             // infoTipRequireVerification
             // 
-            this.infoTipRequireVerification.Caption = "";
+            this.infoTipRequireVerification.Caption = "This feature is only available on warehouse plans.";
             this.infoTipRequireVerification.Location = new System.Drawing.Point(320, 178);
             this.infoTipRequireVerification.Name = "infoTipRequireVerification";
             this.infoTipRequireVerification.Size = new System.Drawing.Size(12, 12);
             this.infoTipRequireVerification.TabIndex = 48;
             this.infoTipRequireVerification.Title = "Require Verification";
-            this.infoTipRequireVerification.Caption = "This feature is only available on warehouse plans.";
             // 
-            // SettingsPageShortcuts
+            // autoAdvance
+            // 
+            this.autoAdvance.AutoSize = true;
+            this.autoAdvance.Location = new System.Drawing.Point(20, 199);
+            this.autoAdvance.Name = "autoAdvance";
+            this.autoAdvance.Size = new System.Drawing.Size(316, 17);
+            this.autoAdvance.TabIndex = 49;
+            this.autoAdvance.Text = "Automatically advance to Ship details once orders are verified";
+            this.autoAdvance.UseVisualStyleBackColor = true;
+            // 
+            // SettingsPageScanToShip
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.autoAdvance);
             this.Controls.Add(this.infoTipRequireVerification);
             this.Controls.Add(this.requireVerificationForAutoPrint);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.printBarcodeButton);
+            this.Controls.Add(this.manageProfilesButton);
+            this.Controls.Add(this.instructionsLabel);
             this.Controls.Add(this.displayShortcutIndicator);
             this.Controls.Add(this.sectionTitleShipping);
             this.Controls.Add(this.sectionTitleDisplay);
@@ -231,8 +242,8 @@
             this.Controls.Add(this.registerScannerButton);
             this.Controls.Add(this.autoPrint);
             this.Controls.Add(this.singleScan);
-            this.Name = "SettingsPageShortcuts";
-            this.Size = new System.Drawing.Size(550, 300);
+            this.Name = "SettingsPageScanToShip";
+            this.Size = new System.Drawing.Size(550, 311);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -252,10 +263,11 @@
         private UI.Controls.SectionTitle sectionTitleDisplay;
         private UI.Controls.SectionTitle sectionTitleShipping;
         private System.Windows.Forms.CheckBox displayShortcutIndicator;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label instructionsLabel;
+        private System.Windows.Forms.Button manageProfilesButton;
+        private System.Windows.Forms.Button printBarcodeButton;
         private System.Windows.Forms.CheckBox requireVerificationForAutoPrint;
         private UI.Controls.InfoTip infoTipRequireVerification;
+        private System.Windows.Forms.CheckBox autoAdvance;
     }
 }

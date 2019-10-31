@@ -1760,6 +1760,8 @@ namespace ShipWorks.Data.Model
 		AmazonApiRegion,
 		///<summary>RefreshToken. </summary>
 		RefreshToken,
+		///<summary>DownloadDaysBack. </summary>
+		DownloadDaysBack,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12740,6 +12742,8 @@ namespace ShipWorks.Data.Model
 		MinimizeRibbon,
 		///<summary>ShowQAToolbarBelowRibbon. </summary>
 		ShowQAToolbarBelowRibbon,
+		///<summary>ScanToShipAutoAdvance. </summary>
+		ScanToShipAutoAdvance,
 		/// <summary></summary>
 		AmountOfFields
 	}

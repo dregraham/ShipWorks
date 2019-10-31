@@ -11,6 +11,11 @@ namespace Interapptive.Shared.Metrics
     /// </summary>
     public class TrackedEvent : ITrackedEvent
     {
+        /// <summary>
+        /// Creates and sends a single event with the given name
+        /// </summary>
+        public static void SendSingleEvent(string name) => new TrackedEvent(name).Dispose();
+        
         private readonly EventTelemetry eventTelemetry;
         protected bool disposed = false;
 

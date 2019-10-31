@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Loading
                 Disposable.Empty :
                 messageHelper.ShowProgressDialog("Load Shipments",
                     "ShipWorks is loading shipments for the selected orders.",
-                    progressProvider, TimeSpan.FromMilliseconds(250));
+                    progressProvider, TimeSpan.FromMilliseconds(1000));
         }
     }
 }

@@ -1,8 +1,10 @@
 using System.ComponentModel;
 using Autofac.Extras.Moq;
 using Moq;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
+using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Users.Security;
@@ -38,6 +40,7 @@ namespace ShipWorks.OrderLookup.Tests
             orderLookupShipmentModel.Setup(d => d.ShipmentAdapter).Returns(shipmentAdapter.Object);
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.SelectedTab = ScanToShipTab.ShipTab;
 
             orderLookupShipmentModel.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
@@ -71,7 +74,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.Equal(string.Empty, testObject.SearchErrorMessage);
+            Assert.Equal(string.Empty, testObject.SearchMessage);
         }
 
         [Fact]
@@ -86,7 +89,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.False(testObject.SearchError);
+            Assert.False(testObject.ShowSearchMessage);
         }
 
         [Fact]
@@ -110,7 +113,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.Equal("No matching orders were found.", testObject.SearchErrorMessage);
+            Assert.Equal("No matching orders were found.", testObject.SearchMessage);
         }
 
         [Fact]
@@ -120,10 +123,11 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Setup(d => d.SelectedOrder).Returns<OrderEntity>(null);
 
             OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.SelectedTab = ScanToShipTab.ShipTab;
 
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("SelectedOrder"));
 
-            Assert.True(testObject.SearchError);
+            Assert.True(testObject.ShowSearchMessage);
         }
 
         [Fact]
@@ -139,7 +143,62 @@ namespace ShipWorks.OrderLookup.Tests
             dataService.Raise(d => d.PropertyChanged += null, new PropertyChangedEventArgs("Foo"));
 
             Assert.Equal(string.Empty, testObject.OrderNumber);
-            Assert.Equal(string.Empty, testObject.SearchErrorMessage);
+            Assert.Equal(string.Empty, testObject.SearchMessage);
         }
+
+        [Fact]
+        public void GetOrderCommand_SendsOrderLookupSearchMessage()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.GetOrderCommand.Execute(null);
+
+            mock.Mock<IMessenger>().Verify(x => x.Send(It.IsAny<OrderLookupSearchMessage>(), It.IsAny<string>()));
+        }
+
+        [Fact]
+        public void GetOrderCommand_DoesNotResetOrderNumber()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.OrderNumber = "1";
+
+            testObject.GetOrderCommand.Execute(null);
+
+            Assert.Equal("1", testObject.OrderNumber);
+        }
+
+        [Fact]
+        public void Reset_ClearsOrderNumber()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+
+            testObject.OrderNumber = "1";
+
+            testObject.ResetCommand.Execute(null);
+
+            Assert.Equal(string.Empty, testObject.OrderNumber);
+        }
+		
+        [Fact]
+        public void ShowCreateLabel_ReturnsFalse_WhenSelectedTabIsPack()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.ShowCreateLabel = true;
+            testObject.SelectedTab = ScanToShipTab.PackTab;
+
+            Assert.False(testObject.ShowCreateLabel);
+        }
+
+        [Fact]
+        public void ShowSearchMessage_ReturnsFalse_WhenSelectedTabIsPack()
+        {
+            OrderLookupSearchViewModel testObject = mock.Create<OrderLookupSearchViewModel>();
+            testObject.ShowSearchMessage = true;
+            testObject.SelectedTab = ScanToShipTab.PackTab;
+
+            Assert.False(testObject.ShowSearchMessage);
+        }
+
     }
 }

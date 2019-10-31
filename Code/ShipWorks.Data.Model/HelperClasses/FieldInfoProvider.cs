@@ -770,6 +770,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonAuthToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, 100, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadDaysBack", typeof(System.Byte), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, 0, 0, 3);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -3741,6 +3742,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoPrintRequireValidation", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoPrintRequireValidation, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "MinimizeRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.MinimizeRibbon, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "ShowQAToolbarBelowRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "ScanToShipAutoAdvance", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ScanToShipAutoAdvance, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

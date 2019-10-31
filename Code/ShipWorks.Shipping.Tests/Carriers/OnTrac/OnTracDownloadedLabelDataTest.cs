@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
             testObject.Save();
 
-            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(new byte[] { 97 }, 1234, "LabelPrimary"));
+            mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromBytes(new byte[] { 97 }, 1234, "LabelPrimary", true));
         }
 
         [Fact]
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.OnTrac
 
             mock.Mock<IDataResourceManager>().Verify(x => x.CreateFromPdf(
                                                              PdfDocumentType.BlackAndWhite, It.IsAny<MemoryStream>(),
-                                                             shipment.ShipmentID, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>()));
+                                                             shipment.ShipmentID, It.IsAny<Func<int, string>>(), It.IsAny<Func<MemoryStream, byte[]>>(), true));
         }
 
         [Fact]

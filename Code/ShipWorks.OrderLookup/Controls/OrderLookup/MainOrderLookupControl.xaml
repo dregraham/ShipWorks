@@ -35,11 +35,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-        <orderLookupSearchControl:OrderLookupSearchControl
-            Grid.Row="0"
-            Margin="10"
-            DataContext="{Binding OrderLookupSearchViewModel}" />
         <ScrollViewer
             Grid.Row="1"
             HorizontalScrollBarVisibility="Disabled"

@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Settings
     /// <summary>
     /// Option page for keyboard and barcode shortcuts
     /// </summary>
-    public partial class SettingsPageShortcuts : SettingsPageBase
+    public partial class SettingsPageScanToShip : SettingsPageBase
     {
         private readonly IScannerConfigurationRepository scannerRepo;
         private IUserSession userSession;
@@ -48,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Constructor
         /// </summary>
-        public SettingsPageShortcuts(IWin32Window owner, ILifetimeScope scope)
+        public SettingsPageScanToShip(IWin32Window owner, ILifetimeScope scope)
         {
             InitializeComponent();
             scannerRepo = scope.Resolve<IScannerConfigurationRepository>();
@@ -97,6 +97,7 @@ namespace ShipWorks.ApplicationCore.Settings
 
                 settings.AutoWeigh = autoWeigh.Checked;
                 settings.AutoPrintRequireValidation = requireVerificationForAutoPrint.Checked;
+                settings.ScanToShipAutoAdvance = autoAdvance.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -135,6 +136,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 LoadRequireVerificationSetting();
 
                 requireVerificationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
+                autoAdvance.Checked = settings.ScanToShipAutoAdvance;
 
                 UpdateSingleScanSettingsUI();
 
@@ -168,7 +170,8 @@ namespace ShipWorks.ApplicationCore.Settings
             else
             {
                 settings.AutoPrintRequireValidation = false;
-                infoTipRequireVerification.Visible = true;
+                settings.ScanToShipAutoAdvance = false;
+                infoTipRequireVerification.Visible = true;                
             }
         }
 
@@ -238,6 +241,16 @@ namespace ShipWorks.ApplicationCore.Settings
             {
                 requireVerificationForAutoPrint.Checked = false;
                 requireVerificationForAutoPrint.Enabled = false;
+            }
+
+            if (warehouseEnabled)
+            {
+                autoAdvance.Enabled = true;
+            }
+            else
+            {
+                autoAdvance.Enabled = false;
+                autoAdvance.Checked = false;
             }
         }
 
