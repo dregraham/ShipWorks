@@ -161,23 +161,29 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             return shipments.Select((shipment, i) =>
             {
-                if(shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
-                {
-                    var tag = chosenRateResult.Tag as BestRateResultTag;
-                    shipment.CarrierAccount = tag?.AccountDescription;
-                }
-
-                else
-                {
-                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
-                }
-                
+                SetShipmentCarrierAccount(shipment, chosenRateResult);
                 return concurrencyErrors.ContainsKey(shipment) ?
                     new ProcessShipmentState(i, shipment, concurrencyErrors[shipment], cancellationSource) :
                     new ProcessShipmentState(i, shipment, licenseCheckCache, chosenRateResult, cancellationSource);
             });
         }
 
+        /// <summary>
+        /// Set the CarrierAccount property of the shipment
+        /// </summary>
+        private void SetShipmentCarrierAccount(ShipmentEntity shipment,RateResult rateResult)
+        {
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                var tag = rateResult.Tag as BestRateResultTag;
+                shipment.CarrierAccount = tag?.AccountDescription;
+            }
+
+            else if(shipment.ShipmentTypeCode != ShipmentTypeCode.iParcel)
+            {
+                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
+            }
+        }
         /// <summary>
         /// Process a single shipment and its automatic return
         /// </summary>

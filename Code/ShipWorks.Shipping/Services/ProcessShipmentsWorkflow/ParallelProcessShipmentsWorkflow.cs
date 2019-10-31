@@ -92,16 +92,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     shipmentCount++;
                 }
 
-                if (shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
-                {
-                    var tag = chosenRateResult.Tag as BestRateResultTag;
-                    shipment.CarrierAccount = tag?.AccountDescription;
-                }
-
-                else
-                {
-                    shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
-                }
+                SetShipmentCarrierAccount(shipment, chosenRateResult);
             }
             
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";
@@ -132,6 +123,23 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ProcessShipmentsWorkflowResult result = await results;
             workProgress.Completed();
             return result;
+        }
+
+        /// <summary>
+        /// Set the CarrierAccount property of the shipment
+        /// </summary>
+        private void SetShipmentCarrierAccount(ShipmentEntity shipment, RateResult rateResult)
+        {
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                var tag = rateResult.Tag as BestRateResultTag;
+                shipment.CarrierAccount = tag?.AccountDescription;
+            }
+
+            else if (shipment.ShipmentTypeCode != ShipmentTypeCode.iParcel)
+            {
+                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
+            }
         }
 
         /// <summary>
