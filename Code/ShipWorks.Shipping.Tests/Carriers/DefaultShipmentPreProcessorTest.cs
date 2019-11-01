@@ -89,11 +89,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public async Task Run_ReturnsNull_WhenRegistrationIsNotAllowed()
+            public async Task Run_ThrowsException_WhenRegistrationIsNotAllowed()
             {
-                var result = await testObject.Run(shipment, null, null);
-
-                Assert.Null(result);
+                Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
 
             [Fact]
@@ -111,15 +109,13 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public async Task Run_ReturnsNull_WhenDialogIsCanceled()
+            public async Task Run_ThrowsException_WhenDialogIsCanceled()
             {
                 mock.WithShipmentTypeFromShipmentManager(s => s.SetupGet(x => x.IsAccountRegistrationAllowed).Returns(true));
                 mock.Mock<IAsyncMessageHelper>()
                     .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).ReturnsAsync(DialogResult.Cancel);
 
-                var result = await testObject.Run(shipment, null, null);
-
-                Assert.Null(result);
+                Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
         }
 

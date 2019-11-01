@@ -142,8 +142,7 @@ namespace ShipWorks.Shipping.Carriers
             // If this shipment type is not allowed to have new registrations, cancel out.
             if (!shipmentType.IsAccountRegistrationAllowed)
             {
-                await messageHelper.ShowWarning($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}").ConfigureAwait(true);
-                return DialogResult.Cancel;
+                throw new ShippingException($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}");
             }
 
             result = await messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing)).ConfigureAwait(true);
