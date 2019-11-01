@@ -80,18 +80,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ShowWarning_WhenRegistrationIsNotAllowed()
-            {
-                testObject.Run(shipment, null, null);
-
-                mock.Mock<IAsyncMessageHelper>()
-                    .Verify(x => x.ShowWarning(It.IsAny<string>()));
-            }
-
-            [Fact]
             public async Task Run_ThrowsException_WhenRegistrationIsNotAllowed()
             {
-                Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
+                await Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
 
             [Fact]
@@ -115,7 +106,7 @@ namespace ShipWorks.Shipping.Tests.Carriers
                 mock.Mock<IAsyncMessageHelper>()
                     .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).ReturnsAsync(DialogResult.Cancel);
 
-                Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
+                await Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
         }
 
