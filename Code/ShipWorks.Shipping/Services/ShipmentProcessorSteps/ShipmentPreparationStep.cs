@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Process a single shipment
         /// </summary>
-        public ShipmentPreparationResult PrepareShipment(ProcessShipmentState state)
+        public async Task<IShipmentPreparationResult> PrepareShipment(ProcessShipmentState state)
         {
             ShipmentEntity shipment = state.OriginalShipment;
 
@@ -99,7 +100,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 return new ShipmentPreparationResult(entityLock, state, exception);
             }
 
-            ShipmentPreparationResult result = RunPreProcessor(entityLock, state, shipment, store, state.CancellationSource);
+            ShipmentPreparationResult result = await RunPreProcessor(entityLock, state, shipment, store, state.CancellationSource).ConfigureAwait(true);
             if (!result.Success)
             {
                 entityLock.Dispose();
@@ -111,7 +112,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// <summary>
         /// Run the preprocessor
         /// </summary>
-        private ShipmentPreparationResult RunPreProcessor(IDisposable entityLock, ProcessShipmentState state,
+        private async Task<ShipmentPreparationResult> RunPreProcessor(IDisposable entityLock, ProcessShipmentState state,
             ShipmentEntity shipment, StoreEntity store, CancellationTokenSource cancellationSource)
         {
             IEnumerable<ShipmentEntity> shipmentsToTryToProcess;
@@ -121,7 +122,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             try
             {
                 shipmentsToTryToProcess =
-                    preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing);
+                    await preprocessor.Run(shipment, state.ChosenRate, CounterRateCarrierConfiguredWhileProcessing).ConfigureAwait(true);
             }
             catch (ShippingException ex)
             {

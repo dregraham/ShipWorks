@@ -1,8 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using System;
-using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Run the pre processor on the given shipment
         /// </summary>
-        IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback);
+        Task<IEnumerable<ShipmentEntity>> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback);
     }
 }
