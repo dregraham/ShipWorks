@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
@@ -52,9 +53,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ReturnsShipment_WhenCarrierIsReadyToShip()
+            public async Task Run_ReturnsShipment_WhenCarrierIsReadyToShip()
             {
-                var results = testObject.Run(shipment, null, null);
+                var results = await testObject.Run(shipment, null, null);
 
                 Assert.Equal(new[] { shipment }, results);
             }
@@ -79,27 +80,16 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ShowWarning_WhenRegistrationIsNotAllowed()
+            public async Task Run_ThrowsException_WhenRegistrationIsNotAllowed()
             {
-                testObject.Run(shipment, null, null);
-
-                mock.Mock<IMessageHelper>()
-                    .Verify(x => x.ShowWarning(It.IsAny<string>()));
-            }
-
-            [Fact]
-            public void Run_ReturnsNull_WhenRegistrationIsNotAllowed()
-            {
-                var result = testObject.Run(shipment, null, null);
-
-                Assert.Null(result);
+                await Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
 
             [Fact]
             public void Run_CreatesDialog_WhenRegistrationIsAllowed()
             {
                 mock.WithShipmentTypeFromShipmentManager(s => s.SetupGet(x => x.IsAccountRegistrationAllowed).Returns(true));
-                mock.Mock<IMessageHelper>()
+                mock.Mock<IAsyncMessageHelper>()
                     .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
                     .Callback<Func<IForm>>(x => x());
 
@@ -110,15 +100,13 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ReturnsNull_WhenDialogIsCanceled()
+            public async Task Run_ThrowsException_WhenDialogIsCanceled()
             {
                 mock.WithShipmentTypeFromShipmentManager(s => s.SetupGet(x => x.IsAccountRegistrationAllowed).Returns(true));
-                mock.Mock<IMessageHelper>()
-                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.Cancel);
+                mock.Mock<IAsyncMessageHelper>()
+                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).ReturnsAsync(DialogResult.Cancel);
 
-                var result = testObject.Run(shipment, null, null);
-
-                Assert.Null(result);
+                await Assert.ThrowsAsync<ShippingException>(async () => await testObject.Run(shipment, null, null));
             }
         }
 
@@ -133,8 +121,8 @@ namespace ShipWorks.Shipping.Tests.Carriers
                 account = mock.CreateMock<ICarrierAccount>();
 
                 mock.WithShipmentTypeFromShipmentManager(s => s.SetupGet(x => x.IsAccountRegistrationAllowed).Returns(true));
-                mock.Mock<IMessageHelper>()
-                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).Returns(DialogResult.OK);
+                mock.Mock<IAsyncMessageHelper>()
+                    .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>())).ReturnsAsync(DialogResult.OK);
 
                 var retriever = mock.CreateMock<ICarrierAccountRetriever>();
                 mock.Mock<ICarrierAccountRetrieverFactory>()
@@ -200,9 +188,9 @@ namespace ShipWorks.Shipping.Tests.Carriers
             }
 
             [Fact]
-            public void Run_ReturnsOriginalShipment_WhenDialogIsFinished()
+            public async Task Run_ReturnsOriginalShipment_WhenDialogIsFinished()
             {
-                var result = testObject.Run(shipment, null, null);
+                var result = await testObject.Run(shipment, null, null);
 
                 Assert.Equal(new[] { shipment }, result);
             }

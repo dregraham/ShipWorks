@@ -12,5 +12,10 @@ namespace ShipWorks.OrderLookup
         /// Print shipments for the orderid
         /// </summary>
         Task<AutoPrintCompletionResult> AutoPrintShipment(long orderID, string message);
+
+        /// <summary>
+        /// Is Auto Print Allowed
+        /// </summary>
+        bool AllowAutoPrint(string scanText);
     }
 }

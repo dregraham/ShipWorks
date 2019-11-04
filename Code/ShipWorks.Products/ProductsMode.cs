@@ -42,6 +42,7 @@ namespace ShipWorks.Products
         private readonly IProductCatalog productCatalog;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IProductViewModelFactory viewModelFactory;
+        public event ProductSelectionChangedEventHandler ProductSelectionChanged;
 
         /// <summary>
         /// Constructor
@@ -69,7 +70,12 @@ namespace ShipWorks.Products
             EditProductVariantButton = new RelayCommand(async () => await EditProductVariantButtonAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             CopyAsVariant = new RelayCommand(async () => await CopyAsVariantAction().ConfigureAwait(true), () => SelectedProductIDs?.Count() == 1);
             SelectedProductsChanged = new RelayCommand<IList>(
-                items => SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList());
+                items =>
+                {
+                    SelectedProductIDs = items?.OfType<IDataWrapper<IProductListItemEntity>>().Select(x => x.EntityID).ToList();
+                    RaiseProductSelectionChanged();
+                });
+
             ImportProductsSplash = viewModelFactory.CreateImportSplash(RefreshProductsAction);
 
             ExportProducts = new RelayCommand(ExportProductsAction);
@@ -360,7 +366,7 @@ namespace ShipWorks.Products
             {
                 return;
             }
-            
+
             bool makeItActive = !product.IsActive;
             string text = (makeItActive ? "Activating" : "Deactivating") + " products";
 
@@ -377,6 +383,16 @@ namespace ShipWorks.Products
 
             // Refresh is required to show the active/inactive state of the row.
             RefreshProductsAction();
+        }
+
+        /// <summary>
+        /// Raise the ProductSelectionChanged event
+        /// </summary>
+        private void RaiseProductSelectionChanged()
+        {
+            bool singleSelection = SelectedProductIDs.IsCountEqualTo(1) ? true : false;
+            var args = new ProductSelectionChangedEventArgs(singleSelection);
+            ProductSelectionChanged?.Invoke(this, args);
         }
 
         /// <summary>

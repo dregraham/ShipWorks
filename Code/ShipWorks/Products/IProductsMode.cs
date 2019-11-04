@@ -14,6 +14,8 @@ namespace ShipWorks.Products
     /// </summary>
     public interface IProductsMode : IDisposable
     {
+        event ProductSelectionChangedEventHandler ProductSelectionChanged;
+
         /// <summary>
         /// Command to refresh the products list
         /// </summary>
@@ -42,6 +44,16 @@ namespace ShipWorks.Products
         /// Add a product
         /// </summary>
         ICommand AddProduct { get; }
+
+        /// <summary>
+        /// Import a list of products
+        /// </summary>
+        ICommand ImportProducts { get; }
+
+        /// <summary>
+        /// Export a list of products
+        /// </summary>
+        ICommand ExportProducts { get; }
 
         /// <summary>
         /// List of products

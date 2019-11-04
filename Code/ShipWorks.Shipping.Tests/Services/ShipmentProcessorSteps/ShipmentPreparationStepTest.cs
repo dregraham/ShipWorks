@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
@@ -53,11 +54,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
+        public async Task PrepareShipment_ReturnsExceptionResult_WhenInputWasNotSuccessful()
         {
             var input = new ProcessShipmentState(0, new ShipmentEntity(), new ShippingException(), new CancellationTokenSource());
 
-            var result = testObject.PrepareShipment(input);
+            var result = await testObject.PrepareShipment(input);
 
             Assert.False(result.Success);
             Assert.Equal(input.Exception, result.Exception);
@@ -65,25 +66,25 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsExceptionResult_WhenPermissionCheckFails()
+        public async Task PrepareShipment_ReturnsExceptionResult_WhenPermissionCheckFails()
         {
             mock.Mock<ISecurityContext>()
                 .Setup(x => x.DemandPermission(PermissionType.ShipmentsCreateEditProcess, 2031))
                 .Throws<PermissionException>();
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<PermissionException>(result.Exception.InnerException);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenEntityLockCouldNotBeSecured()
+        public async Task PrepareShipment_ReturnsException_WhenEntityLockCouldNotBeSecured()
         {
             mock.Mock<IResourceLockFactory>()
                 .Setup(x => x.GetEntityLock(2031, "Process Shipment"))
                 .Throws(new SqlAppResourceLockException("Foo"));
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<SqlAppResourceLockException>(result.Exception.InnerException);
         }
@@ -98,18 +99,18 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenShipmentIsAlreadyProcessed()
+        public async Task PrepareShipment_ReturnsException_WhenShipmentIsAlreadyProcessed()
         {
             shipment.Processed = true;
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShipmentAlreadyProcessedException>(result.Exception);
             Assert.Contains("already been processed", result.Exception.Message);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenUsingInsureShipAndNoItemNames()
+        public async Task PrepareShipment_ReturnsException_WhenUsingInsureShipAndNoItemNames()
         {
             StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
@@ -117,37 +118,37 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             shipment.Insurance = true;
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShippingException>(result.Exception);
             Assert.Contains("insure", result.Exception.Message);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenOrderDoesNotExist()
+        public async Task PrepareShipment_ReturnsException_WhenOrderDoesNotExist()
         {
             shipment.Order = null;
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShippingException>(result.Exception);
             Assert.Contains("order", result.Exception.Message);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenStoreDoesNotExist()
+        public async Task PrepareShipment_ReturnsException_WhenStoreDoesNotExist()
         {
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(1234)).Returns<StoreEntity>(null);
             shipment.Order.StoreID = 1234;
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShippingException>(result.Exception);
             Assert.Contains("store", result.Exception.Message);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsException_WhenValidateLicenseReturnsError()
+        public async Task PrepareShipment_ReturnsException_WhenValidateLicenseReturnsError()
         {
             StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
@@ -155,7 +156,7 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
                 .Setup(x => x.ValidateLicense(store, defaultInput.LicenseCheckCache))
                 .Returns(new Exception("Foo"));
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShippingException>(result.Exception);
             Assert.Contains("Foo", result.Exception.Message);
@@ -183,25 +184,25 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsCanceledException_WhenPreprocessorReturnsNull()
+        public async Task PrepareShipment_ReturnsCanceledException_WhenPreprocessorReturnsNull()
         {
             StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
 
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
-                    .Returns<IEnumerable<ShipmentEntity>>(null));
+                    .ReturnsAsync((IEnumerable<ShipmentEntity>) null));
             mock.Mock<IShipmentPreProcessorFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>())).Returns(preProcessor);
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.IsType<ShippingException>(result.Exception);
             Assert.Contains("cancel", result.Exception.Message);
         }
 
         [Fact]
-        public void PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
+        public async Task PrepareShipment_ReturnsPreprocessedShipments_WhenPreprocessorSucceeds()
         {
             StoreEntity store = new StoreEntity() { Enabled = true };
             mock.Mock<IStoreManager>().Setup(x => x.GetStore(It.IsAny<long>())).Returns(store);
@@ -209,11 +210,11 @@ namespace ShipWorks.Shipping.Tests.Services.ShipmentProcessorSteps
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
             Mock<IShipmentPreProcessor> preProcessor = mock.CreateMock<IShipmentPreProcessor>(s =>
                 s.Setup(x => x.Run(It.IsAny<ShipmentEntity>(), It.IsAny<RateResult>(), It.IsAny<Action>()))
-                    .Returns(shipments));
+                    .ReturnsAsync(shipments));
             mock.Mock<IShipmentPreProcessorFactory>()
                 .Setup(x => x.Create(It.IsAny<ShipmentTypeCode>())).Returns(preProcessor);
 
-            var result = testObject.PrepareShipment(defaultInput);
+            var result = await testObject.PrepareShipment(defaultInput);
 
             Assert.Equal(shipments, result.Shipments);
         }

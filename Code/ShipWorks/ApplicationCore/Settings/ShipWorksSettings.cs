@@ -55,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Settings
             settingsPages["My Settings"] = InitializeSettingsPage(new SettingsPagePersonal());
 
             settingsPages["Logging"] = InitializeSettingsPage(new SettingsPageLogging());
-            settingsPages["Keyboard && Barcode Shortcuts"] = InitializeSettingsPage(new SettingsPageShortcuts(this, scope));
+            settingsPages["Scan-to-Ship"] = InitializeSettingsPage(new SettingsPageScanToShip(this, scope));
 
             if (IsWarehouseAllowed)
             {

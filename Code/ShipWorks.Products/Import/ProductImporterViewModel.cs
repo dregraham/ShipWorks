@@ -5,6 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 

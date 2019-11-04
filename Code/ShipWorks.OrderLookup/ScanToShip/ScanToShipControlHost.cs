@@ -13,29 +13,32 @@ using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Controls;
 
-namespace ShipWorks.OrderLookup.Controls.OrderLookup
+namespace ShipWorks.OrderLookup.ScanToShip
 {
     /// <summary>
     /// Control to look up orders for single scan mode
     /// </summary>
     [Component(RegisterAs = RegistrationType.SpecificService, Service = typeof(IOrderLookup))]
-    public partial class OrderLookupControlHost : UserControl, IOrderLookup
+    public partial class ScanToShipControlHost : UserControl, IOrderLookup
     {
-        private readonly MainOrderLookupViewModel orderLookupViewModel;
-        private MainOrderLookupControl mainOrderLookupControl;
+        private ScanToShipControl scanToShipControl;
+        private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupControlHost(MainOrderLookupViewModel orderLookupViewModel, IMessenger messenger)
+        public ScanToShipControlHost(IScanToShipViewModel scanToShipViewModel, IMessenger messenger)
         {
             this.messenger = messenger;
             InitializeComponent();
-            this.orderLookupViewModel = orderLookupViewModel;
-            orderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
-            orderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
-            orderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
+
+            this.scanToShipViewModel = scanToShipViewModel;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.ShipmentNeedsBinding += OnShipmentModelShipmentSaving;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CanAcceptFocus = () => this.Visible && this.CanFocus;
+            this.scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabelWrapper = CreateLabelWrapper;
+
+            this.scanToShipViewModel.ScanPackViewModel.CanAcceptFocus = () => Visible && CanFocus;
         }
 
         /// <summary>
@@ -52,15 +55,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             base.OnLoad(e);
 
-            mainOrderLookupControl = new MainOrderLookupControl()
+            scanToShipControl = new ScanToShipControl()
             {
-                DataContext = orderLookupViewModel
+                DataContext = scanToShipViewModel
             };
 
             ElementHost host = new ElementHost
             {
                 Dock = DockStyle.Fill,
-                Child = mainOrderLookupControl
+                Child = scanToShipControl
             };
 
             Controls.Add(host);
@@ -72,27 +75,28 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         public void Unload()
         {
             CommitBindingsOnFocusedControl();
-            orderLookupViewModel.ShipmentModel.Unload();
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.Unload();
+            scanToShipViewModel.ScanPackViewModel.Reset();
         }
 
         /// <summary>
         /// Create the label for a shipment
         /// </summary>
         public Task CreateLabel() =>
-            orderLookupViewModel.ShipmentModel.CreateLabel();
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.CreateLabel();
 
         /// <summary>
         /// Allow reshipping an order
         /// </summary>
         public bool ShipAgainAllowed() =>
-            orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true;
 
         /// <summary>
         /// Ship the shipment again
         /// </summary>
         public void ShipAgain()
         {
-            long? shipmentId = orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
+            long? shipmentId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.ShipmentID;
 
             if (shipmentId != 0 && shipmentId != null)
             {
@@ -103,20 +107,25 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// <summary>
         /// Register the profile handler
         /// </summary>
-        public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration) =>
-            orderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
+        public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration)
+        {
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.RegisterProfileHandler(profileRegistration);
+        }
 
         /// <summary>
         /// Save the order
         /// </summary>
-        public void Save() => orderLookupViewModel.ShipmentModel.SaveToDatabase();
+        public void Save()
+        {
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SaveToDatabase();
+        }
 
         /// <summary>
         /// Allow the creation of a label
         /// </summary>
         public bool CreateLabelAllowed()
-        {
-            return orderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        {            
+            return scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
         }
 
         /// <summary>
@@ -155,7 +164,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private void CommitBindingsOnFocusedControl()
         {
-            IInputElement focusedElement = FindFocusedInputElement(mainOrderLookupControl);
+            IInputElement focusedElement = FindFocusedInputElement(scanToShipControl);
             if (!IsNonKeyboardInputElement(focusedElement))
             {
                 CommitBindings(focusedElement);
@@ -167,7 +176,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         private IInputElement FindFocusedInputElement(DependencyObject container)
         {
-            DependencyObject focusScope = FocusManager.GetFocusScope(mainOrderLookupControl);
+            DependencyObject focusScope = FocusManager.GetFocusScope(scanToShipControl);
             return focusScope == null ?
                 null :
                 FocusManager.GetFocusedElement(focusScope);

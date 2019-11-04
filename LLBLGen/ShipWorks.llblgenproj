@@ -3325,6 +3325,7 @@
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
+          <Field Name="ScanToShipAutoAdvance" Type="bool" FieldIndex="24" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
@@ -4584,7 +4585,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-22T15:28:35.3705979Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-24T18:01:22.6975293Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9305,6 +9306,7 @@
                     <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ScanToShipAutoAdvance" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -14156,6 +14158,7 @@
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
+            <FieldMapping FieldName="ScanToShipAutoAdvance" TargetFieldName="ScanToShipAutoAdvance" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />

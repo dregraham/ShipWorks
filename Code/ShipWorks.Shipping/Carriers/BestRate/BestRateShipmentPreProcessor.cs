@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -42,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="configurationCallback">Callback to execute when a shipment type is configured.</param>
         /// <returns></returns>
         /// <exception cref="ShippingException">An account must be created to process this shipment.</exception>
-        public virtual IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
+        public virtual Task<IEnumerable<ShipmentEntity>> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
             RateResult bestRate = null;
 
@@ -98,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             LogTelemetry(shipment, filteredRates, selectedRate ?? bestRate);
 
-            return shipmentsToReturn;
+            return Task.FromResult<IEnumerable<ShipmentEntity>>(shipmentsToReturn);
         }
 
         /// <summary>

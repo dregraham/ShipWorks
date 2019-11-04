@@ -397,6 +397,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MinimizeRibbon", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShowQAToolbarBelowRibbon", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ScanToShipAutoAdvance", fieldHashtable);
 		}
 		#endregion
 
@@ -733,6 +735,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, value); }
+		}
+
+		/// <summary> The ScanToShipAutoAdvance property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."ScanToShipAutoAdvance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ScanToShipAutoAdvance
+		{
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ScanToShipAutoAdvance, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.ScanToShipAutoAdvance, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

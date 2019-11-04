@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Orders.Split
 
             SplitOrders = orderNumbers.ToImmutableList();
 
-            await messageHelper.ShowDialog(SetupDialog);
+            await messageHelper.ShowDialog(() => SetupDialog());
         }
 
         /// <summary>

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
+using System.Windows.Forms;
 using System.Xml;
 using Autofac;
 using Interapptive.Shared.Tests.Filters;
@@ -66,16 +67,16 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
         public ShipmentProcessorTest(DatabaseFixture db)
         {
             context = db.CreateDataContext((mock, builder) =>
-            {
-                webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
-                messageHelper = builder.RegisterMock<IAsyncMessageHelper>(mock);
-                messenger = builder.RegisterMock<IMessenger>(mock);
-                dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
-                builder.RegisterMock<IActionDispatcher>(mock);
-                builder.RegisterMock<ITangoWebClient>(mock);
-                userSession = builder.RegisterMock<IUserSession>(mock);
-                mainForm = builder.RegisterMock<IMainForm>(mock);
-            });
+                {
+                    webServiceFactory = builder.RegisterMock<IUspsWebServiceFactory>(mock);
+                    messageHelper = builder.RegisterMock<IAsyncMessageHelper>(mock);
+                    messenger = builder.RegisterMock<IMessenger>(mock);
+                    dateTimeProvider = builder.RegisterMock<IDateTimeProvider>(mock);
+                    builder.RegisterMock<IActionDispatcher>(mock);
+                    builder.RegisterMock<ITangoWebClient>(mock);
+                    userSession = builder.RegisterMock<IUserSession>(mock);
+                    mainForm = builder.RegisterMock<IMainForm>(mock);
+                });
 
             dateTimeProvider.Setup(x => x.UtcNow).Returns(new DateTime(2016, 1, 20, 10, 30, 0));
 
@@ -283,10 +284,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(shipmentType);
             IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(shipmentType, shipment);
 
-            Func<IDialog> dialogCreator = null;
+            Func<IForm> dialogCreator = null;
             messageHelper
-                .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
-                .Callback((Func<IDialog> x) => dialogCreator = x);
+                .Setup(x => x.ShowDialog(It.IsAny<Func<IForm>>()))
+                .Callback((Func<IForm> x) => dialogCreator = x)
+                .ReturnsAsync(DialogResult.Cancel);
 
             testObject = context.Container.Resolve<IShipmentProcessor>();
 

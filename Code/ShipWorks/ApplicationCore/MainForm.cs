@@ -149,8 +149,8 @@ namespace ShipWorks
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
         private IShipmentHistory shipmentHistory;
-        private IScanPack scanPackControl;
         private IUpdateService updateService;
+        private IProductsMode productsMode;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
 
         // Is ShipWorks currently changing modes
@@ -183,7 +183,7 @@ namespace ShipWorks
 
             InitializeCustomEnablerComponents();
 
-            SetShipmentButonEnabledState();
+            SetShipmentButtonEnabledState();
 
             SetButtonTelemetry();
         }
@@ -191,7 +191,7 @@ namespace ShipWorks
         /// <summary>
         /// Wire up updating the CreateLabel and ApplyProfile enabled state
         /// </summary>
-        private void SetShipmentButonEnabledState()
+        private void SetShipmentButtonEnabledState()
         {
             // Listen for message to enable Create Label button
             Messenger.Current.Subscribe(x =>
@@ -1145,8 +1145,86 @@ namespace ShipWorks
 
             productsLifetimeScope = IoC.BeginLifetimeScope();
 
-            productsLifetimeScope.Resolve<IProductsMode>()
-                .Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
+            productsMode = productsLifetimeScope.Resolve<IProductsMode>();
+
+            productsMode.Initialize(panelDockingArea.Controls.Add, panelDockingArea.Controls.Remove);
+
+            AttachProductEventHandlers();
+        }
+
+        /// <summary>
+        /// Attach event handlers to product mode buttons
+        /// </summary>
+        private void AttachProductEventHandlers()
+        {
+            addProductMenuItemNewProduct.Activate += OnAddNewProduct;
+            addProductMenuItemFromFile.Activate += OnAddProductFromFile;
+            addProductMenuItemVariant.Activate += OnAddProductVariant;
+
+            buttonProductCatalogEditProduct.Activate += OnEditProduct;
+            buttonProductCatalogExportProduct.Activate += OnExportProduct;
+
+            if (productsMode != null)
+            {
+                productsMode.ProductSelectionChanged += OnProductSelectionChanged;
+            }
+        }
+
+        /// <summary>
+        /// Add New Product event handler
+        /// </summary>
+        private void OnAddNewProduct(object sender, EventArgs e)
+        {
+            productsMode?.AddProduct.Execute(null);
+        }
+
+        /// <summary>
+        /// Add Product From File event handler
+        /// </summary>
+        private void OnAddProductFromFile(object sender, EventArgs e)
+        {
+            productsMode?.ImportProducts.Execute(null);
+        }
+
+        /// <summary>
+        /// Add Product Variant event handler
+        /// </summary>
+        private void OnAddProductVariant(object sender, EventArgs e)
+        {
+            productsMode?.CopyAsVariant.Execute(null);
+        }
+
+        /// <summary>
+        /// Edit Product event handler
+        /// </summary>
+        private void OnEditProduct(object sender, EventArgs e)
+        {
+            productsMode?.EditProductVariantButton.Execute(null);
+        }
+
+        /// <summary>
+        /// Export product event handler
+        /// </summary>
+        private void OnExportProduct(object sender, EventArgs e)
+        {
+            productsMode?.ExportProducts.Execute(null);
+        }
+
+        /// <summary>
+        /// Product selection event handler
+        /// </summary>
+        private void OnProductSelectionChanged(object sender, ProductSelectionChangedEventArgs e)
+        {
+            if (e.SingleSelection)
+            {
+                addProductMenuItemVariant.Enabled = true;
+                buttonProductCatalogEditProduct.Enabled = true;
+            }
+            else
+            {
+                addProductMenuItemVariant.Enabled = false;
+                buttonProductCatalogEditProduct.Enabled = false;
+            }
         }
 
         /// <summary>
@@ -1169,7 +1247,6 @@ namespace ShipWorks
             }
 
             orderLookupControl = orderLookupLifetimeScope.Resolve<IOrderLookup>();
-            scanPackControl = orderLookupLifetimeScope.Resolve<IScanPack>();
 
             var profilePopupService = orderLookupLifetimeScope.Resolve<IProfilePopupService>();
             orderLookupControl.RegisterProfileHandler(
@@ -1181,6 +1258,11 @@ namespace ShipWorks
 
             panelDockingArea.Controls.Add(orderLookupControl.Control);
             orderLookupControl.Control.BringToFront();
+
+            // Since no order will be selected when they change modes, set these to false.
+            buttonOrderLookupViewCreateLabel.Enabled = false;
+            buttonOrderLookupViewApplyProfile.Enabled = false;
+            buttonOrderLookupViewShipShipAgain.Enabled = false;
         }
 
         /// <summary>
@@ -1191,10 +1273,8 @@ namespace ShipWorks
             if (orderLookupLifetimeScope != null)
             {
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-                panelDockingArea.Controls.Remove(scanPackControl?.Control);
                 panelDockingArea.Controls.Remove(shipmentHistory?.Control);
                 orderLookupControl.Unload();
-                scanPackControl.Unload();
                 orderLookupLifetimeScope.Dispose();
                 orderLookupLifetimeScope = null;
             }
@@ -1205,10 +1285,26 @@ namespace ShipWorks
         /// </summary>
         private void UnloadProductsMode()
         {
+            DetachProductEventHandlers();
+            addProductMenuItemVariant.Enabled = false;
+            buttonProductCatalogEditProduct.Enabled = false;
             productsLifetimeScope?.Dispose();
             productsLifetimeScope = null;
+            productsMode = null;
         }
 
+        /// <summary>
+        /// Detach event handlers from product mode buttons
+        /// </summary>
+        private void DetachProductEventHandlers()
+        {
+            addProductMenuItemNewProduct.Activate -= OnAddNewProduct;
+            addProductMenuItemFromFile.Activate -= OnAddProductFromFile;
+            addProductMenuItemVariant.Activate -= OnAddProductVariant;
+
+            buttonProductCatalogEditProduct.Activate -= OnEditProduct;
+            buttonProductCatalogExportProduct.Activate -= OnExportProduct;
+        }
         /// <summary>
         /// Disable the main batch mode controls
         /// </summary>
@@ -1238,7 +1334,6 @@ namespace ShipWorks
         /// Is the specified tab an order lookup mode specific tab
         /// </summary>
         private bool IsOrderLookupSpecificTab(RibbonTab tab) =>
-            tab == ribbonTabOrderLookupViewScanPack ||
             tab == ribbonTabOrderLookupViewShipmentHistory ||
             tab == ribbonTabOrderLookupViewShipping;
 
@@ -1272,14 +1367,7 @@ namespace ShipWorks
                 ChangeUIMode(UIMode.Products);
             }
 
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewScanPack)
-            {
-                // Save the order in case changes were made before switching to this tab
-                orderLookupControl?.Save();
-                ToggleVisiblePanel(scanPackControl?.Control);
-                shipmentHistory?.Deactivate();
-            }
-            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
             {
                 ToggleVisiblePanel(orderLookupControl?.Control);
                 shipmentHistory?.Deactivate();
@@ -1304,14 +1392,6 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// True if scan pack control is active
-        /// </summary>
-        public bool IsScanPackActive()
-        {
-            return scanPackControl != null && panelDockingArea.Controls.Contains(scanPackControl.Control);
-        }
-
-        /// <summary>
         /// Toggle which control is visible in the panel docking area
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd)
@@ -1319,7 +1399,6 @@ namespace ShipWorks
             // first remove everything
             panelDockingArea.Controls.Remove(shipmentHistory?.Control);
             panelDockingArea.Controls.Remove(orderLookupControl?.Control);
-            panelDockingArea.Controls.Remove(scanPackControl?.Control);
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
@@ -1707,11 +1786,6 @@ namespace ShipWorks
                 {
                     ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
                     EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
-
-                    if (restrictionLevel == EditionRestrictionLevel.None)
-                    {
-                        ribbonTabOrderLookupViewScanPack.Enabled = true;
-                    }
                 }
             }
         }
@@ -1891,10 +1965,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            else if (UIMode == UIMode.OrderLookup)
-            {
-                shipmentHistory.SaveGridColumnState();
-            }
+            
+            shipmentHistory?.SaveGridColumnState();            
         }
 
         /// <summary>
@@ -3645,20 +3717,6 @@ namespace ShipWorks
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     LookupOrder(dlg.OrderID);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Create a manual order from the order lookup panel
-        /// </summary>
-        private void OnOrderLookupManualOrder(object sender, EventArgs e)
-        {
-            using (AddOrderWizard dlg = new AddOrderWizard(null, null))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    Messenger.Current.Send(new OrderLookupSearchMessage(this, dlg.OrderNmberComplete));
                 }
             }
         }

@@ -106,7 +106,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// True if a profile is selected
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter.Shipment.Postal.DimsProfileID > 0;
+        public bool IsProfileSelected => ShipmentModel.ShipmentAdapter?.Shipment.Postal.DimsProfileID > 0;
 
         /// <summary>
         /// Collection of ServiceTypes
