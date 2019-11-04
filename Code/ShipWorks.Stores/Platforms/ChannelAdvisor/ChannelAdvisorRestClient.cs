@@ -177,15 +177,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
-            daysBack.Clamp(1, 30);
+            var clampedDaysBack = daysBack.Clamp(1, 30);
 
-            var downloadStartDate = DateTime.UtcNow.AddDays(-daysBack);
+            var downloadStartDate = DateTime.UtcNow.AddDays(-clampedDaysBack);
 
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             getOrdersRequestSubmitter.Variables.Add("$filter", "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped') AND " +
                 "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
                 "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited') AND " +
-                $"(CreatedDateUtc ge {downloadStartDate.ToIsoString()})");
+                $"(CreatedDateUtc ge {downloadStartDate.ToString("o")})");
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
