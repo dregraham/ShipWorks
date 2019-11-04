@@ -176,8 +176,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             try
             {
-                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
-                    () => prepareShipmentTask.PrepareShipment(initial));
+                prepareShipmentResult = await telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
+                    async () => await prepareShipmentTask.PrepareShipment(initial));
 
                 if (initial.CancellationSource.IsCancellationRequested)
                 {

@@ -1068,11 +1068,11 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Settings\ModifiedOrderCustomerUpdateBehavior.cs" />
-    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageScanToShip.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.Designer.cs">
-      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageScanToShip.Designer.cs">
+      <DependentUpon>SettingsPageScanToShip.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Settings\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
@@ -1149,6 +1149,7 @@
     <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
@@ -7203,8 +7204,8 @@
     <EmbeddedResource Include="ApplicationCore\Nudges\NudgeDlg.resx">
       <DependentUpon>NudgeDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageShortcuts.resx">
-      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageScanToShip.resx">
+      <DependentUpon>SettingsPageScanToShip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Settings\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>

@@ -3752,6 +3752,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "AutoPrintRequireValidation", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoPrintRequireValidation, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "MinimizeRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.MinimizeRibbon, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "ShowQAToolbarBelowRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "ScanToShipAutoAdvance", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ScanToShipAutoAdvance, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

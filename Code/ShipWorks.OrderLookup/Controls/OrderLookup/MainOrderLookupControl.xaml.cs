@@ -52,6 +52,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private void UpdateColumnWidths()
         {
             double columnMaxWidth = Math.Min(ColumnGrid.ActualWidth, ColumnGrid.MaxWidth) - (2 * (LeftColumn.MinWidth + 10));
+            columnMaxWidth = Math.Max(0, columnMaxWidth);
 
             LeftColumn.MaxWidth = columnMaxWidth;
             MiddleColumn.MaxWidth = columnMaxWidth;

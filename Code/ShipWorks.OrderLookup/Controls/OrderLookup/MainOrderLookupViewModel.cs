@@ -14,8 +14,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.Messaging.Messages.Shipping;
-using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.OrderLookup.Layout;
 
@@ -45,7 +43,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Constructor
         /// </summary>
         public MainOrderLookupViewModel(IOrderLookupShipmentModel shipmentModel,
-            OrderLookupSearchViewModel orderLookupSearchViewModel,
             IOrderLookupLayout layout,
             ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages,
@@ -58,11 +55,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             ShipmentModel.ShipmentUnloading += OnShipmentModelShipmentUnloading;
             ShipmentModel.ShipmentLoading += OnShipmentModelShipmentLoading;
             ShipmentModel.ShipmentLoaded += OnShipmentModelShipmentLoaded;
-            OrderLookupSearchViewModel = orderLookupSearchViewModel;
             this.layout = layout;
             layout.Apply(this, scope);
             LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
-
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -128,13 +123,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private void UnloadViewModels() => innerScope?.Dispose();
 
         /// <summary>
-        /// View Model for the search section of the OrderLookup UI Mode
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public OrderLookupSearchViewModel OrderLookupSearchViewModel { get; set; }
-
-        /// <summary>
-        /// Order Number to search for
+        /// Left column of panels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> LeftColumn
@@ -144,7 +133,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
-        /// Order Number to search for
+        /// Middle column of panels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> MiddleColumn
@@ -154,7 +143,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         }
 
         /// <summary>
-        /// Order Number to search for
+        /// Right column of panels
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ObservableCollection<IOrderLookupPanelViewModel<IOrderLookupViewModel>> RightColumn
@@ -174,7 +163,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// </summary>
         [Obfuscation(Exclude = true)]
         public Visibility ShowColumns => ShipmentModel.ShipmentAdapter == null ? Visibility.Collapsed : Visibility.Visible;
-            
 
         /// <summary>
         /// Width of the left column

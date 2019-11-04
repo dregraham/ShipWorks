@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -9,6 +10,16 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public interface IScanPackViewModel
     {
+        /// <summary>
+        /// The Scan Header
+        /// </summary>
+        string ScanHeader { get; set; }
+
+        /// <summary>
+        /// The Scan Footer
+        /// </summary>
+        string ScanFooter { get; set; }
+
         /// <summary>
         /// Is the view enabled
         /// </summary>
@@ -20,9 +31,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         Func<bool> CanAcceptFocus { get; set; }
 
         /// <summary>
-        /// Load an order
+        /// Process a line item
         /// </summary>
-        Task ProcessScan(string scannedText);
+        void ProcessItemScan(string scannedText);
 
         /// <summary>
         /// Load an order
@@ -33,5 +44,15 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Reset the control
         /// </summary>
         void Reset();
+
+        /// <summary>
+        /// Current state of the view model
+        /// </summary>
+        ScanPackState State { get; set; }
+
+        /// <summary>
+        /// Event handler for when state changes
+        /// </summary>
+        event EventHandler OrderVerified;
     }
 }

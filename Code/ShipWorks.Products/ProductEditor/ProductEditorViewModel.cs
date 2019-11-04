@@ -253,10 +253,6 @@ namespace ShipWorks.Products.ProductEditor
                 CreatedDate = DateTime.SpecifyKind(productVariant.CreatedDate, DateTimeKind.Utc)
                     .ToLocalTime();
             }
-            else
-            {
-                Telemetry.TrackButtonClick("ShipWorks.Button.Click.Products.Edit");
-            }
 
             BundleEditorViewModel.Load(productVariant);
             await AttributeEditorViewModel.Load(productVariant).ConfigureAwait(true);

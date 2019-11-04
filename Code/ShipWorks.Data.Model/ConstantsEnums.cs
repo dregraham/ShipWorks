@@ -13132,6 +13132,8 @@ namespace ShipWorks.Data.Model
 		MinimizeRibbon,
 		///<summary>ShowQAToolbarBelowRibbon. </summary>
 		ShowQAToolbarBelowRibbon,
+		///<summary>ScanToShipAutoAdvance. </summary>
+		ScanToShipAutoAdvance,
 		/// <summary></summary>
 		AmountOfFields
 	}

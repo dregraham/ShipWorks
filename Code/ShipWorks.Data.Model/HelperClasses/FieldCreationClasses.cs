@@ -30642,6 +30642,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.ScanToShipAutoAdvance field instance</summary>
+		public static EntityField2 ScanToShipAutoAdvance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ScanToShipAutoAdvance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

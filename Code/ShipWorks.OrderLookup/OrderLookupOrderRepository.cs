@@ -80,9 +80,11 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Given scanned text, find the associated order
         /// </summary>
-        public async Task<OrderEntity> GetOrder(long orderID)
+        public async Task<OrderEntity> GetOrder(long orderID, bool showProgressDialog)
         {
-            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, ProgressDisplayOptions.Delay, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(true);
+            var displayOption = showProgressDialog ? ProgressDisplayOptions.Delay : ProgressDisplayOptions.NeverShow;
+
+            ShipmentsLoadedEventArgs result = await orderLoader.LoadAsync(new[] { orderID }, displayOption, true, TimeSpan.FromMilliseconds(1000)).ConfigureAwait(true);
 
             if (result.Shipments.Any())
             {

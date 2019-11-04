@@ -163,9 +163,8 @@
         <TextBlock
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="3"
             Margin="0,8,0,0"
-            Text="{Binding SearchErrorMessage}"
-            Visibility="{Binding SearchError, Converter={StaticResource BoolToVis}}" />        
+            Text="{Binding SearchMessage}"
+            Visibility="{Binding ShowSearchMessage, Converter={StaticResource BoolToVis}}" />
     </Grid>
 </UserControl>
