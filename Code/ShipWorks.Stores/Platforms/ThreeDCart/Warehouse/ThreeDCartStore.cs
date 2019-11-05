@@ -1,10 +1,12 @@
-﻿using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
+﻿using System.Reflection;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.Warehouse
 {
     /// <summary>
     /// ThreeD Cart Store DTO
     /// </summary>
+    [Obfuscation]
     public class ThreeDCartStore : Store
     {
         /// <summary>
