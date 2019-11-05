@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -59,7 +56,7 @@ namespace ShipWorks.Stores.Orders.Split
             (Message, MoreInfoUrl) = GetErrorDetails(exception);
             ShowMoreInfoUrl = !string.IsNullOrEmpty(MoreInfoUrl);
 
-            await messageHelper.ShowDialog(SetupDialog);
+            await messageHelper.ShowDialog(() => SetupDialog());
         }
 
         /// <summary>

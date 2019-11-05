@@ -33,8 +33,6 @@ namespace ShipWorks.Products.Export
             this.dateTimeProvider = dateTimeProvider;
             this.productExporter = productExporter;
             this.fileSelector = fileSelector;
-
-            Telemetry.TrackButtonClick("ShipWorks.Button.Click.Products.Export");
         }
 
         /// <summary>

@@ -16,9 +16,9 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         public string RefreshToken { get; set; }
 
         /// <summary>
-        /// The date to start downloading orders from
+        /// The number of days back to download orders
         /// </summary>
-        public ulong DownloadStartDate { get; set; }
+        public int DaysBack { get; set; }
 
         /// <summary>
         /// A list of item attribute names to be imported

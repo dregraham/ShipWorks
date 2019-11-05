@@ -354,6 +354,15 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.HashFunction.CityHash, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Data.HashFunction.CityHash.2.0.0\lib\net45\System.Data.HashFunction.CityHash.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Data.HashFunction.Core.2.0.0\lib\net45\System.Data.HashFunction.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.HashFunction.Interfaces, Version=2.0.0.0, Culture=neutral, PublicKeyToken=80c9288e394c1322, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\System.Data.HashFunction.Interfaces.2.0.0\lib\net45\System.Data.HashFunction.Interfaces.dll</HintPath>
+    </Reference>
     <Reference Include="System.Deployment" />
     <Reference Include="System.Design" />
     <Reference Include="System.DirectoryServices" />
@@ -580,6 +589,12 @@
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Actions\Tasks\Common\DisabledIndex.cs" />
+    <Compile Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.Designer.cs">
+      <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\IManageDisabledIndexesRepo.cs" />
     <Compile Include="Actions\Tasks\Common\IMissingIndexResolver.cs" />
     <Compile Include="Actions\Tasks\Common\IndexColumn.cs" />
@@ -596,6 +611,7 @@
     <Compile Include="Actions\Tasks\Common\DatabaseMaintenanceTask.cs" />
     <Compile Include="Actions\Tasks\Common\MissingIndex.cs" />
     <Compile Include="Actions\Tasks\Common\MissingIndexResolver.cs" />
+    <Compile Include="Actions\Tasks\Common\CreateLabelTask.cs" />
     <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
@@ -1042,11 +1058,11 @@
     <Compile Include="ApplicationCore\Nudges\NudgeOptionDeserializer.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeType.cs" />
     <Compile Include="ApplicationCore\Settings\ModifiedOrderCustomerUpdateBehavior.cs" />
-    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.cs">
+    <Compile Include="ApplicationCore\Settings\SettingsPageScanToShip.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ApplicationCore\Settings\SettingsPageShortcuts.Designer.cs">
-      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
+    <Compile Include="ApplicationCore\Settings\SettingsPageScanToShip.Designer.cs">
+      <DependentUpon>SettingsPageScanToShip.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Settings\SingleScanSettings.cs" />
     <Compile Include="ApplicationCore\Security\CipherContext.cs" />
@@ -1123,6 +1139,7 @@
     <Compile Include="Products\Export\IWarehouseProductUploader.cs" />
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
+    <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
@@ -1377,6 +1394,7 @@
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
+    <Compile Include="UI\BackgroundAsyncMessageHelper.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
     <Compile Include="UI\Controls\SandRibbon\IButtonTelemetry.cs" />
     <Compile Include="UI\Controls\SandRibbon\IRibbonButton.cs" />
@@ -1401,6 +1419,9 @@
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.resx">
+      <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -7173,8 +7194,8 @@
     <EmbeddedResource Include="ApplicationCore\Nudges\NudgeDlg.resx">
       <DependentUpon>NudgeDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageShortcuts.resx">
-      <DependentUpon>SettingsPageShortcuts.cs</DependentUpon>
+    <EmbeddedResource Include="ApplicationCore\Settings\SettingsPageScanToShip.resx">
+      <DependentUpon>SettingsPageScanToShip.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Settings\PrintResultCleanup\PrintJobCleanupDlg.resx">
       <DependentUpon>PrintJobCleanupDlg.cs</DependentUpon>

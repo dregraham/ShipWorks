@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Services
                     // changes had been made by other users we pick up the concurrency violation.
                     if (forceSave && !shipment.IsDirty)
                     {
-                        shipment.Fields[(int) ShipmentFieldIndex.ShipmentType].IsChanged = true;
+                        shipment.Fields[(int) ShipmentFieldIndex.BestRateEvents].IsChanged = true;
                         shipment.Fields.IsDirty = true;
                     }
 

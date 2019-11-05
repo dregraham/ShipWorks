@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Caching;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -19,12 +21,15 @@ namespace ShipWorks.Shipping
     /// </summary>
     public static class ShipmentTypeManager
     {
+        private static readonly List<ShipmentTypeCode> shipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>()
+            .Select(s => s.Value)
+            .ToList();
+
         /// <summary>
         /// Returns all shipment types in ShipWorks
         /// </summary>
         public static IEnumerable<ShipmentTypeCode> ShipmentTypeCodes =>
-            EnumHelper.GetEnumList<ShipmentTypeCode>()
-                .Select(s => s.Value)
+            shipmentTypeCodes
                 .Where(IsCarrierAllowed)
                 .OrderBy(GetSortValue);
 

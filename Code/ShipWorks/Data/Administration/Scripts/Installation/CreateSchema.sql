@@ -1517,7 +1517,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonMerchantID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4))
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -4306,7 +4307,8 @@ CREATE TABLE [dbo].[UserSettings]
 [LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0',
 [AutoPrintRequireValidation] [bit] NOT NULL,
 [MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
-[ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0
+[ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0,
+[ScanToShipAutoAdvance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

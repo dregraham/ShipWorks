@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Threading;
@@ -425,7 +426,8 @@ namespace ShipWorks.Templates.Printing
                         }
 
                         // Log the result of the print job
-                        PrintResultLogger.LogPrintJob(jobIdentifier, templateResults.Take(lastSuccessIndex + 1).ToList(), Settings, progressProvider);
+                        Task.Factory.StartNew(() => 
+                            PrintResultLogger.LogPrintJob(jobIdentifier, templateResults.Take(lastSuccessIndex + 1).ToList(), Settings));
 
                         htmlControl.ExternalObject = null;
 
@@ -481,7 +483,7 @@ namespace ShipWorks.Templates.Printing
                     }
 
                     // Log the result of the print job
-                    PrintResultLogger.LogPrintJob(jobIdentifier, succeeded, Settings, progressProvider);
+                    Task.Factory.StartNew(() => PrintResultLogger.LogPrintJob(jobIdentifier, succeeded, Settings));
                 }
             }
 

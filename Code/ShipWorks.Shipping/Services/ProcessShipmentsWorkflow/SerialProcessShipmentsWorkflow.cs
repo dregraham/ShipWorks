@@ -11,6 +11,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 {
@@ -153,7 +154,13 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
             IDictionary<ShipmentEntity, Exception> concurrencyErrors =
-                await Task.Run(() => shippingManager.SaveShipmentsToDatabase(shipments, true));
+                await Task.Run(() =>
+                {
+                    using (new AuditBehaviorScope(AuditState.Disabled))
+                    {
+                        return shippingManager.SaveShipmentsToDatabase(shipments, true);
+                    }
+                });
 
             return shipments.Select((shipment, i) =>
             {
@@ -176,8 +183,8 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             try
             {
-                prepareShipmentResult = telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
-                    () => prepareShipmentTask.PrepareShipment(initial));
+                prepareShipmentResult = await telemetricResult.RunTimedEvent("PrepareShipment.DurationInMilliseconds",
+                    async () => await prepareShipmentTask.PrepareShipment(initial));
 
                 if (initial.CancellationSource.IsCancellationRequested)
                 {

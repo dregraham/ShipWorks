@@ -1131,7 +1131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(cn22Label)))
             {
-                DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs");
+                DataResourceManager.CreateFromBytes(stream.ToArray(), shipment.Ups.Packages.First().UpsPackageID, "Customs", true);
             }
         }
 
@@ -1165,7 +1165,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                                 {
                                     imageCrop.Save(imageStream, ImageFormat.Gif);
 
-                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, "LabelImage");
+                                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), package.UpsPackageID, "LabelImage", true);
 
                                     // imageCrop.Save(, ImageFormat.Gif);
                                 }
@@ -1174,7 +1174,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     }
                     else
                     {
-                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, "LabelImage");
+                        DataResourceManager.CreateFromBytes(stream.ToArray(), package.UpsPackageID, "LabelImage", true);
                     }
                 }
             }

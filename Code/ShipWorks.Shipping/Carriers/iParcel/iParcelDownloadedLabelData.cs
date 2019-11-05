@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                         imageData = GetImageLabel(iParcelResponse, rowIndex);
                     }
 
-                    dataResourceManager.CreateFromBytes(imageData, shipment.ShipmentID, "LabelPrimary");
+                    dataResourceManager.CreateFromBytes(imageData, shipment.ShipmentID, "LabelPrimary", true);
                 }
             }
             catch (Exception ex)

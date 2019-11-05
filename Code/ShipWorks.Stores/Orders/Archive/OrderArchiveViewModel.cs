@@ -146,7 +146,7 @@ namespace ShipWorks.Stores.Orders.Archive
         public Task<DateTime> GetArchiveDateFromUser()
         {
             return messageHelper
-                .ShowDialog(SetupDialog)
+                .ShowDialog(() => SetupDialog())
                 .Bind(x => x == true ?
                     Task.FromResult(ArchiveDate.ToUniversalTime()) :
                     Task.FromException<DateTime>(Error.Canceled));

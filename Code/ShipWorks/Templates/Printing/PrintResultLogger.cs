@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Transactions;
 using HtmlAgilityPack;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -27,33 +26,19 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Log the results of the givne print job that were printed with the specified settings
         /// </summary>
-        public static void LogPrintJob(Guid jobIdentifier, List<TemplateResult> resultsUsed, PrintJobSettings settings, ProgressProvider progressProvider)
+        public static async Task LogPrintJob(Guid jobIdentifier, List<TemplateResult> resultsUsed, PrintJobSettings settings)
         {
-            // Add a progress item for the logging
-            ProgressItem logProgress = new ProgressItem("Logging");
-            progressProvider.ProgressItems.Add(logProgress);
-
-            logProgress.CanCancel = false;
-            logProgress.Starting();
-            logProgress.Detail = "Saving print history...";
-
-            int count = 0;
-
             // If there is more than one, we have to break it down into each individual result to be logged
             foreach (TemplateResult result in resultsUsed)
             {
-                LogPrintResult(result, settings, jobIdentifier);
-
-                logProgress.PercentComplete = (++count * 100) / resultsUsed.Count;
+                await LogPrintResult(result, settings, jobIdentifier).ConfigureAwait(false);
             }
-
-            logProgress.Completed();
         }
 
         /// <summary>
         /// Log the result of the print
         /// </summary>
-        private static void LogPrintResult(TemplateResult templateResult, PrintJobSettings settings, Guid jobIdentifier)
+        private static async Task LogPrintResult(TemplateResult templateResult, PrintJobSettings settings, Guid jobIdentifier)
         {
             // Determine the input that generated this result
             TemplateInput input = templateResult.XPathSource?.Context.Input;
@@ -84,7 +69,7 @@ namespace ShipWorks.Templates.Printing
                         }
                     }
 
-                    LogPrintResultContent(templateResult, settings, relatedEntityID, contextEntityID, jobIdentifier);
+                    await LogPrintResultContent(templateResult, settings, relatedEntityID, contextEntityID, jobIdentifier).ConfigureAwait(false);
                 }
             }
         }
@@ -92,7 +77,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// Log the result of the print
         /// </summary>
-        private static void LogPrintResultContent(TemplateResult templateResult, PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier)
+        private static async Task LogPrintResultContent(TemplateResult templateResult, PrintJobSettings settings, long relatedEntityID, long contextEntityID, Guid jobIdentifier)
         {
             TemplateEntity template = templateResult.XPathSource.Template;
             PrintResultEntity result = null;
@@ -102,7 +87,7 @@ namespace ShipWorks.Templates.Printing
                 result = CreatePrintResultEntry(settings, relatedEntityID, contextEntityID, jobIdentifier, template);
 
                 // Save it now, b\c we need the ID to use for the resource manager
-                adapter.SaveAndRefetch(result);
+                await adapter.SaveAndRefetchAsync(result).ConfigureAwait(false);
 
                 try
                 {
@@ -129,14 +114,11 @@ namespace ShipWorks.Templates.Printing
                     result.ContentResourceID = contentResource.ReferenceID;
 
                     // Save the result while in a transaction
-                    using (new LoggedStopwatch(log, "PrintResultLogger.LogPrintResultContent - committed: "))
+                    using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
                     {
-                        using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TransactionScopeAsyncFlowOption.Enabled))
-                        {
-                            adapter.SaveEntity(result);
+                        await adapter.SaveEntityAsync(result).ConfigureAwait(false);
 
-                            scope.Complete();
-                        }
+                        scope.Complete();
                     }
                 }
                 catch (Exception ex)
@@ -145,12 +127,11 @@ namespace ShipWorks.Templates.Printing
 
                     // Delete the result we created.  If other resources were created, they should be cleaned up
                     // by the deleted abandoned resources task.
-                    SqlAdapter.Default.DeleteEntity(result);
+                    await SqlAdapter.Default.DeleteEntityAsync(result).ConfigureAwait(false);
 
                     throw;
                 }
             }
-
         }
 
         /// <summary>
