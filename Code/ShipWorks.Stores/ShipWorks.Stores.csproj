@@ -281,6 +281,11 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Overstock\Warehouse\OverstockStore.cs" />
+    <Compile Include="Platforms\Overstock\Warehouse\OverstockStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseItem.cs" />
+    <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrder.cs" />
+    <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStoreDtoFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseItem.cs" />
