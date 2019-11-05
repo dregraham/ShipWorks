@@ -47,8 +47,7 @@ namespace ShipWorks.Stores.Warehouse
                 .ConfigureAwait(false);
             store.CountryCode = storeEntity.CountryCode;
             store.ItemAttributesToImport = storeEntity.ParsedAttributesToDownload;
-            var downloadStartDate = await downloadStartingPoint.OnlineLastModified(storeEntity).ConfigureAwait(false);
-            store.DownloadStartDate = helpers.GetUnixTimestampMillis(downloadStartDate);
+            store.DaysBack = storeEntity.InitialDownloadDays ?? 30;
 
             return store;
         }

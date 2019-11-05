@@ -44,6 +44,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AmazonAuthToken = source.AmazonAuthToken;
             AmazonApiRegion = source.AmazonApiRegion;
             RefreshToken = source.RefreshToken;
+            DownloadDaysBack = source.DownloadDaysBack;
             
             
             
@@ -100,6 +101,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String RefreshToken { get; }
+        /// <summary> The DownloadDaysBack property of the Entity ChannelAdvisorStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ChannelAdvisorStore"."DownloadDaysBack"<br/>
+        /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Byte DownloadDaysBack { get; }
         
         
         

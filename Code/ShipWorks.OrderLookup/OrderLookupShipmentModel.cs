@@ -32,7 +32,6 @@ namespace ShipWorks.OrderLookup
     /// <summary>
     /// Model used by the various order lookup viewmodels
     /// </summary>
-    [Component(SingleInstance = true)]
     [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
         Justification = "Identifier is not being used for data binding")]
     public class OrderLookupShipmentModel : INotifyPropertyChanged, IOrderLookupShipmentModel
@@ -121,6 +120,11 @@ namespace ShipWorks.OrderLookup
         /// A shipment has fully loaded
         /// </summary>
         public event EventHandler ShipmentLoaded;
+
+        /// <summary>
+        /// Called after ShipmentLoaded events have fired (quick and dirty)
+        /// </summary>
+        public event EventHandler ShipmentLoadedComplete;
 
         /// <summary>
         /// Constructor
@@ -223,7 +227,7 @@ namespace ShipWorks.OrderLookup
             get => totalCost;
             set => handler.Set(nameof(TotalCost), ref totalCost, value, true);
         }
-
+        
         /// <summary>
         /// Invoked when a property on the order object changes
         /// </summary>
@@ -370,6 +374,7 @@ namespace ShipWorks.OrderLookup
             {
                 ShipmentLoaded?.Invoke(this, EventArgs.Empty);
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+                ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -574,6 +579,7 @@ namespace ShipWorks.OrderLookup
 
             ShipmentLoaded?.Invoke(this, EventArgs.Empty);
             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
+            ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

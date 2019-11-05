@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -24,8 +26,6 @@ namespace ShipWorks.Actions.Tasks.Common
     {
         private readonly IOrderLoader orderLoader;
         private readonly IShipmentFactory shipmentFactory;
-        private readonly BackgroundAsyncMessageHelper messageHelper;
-        private readonly Func<IAsyncMessageHelper, IShipmentProcessor> shipmentProcessorFactory;
         private readonly Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory;
 
         /// <summary>
@@ -38,14 +38,10 @@ namespace ShipWorks.Actions.Tasks.Common
         /// </summary>
         public CreateLabelTask(IOrderLoader orderLoader,
             IShipmentFactory shipmentFactory,
-            BackgroundAsyncMessageHelper messageHelper,
-            Func<IAsyncMessageHelper, IShipmentProcessor> shipmentProcessorFactory,
             Func<ICarrierConfigurationShipmentRefresher> shipmentRefresherFactory)
         {
             this.orderLoader = orderLoader;
             this.shipmentFactory = shipmentFactory;
-            this.messageHelper = messageHelper;
-            this.shipmentProcessorFactory = shipmentProcessorFactory;
             this.shipmentRefresherFactory = shipmentRefresherFactory;
         }
 
@@ -173,16 +169,29 @@ namespace ShipWorks.Actions.Tasks.Common
         {
             IEnumerable<ProcessShipmentResult> results;
 
-            using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShipmentProcessorDependencies))
             {
-                refresher.RetrieveShipments = () => shipmentsToProcess;
+                var shipmentProcessor = lifetimeScope.Resolve<IShipmentProcessor>();
 
-                var shipmentProcessor = shipmentProcessorFactory(messageHelper);
+                using (ICarrierConfigurationShipmentRefresher refresher = shipmentRefresherFactory())
+                {
+                    refresher.RetrieveShipments = () => shipmentsToProcess;
 
-                results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+                    results = await shipmentProcessor.Process(shipmentsToProcess, refresher, null, null);
+                }
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Override the IAsyncMessageHelper to use the background implementation
+        /// </summary>
+        private void ConfigureShipmentProcessorDependencies(ContainerBuilder builder)
+        {
+            builder.RegisterType<BackgroundAsyncMessageHelper>()
+                .AsSelf()
+                .As<IAsyncMessageHelper>();
         }
     }
 }

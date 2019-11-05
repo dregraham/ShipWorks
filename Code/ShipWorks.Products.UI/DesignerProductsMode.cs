@@ -71,6 +71,8 @@ namespace ShipWorks.Products.UI
         public ICommand DeactivateProductCommand => throw new NotImplementedException();
 
         public ICommand AddProduct => throw new NotImplementedException();
+        public ICommand ImportProducts => throw new NotImplementedException();
+        public ICommand ExportProducts => throw new NotImplementedException();
         public ICommand RefreshProducts => throw new NotImplementedException();
         public ICommand EditProductVariant => throw new NotImplementedException();
         public ICommand SelectedProductsChanged => throw new NotImplementedException();
@@ -95,6 +97,16 @@ namespace ShipWorks.Products.UI
         public void Initialize(Action<Control> addControl, Action<Control> removeControl)
         {
             throw new NotImplementedException();
+        }
+
+
+        /// <summary>
+        /// Non-invokable implementation of the ProductSelectionChanged event handler
+        /// </summary>
+        public event ProductSelectionChangedEventHandler ProductSelectionChanged
+        {
+            add { throw new NotImplementedException(); }
+            remove { }
         }
     }
 

@@ -118,6 +118,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                     {
                         using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                         {
+                            adapter.KeepConnectionOpen = true;
                             ClearNonActiveShipmentData(shipment, adapter);
                         }
                     }

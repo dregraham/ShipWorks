@@ -12,7 +12,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Get the order
         /// </summary>
-        Task<OrderEntity> GetOrder(long orderID);
+        Task<OrderEntity> GetOrder(long orderID, bool showProgressDialog);
 
         /// <summary>
         /// Get the orders order id matching the order number

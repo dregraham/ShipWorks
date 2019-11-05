@@ -665,7 +665,6 @@ namespace ShipWorks.Data.Controls
 
                     newAddress.AddressValidationSuggestionCount = 0;
                     newAddress.AddressValidationError = string.Empty;
-                    lastValidatedAddress = null;
                 }
 
                 if (hasOneEntity && lastValidatedAddress != null)

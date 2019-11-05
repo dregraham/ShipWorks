@@ -66,7 +66,6 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
         <Grid IsSharedSizeScope="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -74,31 +73,6 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <UniformGrid
-                Grid.Row="0"
-                Columns="7"
-                Rows="1">
-                <Button
-                    Command="{Binding AddProduct}"
-                    Content="Add"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding CopyAsVariant}"
-                    Content="Create Variant"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding EditProductVariantButton}"
-                    Content="Edit"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ImportProducts}"
-                    Content="Import"
-                    Style="{StaticResource PrimaryButton}" />
-                <Button
-                    Command="{Binding ExportProducts}"
-                    Content="Export"
-                    Style="{StaticResource PrimaryButton}" />
-            </UniformGrid>
             <syncfusion:SfTextBoxExt
                 Grid.Column="3"
                 MinWidth="300"
@@ -365,9 +339,6 @@
             </Button>
             <TextBlock Grid.Column="1" Margin="16,0">
                 Products:<Run Text="{Binding Products.Data.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
-            </TextBlock>
-            <TextBlock Grid.Column="2">
-                Selected:<Run Text="{Binding SelectedProductIDs.Count, Mode=OneWay, StringFormat='{}{0:#,##0}'}" />
             </TextBlock>
             <CheckBox
                 Grid.Column="3"

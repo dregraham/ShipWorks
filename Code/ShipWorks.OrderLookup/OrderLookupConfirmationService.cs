@@ -68,10 +68,12 @@ namespace ShipWorks.OrderLookup
 
             foreach (long orderID in orderIDs)
             {
-                result.Add(await repository.GetOrder(orderID));
+                result.Add(await repository.GetOrder(orderID, false));
             }
 
-            return result;
+            // the repo from above returns null for orders it fails to load
+            // omit those because it will cause shipworks to crash
+            return result.Where(o => o != null).ToList();
         }
     }
 }

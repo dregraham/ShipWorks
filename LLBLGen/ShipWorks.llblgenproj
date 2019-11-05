@@ -588,6 +588,7 @@
           <Field Name="AmazonMerchantID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
+          <Field Name="DownloadDaysBack" Type="byte" Precision="3" FieldIndex="8" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
           <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
@@ -3325,6 +3326,7 @@
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
+          <Field Name="ScanToShipAutoAdvance" Type="bool" FieldIndex="24" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
@@ -5140,6 +5142,7 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
+                    <Field Name="DownloadDaysBack" Ordinal="10" DbType="22" Precision="3" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -9305,6 +9308,7 @@
                     <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="ScanToShipAutoAdvance" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -11372,6 +11376,7 @@
             <FieldMapping FieldName="AmazonMerchantID" TargetFieldName="AmazonMerchantID" />
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
+            <FieldMapping FieldName="DownloadDaysBack" TargetFieldName="DownloadDaysBack" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
             <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
@@ -14156,6 +14161,7 @@
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
+            <FieldMapping FieldName="ScanToShipAutoAdvance" TargetFieldName="ScanToShipAutoAdvance" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />

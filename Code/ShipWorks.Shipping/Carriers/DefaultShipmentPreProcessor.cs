@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers
     public class DefaultShipmentPreProcessor : IShipmentPreProcessor, IDefaultShipmentPreProcessor
     {
         private readonly ICarrierAccountRetrieverFactory accountRetrieverFactory;
-        private readonly IMessageHelper messageHelper;
+        private readonly IAsyncMessageHelper messageHelper;
         private readonly IShippingManager shippingManager;
         private readonly IShippingSettings shippingSettings;
         private readonly IShipmentTypeSetupWizardFactory createSetupWizard;
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers
             IShipmentTypeManager shipmentTypeManager,
             IShippingSettings shippingSettings,
             ICarrierAccountRetrieverFactory accountRetrieverFactory,
-            IMessageHelper messageHelper,
+            IAsyncMessageHelper messageHelper,
             IShipmentTypeSetupWizardFactory createSetupWizard,
             ISqlAdapterFactory sqlAdapterFactory)
         {
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers
         /// provided when trying to process a shipment without any accounts for this shipment type in ShipWorks,
         /// otherwise the shipment is unchanged.
         /// </summary>
-        public virtual IEnumerable<ShipmentEntity> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
+        public virtual async Task<IEnumerable<ShipmentEntity>> Run(ShipmentEntity shipment, RateResult selectedRate, Action configurationCallback)
         {
             ICarrierAccountRetriever accountRetriever = accountRetrieverFactory.Create(shipment.ShipmentTypeCode);
 
@@ -82,10 +82,12 @@ namespace ShipWorks.Shipping.Carriers
             }
 
             // Invoke the counter rates callback
-            if (CounterRatesProcessing(shipment, configurationCallback) != DialogResult.OK)
+            var counterRatesResult = await CounterRatesProcessing(shipment, configurationCallback).ConfigureAwait(true);
+
+            if (counterRatesResult != DialogResult.OK)
             {
-                // The user canceled, so we need to stop processing
-                return null;
+                // The user didn't add an account, so add an error to this shipment
+                throw new ShippingException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
             }
 
             // The user created an account, so try to grab the account and use it
@@ -98,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers
                 ICarrierAccount carrierAccount = accountRetriever.AccountsReadOnly.FirstOrDefault();
                 if (carrierAccount == null)
                 {
-                    throw new CarrierException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
+                    throw new ShippingException($"An account for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)} must be created to process this shipment.");
                 }
 
                 carrierAccount.ApplyTo(shipment);
@@ -129,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers
         /// accounts setup, and we need to provide the user with a way to sign up for the carrier.
         /// </summary>
         /// <returns></returns>
-        private DialogResult CounterRatesProcessing(ShipmentEntity shipment, Action configurationCallback)
+        private async Task<DialogResult> CounterRatesProcessing(ShipmentEntity shipment, Action configurationCallback)
         {
             // This is for a specific shipment type, so we're always going to need to show the wizard
             // since the user explicitly chose to process with this provider
@@ -140,11 +142,10 @@ namespace ShipWorks.Shipping.Carriers
             // If this shipment type is not allowed to have new registrations, cancel out.
             if (!shipmentType.IsAccountRegistrationAllowed)
             {
-                messageHelper.ShowWarning($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}");
-                return DialogResult.Cancel;
+                throw new ShippingException($"Account registration is disabled for {EnumHelper.GetDescription(shipment.ShipmentTypeCode)}");
             }
 
-            result = messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing));
+            result = await messageHelper.ShowDialog(() => createSetupWizard.Create(shipment.ShipmentTypeCode, OpenedFromSource.Processing)).ConfigureAwait(true);
 
             if (result == DialogResult.OK)
             {
