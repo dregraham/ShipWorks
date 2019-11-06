@@ -58,15 +58,20 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             OriginalOrderID = source.OriginalOrderID;
             Length = source.Length;
             Width = source.Width;
-            Height = source.Height;
             Brand = source.Brand;
-            MPN = source.MPN;
+            Height = source.Height;
             Custom1 = source.Custom1;
+            MPN = source.MPN;
             Custom2 = source.Custom2;
             Custom3 = source.Custom3;
             Custom4 = source.Custom4;
             Custom5 = source.Custom5;
+            Custom6 = source.Custom6;
             HubItemID = source.HubItemID;
+            Custom7 = source.Custom7;
+            Custom8 = source.Custom8;
+            Custom9 = source.Custom9;
+            Custom10 = source.Custom10;
             
             
             Order = (IOrderEntity) source.Order?.AsReadOnly(objectMap);
@@ -210,30 +215,30 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Decimal Width { get; }
-        /// <summary> The Height property of the Entity OrderItem<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "OrderItem"."Height"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Decimal Height { get; }
         /// <summary> The Brand property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Brand"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Brand { get; }
-        /// <summary> The MPN property of the Entity OrderItem<br/><br/>
+        /// <summary> The Height property of the Entity OrderItem<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "OrderItem"."MPN"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// <remarks>Mapped on table field: "OrderItem"."Height"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String MPN { get; }
+        public System.Decimal Height { get; }
         /// <summary> The Custom1 property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Custom1"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Custom1 { get; }
+        /// <summary> The MPN property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."MPN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String MPN { get; }
         /// <summary> The Custom2 property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."Custom2"<br/>
@@ -258,12 +263,42 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Custom5 { get; }
+        /// <summary> The Custom6 property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Custom6"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom6 { get; }
         /// <summary> The HubItemID property of the Entity OrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "OrderItem"."HubItemID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String HubItemID { get; }
+        /// <summary> The Custom7 property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Custom7"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom7 { get; }
+        /// <summary> The Custom8 property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Custom8"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom8 { get; }
+        /// <summary> The Custom9 property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Custom9"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom9 { get; }
+        /// <summary> The Custom10 property of the Entity OrderItem<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OrderItem"."Custom10"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String Custom10 { get; }
         
         
         public IOrderEntity Order { get; }

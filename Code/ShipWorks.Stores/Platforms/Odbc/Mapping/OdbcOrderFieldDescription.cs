@@ -48,6 +48,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         [Description("Custom Field 5")]
         Custom5,
 
+        [Description("Custom Field 6")]
+        Custom6,
+
+        [Description("Custom Field 7")]
+        Custom7,
+
+        [Description("Custom Field 8")]
+        Custom8,
+
+        [Description("Custom Field 9")]
+        Custom9,
+
+        [Description("Custom Field 10")]
+        Custom10,
+
         [Description("Customer Number")]
         CustomerID,
 
@@ -175,6 +190,21 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
         ItemCustom4,
 
         [Description("Custom Field 5")]
-        ItemCustom5
+        ItemCustom5,
+
+        [Description("Custom Field 6")]
+        ItemCustom6,
+
+        [Description("Custom Field 7")]
+        ItemCustom7,
+
+        [Description("Custom Field 8")]
+        ItemCustom8,
+
+        [Description("Custom Field 9")]
+        ItemCustom9,
+
+        [Description("Custom Field 10")]
+        ItemCustom10
     }
 }

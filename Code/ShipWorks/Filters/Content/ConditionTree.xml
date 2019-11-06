@@ -83,6 +83,12 @@
         <Condition identifier="Order.Custom3" displayAs="Custom Field 3" />
         <Condition identifier="Order.Custom4" displayAs="Custom Field 4" />
         <Condition identifier="Order.Custom5" displayAs="Custom Field 5" />
+        <Condition identifier="Order.Custom6" displayAs="Custom Field 6" />
+        <Condition identifier="Order.Custom7" displayAs="Custom Field 7" />
+        <Condition identifier="Order.Custom8" displayAs="Custom Field 8" />
+        <Condition identifier="Order.Custom9" displayAs="Custom Field 9" />
+        <Condition identifier="Order.Custom10" displayAs="Custom Field 10" />
+        <Separator />
         <Separator />
         <Condition identifier="Order.LocalStatus" />
         <Condition identifier="Order.OnlineStatus" />
@@ -357,6 +363,11 @@
       <Condition identifier="OrderItem.Custom3" displayAs="Custom Field 3" />
       <Condition identifier="OrderItem.Custom4" displayAs="Custom Field 4" />
       <Condition identifier="OrderItem.Custom5" displayAs="Custom Field 5" />
+      <Condition identifier="OrderItem.Custom6" displayAs="Custom Field 6" />
+      <Condition identifier="OrderItem.Custom7" displayAs="Custom Field 7" />
+      <Condition identifier="OrderItem.Custom8" displayAs="Custom Field 8" />
+      <Condition identifier="OrderItem.Custom9" displayAs="Custom Field 9" />
+      <Condition identifier="OrderItem.Custom10" displayAs="Custom Field 10" />
       <Separator/>
       <Condition identifier="BigCommerceOrderItem.IsDigitalItem" />
       <Condition identifier="BigCommerceOrderItem.EventDate" />

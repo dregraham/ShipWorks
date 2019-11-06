@@ -49,6 +49,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	            new ShipWorksOdbcMappableField(OrderFields.Custom3, OdbcOrderFieldDescription.Custom3, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.Custom4, OdbcOrderFieldDescription.Custom4, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderFields.Custom5, OdbcOrderFieldDescription.Custom5, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.Custom6, OdbcOrderFieldDescription.Custom6, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.Custom7, OdbcOrderFieldDescription.Custom7, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.Custom8, OdbcOrderFieldDescription.Custom8, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.Custom9, OdbcOrderFieldDescription.Custom9, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderFields.Custom10, OdbcOrderFieldDescription.Custom10, OdbcFieldValueResolutionStrategy.Default),
                 new ShipWorksOdbcMappableField(OrderFields.OnlineCustomerID, OdbcOrderFieldDescription.CustomerID, OdbcFieldValueResolutionStrategy.Default),
 
                 // Notes
@@ -120,7 +125,12 @@ namespace ShipWorks.Stores.Platforms.Odbc.Mapping
 	            new ShipWorksOdbcMappableField(OrderItemFields.Custom2, OdbcOrderFieldDescription.Custom2, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderItemFields.Custom3, OdbcOrderFieldDescription.Custom3, OdbcFieldValueResolutionStrategy.Default),
 	            new ShipWorksOdbcMappableField(OrderItemFields.Custom4, OdbcOrderFieldDescription.Custom4, OdbcFieldValueResolutionStrategy.Default),
-	            new ShipWorksOdbcMappableField(OrderItemFields.Custom5, OdbcOrderFieldDescription.Custom5, OdbcFieldValueResolutionStrategy.Default)
+	            new ShipWorksOdbcMappableField(OrderItemFields.Custom5, OdbcOrderFieldDescription.Custom5, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Custom6, OdbcOrderFieldDescription.Custom6, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Custom7, OdbcOrderFieldDescription.Custom7, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Custom8, OdbcOrderFieldDescription.Custom8, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Custom9, OdbcOrderFieldDescription.Custom9, OdbcFieldValueResolutionStrategy.Default),
+                new ShipWorksOdbcMappableField(OrderItemFields.Custom10, OdbcOrderFieldDescription.Custom10, OdbcFieldValueResolutionStrategy.Default)
             };
 
 	        return fields;

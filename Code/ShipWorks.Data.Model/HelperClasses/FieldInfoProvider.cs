@@ -1659,7 +1659,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)FilterNodeContentFieldIndex.Status, 0, 0, 5);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "InitialCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.InitialCalculation, 2147483647, 0, 0);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "UpdateCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.UpdateCalculation, 2147483647, 0, 0);
-			this.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 100, 0, 0);
+			this.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 150, 0, 0);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			this.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
@@ -2365,6 +2365,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderEntity", "Verified", typeof(System.Boolean), false, false, false, false,  (int)OrderFieldIndex.Verified, 0, 0, 0);
 			this.AddElementFieldInfo("OrderEntity", "VerifiedBy", typeof(Nullable<System.Int64>), false, false, false, true,  (int)OrderFieldIndex.VerifiedBy, 0, 0, 19);
 			this.AddElementFieldInfo("OrderEntity", "VerifiedDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)OrderFieldIndex.VerifiedDate, 0, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom6", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom6, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom7", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom7, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom8", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom8, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom9", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom9, 50, 0, 0);
+			this.AddElementFieldInfo("OrderEntity", "Custom10", typeof(System.String), false, false, false, false,  (int)OrderFieldIndex.Custom10, 50, 0, 0);
 		}
 		/// <summary>Inits OrderChargeEntity's FieldInfo objects</summary>
 		private void InitOrderChargeEntityInfos()
@@ -2404,15 +2409,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OrderItemEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)OrderItemFieldIndex.OriginalOrderID, 0, 0, 19);
 			this.AddElementFieldInfo("OrderItemEntity", "Length", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Length, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Width", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Width, 0, 2, 10);
-			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Brand", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Brand, 50, 0, 0);
-			this.AddElementFieldInfo("OrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.MPN, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Height", typeof(System.Decimal), false, false, false, false,  (int)OrderItemFieldIndex.Height, 0, 2, 10);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom1", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom1, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "MPN", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.MPN, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom2", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom2, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom3", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom3, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom4", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom4, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "Custom5", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom5, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom6", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom6, 50, 0, 0);
 			this.AddElementFieldInfo("OrderItemEntity", "HubItemID", typeof(System.String), false, false, false, true,  (int)OrderItemFieldIndex.HubItemID, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom7", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom7, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom8", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom8, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom9", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom9, 50, 0, 0);
+			this.AddElementFieldInfo("OrderItemEntity", "Custom10", typeof(System.String), false, false, false, false,  (int)OrderItemFieldIndex.Custom10, 50, 0, 0);
 		}
 		/// <summary>Inits OrderItemAttributeEntity's FieldInfo objects</summary>
 		private void InitOrderItemAttributeEntityInfos()

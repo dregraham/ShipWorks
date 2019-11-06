@@ -107,6 +107,11 @@ namespace ShipWorks.Warehouse
             orderEntity.Custom3 = warehouseOrder.Custom3;
             orderEntity.Custom4 = warehouseOrder.Custom4;
             orderEntity.Custom5 = warehouseOrder.Custom5;
+            orderEntity.Custom6 = warehouseOrder.Custom6;
+            orderEntity.Custom7 = warehouseOrder.Custom7;
+            orderEntity.Custom8 = warehouseOrder.Custom8;
+            orderEntity.Custom9 = warehouseOrder.Custom9;
+            orderEntity.Custom10 = warehouseOrder.Custom10;
         }
 
         /// <summary>
@@ -199,16 +204,28 @@ namespace ShipWorks.Warehouse
             itemEntity.Width = warehouseItem.Width;
             itemEntity.Height = warehouseItem.Height;
 
-            itemEntity.Custom1 = warehouseItem.Custom1;
-            itemEntity.Custom2 = warehouseItem.Custom2;
-            itemEntity.Custom3 = warehouseItem.Custom3;
-            itemEntity.Custom4 = warehouseItem.Custom4;
-            itemEntity.Custom5 = warehouseItem.Custom5;
-
+            LoadCustomItems(itemEntity, warehouseItem);
             LoadItemAttributes(itemEntity, warehouseItem);
-
             LoadStoreItemDetails(store, itemEntity, warehouseItem);
         }
+
+        /// <summary>
+        /// Load custom items info
+        /// </summary>
+        private void LoadCustomItems(OrderItemEntity item, WarehouseOrderItem warehouseItem)
+        {
+            item.Custom1 = warehouseItem.Custom1;
+            item.Custom2 = warehouseItem.Custom2;
+            item.Custom3 = warehouseItem.Custom3;
+            item.Custom4 = warehouseItem.Custom4;
+            item.Custom5 = warehouseItem.Custom5;
+            item.Custom6 = warehouseItem.Custom6;
+            item.Custom7 = warehouseItem.Custom7;
+            item.Custom8 = warehouseItem.Custom8;
+            item.Custom9 = warehouseItem.Custom9;
+            item.Custom10 = warehouseItem.Custom10;
+        }
+
 
         /// <summary>
         /// Load item attributes from the warehouse item into the item entity

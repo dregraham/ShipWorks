@@ -55,6 +55,11 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("CustomField3", () => Order.Custom3);
             AddElement("CustomField4", () => Order.Custom4);
             AddElement("CustomField5", () => Order.Custom5);
+            AddElement("CustomField6", () => Order.Custom6);
+            AddElement("CustomField7", () => Order.Custom7);
+            AddElement("CustomField8", () => Order.Custom8);
+            AddElement("CustomField9", () => Order.Custom9);
+            AddElement("CustomField10", () => Order.Custom10);
 
             AddElement("Address", new AddressOutline(context, "ship", true), () => new PersonAdapter(Order, "Ship"));
             AddElement("Address", new AddressOutline(context, "bill", true), () => new PersonAdapter(Order, "Bill"));

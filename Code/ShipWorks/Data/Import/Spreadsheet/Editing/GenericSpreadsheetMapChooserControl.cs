@@ -12,6 +12,7 @@ using System.Web.Script.Serialization;
 using ShipWorks.Data.Import.Spreadsheet;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv.Editing;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
+using Interapptive.Shared.Metrics;
 
 namespace ShipWorks.Data.Import.Spreadsheet.Editing
 {
@@ -138,6 +139,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
             if (newMap != null)
             {
                 this.Map = newMap;
+                CollectTelemetry();
             }
         }
 
@@ -149,6 +151,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
             if (EditMap(Map))
             {
                 UpdateUI();
+                CollectTelemetry();
             }
         }
 
@@ -167,6 +170,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
                         if (loadedMap != null)
                         {
                             this.Map = loadedMap;
+                            CollectTelemetry();
                         }
                     }
                     catch (IOException ex)
@@ -208,6 +212,51 @@ namespace ShipWorks.Data.Import.Spreadsheet.Editing
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Collect Telemetry Data
+        /// </summary>
+        private void CollectTelemetry()
+        {
+            using (ITrackedEvent trackedEvent = new TrackedEvent("Import.CustomField.Count"))
+            {
+                try
+                {
+                    trackedEvent.AddProperty("CustomField.Count", GetCustomColumnUsedCount().ToString());
+                }
+                catch (Exception ex)
+                {
+                    trackedEvent.AddProperty("Error", ex.Message);
+                }
+            }          
+        }
+
+        /// <summary>
+        /// Get the number of used Custom Columns 
+        /// </summary>
+        private int GetCustomColumnUsedCount()
+        {
+            int count = 0;
+            List<string> knownFields = new List<string>();
+            foreach(var m in map.Mappings)
+            {
+                if(m.TargetField.Identifier.Contains("Order.Custom"))
+                {
+                    count++;
+                }
+
+                else if (m.TargetField.Identifier.Contains("Item.Custom"))
+                {
+                    var id = m.TargetField.Identifier.Substring(0, m.TargetField.Identifier.Length - 2);
+                    if (!knownFields.Contains(id))
+                    {
+                        count++;
+                        knownFields.Add(id);
+                    }
+                }
+            }
+            return count;
         }
     }
 }

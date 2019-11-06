@@ -447,13 +447,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Width", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("Height", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Brand", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("MPN", fieldHashtable);
+			_fieldsCustomProperties.Add("Height", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("MPN", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom2", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -463,7 +463,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Custom5", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom6", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubItemID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom7", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom8", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom9", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom10", fieldHashtable);
 		}
 		#endregion
 
@@ -789,16 +799,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderItemFieldIndex.Width, value); }
 		}
 
-		/// <summary> The Height property of the Entity OrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OrderItem"."Height"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Decimal Height
-		{
-			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Height, true); }
-			set	{ SetValue((int)OrderItemFieldIndex.Height, value); }
-		}
-
 		/// <summary> The Brand property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."Brand"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
@@ -809,14 +809,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderItemFieldIndex.Brand, value); }
 		}
 
-		/// <summary> The MPN property of the Entity OrderItem<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "OrderItem"."MPN"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <summary> The Height property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Height"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Decimal, 10, 2, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String MPN
+		public virtual System.Decimal Height
 		{
-			get { return (System.String)GetValue((int)OrderItemFieldIndex.MPN, true); }
-			set	{ SetValue((int)OrderItemFieldIndex.MPN, value); }
+			get { return (System.Decimal)GetValue((int)OrderItemFieldIndex.Height, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Height, value); }
 		}
 
 		/// <summary> The Custom1 property of the Entity OrderItem<br/><br/></summary>
@@ -827,6 +827,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom1, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.Custom1, value); }
+		}
+
+		/// <summary> The MPN property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."MPN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String MPN
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.MPN, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.MPN, value); }
 		}
 
 		/// <summary> The Custom2 property of the Entity OrderItem<br/><br/></summary>
@@ -869,6 +879,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)OrderItemFieldIndex.Custom5, value); }
 		}
 
+		/// <summary> The Custom6 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom6"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom6
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom6, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom6, value); }
+		}
+
 		/// <summary> The HubItemID property of the Entity OrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "OrderItem"."HubItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
@@ -877,6 +897,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)OrderItemFieldIndex.HubItemID, true); }
 			set	{ SetValue((int)OrderItemFieldIndex.HubItemID, value); }
+		}
+
+		/// <summary> The Custom7 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom7"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom7
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom7, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom7, value); }
+		}
+
+		/// <summary> The Custom8 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom8"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom8
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom8, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom8, value); }
+		}
+
+		/// <summary> The Custom9 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom9"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom9
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom9, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom9, value); }
+		}
+
+		/// <summary> The Custom10 property of the Entity OrderItem<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "OrderItem"."Custom10"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom10
+		{
+			get { return (System.String)GetValue((int)OrderItemFieldIndex.Custom10, true); }
+			set	{ SetValue((int)OrderItemFieldIndex.Custom10, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderItemAttributeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -1,7 +1,3 @@
-PRINT N'Altering [dbo].[FilterNodeContent]'
-GO
-ALTER TABLE [FilterNodeContent] ALTER COLUMN ColumnMask VARBINARY(150) NOT NULL
-GO
 PRINT N'Altering [dbo].[Order]'
 GO
 IF COL_LENGTH('Order','Custom6') IS NULL AND 
