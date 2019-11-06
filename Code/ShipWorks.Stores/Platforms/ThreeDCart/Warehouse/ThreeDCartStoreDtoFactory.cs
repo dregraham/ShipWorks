@@ -34,6 +34,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Warehouse
             store.Url = storeEntity.StoreUrl;
             store.Token = await helpers.EncryptSecret(storeEntity.ApiUserKey).ConfigureAwait(false);
             store.DownloadNumberOfDaysBack = storeEntity.DownloadModifiedNumberOfDaysBack;
+            store.InitialDownloadDays = storeEntity.InitialDownloadDays ?? 30;
 
             return store;
         }

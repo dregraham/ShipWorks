@@ -30,5 +30,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Warehouse
         /// How far back should we download
         /// </summary>
         public int DownloadNumberOfDaysBack { get; set; }
+
+        /// <summary>
+        /// How far back should we download for the initial download
+        /// </summary>
+        public int InitialDownloadDays { get; set; }
     }
 }
