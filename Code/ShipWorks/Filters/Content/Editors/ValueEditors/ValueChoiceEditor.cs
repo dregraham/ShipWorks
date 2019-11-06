@@ -15,7 +15,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
     /// <summary>
     /// A value editor that is for ValueChoiceEditor based conditions
     /// </summary>
-    public partial class ValueChoiceEditor<T> : ValueEditor where T: struct
+    public partial class ValueChoiceEditor<T> : ValueEditor
     {
         ValueChoiceCondition<T> condition;
 

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.Custom;
-using ShipWorks.Shipping.Carriers;
 
-namespace ShipWorks.Shipping.Services.Accounts
+namespace ShipWorks.Shipping.Carriers
 {
     /// <summary>
     /// Provides an IObservable collection of accounts for the shipment type

@@ -471,6 +471,7 @@
       <Condition identifier="Shipment.VoidedDate" />
       <Condition identifier="Shipment.VoidedUser" />
       <Condition identifier="Shipment.ReturnStatus" />
+      <Condition identifier="Shipment.Account" displayAs="Account"/>
       <Separator/>
       <Condition identifier="Shipment.Cost" displayAs="Cost" />
       <Condition identifier="Shipment.Tracking" displayAs="Tracking Number" />

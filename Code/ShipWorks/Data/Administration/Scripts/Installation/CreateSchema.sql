@@ -1291,7 +1291,8 @@ CREATE TABLE [dbo].[Shipment]
 [ApplyReturnProfile] [bit] NOT NULL CONSTRAINT [DF_Shipment_ApplyReturnProfile] DEFAULT ((0)),
 [ReturnProfileID] [bigint] NOT NULL CONSTRAINT [DF_Shipment_ReturnProfileID] DEFAULT ((-1)),
 [LoggedShippedToHub] [bit] NULL,
-[LoggedVoidToHub] [bit] NULL
+[LoggedVoidToHub] [bit] NULL,
+[CarrierAccount][nvarchar](25) NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1305,6 +1306,10 @@ GO
 PRINT N'Creating index [IX_SWDefault_Shipment_ProcessedOrderID] on [dbo].[Shipment]'
 GO
 CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_ProcessedOrderID] ON [dbo].[Shipment] ([Processed] DESC, [ProcessedDate]) INCLUDE ([OrderID], [Voided])
+GO
+PRINT N'Creating index [IX_SWDefault_Shipment_CarrierAccount] on [dbo].[Shipment]'
+GO
+CREATE NONCLUSTERED INDEX [IX_SWDefault_Shipment_CarrierAccount] ON [dbo].[Shipment] ([CarrierAccount])
 GO
 PRINT N'Creating Shipment.[IX_SWDefault_Shipment_ProcessedVoidedOnlineShipmentIDShipmentType] index'
 GO

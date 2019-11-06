@@ -2595,6 +2595,7 @@
           <Field Name="BestRateEvents" Type="byte" FieldIndex="66" />
           <Field Name="BilledType" Type="int" FieldIndex="71" />
           <Field Name="BilledWeight" Type="double" FieldIndex="72" />
+          <Field Name="CarrierAccount" Type="string" IsOptional="true" MaxLength="25" FieldIndex="79" />
           <Field Name="ContentWeight" Type="double" FieldIndex="4" />
           <Field Name="CustomsGenerated" Type="bool" FieldIndex="17" />
           <Field Name="CustomsValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
@@ -4595,7 +4596,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-24T18:01:22.6975293Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-28T19:32:22.4332839Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8455,6 +8456,7 @@
                     <Field Name="ReturnProfileID" Ordinal="77" HasDefaultValue="true" DefaultValue="(-1)" DbType="0" Precision="19" />
                     <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
                     <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
+                    <Field Name="CarrierAccount" Ordinal="80" IsOptional="true" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -13439,6 +13441,7 @@
             <FieldMapping FieldName="BestRateEvents" TargetFieldName="BestRateEvents" />
             <FieldMapping FieldName="BilledType" TargetFieldName="BilledType" />
             <FieldMapping FieldName="BilledWeight" TargetFieldName="BilledWeight" />
+            <FieldMapping FieldName="CarrierAccount" TargetFieldName="CarrierAccount" />
             <FieldMapping FieldName="ContentWeight" TargetFieldName="ContentWeight" />
             <FieldMapping FieldName="CustomsGenerated" TargetFieldName="CustomsGenerated" />
             <FieldMapping FieldName="CustomsValue" TargetFieldName="CustomsValue" />
