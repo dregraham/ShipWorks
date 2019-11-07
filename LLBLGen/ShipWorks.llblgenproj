@@ -2478,6 +2478,11 @@
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="RakutenOrder" ObjectID="a13acdfa-94f8-460d-99a2-59eb5b4e14a6" InheritanceType="2">
+        <Fields>
+          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
         <Fields>
           <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
@@ -4524,6 +4529,7 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":RakutenStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":SearsOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":SearsOrderItem" />
@@ -4605,7 +4611,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-07T20:33:47.9904921Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-07T21:34:57.319024Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8052,6 +8058,13 @@
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
                   </Fields>
                 </Table>
+                <Table Name="RakutenOrder">
+                  <PkConstraintName Name="PK_RakutenOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
+                  </Fields>
+                </Table>
                 <Table Name="RakutenStore">
                   <PkConstraintName Name="PK_RakutenStore" />
                   <Fields>
@@ -10614,6 +10627,11 @@
             <ForeignKeyConstraint Name="dbo:ProStoresStore:FK_ProStoresStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ProStoresStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenOrder:FK_RakutenOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
@@ -13349,6 +13367,12 @@
             <FieldMapping FieldName="ShortName" TargetFieldName="ShortName" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenOrder" TargetName="ShipWorksLocal:dbo:RakutenOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">

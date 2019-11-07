@@ -182,6 +182,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ProStoresOrderEntity": return EntityType.ProStoresOrderEntity;
 				case "ProStoresOrderSearchEntity": return EntityType.ProStoresOrderSearchEntity;
 				case "ProStoresStoreEntity": return EntityType.ProStoresStoreEntity;
+				case "RakutenOrderEntity": return EntityType.RakutenOrderEntity;
 				case "RakutenStoreEntity": return EntityType.RakutenStoreEntity;
 				case "ResourceEntity": return EntityType.ResourceEntity;
 				case "ScanFormBatchEntity": return EntityType.ScanFormBatchEntity;
@@ -365,6 +366,7 @@ namespace ShipWorks.Data.Model.Custom
 				case EntityType.PayPalStoreEntity: return new PayPalStoreRelations();
 				case EntityType.ProStoresOrderEntity: return new ProStoresOrderRelations();
 				case EntityType.ProStoresStoreEntity: return new ProStoresStoreRelations();
+				case EntityType.RakutenOrderEntity: return new RakutenOrderRelations();
 				case EntityType.RakutenStoreEntity: return new RakutenStoreRelations();
 				case EntityType.SearsOrderEntity: return new SearsOrderRelations();
 				case EntityType.SearsOrderItemEntity: return new SearsOrderItemRelations();

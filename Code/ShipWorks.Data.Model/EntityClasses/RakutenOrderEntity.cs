@@ -25,16 +25,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'RakutenStore'.<br/><br/></summary>
+	
+	/// <summary>Entity class which represents the entity 'RakutenOrder'.<br/><br/></summary>
 	[Serializable]
-	public partial class RakutenStoreEntity : StoreEntity
+	public partial class RakutenOrderEntity : OrderEntity
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END	
+		// __LLBLGENPRO_USER_CODE_REGION_END
+			
 	{
 		#region Class Member Declarations
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Statics
@@ -44,67 +47,85 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
+			/// <summary>Member name Customer</summary>
+			public static readonly string Customer = "Customer";
+			/// <summary>Member name Store</summary>
+			public static readonly string Store = "Store";
+			/// <summary>Member name Notes</summary>
+			public static readonly string Notes = "Notes";
+			/// <summary>Member name OrderCharges</summary>
+			public static readonly string OrderCharges = "OrderCharges";
+			/// <summary>Member name OrderItems</summary>
+			public static readonly string OrderItems = "OrderItems";
+			/// <summary>Member name OrderPaymentDetails</summary>
+			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
 			/// <summary>Member name OrderSearch</summary>
 			public static readonly string OrderSearch = "OrderSearch";
+			/// <summary>Member name Shipments</summary>
+			public static readonly string Shipments = "Shipments";
+			/// <summary>Member name ValidatedAddress</summary>
+			public static readonly string ValidatedAddress = "ValidatedAddress";
+			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
+			public static readonly string ShipmentCollectionViaValidatedAddress = "ShipmentCollectionViaValidatedAddress";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static RakutenStoreEntity()
+		static RakutenOrderEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public RakutenStoreEntity()
+		public RakutenOrderEntity()
 		{
 			InitClassEmpty();
-			SetName("RakutenStoreEntity");
+			SetName("RakutenOrderEntity");
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public RakutenStoreEntity(IEntityFields2 fields):base(fields)
+		public RakutenOrderEntity(IEntityFields2 fields):base(fields)
 		{
 			InitClassEmpty();
-			SetName("RakutenStoreEntity");
+			SetName("RakutenOrderEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this RakutenStoreEntity</param>
-		public RakutenStoreEntity(IValidator validator):base(validator)
+		/// <param name="validator">The custom validator object for this RakutenOrderEntity</param>
+		public RakutenOrderEntity(IValidator validator):base(validator)
 		{
 			InitClassEmpty();
-			SetName("RakutenStoreEntity");
+			SetName("RakutenOrderEntity");
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="storeID">PK value for RakutenStore which data should be fetched into this RakutenStore object</param>
+		/// <param name="orderID">PK value for RakutenOrder which data should be fetched into this RakutenOrder object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public RakutenStoreEntity(System.Int64 storeID):base(storeID)
+		public RakutenOrderEntity(System.Int64 orderID):base(orderID)
 		{
 			InitClassEmpty();
 
-			SetName("RakutenStoreEntity");
+			SetName("RakutenOrderEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="storeID">PK value for RakutenStore which data should be fetched into this RakutenStore object</param>
-		/// <param name="validator">The custom validator object for this RakutenStoreEntity</param>
+		/// <param name="orderID">PK value for RakutenOrder which data should be fetched into this RakutenOrder object</param>
+		/// <param name="validator">The custom validator object for this RakutenOrderEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public RakutenStoreEntity(System.Int64 storeID, IValidator validator):base(storeID, validator)
+		public RakutenOrderEntity(System.Int64 orderID, IValidator validator):base(orderID, validator)
 		{
 			InitClassEmpty();
 
-			SetName("RakutenStoreEntity");
+			SetName("RakutenOrderEntity");
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected RakutenStoreEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected RakutenOrderEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -112,6 +133,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -146,7 +168,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			switch(fieldName)
 			{
 				default:
-					toReturn = StoreEntity.GetRelationsForField(fieldName);
+					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -227,7 +249,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter()
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenStoreEntity", false);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenOrderEntity", false);
 		}
 		
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
@@ -236,7 +258,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenStoreEntity", negate);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenOrderEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -250,6 +272,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			base.GetObjectData(info, context);
 		}
 
@@ -259,21 +282,21 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
 		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("RakutenStoreEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("RakutenOrderEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
 		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new RakutenStoreRelations().GetAllRelations();
+			return new RakutenOrderRelations().GetAllRelations();
 		}
 		
 
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(RakutenStoreEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -321,6 +344,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 
@@ -332,33 +356,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AuthKey", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("MarketplaceID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ShopURL", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DownloadStartDate", fieldHashtable);
+			_fieldsCustomProperties.Add("RakutenOrderID", fieldHashtable);
 		}
 		#endregion
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this RakutenStoreEntity</param>
+		/// <param name="validator">The validator object for this RakutenOrderEntity</param>
 		private void InitClassEmpty()
 		{
 			InitClassMembers();
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 
 
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public new static RakutenStoreRelations Relations
+		public new static RakutenOrderRelations Relations
 		{
-			get	{ return new RakutenStoreRelations(); }
+			get	{ return new RakutenOrderRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -392,44 +411,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The AuthKey property of the Entity RakutenStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenStore"."AuthKey"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String AuthKey
-		{
-			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.AuthKey, true); }
-			set	{ SetValue((int)RakutenStoreFieldIndex.AuthKey, value); }
-		}
-
-		/// <summary> The MarketplaceID property of the Entity RakutenStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenStore"."MarketplaceID"<br/>
+		/// <summary> The RakutenOrderID property of the Entity RakutenOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrder"."RakutenOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String MarketplaceID
+		public virtual System.String RakutenOrderID
 		{
-			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.MarketplaceID, true); }
-			set	{ SetValue((int)RakutenStoreFieldIndex.MarketplaceID, value); }
-		}
-
-		/// <summary> The ShopURL property of the Entity RakutenStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenStore"."ShopURL"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShopURL
-		{
-			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.ShopURL, true); }
-			set	{ SetValue((int)RakutenStoreFieldIndex.ShopURL, value); }
-		}
-
-		/// <summary> The DownloadStartDate property of the Entity RakutenStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenStore"."DownloadStartDate"<br/>
-		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.DateTime> DownloadStartDate
-		{
-			get { return (Nullable<System.DateTime>)GetValue((int)RakutenStoreFieldIndex.DownloadStartDate, false); }
-			set	{ SetValue((int)RakutenStoreFieldIndex.DownloadStartDate, value); }
+			get { return (System.String)GetValue((int)RakutenOrderFieldIndex.RakutenOrderID, true); }
+			set	{ SetValue((int)RakutenOrderFieldIndex.RakutenOrderID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -448,7 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.RakutenStoreEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.RakutenOrderEntity; }
 		}
 
 		#endregion
@@ -458,6 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Included code

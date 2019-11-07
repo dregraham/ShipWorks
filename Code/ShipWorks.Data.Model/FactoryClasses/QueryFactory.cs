@@ -1078,6 +1078,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			get { return Create<ProStoresStoreEntity>(); }
 		}
 
+		/// <summary>Creates and returns a new EntityQuery for the RakutenOrder entity</summary>
+		public EntityQuery<RakutenOrderEntity> RakutenOrder
+		{
+			get { return Create<RakutenOrderEntity>(); }
+		}
+
 		/// <summary>Creates and returns a new EntityQuery for the RakutenStore entity</summary>
 		public EntityQuery<RakutenStoreEntity> RakutenStore
 		{

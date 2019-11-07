@@ -10375,6 +10375,200 @@ namespace ShipWorks.Data.Model
 		/// <summary></summary>
 		AmountOfFields
 	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: RakutenOrder.</summary>
+	public enum RakutenOrderFieldIndex
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. Inherited from Order</summary>
+		RowVersion,
+		///<summary>StoreID. Inherited from Order</summary>
+		StoreID,
+		///<summary>CustomerID. Inherited from Order</summary>
+		CustomerID,
+		///<summary>OrderNumber. Inherited from Order</summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. Inherited from Order</summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. Inherited from Order</summary>
+		OrderDate,
+		///<summary>OrderTotal. Inherited from Order</summary>
+		OrderTotal,
+		///<summary>LocalStatus. Inherited from Order</summary>
+		LocalStatus,
+		///<summary>IsManual. Inherited from Order</summary>
+		IsManual,
+		///<summary>OnlineLastModified. Inherited from Order</summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. Inherited from Order</summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. Inherited from Order</summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. Inherited from Order</summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. Inherited from Order</summary>
+		RequestedShipping,
+		///<summary>BillFirstName. Inherited from Order</summary>
+		BillFirstName,
+		///<summary>BillMiddleName. Inherited from Order</summary>
+		BillMiddleName,
+		///<summary>BillLastName. Inherited from Order</summary>
+		BillLastName,
+		///<summary>BillCompany. Inherited from Order</summary>
+		BillCompany,
+		///<summary>BillStreet1. Inherited from Order</summary>
+		BillStreet1,
+		///<summary>BillStreet2. Inherited from Order</summary>
+		BillStreet2,
+		///<summary>BillStreet3. Inherited from Order</summary>
+		BillStreet3,
+		///<summary>BillCity. Inherited from Order</summary>
+		BillCity,
+		///<summary>BillStateProvCode. Inherited from Order</summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. Inherited from Order</summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. Inherited from Order</summary>
+		BillCountryCode,
+		///<summary>BillPhone. Inherited from Order</summary>
+		BillPhone,
+		///<summary>BillFax. Inherited from Order</summary>
+		BillFax,
+		///<summary>BillEmail. Inherited from Order</summary>
+		BillEmail,
+		///<summary>BillWebsite. Inherited from Order</summary>
+		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. Inherited from Order</summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. Inherited from Order</summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. Inherited from Order</summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. Inherited from Order</summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. Inherited from Order</summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. Inherited from Order</summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. Inherited from Order</summary>
+		BillMilitaryAddress,
+		///<summary>ShipFirstName. Inherited from Order</summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. Inherited from Order</summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. Inherited from Order</summary>
+		ShipLastName,
+		///<summary>ShipCompany. Inherited from Order</summary>
+		ShipCompany,
+		///<summary>ShipStreet1. Inherited from Order</summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. Inherited from Order</summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. Inherited from Order</summary>
+		ShipStreet3,
+		///<summary>ShipCity. Inherited from Order</summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. Inherited from Order</summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. Inherited from Order</summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. Inherited from Order</summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. Inherited from Order</summary>
+		ShipPhone,
+		///<summary>ShipFax. Inherited from Order</summary>
+		ShipFax,
+		///<summary>ShipEmail. Inherited from Order</summary>
+		ShipEmail,
+		///<summary>ShipWebsite. Inherited from Order</summary>
+		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. Inherited from Order</summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. Inherited from Order</summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. Inherited from Order</summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. Inherited from Order</summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. Inherited from Order</summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. Inherited from Order</summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. Inherited from Order</summary>
+		ShipMilitaryAddress,
+		///<summary>RollupItemCount. Inherited from Order</summary>
+		RollupItemCount,
+		///<summary>RollupItemName. Inherited from Order</summary>
+		RollupItemName,
+		///<summary>RollupItemCode. Inherited from Order</summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. Inherited from Order</summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. Inherited from Order</summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. Inherited from Order</summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. Inherited from Order</summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. Inherited from Order</summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. Inherited from Order</summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. Inherited from Order</summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. Inherited from Order</summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. Inherited from Order</summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. Inherited from Order</summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. Inherited from Order</summary>
+		ShipSenseRecognitionStatus,
+		///<summary>ShipAddressType. Inherited from Order</summary>
+		ShipAddressType,
+		///<summary>CombineSplitStatus. Inherited from Order</summary>
+		CombineSplitStatus,
+		///<summary>ChannelOrderID. Inherited from Order</summary>
+		ChannelOrderID,
+		///<summary>ShipByDate. Inherited from Order</summary>
+		ShipByDate,
+		///<summary>Custom1. Inherited from Order</summary>
+		Custom1,
+		///<summary>Custom2. Inherited from Order</summary>
+		Custom2,
+		///<summary>Custom3. Inherited from Order</summary>
+		Custom3,
+		///<summary>Custom4. Inherited from Order</summary>
+		Custom4,
+		///<summary>Custom5. Inherited from Order</summary>
+		Custom5,
+		///<summary>HubOrderID. Inherited from Order</summary>
+		HubOrderID,
+		///<summary>HubSequence. Inherited from Order</summary>
+		HubSequence,
+		///<summary>Verified. Inherited from Order</summary>
+		Verified,
+		///<summary>VerifiedBy. Inherited from Order</summary>
+		VerifiedBy,
+		///<summary>VerifiedDate. Inherited from Order</summary>
+		VerifiedDate,
+		///<summary>Custom6. Inherited from Order</summary>
+		Custom6,
+		///<summary>Custom7. Inherited from Order</summary>
+		Custom7,
+		///<summary>Custom8. Inherited from Order</summary>
+		Custom8,
+		///<summary>Custom9. Inherited from Order</summary>
+		Custom9,
+		///<summary>Custom10. Inherited from Order</summary>
+		Custom10,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>RakutenOrderID. </summary>
+		RakutenOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
 	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: RakutenStore.</summary>
 	public enum RakutenStoreFieldIndex
 	{
@@ -14939,6 +15133,8 @@ namespace ShipWorks.Data.Model
 		ProStoresOrderSearchEntity,
 		///<summary>ProStoresStore</summary>
 		ProStoresStoreEntity,
+		///<summary>RakutenOrder</summary>
+		RakutenOrderEntity,
 		///<summary>RakutenStore</summary>
 		RakutenStoreEntity,
 		///<summary>Resource</summary>
