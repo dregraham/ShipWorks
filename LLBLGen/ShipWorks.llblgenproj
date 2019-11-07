@@ -2478,6 +2478,14 @@
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
+        <Fields>
+          <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
+          <Field Name="DownloadStartDate" Type="datetime" IsOptional="true" FieldIndex="3" />
+          <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="ShopURL" Type="string" MaxLength="50" FieldIndex="2" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="Resource" ObjectID="d46aa2e7-b8c5-4c78-b223-79af1f84e6dd">
         <Fields>
           <Field Name="Checksum" Type="byte[]" MaxLength="32" FieldIndex="2" />
@@ -4516,6 +4524,7 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":RakutenStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":SearsOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":SearsOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":SearsStore" />
@@ -4596,7 +4605,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-28T19:32:22.4332839Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-07T20:33:47.9904921Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5152,7 +5161,7 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
-                    <Field Name="DownloadDaysBack" Ordinal="10" DbType="22" Precision="3" />
+                    <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -7576,11 +7585,11 @@
                     </Field>
                     <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
-                    <Field Name="Custom6" Ordinal="88" DbType="12" Length="50" />
-                    <Field Name="Custom7" Ordinal="89" DbType="12" Length="50" />
-                    <Field Name="Custom8" Ordinal="90" DbType="12" Length="50" />
-                    <Field Name="Custom9" Ordinal="91" DbType="12" Length="50" />
-                    <Field Name="Custom10" Ordinal="92" DbType="12" Length="50" />
+                    <Field Name="Custom6" Ordinal="88" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="89" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="90" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="91" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="92" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7646,11 +7655,11 @@
                     <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="HubItemID" Ordinal="32" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="Custom6" Ordinal="33" DbType="12" Length="50" />
-                    <Field Name="Custom7" Ordinal="34" DbType="12" Length="50" />
-                    <Field Name="Custom8" Ordinal="35" DbType="12" Length="50" />
-                    <Field Name="Custom9" Ordinal="36" DbType="12" Length="50" />
-                    <Field Name="Custom10" Ordinal="37" DbType="12" Length="50" />
+                    <Field Name="Custom6" Ordinal="33" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="34" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="35" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="36" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="37" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -8041,6 +8050,16 @@
                     <Field Name="LegacyPrefix" Ordinal="15" DbType="24" Length="30" />
                     <Field Name="LegacyPassword" Ordinal="16" DbType="24" Length="150" />
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="RakutenStore">
+                  <PkConstraintName Name="PK_RakutenStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AuthKey" Ordinal="2" DbType="12" Length="100" />
+                    <Field Name="MarketplaceID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="ShopURL" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="DownloadStartDate" Ordinal="5" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="Resource">
@@ -10595,6 +10614,11 @@
             <ForeignKeyConstraint Name="dbo:ProStoresStore:FK_ProStoresStore_Store">
               <FieldPairs>
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ProStoresStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:RakutenStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Scheduling_CRON_TRIGGERS:FK_Scheduling_CRON_TRIGGERS_Scheduling_TRIGGERS" DeleteRuleAction="1">
@@ -13325,6 +13349,15 @@
             <FieldMapping FieldName="ShortName" TargetFieldName="ShortName" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">
+          <FieldMappings>
+            <FieldMapping FieldName="AuthKey" TargetFieldName="AuthKey" />
+            <FieldMapping FieldName="DownloadStartDate" TargetFieldName="DownloadStartDate" />
+            <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
+            <FieldMapping FieldName="ShopURL" TargetFieldName="ShopURL" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Resource" TargetName="ShipWorksLocal:dbo:Resource">

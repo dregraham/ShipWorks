@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (238 + 2));
+			this.InitClass( (239 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -212,6 +212,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProStoresOrderEntityInfos();
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
+			InitRakutenStoreEntityInfos();
 			InitResourceEntityInfos();
 			InitScanFormBatchEntityInfos();
 			InitSearchEntityInfos();
@@ -2823,6 +2824,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPrefix", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPrefix, 30, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPassword", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPassword, 150, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyCanUpgrade", typeof(System.Boolean), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyCanUpgrade, 0, 0, 0);
+		}
+		/// <summary>Inits RakutenStoreEntity's FieldInfo objects</summary>
+		private void InitRakutenStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(RakutenStoreFieldIndex), "RakutenStoreEntity");
+			this.AddElementFieldInfo("RakutenStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)RakutenStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenStoreEntity", "AuthKey", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.AuthKey, 100, 0, 0);
+			this.AddElementFieldInfo("RakutenStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.MarketplaceID, 50, 0, 0);
+			this.AddElementFieldInfo("RakutenStoreEntity", "ShopURL", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.ShopURL, 50, 0, 0);
+			this.AddElementFieldInfo("RakutenStoreEntity", "DownloadStartDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)RakutenStoreFieldIndex.DownloadStartDate, 0, 0, 0);
 		}
 		/// <summary>Inits ResourceEntity's FieldInfo objects</summary>
 		private void InitResourceEntityInfos()
