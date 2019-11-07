@@ -35,9 +35,14 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Warehouse
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
+            if (!long.TryParse(warehouseOrder.OrderNumber, out long orderNumber))
+            {
+                return GenericResult.FromError<OrderEntity>($"Skipping order because order number {warehouseOrder.OrderNumber} could not be parsed as a number");
+            }
+
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
-                .CreateOrder(new AlphaNumericOrderIdentifier(warehouseOrder.OrderNumber)).ConfigureAwait(false);
+                .CreateOrder(new ThreeDCartOrderIdentifier(orderNumber, warehouseOrder.OrderNumberPrefix, warehouseOrder.OrderNumberPostfix)).ConfigureAwait(false);
 
             if (result.Failure)
             {
