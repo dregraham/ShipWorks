@@ -104,9 +104,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 
             var storeTypeCode = shipment.Order.Store.StoreTypeCode;
 
-            // Due to TOS don't allow SWA for Walmart, eBay or Generic Module stores
-            if (storeTypeCode == StoreTypeCode.Walmart || storeTypeCode == StoreTypeCode.Ebay ||
-                    storeTypeCode == StoreTypeCode.GenericModule)
+            // Due to TOS don't allow SWA for Walmart or eBay
+            if (storeTypeCode == StoreTypeCode.Walmart || storeTypeCode == StoreTypeCode.Ebay)
             {
                 return false;
             }
