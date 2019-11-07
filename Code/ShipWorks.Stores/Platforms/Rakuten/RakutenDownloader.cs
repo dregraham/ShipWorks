@@ -22,15 +22,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
     [Component]
-    public class ChannelAdvisorRestDownloader : StoreDownloader, IChannelAdvisorRestDownloader
+    public class ChannelAdvisorRestDownloader : StoreDownloader, IRakutenDownloader
     {
         private readonly ILog log;
-        private readonly IChannelAdvisorRestClient restClient;
-        private readonly Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory;
-        private readonly string refreshToken;
+        private readonly IRakutenWebClient webClient;
+        private readonly RakutenOrderLoader orderLoader;
+        private readonly string authToken;
         private readonly ISqlAdapterRetry sqlAdapter;
-        private IEnumerable<ChannelAdvisorDistributionCenter> distributionCenters;
-        private readonly ChannelAdvisorStoreEntity caStore;
+        private readonly RakutenStoreEntity rakutenStore;
 
         /// <summary>
         /// Constructor
@@ -39,21 +38,20 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
         public ChannelAdvisorRestDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
-            IChannelAdvisorRestClient restClient,
-            IEncryptionProviderFactory encryptionProviderFactory,
+            Func<RakutenStoreEntity, IRakutenWebClient> webClientFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
-            Func<IEnumerable<ChannelAdvisorDistributionCenter>, ChannelAdvisorOrderLoader> orderLoaderFactory,
+            RakutenOrderLoader orderLoader,
             Func<Type, ILog> createLogger) :
             base(store, storeTypeManager.GetType(store))
         {
-            this.restClient = restClient;
-            this.orderLoaderFactory = orderLoaderFactory;
+            rakutenStore = store as RakutenStoreEntity;
+            this.webClient = webClientFactory(rakutenStore);
+            this.orderLoader = orderLoader;
 
-            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "ChannelAdvisorRestDownloader.Download");
-            caStore = Store as ChannelAdvisorStoreEntity;
-            MethodConditions.EnsureArgumentIsNotNull(caStore, "ChannelAdvisor Store");
-            refreshToken = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ChannelAdvisor")
-                .Decrypt(caStore.RefreshToken);
+            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "RakutenDownloader.Download");
+            
+            MethodConditions.EnsureArgumentIsNotNull(rakutenStore, "Rakuten Store");
+            
             log = createLogger(GetType());
         }
 
@@ -72,9 +70,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     return;
                 }
 
-                UpdateDistributionCenters();
-
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken);
+                ChannelAdvisorOrderResult ordersResult = webClient.GetOrders(rakutenStore.LastModifiedDate, refreshToken);
 
                 string previousLink = String.Empty;
 

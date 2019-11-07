@@ -282,10 +282,16 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenOrderLoader.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrder.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrderItem.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenShipment.cs" />
+    <Compile Include="Platforms\Rakuten\IRakutenDownloader.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenWebClient.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenDownloader.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
