@@ -295,6 +295,10 @@
     <Compile Include="Platforms\Rakuten\IRakutenDownloader.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenWebClient.cs" />
     <Compile Include="Platforms\Rakuten\RakutenDownloader.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -1043,7 +1047,6 @@
   <ItemGroup>
     <Folder Include="Platforms\Rakuten\Content\" />
     <Folder Include="Platforms\Rakuten\OnlineUpdating\" />
-    <Folder Include="Platforms\Rakuten\Warehouse\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
