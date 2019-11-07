@@ -8,13 +8,22 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// </summary>
     public class RakutenOrdersResponse
     {
+        /// <summary>
+        /// The list of Rakuten orders
+        /// </summary>
         [JsonProperty("orders")]
-        IList<RakutenOrder> Orders { get; set; }
+        public IList<RakutenOrder> Orders { get; set; }
 
+        /// <summary>
+        /// The list of errors encountered, if any
+        /// </summary>
         [JsonProperty("errors")]
-        RakutenErrors Errors { get; set; }
+        public RakutenErrors Errors { get; set; }
 
+        /// <summary>
+        /// The total number of orders in all pages of the response
+        /// </summary>
         [JsonProperty("totalCount")]
-        int TotalCount { get; set; }
+        public int TotalCount { get; set; }
     }
 }

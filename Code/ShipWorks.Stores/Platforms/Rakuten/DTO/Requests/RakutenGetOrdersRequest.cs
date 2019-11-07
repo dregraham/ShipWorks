@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
 {

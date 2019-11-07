@@ -5,25 +5,43 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
     public class RakutenErrors
     {
+        /// <summary>
+        /// List of resources that caused errors
+        /// </summary>
         [JsonProperty("failedResources")]
-        IList<string> FailedResources { get; set; }
+        public IList<string> FailedResources { get; set; }
 
+        /// <summary>
+        /// List of errors from the full request
+        /// </summary>
         [JsonProperty("common")]
-        IList<RakutenError> Common { get; set; }
+        public IList<RakutenError> Common { get; set; }
 
+        /// <summary>
+        /// List of errors for each resource that failed
+        /// </summary>
         [JsonProperty("specific")]
-        Dictionary<string, IList<RakutenError>> Specific { get; set; }
+        public Dictionary<string, IList<RakutenError>> Specific { get; set; }
     }
 
     public class RakutenError
     {
+        /// <summary>
+        /// The Rakuten API error code
+        /// </summary>
         [JsonProperty("errorCode")]
-        int ErrorCode { get; set; }
+        public int ErrorCode { get; set; }
 
+        /// <summary>
+        /// A short version of the error message
+        /// </summary>
         [JsonProperty("shortMessage")]
-        string ShortMessage { get; set; }
+        public string ShortMessage { get; set; }
 
+        /// <summary>
+        /// The complete error message
+        /// </summary>
         [JsonProperty("longMessage")]
-        string LongMessage { get; set; }
+        public string LongMessage { get; set; }
     }
 }
