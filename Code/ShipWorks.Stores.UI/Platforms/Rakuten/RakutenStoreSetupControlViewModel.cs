@@ -71,9 +71,9 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public void Load(RakutenStoreEntity store)
         {
-            ApiKey = store.ApiKey;
+            ApiKey = store.AuthKey;
             MarketplaceID = store.MarketplaceID;
-            ShopUrl = store.ShopUrl;
+            ShopUrl = store.ShopURL;
         }
 
         /// <summary>
@@ -84,22 +84,22 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
             // Use a throw away store to test entered credentials.
             RakutenStoreEntity testStore = new RakutenStoreEntity()
             {
-                ApiKey = ApiKey,
+                AuthKey = ApiKey,
                 MarketplaceID = MarketplaceID,
-                ShopUrl = ShopUrl
+                ShopURL = ShopUrl
             };
 
-            bool result = webClient.TestConnection(testStore).Result;
+            bool result = webClient.TestConnection(testStore);
 
             if (!result)
             {
                 messageHelper.ShowError("Unable to authenticate credentials.");
                 return false;
             }
-
-            store.ApiKey = ApiKey;
+            
+            store.AuthKey = ApiKey;
             store.MarketplaceID = MarketplaceID;
-            store.ShopUrl = ShopUrl;
+            store.ShopURL = ShopUrl;
 
             return true;
         }
