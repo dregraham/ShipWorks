@@ -18,5 +18,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Mark order as shipped and upload tracking number
         /// </summary>
         void ConfirmShipping(ShipmentEntity shipment);
+
+        bool TestConnection(RakutenStoreEntity store);
     }
 }
