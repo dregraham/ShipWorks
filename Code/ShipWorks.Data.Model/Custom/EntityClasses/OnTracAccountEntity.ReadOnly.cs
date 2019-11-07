@@ -31,6 +31,11 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public string AccountDescription => Description;
 
         /// <summary>
+        /// Gets the shortened account description.
+        /// </summary>
+        public string ShortAccountDescription => AccountNumber.ToString();
+
+        /// <summary>
         /// Applies account to shipment
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment) => shipment.OnTrac.OnTracAccountID = AccountId;

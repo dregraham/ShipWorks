@@ -67,6 +67,11 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("CustomField3", () => Item.Custom3);
             AddElement("CustomField4", () => Item.Custom4);
             AddElement("CustomField5", () => Item.Custom5);
+            AddElement("CustomField6", () => Item.Custom6);
+            AddElement("CustomField7", () => Item.Custom7);
+            AddElement("CustomField8", () => Item.Custom8);
+            AddElement("CustomField9", () => Item.Custom9);
+            AddElement("CustomField10", () => Item.Custom10);
 
             AddElement("Product", new OrderItemProductOutline(context),
                 () => new[] { new Tuple<IProductVariant, Func<OrderItemProductBundleOutline>>(Product, () => new OrderItemProductBundleOutline(context)) },

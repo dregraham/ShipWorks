@@ -64,6 +64,11 @@ namespace ShipWorks.Stores.Warehouse
                 Custom3 = order.Custom3,
                 Custom4 = order.Custom4,
                 Custom5 = order.Custom5,
+                Custom6 = order.Custom6,
+                Custom7 = order.Custom7,
+                Custom8 = order.Custom8,
+                Custom9 = order.Custom9,
+                Custom10 = order.Custom10,
                 Charges = order.OrderCharges.Select(CreateCharge).ToList(),
                 PaymentDetails = order.OrderPaymentDetails.Select(CreatePaymentDetail).ToList(),
                 Notes = order.Notes.Select(CreateNote).ToList(),
@@ -166,6 +171,11 @@ namespace ShipWorks.Stores.Warehouse
                 Custom3 = item.Custom3,
                 Custom4 = item.Custom4,
                 Custom5 = item.Custom5,
+                Custom6 = item.Custom6,
+                Custom7 = item.Custom7,
+                Custom8 = item.Custom8,
+                Custom9 = item.Custom9,
+                Custom10 = item.Custom10,
                 LocalStatus = item.LocalStatus,
                 ItemAttributes = item.OrderItemAttributes.Select(CreateOrderItemAttributes).ToList()
             };

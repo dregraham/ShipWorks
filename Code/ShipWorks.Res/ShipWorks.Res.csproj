@@ -551,7 +551,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.2\7.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.1.0.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.3\7.3.2.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.4\7.4.0.0.sql" />

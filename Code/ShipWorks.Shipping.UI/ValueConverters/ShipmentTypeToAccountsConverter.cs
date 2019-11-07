@@ -9,8 +9,8 @@ using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
-using ShipWorks.Shipping.Services.Accounts;
 using ShipWorks.UI.Controls.Design;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {
