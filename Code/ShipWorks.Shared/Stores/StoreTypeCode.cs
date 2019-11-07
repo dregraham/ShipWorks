@@ -421,6 +421,11 @@ namespace ShipWorks.Stores
         [Description("Bonanza")]
         [StoreTypeIdentity("BONANZA", "BON")]
         [StoreTypeIcon("bonanza")]
-        Bonanza = 85
+        Bonanza = 85,
+
+        [Description("Rakuten")]
+        [StoreTypeIdentity("RAKUTEN", "RAK")]
+        [StoreTypeIcon("rakuten")]
+        Rakuten = 86
     }
 }
