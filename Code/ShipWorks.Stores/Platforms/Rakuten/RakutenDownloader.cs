@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.DTO;
+using ShipWorks.Stores.Platforms.Rakuten.DTO;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -22,24 +16,20 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     /// Downloader for downloading orders from ChannelAdvisor via their REST api
     /// </summary>
     [Component]
-    public class ChannelAdvisorRestDownloader : StoreDownloader, IRakutenDownloader
+    public class RakutenDownloader : StoreDownloader, IRakutenDownloader
     {
         private readonly ILog log;
         private readonly IRakutenWebClient webClient;
         private readonly RakutenOrderLoader orderLoader;
         private readonly string authToken;
-        private readonly ISqlAdapterRetry sqlAdapter;
         private readonly RakutenStoreEntity rakutenStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams(Justification =
-            "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
-        public ChannelAdvisorRestDownloader(StoreEntity store,
+        public RakutenDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
             Func<RakutenStoreEntity, IRakutenWebClient> webClientFactory,
-            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             RakutenOrderLoader orderLoader,
             Func<Type, ILog> createLogger) :
             base(store, storeTypeManager.GetType(store))
@@ -48,15 +38,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             this.webClient = webClientFactory(rakutenStore);
             this.orderLoader = orderLoader;
 
-            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "RakutenDownloader.Download");
-            
             MethodConditions.EnsureArgumentIsNotNull(rakutenStore, "Rakuten Store");
-            
+
             log = createLogger(GetType());
         }
 
         /// <summary>
-        /// Download orders from ChannelAdvisor REST
+        /// Download orders from Rakuten
         /// </summary>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
@@ -70,37 +58,26 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     return;
                 }
 
-                ChannelAdvisorOrderResult ordersResult = webClient.GetOrders(rakutenStore.LastModifiedDate, refreshToken);
-
-                string previousLink = String.Empty;
+                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore.DownloadStartDate ?? DateTime.UtcNow.AddDays(-7));
 
                 Progress.Detail = $"Downloading orders...";
 
-                while (ordersResult?.Orders?.Any() == true)
+                while (response?.Orders?.Any() == true)
                 {
-                    // This is a work-around for a bug in ChannelAdvisor where sometimes they would continue to send us
-                    // the same "next link" causing ShipWorks to download forever
-                    if (ordersResult.OdataNextLink?.Equals(previousLink) == true)
+                    // Save the orders and update the store's download start date
+                    if (!await ProcessOrders(response).ConfigureAwait(false))
                     {
                         break;
                     }
 
-                    previousLink = ordersResult.OdataNextLink;
-
-                    AddProductsToCache(ordersResult);
-
-                    if (!await ProcessOrders(ordersResult).ConfigureAwait(false))
-                    {
-                        break;
-                    }
-
-                    // Don't download orders older than oldestDownload.
-                    ordersResult = string.IsNullOrEmpty(ordersResult.OdataNextLink) ? null : restClient.GetOrders(ordersResult.OdataNextLink, refreshToken);
+                    // Download more orders with the new download date
+                    response = webClient.GetOrders(rakutenStore.DownloadStartDate.Value);
                 }
-            }
-            catch (ChannelAdvisorException ex)
-            {
-                throw new DownloadException(ex.Message);
+
+                if (response?.Errors != null)
+                {
+                    ThrowError(response.Errors);
+                }
             }
             catch (SqlForeignKeyException ex)
             {
@@ -111,10 +88,44 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             Progress.Detail = "Done";
         }
 
-        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult)
+        /// <summary>
+        /// Parse the download errors in order to throw a meaningful error message
+        /// </summary>
+        private void ThrowError(RakutenErrors errors)
+        {
+            RakutenError error = null;
+            string resource = null;
+
+            // Use the common error first
+            if (errors.Common != null)
+            {
+                error = errors.Common.First();
+            }
+            else if (errors.Specific != null)
+            {
+                error = errors.Specific.First().Value.First();
+                resource = errors.Specific.First().Key;
+            }
+
+            log.Error(errors);
+
+            if (error != null)
+            {
+                throw new DownloadException($"An error occured when downloading from Rakuten: {error.ShortMessage} ({error.ErrorCode}) - {error.LongMessage}");
+            }
+            else
+            {
+                throw new DownloadException("An error occured when downloading from Rakuten");
+            }
+        }
+
+        /// <summary>
+        /// Process the Rakuten orders and update the store's download start date
+        /// </summary>
+        private async Task<bool> ProcessOrders(RakutenOrdersResponse response)
         {
 
-            foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
+            foreach (RakutenOrder order in response.Orders)
             {
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
@@ -122,115 +133,37 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     return false;
                 }
 
-                DownloadOtherLineItems(caOrder);
-
-                List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
-
-                await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+                await LoadOrder(order).ConfigureAwait(false);
             }
 
             return true;
         }
 
         /// <summary>
-        /// Loads all order items, gets pages if required.
-        /// </summary>
-        private void DownloadOtherLineItems(ChannelAdvisorOrder caOrder)
-        {
-            int maxItems = 20;
-            List<ChannelAdvisorOrderItem> caOrderItems = caOrder.Items.ToList();
-            while (caOrderItems.Count == maxItems)
-            {
-                string nextToken =
-                    $"https://api.channeladvisor.com/v1/Orders({caOrder.ID})/Items?$skip={caOrderItems.Count}&$expand=FulfillmentItems";
-
-                ChannelAdvisorOrderItemsResult nextPage = restClient.GetOrderItems(
-                    nextToken,
-                    refreshToken);
-
-                caOrderItems.AddRange(nextPage.OrderItems);
-                maxItems += 20;
-            }
-
-            caOrder.Items = caOrderItems;
-        }
-
-        /// <summary>
-        /// Download product details from ChannelAdvisor
-        /// </summary>
-        private List<ChannelAdvisorProduct> DownloadChannelAdvisorProducts(ChannelAdvisorOrder caOrder)
-        {
-            // Get the products for the order to pass into the loader
-            List<ChannelAdvisorProduct> caProducts =
-                caOrder.Items
-                    .Select(item => restClient.GetProduct(item.ProductID, refreshToken))
-                    .Where(p => p != null).ToList();
-            return caProducts;
-        }
-
-        /// <summary>
-        /// Updates local copy of Distribution Centers
-        /// </summary>
-        private void UpdateDistributionCenters()
-        {
-            List<ChannelAdvisorDistributionCenter> refreshedDistributionCenters = new List<ChannelAdvisorDistributionCenter>();
-
-            ChannelAdvisorDistributionCenterResponse response = restClient.GetDistributionCenters(refreshToken);
-
-            while (response?.DistributionCenters?.Any() ?? false)
-            {
-                refreshedDistributionCenters.AddRange(response.DistributionCenters);
-
-                response = string.IsNullOrEmpty(response.OdataNextLink)
-                    ? null
-                    : restClient.GetDistributionCenters(response.OdataNextLink, refreshToken);
-            }
-
-            distributionCenters = refreshedDistributionCenters;
-        }
-
-        /// <summary>
         /// Load the given ChannelAdvisor order
         /// </summary>
-        private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
+        private async Task LoadOrder(RakutenOrder rakutenOrder)
         {
-            // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
 
-            // Check if it has been canceled
             if (!Progress.IsCancelRequested)
             {
-                // get the order instance
-                GenericResult<OrderEntity> result = await InstantiateOrder(new OrderNumberIdentifier(caOrder.ID)).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(new RakutenOrderIdentifier(rakutenOrder.OrderNumber)).ConfigureAwait(false);
+
                 if (result.Failure)
                 {
-                    log.InfoFormat("Skipping order '{0}': {1}.", caOrder.ID, result.Message);
+                    log.InfoFormat("Skipping order '{0}': {1}.", rakutenOrder.OrderNumber, result.Message);
                     return;
                 }
 
-                ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) result.Value;
+                var order = (RakutenOrderEntity) result.Value;
 
                 // Required by order loader
                 order.Store = Store;
 
-                //Order loader loads the order
-                orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
-
-                // Save the downloaded order
-                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+                // Order is saved by the order loader
+                await orderLoader.LoadOrder(order, rakutenOrder, this);
             }
-        }
-
-        /// <summary>
-        /// Fetch all products for the given orders, and add them to the cache
-        /// </summary>
-        private void AddProductsToCache(ChannelAdvisorOrderResult orderResult)
-        {
-            Progress.Detail = "Fetching products...";
-
-            IEnumerable<int> productIds = orderResult.Orders.SelectMany(x => x.Items).Select(x => x.ProductID);
-
-            restClient.AddProductsToCache(productIds, refreshToken);
         }
     }
 }
