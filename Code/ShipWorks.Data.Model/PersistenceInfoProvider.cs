@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(240);
+			this.InitClass(241);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -209,6 +209,7 @@ namespace ShipWorks.Data.Model
 			InitProStoresOrderEntityMappings();
 			InitProStoresOrderSearchEntityMappings();
 			InitProStoresStoreEntityMappings();
+			InitRakutenStoreEntityMappings();
 			InitResourceEntityMappings();
 			InitScanFormBatchEntityMappings();
 			InitSearchEntityMappings();
@@ -2980,6 +2981,17 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPrefix", "LegacyPrefix", false, "VarChar", 30, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyPassword", "LegacyPassword", false, "VarChar", 150, 0, 0, false, "", null, typeof(System.String), 15);
 			this.AddElementFieldMapping("ProStoresStoreEntity", "LegacyCanUpgrade", "LegacyCanUpgrade", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 16);
+		}
+
+		/// <summary>Inits RakutenStoreEntity's mappings</summary>
+		private void InitRakutenStoreEntityMappings()
+		{
+			this.AddElementMapping("RakutenStoreEntity", @"ShipWorksLocal", @"dbo", "RakutenStore", 5, 0);
+			this.AddElementFieldMapping("RakutenStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("RakutenStoreEntity", "AuthKey", "AuthKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("RakutenStoreEntity", "MarketplaceID", "MarketplaceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("RakutenStoreEntity", "ShopURL", "ShopURL", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
+			this.AddElementFieldMapping("RakutenStoreEntity", "DownloadStartDate", "DownloadStartDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 		}
 
 		/// <summary>Inits ResourceEntity's mappings</summary>

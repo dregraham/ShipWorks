@@ -3339,6 +3339,27 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
+	/// <summary>Factory to create new, empty RakutenStoreEntity objects.</summary>
+	[Serializable]
+	public partial class RakutenStoreEntityFactory : EntityFactoryBase2<RakutenStoreEntity> {
+		/// <summary>CTor</summary>
+		public RakutenStoreEntityFactory() : base("RakutenStoreEntity", ShipWorks.Data.Model.EntityType.RakutenStoreEntity, true) { }
+		
+		/// <summary>Creates a new RakutenStoreEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new RakutenStoreEntity(fields);
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewRakutenStoreUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		#region Included Code
+
+		#endregion
+	}
+
 	/// <summary>Factory to create new, empty ResourceEntity objects.</summary>
 	[Serializable]
 	public partial class ResourceEntityFactory : EntityFactoryBase2<ResourceEntity> {
@@ -5356,6 +5377,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.ProStoresStoreEntity:
 					factoryToUse = new ProStoresStoreEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.RakutenStoreEntity:
+					factoryToUse = new RakutenStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.ResourceEntity:
 					factoryToUse = new ResourceEntityFactory();
