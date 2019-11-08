@@ -10,7 +10,6 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
-using ShipWorks.Stores.Platforms.Rakuten.Enums;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -41,11 +40,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Order to save must have store loaded
         /// </remarks>
         public void LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
-            List<RakutenProduct> downloadedProducts, IOrderElementFactory orderElementFactory)
+            IOrderElementFactory orderElementFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
 
-            orderToSave.OrderNumber = downloadedOrder.OrderNumber;
+            orderToSave.RakutenOrderID = downloadedOrder.OrderNumber;
             orderToSave.OrderDate = downloadedOrder.OrderDate;
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
 
@@ -63,7 +62,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
 
                 // items
-                LoadItems(orderToSave, downloadedOrder, downloadedProducts, orderElementFactory);
+                LoadItems(orderToSave, downloadedOrder, orderElementFactory);
 
                 // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
@@ -105,25 +104,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadItems(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder,
-            List<RakutenProduct> downloadedProducts,
             IOrderElementFactory orderElementFactory)
         {
-            if (downloadedOrder.Items != null)
+            if (downloadedOrder.OrderItems != null)
             {
-                foreach (RakutenOrderItem downloadedItem in downloadedOrder.Items)
+                foreach (RakutenOrderItem downloadedItem in downloadedOrder.OrderItems)
                 {
                     RakutenOrderItemEntity itemToSave =
                         (RakutenOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
 
                     LoadItem(itemToSave, downloadedOrder, downloadedItem, orderElementFactory);
-
-                    RakutenProduct downloadedProduct = downloadedProducts.FirstOrDefault(p => p.ID == downloadedItem.ProductID);
-
-                    if (downloadedProduct != null)
-                    {
-                        LoadProductDetails(itemToSave, downloadedProduct);
-                        LoadProductAttributes(itemToSave, downloadedProduct, orderElementFactory);
-                    }
                 }
             }
         }
@@ -142,7 +132,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             itemToSave.OrderItemID = downloadedItem.OrderItemID;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
-
         }
 
         /// <summary>
@@ -154,9 +143,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private void LoadCharges(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
-            if (downloadedOrder.TotalShippingPrice != 0)
+            if (downloadedOrder.Shipping.ShippingFee != 0)
             {
-                orderElementFactory.CreateCharge(orderToSave, "SHIPPING", "Shipping", downloadedOrder.TotalShippingPrice);
+                orderElementFactory.CreateCharge(orderToSave, "SHIPPING", "Shipping", downloadedOrder.Shipping.ShippingFee);
             }
         }
 
@@ -185,8 +174,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             LoadShippingAddress(downloadedOrder, shipAdapter);
             LoadBillingAddress(downloadedOrder, shipAdapter, billAdapter);
 
-            billAdapter.Email = downloadedOrder.BuyerEmailAddress;
-
             // No shipping email provided, so if ship and bill are the same, copy the email to the ship
             if (shipAdapter.FirstName == billAdapter.FirstName &&
                 shipAdapter.LastName == billAdapter.LastName &&
@@ -204,15 +191,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <param name="shipAdapter">The ship adapter.</param>
         private static void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
         {
-            shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
-            shipAdapter.FirstName = downloadedOrder.ShippingName;
-            shipAdapter.LastName = downloadedOrder.ShippingName;
-            shipAdapter.Street1 = downloadedOrder.ShippingAddress1;
-            shipAdapter.City = downloadedOrder.ShippingCity;
-            shipAdapter.StateProvCode = dowloadedOrder.ShippingSateCode;
-            shipAdapter.PostalCode = downloadedOrder.ShippingPostalCode;
-            shipAdapter.CountryCode = downloadedOrder.BillingCountryCode;
-            shipAdapter.Phone = downloadedOrder.ShippingPhoneNumber;
+            var address = downloadedOrder.Shipping.DeliveryAddress;
+            shipAdapter.NameParseStatus = PersonNameParseStatus.Unparsed;
+            shipAdapter.UnparsedName = address.Name;
+            shipAdapter.Street1 = address.Address1;
+            shipAdapter.Street2 = address.Address2;
+            shipAdapter.City = address.CityName;
+            shipAdapter.StateProvCode = address.StateCode;
+            shipAdapter.PostalCode = address.PostalCode;
+            shipAdapter.CountryCode = address.CountryCode;
+            shipAdapter.Phone = address.PhoneNumber;
         }
 
         /// <summary>
@@ -223,15 +211,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <param name="billAdapter">The bill adapter.</param>
         private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter, PersonAdapter billAdapter)
         {
-            shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
-            shipAdapter.FirstName = downloadedOrder.BillingName;
-            shipAdapter.LastName = downloadedOrder.BillingName;
-            shipAdapter.Street1 = downloadedOrder.BillingAddress1;
-            shipAdapter.City = downloadedOrder.BillingCity;
-            shipAdapter.StateProvCode = dowloadedOrder.BillingSateCode;
-            shipAdapter.PostalCode = downloadedOrder.BillingPostalCode;
-            shipAdapter.CountryCode = downloadedOrder.BillingCountryCode;
-            shipAdapter.Phone = downloadedOrder.BillingPhoneNumber;
+            var address = downloadedOrder.Shipping.InvoiceAddress;
+            billAdapter.NameParseStatus = PersonNameParseStatus.Unparsed;
+            billAdapter.UnparsedName = address.Name;
+            billAdapter.Street1 = address.Address1;
+            billAdapter.Street2 = address.Address2;
+            billAdapter.City = address.CityName;
+            billAdapter.StateProvCode = address.StateCode;
+            billAdapter.PostalCode = address.PostalCode;
+            billAdapter.CountryCode = address.CountryCode;
+            billAdapter.Phone = address.PhoneNumber;
         }
 
         /// <summary>
@@ -239,10 +228,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private void LoadPayments(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
-            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Type", downloadedOrder.PaymentMethod);
-            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment ID", downloadedOrder.OrderPaymentID);
-            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Status", downloadedOrder.PaymentStatus);
-            CreatePaymentDetail(orderElementFactory, orderToSave, "Point Amount", downloadedOrder.PointAmount);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment ID", downloadedOrder.Payment.OrderPaymentID);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Status", downloadedOrder.Payment.PaymentStatus);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Amount", downloadedOrder.Payment.PayAmount);
+            CreatePaymentDetail(orderElementFactory, orderToSave, "Point Amount", downloadedOrder.Payment.PointAmount);
         }
 
         /// <summary>
@@ -264,16 +253,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private static void LoadRequestedShipping(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder)
         {
-            RakutenFulfillment fulfillment = downloadedOrder.Fulfillments.FirstOrDefault();
-            string carrier = fulfillment?.ShippingCarrier;
-            string shippingClass = fulfillment?.ShippingClass;
+            var shipping = downloadedOrder.Shipping;
+            string carrier = shipping?.ShippingMethod;
 
-            if (!string.IsNullOrEmpty(carrier) || !string.IsNullOrEmpty(shippingClass))
+            if (!string.IsNullOrEmpty(carrier))
             {
-                orderToSave.RequestedShipping = $"{carrier} - {shippingClass}";
+                orderToSave.RequestedShipping = carrier;
             }
-
-            orderToSave.IsPrime = (int) RakutenHelper.GetIsPrime(fulfillment?.ShippingClass, fulfillment?.ShippingCarrier);
         }
 
         /// <summary>
@@ -284,9 +270,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private static void LoadOrderStatuses(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder)
         {
-            orderToSave.OnlinePaymentStatus =
-                (int) (EnumHelper.TryParseEnum<RakutenPaymentStatus>(downloadedOrder.OrderStatus) ??
-                       RakutenPaymentStatus.Unknown);
+           //Will need to see if this needs to be implemented
         }
     }
 }
