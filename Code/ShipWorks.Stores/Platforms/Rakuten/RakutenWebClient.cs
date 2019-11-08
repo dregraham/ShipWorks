@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
         }
 
-        public static bool TestConnection(RakutenStoreEntity testStore)
+        public bool TestConnection(RakutenStoreEntity testStore)
         {
             return true;
         }
