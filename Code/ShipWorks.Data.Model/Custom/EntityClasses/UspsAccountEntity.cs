@@ -38,5 +38,10 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment) =>
             shipment.Postal.Usps.UspsAccountID = AccountId;
+
+        /// <summary>
+        /// Gets the shortened account description.
+        /// </summary>
+        public string ShortAccountDescription => Username;
     }
 }
