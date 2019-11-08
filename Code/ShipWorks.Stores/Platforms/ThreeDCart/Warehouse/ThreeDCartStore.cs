@@ -35,5 +35,10 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.Warehouse
         /// How far back should we download for the initial download
         /// </summary>
         public int InitialDownloadDays { get; set; }
+
+        /// <summary>
+        /// Id of the time zone for this store
+        /// </summary>
+        public string TimeZoneId { get; set; }
     }
 }
