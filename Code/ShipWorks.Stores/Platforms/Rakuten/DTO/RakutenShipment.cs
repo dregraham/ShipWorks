@@ -18,6 +18,45 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 
         [JsonProperty("shippingFee")]
         public decimal ShippingFee { get; set; }
-        
+
+        [JsonProperty("deliveryAddress")]
+        public RakutenAddress DeliveryAddress { get; set; }
+
+        [JsonProperty("invoiceAddress")]
+        public RakutenAddress InvoiceAddress { get; set; }
+    }
+
+    public class RakutenAddress
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("phoneNumber")]
+        public string PhoneNumber { get; set; }
+
+        [JsonProperty("postalCode")]
+        public string PostalCode { get; set; }
+
+        [JsonProperty("countryCode")]
+        public string CountryCode { get; set; }
+
+        [JsonProperty("stateCode")]
+        public string StateCode { get; set; }
+
+        [JsonProperty("stateName")]
+        public string StateName { get; set; }
+
+        [JsonProperty("cityCode")]
+        public string CityCode { get; set; }
+
+        [JsonProperty("cityName")]
+        public string CityName { get; set; }
+
+        [JsonProperty("address1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
+
     }
 }

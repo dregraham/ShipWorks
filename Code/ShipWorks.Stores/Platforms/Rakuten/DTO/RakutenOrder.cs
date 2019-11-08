@@ -57,6 +57,40 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         [JsonProperty("shipping")]
         public RakutenShipment Shipping { get; set; }
 
+        /// <summary>
+        /// The payment information of the order
+        /// </summary>
+        [JsonProperty("payment")]
+        public RakutenPayment Payment { get; set; }
 
+        /// <summary>
+        /// The buyers name
+        /// </summary>
+        [JsonProperty("buyerName")]
+        public string BuyerName { get; set; }
+
+        /// <summary>
+        /// The buyers phone number
+        /// </summary>
+        [JsonProperty("buyerPhoneNumber")]
+        public string BuyerPhoneNumber { get; set; }
+
+        /// <summary>
+        /// The anonymized email address of the shopper
+        /// </summary>
+        [JsonProperty("shopperAnonymizedAddress")]
+        public RakutenShipment AnonymizedEmailAddress { get; set; }
+
+        /// <summary>
+        /// The merchant memo attached to the order
+        /// </summary>
+        [JsonProperty("merchantMemo")]
+        public string MerchantMemo { get; set; }
+
+        /// <summary>
+        /// The optional information entered by the customer
+        /// </summary>
+        [JsonProperty("checkoutOptionalInfo")]
+        public RakutenOptionalCheckoutInfo checkoutOptionalInfo { get; set; }
     }
 }

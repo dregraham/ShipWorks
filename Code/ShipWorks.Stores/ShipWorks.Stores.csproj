@@ -282,6 +282,8 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOptionalCheckoutInfo.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenPayment.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenShipmentResponse.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenConfirmShippingRequest.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
