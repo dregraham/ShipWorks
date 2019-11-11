@@ -115,6 +115,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddEntityInfo("ProStoresOrderEntity", "OrderEntity", new ProStoresOrderRelations(), new ProStoresOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("ProStoresStoreEntity", "StoreEntity", new ProStoresStoreRelations(), new ProStoresStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("RakutenOrderEntity", "OrderEntity", new RakutenOrderRelations(), new RakutenOrderEntityFactory(), 1-1);
+			this.AddEntityInfo("RakutenOrderItemEntity", "OrderItemEntity", new RakutenOrderItemRelations(), new RakutenOrderItemEntityFactory(), 1-1);
 			this.AddEntityInfo("RakutenStoreEntity", "StoreEntity", new RakutenStoreRelations(), new RakutenStoreEntityFactory(), 1-1);
 			this.AddEntityInfo("SearsOrderEntity", "OrderEntity", new SearsOrderRelations(), new SearsOrderEntityFactory(), 1-1);
 			this.AddEntityInfo("SearsOrderItemEntity", "OrderItemEntity", new SearsOrderItemRelations(), new SearsOrderItemEntityFactory(), 1-1);

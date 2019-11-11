@@ -368,6 +368,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderEntity and RakutenOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeRakutenOrderEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(OrderFields.OrderID, RakutenOrderFields.OrderID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between OrderEntity and SearsOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
 		internal IEntityRelation RelationToSubTypeSearsOrderEntity
 		{
@@ -423,17 +434,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between OrderEntity and RakutenOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
-		internal IEntityRelation RelationToSubTypeRakutenOrderEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-				relation.AddEntityFieldPair(OrderFields.OrderID, RakutenOrderFields.OrderID);
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
@@ -476,6 +476,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypePayPalOrderEntity;
 				case "ProStoresOrderEntity":
 					return this.RelationToSubTypeProStoresOrderEntity;
+				case "RakutenOrderEntity":
+					return this.RelationToSubTypeRakutenOrderEntity;
 				case "SearsOrderEntity":
 					return this.RelationToSubTypeSearsOrderEntity;
 				case "ShopifyOrderEntity":
@@ -486,8 +488,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeWalmartOrderEntity;
 				case "YahooOrderEntity":
 					return this.RelationToSubTypeYahooOrderEntity;
-				case "RakutenOrderEntity":
-					return this.RelationToSubTypeRakutenOrderEntity;
 				default:
 					return null;
 			}

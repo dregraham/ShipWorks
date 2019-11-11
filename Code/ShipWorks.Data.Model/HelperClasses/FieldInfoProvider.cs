@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (240 + 2));
+			this.InitClass( (241 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -213,6 +213,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
 			InitRakutenOrderEntityInfos();
+			InitRakutenOrderItemEntityInfos();
 			InitRakutenStoreEntityInfos();
 			InitResourceEntityInfos();
 			InitScanFormBatchEntityInfos();
@@ -2832,6 +2833,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(RakutenOrderFieldIndex), "RakutenOrderEntity");
 			this.AddElementFieldInfo("RakutenOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("RakutenOrderEntity", "RakutenOrderID", typeof(System.String), false, false, false, false,  (int)RakutenOrderFieldIndex.RakutenOrderID, 50, 0, 0);
+		}
+		/// <summary>Inits RakutenOrderItemEntity's FieldInfo objects</summary>
+		private void InitRakutenOrderItemEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(RakutenOrderItemFieldIndex), "RakutenOrderItemEntity");
+			this.AddElementFieldInfo("RakutenOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderItemEntity", "RakutenOrderID", typeof(System.String), false, false, false, false,  (int)RakutenOrderItemFieldIndex.RakutenOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("RakutenOrderItemEntity", "Discount", typeof(System.Decimal), false, false, false, false,  (int)RakutenOrderItemFieldIndex.Discount, 0, 4, 19);
+			this.AddElementFieldInfo("RakutenOrderItemEntity", "ItemTotal", typeof(System.Decimal), false, false, false, false,  (int)RakutenOrderItemFieldIndex.ItemTotal, 0, 4, 19);
 		}
 		/// <summary>Inits RakutenStoreEntity's FieldInfo objects</summary>
 		private void InitRakutenStoreEntityInfos()

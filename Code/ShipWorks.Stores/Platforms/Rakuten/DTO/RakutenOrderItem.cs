@@ -26,6 +26,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public decimal ItemTotal { get; set; }
 
         [JsonProperty("sku")]
-        public string Sku { get; set; }
+        public string SKU { get; set; }
     }
 }

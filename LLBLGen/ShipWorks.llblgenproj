@@ -2483,6 +2483,13 @@
           <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
+      <EntityDefinition Name="RakutenOrderItem" ObjectID="15df98df-a7f8-4c8e-b510-e13b7d82925b" InheritanceType="2">
+        <Fields>
+          <Field Name="Discount" Type="decimal" Precision="19" Scale="4" FieldIndex="1" />
+          <Field Name="ItemTotal" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
+          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
       <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
         <Fields>
           <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
@@ -4530,6 +4537,7 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
+      <InheritanceHierarchy SuperType=":OrderItem" SubType=":RakutenOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":RakutenStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":SearsOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":SearsOrderItem" />
@@ -4611,7 +4619,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-07T21:34:57.319024Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-11T16:19:51.1554952Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8065,6 +8073,15 @@
                     <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
                   </Fields>
                 </Table>
+                <Table Name="RakutenOrderItem">
+                  <PkConstraintName Name="PK_RakutenOrderItem" />
+                  <Fields>
+                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="Discount" Ordinal="3" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="ItemTotal" Ordinal="4" DbType="9" Precision="19" Scale="4" />
+                  </Fields>
+                </Table>
                 <Table Name="RakutenStore">
                   <PkConstraintName Name="PK_RakutenStore" />
                   <Fields>
@@ -10632,6 +10649,11 @@
             <ForeignKeyConstraint Name="dbo:RakutenOrder:FK_RakutenOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenOrderItem:FK_RakutenOrderItem_OrderItem">
+              <FieldPairs>
+                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:RakutenOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
@@ -13372,6 +13394,14 @@
         <EntityMapping EntityName=":RakutenOrder" TargetName="ShipWorksLocal:dbo:RakutenOrder">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenOrderItem" TargetName="ShipWorksLocal:dbo:RakutenOrderItem">
+          <FieldMappings>
+            <FieldMapping FieldName="Discount" TargetFieldName="Discount" />
+            <FieldMapping FieldName="ItemTotal" TargetFieldName="ItemTotal" />
+            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
             <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
           </FieldMappings>
         </EntityMapping>

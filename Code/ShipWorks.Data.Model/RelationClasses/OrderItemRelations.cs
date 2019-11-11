@@ -268,6 +268,17 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderItemEntity and RakutenOrderItemEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy</summary>		
+		internal IEntityRelation RelationToSubTypeRakutenOrderItemEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+				relation.AddEntityFieldPair(OrderItemFields.OrderItemID, RakutenOrderItemFields.OrderItemID);
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
@@ -312,6 +323,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeWalmartOrderItemEntity;
 				case "YahooOrderItemEntity":
 					return this.RelationToSubTypeYahooOrderItemEntity;
+				case "RakutenOrderItemEntity":
+					return this.RelationToSubTypeRakutenOrderItemEntity;
 				default:
 					return null;
 			}
