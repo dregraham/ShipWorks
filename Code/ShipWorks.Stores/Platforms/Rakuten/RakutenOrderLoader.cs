@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
@@ -58,18 +55,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             if (orderToSave.IsNew)
             {
-
+                // Load order data
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
-
-                // items
                 LoadItems(orderToSave, downloadedOrder, orderElementFactory);
-
-                // charges
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
-
-                // payments
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
-
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
             }
         }
@@ -83,8 +73,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             decimal calculatedTotal = orderChargeCalculator.CalculateTotal(orderToSave);
 
-            // Sometimes Rakuten doesnt give us all of the discounts for the order, if the order total is different than what we calculate
-            // we need to figure out the difference so that the user can see that there was an aditional discount or cost
+            // Sometimes Rakuten doesn't give us all of the discounts for the order
+            // If the order total is different than what we calculate we need to show the additional discount/cost
             if (downloadedOrder.OrderTotal != calculatedTotal)
             {
                 decimal adjustment = downloadedOrder.OrderTotal - calculatedTotal;
@@ -100,7 +90,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         /// <param name="orderToSave">The order to save.</param>
         /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="downloadedProducts">The downloaded products.</param>
         /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadItems(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder,
@@ -113,7 +102,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     RakutenOrderItemEntity itemToSave =
                         (RakutenOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
 
-                    LoadItem(itemToSave, downloadedOrder, downloadedItem, orderElementFactory);
+                    LoadItem(itemToSave, downloadedItem);
                 }
             }
         }
@@ -121,15 +110,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the item.
         /// </summary>
-        private void LoadItem(RakutenOrderItemEntity itemToSave,
-            RakutenOrder downloadedOrder,
-            RakutenOrderItem downloadedItem,
-            IOrderElementFactory orderElementFactory)
+        private void LoadItem(RakutenOrderItemEntity itemToSave, RakutenOrderItem downloadedItem)
         {
-            itemToSave.SKU = downloadedItem.BaseSku;
+            itemToSave.SKU = downloadedItem.SKU ?? downloadedItem.BaseSku;
             itemToSave.Discount = downloadedItem.Discount;
             itemToSave.ItemTotal = downloadedItem.ItemTotal;
-            itemToSave.OrderItemID = downloadedItem.OrderItemID;
+            itemToSave.RakutenOrderID = downloadedItem.OrderItemID;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
         }
@@ -270,7 +256,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private static void LoadOrderStatuses(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder)
         {
-           //Will need to see if this needs to be implemented
+
         }
     }
 }
