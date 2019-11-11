@@ -50,8 +50,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             InitializeStoreDefaults(store);
 
-            store.Username = string.Empty;
-            store.Password = string.Empty;
+            store.AuthKey = string.Empty;
+            store.ShopURL = string.Empty;
+            store.MarketplaceID = string.Empty;
             store.StoreName = "My Rakuten Store";
 
             return store;
@@ -87,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => RakutenStore.Username;
+        protected override string InternalLicenseIdentifier => RakutenStore.MarketplaceID;
 
         /// <summary>
         /// Do we support online columns
