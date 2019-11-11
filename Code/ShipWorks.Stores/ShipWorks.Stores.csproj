@@ -287,7 +287,10 @@
     <Compile Include="Platforms\Rakuten\DTO\RakutenShipmentResponse.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenConfirmShippingRequest.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
     <Compile Include="Platforms\Rakuten\RakutenOrderIdentifier.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenStoreType.cs" />
     <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
@@ -1049,7 +1052,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Platforms\Rakuten\Content\" />
-    <Folder Include="Platforms\Rakuten\OnlineUpdating\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
