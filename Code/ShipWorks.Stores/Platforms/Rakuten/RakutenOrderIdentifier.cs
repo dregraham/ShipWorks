@@ -58,11 +58,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create an entity query that can be used to retrieve the search record for a combined order
         /// </summary>
-        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory) =>
-            CreateCombinedSearchQueryInternal(factory,
-                factory.ShopifyOrderSearch,
-                RakutenOrderSearchFields.OriginalOrderID,
-                RakutenOrderSearchFields.RakutenOrderID == rakutenOrderIdentifier);
+        public override QuerySpec CreateCombinedSearchQuery(QueryFactory factory)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// String representation
