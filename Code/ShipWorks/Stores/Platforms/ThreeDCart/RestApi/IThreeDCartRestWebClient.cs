@@ -6,8 +6,16 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
 {
+    /// <summary>
+    /// ThreeDCart REST downloader
+    /// </summary>
     public interface IThreeDCartRestWebClient
     {
+        /// <summary>
+        /// Attempt to get an order count to test connecting to ThreeDCart.  If any error, assume connection failed.
+        /// </summary>
+        void TestConnection();
+
         /// <summary>
         /// Gets the orders.
         /// </summary>

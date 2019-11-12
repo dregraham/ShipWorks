@@ -6,6 +6,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 using log4net;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Stores.Platforms.ThreeDCart
 {
@@ -76,8 +78,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 {
                     if (threeDCartStore.RestUser)
                     {
-                        ThreeDCartRestWebClient webClient = new ThreeDCartRestWebClient(threeDCartStore);
-                        webClient.TestConnection();
+                        using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                        {
+                            IThreeDCartRestWebClient webClient = lifetimeScope.Resolve<IThreeDCartRestWebClient>(TypedParameter.From(threeDCartStore));
+                            webClient.TestConnection();
+                        }
                     }
                     else
                     {
@@ -210,8 +215,11 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
 
                 try
                 {
-                    ThreeDCartRestWebClient client = new ThreeDCartRestWebClient(threeDCartStoreEntity);
-                    client.TestConnection();
+                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                    {
+                        IThreeDCartRestWebClient webClient = lifetimeScope.Resolve<IThreeDCartRestWebClient>(TypedParameter.From(threeDCartStoreEntity));
+                        webClient.TestConnection();
+                    }
                 }
                 catch (Exception ex)
                 {

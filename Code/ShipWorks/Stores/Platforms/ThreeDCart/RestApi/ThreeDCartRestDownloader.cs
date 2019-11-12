@@ -11,6 +11,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using ShipWorks.Data;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
@@ -118,7 +119,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             catch (Exception ex)
             {
                 log.Error(ex);
-                if (ex.GetType() == typeof(ThreeDCartException) || ex.GetType() == typeof(SqlForeignKeyException))
+                if (ex is ThreeDCartException || ex is SqlForeignKeyException || ex is JsonReaderException || ex is ArgumentException)
                 {
                     throw new DownloadException(ex.Message, ex);
                 }
