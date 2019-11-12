@@ -36,7 +36,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
                 objectMap[source] = this;
             }
             
-            RakutenOrderID = source.RakutenOrderID;
+            RakutenOrderItemID = source.RakutenOrderItemID;
             Discount = source.Discount;
             ItemTotal = source.ItemTotal;
             
@@ -47,12 +47,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         }
 
         
-        /// <summary> The RakutenOrderID property of the Entity RakutenOrderItem<br/><br/>
+        /// <summary> The RakutenOrderItemID property of the Entity RakutenOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "RakutenOrderItem"."RakutenOrderItemID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.String RakutenOrderID { get; }
+        public System.String RakutenOrderItemID { get; }
         /// <summary> The Discount property of the Entity RakutenOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "RakutenOrderItem"."Discount"<br/>

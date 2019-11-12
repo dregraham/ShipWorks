@@ -10646,8 +10646,8 @@ namespace ShipWorks.Data.Model
 		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
-		///<summary>RakutenOrderID. </summary>
-		RakutenOrderID,
+		///<summary>RakutenOrderItemID. </summary>
+		RakutenOrderItemID,
 		///<summary>Discount. </summary>
 		Discount,
 		///<summary>ItemTotal. </summary>

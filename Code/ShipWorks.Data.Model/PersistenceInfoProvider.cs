@@ -2999,7 +2999,7 @@ namespace ShipWorks.Data.Model
 		{
 			this.AddElementMapping("RakutenOrderItemEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderItem", 4, 0);
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("RakutenOrderItemEntity", "RakutenOrderID", "RakutenOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("RakutenOrderItemEntity", "RakutenOrderItemID", "RakutenOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "Discount", "Discount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "ItemTotal", "ItemTotal", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
 		}

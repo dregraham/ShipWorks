@@ -24967,10 +24967,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.OrderItemID);}
 		}
-		/// <summary>Creates a new RakutenOrderItemEntity.RakutenOrderID field instance</summary>
-		public static EntityField2 RakutenOrderID
+		/// <summary>Creates a new RakutenOrderItemEntity.RakutenOrderItemID field instance</summary>
+		public static EntityField2 RakutenOrderItemID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.RakutenOrderID);}
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.RakutenOrderItemID);}
 		}
 		/// <summary>Creates a new RakutenOrderItemEntity.Discount field instance</summary>
 		public static EntityField2 Discount

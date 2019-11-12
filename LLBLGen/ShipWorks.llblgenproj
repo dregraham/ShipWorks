@@ -2487,7 +2487,7 @@
         <Fields>
           <Field Name="Discount" Type="decimal" Precision="19" Scale="4" FieldIndex="1" />
           <Field Name="ItemTotal" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
-          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="RakutenOrderItemID" Type="string" MaxLength="50" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="RakutenOrderSearch" ObjectID="a3a1c3f4-da75-4beb-98b4-7c75d61ee93a">
@@ -13429,7 +13429,7 @@
             <FieldMapping FieldName="Discount" TargetFieldName="Discount" />
             <FieldMapping FieldName="ItemTotal" TargetFieldName="ItemTotal" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderItemID" />
+            <FieldMapping FieldName="RakutenOrderItemID" TargetFieldName="RakutenOrderItemID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenOrderSearch" TargetName="ShipWorksLocal:dbo:RakutenOrderSearch">

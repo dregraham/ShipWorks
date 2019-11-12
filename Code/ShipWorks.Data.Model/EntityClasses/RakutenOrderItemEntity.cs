@@ -334,7 +334,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RakutenOrderID", fieldHashtable);
+			_fieldsCustomProperties.Add("RakutenOrderItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Discount", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
@@ -392,14 +392,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The RakutenOrderID property of the Entity RakutenOrderItem<br/><br/></summary>
+		/// <summary> The RakutenOrderItemID property of the Entity RakutenOrderItem<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "RakutenOrderItem"."RakutenOrderItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String RakutenOrderID
+		public virtual System.String RakutenOrderItemID
 		{
-			get { return (System.String)GetValue((int)RakutenOrderItemFieldIndex.RakutenOrderID, true); }
-			set	{ SetValue((int)RakutenOrderItemFieldIndex.RakutenOrderID, value); }
+			get { return (System.String)GetValue((int)RakutenOrderItemFieldIndex.RakutenOrderItemID, true); }
+			set	{ SetValue((int)RakutenOrderItemFieldIndex.RakutenOrderItemID, value); }
 		}
 
 		/// <summary> The Discount property of the Entity RakutenOrderItem<br/><br/></summary>

@@ -3392,7 +3392,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			IEntity2 toReturn = new RakutenOrderSearchEntity(fields);
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewRakutenOrderSearchUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		#region Included Code
