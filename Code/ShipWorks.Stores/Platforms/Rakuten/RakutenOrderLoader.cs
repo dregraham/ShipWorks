@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -36,7 +37,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <remarks>
         /// Order to save must have store loaded
         /// </remarks>
-        public void LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
+        public Task LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
@@ -45,7 +46,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             orderToSave.OrderDate = downloadedOrder.OrderDate;
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
 
-            LoadOrderStatuses(orderToSave, downloadedOrder);
             LoadAddresses(orderToSave, downloadedOrder);
 
             if (orderToSave.IsNew || string.IsNullOrWhiteSpace(orderToSave.RequestedShipping))
@@ -62,6 +62,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
             }
+
+            return null;
         }
 
         /// <summary>
@@ -88,9 +90,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the items.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadItems(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
@@ -123,9 +122,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the charges.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadCharges(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
@@ -138,9 +134,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the notes.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="orderElementFactory">The order element factory.</param>
         private void LoadNotes(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
             orderElementFactory.CreateNote(orderToSave, downloadedOrder.MerchantMemo, orderToSave.OrderDate, NoteVisibility.Public);
@@ -150,8 +143,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the shipping, billing, and email addresses.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
         private void LoadAddresses(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder)
         {
             PersonAdapter shipAdapter = new PersonAdapter(orderToSave, "Ship");
@@ -160,7 +151,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             LoadShippingAddress(downloadedOrder, shipAdapter);
             LoadBillingAddress(downloadedOrder, shipAdapter, billAdapter);
 
-            // No shipping email provided, so if ship and bill are the same, copy the email to the ship
             if (shipAdapter.FirstName == billAdapter.FirstName &&
                 shipAdapter.LastName == billAdapter.LastName &&
                 shipAdapter.City == billAdapter.City &&
@@ -173,8 +163,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the shipping address.
         /// </summary>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="shipAdapter">The ship adapter.</param>
         private static void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
         {
             var address = downloadedOrder.Shipping.DeliveryAddress;
@@ -192,9 +180,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the billing address.
         /// </summary>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        /// <param name="shipAdapter">The ship adapter.</param>
-        /// <param name="billAdapter">The bill adapter.</param>
         private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter, PersonAdapter billAdapter)
         {
             var address = downloadedOrder.Shipping.InvoiceAddress;
@@ -234,8 +219,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the requested shipping and prime status.
         /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
         private static void LoadRequestedShipping(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder)
         {
@@ -246,17 +229,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 orderToSave.RequestedShipping = carrier;
             }
-        }
-
-        /// <summary>
-        /// Loads the order statuses.
-        /// </summary>
-        /// <param name="orderToSave">The order to save.</param>
-        /// <param name="downloadedOrder">The downloaded order.</param>
-        private static void LoadOrderStatuses(RakutenOrderEntity orderToSave,
-            RakutenOrder downloadedOrder)
-        {
-
         }
     }
 }
