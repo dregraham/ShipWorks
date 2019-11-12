@@ -85,9 +85,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public RakutenShipmentResponse ConfirmShipping(ShipmentEntity shipment)
         {
-            var order = shipment.Order as RakutenOrderEntity;
-
-            var path = String.Format(shippingPath, shipment.Order.OrderNumberComplete, order.PackageID);
+            var path = String.Format(shippingPath, shipment.Order.OrderNumberComplete);
 
             var shippingInfo = new RakutenShippingInfo
             {
@@ -160,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             catch (Exception ex)
             {
                 apiLogEntry.LogResponse(ex);
-                throw ex;
+                throw;
             }
         }
 
