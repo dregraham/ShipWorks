@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
@@ -30,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions
         /// <summary>
         /// Should the ActionTask be run async
         /// </summary>
-        public override bool IsAsync => true;
+        public override bool IsAsync => false;
 
         /// <summary>
         /// This task is for shipments
@@ -59,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions
         /// <summary>
         /// Executes the task
         /// </summary>
-        protected override async Task RunAsync(List<long> inputKeys)
+        protected override void Run(List<long> inputKeys)
         {
             if (StoreID <= 0)
             {
@@ -76,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions
             {
                 foreach (long entityID in inputKeys)
                 {
-                    await onlineUpdater.UploadTrackingNumber(store, entityID).ConfigureAwait(false);
+                    onlineUpdater.UploadTrackingNumber(store, entityID);
                 }
             }
             catch (Exception ex)

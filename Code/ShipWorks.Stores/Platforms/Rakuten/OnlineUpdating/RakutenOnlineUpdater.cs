@@ -1,25 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
-using ShipWorks.Shipping.Carriers.OnTrac.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Stores.Platforms.Rakuten.DTO;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 {
@@ -45,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public async Task UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID)
+        public void UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -54,14 +40,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
             }
             else
             {
-                await UploadTrackingNumber(store, shipment).ConfigureAwait(false);
+                UploadTrackingNumber(store, shipment);
             }
         }
 
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public async Task UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment)
+        public void UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Voided)
             {
@@ -71,9 +57,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 
             OrderEntity order = shipment.Order;
 
-            // If the order is manual but also has combined orders, let it through so the updater
-            // can check the combined orders manual status.
-            if (!order.IsManual || order.CombineSplitStatus.IsCombined())
+            if (!order.IsManual)
             {
                 try
                 {
@@ -91,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                 }
 
                 // Upload tracking number
-                updateClient.ConfirmShipping(shipment);                                     
+                updateClient.ConfirmShipping(shipment);
             }
             else
             {

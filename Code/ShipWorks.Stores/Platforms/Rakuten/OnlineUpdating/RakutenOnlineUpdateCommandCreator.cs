@@ -75,18 +75,18 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Worker thread method for uploading shipment details
         /// </summary>
-        private async Task<IResult> ShipmentUploadCallback(long orderID, IRakutenStoreEntity store)
+        private Task<IResult> ShipmentUploadCallback(long orderID, IRakutenStoreEntity store)
         {
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderID, false);
             if (shipment == null)
             {
                 log.InfoFormat("There were no Processed and not Voided shipments to upload for OrderID {0}", orderID);
-                return Result.FromSuccess();
+                return Task.FromResult<IResult>(Result.FromSuccess());
             }
 
-            await onlineUpdater.UploadTrackingNumber(store, shipment).ConfigureAwait(false);
-            return Result.FromSuccess();           
+            onlineUpdater.UploadTrackingNumber(store, shipment);
+            return Task.FromResult<IResult>(Result.FromSuccess());
         }
     }
 }
