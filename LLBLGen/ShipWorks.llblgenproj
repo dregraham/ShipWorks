@@ -4619,7 +4619,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-11T16:19:51.1554952Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-12T16:23:08.0109054Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8077,7 +8077,7 @@
                   <PkConstraintName Name="PK_RakutenOrderItem" />
                   <Fields>
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="RakutenOrderItemID" Ordinal="2" DbType="12" Length="50" />
                     <Field Name="Discount" Ordinal="3" DbType="9" Precision="19" Scale="4" />
                     <Field Name="ItemTotal" Ordinal="4" DbType="9" Precision="19" Scale="4" />
                   </Fields>
@@ -13402,7 +13402,7 @@
             <FieldMapping FieldName="Discount" TargetFieldName="Discount" />
             <FieldMapping FieldName="ItemTotal" TargetFieldName="ItemTotal" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
+            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderItemID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">
