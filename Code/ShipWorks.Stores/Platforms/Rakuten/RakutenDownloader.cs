@@ -13,7 +13,7 @@ using ShipWorks.Stores.Platforms.Rakuten.DTO;
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
     /// <summary>
-    /// Downloader for downloading orders from ChannelAdvisor via their REST api
+    /// Downloader for downloading Rakuten orders
     /// </summary>
     [Component]
     public class RakutenDownloader : StoreDownloader, IRakutenDownloader
@@ -21,7 +21,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly ILog log;
         private readonly IRakutenWebClient webClient;
         private readonly RakutenOrderLoader orderLoader;
-        private readonly string authToken;
         private readonly RakutenStoreEntity rakutenStore;
 
         /// <summary>
@@ -89,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Parse the download errors in order to throw a meaningful error message
+        /// Parse the download errors
         /// </summary>
         private void ThrowError(RakutenErrors errors)
         {
@@ -120,11 +119,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Process the Rakuten orders and update the store's download start date
+        /// Process Rakuten orders
         /// </summary>
         private async Task<bool> ProcessOrders(RakutenOrdersResponse response)
         {
-
             foreach (RakutenOrder order in response.Orders)
             {
                 // Check if it has been canceled
@@ -140,7 +138,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Load the given ChannelAdvisor order
+        /// Load the given Rakuten order
         /// </summary>
         private async Task LoadOrder(RakutenOrder rakutenOrder)
         {
@@ -158,10 +156,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 var order = (RakutenOrderEntity) result.Value;
 
-                // Required by order loader
                 order.Store = Store;
 
-                // Order is saved by the order loader
+                // Save the order
                 await orderLoader.LoadOrder(order, rakutenOrder, this);
             }
         }
