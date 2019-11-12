@@ -229,7 +229,5 @@ namespace ShipWorks.Data.Model.EntityClasses
 
             return new ReadOnlyUspsAccountEntity(this, objectMap);
         }
-
-        
     }
 }
