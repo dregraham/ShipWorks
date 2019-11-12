@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Should the client use the fake api
         /// </summary>
         private bool UseFakeApi =>
-            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("RakutenLive", true);
+            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("RakutenLiveServer", true);
 
         /// <summary>
         /// Get the base endpoint for Rakuten requests
