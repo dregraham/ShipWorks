@@ -1407,7 +1407,6 @@
     <Compile Include="Stores\Platforms\GenericFile\WizardPages\IGenericStoreHubPage.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
-    <Compile Include="Stores\Platforms\Rakuten\Actions\RakutenShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Rakuten\IRakutenStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Rakuten\OnlineUpdating\IRakutenOnlineUpdater.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />

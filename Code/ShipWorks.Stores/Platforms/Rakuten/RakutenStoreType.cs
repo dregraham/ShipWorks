@@ -77,10 +77,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public override OrderItemEntity CreateOrderItemInstance()
         {
-            RakutenOrderItemEntity entity = new RakutenOrderItemEntity
-            {
-                SalesChannelLineNumber = -1
-            };
+            RakutenOrderItemEntity entity = new RakutenOrderItemEntity();
 
             return entity;
         }
@@ -102,13 +99,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices() => new[]
         {
-            "Acknowledged",
-            "Accepted",
-            "Canceled",
+            "Not Shipped",
+            "Processing Payment",
+            "Awaiting Completion",
             "Cancelled",
             "Complete",
-            "Entered",
-            "Processing",
         };
 
         /// <summary>
@@ -125,9 +120,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             var order = new Lazy<RakutenOrderEntity>(() => (RakutenOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Rakuten");
-            outline.AddElement("Warehouse", () => order.Value.WarehouseCode);
-            outline.AddElement("Channel", () => order.Value.SalesChannelName);
-            outline.AddElement("SOFSCreatedDate", () => order.Value.SofsCreatedDate);
+            outline.AddElement("RakutenOrderID", () => order.Value.RakutenOrderID);
         }
 
         /// <summary>
