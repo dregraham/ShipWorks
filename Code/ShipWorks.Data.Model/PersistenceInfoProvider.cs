@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(243);
+			this.InitClass(244);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -211,6 +211,7 @@ namespace ShipWorks.Data.Model
 			InitProStoresStoreEntityMappings();
 			InitRakutenOrderEntityMappings();
 			InitRakutenOrderItemEntityMappings();
+			InitRakutenOrderSearchEntityMappings();
 			InitRakutenStoreEntityMappings();
 			InitResourceEntityMappings();
 			InitScanFormBatchEntityMappings();
@@ -3001,6 +3002,16 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "RakutenOrderID", "RakutenOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "Discount", "Discount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
 			this.AddElementFieldMapping("RakutenOrderItemEntity", "ItemTotal", "ItemTotal", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+		}
+
+		/// <summary>Inits RakutenOrderSearchEntity's mappings</summary>
+		private void InitRakutenOrderSearchEntityMappings()
+		{
+			this.AddElementMapping("RakutenOrderSearchEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderSearch", 4, 0);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenOrderSearchID", "RakutenOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenOrderID", "RakutenOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
 		}
 
 		/// <summary>Inits RakutenStoreEntity's mappings</summary>

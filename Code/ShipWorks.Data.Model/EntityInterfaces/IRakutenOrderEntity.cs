@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         
         
         
+        IEnumerable<IRakutenOrderSearchEntity> RakutenOrderSearch { get; }
 
         
         /// <summary>
@@ -58,6 +59,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     {
         
         
+        IEnumerable<IRakutenOrderSearchEntity> IRakutenOrderEntity.RakutenOrderSearch => RakutenOrderSearch;
 
         /// <summary>
         /// Get a read only version of the entity

@@ -184,6 +184,7 @@ namespace ShipWorks.Data.Model.Custom
 				case "ProStoresStoreEntity": return EntityType.ProStoresStoreEntity;
 				case "RakutenOrderEntity": return EntityType.RakutenOrderEntity;
 				case "RakutenOrderItemEntity": return EntityType.RakutenOrderItemEntity;
+				case "RakutenOrderSearchEntity": return EntityType.RakutenOrderSearchEntity;
 				case "RakutenStoreEntity": return EntityType.RakutenStoreEntity;
 				case "ResourceEntity": return EntityType.ResourceEntity;
 				case "ScanFormBatchEntity": return EntityType.ScanFormBatchEntity;

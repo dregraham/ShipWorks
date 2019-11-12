@@ -24984,6 +24984,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity RakutenOrderSearchEntity</summary>
+	public partial class RakutenOrderSearchFields
+	{
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenOrderSearchID field instance</summary>
+		public static EntityField2 RakutenOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenOrderSearchID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenOrderID field instance</summary>
+		public static EntityField2 RakutenOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenOrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OriginalOrderID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity RakutenStoreEntity</summary>
 	public partial class RakutenStoreFields
 	{

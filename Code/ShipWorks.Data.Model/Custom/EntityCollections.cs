@@ -9354,6 +9354,63 @@ namespace ShipWorks.Data.Model.Custom
 
 	
 	/// <summary>
+	/// Strongly typed collection of RakutenOrderSearchEntity
+	/// </summary>
+	public class RakutenOrderSearchCollection : EntityCollection<RakutenOrderSearchEntity>
+	{
+        /// <summary>
+        /// Gets the count of all RakutenOrderSearchEntity rows
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all RakutenOrderSearchEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(IDataAccessAdapter adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new RakutenOrderSearchEntityFactory().CreateFields(), bucket);
+        }
+
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static RakutenOrderSearchCollection Fetch(IDataAccessAdapter adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static RakutenOrderSearchCollection Fetch(IDataAccessAdapter adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            RakutenOrderSearchCollection collection = new RakutenOrderSearchCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+
+	
+	/// <summary>
 	/// Strongly typed collection of RakutenStoreEntity
 	/// </summary>
 	public class RakutenStoreCollection : EntityCollection<RakutenStoreEntity>
