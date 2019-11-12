@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
 using ShipWorks.Stores.Platforms.Rakuten.DTO.Requests;
@@ -18,31 +19,28 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     [Component]
     public class RakutenWebClient : IRakutenWebClient
     {
-        private readonly RakutenStoreEntity store;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
+        private readonly string endpointBase;
         private readonly string ordersEndpoint;
-        private readonly string shippingPath;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenWebClient(RakutenStoreEntity store,
-            IEncryptionProviderFactory encryptionProviderFactory,
+        public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
             IHttpRequestSubmitterFactory submitterFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
         {
-            this.store = store;
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.submitterFactory = submitterFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
 
-            var endpointBase = GetEndpointBase();
+            endpointBase = GetEndpointBase();
             ordersEndpoint = $"{endpointBase}/ordersearch";
-            shippingPath = $"{endpointBase}/orders/{store.MarketplaceID}/{store.ShopURL}/" + "{0}/shipping/{1}/shippingstatus";
+            
         }
 
         /// <summary>
@@ -71,11 +69,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Get a list of orders from Rakuten
         /// </summary>
-        public RakutenOrdersResponse GetOrders(DateTime startDate)
+        public RakutenOrdersResponse GetOrders(IRakutenStoreEntity store,DateTime startDate)
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.Now, DateTime.MinValue, startDate);
 
-            var request = CreateRequest(ordersEndpoint, HttpVerb.Get, requestObject);
+            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Get, requestObject);
 
             return ProcessRequest<RakutenOrdersResponse>(request, "GetOrders");
         }
@@ -83,8 +81,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
-        public RakutenShipmentResponse ConfirmShipping(ShipmentEntity shipment)
+        public RakutenShipmentResponse ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
+            var shippingPath = $"{endpointBase}/orders/{store.MarketplaceID}/{store.ShopURL}/" + "{0}/shipping/{1}/shippingstatus";
             var path = String.Format(shippingPath, shipment.Order.OrderNumberComplete);
 
             var shippingInfo = new RakutenShippingInfo
@@ -105,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             });
 
-            var request = CreateRequest(ordersEndpoint, HttpVerb.Patch, requestObject);
+            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Patch, requestObject);
 
             return ProcessRequest<RakutenShipmentResponse>(request, "ConfirmShipping");
         }
@@ -113,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create a request to Rakuten
         /// </summary>
-        private IHttpRequestSubmitter CreateRequest<T>(string endpoint, HttpVerb method, T body)
+        private IHttpRequestSubmitter CreateRequest<T>(IRakutenStoreEntity store, string endpoint, HttpVerb method, T body)
         {
             var jsonSerializerSettings = new JsonSerializerSettings
             {

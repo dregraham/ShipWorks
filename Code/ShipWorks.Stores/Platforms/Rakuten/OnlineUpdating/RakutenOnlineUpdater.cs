@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                 }
 
                 // Upload tracking number
-                updateClient.ConfirmShipping(shipment);
+                updateClient.ConfirmShipping(store, shipment);
             }
             else
             {

@@ -302,6 +302,10 @@
     <Compile Include="Platforms\Rakuten\IRakutenDownloader.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenWebClient.cs" />
     <Compile Include="Platforms\Rakuten\RakutenDownloader.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -978,6 +982,7 @@
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\RakutenStore.cs" />
     <Compile Include="Warehouse\UploadOrdersRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />

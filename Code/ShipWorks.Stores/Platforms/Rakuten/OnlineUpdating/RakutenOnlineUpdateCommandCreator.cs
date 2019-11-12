@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                 return Task.FromResult<IResult>(Result.FromSuccess());
             }
 
-            onlineUpdater.UploadTrackingNumber(store, shipment);
+            onlineUpdater.UploadTrackingNumber(store, orderID);
             return Task.FromResult<IResult>(Result.FromSuccess());
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
 {
@@ -28,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenGetOrdersRequest(RakutenStoreEntity store, DateTime createdBefore, DateTime createdAfter, DateTime lastModified)
+        public RakutenGetOrdersRequest(IRakutenStoreEntity store, DateTime createdBefore, DateTime createdAfter, DateTime lastModified)
         {
             this.Query = new RakutenOrderSearchQuery(store)
             {
@@ -74,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenOrderSearchQuery(RakutenStoreEntity store)
+        public RakutenOrderSearchQuery(IRakutenStoreEntity store)
         {
             this.ShopKey = new RakutenShopKey(store);
         }
@@ -94,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenShopKey(RakutenStoreEntity store)
+        public RakutenShopKey(IRakutenStoreEntity store)
         {
             this.MarketplaceID = store.MarketplaceID;
             this.ShopURL = store.ShopURL;

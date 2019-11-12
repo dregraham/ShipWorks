@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
 
@@ -21,14 +22,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly ILog log;
         private readonly IRakutenWebClient webClient;
         private readonly RakutenOrderLoader orderLoader;
-        private readonly RakutenStoreEntity rakutenStore;
+        private readonly IRakutenStoreEntity rakutenStore;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RakutenDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
-            Func<RakutenStoreEntity, IRakutenWebClient> webClientFactory,
+            Func<IRakutenStoreEntity, IRakutenWebClient> webClientFactory,
             RakutenOrderLoader orderLoader,
             Func<Type, ILog> createLogger) :
             base(store, storeTypeManager.GetType(store))
@@ -57,7 +58,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     return;
                 }
 
-                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore.DownloadStartDate ?? DateTime.UtcNow.AddDays(-7));
+                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate ?? DateTime.UtcNow.AddDays(-7));
 
                 Progress.Detail = $"Downloading orders...";
 
@@ -70,7 +71,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     }
 
                     // Download more orders with the new download date
-                    response = webClient.GetOrders(rakutenStore.DownloadStartDate.Value);
+                    response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate.Value);
                 }
 
                 if (response?.Errors != null)
