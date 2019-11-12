@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -25,14 +26,33 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 
         }
 
-        protected override Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
-            throw new System.NotImplementedException();
+            QueryFactory factory = new QueryFactory();
+
+            var from = factory.RakutenOrderSearch
+                .LeftJoin(factory.OrderSearch)
+                .On(RakutenOrderSearchFields.OriginalOrderID == OrderSearchFields.OriginalOrderID);
+
+            var query = factory.Create()
+                .From(from)
+                .Select(() => RakutenOrderSearchFields.RakutenOrderID.ToValue<string>())
+                .Distinct()
+                .Where(RakutenOrderSearchFields.OrderID == order.OrderID)
+                .AndWhere(OrderSearchFields.IsManual == false);
+
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                return await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            }
         }
 
+        /// <summary>
+        /// Gets the Rakuten online order identifier
+        /// </summary>
         protected override string GetOnlineOrderIdentifier(IOrderEntity order)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }
