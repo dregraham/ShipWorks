@@ -74,10 +74,9 @@
         <TextBlock Grid.Column="2"
                    Grid.Row="4" 
                    TextWrapping="WrapWithOverflow">
-            For help getting your Rakuten API Credentials, 
-            <!-- This needs changed to a rakuten article at some point-->
+            For help getting your Rakuten API Credentials,
             <Hyperlink
-                NavigateUri="https://shipworks.zendesk.com/hc/en-us/articles/360022653991" ui:Link.OpenInBrowser="true">
+                NavigateUri="https://support.shipworks.com/hc/en-us/articles/360036157911" ui:Link.OpenInBrowser="true">
                 click here.
             </Hyperlink>
         </TextBlock>
