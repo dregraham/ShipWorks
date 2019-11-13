@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly RakutenOrderLoader orderLoader;
         private readonly RakutenStoreEntity rakutenStore;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private DateTime downloadStartDate;
 
         /// <summary>
         /// Constructor
@@ -66,12 +67,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 Progress.Detail = $"Downloading orders...";
 
-                if (rakutenStore.DownloadStartDate == null)
-                {
-                    rakutenStore.DownloadStartDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false) ?? DateTime.UtcNow.AddDays(-30)
-                }
+                downloadStartDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false) ?? DateTime.UtcNow.AddDays(-30);
 
-                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate.Value);
+                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, downloadStartDate);
 
                 while (response?.Orders?.Any() == true)
                 {
@@ -84,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     Progress.Detail = $"Downloading orders...";
 
                     // Download more orders with the new download date
-                    response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate.Value);
+                    response = webClient.GetOrders(rakutenStore, downloadStartDate);
                 }
 
                 if (response?.Errors != null)
@@ -181,6 +179,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+                // Update downloadStartDate
+                downloadStartDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
             }
         }
     }

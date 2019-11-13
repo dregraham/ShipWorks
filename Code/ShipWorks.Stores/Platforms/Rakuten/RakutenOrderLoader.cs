@@ -166,8 +166,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private void LoadNotes(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
-            orderElementFactory.CreateNote(orderToSave, downloadedOrder.MerchantMemo, orderToSave.OrderDate, NoteVisibility.Public);
-            orderElementFactory.CreateNote(orderToSave, downloadedOrder.ShopperComment, orderToSave.OrderDate, NoteVisibility.Public);
+            if (!string.IsNullOrWhiteSpace(downloadedOrder.MerchantMemo))
+            {
+                orderElementFactory.CreateNote(orderToSave, downloadedOrder.MerchantMemo, orderToSave.OrderDate, NoteVisibility.Public);
+            }
+
+            if (!string.IsNullOrWhiteSpace(downloadedOrder.ShopperComment) &&
+                !downloadedOrder.ShopperComment.Equals("{}"))
+            {
+                orderElementFactory.CreateNote(orderToSave, downloadedOrder.ShopperComment, orderToSave.OrderDate, NoteVisibility.Public);
+            }
         }
 
         /// <summary>
