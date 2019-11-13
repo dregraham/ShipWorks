@@ -166,8 +166,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private static void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
         {
             var address = downloadedOrder.Shipping.DeliveryAddress;
-            shipAdapter.NameParseStatus = PersonNameParseStatus.Unparsed;
-            shipAdapter.UnparsedName = address.Name;
+            
+
+            var name = PersonName.Parse(address.Name);
+            shipAdapter.NameParseStatus = name.ParseStatus;
+            shipAdapter.FirstName = name.First;
+            shipAdapter.MiddleName = name.Middle;
+            shipAdapter.LastName = name.Last;
+
             shipAdapter.Street1 = address.Address1;
             shipAdapter.Street2 = address.Address2;
             shipAdapter.City = address.CityName;
@@ -183,8 +189,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter, PersonAdapter billAdapter)
         {
             var address = downloadedOrder.Shipping.InvoiceAddress;
-            billAdapter.NameParseStatus = PersonNameParseStatus.Unparsed;
-            billAdapter.UnparsedName = address.Name;
+
+            var name = PersonName.Parse(address.Name);
+            billAdapter.NameParseStatus = name.ParseStatus;
+            billAdapter.FirstName = name.First;
+            billAdapter.MiddleName = name.Middle;
+            billAdapter.LastName = name.Last;
+
             billAdapter.Street1 = address.Address1;
             billAdapter.Street2 = address.Address2;
             billAdapter.City = address.CityName;
