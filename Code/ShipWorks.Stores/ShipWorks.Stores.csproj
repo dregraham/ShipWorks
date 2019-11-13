@@ -282,8 +282,6 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
-    <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
-    <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOptionalCheckoutInfo.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenPayment.cs" />
@@ -1057,7 +1055,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Platforms\Rakuten\Content\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
