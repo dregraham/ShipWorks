@@ -23,7 +23,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <param name="sqlAdapterFactory"></param>
         public RakutenOrderSearchProvider(ISqlAdapterFactory sqlAdapterFactory) : base(sqlAdapterFactory)
         {
-
         }
 
         protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
@@ -50,9 +49,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Gets the Rakuten online order identifier
         /// </summary>
-        protected override string GetOnlineOrderIdentifier(IOrderEntity order)
-        {
-            throw new NotImplementedException();
-        }
+        protected override string GetOnlineOrderIdentifier(IOrderEntity order) =>
+            (order as IRakutenOrderEntity)?.RakutenOrderID ?? string.Empty;
     }
 }
