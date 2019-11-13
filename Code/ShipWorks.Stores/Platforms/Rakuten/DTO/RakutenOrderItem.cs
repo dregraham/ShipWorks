@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
@@ -27,5 +28,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 
         [JsonProperty("sku")]
         public string SKU { get; set; }
+
+        [JsonProperty("name")]
+        public Dictionary<string, string> Name { get; set; }
     }
 }

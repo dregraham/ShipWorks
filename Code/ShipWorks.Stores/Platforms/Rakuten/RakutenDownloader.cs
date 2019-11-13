@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -22,7 +25,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly ILog log;
         private readonly IRakutenWebClient webClient;
         private readonly RakutenOrderLoader orderLoader;
-        private readonly IRakutenStoreEntity rakutenStore;
+        private RakutenStoreEntity rakutenStore;
+        private readonly ISqlAdapterRetry sqlAdapter;
 
         /// <summary>
         /// Constructor
@@ -31,12 +35,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             IStoreTypeManager storeTypeManager,
             Func<IRakutenStoreEntity, IRakutenWebClient> webClientFactory,
             RakutenOrderLoader orderLoader,
+            ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<Type, ILog> createLogger) :
             base(store, storeTypeManager.GetType(store))
         {
             rakutenStore = store as RakutenStoreEntity;
             this.webClient = webClientFactory(rakutenStore);
             this.orderLoader = orderLoader;
+            sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "RakutenDownloader.Download");
 
             MethodConditions.EnsureArgumentIsNotNull(rakutenStore, "Rakuten Store");
 
@@ -78,6 +84,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 {
                     ThrowError(response.Errors);
                 }
+            }
+            catch (WebException ex)
+            {
+                throw new DownloadException(ex.Message);
             }
             catch (SqlForeignKeyException ex)
             {
@@ -159,8 +169,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 order.Store = Store;
 
-                // Save the order
-                await orderLoader.LoadOrder(order, rakutenOrder, this);
+                // Create the order
+                orderLoader.LoadOrder(order, rakutenOrder, this);
+
+                // Save the downloaded order
+                await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+                rakutenStore.DownloadStartDate = rakutenOrder.LastModifiedDate;
             }
         }
     }

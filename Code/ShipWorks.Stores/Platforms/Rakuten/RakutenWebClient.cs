@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.Now, DateTime.MinValue, startDate);
 
-            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Get, requestObject);
+            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Post, requestObject);
 
             return jsonRequest.Submit<RakutenOrdersResponse>("GetOrders", ApiLogSource.Rakuten, request);
         }

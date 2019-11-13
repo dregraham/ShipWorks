@@ -79,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// The anonymized email address of the shopper
         /// </summary>
         [JsonProperty("shopperAnonymizedAddress")]
-        public RakutenShipment AnonymizedEmailAddress { get; set; }
+        public string AnonymizedEmailAddress { get; set; }
 
         /// <summary>
         /// The merchant memo attached to the order
