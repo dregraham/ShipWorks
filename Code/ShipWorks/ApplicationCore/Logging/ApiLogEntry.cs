@@ -109,13 +109,6 @@ namespace ShipWorks.ApplicationCore.Logging
                 return;
             }
 
-            HttpTextPostRequestSubmitter text = request as HttpTextPostRequestSubmitter;
-            if (text != null)
-            {
-                LogHttpTextRequest(text);
-                return;
-            }
-
             // We also know how to log any Post-based request
             if (request.Verb != HttpVerb.Get)
             {
@@ -267,41 +260,6 @@ namespace ShipWorks.ApplicationCore.Logging
                 xmlWriter.WriteEndElement();
 
                 WriteLog(writer.ToString(), ApiLogCategory.Request);
-            }
-        }
-
-        /// <summary>
-        /// Log the specified Text Post request
-        /// </summary>
-        private void LogHttpTextRequest(IHttpRequestSubmitter request)
-        {
-            using (StringWriter writer = new StringWriter())
-            {
-                XmlTextWriter xmlWriter = new XmlTextWriter(writer);
-
-                xmlWriter.WriteStartElement(request.Verb.ToString());
-                xmlWriter.WriteElementString("Url", request.Uri.ToString());
-                xmlWriter.WriteElementString("ContentType", request.ContentType);
-                xmlWriter.WriteElementString("Data", "See supplemental request file.");
-                xmlWriter.WriteEndElement();
-
-                // output the log
-                WriteLog(writer.ToString(), ApiLogCategory.Request);
-
-                // Default to bin
-                string extension = "bin";
-
-                // If it contains xml anywhere
-                if (request.ContentType.IndexOf("xml", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    extension = "xml";
-                }
-                else if (request.ContentType.IndexOf("json", StringComparison.InvariantCultureIgnoreCase) >= 0)
-                {
-                    extension = "txt";
-                }
-
-                WriteLog(request.GetPostContent(), ApiLogCategory.RequestSupplement, "RawData", extension);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -37,12 +37,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <remarks>
         /// Order to save must have store loaded
         /// </remarks>
-        public Task LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
+        public void LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
 
-            orderToSave.RakutenOrderID = downloadedOrder.OrderNumber;
+            ParseOrderNumber(orderToSave, downloadedOrder);
+
             orderToSave.OrderDate = downloadedOrder.OrderDate;
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
 
@@ -62,8 +63,20 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
             }
+        }
 
-            return null;
+        /// <summary>
+        /// Parse the Rakuten order number
+        /// </summary>
+        private void ParseOrderNumber(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder)
+        {
+            orderToSave.RakutenOrderID = downloadedOrder.OrderNumber;
+
+            var orderNumber = downloadedOrder.OrderNumber.Split('-');
+
+            orderToSave.ApplyOrderNumberPrefix(orderNumber[0]);
+            orderToSave.OrderNumber = long.Parse(orderNumber[1]);
+            orderToSave.ApplyOrderNumberPostfix(orderNumber[2]);
         }
 
         /// <summary>
@@ -117,6 +130,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             itemToSave.RakutenOrderItemID = downloadedItem.OrderItemID;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
+
+            string englishName;
+            downloadedItem.Name.TryGetValue("en_us", out englishName);
+
+            itemToSave.Name = string.IsNullOrEmpty(englishName) ? downloadedItem.Name.Values.FirstOrDefault() : englishName;
         }
 
         /// <summary>

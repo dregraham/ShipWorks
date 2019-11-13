@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using System.Security;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Rakuten;
@@ -71,7 +69,10 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public void Load(RakutenStoreEntity store)
         {
-            ApiKey = store.AuthKey;
+            var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
+                .Decrypt(store.AuthKey);
+
+            ApiKey = authKey;
             MarketplaceID = store.MarketplaceID;
             ShopUrl = store.ShopURL;
         }
@@ -81,10 +82,13 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public bool Save(RakutenStoreEntity store)
         {
+            var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
+                .Encrypt(ApiKey);
+
             // Use a throw away store to test entered credentials.
             RakutenStoreEntity testStore = new RakutenStoreEntity()
             {
-                AuthKey = ApiKey,
+                AuthKey = authKey,
                 MarketplaceID = MarketplaceID,
                 ShopURL = ShopUrl
             };
@@ -96,8 +100,8 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
                 messageHelper.ShowError("Unable to authenticate credentials.");
                 return false;
             }
-            
-            store.AuthKey = ApiKey;
+
+            store.AuthKey = authKey;
             store.MarketplaceID = MarketplaceID;
             store.ShopURL = ShopUrl;
 
