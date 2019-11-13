@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private static void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
         {
             var address = downloadedOrder.Shipping.DeliveryAddress;
-            
+
 
             var name = PersonName.Parse(address.Name);
             shipAdapter.NameParseStatus = name.ParseStatus;
@@ -219,6 +219,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter, PersonAdapter billAdapter)
         {
             var address = downloadedOrder.Shipping.InvoiceAddress;
+
+            if (address == null)
+            {
+                return;
+            }
 
             var name = PersonName.Parse(address.Name);
             billAdapter.NameParseStatus = name.ParseStatus;

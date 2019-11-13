@@ -64,9 +64,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     return;
                 }
 
-                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate ?? DateTime.UtcNow.AddDays(-7));
-
                 Progress.Detail = $"Downloading orders...";
+
+                if (rakutenStore.DownloadStartDate == null)
+                {
+                    rakutenStore.DownloadStartDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false) ?? DateTime.UtcNow.AddDays(-30)
+                }
+
+                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate.Value);
 
                 while (response?.Orders?.Any() == true)
                 {
@@ -75,6 +80,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     {
                         break;
                     }
+
+                    Progress.Detail = $"Downloading orders...";
 
                     // Download more orders with the new download date
                     response = webClient.GetOrders(rakutenStore, rakutenStore.DownloadStartDate.Value);
@@ -174,8 +181,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-
-                rakutenStore.DownloadStartDate = rakutenOrder.LastModifiedDate;
             }
         }
     }

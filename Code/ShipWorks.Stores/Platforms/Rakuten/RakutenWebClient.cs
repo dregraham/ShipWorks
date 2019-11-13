@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -72,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public RakutenOrdersResponse GetOrders(IRakutenStoreEntity store, DateTime startDate)
         {
-            var requestObject = new RakutenGetOrdersRequest(store, DateTime.Now, DateTime.MinValue, startDate);
+            var requestObject = new RakutenGetOrdersRequest(store, DateTime.UtcNow.AddDays(7), new DateTime(1970, 1, 1), startDate);
 
             var request = CreateRequest(store, ordersEndpoint, HttpVerb.Post, requestObject);
 
@@ -119,6 +120,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore,
+                DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
             };
 
             IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(body, jsonSerializerSettings),
@@ -126,6 +128,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             submitter.Uri = new Uri(endpoint);
             submitter.Verb = method;
+            submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.BadRequest });
 
             var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
                 .Decrypt(store.AuthKey);

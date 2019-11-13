@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
@@ -18,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         public string SortOrder { get; set; }
 
         [JsonProperty("maxResultsPerPage")]
-        public int MaxResultsPerPage { get; set; }
+        public int MaxResultsPerPage { get; set; } = 100;
 
         [JsonProperty("pageIndex")]
         public int PageIndex { get; set; }
@@ -61,10 +60,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         public IList<String> OrderStatus { get; set; }
 
         [JsonProperty("lastModifiedAfter")]
-        public DateTime LastModifiedAfter { get; set; }
+        public DateTime? LastModifiedAfter { get; set; }
 
         [JsonProperty("lastModifiedBefore")]
-        public DateTime LastModifiedBefore { get; set; }
+        public DateTime? LastModifiedBefore { get; set; }
 
         [JsonProperty("buyerName")]
         public string BuyerName { get; set; }
@@ -89,7 +88,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         [JsonProperty("marketplaceIdentifier")]
         public string MarketplaceID { get; set; }
 
-        [JsonProperty("shopURL")]
+        [JsonProperty("shopUrl")]
         public string ShopURL { get; set; }
 
         /// <summary>
