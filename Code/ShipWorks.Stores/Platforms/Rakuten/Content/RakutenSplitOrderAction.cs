@@ -23,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Content
             RakutenOrderEntity order = (RakutenOrderEntity) splitOrder;
             RakutenOrderSearchEntity orderSearchEntity = order.RakutenOrderSearch.AddNew();
 
-            orderSearchEntity.CustomOrderIdentifier = order.CustomOrderIdentifier;
+            orderSearchEntity.RakutenOrderID = order.RakutenOrderID;
             orderSearchEntity.OriginalOrderID = originalOrderID;
         }
     }
