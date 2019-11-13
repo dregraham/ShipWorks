@@ -37,7 +37,7 @@
     <LogDirectory>$(ArtifactDirectory)\Logs</LogDirectory>
     <AppDirectory>$(ArtifactDirectory)\Application</AppDirectory>
     <InstallerDirectory>$(ArtifactDirectory)\Distribute</InstallerDirectory>
-    <SupportObfuscationLogDirectory>\\INTFS01\Support\ObfuscationReports</SupportObfuscationLogDirectory>
+    <SupportObfuscationLogDirectory>\\intdev1201\networkshare\DevShare\ObfuscationReports</SupportObfuscationLogDirectory>
   </PropertyGroup>
 
   <!-- The main build -->

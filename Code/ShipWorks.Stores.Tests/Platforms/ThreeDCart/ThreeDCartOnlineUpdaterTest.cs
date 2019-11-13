@@ -1,6 +1,9 @@
 ﻿using System;
+using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -9,6 +12,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.ThreeDCart.RestApi;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
@@ -23,14 +27,14 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
         private readonly UpsShipmentEntity upsShipment;
         private readonly IParcelShipmentEntity iParcelShipment;
         private readonly ThreeDCartRestOnlineUpdater testObject;
-        readonly Mock<ThreeDCartStoreEntity> store = new Mock<ThreeDCartStoreEntity>();
-        readonly Mock<IShippingManager> shippingManager = new Mock<IShippingManager>();
+        private readonly AutoMock mock;
 
         public ThreeDCartOnlineUpdaterTest()
         {
-            store.Setup(x => x.RestUser).Returns(true);
-            store.Setup(x => x.TypeCode).Returns((int) StoreTypeCode.ThreeDCart);
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
+            var store = new ThreeDCartStoreEntity { RestUser = true, TypeCode = (int) StoreTypeCode.ThreeDCart };
+            
             OrderEntity orderEntity = new ThreeDCartOrderEntity() { ThreeDCartOrderID = 100 };
             shipment = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };
             postalShipment = new PostalShipmentEntity { Service = (int) PostalServiceType.FirstClass };
@@ -40,9 +44,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ThreeDCart
             onTracShipment = new OnTracShipmentEntity { Service = (int) OnTracServiceType.Ground };
             iParcelShipment = new IParcelShipmentEntity { Service = (int) iParcelServiceType.Immediate };
 
-            shippingManager.Setup(x => x.EnsureShipmentLoaded(shipment));
-
-            testObject = new ThreeDCartRestOnlineUpdater(store.Object, (x => new ThreeDCartRestWebClient(store.Object)));
+            
+            testObject = mock.Create<ThreeDCartRestOnlineUpdater>(TypedParameter.From(store));
         }
 
         [Fact]

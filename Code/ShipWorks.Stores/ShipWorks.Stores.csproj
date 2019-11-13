@@ -298,6 +298,7 @@
     <Compile Include="Platforms\Rakuten\RakutenOrderIdentifier.cs" />
     <Compile Include="Platforms\Rakuten\RakutenStoreType.cs" />
     <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
+    <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
     <Compile Include="Platforms\Rakuten\RakutenOrderLoader.cs" />
@@ -307,6 +308,10 @@
     <Compile Include="Platforms\Rakuten\IRakutenDownloader.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenWebClient.cs" />
     <Compile Include="Platforms\Rakuten\RakutenDownloader.cs" />
+    <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStoreDtoFactory.cs" />
+    <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseItem.cs" />
+    <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrder.cs" />
+    <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
