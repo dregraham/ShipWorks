@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.RakutenOrderSearchEntityUsingOrderID);
 			return toReturn;
 		}
 
@@ -106,6 +107,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(RakutenOrderFields.OrderID, OrderSearchFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("RakutenOrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderSearchEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between RakutenOrderEntity and RakutenOrderSearchEntity over the 1:n relation they have, using the relation between the fields:
+		/// RakutenOrder.OrderID - RakutenOrderSearch.OrderID
+		/// </summary>
+		public virtual IEntityRelation RakutenOrderSearchEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "RakutenOrderSearch" , true);
+				relation.AddEntityFieldPair(RakutenOrderFields.OrderID, RakutenOrderSearchFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("RakutenOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("RakutenOrderSearchEntity", false);
 				return relation;
 			}
 		}
@@ -213,6 +229,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		internal static readonly IEntityRelation OrderItemEntityUsingOrderIDStatic = new RakutenOrderRelations().OrderItemEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderPaymentDetailEntityUsingOrderIDStatic = new RakutenOrderRelations().OrderPaymentDetailEntityUsingOrderID;
 		internal static readonly IEntityRelation OrderSearchEntityUsingOrderIDStatic = new RakutenOrderRelations().OrderSearchEntityUsingOrderID;
+		internal static readonly IEntityRelation RakutenOrderSearchEntityUsingOrderIDStatic = new RakutenOrderRelations().RakutenOrderSearchEntityUsingOrderID;
 		internal static readonly IEntityRelation ShipmentEntityUsingOrderIDStatic = new RakutenOrderRelations().ShipmentEntityUsingOrderID;
 		internal static readonly IEntityRelation ValidatedAddressEntityUsingConsumerIDStatic = new RakutenOrderRelations().ValidatedAddressEntityUsingConsumerID;
 		internal static readonly IEntityRelation CustomerEntityUsingCustomerIDStatic = new RakutenOrderRelations().CustomerEntityUsingCustomerID;

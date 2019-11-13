@@ -7247,6 +7247,18 @@ PRINT N'Creating primary key [PK_RakutenOrderItem] on [dbo].[RakutenOrderItem]'
 GO
 ALTER TABLE [dbo].[RakutenOrderItem] ADD CONSTRAINT [PK_RakutenOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
 GO
+CREATE TABLE [dbo].[RakutenOrderSearch]
+(
+[RakutenOrderSearchID] [bigint] IDENTITY(1,1) NOT NULL,
+[OrderID] [bigint] NOT NULL,
+[RakutenOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_RakutenOrderSearch] on [dbo].[RakutenOrderSearch]'
+GO
+ALTER TABLE [dbo].[RakutenOrderSearch] ADD CONSTRAINT [PK_RakutenOrderSearch] PRIMARY KEY CLUSTERED  ([RakutenOrderSearchID])
+GO
 PRINT N'Creating [dbo].[RakutenStore]'
 GO
 CREATE TABLE [dbo].[RakutenStore]

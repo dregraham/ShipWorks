@@ -16,12 +16,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "RakutenShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class RakutenShipmentUploadTask : StoreInstanceTaskBase
     {
-        readonly RakutenOnlineUpdater onlineUpdater;
+        readonly IRakutenOnlineUpdater onlineUpdater;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenShipmentUploadTask(RakutenOnlineUpdater onlineUpdater)
+        public RakutenShipmentUploadTask(IRakutenOnlineUpdater onlineUpdater)
         {
             this.onlineUpdater = onlineUpdater;
         }

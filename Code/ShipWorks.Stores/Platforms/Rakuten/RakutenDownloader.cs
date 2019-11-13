@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     /// <summary>
     /// Downloader for downloading Rakuten orders
     /// </summary>
-    [Component]
+    [KeyedComponent(typeof(IStoreDownloader), StoreTypeCode.Rakuten)]
     public class RakutenDownloader : StoreDownloader, IRakutenDownloader
     {
         private readonly ILog log;

@@ -40,6 +40,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             
             
             
+            RakutenOrderSearch = source.RakutenOrderSearch?.Select(x => x.AsReadOnly(objectMap)).OfType<IRakutenOrderSearchEntity>().ToReadOnly() ??
+                Enumerable.Empty<IRakutenOrderSearchEntity>();
 
             CopyCustomRakutenOrderData(source);
         }
@@ -53,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         public System.String RakutenOrderID { get; }
         
         
+        
+        public IEnumerable<IRakutenOrderSearchEntity> RakutenOrderSearch { get; }
         
         /// <summary>
         /// Get a read only version of the entity

@@ -5,6 +5,7 @@ using Interapptive.Shared.Security;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
@@ -21,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
-        private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly IJsonRequest jsonRequest;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
         private readonly string endpointBase;
@@ -32,22 +33,22 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
             IHttpRequestSubmitterFactory submitterFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory)
+            IJsonRequest jsonRequest)
         {
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.submitterFactory = submitterFactory;
-            this.apiLogEntryFactory = apiLogEntryFactory;
+            this.jsonRequest = jsonRequest;
 
             endpointBase = GetEndpointBase();
             ordersEndpoint = $"{endpointBase}/ordersearch";
-            
+
         }
 
         /// <summary>
         /// Should the client use the fake api
         /// </summary>
         private bool UseFakeApi =>
-            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("RakutenLive", true);
+            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("RakutenLiveServer", true);
 
         /// <summary>
         /// Get the base endpoint for Rakuten requests
@@ -69,13 +70,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Get a list of orders from Rakuten
         /// </summary>
-        public RakutenOrdersResponse GetOrders(IRakutenStoreEntity store,DateTime startDate)
+        public RakutenOrdersResponse GetOrders(IRakutenStoreEntity store, DateTime startDate)
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.Now, DateTime.MinValue, startDate);
 
             var request = CreateRequest(store, ordersEndpoint, HttpVerb.Get, requestObject);
 
-            return ProcessRequest<RakutenOrdersResponse>(request, "GetOrders");
+            return jsonRequest.Submit<RakutenOrdersResponse>("GetOrders", ApiLogSource.Rakuten, request);
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var request = CreateRequest(store, ordersEndpoint, HttpVerb.Patch, requestObject);
 
-            return ProcessRequest<RakutenShipmentResponse>(request, "ConfirmShipping");
+            return jsonRequest.Submit<RakutenShipmentResponse>("ConfirmShipping", ApiLogSource.Rakuten, request);
         }
 
         /// <summary>
@@ -132,33 +133,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             submitter.Headers.Add("Authorization", $"ESA {authKey}");
 
             return submitter;
-        }
-
-        /// <summary>
-        /// Processes the request.
-        /// </summary>
-        private T ProcessRequest<T>(IHttpRequestSubmitter request, string action)
-        {
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.Rakuten, action);
-            apiLogEntry.LogRequest(request);
-
-            try
-            {
-                IHttpResponseReader httpResponseReader = request.GetResponse();
-                string result = httpResponseReader.ReadResult();
-                apiLogEntry.LogResponse(result, "json");
-
-                return JsonConvert.DeserializeObject<T>(result, new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore
-                });
-            }
-            catch (Exception ex)
-            {
-                apiLogEntry.LogResponse(ex);
-                throw;
-            }
         }
 
         /// <summary>

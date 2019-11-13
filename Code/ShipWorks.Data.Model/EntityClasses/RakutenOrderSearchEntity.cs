@@ -25,14 +25,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 {
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	/// <summary>Entity class which represents the entity 'RakutenOrder'.<br/><br/></summary>
+	/// <summary>Entity class which represents the entity 'RakutenOrderSearch'.<br/><br/></summary>
 	[Serializable]
-	public partial class RakutenOrderEntity : OrderEntity
+	public partial class RakutenOrderSearchEntity : CommonEntityBase
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
-		private EntityCollection<RakutenOrderSearchEntity> _rakutenOrderSearch;
+		private RakutenOrderEntity _rakutenOrder;
 
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -43,99 +43,93 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private static Dictionary<string, Dictionary<string, string>>	_fieldsCustomProperties;
 
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
-		public static new partial class MemberNames
+		public static partial class MemberNames
 		{
-			/// <summary>Member name Customer</summary>
-			public static readonly string Customer = "Customer";
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
-			/// <summary>Member name Notes</summary>
-			public static readonly string Notes = "Notes";
-			/// <summary>Member name OrderCharges</summary>
-			public static readonly string OrderCharges = "OrderCharges";
-			/// <summary>Member name OrderItems</summary>
-			public static readonly string OrderItems = "OrderItems";
-			/// <summary>Member name OrderPaymentDetails</summary>
-			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
-			/// <summary>Member name OrderSearch</summary>
-			public static readonly string OrderSearch = "OrderSearch";
-			/// <summary>Member name RakutenOrderSearch</summary>
-			public static readonly string RakutenOrderSearch = "RakutenOrderSearch";
-			/// <summary>Member name Shipments</summary>
-			public static readonly string Shipments = "Shipments";
-			/// <summary>Member name ValidatedAddress</summary>
-			public static readonly string ValidatedAddress = "ValidatedAddress";
-			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
-			public static readonly string ShipmentCollectionViaValidatedAddress = "ShipmentCollectionViaValidatedAddress";
+			/// <summary>Member name RakutenOrder</summary>
+			public static readonly string RakutenOrder = "RakutenOrder";
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static RakutenOrderEntity()
+		static RakutenOrderSearchEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 		
 		/// <summary> CTor</summary>
-		public RakutenOrderEntity()
+		public RakutenOrderSearchEntity():base("RakutenOrderSearchEntity")
 		{
-			InitClassEmpty();
-			SetName("RakutenOrderEntity");
+			InitClassEmpty(null, null);
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public RakutenOrderEntity(IEntityFields2 fields):base(fields)
+		public RakutenOrderSearchEntity(IEntityFields2 fields):base("RakutenOrderSearchEntity")
 		{
-			InitClassEmpty();
-			SetName("RakutenOrderEntity");
+			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this RakutenOrderEntity</param>
-		public RakutenOrderEntity(IValidator validator):base(validator)
+		/// <param name="validator">The custom validator object for this RakutenOrderSearchEntity</param>
+		public RakutenOrderSearchEntity(IValidator validator):base("RakutenOrderSearchEntity")
 		{
-			InitClassEmpty();
-			SetName("RakutenOrderEntity");
+			InitClassEmpty(validator, null);
 		}
 				
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for RakutenOrder which data should be fetched into this RakutenOrder object</param>
+		/// <param name="rakutenOrderSearchID">PK value for RakutenOrderSearch which data should be fetched into this RakutenOrderSearch object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public RakutenOrderEntity(System.Int64 orderID):base(orderID)
+		public RakutenOrderSearchEntity(System.Int64 rakutenOrderSearchID):base("RakutenOrderSearchEntity")
 		{
-			InitClassEmpty();
-
-			SetName("RakutenOrderEntity");
+			InitClassEmpty(null, null);
+			this.RakutenOrderSearchID = rakutenOrderSearchID;
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for RakutenOrder which data should be fetched into this RakutenOrder object</param>
-		/// <param name="validator">The custom validator object for this RakutenOrderEntity</param>
+		/// <param name="rakutenOrderSearchID">PK value for RakutenOrderSearch which data should be fetched into this RakutenOrderSearch object</param>
+		/// <param name="validator">The custom validator object for this RakutenOrderSearchEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public RakutenOrderEntity(System.Int64 orderID, IValidator validator):base(orderID, validator)
+		public RakutenOrderSearchEntity(System.Int64 rakutenOrderSearchID, IValidator validator):base("RakutenOrderSearchEntity")
 		{
-			InitClassEmpty();
-
-			SetName("RakutenOrderEntity");
+			InitClassEmpty(validator, null);
+			this.RakutenOrderSearchID = rakutenOrderSearchID;
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected RakutenOrderEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected RakutenOrderSearchEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				_rakutenOrderSearch = (EntityCollection<RakutenOrderSearchEntity>)info.GetValue("_rakutenOrderSearch", typeof(EntityCollection<RakutenOrderSearchEntity>));
+				_rakutenOrder = (RakutenOrderEntity)info.GetValue("_rakutenOrder", typeof(RakutenOrderEntity));
+				if(_rakutenOrder!=null)
+				{
+					_rakutenOrder.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				this.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
 		}
 
+		
+		/// <summary>Performs the desync setup when an FK field has been changed. The entity referenced based on the FK field will be dereferenced and sync info will be removed.</summary>
+		/// <param name="fieldIndex">The fieldindex.</param>
+		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
+		{
+			switch((RakutenOrderSearchFieldIndex)fieldIndex)
+			{
+				case RakutenOrderSearchFieldIndex.OrderID:
+					DesetupSyncRakutenOrder(true, false);
+					break;
+				default:
+					base.PerformDesyncSetupFKFieldChange(fieldIndex);
+					break;
+			}
+		}
 
 		/// <summary> Sets the related entity property to the entity specified. If the property is a collection, it will add the entity specified to that collection.</summary>
 		/// <param name="propertyName">Name of the property.</param>
@@ -145,11 +139,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-				case "RakutenOrderSearch":
-					this.RakutenOrderSearch.Add((RakutenOrderSearchEntity)entity);
+				case "RakutenOrder":
+					this.RakutenOrder = (RakutenOrderEntity)entity;
 					break;
 				default:
-					base.SetRelatedEntityProperty(propertyName, entity);
+					this.OnSetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -165,16 +159,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		internal static new RelationCollection GetRelationsForField(string fieldName)
+		internal static RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-				case "RakutenOrderSearch":
-					toReturn.Add(Relations.RakutenOrderSearchEntityUsingOrderID);
+				case "RakutenOrder":
+					toReturn.Add(Relations.RakutenOrderEntityUsingOrderID);
 					break;
 				default:
-					toReturn = OrderEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -202,11 +195,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "RakutenOrderSearch":
-					this.RakutenOrderSearch.Add((RakutenOrderSearchEntity)relatedEntity);
+				case "RakutenOrder":
+					SetupSyncRakutenOrder(relatedEntity);
 					break;
 				default:
-					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
 			}
 		}
@@ -219,11 +211,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-				case "RakutenOrderSearch":
-					this.PerformRelatedEntityRemoval(this.RakutenOrderSearch, relatedEntity, signalRelatedEntityManyToOne);
+				case "RakutenOrder":
+					DesetupSyncRakutenOrder(false, true);
 					break;
 				default:
-					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
 			}
 		}
@@ -233,7 +224,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			toReturn.AddRange(base.GetDependingRelatedEntities());
 			return toReturn;
 		}
 		
@@ -243,7 +233,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			toReturn.AddRange(base.GetDependentRelatedEntities());
+			if(_rakutenOrder!=null)
+			{
+				toReturn.Add(_rakutenOrder);
+			}
 			return toReturn;
 		}
 		
@@ -252,26 +245,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override List<IEntityCollection2> GetMemberEntityCollections()
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
-			toReturn.Add(this.RakutenOrderSearch);
-			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
-		}
-
-		/// <summary>Gets a predicateexpression which filters on this entity</summary>
-		/// <returns>ready to use predicateexpression</returns>
-		/// <remarks>Only useful in entity fetches.</remarks>
-		public new static IPredicateExpression GetEntityTypeFilter()
-		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenOrderEntity", false);
-		}
-		
-		/// <summary>Gets a predicateexpression which filters on this entity</summary>
-		/// <param name="negate">Flag to produce a NOT filter, (true), or a normal filter (false). </param>
-		/// <returns>ready to use predicateexpression</returns>
-		/// <remarks>Only useful in entity fetches.</remarks>
-		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
-		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("RakutenOrderEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -282,35 +256,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
-				info.AddValue("_rakutenOrderSearch", ((_rakutenOrderSearch!=null) && (_rakutenOrderSearch.Count>0) && !this.MarkedForDeletion)?_rakutenOrderSearch:null);
+				info.AddValue("_rakutenOrder", (!this.MarkedForDeletion?_rakutenOrder:null));
 			}
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
 			base.GetObjectData(info, context);
 		}
 
-		
-		/// <summary>Determines whether this entity is a subType of the entity represented by the passed in enum value, which represents a value in the ShipWorks.Data.Model.EntityType enum</summary>
-		/// <param name="typeOfEntity">Type of entity.</param>
-		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
-		protected override bool CheckIfIsSubTypeOf(int typeOfEntity)
-		{
-			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("RakutenOrderEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
-		}
+
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		protected override List<IEntityRelation> GetAllRelations()
 		{
-			return new RakutenOrderRelations().GetAllRelations();
+			return new RakutenOrderSearchRelations().GetAllRelations();
 		}
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entities of type 'RakutenOrderSearch' to this entity.</summary>
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch the related entity of type 'RakutenOrder' to this entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoRakutenOrderSearch()
+		public virtual IRelationPredicateBucket GetRelationInfoRakutenOrder()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(RakutenOrderSearchFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(RakutenOrderFields.OrderID, null, ComparisonOperator.Equal, this.OrderID));
 			return bucket;
 		}
 		
@@ -318,7 +285,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderSearchEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -326,7 +293,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void AddToMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue) 
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
-			collectionsQueue.Enqueue(this._rakutenOrderSearch);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -334,7 +300,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void GetFromMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue)
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
-			this._rakutenOrderSearch = (EntityCollection<RakutenOrderSearchEntity>) collectionsQueue.Dequeue();
 
 		}
 		
@@ -343,7 +308,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override bool HasPopulatedMemberEntityCollections()
 		{
 			bool toReturn = false;
-			toReturn |=(this._rakutenOrderSearch != null);
 			return toReturn ? true : base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -353,24 +317,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 		protected override void CreateMemberEntityCollectionsQueue(Queue<IEntityCollection2> collectionsQueue, Queue<bool> requiredQueue) 
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
-			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<RakutenOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderSearchEntityFactory))) : null);
 		}
 #endif
 		/// <summary>Gets all related data objects, stored by name. The name is the field name mapped onto the relation for that particular data element.</summary>
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
 		protected override Dictionary<string, object> GetRelatedData()
 		{
-			Dictionary<string, object> toReturn = base.GetRelatedData();
-			toReturn.Add("RakutenOrderSearch", _rakutenOrderSearch);
+			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			toReturn.Add("RakutenOrder", _rakutenOrder);
 			return toReturn;
 		}
 
 		/// <summary> Initializes the class members</summary>
 		private void InitClassMembers()
 		{
+			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			OnInitClassMembersComplete();
 		}
 
 
@@ -382,41 +347,85 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties = new Dictionary<string, Dictionary<string, string>>();
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RakutenOrderSearchID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RakutenOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
 
-		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this RakutenOrderEntity</param>
-		private void InitClassEmpty()
+		/// <summary> Removes the sync logic for member _rakutenOrder</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncRakutenOrder(bool signalRelatedEntity, bool resetFKFields)
 		{
+			this.PerformDesetupSyncRelatedEntity( _rakutenOrder, new PropertyChangedEventHandler( OnRakutenOrderPropertyChanged ), "RakutenOrder", ShipWorks.Data.Model.RelationClasses.StaticRakutenOrderSearchRelations.RakutenOrderEntityUsingOrderIDStatic, true, signalRelatedEntity, "RakutenOrderSearch", resetFKFields, new int[] { (int)RakutenOrderSearchFieldIndex.OrderID } );
+			_rakutenOrder = null;
+		}
+
+		/// <summary> setups the sync logic for member _rakutenOrder</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncRakutenOrder(IEntityCore relatedEntity)
+		{
+			if(_rakutenOrder!=relatedEntity)
+			{
+				DesetupSyncRakutenOrder(true, true);
+				_rakutenOrder = (RakutenOrderEntity)relatedEntity;
+				this.PerformSetupSyncRelatedEntity( _rakutenOrder, new PropertyChangedEventHandler( OnRakutenOrderPropertyChanged ), "RakutenOrder", ShipWorks.Data.Model.RelationClasses.StaticRakutenOrderSearchRelations.RakutenOrderEntityUsingOrderIDStatic, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnRakutenOrderPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
+
+		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
+		/// <param name="validator">The validator object for this RakutenOrderSearchEntity</param>
+		/// <param name="fields">Fields of this entity</param>
+		private void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		{
+			OnInitializing();
+			this.Fields = fields ?? CreateFields();
+			this.Validator = validator;
 			InitClassMembers();
 
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
+			OnInitialized();
 
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public new static RakutenOrderRelations Relations
+		public  static RakutenOrderSearchRelations Relations
 		{
-			get	{ return new RakutenOrderRelations(); }
+			get	{ return new RakutenOrderSearchRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
-		public new static Dictionary<string, string> CustomProperties
+		public  static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'RakutenOrderSearch' for this entity.</summary>
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'RakutenOrder' for this entity.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathRakutenOrderSearch
+		public static IPrefetchPathElement2 PrefetchPathRakutenOrder
 		{
-			get	{ return new PrefetchPathElement2( new EntityCollection<RakutenOrderSearchEntity>(EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderSearchEntityFactory))), (IEntityRelation)GetRelationsForField("RakutenOrderSearch")[0], (int)ShipWorks.Data.Model.EntityType.RakutenOrderEntity, (int)ShipWorks.Data.Model.EntityType.RakutenOrderSearchEntity, 0, null, null, null, null, "RakutenOrderSearch", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);	}
+			get	{ return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(RakutenOrderEntityFactory))),	(IEntityRelation)GetRelationsForField("RakutenOrder")[0], (int)ShipWorks.Data.Model.EntityType.RakutenOrderSearchEntity, (int)ShipWorks.Data.Model.EntityType.RakutenOrderEntity, 0, null, null, null, null, "RakutenOrder", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne); }
 		}
 
 
@@ -430,7 +439,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
-		public new static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
+		public  static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
 			get { return _fieldsCustomProperties;}
 		}
@@ -443,40 +452,81 @@ namespace ShipWorks.Data.Model.EntityClasses
 			get { return FieldsCustomProperties;}
 		}
 
-		/// <summary> The RakutenOrderID property of the Entity RakutenOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenOrder"."RakutenOrderID"<br/>
+		/// <summary> The RakutenOrderSearchID property of the Entity RakutenOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."RakutenOrderSearchID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		public virtual System.Int64 RakutenOrderSearchID
+		{
+			get { return (System.Int64)GetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderSearchID, true); }
+			set	{ SetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderSearchID, value); }
+		}
+
+		/// <summary> The OrderID property of the Entity RakutenOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."OrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OrderID
+		{
+			get { return (System.Int64)GetValue((int)RakutenOrderSearchFieldIndex.OrderID, true); }
+			set	{ SetValue((int)RakutenOrderSearchFieldIndex.OrderID, value); }
+		}
+
+		/// <summary> The RakutenOrderID property of the Entity RakutenOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."RakutenOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String RakutenOrderID
 		{
-			get { return (System.String)GetValue((int)RakutenOrderFieldIndex.RakutenOrderID, true); }
-			set	{ SetValue((int)RakutenOrderFieldIndex.RakutenOrderID, value); }
+			get { return (System.String)GetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderID, true); }
+			set	{ SetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderID, value); }
 		}
 
-		/// <summary> Gets the EntityCollection with the related entities of type 'RakutenOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
-		[TypeContainedAttribute(typeof(RakutenOrderSearchEntity))]
-		public virtual EntityCollection<RakutenOrderSearchEntity> RakutenOrderSearch
+		/// <summary> The OriginalOrderID property of the Entity RakutenOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."OriginalOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 OriginalOrderID
 		{
-			get { return GetOrCreateEntityCollection<RakutenOrderSearchEntity, RakutenOrderSearchEntityFactory>("RakutenOrder", true, false, ref _rakutenOrderSearch);	}
+			get { return (System.Int64)GetValue((int)RakutenOrderSearchFieldIndex.OriginalOrderID, true); }
+			set	{ SetValue((int)RakutenOrderSearchFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> Gets / sets related entity of type 'RakutenOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
+		[Browsable(true)]
+		public virtual RakutenOrderEntity RakutenOrder
+		{
+			get	{ return _rakutenOrder; }
+			set
+			{
+				if(this.IsDeserializing)
+				{
+					SetupSyncRakutenOrder(value);
+				}
+				else
+				{
+					SetSingleRelatedEntityNavigator(value, "RakutenOrderSearch", "RakutenOrder", _rakutenOrder, true); 
+				}
+			}
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
-			get { return InheritanceHierarchyType.TargetPerEntity;}
+			get { return InheritanceHierarchyType.None;}
 		}
 		
 		/// <summary> Gets or sets a value indicating whether this entity is a subtype</summary>
 		protected override bool LLBLGenProIsSubType
 		{
-			get { return true;}
+			get { return false;}
 		}
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
 		protected override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.RakutenOrderEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.RakutenOrderSearchEntity; }
 		}
 
 		#endregion

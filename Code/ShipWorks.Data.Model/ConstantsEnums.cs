@@ -10646,12 +10646,26 @@ namespace ShipWorks.Data.Model
 		Custom10,
 		///<summary>OrderItemID. </summary>
 		OrderItemID,
-		///<summary>RakutenOrderID. </summary>
-		RakutenOrderID,
+		///<summary>RakutenOrderItemID. </summary>
+		RakutenOrderItemID,
 		///<summary>Discount. </summary>
 		Discount,
 		///<summary>ItemTotal. </summary>
 		ItemTotal,
+		/// <summary></summary>
+		AmountOfFields
+	}
+	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: RakutenOrderSearch.</summary>
+	public enum RakutenOrderSearchFieldIndex
+	{
+		///<summary>RakutenOrderSearchID. </summary>
+		RakutenOrderSearchID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>RakutenOrderID. </summary>
+		RakutenOrderID,
+		///<summary>OriginalOrderID. </summary>
+		OriginalOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -15223,6 +15237,8 @@ namespace ShipWorks.Data.Model
 		RakutenOrderEntity,
 		///<summary>RakutenOrderItem</summary>
 		RakutenOrderItemEntity,
+		///<summary>RakutenOrderSearch</summary>
+		RakutenOrderSearchEntity,
 		///<summary>RakutenStore</summary>
 		RakutenStoreEntity,
 		///<summary>Resource</summary>

@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             itemToSave.SKU = downloadedItem.SKU ?? downloadedItem.BaseSku;
             itemToSave.Discount = downloadedItem.Discount;
             itemToSave.ItemTotal = downloadedItem.ItemTotal;
-            itemToSave.RakutenOrderID = downloadedItem.OrderItemID;
+            itemToSave.RakutenOrderItemID = downloadedItem.OrderItemID;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
         }

@@ -2487,7 +2487,15 @@
         <Fields>
           <Field Name="Discount" Type="decimal" Precision="19" Scale="4" FieldIndex="1" />
           <Field Name="ItemTotal" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
-          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="RakutenOrderItemID" Type="string" MaxLength="50" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RakutenOrderSearch" ObjectID="a3a1c3f4-da75-4beb-98b4-7c75d61ee93a">
+        <Fields>
+          <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="3" />
+          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="RakutenOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
@@ -4202,6 +4210,11 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
@@ -4619,7 +4632,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-12T16:23:08.0109054Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-12T18:17:07.7360049Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8082,6 +8095,15 @@
                     <Field Name="ItemTotal" Ordinal="4" DbType="9" Precision="19" Scale="4" />
                   </Fields>
                 </Table>
+                <Table Name="RakutenOrderSearch">
+                  <PkConstraintName Name="PK_RakutenOrderSearch" />
+                  <Fields>
+                    <Field Name="RakutenOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="RakutenOrderID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                  </Fields>
+                </Table>
                 <Table Name="RakutenStore">
                   <PkConstraintName Name="PK_RakutenStore" />
                   <Fields>
@@ -10654,6 +10676,11 @@
             <ForeignKeyConstraint Name="dbo:RakutenOrderItem:FK_RakutenOrderItem_OrderItem">
               <FieldPairs>
                 <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:RakutenOrderItem:OrderItemID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:RakutenOrder:OrderID" FkField="dbo:RakutenOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
@@ -13402,7 +13429,15 @@
             <FieldMapping FieldName="Discount" TargetFieldName="Discount" />
             <FieldMapping FieldName="ItemTotal" TargetFieldName="ItemTotal" />
             <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderItemID" />
+            <FieldMapping FieldName="RakutenOrderItemID" TargetFieldName="RakutenOrderItemID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenOrderSearch" TargetName="ShipWorksLocal:dbo:RakutenOrderSearch">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
+            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
+            <FieldMapping FieldName="RakutenOrderSearchID" TargetFieldName="RakutenOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">

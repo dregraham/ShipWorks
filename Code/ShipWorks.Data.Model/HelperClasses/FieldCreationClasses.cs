@@ -24967,10 +24967,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.OrderItemID);}
 		}
-		/// <summary>Creates a new RakutenOrderItemEntity.RakutenOrderID field instance</summary>
-		public static EntityField2 RakutenOrderID
+		/// <summary>Creates a new RakutenOrderItemEntity.RakutenOrderItemID field instance</summary>
+		public static EntityField2 RakutenOrderItemID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.RakutenOrderID);}
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.RakutenOrderItemID);}
 		}
 		/// <summary>Creates a new RakutenOrderItemEntity.Discount field instance</summary>
 		public static EntityField2 Discount
@@ -24981,6 +24981,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ItemTotal
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderItemFieldIndex.ItemTotal);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity RakutenOrderSearchEntity</summary>
+	public partial class RakutenOrderSearchFields
+	{
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenOrderSearchID field instance</summary>
+		public static EntityField2 RakutenOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenOrderSearchID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenOrderID field instance</summary>
+		public static EntityField2 RakutenOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenOrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OriginalOrderID);}
 		}
 	}
 
