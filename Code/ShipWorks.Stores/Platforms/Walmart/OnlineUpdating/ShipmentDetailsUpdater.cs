@@ -153,16 +153,9 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                 orderLines = order.OrderItems
                     .Where(x => x.OriginalOrderID == originalOrderID)
                     .OfType<IWalmartOrderItemEntity>()
-                    .Where(IsLineShippable)
                     .Select(item => CreateShippingLineType(shipment, item, methodCode)).ToArray()
             };
         }
-
-        /// <summary>
-        /// Determines whether [is line shippable] [the specified item].
-        /// </summary>
-        private static bool IsLineShippable(IWalmartOrderItemEntity item) =>
-            item.OnlineStatus == orderLineStatusValueType.Acknowledged.ToString();
 
         /// <summary>
         /// Create a new Shipping Line Type.
@@ -219,7 +212,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                     carrierName.Item = carrierType.OnTrac;
                     break;
                 case ShipmentTypeCode.Other:
-                    carrierName.Item = EnumHelper.TryParseEnum<carrierType>(shipment.Other.Carrier, true) ?? 
+                    carrierName.Item = EnumHelper.TryParseEnum<carrierType>(shipment.Other.Carrier, true) ??
                         (object) EnumHelper.GetDescription(shipment.ShipmentTypeCode);
                     break;
                 default:
