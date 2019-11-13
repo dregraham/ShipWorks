@@ -20,8 +20,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Content
         /// </summary>
         public Task Perform(OrderEntity combinedOrder, IEnumerable<IOrderEntity> orders, ISqlAdapter sqlAdapter)
         {
-            RakutenOrderEntity order = (RakutenOrderEntity) combinedOrder;
-
             var recordCreator = new SearchRecordMerger<IRakutenOrderEntity>(combinedOrder, orders, sqlAdapter);
 
             return recordCreator.Perform(RakutenOrderSearchFields.OrderID,

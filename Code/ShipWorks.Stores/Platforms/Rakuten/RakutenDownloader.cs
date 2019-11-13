@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly ILog log;
         private readonly IRakutenWebClient webClient;
         private readonly RakutenOrderLoader orderLoader;
-        private RakutenStoreEntity rakutenStore;
+        private readonly RakutenStoreEntity rakutenStore;
         private readonly ISqlAdapterRetry sqlAdapter;
 
         /// <summary>
