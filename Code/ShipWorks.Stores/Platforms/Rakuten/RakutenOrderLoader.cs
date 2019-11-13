@@ -8,6 +8,7 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
+using ShipWorks.Stores.Platforms.Rakuten.Enums;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -48,6 +49,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
 
             LoadAddresses(orderToSave, downloadedOrder);
+            LoadOrderStatus(orderToSave, downloadedOrder);
 
             if (orderToSave.IsNew || string.IsNullOrWhiteSpace(orderToSave.RequestedShipping))
             {
@@ -77,6 +79,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             orderToSave.ApplyOrderNumberPrefix(orderNumber[0]);
             orderToSave.OrderNumber = long.Parse(orderNumber[1]);
             orderToSave.ApplyOrderNumberPostfix(orderNumber[2]);
+        }
+
+        /// <summary>
+        /// Loads the order statuses.
+        /// </summary>
+        private void LoadOrderStatus(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder)
+        {
+            var status = EnumHelper.TryParseEnum<RakutenOrderStatus>(downloadedOrder.OrderStatus);
+            orderToSave.OnlineStatus = status == null ? EnumHelper.GetDescription(RakutenOrderStatus.Unknown) :
+                EnumHelper.GetDescription(status);
         }
 
         /// <summary>
@@ -221,6 +233,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             billAdapter.PostalCode = address.PostalCode;
             billAdapter.CountryCode = address.CountryCode;
             billAdapter.Phone = address.PhoneNumber;
+            billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
         }
 
         /// <summary>
