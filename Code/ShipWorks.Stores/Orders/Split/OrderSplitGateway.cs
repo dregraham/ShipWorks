@@ -135,6 +135,7 @@ namespace ShipWorks.Stores.Orders.Split
             prefetchPath.Add(OverstockOrderEntity.PrefetchPathOverstockOrderSearch);
             prefetchPath.Add(PayPalOrderEntity.PrefetchPathPayPalOrderSearch);
             prefetchPath.Add(ProStoresOrderEntity.PrefetchPathProStoresOrderSearch);
+            prefetchPath.Add(RakutenOrderEntity.PrefetchPathRakutenOrderSearch);
             prefetchPath.Add(SearsOrderEntity.PrefetchPathSearsOrderSearch);
             prefetchPath.Add(ShopifyOrderEntity.PrefetchPathShopifyOrderSearch);
             prefetchPath.Add(ThreeDCartOrderEntity.PrefetchPathThreeDCartOrderSearch);
