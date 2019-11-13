@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
@@ -32,6 +33,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams(Justification =
+        "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
         public RakutenDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
             Func<IRakutenStoreEntity, IRakutenWebClient> webClientFactory,
