@@ -55,7 +55,6 @@
     <Name>Common.Logging</Name>
     <Name>Common.Logging.Log4Net1213</Name>
     <Name>GalaSoft.MvvmLight.Platform</Name>
-    <Name>BouncyCastle.Crypto</Name>
     <Name>log4net</Name>
     <Name>Rebex.Mail</Name>
     <Name>Newtonsoft.Json</Name>
@@ -64,14 +63,9 @@
     <Name>SandDock</Name>
     <Name>Rebex.Networking</Name>
     <Name>Rebex.Common</Name>
-    <Name>Rebex.Net.Imap</Name>
-    <Name>Rebex.Net.Pop3</Name>
-    <Name>Rebex.Net.SecureSocket</Name>
     <Name>RestSharp</Name>
-    <Name>Microsoft.Web.Services3</Name>
     <Name>Rebex.Ftp</Name>
     <Name>Rebex.Sftp</Name>
-    <Name>Rebex.Net.Smtp</Name>
     <Name>Microsoft.WindowsAzure.Storage</Name>
     <Name>NAudio</Name>
     <Name>Quartz</Name>
@@ -86,6 +80,28 @@
     <Name>System.Reactive.Windows.Threading</Name>
     <Name>System.Reactive.Windows.Forms</Name>
     <Name>System.Windows.Interactivity</Name>
+    <Name>System.ValueTuple</Name>
+    <Name>ICSharpCode.SharpZipLib</Name>
+    <Name>System.Collections.Immutable</Name>
+    <Name>ShipWorks.SqlServer</Name>
+    <Name>Rebex.Smtp</Name>
+    <Name>Rebex.Pop3</Name>
+    <Name>Rebex.Imap</Name>
+    <Name>ShipWorks.ThirdPartyApi</Name>
+    <Name>Syncfusion.Tools.Windows</Name>
+    <Name>System.Data.HashFunction.CityHash</Name>
+    <Name>GalaSoft.MvvmLight</Name>
+    <Name>Syncfusion.Licensing</Name>
+    <Name>System.Data.HashFunction.Interfaces</Name>
+    <Name>SD.Tools.BCLExtensions</Name>
+    <Name>ShipWorks.OrderLookup</Name>
+    <Name>ShipWorks.Products</Name>
+    <Name>ShipWorks.Products.UI</Name>
+    <Name>ShipEngine.ApiClient</Name>
+    <Name>System.Threading.Tasks.Dataflow</Name>
+    <Name>Syncfusion.XlsIO.Base</Name>
+    <Name>Microsoft.CSharp</Name>
+    <Name>Syncfusion.SfInput.Wpf</Name>
   </FrameworkAssemblies>
   <Dirs>
     <Dir>C:\Windows\Microsoft.NET\Framework\v4.0.30319</Dir>
@@ -93,9 +109,9 @@
     <Dir>..\Artifacts\Application</Dir>
   </Dirs>
   <MergeCodeGeneratedByCompiler>True</MergeCodeGeneratedByCompiler>
-  <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="60416" />
-  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2015Oct28_10h51.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <Report Kind="0" SectionsEnabled="513" XslPath="" Flags="60416" />
+  <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="NDaysAgoAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2019Nov12_07h53.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\NDependAnalysisResult_ShipWorks_2019Nov12_07h51_BASELINE.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <CoverageFiles CoverageDir="" UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
@@ -146,8 +162,7 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" />
-  <Queries>
+  <ProjectRules AreActive="True" /><Queries>
     <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types 
@@ -4221,7 +4236,7 @@ warnif count > 0 from m in JustMyCode.Methods where !m.ParentAssembly.Name.Conta
 
 select new { m, m.CyclomaticComplexity }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
-warnif  count > 0
+warnif  count > 586
 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
   m.NbLinesOfCode > 30 &&
   !(m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute") ||
@@ -4270,7 +4285,7 @@ orderby m.FullName
 select new { m }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Jenkins Build Rules: # of NDependIgnoreTooManyParams attributes reached</Name>
-warnif count > 64
+warnif count > 82
 
 from m in JustMyCode.Methods.Where(m=> 
         m.HasAttribute("*.NDependIgnoreTooManyParams*") 
@@ -4337,5 +4352,4 @@ orderby m.NbParameters
 select new { m, m.NbParameters }
 ]]></Query>
     </Group>
-  </Queries>
-</NDepend>
+  </Queries></NDepend>
