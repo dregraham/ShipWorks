@@ -12,7 +12,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     /// </summary>
     public class RakutenOrderIdentifier : OrderIdentifier
     {
-        // Shopify's Order ID
         private readonly string rakutenOrderIdentifier;
 
         /// <summary>

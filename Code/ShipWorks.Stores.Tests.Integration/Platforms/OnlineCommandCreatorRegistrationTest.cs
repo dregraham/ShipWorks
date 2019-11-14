@@ -27,6 +27,7 @@ using ShipWorks.Stores.Platforms.Odbc.Upload;
 using ShipWorks.Stores.Platforms.OrderMotion.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Overstock.OnlineUpdating;
 using ShipWorks.Stores.Platforms.ProStores.OnlineUpdating;
+using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Sears.OnlineUpdating;
 using ShipWorks.Stores.Platforms.Shopify.OnlineUpdating;
 using ShipWorks.Stores.Platforms.SparkPay.Factories;
@@ -154,6 +155,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.PowersportsSupport, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.PrestaShop, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.ProStores, typeof(ProStoresOnlineUpdateCommandCreator) },
+            { StoreTypeCode.Rakuten, typeof(RakutenOnlineUpdateCommandCreator) },
             { StoreTypeCode.RevolutionParts, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.SearchFit, typeof(GenericModuleOnlineUpdateCommandCreator) },
             { StoreTypeCode.Sears, typeof(SearsOnlineUpdateCommandCreator) },
