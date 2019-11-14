@@ -32,6 +32,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly string endpointBase;
         private readonly string ordersEndpoint;
         private readonly string shippingEndpoint;
+        private readonly string testEndpoint;
 
         /// <summary>
         /// Constructor
@@ -47,6 +48,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             endpointBase = GetEndpointBase();
             ordersEndpoint = $"{endpointBase}/ordersearch";
             shippingEndpoint = $"{endpointBase}/orders/";
+            testEndpoint = $"{endpointBase}/configurations" + "/{0}/labels/";
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.UtcNow.AddDays(7), new DateTime(1970, 1, 1), startDate);
 
-            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Post, requestObject);
+            var request = CreateRequest(store.AuthKey, ordersEndpoint, HttpVerb.Post, requestObject);
 
             return SubmitRequest<RakutenOrdersResponse>("GetOrders", request);
         }
@@ -112,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             });
 
-            var request = CreateRequest(store, shippingEndpoint, HttpVerb.Patch, requestObject);
+            var request = CreateRequest(store.AuthKey, shippingEndpoint, HttpVerb.Patch, requestObject);
 
             return SubmitRequest<RakutenBaseResponse>("ConfirmShipping", request);
         }
@@ -120,8 +122,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create a request to Rakuten
         /// </summary>
-        private IHttpRequestSubmitter CreateRequest<T>(IRakutenStoreEntity store, string endpoint, HttpVerb method, T body)
+        private IHttpRequestSubmitter CreateRequest<T>(string encryptedAuthKey, string endpoint, HttpVerb method, T body)
         {
+            IHttpRequestSubmitter submitter;
+
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
@@ -129,15 +133,22 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
             };
 
-            IHttpRequestSubmitter submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(body, jsonSerializerSettings),
+            if (body != null)
+            {
+                submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(body, jsonSerializerSettings),
                 "application/json");
+            }
+            else
+            {
+                submitter = submitterFactory.GetHttpVariableRequestSubmitter();
+            }
 
             submitter.Uri = new Uri(endpoint);
             submitter.Verb = method;
             submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Accepted });
 
             var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
-                .Decrypt(store.AuthKey);
+                .Decrypt(encryptedAuthKey);
 
             submitter.Headers.Add("Authorization", $"ESA {authKey}");
 
@@ -145,10 +156,34 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// If this still just returns true during code review, yell at us about it.
+        /// Verify we can connect with Rakuten
         /// </summary>
         public bool TestConnection(RakutenStoreEntity testStore)
         {
+            if (UseFakeApi)
+            {
+                return true;
+            }
+
+            RakutenBaseResponse response = null;
+            try
+            {
+                var endpoint = string.Format(testEndpoint, testStore.MarketplaceID);
+
+                var request = CreateRequest<string>(testStore.AuthKey, endpoint, HttpVerb.Get, null);
+
+                response = jsonRequest.Submit<RakutenBaseResponse>("TestConnection", ApiLogSource.Rakuten, request);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            if (response?.Errors != null)
+            {
+                return false;
+            }
+
             return true;
         }
 

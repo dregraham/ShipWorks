@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         RakutenBaseResponse ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment);
 
-        bool TestConnection(RakutenStoreEntity store);
+        /// <summary>
+        /// Verify we can connect with Rakuten
+        /// </summary>
+        bool TestConnection(RakutenStoreEntity testStore);
     }
 }
