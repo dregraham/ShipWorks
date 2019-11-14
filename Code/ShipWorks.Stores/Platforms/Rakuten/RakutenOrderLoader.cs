@@ -43,8 +43,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
 
-            ParseOrderNumber(orderToSave, downloadedOrder);
-
             orderToSave.OrderDate = downloadedOrder.OrderDate;
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
             orderToSave.RakutenPackageID = downloadedOrder.Shipping.OrderPackageID;
@@ -66,20 +64,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
             }
-        }
-
-        /// <summary>
-        /// Parse the Rakuten order number
-        /// </summary>
-        private void ParseOrderNumber(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder)
-        {
-            orderToSave.RakutenOrderID = downloadedOrder.OrderNumber;
-
-            var orderNumber = downloadedOrder.OrderNumber.Split('-');
-
-            orderToSave.ApplyOrderNumberPrefix(orderNumber[0] + "-");
-            orderToSave.OrderNumber = long.Parse(orderNumber[1]);
-            orderToSave.ApplyOrderNumberPostfix("-" + orderNumber[2]);
         }
 
         /// <summary>
@@ -124,9 +108,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 foreach (RakutenOrderItem downloadedItem in downloadedOrder.OrderItems)
                 {
-                    RakutenOrderItemEntity itemToSave =
-                        (RakutenOrderItemEntity) orderElementFactory.CreateItem(orderToSave);
-
+                    OrderItemEntity itemToSave = orderElementFactory.CreateItem(orderToSave);
                     LoadItem(itemToSave, downloadedItem);
                 }
             }
@@ -135,12 +117,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the item.
         /// </summary>
-        private void LoadItem(RakutenOrderItemEntity itemToSave, RakutenOrderItem downloadedItem)
+        private void LoadItem(OrderItemEntity itemToSave, RakutenOrderItem downloadedItem)
         {
             itemToSave.SKU = downloadedItem.SKU ?? downloadedItem.BaseSku;
-            itemToSave.Discount = downloadedItem.Discount;
-            itemToSave.ItemTotal = downloadedItem.ItemTotal;
-            itemToSave.RakutenOrderItemID = downloadedItem.OrderItemID;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
 
