@@ -87,11 +87,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     // Download more orders with the new download date
                     response = webClient.GetOrders(rakutenStore, downloadStartDate);
                 }
-
-                if (response?.Errors != null)
-                {
-                    ThrowError(response.Errors);
-                }
             }
             catch (WebException ex)
             {
@@ -104,37 +99,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             Progress.PercentComplete = 100;
             Progress.Detail = "Done";
-        }
-
-        /// <summary>
-        /// Parse the download errors
-        /// </summary>
-        private void ThrowError(RakutenErrors errors)
-        {
-            RakutenError error = null;
-            string resource = null;
-
-            // Use the common error first
-            if (errors.Common != null)
-            {
-                error = errors.Common.First();
-            }
-            else if (errors.Specific != null)
-            {
-                error = errors.Specific.First().Value.First();
-                resource = errors.Specific.First().Key;
-            }
-
-            log.Error(errors);
-
-            if (error != null)
-            {
-                throw new DownloadException($"An error occured when downloading from Rakuten: {error.ShortMessage} ({error.ErrorCode}) - {error.LongMessage}");
-            }
-            else
-            {
-                throw new DownloadException("An error occured when downloading from Rakuten");
-            }
         }
 
         /// <summary>
@@ -184,7 +148,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
                 // Update downloadStartDate
-                downloadStartDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
+                if (rakutenOrder.LastModifiedDate.AddMilliseconds(1) > downloadStartDate)
+                {
+                    downloadStartDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
+                }
             }
         }
     }

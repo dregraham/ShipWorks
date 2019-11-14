@@ -286,9 +286,9 @@
     <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
     <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOptionalCheckoutInfo.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenBaseResponse.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenPayment.cs" />
-    <Compile Include="Platforms\Rakuten\DTO\RakutenShipmentResponse.cs" />
-    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenConfirmShippingRequest.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenPatchOperation.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
     <Compile Include="Platforms\Rakuten\Enums\RakutenOrderStatus.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\IRakutenOrderSearchProvider.cs" />

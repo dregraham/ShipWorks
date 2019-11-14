@@ -3,10 +3,13 @@
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
     /// <summary>
-    /// The response from Rakuten when shipping an order
+    /// Response returned by Rakuten when searching for orders
     /// </summary>
-    public class RakutenShipmentResponse
+    public class RakutenBaseResponse
     {
+        /// <summary>
+        /// The list of errors encountered, if any
+        /// </summary>
         [JsonProperty("errors")]
         public RakutenErrors Errors { get; set; }
     }

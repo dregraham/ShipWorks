@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
@@ -26,8 +28,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IJsonRequest jsonRequest;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
+        private const string shippingPath = "/orders/{0}/{1}/{2}/shipping/{3}";
         private readonly string endpointBase;
         private readonly string ordersEndpoint;
+        private readonly string shippingEndpoint;
 
         /// <summary>
         /// Constructor
@@ -42,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             endpointBase = GetEndpointBase();
             ordersEndpoint = $"{endpointBase}/ordersearch";
-
+            shippingEndpoint = $"{endpointBase}/orders/";
         }
 
         /// <summary>
@@ -77,28 +81,30 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var request = CreateRequest(store, ordersEndpoint, HttpVerb.Post, requestObject);
 
-            return jsonRequest.Submit<RakutenOrdersResponse>("GetOrders", ApiLogSource.Rakuten, request);
+            return SubmitRequest<RakutenOrdersResponse>("GetOrders", request);
         }
 
         /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
-        public RakutenShipmentResponse ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
+        public RakutenBaseResponse ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
-            var shippingPath = $"{endpointBase}/orders/{store.MarketplaceID}/{store.ShopURL}/" + "{0}/shipping/{1}/shippingstatus";
-            var path = String.Format(shippingPath, shipment.Order.OrderNumberComplete);
+            var rakutenOrder = shipment.Order as RakutenOrderEntity;
+            var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.OrderNumberComplete, rakutenOrder.RakutenPackageID);
 
             var shippingInfo = new RakutenShippingInfo
             {
-                CarrierName = GetCarrier(shipment),
+                CarrierName = shipment.ShipmentTypeCode == ShipmentTypeCode.Other ?
+                    ShippingManager.GetOtherCarrierDescription(shipment).Name :
+                    ShippingManager.GetCarrierName(shipment.ShipmentTypeCode),
                 ShippingStatus = "Shipped",
                 TrackingNumber = shipment.TrackingNumber
 
             };
 
-            var requestObject = new RakutenConfirmShippingRequest();
+            var requestObject = new List<RakutenPatchOperation>();
 
-            requestObject.Operations.Add(new RakutenPatchOperation
+            requestObject.Add(new RakutenPatchOperation
             {
                 OP = "replace",
                 Path = path,
@@ -106,9 +112,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             });
 
-            var request = CreateRequest(store, ordersEndpoint, HttpVerb.Patch, requestObject);
+            var request = CreateRequest(store, shippingEndpoint, HttpVerb.Patch, requestObject);
 
-            return jsonRequest.Submit<RakutenShipmentResponse>("ConfirmShipping", ApiLogSource.Rakuten, request);
+            return SubmitRequest<RakutenBaseResponse>("ConfirmShipping", request);
         }
 
         /// <summary>
@@ -128,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             submitter.Uri = new Uri(endpoint);
             submitter.Verb = method;
-            submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.BadRequest });
+            submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Accepted });
 
             var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
                 .Decrypt(store.AuthKey);
@@ -139,33 +145,50 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Get the carrier name
+        /// If this still just returns true during code review, yell at us about it.
         /// </summary>
-        private static string GetCarrier(ShipmentEntity shipment)
-        {
-            switch (shipment.ShipmentTypeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    return "UPS";
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
-                    return "USPS";
-                case ShipmentTypeCode.FedEx:
-                    return "FedEx";
-                case ShipmentTypeCode.OnTrac:
-                    return "OnTrac";
-                default:
-                    return "Other";
-            }
-        }
-
         public bool TestConnection(RakutenStoreEntity testStore)
         {
             return true;
+        }
+
+        /// <summary>
+        /// Parse the Rakuten errors
+        /// </summary>
+        private void ThrowError(RakutenErrors errors)
+        {
+            RakutenError error = null;
+
+            // Use the common error first
+            if (errors.Common != null)
+            {
+                error = errors.Common.First();
+            }
+            else if (errors.Specific != null)
+            {
+                error = errors.Specific.First().Value.First();
+            }
+
+            if (error != null)
+            {
+                throw new WebException($"An error occured when communicating with Rakuten: {error.ShortMessage} ({error.ErrorCode}) - {error.LongMessage}");
+            }
+            else
+            {
+                throw new WebException("An error occured when communicating with Rakuten");
+            }
+        }
+
+        private T SubmitRequest<T>(string action, IHttpRequestSubmitter request) where T : RakutenBaseResponse
+        {
+            var response = jsonRequest.Submit<T>(action, ApiLogSource.Rakuten, request);
+
+            if (response?.Errors != null)
+            {
+                ThrowError(response.Errors);
+            }
+
+            return response;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -85,8 +86,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                 return Task.FromResult<IResult>(Result.FromSuccess());
             }
 
-            onlineUpdater.UploadTrackingNumber(store, orderID);
-            return Task.FromResult<IResult>(Result.FromSuccess());
+            try
+            {
+                onlineUpdater.UploadTrackingNumber(store, shipment.ShipmentID);
+                return Task.FromResult<IResult>(Result.FromSuccess());
+            }
+            catch (WebException ex)
+            {
+                log.ErrorFormat("Error uploading shipment information for orders {0}", ex.Message);
+                return Task.FromResult<IResult>(Result.FromError(ex));
+            }
         }
     }
 }

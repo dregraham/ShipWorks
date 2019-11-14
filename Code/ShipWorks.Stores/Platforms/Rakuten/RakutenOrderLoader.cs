@@ -77,9 +77,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var orderNumber = downloadedOrder.OrderNumber.Split('-');
 
-            orderToSave.ApplyOrderNumberPrefix(orderNumber[0]);
+            orderToSave.ApplyOrderNumberPrefix(orderNumber[0] + "-");
             orderToSave.OrderNumber = long.Parse(orderNumber[1]);
-            orderToSave.ApplyOrderNumberPostfix(orderNumber[2]);
+            orderToSave.ApplyOrderNumberPostfix("-" + orderNumber[2]);
         }
 
         /// <summary>
@@ -190,6 +190,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             LoadShippingAddress(downloadedOrder, shipAdapter);
             LoadBillingAddress(downloadedOrder, shipAdapter, billAdapter);
 
+            billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
+
             if (shipAdapter.FirstName == billAdapter.FirstName &&
                 shipAdapter.LastName == billAdapter.LastName &&
                 shipAdapter.City == billAdapter.City &&
@@ -202,10 +204,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the shipping address.
         /// </summary>
-        private static void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
+        private void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
         {
             var address = downloadedOrder.Shipping.DeliveryAddress;
-
 
             var name = PersonName.Parse(address.Name);
             shipAdapter.NameParseStatus = name.ParseStatus;
@@ -213,10 +214,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             shipAdapter.MiddleName = name.Middle;
             shipAdapter.LastName = name.Last;
 
-            shipAdapter.Street1 = address.Address1;
-            shipAdapter.Street2 = address.Address2;
+            // These are reversed by the API
+            shipAdapter.Street1 = address.Address2;
+            shipAdapter.Street2 = address.Address1;
+
             shipAdapter.City = address.CityName;
-            shipAdapter.StateProvCode = address.StateCode;
+            shipAdapter.StateProvCode = ParseState(address.StateCode);
             shipAdapter.PostalCode = address.PostalCode;
             shipAdapter.CountryCode = address.CountryCode;
             shipAdapter.Phone = address.PhoneNumber;
@@ -240,14 +243,23 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             billAdapter.MiddleName = name.Middle;
             billAdapter.LastName = name.Last;
 
-            billAdapter.Street1 = address.Address1;
-            billAdapter.Street2 = address.Address2;
+            // These are reversed by the API
+            billAdapter.Street1 = address.Address2;
+            billAdapter.Street2 = address.Address1;
+
             billAdapter.City = address.CityName;
-            billAdapter.StateProvCode = address.StateCode;
+            billAdapter.StateProvCode = ParseState(address.StateCode);
             billAdapter.PostalCode = address.PostalCode;
             billAdapter.CountryCode = address.CountryCode;
             billAdapter.Phone = address.PhoneNumber;
-            billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
+        }
+
+        /// <summary>
+        /// Remove the prepended country code from the state code
+        /// </summary>
+        private string ParseState(string stateCode)
+        {
+            return stateCode.Substring(stateCode.IndexOf("-") + 1);
         }
 
         /// <summary>
