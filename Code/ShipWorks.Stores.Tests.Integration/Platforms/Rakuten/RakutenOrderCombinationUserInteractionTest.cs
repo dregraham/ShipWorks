@@ -51,17 +51,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
             Create.Order<RakutenOrderEntity>(store, context.Customer).Save();
 
             var order1 = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "1000")
+                .Set(x => x.OrderID, 123)
                 .Set(x => x.OrderNumber, 10)
                 .Set(x => x.OrderNumberComplete, "100")
                 .Save();
             var order2 = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "2000")
+                .Set(x => x.OrderID, 456)
                 .Set(x => x.OrderNumber, 20)
                 .Set(x => x.OrderNumberComplete, "200")
                 .Save();
             var order3 = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "4000")
+                .Set(x => x.OrderID, 789)
                 .Set(x => x.OrderNumber, 30)
                 .Set(x => x.OrderNumberComplete, "300")
                 .Save();
@@ -129,8 +129,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
                     }
                     else
                     {
-                        Assert.Equal((test.Order as IRakutenOrderEntity).RakutenOrderID,
-                            (test.StoreSearch as IRakutenOrderSearchEntity).RakutenOrderID);
+                        Assert.Equal((test.Order as IRakutenOrderEntity).OrderID,
+                            (test.StoreSearch as IRakutenOrderSearchEntity).OriginalOrderID);
                     }
                 }
             }

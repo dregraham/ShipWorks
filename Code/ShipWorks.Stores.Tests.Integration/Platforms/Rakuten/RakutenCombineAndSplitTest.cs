@@ -62,17 +62,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
             Create.Order(store, context.Customer).Save();
 
             orderA = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "1000")
                 .Set(x => x.OrderNumber, 10)
                 .Set(x => x.OrderNumberComplete, "10")
                 .Save();
             orderB = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "2000")
                 .Set(x => x.OrderNumber, 20)
                 .Set(x => x.OrderNumberComplete, "20")
                 .Save();
             orderD = Create.Order<RakutenOrderEntity>(store, context.Customer)
-                .Set(x => x.RakutenOrderID, "3000")
                 .Set(x => x.OrderNumber, 30)
                 .Set(x => x.OrderNumberComplete, "30")
                 .Save();
