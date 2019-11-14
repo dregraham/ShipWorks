@@ -97,8 +97,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
             };
 
             client = mock.Mock<IRakutenWebClient>();
-            client.Setup(c => c.GetOrders(It.IsAny<IRakutenStoreEntity>(), It.IsAny<DateTime>()))
-                .Returns(() => firstBatch);
+            client.SetupSequence(c => c.GetOrders(It.IsAny<IRakutenStoreEntity>(), It.IsAny<DateTime>()))
+                .Returns(firstBatch)
+                .Returns(new RakutenOrdersResponse());
 
             dbConnection = SqlSession.Current.OpenConnection();
             testObject = mock.Create<RakutenDownloader>(TypedParameter.From<StoreEntity>(store));
