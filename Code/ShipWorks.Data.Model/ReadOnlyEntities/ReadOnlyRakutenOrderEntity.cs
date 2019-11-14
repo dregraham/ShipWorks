@@ -37,6 +37,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             }
             
             RakutenOrderID = source.RakutenOrderID;
+            RakutenPackageID = source.RakutenPackageID;
             
             
             
@@ -53,6 +54,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String RakutenOrderID { get; }
+        /// <summary> The RakutenPackageID property of the Entity RakutenOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "RakutenOrder"."RakutenPackageID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String RakutenPackageID { get; }
         
         
         

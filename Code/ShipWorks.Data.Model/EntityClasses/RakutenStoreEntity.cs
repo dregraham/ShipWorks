@@ -337,8 +337,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MarketplaceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShopURL", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("DownloadStartDate", fieldHashtable);
 		}
 		#endregion
 
@@ -420,16 +418,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)RakutenStoreFieldIndex.ShopURL, true); }
 			set	{ SetValue((int)RakutenStoreFieldIndex.ShopURL, value); }
-		}
-
-		/// <summary> The DownloadStartDate property of the Entity RakutenStore<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenStore"."DownloadStartDate"<br/>
-		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.DateTime> DownloadStartDate
-		{
-			get { return (Nullable<System.DateTime>)GetValue((int)RakutenStoreFieldIndex.DownloadStartDate, false); }
-			set	{ SetValue((int)RakutenStoreFieldIndex.DownloadStartDate, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

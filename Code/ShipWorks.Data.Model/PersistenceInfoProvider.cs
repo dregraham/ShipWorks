@@ -2989,9 +2989,10 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits RakutenOrderEntity's mappings</summary>
 		private void InitRakutenOrderEntityMappings()
 		{
-			this.AddElementMapping("RakutenOrderEntity", @"ShipWorksLocal", @"dbo", "RakutenOrder", 2, 0);
+			this.AddElementMapping("RakutenOrderEntity", @"ShipWorksLocal", @"dbo", "RakutenOrder", 3, 0);
 			this.AddElementFieldMapping("RakutenOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("RakutenOrderEntity", "RakutenOrderID", "RakutenOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
+			this.AddElementFieldMapping("RakutenOrderEntity", "RakutenPackageID", "RakutenPackageID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 		}
 
 		/// <summary>Inits RakutenOrderItemEntity's mappings</summary>
@@ -3017,12 +3018,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits RakutenStoreEntity's mappings</summary>
 		private void InitRakutenStoreEntityMappings()
 		{
-			this.AddElementMapping("RakutenStoreEntity", @"ShipWorksLocal", @"dbo", "RakutenStore", 5, 0);
+			this.AddElementMapping("RakutenStoreEntity", @"ShipWorksLocal", @"dbo", "RakutenStore", 4, 0);
 			this.AddElementFieldMapping("RakutenStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("RakutenStoreEntity", "AuthKey", "AuthKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("RakutenStoreEntity", "MarketplaceID", "MarketplaceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("RakutenStoreEntity", "ShopURL", "ShopURL", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
-			this.AddElementFieldMapping("RakutenStoreEntity", "DownloadStartDate", "DownloadStartDate", true, "DateTime", 0, 0, 0, false, "", null, typeof(System.DateTime), 4);
 		}
 
 		/// <summary>Inits ResourceEntity's mappings</summary>

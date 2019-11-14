@@ -47,6 +47,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             orderToSave.OrderDate = downloadedOrder.OrderDate;
             orderToSave.OnlineLastModified = downloadedOrder.LastModifiedDate;
+            orderToSave.RakutenPackageID = downloadedOrder.Shipping.OrderPackageID;
 
             LoadAddresses(orderToSave, downloadedOrder);
             LoadOrderStatus(orderToSave, downloadedOrder);

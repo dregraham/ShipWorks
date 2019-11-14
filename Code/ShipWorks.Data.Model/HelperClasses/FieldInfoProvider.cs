@@ -2834,6 +2834,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(RakutenOrderFieldIndex), "RakutenOrderEntity");
 			this.AddElementFieldInfo("RakutenOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("RakutenOrderEntity", "RakutenOrderID", typeof(System.String), false, false, false, false,  (int)RakutenOrderFieldIndex.RakutenOrderID, 50, 0, 0);
+			this.AddElementFieldInfo("RakutenOrderEntity", "RakutenPackageID", typeof(System.String), false, false, false, false,  (int)RakutenOrderFieldIndex.RakutenPackageID, 50, 0, 0);
 		}
 		/// <summary>Inits RakutenOrderItemEntity's FieldInfo objects</summary>
 		private void InitRakutenOrderItemEntityInfos()
@@ -2861,7 +2862,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("RakutenStoreEntity", "AuthKey", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.AuthKey, 100, 0, 0);
 			this.AddElementFieldInfo("RakutenStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.MarketplaceID, 50, 0, 0);
 			this.AddElementFieldInfo("RakutenStoreEntity", "ShopURL", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.ShopURL, 50, 0, 0);
-			this.AddElementFieldInfo("RakutenStoreEntity", "DownloadStartDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)RakutenStoreFieldIndex.DownloadStartDate, 0, 0, 0);
 		}
 		/// <summary>Inits ResourceEntity's FieldInfo objects</summary>
 		private void InitResourceEntityInfos()

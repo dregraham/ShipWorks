@@ -2481,6 +2481,7 @@
       <EntityDefinition Name="RakutenOrder" ObjectID="a13acdfa-94f8-460d-99a2-59eb5b4e14a6" InheritanceType="2">
         <Fields>
           <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="RakutenPackageID" Type="string" MaxLength="50" FieldIndex="1" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="RakutenOrderItem" ObjectID="15df98df-a7f8-4c8e-b510-e13b7d82925b" InheritanceType="2">
@@ -2501,7 +2502,6 @@
       <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
         <Fields>
           <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
-          <Field Name="DownloadStartDate" Type="datetime" IsOptional="true" FieldIndex="3" />
           <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="ShopURL" Type="string" MaxLength="50" FieldIndex="2" />
         </Fields>
@@ -4632,7 +4632,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-12T18:17:07.7360049Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-14T16:05:56.6230379Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8084,6 +8084,7 @@
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
+                    <Field Name="RakutenPackageID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="RakutenOrderItem">
@@ -8111,7 +8112,6 @@
                     <Field Name="AuthKey" Ordinal="2" DbType="12" Length="100" />
                     <Field Name="MarketplaceID" Ordinal="3" DbType="12" Length="50" />
                     <Field Name="ShopURL" Ordinal="4" DbType="12" Length="50" />
-                    <Field Name="DownloadStartDate" Ordinal="5" IsOptional="true" DbType="4" />
                   </Fields>
                 </Table>
                 <Table Name="Resource">
@@ -13422,6 +13422,7 @@
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
+            <FieldMapping FieldName="RakutenPackageID" TargetFieldName="RakutenPackageID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenOrderItem" TargetName="ShipWorksLocal:dbo:RakutenOrderItem">
@@ -13443,7 +13444,6 @@
         <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">
           <FieldMappings>
             <FieldMapping FieldName="AuthKey" TargetFieldName="AuthKey" />
-            <FieldMapping FieldName="DownloadStartDate" TargetFieldName="DownloadStartDate" />
             <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
             <FieldMapping FieldName="ShopURL" TargetFieldName="ShopURL" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />

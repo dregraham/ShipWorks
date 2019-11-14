@@ -383,6 +383,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable;
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RakutenOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RakutenPackageID", fieldHashtable);
 		}
 		#endregion
 
@@ -451,6 +453,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)RakutenOrderFieldIndex.RakutenOrderID, true); }
 			set	{ SetValue((int)RakutenOrderFieldIndex.RakutenOrderID, value); }
+		}
+
+		/// <summary> The RakutenPackageID property of the Entity RakutenOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrder"."RakutenPackageID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String RakutenPackageID
+		{
+			get { return (System.String)GetValue((int)RakutenOrderFieldIndex.RakutenPackageID, true); }
+			set	{ SetValue((int)RakutenOrderFieldIndex.RakutenPackageID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'RakutenOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

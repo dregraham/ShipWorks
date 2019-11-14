@@ -10566,6 +10566,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>RakutenOrderID. </summary>
 		RakutenOrderID,
+		///<summary>RakutenPackageID. </summary>
+		RakutenPackageID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10748,8 +10750,6 @@ namespace ShipWorks.Data.Model
 		MarketplaceID,
 		///<summary>ShopURL. </summary>
 		ShopURL,
-		///<summary>DownloadStartDate. </summary>
-		DownloadStartDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -7225,7 +7225,8 @@ GO
 CREATE TABLE [dbo].[RakutenOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[RakutenOrderID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RakutenOrderID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[RakutenPackageID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenOrder] on [dbo].[RakutenOrder]'
@@ -7266,8 +7267,7 @@ CREATE TABLE [dbo].[RakutenStore]
 [StoreID] [bigint] NOT NULL,
 [AuthKey] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MarketplaceID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShopURL] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadStartDate] [datetime] NULL,
+[ShopURL] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenStore] on [dbo].[RakutenStore]'

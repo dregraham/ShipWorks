@@ -24777,6 +24777,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RakutenOrderID);}
 		}
+		/// <summary>Creates a new RakutenOrderEntity.RakutenPackageID field instance</summary>
+		public static EntityField2 RakutenPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RakutenPackageID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity RakutenOrderItemEntity</summary>
@@ -25201,11 +25206,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShopURL
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ShopURL);}
-		}
-		/// <summary>Creates a new RakutenStoreEntity.DownloadStartDate field instance</summary>
-		public static EntityField2 DownloadStartDate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.DownloadStartDate);}
 		}
 	}
 
