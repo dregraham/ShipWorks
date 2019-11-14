@@ -179,7 +179,6 @@ namespace ShipWorks.Stores.Tests.Orders.Archive
                     typeof(PrintResultEntity),
                     typeof(ProStoresOrderEntity),
                     typeof(RakutenOrderEntity),
-                    typeof(RakutenOrderItemEntity),
                     typeof(RakutenOrderSearchEntity),
                     typeof(SearsOrderEntity),
                     typeof(SearsOrderItemEntity),

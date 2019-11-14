@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 
             var query = factory.Create()
                 .From(from)
-                .Select(() => RakutenOrderSearchFields.RakutenOrderID.ToValue<string>())
+                .Select(() => RakutenOrderSearchFields.OrderID.ToValue<string>())
                 .Distinct()
                 .Where(RakutenOrderSearchFields.OrderID == order.OrderID)
                 .AndWhere(OrderSearchFields.IsManual == false);
@@ -49,7 +49,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Gets the Rakuten online order identifier
         /// </summary>
-        protected override string GetOnlineOrderIdentifier(IOrderEntity order) =>
-            (order as IRakutenOrderEntity)?.RakutenOrderID ?? string.Empty;
+        protected override string GetOnlineOrderIdentifier(IOrderEntity order) => order.OrderNumberComplete;
     }
 }

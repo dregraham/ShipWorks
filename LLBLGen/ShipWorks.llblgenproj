@@ -2480,29 +2480,20 @@
       </EntityDefinition>
       <EntityDefinition Name="RakutenOrder" ObjectID="a13acdfa-94f8-460d-99a2-59eb5b4e14a6" InheritanceType="2">
         <Fields>
-          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="0" />
-          <Field Name="RakutenPackageID" Type="string" MaxLength="50" FieldIndex="1" />
-        </Fields>
-      </EntityDefinition>
-      <EntityDefinition Name="RakutenOrderItem" ObjectID="15df98df-a7f8-4c8e-b510-e13b7d82925b" InheritanceType="2">
-        <Fields>
-          <Field Name="Discount" Type="decimal" Precision="19" Scale="4" FieldIndex="1" />
-          <Field Name="ItemTotal" Type="decimal" Precision="19" Scale="4" FieldIndex="2" />
-          <Field Name="RakutenOrderItemID" Type="string" MaxLength="50" FieldIndex="0" />
+          <Field Name="RakutenPackageID" Type="string" MaxLength="36" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="RakutenOrderSearch" ObjectID="a3a1c3f4-da75-4beb-98b4-7c75d61ee93a">
         <Fields>
           <Field Name="OrderID" Type="long" FieldIndex="1" />
-          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="3" />
-          <Field Name="RakutenOrderID" Type="string" MaxLength="50" FieldIndex="2" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="RakutenOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
         <Fields>
           <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
-          <Field Name="MarketplaceID" Type="string" MaxLength="50" FieldIndex="1" />
+          <Field Name="MarketplaceID" Type="string" MaxLength="10" FieldIndex="1" />
           <Field Name="ShopURL" Type="string" MaxLength="50" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
@@ -4550,7 +4541,6 @@
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
-      <InheritanceHierarchy SuperType=":OrderItem" SubType=":RakutenOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":RakutenStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":SearsOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":SearsOrderItem" />
@@ -4632,7 +4622,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-14T16:05:56.6230379Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-11-14T17:37:13.8147909Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8083,17 +8073,7 @@
                   <PkConstraintName Name="PK_RakutenOrder" />
                   <Fields>
                     <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="RakutenOrderID" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="RakutenPackageID" Ordinal="3" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                  </Fields>
-                </Table>
-                <Table Name="RakutenOrderItem">
-                  <PkConstraintName Name="PK_RakutenOrderItem" />
-                  <Fields>
-                    <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
-                    <Field Name="RakutenOrderItemID" Ordinal="2" DbType="12" Length="50" />
-                    <Field Name="Discount" Ordinal="3" DbType="9" Precision="19" Scale="4" />
-                    <Field Name="ItemTotal" Ordinal="4" DbType="9" Precision="19" Scale="4" />
+                    <Field Name="RakutenPackageID" Ordinal="2" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="36" />
                   </Fields>
                 </Table>
                 <Table Name="RakutenOrderSearch">
@@ -8101,8 +8081,7 @@
                   <Fields>
                     <Field Name="RakutenOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="RakutenOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="RakutenStore">
@@ -8110,7 +8089,7 @@
                   <Fields>
                     <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="AuthKey" Ordinal="2" DbType="12" Length="100" />
-                    <Field Name="MarketplaceID" Ordinal="3" DbType="12" Length="50" />
+                    <Field Name="MarketplaceID" Ordinal="3" DbType="12" Length="10" />
                     <Field Name="ShopURL" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                 </Table>
@@ -10671,11 +10650,6 @@
             <ForeignKeyConstraint Name="dbo:RakutenOrder:FK_RakutenOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:RakutenOrderItem:FK_RakutenOrderItem_OrderItem">
-              <FieldPairs>
-                <FieldPair PkField="dbo:OrderItem:OrderItemID" FkField="dbo:RakutenOrderItem:OrderItemID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder" DeleteRuleAction="1">
@@ -13421,23 +13395,13 @@
         <EntityMapping EntityName=":RakutenOrder" TargetName="ShipWorksLocal:dbo:RakutenOrder">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
             <FieldMapping FieldName="RakutenPackageID" TargetFieldName="RakutenPackageID" />
-          </FieldMappings>
-        </EntityMapping>
-        <EntityMapping EntityName=":RakutenOrderItem" TargetName="ShipWorksLocal:dbo:RakutenOrderItem">
-          <FieldMappings>
-            <FieldMapping FieldName="Discount" TargetFieldName="Discount" />
-            <FieldMapping FieldName="ItemTotal" TargetFieldName="ItemTotal" />
-            <FieldMapping FieldName="OrderItemID" TargetFieldName="OrderItemID" />
-            <FieldMapping FieldName="RakutenOrderItemID" TargetFieldName="RakutenOrderItemID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":RakutenOrderSearch" TargetName="ShipWorksLocal:dbo:RakutenOrderSearch">
           <FieldMappings>
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
-            <FieldMapping FieldName="RakutenOrderID" TargetFieldName="RakutenOrderID" />
             <FieldMapping FieldName="RakutenOrderSearchID" TargetFieldName="RakutenOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
           </FieldMappings>
         </EntityMapping>

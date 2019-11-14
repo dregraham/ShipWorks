@@ -21,16 +21,10 @@ namespace ShipWorks.Data.Model.EntityInterfaces
     public partial interface IRakutenOrderEntity: IOrderEntity
     {
         
-        /// <summary> The RakutenOrderID property of the Entity RakutenOrder<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "RakutenOrder"."RakutenOrderID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.String RakutenOrderID { get; }
         /// <summary> The RakutenPackageID property of the Entity RakutenOrder<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "RakutenOrder"."RakutenPackageID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 36<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String RakutenPackageID { get; }
         

@@ -3359,26 +3359,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		#endregion
 	}
 
-	/// <summary>Factory to create new, empty RakutenOrderItemEntity objects.</summary>
-	[Serializable]
-	public partial class RakutenOrderItemEntityFactory : EntityFactoryBase2<RakutenOrderItemEntity> {
-		/// <summary>CTor</summary>
-		public RakutenOrderItemEntityFactory() : base("RakutenOrderItemEntity", ShipWorks.Data.Model.EntityType.RakutenOrderItemEntity, true) { }
-		
-		/// <summary>Creates a new RakutenOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new RakutenOrderItemEntity(fields);
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewRakutenOrderItemUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		#region Included Code
-
-		#endregion
-	}
-
 	/// <summary>Factory to create new, empty RakutenOrderSearchEntity objects.</summary>
 	[Serializable]
 	public partial class RakutenOrderSearchEntityFactory : EntityFactoryBase2<RakutenOrderSearchEntity> {
@@ -5439,9 +5419,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.RakutenOrderEntity:
 					factoryToUse = new RakutenOrderEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.RakutenOrderItemEntity:
-					factoryToUse = new RakutenOrderItemEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.RakutenOrderSearchEntity:
 					factoryToUse = new RakutenOrderSearchEntityFactory();

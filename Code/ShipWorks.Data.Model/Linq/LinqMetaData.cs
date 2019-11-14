@@ -551,9 +551,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.RakutenOrderEntity:
 					toReturn = this.RakutenOrder;
 					break;
-				case ShipWorks.Data.Model.EntityType.RakutenOrderItemEntity:
-					toReturn = this.RakutenOrderItem;
-					break;
 				case ShipWorks.Data.Model.EntityType.RakutenOrderSearchEntity:
 					toReturn = this.RakutenOrderSearch;
 					break;
@@ -1780,12 +1777,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<RakutenOrderEntity> RakutenOrder
 		{
 			get { return new DataSource2<RakutenOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting RakutenOrderItemEntity instances in the database.</summary>
-		public DataSource2<RakutenOrderItemEntity> RakutenOrderItem
-		{
-			get { return new DataSource2<RakutenOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting RakutenOrderSearchEntity instances in the database.</summary>

@@ -351,8 +351,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("RakutenOrderID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
 		}
 		#endregion
@@ -470,16 +468,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)RakutenOrderSearchFieldIndex.OrderID, true); }
 			set	{ SetValue((int)RakutenOrderSearchFieldIndex.OrderID, value); }
-		}
-
-		/// <summary> The RakutenOrderID property of the Entity RakutenOrderSearch<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."RakutenOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String RakutenOrderID
-		{
-			get { return (System.String)GetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderID, true); }
-			set	{ SetValue((int)RakutenOrderSearchFieldIndex.RakutenOrderID, value); }
 		}
 
 		/// <summary> The OriginalOrderID property of the Entity RakutenOrderSearch<br/><br/></summary>

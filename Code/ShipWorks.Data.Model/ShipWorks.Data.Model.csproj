@@ -3215,18 +3215,6 @@
     <Compile Include=".\RelationClasses\RakutenOrderRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\RakutenOrderItemEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityInterfaces\IRakutenOrderItemEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\ReadOnlyEntities\ReadOnlyRakutenOrderItemEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\RakutenOrderItemRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\EntityClasses\RakutenOrderSearchEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>

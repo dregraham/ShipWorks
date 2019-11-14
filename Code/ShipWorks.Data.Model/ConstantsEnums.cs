@@ -10564,96 +10564,8 @@ namespace ShipWorks.Data.Model
 		Custom10,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>RakutenOrderID. </summary>
-		RakutenOrderID,
 		///<summary>RakutenPackageID. </summary>
 		RakutenPackageID,
-		/// <summary></summary>
-		AmountOfFields
-	}
-	/// <summary>Index enum to fast-access EntityFields in the IEntityFields collection for the entity: RakutenOrderItem.</summary>
-	public enum RakutenOrderItemFieldIndex
-	{
-		///<summary>OrderItemID. Inherited from OrderItem</summary>
-		OrderItemID_OrderItem,
-		///<summary>RowVersion. Inherited from OrderItem</summary>
-		RowVersion,
-		///<summary>OrderID. Inherited from OrderItem</summary>
-		OrderID,
-		///<summary>Name. Inherited from OrderItem</summary>
-		Name,
-		///<summary>Code. Inherited from OrderItem</summary>
-		Code,
-		///<summary>SKU. Inherited from OrderItem</summary>
-		SKU,
-		///<summary>ISBN. Inherited from OrderItem</summary>
-		ISBN,
-		///<summary>UPC. Inherited from OrderItem</summary>
-		UPC,
-		///<summary>Description. Inherited from OrderItem</summary>
-		Description,
-		///<summary>Location. Inherited from OrderItem</summary>
-		Location,
-		///<summary>Image. Inherited from OrderItem</summary>
-		Image,
-		///<summary>Thumbnail. Inherited from OrderItem</summary>
-		Thumbnail,
-		///<summary>UnitPrice. Inherited from OrderItem</summary>
-		UnitPrice,
-		///<summary>UnitCost. Inherited from OrderItem</summary>
-		UnitCost,
-		///<summary>Weight. Inherited from OrderItem</summary>
-		Weight,
-		///<summary>Quantity. Inherited from OrderItem</summary>
-		Quantity,
-		///<summary>LocalStatus. Inherited from OrderItem</summary>
-		LocalStatus,
-		///<summary>IsManual. Inherited from OrderItem</summary>
-		IsManual,
-		///<summary>HarmonizedCode. Inherited from OrderItem</summary>
-		HarmonizedCode,
-		///<summary>OriginalOrderID. Inherited from OrderItem</summary>
-		OriginalOrderID,
-		///<summary>Length. Inherited from OrderItem</summary>
-		Length,
-		///<summary>Width. Inherited from OrderItem</summary>
-		Width,
-		///<summary>Brand. Inherited from OrderItem</summary>
-		Brand,
-		///<summary>Height. Inherited from OrderItem</summary>
-		Height,
-		///<summary>Custom1. Inherited from OrderItem</summary>
-		Custom1,
-		///<summary>MPN. Inherited from OrderItem</summary>
-		MPN,
-		///<summary>Custom2. Inherited from OrderItem</summary>
-		Custom2,
-		///<summary>Custom3. Inherited from OrderItem</summary>
-		Custom3,
-		///<summary>Custom4. Inherited from OrderItem</summary>
-		Custom4,
-		///<summary>Custom5. Inherited from OrderItem</summary>
-		Custom5,
-		///<summary>Custom6. Inherited from OrderItem</summary>
-		Custom6,
-		///<summary>HubItemID. Inherited from OrderItem</summary>
-		HubItemID,
-		///<summary>Custom7. Inherited from OrderItem</summary>
-		Custom7,
-		///<summary>Custom8. Inherited from OrderItem</summary>
-		Custom8,
-		///<summary>Custom9. Inherited from OrderItem</summary>
-		Custom9,
-		///<summary>Custom10. Inherited from OrderItem</summary>
-		Custom10,
-		///<summary>OrderItemID. </summary>
-		OrderItemID,
-		///<summary>RakutenOrderItemID. </summary>
-		RakutenOrderItemID,
-		///<summary>Discount. </summary>
-		Discount,
-		///<summary>ItemTotal. </summary>
-		ItemTotal,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10664,8 +10576,6 @@ namespace ShipWorks.Data.Model
 		RakutenOrderSearchID,
 		///<summary>OrderID. </summary>
 		OrderID,
-		///<summary>RakutenOrderID. </summary>
-		RakutenOrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
 		/// <summary></summary>
@@ -15235,8 +15145,6 @@ namespace ShipWorks.Data.Model
 		ProStoresStoreEntity,
 		///<summary>RakutenOrder</summary>
 		RakutenOrderEntity,
-		///<summary>RakutenOrderItem</summary>
-		RakutenOrderItemEntity,
 		///<summary>RakutenOrderSearch</summary>
 		RakutenOrderSearchEntity,
 		///<summary>RakutenStore</summary>

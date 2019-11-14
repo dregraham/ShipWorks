@@ -39,7 +39,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 throw new InvalidOperationException("A non Rakuten order was passed to the Rakuten order identifier.");
             }
 
-            rakutenOrder.RakutenOrderID = rakutenOrderIdentifier;
+            var orderNumber = rakutenOrderIdentifier.Split('-');
+
+            rakutenOrder.ApplyOrderNumberPrefix(orderNumber[0]);
+            rakutenOrder.OrderNumber = long.Parse(orderNumber[1]);
+            rakutenOrder.ApplyOrderNumberPostfix(orderNumber[2]);
         }
 
         /// <summary>
@@ -62,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             CreateCombinedSearchQueryInternal(factory,
                 factory.ShopifyOrderSearch,
                 RakutenOrderSearchFields.OriginalOrderID,
-                RakutenOrderSearchFields.RakutenOrderID == rakutenOrderIdentifier);
+                RakutenOrderSearchFields.OrderID == rakutenOrderIdentifier);
 
         /// <summary>
         /// String representation

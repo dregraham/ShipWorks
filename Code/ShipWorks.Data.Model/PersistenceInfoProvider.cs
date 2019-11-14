@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			this.InitClass(244);
+			this.InitClass(243);
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -210,7 +210,6 @@ namespace ShipWorks.Data.Model
 			InitProStoresOrderSearchEntityMappings();
 			InitProStoresStoreEntityMappings();
 			InitRakutenOrderEntityMappings();
-			InitRakutenOrderItemEntityMappings();
 			InitRakutenOrderSearchEntityMappings();
 			InitRakutenStoreEntityMappings();
 			InitResourceEntityMappings();
@@ -2989,30 +2988,18 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits RakutenOrderEntity's mappings</summary>
 		private void InitRakutenOrderEntityMappings()
 		{
-			this.AddElementMapping("RakutenOrderEntity", @"ShipWorksLocal", @"dbo", "RakutenOrder", 3, 0);
+			this.AddElementMapping("RakutenOrderEntity", @"ShipWorksLocal", @"dbo", "RakutenOrder", 2, 0);
 			this.AddElementFieldMapping("RakutenOrderEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("RakutenOrderEntity", "RakutenOrderID", "RakutenOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("RakutenOrderEntity", "RakutenPackageID", "RakutenPackageID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-		}
-
-		/// <summary>Inits RakutenOrderItemEntity's mappings</summary>
-		private void InitRakutenOrderItemEntityMappings()
-		{
-			this.AddElementMapping("RakutenOrderItemEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderItem", 4, 0);
-			this.AddElementFieldMapping("RakutenOrderItemEntity", "OrderItemID", "OrderItemID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
-			this.AddElementFieldMapping("RakutenOrderItemEntity", "RakutenOrderItemID", "RakutenOrderItemID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("RakutenOrderItemEntity", "Discount", "Discount", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 2);
-			this.AddElementFieldMapping("RakutenOrderItemEntity", "ItemTotal", "ItemTotal", false, "Money", 0, 19, 4, false, "", null, typeof(System.Decimal), 3);
+			this.AddElementFieldMapping("RakutenOrderEntity", "RakutenPackageID", "RakutenPackageID", false, "NVarChar", 36, 0, 0, false, "", null, typeof(System.String), 1);
 		}
 
 		/// <summary>Inits RakutenOrderSearchEntity's mappings</summary>
 		private void InitRakutenOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("RakutenOrderSearchEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderSearch", 4, 0);
+			this.AddElementMapping("RakutenOrderSearchEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderSearch", 3, 0);
 			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenOrderSearchID", "RakutenOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
-			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenOrderID", "RakutenOrderID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
-			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 3);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
 		}
 
 		/// <summary>Inits RakutenStoreEntity's mappings</summary>
@@ -3021,7 +3008,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementMapping("RakutenStoreEntity", @"ShipWorksLocal", @"dbo", "RakutenStore", 4, 0);
 			this.AddElementFieldMapping("RakutenStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("RakutenStoreEntity", "AuthKey", "AuthKey", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 1);
-			this.AddElementFieldMapping("RakutenStoreEntity", "MarketplaceID", "MarketplaceID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
+			this.AddElementFieldMapping("RakutenStoreEntity", "MarketplaceID", "MarketplaceID", false, "NVarChar", 10, 0, 0, false, "", null, typeof(System.String), 2);
 			this.AddElementFieldMapping("RakutenStoreEntity", "ShopURL", "ShopURL", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 

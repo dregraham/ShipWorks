@@ -7225,35 +7225,18 @@ GO
 CREATE TABLE [dbo].[RakutenOrder]
 (
 [OrderID] [bigint] NOT NULL,
-[RakutenOrderID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RakutenPackageID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[RakutenPackageID] [nvarchar](36) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenOrder] on [dbo].[RakutenOrder]'
 GO
 ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [PK_RakutenOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-
-PRINT N'Creating [dbo].[RakutenOrderItem]'
-GO
-CREATE TABLE [dbo].[RakutenOrderItem]
-(
-[OrderItemID] [bigint] NOT NULL,
-[RakutenOrderItemID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Discount] [money] NOT NULL,
-[ItemTotal] [money] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_RakutenOrderItem] on [dbo].[RakutenOrderItem]'
-GO
-ALTER TABLE [dbo].[RakutenOrderItem] ADD CONSTRAINT [PK_RakutenOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
-GO
 CREATE TABLE [dbo].[RakutenOrderSearch]
 (
 [RakutenOrderSearchID] [bigint] IDENTITY(1,1) NOT NULL,
 [OrderID] [bigint] NOT NULL,
-[RakutenOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenOrderSearch] on [dbo].[RakutenOrderSearch]'
@@ -7266,17 +7249,13 @@ CREATE TABLE [dbo].[RakutenStore]
 (
 [StoreID] [bigint] NOT NULL,
 [AuthKey] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MarketplaceID] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MarketplaceID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShopURL] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenStore] on [dbo].[RakutenStore]'
 GO
 ALTER TABLE [dbo].[RakutenStore] ADD CONSTRAINT [PK_RakutenStore] PRIMARY KEY CLUSTERED  ([StoreID])
-GO
-PRINT N'Adding foreign keys to [dbo].[RakutenOrderItem]'
-GO
-ALTER TABLE [dbo].[RakutenOrderItem] ADD CONSTRAINT [FK_RakutenOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
 GO
 PRINT N'Adding foreign keys to [dbo].[RakutenOrder]'
 GO

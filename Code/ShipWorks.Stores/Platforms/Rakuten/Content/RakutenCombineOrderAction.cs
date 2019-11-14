@@ -26,7 +26,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Content
                 x => new RakutenOrderSearchEntity
                 {
                     OrderID = combinedOrder.OrderID,
-                    RakutenOrderID = x.RakutenOrderID,
                     OriginalOrderID = x.OrderID
                 });
         }

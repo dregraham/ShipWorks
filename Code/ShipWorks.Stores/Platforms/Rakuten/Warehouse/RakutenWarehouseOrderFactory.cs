@@ -18,7 +18,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Rakuten)]
     public class RakutenWarehouseOrderFactory : WarehouseOrderFactory
     {
-        private const string RakutenEntryKey = "rakuten";
         private readonly ILog log;
 
         /// <summary>
@@ -47,29 +46,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
             }
 
             return result;
-        }
-
-        /// <summary>
-        /// Load Rakuten order details
-        /// </summary>
-        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
-        {
-            RakutenOrderEntity RakutenOrderEntity = (RakutenOrderEntity)orderEntity;
-            var RakutenWarehouseOrder = warehouseOrder.AdditionalData[RakutenEntryKey].ToObject<RakutenWarehouseOrder>();
-
-            RakutenOrderEntity.RakutenOrderID = RakutenWarehouseOrder.OrderNumber;
-        }
-
-        /// <summary>
-        /// Load Rakuten item details
-        /// </summary>
-        protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
-        {
-            RakutenOrderItemEntity RakutenItemEntity = (RakutenOrderItemEntity)itemEntity;
-            var RakutenWarehouseItem = warehouseItem.AdditionalData[RakutenEntryKey].ToObject<RakutenWarehouseItem>();
-
-            RakutenItemEntity.Discount = RakutenWarehouseItem.Discount;
-            RakutenItemEntity.ItemTotal = RakutenWarehouseItem.ItemTotal;
         }
     }
 }

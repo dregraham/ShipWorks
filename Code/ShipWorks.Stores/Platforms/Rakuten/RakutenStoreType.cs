@@ -73,16 +73,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             new RakutenOrderEntity();
 
         /// <summary>
-        /// Creates a custom order item entity
-        /// </summary>
-        public override OrderItemEntity CreateOrderItemInstance()
-        {
-            RakutenOrderItemEntity entity = new RakutenOrderItemEntity();
-
-            return entity;
-        }
-
-        /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
         protected override string InternalLicenseIdentifier => RakutenStore.AuthKey;
@@ -120,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             var order = new Lazy<RakutenOrderEntity>(() => (RakutenOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("Rakuten");
-            outline.AddElement("RakutenOrderID", () => order.Value.RakutenOrderID);
+            outline.AddElement("RakutenOrderID", () => order.Value.OrderID);
         }
 
         /// <summary>
