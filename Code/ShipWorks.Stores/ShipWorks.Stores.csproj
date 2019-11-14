@@ -295,7 +295,6 @@
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOrderSearchProvider.cs" />
-    <Compile Include="Platforms\Rakuten\RakutenOrderIdentifier.cs" />
     <Compile Include="Platforms\Rakuten\RakutenStoreType.cs" />
     <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />

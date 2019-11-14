@@ -13,6 +13,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
@@ -129,7 +130,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             if (!Progress.IsCancelRequested)
             {
-                GenericResult<OrderEntity> result = await InstantiateOrder(new RakutenOrderIdentifier(rakutenOrder.OrderNumber)).ConfigureAwait(false);
+                GenericResult<OrderEntity> result = await InstantiateOrder(new AlphaNumericOrderIdentifier(rakutenOrder.OrderNumber)).ConfigureAwait(false);
 
                 if (result.Failure)
                 {

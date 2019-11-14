@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly IJsonRequest jsonRequest;
+        private readonly JsonSerializerSettings jsonSerializerSettings;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
         private const string shippingPath = "/orders/{0}/{1}/{2}/shipping/{3}";
@@ -49,6 +50,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             ordersEndpoint = $"{endpointBase}/ordersearch";
             shippingEndpoint = $"{endpointBase}/orders/";
             testEndpoint = $"{endpointBase}/configurations" + "/{0}/labels/";
+
+            jsonSerializerSettings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
+            };
         }
 
         /// <summary>
@@ -81,7 +89,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.UtcNow.AddDays(7), new DateTime(1970, 1, 1), startDate);
 
-            var request = CreateRequest(store.AuthKey, ordersEndpoint, HttpVerb.Post, requestObject);
+            var request = CreateRequest(store.AuthKey, ordersEndpoint, HttpVerb.Post, JsonConvert.SerializeObject(requestObject, jsonSerializerSettings));
 
             return SubmitRequest<RakutenOrdersResponse>("GetOrders", request);
         }
@@ -114,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             });
 
-            var request = CreateRequest(store.AuthKey, shippingEndpoint, HttpVerb.Patch, requestObject);
+            var request = CreateRequest(store.AuthKey, shippingEndpoint, HttpVerb.Patch, JsonConvert.SerializeObject(requestObject, jsonSerializerSettings));
 
             return SubmitRequest<RakutenBaseResponse>("ConfirmShipping", request);
         }
@@ -122,26 +130,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create a request to Rakuten
         /// </summary>
-        private IHttpRequestSubmitter CreateRequest<T>(string encryptedAuthKey, string endpoint, HttpVerb method, T body)
+        private IHttpRequestSubmitter CreateRequest(string encryptedAuthKey, string endpoint, HttpVerb method, string body)
         {
             IHttpRequestSubmitter submitter;
 
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore,
-                DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
-            };
-
-            if (body != null)
-            {
-                submitter = submitterFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(body, jsonSerializerSettings),
-                "application/json");
-            }
-            else
-            {
-                submitter = submitterFactory.GetHttpVariableRequestSubmitter();
-            }
+            submitter = !string.IsNullOrEmpty(body) ? submitterFactory.GetHttpTextPostRequestSubmitter(body, "application/json") :
+                submitterFactory.GetHttpVariableRequestSubmitter();
 
             submitter.Uri = new Uri(endpoint);
             submitter.Verb = method;
@@ -165,26 +159,21 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 return true;
             }
 
-            RakutenBaseResponse response = null;
+            RakutenBaseResponse response;
             try
             {
                 var endpoint = string.Format(testEndpoint, testStore.MarketplaceID);
 
-                var request = CreateRequest<string>(testStore.AuthKey, endpoint, HttpVerb.Get, null);
+                var request = CreateRequest(testStore.AuthKey, endpoint, HttpVerb.Get, null);
 
                 response = jsonRequest.Submit<RakutenBaseResponse>("TestConnection", ApiLogSource.Rakuten, request);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
 
-            if (response?.Errors != null)
-            {
-                return false;
-            }
-
-            return true;
+            return response?.Errors == null;
         }
 
         /// <summary>

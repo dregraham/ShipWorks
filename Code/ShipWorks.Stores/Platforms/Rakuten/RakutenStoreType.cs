@@ -103,17 +103,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack) { DefaultDaysBack = 30, MaxDaysBack = 30 };
 
         /// <summary>
-        /// Generate the template XML output for the given order
-        /// </summary>
-        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
-        {
-            var order = new Lazy<RakutenOrderEntity>(() => (RakutenOrderEntity) orderSource());
-
-            ElementOutline outline = container.AddElement("Rakuten");
-            outline.AddElement("RakutenOrderID", () => order.Value.OrderID);
-        }
-
-        /// <summary>
         /// Creates the add store wizard online update action control for Rakuten
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
