@@ -116,14 +116,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
         {
             await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
 
-            NoteEntity note;
+            NoteEntity[] note;
             using (SqlAdapter adapter = SqlAdapter.Default)
             {
                 var meta = new LinqMetaData(adapter);
-                note = meta.Note.SingleOrDefault();
+                note = meta.Note.ToArray();
             }
 
-            Assert.Equal("This is a public note", note.Text);
+            Assert.Equal("This is a public note", note[0].Text);
+            Assert.Equal("This is a shopper comment", note[1].Text);
         }
 
         private RakutenOrder CreateOrderData()
