@@ -289,7 +289,6 @@ BEGIN
 	exec PurgeEntities 'NeweggOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'OverstockOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'OrderItemAttribute', 'OrderItemID', 'OrderItemAttributeID'
-	exec PurgeEntities 'RakutenOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'SearsOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'ThreeDCartOrderItem', 'OrderItemID', 'OrderItemID'
 	exec PurgeEntities 'WalmartOrderItem', 'OrderItemID', 'OrderItemID'
