@@ -55,7 +55,8 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
             IDataProvider dataProvider,
             IIndex<StoreTypeCode, ICombineOrderSearchProvider<MagentoOrderSearchEntity>> combineOrderSearchProviderFactory,
-            Func<Type, ILog> logFactory, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+            Func<Type, ILog> logFactory, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
             : base(store)
         {
             this.webClientFactory = webClientFactory;
