@@ -37,8 +37,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
-            <RowDefinition Height="auto" />
-        </Grid.RowDefinitions>        
+        </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".2*" MaxWidth="140" />
@@ -72,12 +71,14 @@
                             Grid.Column="0"
                             Height="32"
                             VerticalContentAlignment="Center"
-                            ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
+
                             Background="{StaticResource InputControlBackgroundGradient}"
                             BorderBrush="{x:Null}"
                             BorderThickness="0"
                             FontSize="20"
                             Text="{Binding OrderNumber, UpdateSourceTrigger=PropertyChanged}">
+                            <!-- Need to add the line below back to the above text box. This line is causing the designer to blow up. -->
+                            <!--ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"-->
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding Path=GetOrderCommand}" />
                             </TextBox.InputBindings>
@@ -134,37 +135,6 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
-
-            <TextBlock
-                Margin="10 0 10 0"
-                Grid.Column="3"
-                HorizontalAlignment="Right"
-                FontWeight="Bold"
-                Text="{Binding ShipmentModel.TotalCost, StringFormat='Total Cost: {0:c}', Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-
-                <TextBlock.Visibility>
-                    <Binding Converter="{StaticResource VisibleWhenNotEqualToParameter}" Path="ShipmentModel.TotalCost">
-                        <Binding.ConverterParameter>
-                            <system:Decimal>0</system:Decimal>
-                        </Binding.ConverterParameter>
-                    </Binding>
-                </TextBlock.Visibility>
-            </TextBlock>
-
-            <Button Grid.Row="0"
-                    Grid.Column="4"
-                    Width="auto"
-                    Command="{Binding CreateLabelCommand}"
-                    Content="Create Label"
-                    Style="{StaticResource LargePrimaryButton}"
-                    Visibility="{Binding ShowCreateLabel, Converter={StaticResource BoolToVisHidden}}" />
-        </Grid>        
-        <!-- Search Error Message -->
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="0,8,0,0"
-            Text="{Binding SearchMessage}"
-            Visibility="{Binding ShowSearchMessage, Converter={StaticResource BoolToVis}}" />
+        </Grid>
     </Grid>
 </UserControl>
