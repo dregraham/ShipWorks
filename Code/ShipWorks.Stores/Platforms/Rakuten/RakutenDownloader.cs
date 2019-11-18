@@ -70,7 +70,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 Progress.Detail = $"Downloading orders...";
 
-                downloadStartDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false) ?? DateTime.UtcNow.AddDays(-30);
+                var lastModifiedStartingPoint = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false);
+
+                // Add 1 millisecond so Rakuten doesn't send us the same order twice
+                downloadStartDate = lastModifiedStartingPoint?.AddMilliseconds(1) ?? DateTime.UtcNow.AddDays(-30);
 
                 RakutenOrdersResponse response = await webClient.GetOrders(rakutenStore, downloadStartDate).ConfigureAwait(false);
 
@@ -145,8 +148,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
-                // Add 1 millisecond to ensure we don't retrieve the same order again.
-                // Rakuten polls orders based on LastModifiedDate.
+                // Add 1 millisecond so Rakuten doesn't send us the same order twice
                 var modifiedDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
 
                 if (modifiedDate > downloadStartDate)
