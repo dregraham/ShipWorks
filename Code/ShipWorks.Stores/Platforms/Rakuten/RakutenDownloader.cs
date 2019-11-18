@@ -72,7 +72,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 downloadStartDate = await GetOnlineLastModifiedStartingPoint().ConfigureAwait(false) ?? DateTime.UtcNow.AddDays(-30);
 
-                RakutenOrdersResponse response = webClient.GetOrders(rakutenStore, downloadStartDate);
+                RakutenOrdersResponse response = await webClient.GetOrders(rakutenStore, downloadStartDate).ConfigureAwait(false);
 
                 while (response?.Orders?.Any() == true)
                 {
@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     Progress.Detail = $"Downloading orders...";
 
                     // Download more orders with the new download date
-                    response = webClient.GetOrders(rakutenStore, downloadStartDate);
+                    response = await webClient.GetOrders(rakutenStore, downloadStartDate).ConfigureAwait(false);
                 }
             }
             catch (WebException ex)
@@ -145,9 +145,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
-                if (rakutenOrder.LastModifiedDate.AddMilliseconds(1) > downloadStartDate)
+                // Add 1 millisecond to ensure we don't retrieve the same order again.
+                // Rakuten polls orders based on LastModifiedDate.
+                var modifiedDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
+
+                if (modifiedDate > downloadStartDate)
                 {
-                    downloadStartDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
+                    downloadStartDate = modifiedDate;
                 }
             }
         }

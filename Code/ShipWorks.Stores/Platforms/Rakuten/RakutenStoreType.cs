@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions;
+using ShipWorks.Stores.Platforms.Rakuten.Enums;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -86,16 +89,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices() => new[]
-        {
-            "Not Shipped",
-            "Processing Payment",
-            "Awaiting Completion",
-            "Cancelled",
-            "Complete",
-        };
+        public override ICollection<string> GetOnlineStatusChoices() => 
+            EnumHelper.GetEnumList<RakutenOrderStatus>().Select(status => status.Description).ToList();
 
-        /// <summary>
+            /// <summary>
         /// Specifies the download policy for the online store
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>

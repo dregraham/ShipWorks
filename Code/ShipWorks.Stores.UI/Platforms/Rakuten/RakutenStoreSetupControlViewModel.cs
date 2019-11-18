@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
@@ -78,7 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// <summary>
         /// Save the API user and Secret to the store
         /// </summary>
-        public bool Save(RakutenStoreEntity store)
+        public async Task<bool> Save(RakutenStoreEntity store)
         {
             var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
 
@@ -90,7 +91,7 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
                 ShopURL = ShopUrl
             };
 
-            bool result = webClient.TestConnection(testStore);
+            bool result = await webClient.TestConnection(testStore).ConfigureAwait(false);
 
             if (!result)
             {

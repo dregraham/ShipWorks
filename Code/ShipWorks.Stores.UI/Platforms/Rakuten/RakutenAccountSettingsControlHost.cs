@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.UI;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -35,11 +36,16 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         }
 
         /// <summary>
+        /// Should the save operation use the async version
+        /// </summary>
+        public override bool IsSaveAsync => true;
+
+        /// <summary>
         /// Save the data into the StoreEntity. Nothing is saved to the database.
         /// </summary>
-        public override bool SaveToEntity(StoreEntity store)
+        public override async Task<bool> SaveToEntityAsync(StoreEntity store)
         {
-            return viewModel.Save(store as RakutenStoreEntity);
+            return await viewModel.Save(store as RakutenStoreEntity).ConfigureAwait(false);
         }
     }
 }

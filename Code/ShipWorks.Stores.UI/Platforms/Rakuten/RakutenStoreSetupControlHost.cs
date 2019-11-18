@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
@@ -38,9 +39,12 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// <summary>
         /// Called when [step next].
         /// </summary>
-        private void OnStepNext(object sender, WizardStepEventArgs e)
+        private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
-            if (!viewModel.Save(GetStore<RakutenStoreEntity>()))
+            bool saveSuccessful = await viewModel.Save(GetStore<RakutenStoreEntity>()).ConfigureAwait(false);
+
+            // Ask the account settings control to save it's info to the store.  If anything is invalid, stay on this page.
+            if (!saveSuccessful)
             {
                 e.NextPage = this;
             }

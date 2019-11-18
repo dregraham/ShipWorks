@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Save the store to the view model
         /// </summary>
-        bool Save(RakutenStoreEntity store);
+        Task<bool> Save(RakutenStoreEntity store);
     }
 }

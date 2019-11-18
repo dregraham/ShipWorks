@@ -165,8 +165,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             PersonAdapter shipAdapter = new PersonAdapter(orderToSave, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(orderToSave, "Bill");
 
-            LoadShippingAddress(downloadedOrder, shipAdapter);
-            LoadBillingAddress(downloadedOrder, billAdapter);
+            LoadAddress(downloadedOrder, billAdapter);
 
             billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
 
@@ -178,37 +177,15 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 shipAdapter.Email = billAdapter.Email;
             }
         }
-
-        /// <summary>
-        /// Loads the shipping address.
-        /// </summary>
-        private void LoadShippingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter)
-        {
-            var address = downloadedOrder.Shipping.DeliveryAddress;
-
-            var name = PersonName.Parse(address.Name);
-            shipAdapter.NameParseStatus = name.ParseStatus;
-            shipAdapter.FirstName = name.First;
-            shipAdapter.MiddleName = name.Middle;
-            shipAdapter.LastName = name.Last;
-
-            // These are reversed by the API
-            shipAdapter.Street1 = address.Address2;
-            shipAdapter.Street2 = address.Address1;
-
-            shipAdapter.City = address.CityName;
-            shipAdapter.StateProvCode = ParseState(address.StateCode);
-            shipAdapter.PostalCode = address.PostalCode;
-            shipAdapter.CountryCode = address.CountryCode;
-            shipAdapter.Phone = address.PhoneNumber;
-        }
-
         /// <summary>
         /// Loads the billing address.
         /// </summary>
-        private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter billAdapter)
+        private void LoadAddress(RakutenOrder downloadedOrder, PersonAdapter adapter)
         {
-            var address = downloadedOrder.Shipping.InvoiceAddress;
+            RakutenAddress address;
+
+            address = adapter.FieldPrefix.Equals("Ship") ? downloadedOrder.Shipping.DeliveryAddress : 
+                downloadedOrder.Shipping.InvoiceAddress;
 
             if (address == null)
             {
@@ -216,20 +193,20 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
 
             var name = PersonName.Parse(address.Name);
-            billAdapter.NameParseStatus = name.ParseStatus;
-            billAdapter.FirstName = name.First;
-            billAdapter.MiddleName = name.Middle;
-            billAdapter.LastName = name.Last;
+            adapter.NameParseStatus = name.ParseStatus;
+            adapter.FirstName = name.First;
+            adapter.MiddleName = name.Middle;
+            adapter.LastName = name.Last;
 
             // These are reversed by the API
-            billAdapter.Street1 = address.Address2;
-            billAdapter.Street2 = address.Address1;
+            adapter.Street1 = address.Address2;
+            adapter.Street2 = address.Address1;
 
-            billAdapter.City = address.CityName;
-            billAdapter.StateProvCode = ParseState(address.StateCode);
-            billAdapter.PostalCode = address.PostalCode;
-            billAdapter.CountryCode = address.CountryCode;
-            billAdapter.Phone = address.PhoneNumber;
+            adapter.City = address.CityName;
+            adapter.StateProvCode = ParseState(address.StateCode);
+            adapter.PostalCode = address.PostalCode;
+            adapter.CountryCode = address.CountryCode;
+            adapter.Phone = address.PhoneNumber;
         }
 
         /// <summary>
@@ -237,7 +214,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private string ParseState(string stateCode)
         {
-            return stateCode.Substring(stateCode.IndexOf("-") + 1);
+            var stateCodeIndex = stateCode.IndexOf("-");
+
+            if (stateCodeIndex == -1 || stateCodeIndex + 1 >= stateCode.Length)
+            {
+                return stateCode;
+            }
+            
+            return stateCode.Substring(stateCodeIndex + 1);
         }
 
         /// <summary>
@@ -263,13 +247,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Loads the requested shipping and prime status.
+        /// Loads the requested shipping
         /// </summary>
-        private static void LoadRequestedShipping(RakutenOrderEntity orderToSave,
-            RakutenOrder downloadedOrder)
+        private static void LoadRequestedShipping(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder)
         {
-            var shipping = downloadedOrder.Shipping;
-            string carrier = shipping?.ShippingMethod;
+            string carrier = downloadedOrder.Shipping?.ShippingMethod;
 
             if (!string.IsNullOrEmpty(carrier))
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -80,17 +81,17 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Get a list of orders from Rakuten
         /// </summary>
-        public RakutenOrdersResponse GetOrders(IRakutenStoreEntity store, DateTime startDate)
+        public async Task<RakutenOrdersResponse> GetOrders(IRakutenStoreEntity store, DateTime startDate)
         {
             var requestObject = new RakutenGetOrdersRequest(store, DateTime.UtcNow.AddDays(7), new DateTime(1970, 1, 1), startDate);
 
-            return SubmitRequest<RakutenOrdersResponse>(store.AuthKey, ordersResource, Method.POST, requestObject, "GetOrders");
+            return await SubmitRequest<RakutenOrdersResponse>(store.AuthKey, ordersResource, Method.POST, requestObject, "GetOrders").ConfigureAwait(false);
         }
 
         /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
-        public RakutenBaseResponse ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
+        public async Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
             var rakutenOrder = shipment.Order as RakutenOrderEntity;
             var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.OrderNumberComplete, rakutenOrder.RakutenPackageID);
@@ -115,13 +116,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             });
 
-            return SubmitRequest<RakutenBaseResponse>(store.AuthKey, shippingResource, Method.PATCH, requestObject, "ConfirmShipping");
+            return await SubmitRequest<RakutenBaseResponse>(store.AuthKey, shippingResource, Method.PATCH, requestObject, "ConfirmShipping").ConfigureAwait(false);
         }
 
         /// <summary>
         /// Send a request to Rakuten
         /// </summary>
-        private T SubmitRequest<T>(string encryptedAuthKey, string resource, Method method, object body, string action) where T : RakutenBaseResponse, new()
+        private async Task<T> SubmitRequest<T>(string encryptedAuthKey, string resource, Method method, object body, string action) where T : RakutenBaseResponse, new()
         {
             var log = new ApiLogEntry(ApiLogSource.Rakuten, action);
 
@@ -140,7 +141,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             request.AddHeader("Authorization", $"ESA {authKey}");
 
-            var response = client.Execute<T>(request);
+            var response = await client.ExecuteTaskAsync<T>(request).ConfigureAwait(false);
 
             log.LogResponse(response, "txt");
 
@@ -155,7 +156,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Verify we can connect with Rakuten
         /// </summary>
-        public bool TestConnection(RakutenStoreEntity testStore)
+        public async Task<bool> TestConnection(RakutenStoreEntity testStore)
         {
             if (UseFakeApi)
             {
@@ -167,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 var resource = string.Format(testResource, testStore.MarketplaceID);
 
-                response = SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection");
+                response = await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
             }
             catch (Exception)
             {
