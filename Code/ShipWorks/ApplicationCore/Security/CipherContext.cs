@@ -28,6 +28,9 @@ namespace ShipWorks.ApplicationCore.Security
         ChannelAdvisor,
 
         [Description("Overstock Context")]
-        Overstock
+        Overstock,
+
+        [Description("Rakuten Context")]
+        Rakuten
     }
 }

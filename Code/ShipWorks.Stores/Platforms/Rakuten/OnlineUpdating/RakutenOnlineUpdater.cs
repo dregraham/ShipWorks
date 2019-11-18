@@ -51,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         {
             if (!shipment.Processed || shipment.Voided)
             {
-                log.InfoFormat("Not uploading tracking number since shipment ID {0} is not processed.", shipment.ShipmentID);
+                log.InfoFormat("Not uploading tracking number since shipment ID {0} is not processed or is voided.", shipment.ShipmentID);
                 return;
             }
 
@@ -65,12 +65,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                 }
                 catch (ObjectDeletedException)
                 {
-                    log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                    // Shipment was deleted
                     return;
                 }
                 catch (SqlForeignKeyException)
                 {
-                    log.InfoFormat("Not uploading tracking number since shipment {0} or related information has been deleted.", shipment.ShipmentID);
+                    // Shipment was deleted
                     return;
                 }
 

@@ -8,7 +8,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
     public class RakutenPatchOperation
     {
         [JsonProperty("op")]
-        public string OP { get; set; }
+        public string Operation { get; set; }
 
         [JsonProperty("path")]
         public string Path { get; set; }

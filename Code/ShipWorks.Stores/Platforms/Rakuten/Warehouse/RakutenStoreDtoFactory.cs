@@ -22,9 +22,9 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint,
-                               IEncryptionProviderFactory encryptionProviderFactory,
-                               IStoreDtoHelpers helpers)
+        public RakutenStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, 
+            IEncryptionProviderFactory encryptionProviderFactory,
+            IStoreDtoHelpers helpers)
         {
             this.helpers = helpers;
             this.downloadStartingPoint = downloadStartingPoint;

@@ -69,10 +69,7 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public void Load(RakutenStoreEntity store)
         {
-            var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
-                .Decrypt(store.AuthKey);
-
-            ApiKey = authKey;
+            ApiKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(store.AuthKey);
             MarketplaceID = store.MarketplaceID;
             ShopUrl = store.ShopURL;
         }
@@ -82,8 +79,7 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public bool Save(RakutenStoreEntity store)
         {
-            var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
-                .Encrypt(ApiKey);
+            var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
 
             // Use a throw away store to test entered credentials.
             RakutenStoreEntity testStore = new RakutenStoreEntity()

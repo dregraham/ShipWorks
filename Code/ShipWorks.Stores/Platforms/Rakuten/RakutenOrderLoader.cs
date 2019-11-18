@@ -123,8 +123,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
 
-            string englishName;
-            downloadedItem.Name.TryGetValue("en_us", out englishName);
+            downloadedItem.Name.TryGetValue("en_us", out string englishName);
 
             itemToSave.Name = string.IsNullOrEmpty(englishName) ? downloadedItem.Name.Values.FirstOrDefault() : englishName;
         }
@@ -167,7 +166,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             PersonAdapter billAdapter = new PersonAdapter(orderToSave, "Bill");
 
             LoadShippingAddress(downloadedOrder, shipAdapter);
-            LoadBillingAddress(downloadedOrder, shipAdapter, billAdapter);
+            LoadBillingAddress(downloadedOrder, billAdapter);
 
             billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
 
@@ -207,7 +206,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the billing address.
         /// </summary>
-        private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter shipAdapter, PersonAdapter billAdapter)
+        private void LoadBillingAddress(RakutenOrder downloadedOrder, PersonAdapter billAdapter)
         {
             var address = downloadedOrder.Shipping.InvoiceAddress;
 

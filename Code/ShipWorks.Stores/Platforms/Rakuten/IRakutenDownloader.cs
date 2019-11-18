@@ -1,6 +1,9 @@
 ﻿namespace ShipWorks.Stores.Platforms.Rakuten
 {
-    interface IRakutenDownloader
+    /// <summary>
+    /// Interface for the RakutenDownloader for downloading Rakuten orders
+    /// </summary>
+    public interface IRakutenDownloader
     {
     }
 }

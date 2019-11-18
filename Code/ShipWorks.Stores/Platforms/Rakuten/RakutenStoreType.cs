@@ -8,7 +8,6 @@ using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Rakuten.CoreExtensions.Actions;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -21,7 +20,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IIndex<StoreTypeCode, Func<StoreEntity, StoreDownloader>> downloaderFactory;
 
         /// <summary>
-        /// The walmart store
+        /// The Rakuten store
         /// </summary>
         private readonly RakutenStoreEntity RakutenStore;
 
@@ -67,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Create the CA order entity
+        /// Create the RakutenOrderEntity
         /// </summary>
         protected override OrderEntity CreateOrderInstance() =>
             new RakutenOrderEntity();

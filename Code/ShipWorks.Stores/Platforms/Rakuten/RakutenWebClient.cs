@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             requestObject.Add(new RakutenPatchOperation
             {
-                OP = "replace",
+                Operation = "replace",
                 Path = path,
                 Value = shippingInfo
 
@@ -141,8 +141,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             submitter.Verb = method;
             submitter.AllowHttpStatusCodes(new[] { HttpStatusCode.BadRequest, HttpStatusCode.NotFound, HttpStatusCode.Accepted });
 
-            var authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten")
-                .Decrypt(encryptedAuthKey);
+            var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(encryptedAuthKey);
 
             submitter.Headers.Add("Authorization", $"ESA {authKey}");
 
@@ -203,6 +202,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
         }
 
+        /// <summary>
+        /// Submits the request to Rakuten
+        /// </summary>
         private T SubmitRequest<T>(string action, IHttpRequestSubmitter request) where T : RakutenBaseResponse
         {
             var response = jsonRequest.Submit<T>(action, ApiLogSource.Rakuten, request);

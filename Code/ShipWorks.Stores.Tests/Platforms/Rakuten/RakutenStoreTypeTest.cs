@@ -23,9 +23,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
             RakutenStoreType testObject = mock.Create<RakutenStoreType>(new TypedParameter(typeof(StoreEntity), 
                 new RakutenStoreEntity() { StoreTypeCode = StoreTypeCode.Rakuten}));
 
-            var typeCode = testObject.TypeCode;
-
-            Assert.Equal(StoreTypeCode.Rakuten, typeCode);
+            Assert.Equal(StoreTypeCode.Rakuten, testObject.TypeCode);
         }
 
         public void Dispose()

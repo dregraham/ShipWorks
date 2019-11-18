@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.Enums
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = false, ApplyToMembers = true, StripAfterObfuscation = false)]
     public enum RakutenOrderStatus
     {
         [Description("")]

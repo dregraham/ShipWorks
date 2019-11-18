@@ -25,6 +25,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         {
         }
 
+        /// <summary>
+        /// Gets the online store's order identifier
+        /// </summary>
         protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             QueryFactory factory = new QueryFactory();

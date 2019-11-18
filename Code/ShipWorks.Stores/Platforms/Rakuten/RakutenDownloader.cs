@@ -34,8 +34,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Constructor
         /// </summary>
-        [NDependIgnoreTooManyParams(Justification =
-        "The parameters are dependencies that were already part of the downloader, but now they are explicit")]
+        [NDependIgnoreTooManyParams]
         public RakutenDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
             Func<IRakutenStoreEntity, IRakutenWebClient> webClientFactory,
@@ -45,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             base(store, storeTypeManager.GetType(store))
         {
             rakutenStore = store as RakutenStoreEntity;
-            this.webClient = webClientFactory(rakutenStore);
+            webClient = webClientFactory(rakutenStore);
             this.orderLoader = orderLoader;
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "RakutenDownloader.Download");
 
@@ -142,13 +141,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 order.Store = Store;
 
-                // Create the order
                 orderLoader.LoadOrder(order, rakutenOrder, this);
 
-                // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 
-                // Update downloadStartDate
                 if (rakutenOrder.LastModifiedDate.AddMilliseconds(1) > downloadStartDate)
                 {
                     downloadStartDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
