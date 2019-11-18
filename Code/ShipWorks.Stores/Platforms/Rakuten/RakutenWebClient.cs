@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
+        private readonly RestSharpJsonNetSerializer jsonSerializer;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
         private const string shippingPath = "/orders/{0}/{1}/{2}/shipping/{3}";
@@ -44,6 +45,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             this.submitterFactory = submitterFactory;
 
             endpointBase = GetEndpointBase();
+
+            jsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore,
+                DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
+            });
         }
 
         /// <summary>
@@ -117,14 +125,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var log = new ApiLogEntry(ApiLogSource.Rakuten, action);
 
-            RestClient client = new RestClient(endpointBase);
+            RestClient client = CreateClient(endpointBase);
             RestRequest request = new RestRequest(resource, method);
-            request.JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore,
-                DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
-            });
+            request.JsonSerializer = jsonSerializer;
 
             if (body != null)
             {
@@ -199,6 +202,23 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 throw new WebException("An error occured when communicating with Rakuten");
             }
+        }
+
+        /// <summary>
+        /// Create a RestClient that uses our Json Serializer
+        /// </summary>
+        private RestClient CreateClient(string baseUrl)
+        {
+            var client = new RestClient(baseUrl);
+
+            // Override with Newtonsoft JSON Handler
+            client.AddHandler("application/json", () => jsonSerializer);
+            client.AddHandler("text/json", () => jsonSerializer);
+            client.AddHandler("text/x-json", () => jsonSerializer);
+            client.AddHandler("text/javascript", () => jsonSerializer);
+            client.AddHandler("*+json", () => jsonSerializer);
+
+            return client;
         }
     }
 }
