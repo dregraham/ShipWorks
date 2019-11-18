@@ -31,6 +31,6 @@ namespace ShipWorks.ApplicationCore.Security
         Overstock,
 
         [Description("Rakuten Context")]
-        Rakuten
+        Rakuten,
     }
 }

@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public RakutenStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint, 
+        public RakutenStoreDtoFactory(IDownloadStartingPoint downloadStartingPoint,
             IEncryptionProviderFactory encryptionProviderFactory,
             IStoreDtoHelpers helpers)
         {
@@ -41,10 +41,9 @@ namespace ShipWorks.Stores.Warehouse
             var storeEntity = baseStoreEntity as RakutenStoreEntity;
             var store = helpers.PopulateCommonData(storeEntity, new RakutenStore());
 
-            string authKey = encryptionProviderFactory.CreateSecureTextEncryptionProvider("Rakuten").Decrypt(storeEntity.AuthKey);
+            string authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(storeEntity.AuthKey);
 
-            store.AuthKey = await helpers.EncryptSecret(authKey)
-                .ConfigureAwait(false);
+            store.AuthKey = await helpers.EncryptSecret(authKey).ConfigureAwait(false);
             store.DownloadStartDate = storeEntity.InitialDownloadDays ?? 30;
             store.ShopUrl = storeEntity.ShopURL;
             store.MarketplaceID = storeEntity.MarketplaceID;

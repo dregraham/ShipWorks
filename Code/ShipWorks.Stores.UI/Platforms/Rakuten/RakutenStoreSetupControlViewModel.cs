@@ -69,7 +69,8 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public void Load(RakutenStoreEntity store)
         {
-            ApiKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(store.AuthKey);
+            ApiKey = string.IsNullOrEmpty(store.AuthKey) ? string.Empty :
+                encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(store.AuthKey);
             MarketplaceID = store.MarketplaceID;
             ShopUrl = store.ShopURL;
         }

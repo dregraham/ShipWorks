@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.TangoRequests;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.ApplicationCore.Licensing.TangoRequests;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public async Task<GenericResult<TokenResponse>> RemoteLoginWithToken()
         {
-            WebClientEnvironment  webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            WebClientEnvironment webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
             GenericResult<TokenResponse> redirectToken = tangoGetRedirectToken.GetRedirectToken();
 
             if (redirectToken.Failure)
@@ -57,13 +57,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             {
                 RequestFormat = DataFormat.Json
             };
-            restRequest.AddJsonBody(new { redirectToken = redirectToken});
+            restRequest.AddJsonBody(new { redirectToken = redirectToken });
 
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, "RemoteLoginWithToken");
-            logEntry.LogRequest(restRequest, "json");
-            
+            logEntry.LogRequest(restRequest, restClient, "json");
+
             IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
                 .ConfigureAwait(false);
 
