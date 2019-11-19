@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -38,14 +39,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         public RakutenDownloader(StoreEntity store,
             IStoreTypeManager storeTypeManager,
             Func<IRakutenStoreEntity, IRakutenWebClient> webClientFactory,
-            RakutenOrderLoader orderLoader,
+            Func<IRakutenStoreEntity, RakutenOrderLoader> orderLoaderFactory,
             ISqlAdapterRetryFactory sqlAdapterRetryFactory,
             Func<Type, ILog> createLogger) :
             base(store, storeTypeManager.GetType(store))
         {
             rakutenStore = store as RakutenStoreEntity;
             webClient = webClientFactory(rakutenStore);
-            this.orderLoader = orderLoader;
+            this.orderLoader = orderLoaderFactory(rakutenStore);
             sqlAdapter = sqlAdapterRetryFactory.Create<SqlException>(5, -5, "RakutenDownloader.Download");
 
             MethodConditions.EnsureArgumentIsNotNull(rakutenStore, "Rakuten Store");
@@ -111,13 +112,28 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             foreach (RakutenOrder order in response.Orders)
             {
+                Progress.Detail = $"Processing order {QuantitySaved + 1}...";
+
                 // Check if it has been canceled
                 if (Progress.IsCancelRequested)
                 {
                     return false;
                 }
 
-                await LoadOrder(order).ConfigureAwait(false);
+                var products = new List<RakutenProductsResponse>();
+
+                foreach (RakutenOrderItem item in order.OrderItems)
+                {
+                    // Check if it has been canceled
+                    if (Progress.IsCancelRequested)
+                    {
+                        return false;
+                    }
+
+                    products.Add(await webClient.GetProduct(rakutenStore, item.BaseSKU).ConfigureAwait(false));
+                }
+
+                await LoadOrder(order, products).ConfigureAwait(false);
             }
 
             return true;
@@ -126,10 +142,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Load the given Rakuten order
         /// </summary>
-        private async Task LoadOrder(RakutenOrder rakutenOrder)
+        private async Task LoadOrder(RakutenOrder rakutenOrder, List<RakutenProductsResponse> products)
         {
-            Progress.Detail = $"Processing order {QuantitySaved + 1}...";
-
             if (!Progress.IsCancelRequested)
             {
                 GenericResult<OrderEntity> result = await InstantiateOrder(new AlphaNumericOrderIdentifier(rakutenOrder.OrderNumber)).ConfigureAwait(false);
@@ -144,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
                 order.Store = Store;
 
-                orderLoader.LoadOrder(order, rakutenOrder, this);
+                orderLoader.LoadOrder(order, rakutenOrder, products, this);
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
 

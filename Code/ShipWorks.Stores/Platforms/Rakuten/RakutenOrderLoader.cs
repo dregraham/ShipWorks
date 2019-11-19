@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -6,6 +7,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
 using ShipWorks.Stores.Platforms.Rakuten.Enums;
@@ -20,15 +22,18 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly IOrderChargeCalculator orderChargeCalculator;
         private readonly ILog log;
+        private readonly IRakutenStoreEntity store;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RakutenOrderLoader"/> class.
         /// </summary>
         /// <param name="orderChargeCalculator">The order charge calculator.</param>
         public RakutenOrderLoader(IOrderChargeCalculator orderChargeCalculator,
+            IRakutenStoreEntity store,
             Func<Type, ILog> loggerFactory)
         {
             this.orderChargeCalculator = orderChargeCalculator;
+            this.store = store;
             log = loggerFactory(typeof(RakutenOrderLoader));
         }
 
@@ -39,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Order to save must have store loaded
         /// </remarks>
         public void LoadOrder(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
+            List<RakutenProductsResponse> products,
             IOrderElementFactory orderElementFactory)
         {
             MethodConditions.EnsureArgumentIsNotNull(orderToSave.Store, "orderToSave.Store");
@@ -59,7 +65,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 // Load order data
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
-                LoadItems(orderToSave, downloadedOrder, orderElementFactory);
+                LoadItems(orderToSave, downloadedOrder, products, orderElementFactory);
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
@@ -85,8 +91,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             decimal calculatedTotal = orderChargeCalculator.CalculateTotal(orderToSave);
 
-            // Sometimes Rakuten doesn't give us all of the discounts for the order
-            // If the order total is different than what we calculate we need to show the additional discount/cost
+            // This should only happen if Rakuten doesn't send us the correct information somewhere
             if (downloadedOrder.OrderTotal != calculatedTotal)
             {
                 decimal adjustment = downloadedOrder.OrderTotal - calculatedTotal;
@@ -102,6 +107,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private void LoadItems(RakutenOrderEntity orderToSave,
             RakutenOrder downloadedOrder,
+            List<RakutenProductsResponse> products,
             IOrderElementFactory orderElementFactory)
         {
             if (downloadedOrder.OrderItems != null)
@@ -109,7 +115,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 foreach (RakutenOrderItem downloadedItem in downloadedOrder.OrderItems)
                 {
                     OrderItemEntity itemToSave = orderElementFactory.CreateItem(orderToSave);
-                    LoadItem(itemToSave, downloadedItem);
+
+                    var product = products.Where(x => x.BaseSKU.Equals(downloadedItem.BaseSKU)).FirstOrDefault();
+
+                    LoadItem(orderToSave, itemToSave, downloadedItem, product, orderElementFactory);
                 }
             }
         }
@@ -117,15 +126,136 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads the item.
         /// </summary>
-        private void LoadItem(OrderItemEntity itemToSave, RakutenOrderItem downloadedItem)
+        private void LoadItem(RakutenOrderEntity order, OrderItemEntity itemToSave, RakutenOrderItem downloadedItem,
+            RakutenProductsResponse product,
+            IOrderElementFactory orderElementFactory)
         {
-            itemToSave.SKU = downloadedItem.SKU ?? downloadedItem.BaseSku;
+            itemToSave.SKU = downloadedItem.SKU ?? downloadedItem.BaseSKU;
             itemToSave.Quantity = downloadedItem.Quantity;
             itemToSave.UnitPrice = downloadedItem.UnitPrice;
 
-            downloadedItem.Name.TryGetValue("en_us", out string englishName);
+            itemToSave.Name = GetEnglishOrFirst(downloadedItem.Name);
 
-            itemToSave.Name = string.IsNullOrEmpty(englishName) ? downloadedItem.Name.Values.FirstOrDefault() : englishName;
+            if (product != null)
+            {
+                // This can override some of the base values set above
+                LoadAdditionalItemInfo(order, itemToSave, product, orderElementFactory);
+            }
+        }
+
+        /// <summary>
+        /// Adds various details to the item
+        /// </summary>
+        private void LoadAdditionalItemInfo(RakutenOrderEntity order, OrderItemEntity item,
+            RakutenProductsResponse product,
+            IOrderElementFactory orderElementFactory)
+        {
+            var details = product.ShopSpecificProductDetails.Where(x => x.ShopKey?.ShopURL?.Equals(store.ShopURL) == true).FirstOrDefault();
+
+            if (details != null)
+            {
+                LoadItemDetails(order, item, details, orderElementFactory);
+            }
+
+            var variant = product.Variants.Where(x => x.SKU?.Equals(item.SKU) == true).FirstOrDefault();
+
+            if (variant != null)
+            {
+                LoadItemVariant(item, variant, product.VariantAttributeNames, orderElementFactory);
+            }
+        }
+
+        /// <summary>
+        /// Load shop-specific product details
+        /// </summary>
+        private void LoadItemDetails(RakutenOrderEntity order, OrderItemEntity item,
+            RakutenProductDetails details,
+            IOrderElementFactory orderElementFactory)
+        {
+            if (details.InternalNotes?.Any() == true)
+            {
+                orderElementFactory.CreateNote(order, details.InternalNotes.Values.FirstOrDefault(), DateTime.Now, NoteVisibility.Public);
+            }
+
+            item.Brand = details.Brand;
+            item.Description = GetEnglishOrFirst(details.Description);
+            item.Image = details.Images?.FirstOrDefault()?.URL ?? string.Empty;
+            item.Name = GetEnglishOrFirst(details.Title);
+
+            // The SKU was already set in the LoadItem method, so we can use it here
+            details.VariantSpecificInfo.TryGetValue(item.SKU, out RakutenVariantInfo variantInfo);
+
+            // Override the image with the more specific variant image if available
+            item.Image = variantInfo?.Images?.URL ?? item.Image;
+        }
+
+        /// <summary>
+        /// Load variant-specific product details
+        /// </summary>
+        private void LoadItemVariant(OrderItemEntity item, RakutenProductVariant variant,
+            Dictionary<string, Dictionary<string, string>> attributeNames,
+            IOrderElementFactory orderElementFactory)
+        {
+            if (variant.ShippingInfo?.Weight != null)
+            {
+                if (variant.ShippingInfo.Weight.Unit.Equals("g", StringComparison.OrdinalIgnoreCase))
+                {
+                    item.Weight = WeightUtility.Convert(Interapptive.Shared.Enums.WeightUnitOfMeasure.Grams,
+                        Interapptive.Shared.Enums.WeightUnitOfMeasure.Pounds, variant.ShippingInfo.Weight.Value);
+                }
+                else
+                {
+                    item.Weight = variant.ShippingInfo.Weight.Value;
+                }
+            }
+
+            if (variant.ShippingInfo?.Dimensions != null)
+            {
+                item.Length = variant.ShippingInfo.Dimensions.Length;
+                item.Width = variant.ShippingInfo.Dimensions.Width;
+                item.Height = variant.ShippingInfo.Dimensions.Height;
+            }
+
+            item.MPN = variant.ManufacturerPartNumber;
+
+            if (variant.GlobalTradeItems.TryGetValue("UPC", out string upc))
+            {
+                item.UPC = upc;
+            }
+
+            if (variant.GlobalTradeItems.TryGetValue("ISBN", out string isbn))
+            {
+                item.ISBN = isbn;
+            }
+
+            if (attributeNames != null)
+            {
+                LoadItemAttributes(item, variant, attributeNames, orderElementFactory);
+            }
+        }
+
+        /// <summary>
+        /// Load the variant-specific attributes
+        /// </summary>
+        private void LoadItemAttributes(OrderItemEntity item, RakutenProductVariant variant,
+            Dictionary<string, Dictionary<string, string>> attributeNames,
+            IOrderElementFactory orderElementFactory)
+        {
+            foreach (KeyValuePair<string, Dictionary<string, string>> productAttributeName in attributeNames)
+            {
+                var itemAttributeName = GetEnglishOrFirst(productAttributeName.Value);
+
+                // Get the attribute values for this variant
+                variant.VariantAttributes.TryGetValue(productAttributeName.Key, out Dictionary<string, string> variantAttribute);
+
+                var itemAttributeValue = GetEnglishOrFirst(variantAttribute);
+
+                // Assuming we have both a name and value, add the attribute to the item
+                if (!string.IsNullOrEmpty(itemAttributeName) && !string.IsNullOrEmpty(itemAttributeValue))
+                {
+                    orderElementFactory.CreateItemAttribute(item, itemAttributeName, itemAttributeValue, 0, false);
+                }
+            }
         }
 
         /// <summary>
@@ -134,9 +264,19 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private void LoadCharges(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,
             IOrderElementFactory orderElementFactory)
         {
-            if (downloadedOrder.Shipping.ShippingFee != 0)
+            if (downloadedOrder.Shipping?.ShippingFee != 0)
             {
                 orderElementFactory.CreateCharge(orderToSave, "SHIPPING", "Shipping", downloadedOrder.Shipping.ShippingFee);
+            }
+
+            if (downloadedOrder.SalesTaxTotal != 0)
+            {
+                orderElementFactory.CreateCharge(orderToSave, "SALES TAX", "Sales Tax", downloadedOrder.SalesTaxTotal);
+            }
+
+            if (downloadedOrder.RecyclingFeeTotal != 0)
+            {
+                orderElementFactory.CreateCharge(orderToSave, "RECYCLING FEE", "Recycling Fee", downloadedOrder.RecyclingFeeTotal);
             }
         }
 
@@ -165,6 +305,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             PersonAdapter shipAdapter = new PersonAdapter(orderToSave, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(orderToSave, "Bill");
 
+            LoadAddress(downloadedOrder, shipAdapter);
             LoadAddress(downloadedOrder, billAdapter);
 
             billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
@@ -182,9 +323,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private void LoadAddress(RakutenOrder downloadedOrder, PersonAdapter adapter)
         {
-            RakutenAddress address;
-
-            address = adapter.FieldPrefix.Equals("Ship") ? downloadedOrder.Shipping.DeliveryAddress : 
+            var address = adapter.FieldPrefix.Equals("Ship") ? downloadedOrder.Shipping.DeliveryAddress :
                 downloadedOrder.Shipping.InvoiceAddress;
 
             if (address == null)
@@ -220,7 +359,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 return stateCode;
             }
-            
+
             return stateCode.Substring(stateCodeIndex + 1);
         }
 
@@ -257,6 +396,26 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 orderToSave.RequestedShipping = carrier;
             }
+        }
+
+        /// <summary>
+        /// For a given dictionary with language keys, try to get the english string.
+        /// If english doesn't exist, get the first
+        /// </summary>
+        private string GetEnglishOrFirst(Dictionary<string, string> dictionary)
+        {
+            if (dictionary == null || !dictionary.Any())
+            {
+                return string.Empty;
+            }
+
+            dictionary.TryGetValue("en_US", out string result);
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                return dictionary.Values.FirstOrDefault();
+            }
+
+            return result;
         }
     }
 }

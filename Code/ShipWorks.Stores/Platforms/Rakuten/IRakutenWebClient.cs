@@ -17,13 +17,18 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         Task<RakutenOrdersResponse> GetOrders(IRakutenStoreEntity store, DateTime startDate);
 
         /// <summary>
-        /// Mark order as shipped and upload tracking number
+        /// Get a product's variants and details from Rakuten
         /// </summary>
-        Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment);
+        Task<RakutenProductsResponse> GetProduct(IRakutenStoreEntity store, string baseSKU);
 
         /// <summary>
         /// Verify we can connect with Rakuten
         /// </summary>
         Task<bool> TestConnection(RakutenStoreEntity testStore);
+
+        /// <summary>
+        /// Mark order as shipped and upload tracking number
+        /// </summary>
+        Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment);
     }
 }

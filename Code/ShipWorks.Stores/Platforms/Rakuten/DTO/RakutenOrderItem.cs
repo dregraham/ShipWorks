@@ -11,7 +11,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 	public class RakutenOrderItem
     {
         [JsonProperty("baseSku")]
-        public string BaseSku { get; set; }
+        public string BaseSKU { get; set; }
 
         [JsonProperty("orderItemId")]
         public string OrderItemID { get; set; }

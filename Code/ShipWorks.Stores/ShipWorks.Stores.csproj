@@ -288,6 +288,9 @@
     <Compile Include="Platforms\Rakuten\DTO\RakutenOptionalCheckoutInfo.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenBaseResponse.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenPayment.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenProductsResponse.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenShopKey.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetProductsRequest.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenPatchOperation.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
     <Compile Include="Platforms\Rakuten\Enums\RakutenOrderStatus.cs" />

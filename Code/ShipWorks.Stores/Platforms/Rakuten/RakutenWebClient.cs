@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -25,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     [Component]
     public class RakutenWebClient : IRakutenWebClient
     {
+        private readonly LruCache<string, RakutenProductsResponse> productCache;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IHttpRequestSubmitterFactory submitterFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
@@ -33,6 +35,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private const string shippingPath = "/orders/{0}/{1}/{2}/shipping/{3}";
         private const string ordersResource = "ordersearch";
         private const string shippingResource = "orders/";
+        private const string productResource = "products/{0}";
         private const string testResource = "configurations/{0}/labels/";
         private readonly string endpointBase;
 
@@ -53,6 +56,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 MissingMemberHandling = MissingMemberHandling.Ignore,
                 DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
             });
+
+            productCache = new LruCache<string, RakutenProductsResponse>(1000);
         }
 
         /// <summary>
@@ -89,6 +94,31 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
+        /// Get a product's variants and details from Rakuten
+        /// </summary>
+        public async Task<RakutenProductsResponse> GetProduct(IRakutenStoreEntity store, string baseSKU)
+        {
+            if (productCache.Contains(baseSKU))
+            {
+                return productCache[baseSKU];
+            }
+
+            var requestObject = new RakutenGetProductsRequest(baseSKU);
+
+            var resource = string.Format(productResource, baseSKU);
+
+            var product = await SubmitRequest<RakutenProductsResponse>(store.AuthKey, resource, Method.GET, requestObject, "GetProduct");
+
+            // Only add the product to the cache if there were no errors
+            if (product?.Errors == null)
+            {
+                productCache[baseSKU] = product;
+            }
+
+            return product;
+        }
+
+        /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
         public async Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
@@ -117,6 +147,31 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             });
 
             return await SubmitRequest<RakutenBaseResponse>(store.AuthKey, shippingResource, Method.PATCH, requestObject, "ConfirmShipping").ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Verify we can connect with Rakuten
+        /// </summary>
+        public async Task<bool> TestConnection(RakutenStoreEntity testStore)
+        {
+            if (UseFakeApi)
+            {
+                return true;
+            }
+
+            RakutenBaseResponse response;
+            try
+            {
+                var resource = string.Format(testResource, testStore.MarketplaceID);
+
+                response = await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return response?.Errors == null;
         }
 
         /// <summary>
@@ -151,31 +206,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
 
             return response?.Data;
-        }
-
-        /// <summary>
-        /// Verify we can connect with Rakuten
-        /// </summary>
-        public async Task<bool> TestConnection(RakutenStoreEntity testStore)
-        {
-            if (UseFakeApi)
-            {
-                return true;
-            }
-
-            RakutenBaseResponse response;
-            try
-            {
-                var resource = string.Format(testResource, testStore.MarketplaceID);
-
-                response = await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return response?.Errors == null;
         }
 
         /// <summary>

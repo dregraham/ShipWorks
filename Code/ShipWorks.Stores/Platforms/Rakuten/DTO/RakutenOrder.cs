@@ -94,5 +94,17 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// </summary>
         [JsonProperty("checkoutOptionalInfo")]
         public RakutenOptionalCheckoutInfo checkoutOptionalInfo { get; set; }
+
+        /// <summary>
+        /// The sales tax on the order
+        /// </summary>
+        [JsonProperty("salesTaxTotal")]
+        public decimal SalesTaxTotal { get; set; }
+
+        /// <summary>
+        /// The recycling fee on the order
+        /// </summary>
+        [JsonProperty("recyclingFeeTotal")]
+        public decimal RecyclingFeeTotal { get; set; }
     }
 }
