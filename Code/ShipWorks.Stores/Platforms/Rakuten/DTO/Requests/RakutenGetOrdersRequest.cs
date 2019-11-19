@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
 	/// <summary>
 	/// The search query used to filter orders from Rakuten
 	/// </summary>
+	[Obfuscation(Exclude = true)]
 	public class RakutenOrderSearchQuery
 	{
 		[JsonProperty("shopKey")]
@@ -85,6 +86,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
 	/// <summary>
 	/// The store-specific identification key of the request
 	/// </summary>
+	[Obfuscation(Exclude = true)]
 	public class RakutenShopKey
 	{
 		[JsonProperty("marketplaceIdentifier")]
