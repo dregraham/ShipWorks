@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Asendia
 
                 service.ReadMultiValue(v => shipment.Asendia.Service = (AsendiaServiceType) v);
                 nonMachinable.ReadMultiCheck(c => shipment.Asendia.NonMachinable = c);
-                shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+                shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
             }

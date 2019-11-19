@@ -282,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 instructions.ReadMultiText(v => shipment.OnTrac.Instructions = v);
 
                 service.ReadMultiValue(v => shipment.OnTrac.Service = (int) v);
-                shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+                shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
                 saturdayDelivery.ReadMultiCheck(v => shipment.OnTrac.SaturdayDelivery = v);
                 signatureRequired.ReadMultiCheck(v => shipment.OnTrac.SignatureRequired = v);
 
