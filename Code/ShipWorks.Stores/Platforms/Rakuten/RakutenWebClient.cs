@@ -150,7 +150,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 ThrowError(response.Data.Errors);
             }
 
-            return response.Data;
+            return response?.Data;
         }
 
         /// <summary>
