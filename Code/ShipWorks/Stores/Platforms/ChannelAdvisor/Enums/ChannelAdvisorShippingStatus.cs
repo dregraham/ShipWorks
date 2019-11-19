@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
 {
@@ -20,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.Enums
 
         [Description("Pending Shipment")]
         PendingShipment = 4,
+
+        [Description("Third Party Managed")]
+        ThirdPartyManaged = 16,
 
         [Description("Unknown")]
         Unknown = 99
