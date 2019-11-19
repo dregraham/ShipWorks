@@ -54,11 +54,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.rateGrid.AllowMultipleSelection = false;
             this.rateGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rateGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
-            this.gridColumnProvider,
-            this.gridColumnAccountDescription,
+            this.gridColumnProvider,          
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnShipping,
+            this.gridColumnAccountDescription,
             this.gridColumnTax,
             this.gridColumnDuty,
             this.gridColumnRate,
@@ -299,8 +299,14 @@ namespace ShipWorks.Shipping.Editing.Rating
             // 
             // gridColumnAccountDescription
             // 
+            this.gridColumnAccountDescription.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnAccountDescription.AutoSizeIncludeHeader = true;
+            this.gridColumnAccountDescription.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
+            this.gridColumnAccountDescription.Clickable = false;
+            this.gridColumnAccountDescription.ForeColor = System.Drawing.SystemColors.GrayText;
             this.gridColumnAccountDescription.HeaderText = "Account";
-            this.gridColumnAccountDescription.Visible = false;
+            this.gridColumnAccountDescription.MinimumWidth = 20;
+            this.gridColumnAccountDescription.Width = 40;
             // 
             // RateControl
             // 
