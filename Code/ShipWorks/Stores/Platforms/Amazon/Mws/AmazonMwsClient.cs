@@ -653,7 +653,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 // We want to send the request to the hub and have the hub be the one that actually executes the request.
                 // This means we need to swap out the original URI with the hub URI, and store the original one as a variable.
-                request.Variables.Add("requestUrl", request.Uri.ToString());
+                request.Headers.Add("originalRequestUrl", request.Uri.ToString());
                 request.Uri = new Uri(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl + WarehouseEndpoints.AmazonMwsProxy);
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, Progress);
