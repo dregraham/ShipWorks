@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-    /// <summary>
-    /// Order entity returned by Rakuten
-    /// </summary>
-    public class RakutenOrder
+	/// <summary>
+	/// Order entity returned by Rakuten
+	/// </summary>
+	[Obfuscation(Exclude = true)]
+	public class RakutenOrder
     {
         /// <summary>
         /// The Rakuten order number

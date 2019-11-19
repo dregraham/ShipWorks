@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-    public class RakutenErrors
+	[Obfuscation(Exclude = true)]
+	public class RakutenErrors
     {
         /// <summary>
         /// List of resources that caused errors
@@ -24,7 +26,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public Dictionary<string, IList<RakutenError>> Specific { get; set; }
     }
 
-    public class RakutenError
+	[Obfuscation(Exclude = true)]
+	public class RakutenError
     {
         /// <summary>
         /// The Rakuten API error code

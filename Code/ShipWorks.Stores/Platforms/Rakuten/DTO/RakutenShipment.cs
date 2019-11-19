@@ -1,11 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-    /// <summary>
-    /// Shipping entity returned by Rakuten
-    /// </summary>
-    public class RakutenShipment
+	/// <summary>
+	/// Shipping entity returned by Rakuten
+	/// </summary>
+	[Obfuscation(Exclude = true)]
+	public class RakutenShipment
     {
         [JsonProperty("orderPackageId")]
         public string OrderPackageID { get; set; }
@@ -26,7 +28,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public RakutenAddress InvoiceAddress { get; set; }
     }
 
-    public class RakutenAddress
+	/// <summary>
+	/// Address entity returned by Rakuten
+	/// </summary>
+	[Obfuscation(Exclude = true)]
+	public class RakutenAddress
     {
         [JsonProperty("name")]
         public string Name { get; set; }

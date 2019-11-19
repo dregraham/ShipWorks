@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-    public class RakutenOptionalCheckoutInfo
+	[Obfuscation(Exclude = true)]
+	public class RakutenOptionalCheckoutInfo
     {
         /// <summary>
         /// The name of the grouped optional checkout information
@@ -31,7 +32,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public IList<RakutenFilledInfo> FilledInfo { get; set; }
     }
 
-    public class RakutenFilledInfo
+	[Obfuscation(Exclude = true)]
+	public class RakutenFilledInfo
     {
         /// <summary>
         /// The information title
