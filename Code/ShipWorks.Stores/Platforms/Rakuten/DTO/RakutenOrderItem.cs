@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-    /// <summary>
-    /// Order Item entity returned by Rakuten
-    /// </summary>
-    public class RakutenOrderItem
+	/// <summary>
+	/// Order Item entity returned by Rakuten
+	/// </summary>
+	[Obfuscation(Exclude = true)]
+	public class RakutenOrderItem
     {
         [JsonProperty("baseSku")]
         public string BaseSku { get; set; }
