@@ -305,6 +305,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnAccountDescription.Clickable = false;
             this.gridColumnAccountDescription.ForeColor = System.Drawing.SystemColors.GrayText;
             this.gridColumnAccountDescription.HeaderText = "Account";
+            this.gridColumnAccountDescription.Visible = false;
             this.gridColumnAccountDescription.MinimumWidth = 20;
             this.gridColumnAccountDescription.Width = 40;
             // 
