@@ -17,6 +17,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string OdbcStores = "api/stores/{0}/odbc";
         public const string GenericFile = "api/stores/{0}/genericFile";
         public const string UploadOrders = "api/orders";
+        public const string AmazonMwsProxy = "api/amazonMwsProxy";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";

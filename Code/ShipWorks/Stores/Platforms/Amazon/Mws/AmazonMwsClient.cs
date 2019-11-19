@@ -18,6 +18,8 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,6 +50,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         // Throttling request submitter
         private AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly AmazonStoreType storeType;
 
         /// <summary>
@@ -56,10 +59,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public AmazonMwsClient(AmazonStoreEntity store,
             IShippingManager shippingManager,
             Func<StoreEntity, AmazonStoreType> getStoreType,
-            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings)
+            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings,
+            WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             storeType = getStoreType(store);
             this.shippingManager = shippingManager;
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
@@ -645,6 +650,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 {
                     logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
                 }
+
+                // We want to send the request to the hub and have the hub be the one that actually executes the request.
+                // This means we need to swap out the original URI with the hub URI, and store the original one as a variable.
+                request.Variables.Add("requestUrl", request.Uri.ToString());
+                request.Uri = new Uri(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl + WarehouseEndpoints.AmazonMwsProxy);
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, Progress);
 
