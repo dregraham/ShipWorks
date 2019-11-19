@@ -156,7 +156,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
         {
             var item = mock.Create<RakutenOrderItem>();
             item.SKU = "";
-            item.BaseSku = "";
+            item.BaseSKU = "";
             item.Discount = 0;
             item.ItemTotal = 0;
             item.OrderItemID = "";
