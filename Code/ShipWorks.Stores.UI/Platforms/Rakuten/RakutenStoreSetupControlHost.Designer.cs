@@ -49,9 +49,8 @@
             this.Controls.Add(this.elementHost1);
             this.Name = "RakutenStoreSetupControlHost";
             this.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingInto);
-            this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
+            this.StepNextAsync = this.OnStepNext;
             this.ResumeLayout(false);
-
         }
 
         #endregion
