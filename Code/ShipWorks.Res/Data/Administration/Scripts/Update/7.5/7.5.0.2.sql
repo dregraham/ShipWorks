@@ -16,6 +16,7 @@ BEGIN
          WHERE OrderID = eo.OrderID
          ORDER BY OrderID DESC) AS eoi
     WHERE eo.EbayOrderID = 0
+	AND eoi.EbayTransactionID != 0
     )
 
     update eo SET eo.EbayOrderID = eoi.EbayTransactionID FROM
