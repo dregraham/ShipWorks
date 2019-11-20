@@ -81,7 +81,13 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public async Task<bool> Save(RakutenStoreEntity store)
         {
-            var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
+	        if (string.IsNullOrWhiteSpace(ApiKey))
+	        {
+		        messageHelper.ShowError("Please enter a Rakuten Auth Key");
+		        return false;
+			}
+	        
+	        var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
 
             // Use a throw away store to test entered credentials.
             RakutenStoreEntity testStore = new RakutenStoreEntity()
