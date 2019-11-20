@@ -174,7 +174,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             if (details.InternalNotes?.Any() == true)
             {
-                orderElementFactory.CreateNote(order, details.InternalNotes.Values.FirstOrDefault(), order.OrderDate, NoteVisibility.Public);
+                // There will only ever be a single note. This is a dictionary instead
+                // of a tuple because newtonsoft can't properly deserialize a tuple
+                var text = $"Shipping Note: {details.InternalNotes.Values.FirstOrDefault()}";
+                orderElementFactory.CreateNote(order, text, order.OrderDate, NoteVisibility.Public);
             }
 
             item.Brand = details.Brand;
@@ -297,13 +300,15 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             if (!string.IsNullOrWhiteSpace(downloadedOrder.MerchantMemo))
             {
-                orderElementFactory.CreateNote(orderToSave, downloadedOrder.MerchantMemo, orderToSave.OrderDate, NoteVisibility.Public);
+                var text = $"Merchant Memo: {downloadedOrder.MerchantMemo}";
+                orderElementFactory.CreateNote(orderToSave, text, orderToSave.OrderDate, NoteVisibility.Public);
             }
 
             if (!string.IsNullOrWhiteSpace(downloadedOrder.ShopperComment) &&
                 !downloadedOrder.ShopperComment.Equals("{}"))
             {
-                orderElementFactory.CreateNote(orderToSave, downloadedOrder.ShopperComment, orderToSave.OrderDate, NoteVisibility.Public);
+                var text = $"Shopper Comment: {downloadedOrder.ShopperComment}";
+                orderElementFactory.CreateNote(orderToSave, text, orderToSave.OrderDate, NoteVisibility.Public);
             }
 
             if (downloadedOrder.CheckoutOptionalInfo?.Any() == true)
