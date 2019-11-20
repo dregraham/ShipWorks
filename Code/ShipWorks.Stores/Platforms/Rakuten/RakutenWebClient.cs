@@ -30,6 +30,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IRakutenRestClientFactory clientFactory;
         private readonly IRakutenRestRequestFactory requestFactory;
+        private readonly Func<ApiLogSource, string, ApiLogEntry> apiLogEntryFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
@@ -44,11 +45,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Constructor
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
-            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory)
+            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory, 
+            Func<ApiLogSource, string, ApiLogEntry> apiLogEntryFactory)
         {
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.clientFactory = clientFactory;
             this.requestFactory = requestFactory;
+            this.apiLogEntryFactory = apiLogEntryFactory;
 
             endpointBase = GetEndpointBase();
 
@@ -182,7 +185,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private async Task<T> SubmitRequest<T>(string encryptedAuthKey, string resource, Method method, object body, string action) where T : RakutenBaseResponse, new()
         {
-            var log = new ApiLogEntry(ApiLogSource.Rakuten, action);
+            ApiLogEntry log = apiLogEntryFactory(ApiLogSource.Rakuten, action);
 
             IRestClient client = CreateClient(endpointBase);
             IRestRequest request = requestFactory.Create(resource, method);
@@ -193,7 +196,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 request.AddJsonBody(body);
             }
 
+            
             log.LogRequest(request, client, "txt");
+
 
             var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(encryptedAuthKey);
 

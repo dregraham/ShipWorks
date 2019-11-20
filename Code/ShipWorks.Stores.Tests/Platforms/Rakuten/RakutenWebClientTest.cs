@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
@@ -8,6 +9,7 @@ using Moq;
 using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Rakuten;
@@ -19,232 +21,79 @@ using It = Moq.It;
 
 namespace ShipWorks.Stores.Tests.Platforms.Rakuten
 {
-    public class RakutenWebClientTest
+    public class RakutenWebClientTest : IDisposable
     {
         private readonly AutoMock mock;
-        private readonly Mock<IRestClient> restClient;
-        private readonly Mock<IRestRequest> restRequest;
-        private readonly Mock<IApiLogEntry> logger;
-        private readonly Mock<IRakutenStoreEntity> store;
-
-        private readonly Mock<IRestResponse> restResponse;
-
+        private readonly ILogEntryFactory logFactory;
         public RakutenWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            restClient = mock.CreateMock<IRestClient>();
-            mock.Mock<IRakutenRestClientFactory>()
-                .Setup(f => f.Create(It.IsAny<string>()))
-                .Returns(restClient.Object);
-
-            restRequest = mock.CreateMock<IRestRequest>();
-            mock.Mock<IRakutenRestRequestFactory>()
-                .Setup(f => f.Create(It.IsAny<string>(), It.IsAny<Method>()))
-                .Returns(restRequest.Object);
-
-
-            logger = mock.CreateMock<IApiLogEntry>();
-            var logFactory = mock.CreateMock<Func<ApiLogSource, string, IApiLogEntry>>();
-            logFactory.Setup(f => f(It.IsAny<ApiLogSource>(), It.IsAny<string>()))
-                .Returns(logger.Object);
-            mock.Provide(logFactory.Object);
-
-
-            restResponse = mock.CreateMock<IRestResponse>();
-            restClient.Setup(s => s.ExecuteTaskAsync(It.IsAny<IRestRequest>())).Returns(new Task<IRestResponse>(() => restResponse.Object));
-
-            store = mock.CreateMock<IRakutenStoreEntity>();
+            logFactory = mock.Build<ILogEntryFactory>();
         }
 
-        [Fact]
-        public async Task GetOrders_SetsRequestVerbToPost()
+        [Theory]
+        [InlineData( "url", "123456", "123456")]
+        [InlineData( "url", "", "")]
+        public void GetOrders_Succeeds(string shopUrl, string authKey, string marketplaceID)
         {
-            var testObject = mock.Create<RakutenWebClient>();
-            await testObject.GetOrders(store.Object, DateTime.Now);
-
-            restRequest.VerifySet(r => r.Method = Method.POST);
-        }
-
-        [Fact]
-        public async Task GetOrders_SetsRestClientBaseUrl()
-        {
-            var testObject = mock.Create<RakutenWebClient>();
-            await testObject.GetOrders(store.Object, DateTime.Now);
-
-            restClient.VerifySet(r => r.BaseUrl = new Uri("https://openapi-rms.global.rakuten.com/2.0"));
-        }
-
-        [Fact]
-        public async Task ConfirmShipping_UsesOrderEndpoint()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-            await testObject.ConfirmShipping(store.Object, shipment);
-
-            restRequest.VerifySet(s => s.Resource = "ordersearch");
-        }
-
-        [Fact]
-        public async Task ConfirmShipping_UsesShipmentEndpoint()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-            await testObject.ConfirmShipping(store.Object, shipment);
-
-            restRequest.VerifySet(s => s.Resource = "orders/");
-        }
+            RakutenStoreEntity store = new RakutenStoreEntity(1);
+            store.AuthKey = authKey;
+            store.ShopURL = shopUrl;
+            store.MarketplaceID= marketplaceID;
 
 
-        [Fact]
-        public async Task ConfirmShipping_SetsRequestVerbToPatch()
-        {
-            ShipmentEntity shipment = new ShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-            await testObject.ConfirmShipping(store.Object, shipment);
-
-            restRequest.VerifySet(r => r.Method = Method.PATCH);
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_GetsSubmitterWithCorrectBody_AndApplicationType()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity()
+            IRestResponse response = new RestResponse()
             {
-                ShippedDateUtc = new DateTime(2017, 7, 19),
-                ShippingCarrier = "UPS",
-                ShippingClass = "Ground",
-                TrackingNumber = "12345"
+                StatusCode = HttpStatusCode.OK,
+                ErrorException = null
             };
 
-            var testObject = mock.Create<RakutenWebClient>();
-            testObject.UploadShipmentDetails(shipment, "token", "1");
+            mock.FromFactory<IRakutenRestClientFactory>()
+                .Mock<IRestClient>(x => x.Create(It.IsAny<string>()))
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>()))
+                .Returns(response);
 
-            string serializedShipment =
-                JsonConvert.SerializeObject(shipment,
-                    new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddThh:mm:ssZ" });
+            IRakutenWebClient webClient = mock.Create<RakutenWebClient>(TypedParameter.From((IRakutenStoreEntity) store));
 
-            string requestBody = $"{{\"Value\":{serializedShipment}}}";
-
-            mock.Mock<IHttpRequestSubmitterFactory>().Verify(f => f.GetHttpTextPostRequestSubmitter(requestBody, "application/json"));
+            webClient.GetOrders(store, DateTime.Now);
         }
 
-        [Fact]
-        public void UploadShipmentDetails_RequestIsLogged()
+        [Theory]
+        [InlineData("url", "123456", "123456")]
+        [InlineData("url", "", "")]
+        public void ConfirmShipping_Succeeds(string shopUrl, string authKey, string marketplaceID)
         {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
+            RakutenStoreEntity store = new RakutenStoreEntity(1);
+            store.AuthKey = authKey;
+            store.ShopURL = shopUrl;
+            store.MarketplaceID = marketplaceID;
 
-            var testObject = mock.Create<RakutenWebClient>();
+            var order = new RakutenOrderEntity
+            {
+                RakutenPackageID = ""
+            };
 
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
+            var shipment = new ShipmentEntity
+            {
+                ShipmentTypeCode = Shipping.ShipmentTypeCode.Other,
+                Order = order
+            };
 
-            logger.Verify(l => l.LogRequest(postRequestSubmitter.Object), Times.Once);
-        }
+            IRestResponse response = new RestResponse()
+            {
+                StatusCode = HttpStatusCode.Created,
+                ErrorException = null
+            };
 
-        [Fact]
-        public void UploadShipmentDetail_ResponseIsLogged()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
+            mock.FromFactory<IRakutenRestClientFactory>()
+                .Mock<IRestClient>(x => x.Create(It.IsAny<string>()))
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>()))
+                .Returns(response);
 
-            var testObject = mock.Create<RakutenWebClient>();
+            IRakutenWebClient webClient = mock.Create<RakutenWebClient>(TypedParameter.From((IRakutenStoreEntity) store));
 
-            var postResponseReader = mock.CreateMock<IHttpResponseReader>();
-
-            postRequestSubmitter.Setup(s => s.GetResponse()).Returns(postResponseReader.Object);
-            postResponseReader.Setup(r => r.ReadResult()).Returns("blah");
-
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
-
-            logger.Verify(l => l.LogResponse("blah", "json"), Times.Once);
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_GetsNewAccessToken()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
-
-            variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_DoesNotGetNewAccessToken_OnSubsequentCall()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
-
-            variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_SetsSubmitterToAllowNoContentAndBadRequestCodes()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
-
-            var testObject = mock.Create<RakutenWebClient>();
-
-            testObject.UploadShipmentDetails(shipment, "refresh", "1");
-
-            // No content is the expected response from Rakuten
-            postRequestSubmitter.Verify(s => s.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.BadRequest));
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_GetsNewAccessToken_OnSubsequentCall_ThatReturns401()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
-
-            var unauthorizedResponse = mock.CreateMock<HttpWebResponse>();
-            unauthorizedResponse.Setup(r => r.StatusCode).Returns(HttpStatusCode.Unauthorized);
-
-            var webException = new WebException("401", null, WebExceptionStatus.CacheEntryNotFound, unauthorizedResponse.Object);
-
-            postRequestSubmitter.Setup(s => s.GetResponse()).Throws(webException);
-            var testObject = mock.Create<RakutenWebClient>();
-
-            // Since we are throwing a 401 for both attempts of uploading, the final result is throwing a CA exception
-            Assert.Throws<RakutenException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
-
-            variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Exactly(2));
-        }
-
-        [Fact]
-        public void UploadShipmentDetails_ReturnsErrorMessage()
-        {
-            RakutenShipmentEntity shipment = new RakutenShipmentEntity();
-
-            var response = mock.CreateMock<HttpWebResponse>();
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.BadRequest);
-
-            var postResponseReader = mock.CreateMock<IHttpResponseReader>();
-            postResponseReader.Setup(r => r.ReadResult()).Returns("{\r\n  \"error\":{\r\n    \"code\":\"\",\"message\":\"Carrier and Class is invalid.\"\r\n  }\r\n}");
-            postResponseReader.SetupGet(r => r.HttpWebResponse).Returns(response.Object);
-            postRequestSubmitter.Setup(s => s.GetResponse()).Returns(postResponseReader.Object);
-
-            var testObject = mock.Create<RakutenWebClient>();
-
-            // Since we are throwing a 401 for both attempts of uploading, the final result is throwing a CA exception
-            var ex = Assert.Throws<RakutenException>(() => testObject.UploadShipmentDetails(shipment, "refresh", "1"));
-            Assert.Equal("Carrier and Class is invalid.", ex.Message);
-        }
-
-        [Fact]
-        public void GetDistributionCenters_UsesCorrectEndpoint()
-        {
-            var testObject = mock.Create<RakutenWebClient>();
-            testObject.GetDistributionCenters("token");
-            variableRequestSubmitter.VerifySet(s => s.Uri =
-                It.Is<Uri>(u => u.ToString() == "https://api.channeladvisor.com/v1/DistributionCenters"));
+            webClient.ConfirmShipping(store, shipment);
         }
 
         public void Dispose()
