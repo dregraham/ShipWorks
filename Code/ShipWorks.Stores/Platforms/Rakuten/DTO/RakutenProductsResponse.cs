@@ -99,12 +99,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public string Brand { get; set; }
 
         /// <summary>
-        /// The manufacturer of the product
-        /// </summary>
-        [JsonProperty("manufacturer")]
-        public string Manufacturer { get; set; }
-
-        /// <summary>
         /// The product images
         /// </summary>
         [JsonProperty("images")]
@@ -199,12 +193,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// </summary>
         [JsonProperty("url")]
         public string URL { get; set; }
-
-        /// <summary>
-        /// The image alt-text
-        /// </summary>
-        [JsonProperty("alt")]
-        public string AltText { get; set; }
     }
 
     /// <summary>
@@ -217,29 +205,5 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// </summary>
         [JsonProperty("images")]
         public RakutenProductImage Images { get; set; }
-
-        /// <summary>
-        /// The variant's price info
-        /// </summary>
-        [JsonProperty("pricing")]
-        public RakutenProductPrice Pricing { get; set; }
-    }
-
-    /// <summary>
-    /// The price of a rakuten product
-    /// </summary>
-    public class RakutenProductPrice
-    {
-        /// <summary>
-        /// The actual selling price
-        /// </summary>
-        [JsonProperty("price")]
-        public decimal Price { get; set; }
-
-        /// <summary>
-        /// The suggested list price
-        /// </summary>
-        [JsonProperty("listPrice")]
-        public decimal ListPrice { get; set; }
     }
 }

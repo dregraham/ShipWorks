@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -15,14 +14,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         [JsonProperty("query")]
         public RakutenOrderSearchQuery Query { get; set; }
 
-        [JsonProperty("sortOrder")]
-        public string SortOrder { get; set; }
-
         [JsonProperty("maxResultsPerPage")]
         public int MaxResultsPerPage { get; set; } = 100;
-
-        [JsonProperty("pageIndex")]
-        public int PageIndex { get; set; }
 
         [JsonProperty("returnOrderDetail")]
         public bool ReturnOrderDetail { get; set; } = true;
@@ -56,23 +49,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO.Requests
         [JsonProperty("createdBefore")]
         public DateTime CreatedBefore { get; set; }
 
-        [JsonProperty("orderNumbers")]
-        public IList<string> OrderNumbers { get; set; }
-
-        [JsonProperty("orderStatus")]
-        public IList<string> OrderStatus { get; set; }
-
         [JsonProperty("lastModifiedAfter")]
         public DateTime? LastModifiedAfter { get; set; }
-
-        [JsonProperty("lastModifiedBefore")]
-        public DateTime? LastModifiedBefore { get; set; }
-
-        [JsonProperty("buyerName")]
-        public string BuyerName { get; set; }
-
-        [JsonProperty("shippingMethod")]
-        public string ShippingMethod { get; set; }
 
         /// <summary>
         /// Constructor

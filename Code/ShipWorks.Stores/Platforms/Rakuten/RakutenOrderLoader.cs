@@ -174,7 +174,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             if (details.InternalNotes?.Any() == true)
             {
-                orderElementFactory.CreateNote(order, details.InternalNotes.Values.FirstOrDefault(), DateTime.Now, NoteVisibility.Public);
+                orderElementFactory.CreateNote(order, details.InternalNotes.Values.FirstOrDefault(), order.OrderDate, NoteVisibility.Public);
             }
 
             item.Brand = details.Brand;
@@ -198,7 +198,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             if (variant.ShippingInfo?.Weight != null)
             {
-                if (variant.ShippingInfo.Weight.Unit.Equals("g", StringComparison.OrdinalIgnoreCase))
+                if (variant.ShippingInfo.Weight.Unit?.Equals("g", StringComparison.OrdinalIgnoreCase) == true)
                 {
                     item.Weight = WeightUtility.Convert(Interapptive.Shared.Enums.WeightUnitOfMeasure.Grams,
                         Interapptive.Shared.Enums.WeightUnitOfMeasure.Pounds, variant.ShippingInfo.Weight.Value);
@@ -211,9 +211,19 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             if (variant.ShippingInfo?.Dimensions != null)
             {
-                item.Length = variant.ShippingInfo.Dimensions.Length;
-                item.Width = variant.ShippingInfo.Dimensions.Width;
-                item.Height = variant.ShippingInfo.Dimensions.Height;
+                // Convert cm to inches
+                if (variant.ShippingInfo.Dimensions.Unit?.Equals("cm", StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    item.Length = variant.ShippingInfo.Dimensions.Length * 0.393701m;
+                    item.Width = variant.ShippingInfo.Dimensions.Width * 0.393701m;
+                    item.Height = variant.ShippingInfo.Dimensions.Height * 0.393701m;
+                }
+                else
+                {
+                    item.Length = variant.ShippingInfo.Dimensions.Length;
+                    item.Width = variant.ShippingInfo.Dimensions.Width;
+                    item.Height = variant.ShippingInfo.Dimensions.Height;
+                }
             }
 
             item.MPN = variant.ManufacturerPartNumber;
@@ -294,6 +304,18 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 !downloadedOrder.ShopperComment.Equals("{}"))
             {
                 orderElementFactory.CreateNote(orderToSave, downloadedOrder.ShopperComment, orderToSave.OrderDate, NoteVisibility.Public);
+            }
+
+            if (downloadedOrder.CheckoutOptionalInfo?.Any() == true)
+            {
+                foreach (var info in downloadedOrder.CheckoutOptionalInfo)
+                {
+                    var formattedInfo = info.FilledInfo.Select(x => $"{x.Title}: {x.InputValue}");
+                    string values = string.Join("\n", formattedInfo);
+                    string noteText = $"{info.Name} Values:\n\n{values}";
+
+                    orderElementFactory.CreateNote(orderToSave, noteText, orderToSave.OrderDate, NoteVisibility.Public);
+                }
             }
         }
 

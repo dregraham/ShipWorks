@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-	/// <summary>
-	/// Order Item entity returned by Rakuten
-	/// </summary>
-	[Obfuscation(Exclude = true)]
-	public class RakutenOrderItem
+    /// <summary>
+    /// Order Item entity returned by Rakuten
+    /// </summary>
+    [Obfuscation(Exclude = true)]
+    public class RakutenOrderItem
     {
         [JsonProperty("baseSku")]
         public string BaseSKU { get; set; }

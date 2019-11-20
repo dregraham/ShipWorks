@@ -4,15 +4,9 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-	[Obfuscation(Exclude = true)]
-	public class RakutenErrors
+    [Obfuscation(Exclude = true)]
+    public class RakutenErrors
     {
-        /// <summary>
-        /// List of resources that caused errors
-        /// </summary>
-        [JsonProperty("failedResources")]
-        public IList<string> FailedResources { get; set; }
-
         /// <summary>
         /// List of errors from the full request
         /// </summary>
@@ -26,8 +20,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public Dictionary<string, IList<RakutenError>> Specific { get; set; }
     }
 
-	[Obfuscation(Exclude = true)]
-	public class RakutenError
+    [Obfuscation(Exclude = true)]
+    public class RakutenError
     {
         /// <summary>
         /// The Rakuten API error code

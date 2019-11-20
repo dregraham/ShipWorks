@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-	/// <summary>
-	/// Shipping entity returned by Rakuten
-	/// </summary>
-	[Obfuscation(Exclude = true)]
-	public class RakutenShipment
+    /// <summary>
+    /// Shipping entity returned by Rakuten
+    /// </summary>
+    [Obfuscation(Exclude = true)]
+    public class RakutenShipment
     {
         [JsonProperty("orderPackageId")]
         public string OrderPackageID { get; set; }
@@ -28,11 +28,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public RakutenAddress InvoiceAddress { get; set; }
     }
 
-	/// <summary>
-	/// Address entity returned by Rakuten
-	/// </summary>
-	[Obfuscation(Exclude = true)]
-	public class RakutenAddress
+    /// <summary>
+    /// Address entity returned by Rakuten
+    /// </summary>
+    [Obfuscation(Exclude = true)]
+    public class RakutenAddress
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -48,12 +48,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 
         [JsonProperty("stateCode")]
         public string StateCode { get; set; }
-
-        [JsonProperty("stateName")]
-        public string StateName { get; set; }
-
-        [JsonProperty("cityCode")]
-        public string CityCode { get; set; }
 
         [JsonProperty("cityName")]
         public string CityName { get; set; }

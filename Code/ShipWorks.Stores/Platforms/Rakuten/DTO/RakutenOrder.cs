@@ -5,11 +5,11 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-	/// <summary>
-	/// Order entity returned by Rakuten
-	/// </summary>
-	[Obfuscation(Exclude = true)]
-	public class RakutenOrder
+    /// <summary>
+    /// Order entity returned by Rakuten
+    /// </summary>
+    [Obfuscation(Exclude = true)]
+    public class RakutenOrder
     {
         /// <summary>
         /// The Rakuten order number
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// The optional information entered by the customer
         /// </summary>
         [JsonProperty("checkoutOptionalInfo")]
-        public RakutenOptionalCheckoutInfo checkoutOptionalInfo { get; set; }
+        public List<RakutenOptionalCheckoutInfo> CheckoutOptionalInfo { get; set; }
 
         /// <summary>
         /// The sales tax on the order

@@ -4,11 +4,11 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
-	/// <summary>
-	/// Payment entity returned by Rakuten
-	/// </summary>
-	[Obfuscation(Exclude = true)]
-	public class RakutenPayment
+    /// <summary>
+    /// Payment entity returned by Rakuten
+    /// </summary>
+    [Obfuscation(Exclude = true)]
+    public class RakutenPayment
     {   /// <summary>
         /// The payment ID
         /// </summary>
