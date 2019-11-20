@@ -156,6 +156,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             if (UseFakeApi)
             {
+                if (!testStore.ShopURL.Equals("fake"))
+                {
+                    return false;
+                }
+
                 return true;
             }
 
