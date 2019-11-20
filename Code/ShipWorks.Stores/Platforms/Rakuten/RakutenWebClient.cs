@@ -109,11 +109,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var product = await SubmitRequest<RakutenProductsResponse>(store.AuthKey, resource, Method.GET, requestObject, "GetProduct");
 
-            // Only add the product to the cache if there were no errors
-            if (product?.Errors == null)
-            {
-                productCache[baseSKU] = product;
-            }
+            productCache[baseSKU] = product;
 
             return product;
         }
@@ -176,7 +172,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 return false;
             }
 
-            return response?.Errors == null;
+            return true;
         }
 
         /// <summary>
