@@ -28,7 +28,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly LruCache<string, RakutenProductsResponse> productCache;
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
-        private readonly IHttpRequestSubmitterFactory submitterFactory;
+        private readonly IRakutenRestClientFactory clientFactory;
+        private readonly IRakutenRestRequestFactory requestFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
@@ -43,10 +44,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Constructor
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
-            IHttpRequestSubmitterFactory submitterFactory)
+            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory)
         {
             this.encryptionProviderFactory = encryptionProviderFactory;
-            this.submitterFactory = submitterFactory;
+            this.clientFactory = clientFactory;
+            this.requestFactory = requestFactory;
 
             endpointBase = GetEndpointBase();
 
@@ -182,8 +184,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var log = new ApiLogEntry(ApiLogSource.Rakuten, action);
 
-            RestClient client = CreateClient(endpointBase);
-            RestRequest request = new RestRequest(resource, method);
+            IRestClient client = CreateClient(endpointBase);
+            IRestRequest request = requestFactory.Create(resource, method);
             request.JsonSerializer = jsonSerializer;
 
             if (body != null)
@@ -239,9 +241,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create a RestClient that uses our Json Serializer
         /// </summary>
-        private RestClient CreateClient(string baseUrl)
+        private IRestClient CreateClient(string baseUrl)
         {
-            var client = new RestClient(baseUrl);
+            var client = clientFactory.Create(baseUrl);
 
             // Override with Newtonsoft JSON Handler
             client.AddHandler("application/json", () => jsonSerializer);
