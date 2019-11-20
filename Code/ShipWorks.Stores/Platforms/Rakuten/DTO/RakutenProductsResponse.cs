@@ -204,6 +204,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// This variant's images
         /// </summary>
         [JsonProperty("images")]
-        public RakutenProductImage Images { get; set; }
+        public List<RakutenProductImage> Images { get; set; }
     }
 }

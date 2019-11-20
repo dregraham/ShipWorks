@@ -9,6 +9,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -94,9 +95,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
             catch (WebException ex)
             {
-                throw new DownloadException(ex.Message);
+                throw new DownloadException(ex.Message, ex);
             }
             catch (SqlForeignKeyException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (JsonException ex)
             {
                 throw new DownloadException(ex.Message, ex);
             }

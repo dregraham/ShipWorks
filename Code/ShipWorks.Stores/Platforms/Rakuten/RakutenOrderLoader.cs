@@ -189,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             details.VariantSpecificInfo.TryGetValue(item.SKU, out RakutenVariantInfo variantInfo);
 
             // Override the image with the more specific variant image if available
-            item.Image = variantInfo?.Images?.URL ?? item.Image;
+            item.Image = variantInfo?.Images?.FirstOrDefault().URL ?? item.Image;
         }
 
         /// <summary>
