@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IRakutenRestClientFactory clientFactory;
         private readonly IRakutenRestRequestFactory requestFactory;
-        private readonly Func<ApiLogSource, string, ApiLogEntry> apiLogEntryFactory;
+        private readonly ILoggerFactory log;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
@@ -46,12 +46,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
             IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory, 
-            Func<ApiLogSource, string, ApiLogEntry> apiLogEntryFactory)
+            ILoggerFactory log)
         {
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.clientFactory = clientFactory;
             this.requestFactory = requestFactory;
-            this.apiLogEntryFactory = apiLogEntryFactory;
+            this.log = log;
 
             endpointBase = GetEndpointBase();
 
@@ -185,8 +185,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private async Task<T> SubmitRequest<T>(string encryptedAuthKey, string resource, Method method, object body, string action) where T : RakutenBaseResponse, new()
         {
-            ApiLogEntry log = apiLogEntryFactory(ApiLogSource.Rakuten, action);
-
             IRestClient client = CreateClient(endpointBase);
             IRestRequest request = requestFactory.Create(resource, method);
             request.JsonSerializer = jsonSerializer;

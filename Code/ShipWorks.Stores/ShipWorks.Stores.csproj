@@ -294,8 +294,10 @@
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenPatchOperation.cs" />
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
     <Compile Include="Platforms\Rakuten\Enums\RakutenOrderStatus.cs" />
+    <Compile Include="Platforms\Rakuten\ILoggerFactory.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenRestClientFactory.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenRestRequestFactory.cs" />
+    <Compile Include="Platforms\Rakuten\LoggerFactory.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\IRakutenOrderSearchProvider.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
