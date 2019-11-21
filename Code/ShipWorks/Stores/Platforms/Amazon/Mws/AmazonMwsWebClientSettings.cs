@@ -63,6 +63,27 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
+        /// Endpoint to proxy requests through
+        /// </summary>
+        public string ProxyEndpoint {
+            get
+            {
+                if (interapptiveOnly.IsInterapptiveUser)
+                {
+                    bool useLiveEndpoint = interapptiveOnly.Registry.GetValue("AmazonMwsProxyLive", true);
+                    string endpointOverride = interapptiveOnly.Registry.GetValue("AmazonMwsProxyEndpoint", string.Empty);
+
+                    if (!useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
+                    {
+                        return endpointOverride;
+                    }
+                }
+
+                return "https://proxy.hub.shipworks.com/amazonMws";
+            }
+        }
+
+        /// <summary>
         /// Gets the access key id that should be used for the current store
         /// </summary>
         public string InterapptiveAccessKeyID => IsNorthAmericanStore ?

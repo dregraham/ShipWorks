@@ -33,6 +33,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         string Endpoint { get; }
 
         /// <summary>
+        /// Endpoint to proxy requests through
+        /// </summary>
+        string ProxyEndpoint { get; }
+
+        /// <summary>
         /// Gets the access key id that should be used for the current store
         /// </summary>
         string InterapptiveAccessKeyID { get; }
