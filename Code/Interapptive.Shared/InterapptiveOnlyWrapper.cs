@@ -34,5 +34,11 @@ namespace ShipWorks.ApplicationCore
         /// for enabling "hidden" (but not secure!) functionality.
         /// </summary>
         public bool MagicKeysDown => InterapptiveOnly.MagicKeysDown;
+
+        /// <summary>
+        /// Determines if the given store registry key is set to use fake stores
+        /// </summary>
+        public bool UseFakeAPI(string registryKey) =>
+            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue(registryKey, true);
     }
 }

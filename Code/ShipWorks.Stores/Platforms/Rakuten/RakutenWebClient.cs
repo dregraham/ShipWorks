@@ -30,7 +30,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IRakutenRestClientFactory clientFactory;
         private readonly IRakutenRestRequestFactory requestFactory;
-        private readonly ILoggerFactory log;
+        private readonly IInterapptiveOnly interapptiveOnly;
+        private readonly ILogEntryFactory logFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
@@ -39,20 +40,22 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private const string shippingResource = "orders/";
         private const string productResource = "products/{0}";
         private const string testResource = "configurations/{0}/labels/";
+        private const string liveRegKey = "RakutenLiveServer";
         private readonly string endpointBase;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
-            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory, 
-            ILoggerFactory log)
+            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory,
+            IInterapptiveOnly interapptiveOnly,
+            ILogEntryFactory logFactory)
         {
             this.encryptionProviderFactory = encryptionProviderFactory;
             this.clientFactory = clientFactory;
             this.requestFactory = requestFactory;
-            this.log = log;
-
+            this.interapptiveOnly = interapptiveOnly;
+            this.logFactory = logFactory;
             endpointBase = GetEndpointBase();
 
             jsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
@@ -66,17 +69,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         }
 
         /// <summary>
-        /// Should the client use the fake api
-        /// </summary>
-        private bool UseFakeApi =>
-            InterapptiveOnly.IsInterapptiveUser && !InterapptiveOnly.Registry.GetValue("RakutenLiveServer", true);
-
-        /// <summary>
         /// Get the base endpoint for Rakuten requests
         /// </summary>
         private string GetEndpointBase()
         {
-            if (UseFakeApi)
+            if (interapptiveOnly.UseFakeAPI(liveRegKey))
             {
                 var endpointOverride = InterapptiveOnly.Registry.GetValue("RakutenEndpoint", string.Empty);
                 if (!string.IsNullOrWhiteSpace(endpointOverride))
@@ -155,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public async Task<bool> TestConnection(RakutenStoreEntity testStore)
         {
-            if (UseFakeApi)
+            if (interapptiveOnly.UseFakeAPI(liveRegKey))
             {
                 if (!testStore.ShopURL.Equals("fake"))
                 {
@@ -185,6 +182,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private async Task<T> SubmitRequest<T>(string encryptedAuthKey, string resource, Method method, object body, string action) where T : RakutenBaseResponse, new()
         {
+            IApiLogEntry log = logFactory.GetLogEntry(ApiLogSource.Rakuten, action, LogActionType.Other);
             IRestClient client = CreateClient(endpointBase);
             IRestRequest request = requestFactory.Create(resource, method);
             request.JsonSerializer = jsonSerializer;
@@ -194,9 +192,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 request.AddJsonBody(body);
             }
 
-            
             log.LogRequest(request, client, "txt");
-
 
             var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(encryptedAuthKey);
 

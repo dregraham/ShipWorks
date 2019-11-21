@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Xml;
 using Interapptive.Shared.Net;
 using Rebex.Mail;
+using RestSharp;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
-    class NullApiLogEntry:IApiLogEntry
+    class NullApiLogEntry : IApiLogEntry
     {
         public ApiLogEncryption Encryption { get; set; }
         public void LogRequest(string xml)
@@ -38,6 +36,22 @@ namespace ShipWorks.ApplicationCore.Logging
         }
 
         public void LogRequest(MailMessage mailMessage)
+        {
+
+        }
+
+        /// <summary>
+        /// Log an IRestRequest
+        /// </summary>
+        public void LogRequest(IRestRequest request, IRestClient client, string extension)
+        {
+
+        }
+
+        /// <summary>
+        /// Log an IRestResponse
+        /// </summary>
+        public void LogResponse(IRestResponse response, string extension)
         {
 
         }

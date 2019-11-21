@@ -3,19 +3,14 @@ using System.Net;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.Utility;
 using Moq;
-using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Rakuten;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
-using ShipWorks.Stores.Warehouse.StoreData;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using It = Moq.It;
@@ -30,27 +25,24 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            var logger = mock.Mock<ILoggerFactory>();
-            logger.Setup(e => e.LogRequest(It.IsAny<IRestRequest>(), It.IsAny<IRestClient>(), It.IsAny<string>()))
-                .Callback((IRestRequest restRequest, IRestClient restClient, string ext) =>
-                {
-                });
+            mock.FromFactory<ILogEntryFactory>()
+                .Mock(x => x.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()));
 
-            logger.Setup(e => e.LogResponse(It.IsAny<IRestResponse>(), It.IsAny<string>()))
-                .Callback((IRestResponse restRequest, string ext) =>
-                {
-                });
+            //logger.Setup(x => x.LogRequest(It.IsAny<IRestRequest>(), It.IsAny<IRestClient>(), It.IsAny<string>()))
+            //  .Returns()
         }
-        
+
         [Theory]
-        [InlineData( "url", "123456", "123456")]
-        [InlineData( "url", "", "")]
+        [InlineData("url", "123456", "123456")]
+        [InlineData("url", "", "")]
         public void GetOrders_Succeeds(string shopUrl, string authKey, string marketplaceID)
         {
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = authKey;
-            store.ShopURL = shopUrl;
-            store.MarketplaceID= marketplaceID;
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = authKey,
+                ShopURL = shopUrl,
+                MarketplaceID = marketplaceID
+            };
 
 
             IRestResponse<RakutenOrdersResponse> response = new RestResponse<RakutenOrdersResponse>()
@@ -60,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
             };
 
             mock.FromFactory<IRakutenRestClientFactory>()
-                .Mock<IRestClient>(x => x.Create(It.IsAny<string>()))
+                .Mock(x => x.Create(It.IsAny<string>()))
                 .Setup(x => x.ExecuteTaskAsync<RakutenOrdersResponse>(It.IsAny<IRestRequest>()))
                 .Returns(Task.FromResult(response));
 
@@ -74,17 +66,19 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [InlineData("url", "", "")]
         public void ConfirmShipping_Succeeds(string shopUrl, string authKey, string marketplaceID)
         {
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = authKey;
-            store.ShopURL = shopUrl;
-            store.MarketplaceID = marketplaceID;
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = authKey,
+                ShopURL = shopUrl,
+                MarketplaceID = marketplaceID
+            };
 
-            var order = new RakutenOrderEntity
+            RakutenOrderEntity order = new RakutenOrderEntity
             {
                 RakutenPackageID = ""
             };
 
-            var shipment = new ShipmentEntity
+            ShipmentEntity shipment = new ShipmentEntity
             {
                 ShipmentTypeCode = Shipping.ShipmentTypeCode.Other,
                 Order = order
@@ -111,12 +105,14 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [InlineData("url", "", "")]
         public void ConfirmGetProducts_Succeeds(string shopUrl, string authKey, string marketplaceID)
         {
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = authKey;
-            store.ShopURL = shopUrl;
-            store.MarketplaceID = marketplaceID;
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = authKey,
+                ShopURL = shopUrl,
+                MarketplaceID = marketplaceID
+            };
 
-            IRestResponse < RakutenProductsResponse> response = new RestResponse<RakutenProductsResponse>()
+            IRestResponse<RakutenProductsResponse> response = new RestResponse<RakutenProductsResponse>()
             {
                 StatusCode = HttpStatusCode.OK,
                 ErrorException = null
@@ -135,24 +131,29 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [Fact]
         public async Task TestConnection_ReturnsTrueWhenNoError()
         {
-
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = "key";
-            store.ShopURL = "url";
-            store.MarketplaceID = "id";
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = "key",
+                ShopURL = "url",
+                MarketplaceID = "id"
+            };
 
             IRestResponse<RakutenBaseResponse> response = new RestResponse<RakutenBaseResponse>()
             {
                 StatusCode = HttpStatusCode.OK,
-                ErrorException = null
+                ErrorException = null,
             };
 
             mock.FromFactory<IRakutenRestClientFactory>()
-               .Mock<IRestClient>(x => x.Create(It.IsAny<string>()))
+               .Mock(x => x.Create(It.IsAny<string>()))
                .Setup(x => x.ExecuteTaskAsync<RakutenBaseResponse>(It.IsAny<IRestRequest>()))
                .Returns(Task.FromResult(response));
 
-            IRakutenWebClient webClient = mock.Create<RakutenWebClient>(TypedParameter.From((IRakutenStoreEntity) store));
+            mock.Mock<IInterapptiveOnly>()
+                .Setup(x => x.UseFakeAPI(It.IsAny<string>()))
+                .Returns(false);
+
+            IRakutenWebClient webClient = mock.Create<RakutenWebClient>();
 
             Assert.True(await webClient.TestConnection(store));
         }
@@ -160,10 +161,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [Fact]
         public async Task TestConnection_ReturnsFalseWhenError()
         {
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = "key";
-            store.ShopURL = "url";
-            store.MarketplaceID = "id";
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = "key",
+                ShopURL = "url",
+                MarketplaceID = "id"
+            };
+
+            mock.Mock<IInterapptiveOnly>()
+                .Setup(x => x.UseFakeAPI(It.IsAny<string>()))
+                .Returns(false);
 
             mock.FromFactory<IRakutenRestClientFactory>()
                .Mock<IRestClient>(x => x.Create(It.IsAny<string>()))
@@ -179,10 +186,12 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [Fact]
         public async Task GetOrders_ThrowsIfErrorResponse()
         {
-            RakutenStoreEntity store = new RakutenStoreEntity(1);
-            store.AuthKey = "";
-            store.ShopURL = "";
-            store.MarketplaceID = "";
+            RakutenStoreEntity store = new RakutenStoreEntity(1)
+            {
+                AuthKey = "",
+                ShopURL = "",
+                MarketplaceID = ""
+            };
 
             IRestResponse<RakutenOrdersResponse> response = new RestResponse<RakutenOrdersResponse>()
             {
@@ -190,14 +199,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
                 ErrorException = null
             };
 
-            response.Data = new RakutenOrdersResponse();
-            response.Data.Errors = new RakutenErrors();
+            response.Data = new RakutenOrdersResponse
+            {
+                Errors = new RakutenErrors()
+            };
 
-            var client = mock.FromFactory<IRakutenRestClientFactory>()
-                .Mock<IRestClient>(x => x.Create(It.IsAny<string>()));
+            Mock<IRestClient> client = mock.FromFactory<IRakutenRestClientFactory>()
+                .Mock(x => x.Create(It.IsAny<string>()));
 
             client.Setup(x => x.ExecuteTaskAsync<RakutenOrdersResponse>(It.IsAny<IRestRequest>()))
-            .Returns(Task.FromResult(response));
+                .Returns(Task.FromResult(response));
 
             IRakutenWebClient webClient = mock.Create<RakutenWebClient>(TypedParameter.From((IRakutenStoreEntity) store));
 
