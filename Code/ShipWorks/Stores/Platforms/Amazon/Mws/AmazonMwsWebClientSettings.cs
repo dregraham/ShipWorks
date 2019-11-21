@@ -65,9 +65,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Endpoint to proxy requests through
         /// </summary>
-        public string ProxyEndpoint {
+        public Uri ProxyEndpoint {
             get
             {
+                string endpoint = "https://proxy.hub.shipworks.com/amazonMws";
+
                 if (interapptiveOnly.IsInterapptiveUser)
                 {
                     bool useLiveEndpoint = interapptiveOnly.Registry.GetValue("AmazonMwsProxyLive", true);
@@ -75,11 +77,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                     if (!useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
                     {
-                        return endpointOverride;
+                        endpoint = endpointOverride;
                     }
                 }
 
-                return "https://proxy.hub.shipworks.com/amazonMws";
+                return new Uri(endpoint);
             }
         }
 
