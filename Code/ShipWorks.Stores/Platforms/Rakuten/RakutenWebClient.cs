@@ -206,12 +206,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             log.LogResponse(response, "txt");
 
-            if (response?.Data?.Errors != null)
+            if (response?.Data == null || response.Data.Errors != null)
             {
-                ThrowError(response.Data.Errors);
+                ThrowError(response?.Data?.Errors);
             }
 
-            return response.Data;
+            return response?.Data;
         }
 
         /// <summary>
@@ -222,11 +222,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             RakutenError error = null;
 
             // Use the common error first
-            if (errors.Common != null)
+            if (errors?.Common != null)
             {
                 error = errors.Common.FirstOrDefault();
             }
-            else if (errors.Specific != null)
+            else if (errors?.Specific != null)
             {
                 error = errors.Specific.SelectMany(x => x.Value)?.FirstOrDefault();
             }
