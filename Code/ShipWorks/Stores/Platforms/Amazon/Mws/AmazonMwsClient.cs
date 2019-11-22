@@ -136,6 +136,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
+                else
+                {
+                    log.Error(ex);
+                    throw new AmazonException("Error communicating with Amazon.");
+                }
             }
         }
 
