@@ -366,6 +366,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP.Api
             {
                 IApiLogEntry logger = createApiLogEntry.GetLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall), LogActionType.Other);
 
+                // We want to send the request to the hub and have the hub be the one that actually executes the request.
+                // This means we need to swap out the original URI with the hub URI, and store the original one as a variable.
+                request.Headers.Add("originalRequestUrl", request.Uri.ToString());
+                request.Uri = mwsSettings.ProxyEndpoint;
+
                 // log the request
                 logger.LogRequest(request);
                 using (response = request.GetResponse())
