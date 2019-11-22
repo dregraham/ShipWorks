@@ -1,6 +1,5 @@
-﻿using RestSharp;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityInterfaces;
+﻿using Interapptive.Shared.ComponentRegistration;
+using RestSharp;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -20,9 +19,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Create an IRestClient for the given endpoint
         /// </summary>
-        public IRestClient Create(string endpointBase)
-        {
-            return new RestClient(endpointBase);
-        }
+        public IRestClient Create(string endpointBase) => new RestClient(endpointBase);
     }
 }

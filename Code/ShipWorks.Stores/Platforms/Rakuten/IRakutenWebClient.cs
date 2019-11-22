@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
@@ -24,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Verify we can connect with Rakuten
         /// </summary>
-        Task<bool> TestConnection(RakutenStoreEntity testStore);
+        Task<GenericResult<bool>> TestConnection(RakutenStoreEntity testStore);
 
         /// <summary>
         /// Mark order as shipped and upload tracking number

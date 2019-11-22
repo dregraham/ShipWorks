@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Rakuten;
@@ -81,13 +82,13 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
         /// </summary>
         public async Task<bool> Save(RakutenStoreEntity store)
         {
-	        if (string.IsNullOrWhiteSpace(ApiKey))
-	        {
-		        messageHelper.ShowError("Please enter a Rakuten Auth Key");
-		        return false;
-			}
-	        
-	        var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
+            if (ApiKey.IsNullOrWhiteSpace())
+            {
+                messageHelper.ShowError("Please enter a Rakuten Auth Key");
+                return false;
+            }
+
+            var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Encrypt(ApiKey);
 
             // Use a throw away store to test entered credentials.
             RakutenStoreEntity testStore = new RakutenStoreEntity()
@@ -97,11 +98,11 @@ namespace ShipWorks.Stores.UI.Platforms.Rakuten
                 ShopURL = ShopUrl
             };
 
-            bool result = await webClient.TestConnection(testStore).ConfigureAwait(false);
+            var result = await webClient.TestConnection(testStore).ConfigureAwait(false);
 
-            if (!result)
+            if (result.Failure)
             {
-                messageHelper.ShowError("Unable to authenticate credentials.");
+                messageHelper.ShowError($"Unable to authenticate credentials: {result.Exception.Message}");
                 return false;
             }
 

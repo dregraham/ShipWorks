@@ -24,6 +24,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private readonly ILog log;
         private readonly IRakutenStoreEntity store;
 
+        private const decimal cmToInches = 0.393701m;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RakutenOrderLoader"/> class.
         /// </summary>
@@ -189,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             details.VariantSpecificInfo.TryGetValue(item.SKU, out RakutenVariantInfo variantInfo);
 
             // Override the image with the more specific variant image if available
-            item.Image = variantInfo?.Images?.FirstOrDefault().URL ?? item.Image;
+            item.Image = variantInfo?.Images?.FirstOrDefault()?.URL ?? item.Image;
         }
 
         /// <summary>
@@ -217,9 +219,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 // Convert cm to inches
                 if (variant.ShippingInfo.Dimensions.Unit?.Equals("cm", StringComparison.OrdinalIgnoreCase) == true)
                 {
-                    item.Length = variant.ShippingInfo.Dimensions.Length * 0.393701m;
-                    item.Width = variant.ShippingInfo.Dimensions.Width * 0.393701m;
-                    item.Height = variant.ShippingInfo.Dimensions.Height * 0.393701m;
+                    item.Length = variant.ShippingInfo.Dimensions.Length * cmToInches;
+                    item.Width = variant.ShippingInfo.Dimensions.Width * cmToInches;
+                    item.Height = variant.ShippingInfo.Dimensions.Height * cmToInches;
                 }
                 else
                 {
@@ -431,18 +433,17 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         private string GetEnglishOrFirst(Dictionary<string, string> dictionary)
         {
-            if (dictionary == null || !dictionary.Any())
+            if (dictionary?.Any() == false)
             {
                 return string.Empty;
             }
 
-            dictionary.TryGetValue("en_US", out string result);
-            if (string.IsNullOrWhiteSpace(result))
+            if (dictionary.TryGetValue("en_US", out string result))
             {
-                return dictionary.Values.FirstOrDefault();
+                return result;
             }
 
-            return result;
+            return dictionary.Values.FirstOrDefault();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
@@ -6,6 +7,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// The GetProducts response from Rakuten
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductsResponse : RakutenBaseResponse
     {
         /// <summary>
@@ -36,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// A Rakuten product variant
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductVariant
     {
         /// <summary>
@@ -72,6 +75,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// The shop-specific details of a Rakuten product
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductDetails
     {
         /// <summary>
@@ -120,6 +124,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// Weight and dims of a Rakuten product
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductShippingInfo
     {
         /// <summary>
@@ -138,6 +143,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// The Rakuten product variant weight
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductWeight
     {
         /// <summary>
@@ -156,6 +162,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// The Rakuten product variant dimensions
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductDimensions
     {
         /// <summary>
@@ -186,6 +193,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// A Rakuten product image
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenProductImage
     {
         /// <summary>
@@ -198,6 +206,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
     /// <summary>
     /// The variant info specific to a product and shop
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class RakutenVariantInfo
     {
         /// <summary>

@@ -7,6 +7,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Security;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using RestSharp;
 using ShipWorks.ApplicationCore;
@@ -82,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 }
             }
 
-            return defaultEndpointBase.TrimEnd('/');
+            return defaultEndpointBase;
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var resource = string.Format(productResource, baseSKU);
 
-            var product = await SubmitRequest<RakutenProductsResponse>(store.AuthKey, resource, Method.GET, requestObject, "GetProduct");
+            var product = await SubmitRequest<RakutenProductsResponse>(store.AuthKey, resource, Method.GET, requestObject, "GetProduct").ConfigureAwait(false);
 
             productCache[baseSKU] = product;
 
@@ -122,6 +123,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         public async Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
             var rakutenOrder = shipment.Order as RakutenOrderEntity;
+
+            if (rakutenOrder == null)
+            {
+                throw new ArgumentException("A non-Rakuten shipment was passed to the ConfirmShipping method.");
+            }
+
             var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.OrderNumberComplete, rakutenOrder.RakutenPackageID);
 
             var shippingInfo = new RakutenShippingInfo
@@ -131,7 +138,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                     ShippingManager.GetCarrierName(shipment.ShipmentTypeCode),
                 ShippingStatus = "Shipped",
                 TrackingNumber = shipment.TrackingNumber
-
             };
 
             var requestObject = new List<RakutenPatchOperation>();
@@ -141,7 +147,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 Operation = "replace",
                 Path = path,
                 Value = shippingInfo
-
             });
 
             return await SubmitRequest<RakutenBaseResponse>(store.AuthKey, shippingResource, Method.PATCH, requestObject, "ConfirmShipping").ConfigureAwait(false);
@@ -150,28 +155,27 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Verify we can connect with Rakuten
         /// </summary>
-        public async Task<bool> TestConnection(RakutenStoreEntity testStore)
+        public async Task<GenericResult<bool>> TestConnection(RakutenStoreEntity testStore)
         {
             if (interapptiveOnly.UseFakeAPI(liveRegKey))
             {
                 if (!testStore.ShopURL.Equals("fake"))
                 {
-                    return false;
+                    return new ArgumentException("Shop Name must be \"fake\" when using fake stores.");
                 }
 
                 return true;
             }
 
-            RakutenBaseResponse response;
             try
             {
                 var resource = string.Format(testResource, testStore.MarketplaceID);
 
-                response = await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
+                await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                return ex;
             }
 
             return true;
@@ -207,7 +211,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 ThrowError(response.Data.Errors);
             }
 
-            return response?.Data;
+            return response.Data;
         }
 
         /// <summary>
@@ -224,7 +228,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
             else if (errors.Specific != null)
             {
-                error = errors.Specific.FirstOrDefault().Value?.FirstOrDefault();
+                error = errors.Specific.SelectMany(x => x.Value)?.FirstOrDefault();
             }
 
             if (error != null)
