@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -35,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <summary>
         /// Endpoint to proxy requests through
         /// </summary>
-        string ProxyEndpoint { get; }
+        Uri ProxyEndpoint { get; }
 
         /// <summary>
         /// Gets the access key id that should be used for the current store
