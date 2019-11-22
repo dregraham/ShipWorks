@@ -75,7 +75,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     bool useLiveEndpoint = interapptiveOnly.Registry.GetValue("AmazonMwsProxyLive", true);
                     string endpointOverride = interapptiveOnly.Registry.GetValue("AmazonMwsProxyEndpoint", string.Empty);
 
-                    if (!useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
+                    if (useLiveEndpoint && !string.IsNullOrWhiteSpace(endpointOverride))
                     {
                         endpoint = endpointOverride;
                     }
