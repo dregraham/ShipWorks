@@ -130,17 +130,21 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             catch (AmazonException ex)
             {
+                // Throw if the proxy throws its own error
+                if (ex.Code.Equals("ShipWorksProxyError", StringComparison.OrdinalIgnoreCase))
+                {
+                    log.Error(ex);
+                    throw new AmazonException("Error communicating with Amazon.");
+                }
+
                 // if we received the expected InvalidParameterValue, we authenticated just fine
                 if (String.Compare(ex.Code, "InvalidParameterValue", StringComparison.OrdinalIgnoreCase) == 0 &&
                                   !ex.Message.Contains(dummyNumber))
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
-                else
-                {
-                    log.Error(ex);
-                    throw new AmazonException("Error communicating with Amazon.");
-                }
+
+                // At this point, we know the error is "InvalidParameterValue" which is the error we want.
             }
         }
 
