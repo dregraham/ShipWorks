@@ -81,7 +81,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
             var status = EnumHelper.TryParseEnum<RakutenOrderStatus>(downloadedOrder.OrderStatus);
             orderToSave.OnlineStatus = status == null ? EnumHelper.GetDescription(RakutenOrderStatus.Unknown) :
-                EnumHelper.GetDescription(status);
+                EnumHelper.GetDescription(status.Value);
         }
 
         /// <summary>
