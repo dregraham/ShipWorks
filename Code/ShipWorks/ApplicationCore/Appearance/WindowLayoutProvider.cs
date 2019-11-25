@@ -165,11 +165,11 @@ namespace ShipWorks.ApplicationCore.Appearance
             }
             catch (ArgumentException ex)
             {
-                throw new AppearanceException("The contents of ShipWorks the layout file are corrupt.", ex);
+                throw new AppearanceException("The contents of the ShipWorks layout file are corrupt.", ex);
             }
             catch (XmlException ex)
             {
-                throw new AppearanceException("The contents of ShipWorks the layout file are corrupt.", ex);
+                throw new AppearanceException("The contents of the ShipWorks layout file are corrupt.", ex);
             }
             catch (NullReferenceException ex)
             {
