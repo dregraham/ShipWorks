@@ -41,11 +41,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnTax = new Divelements.SandGrid.GridColumn();
             this.gridColumnDuty = new Divelements.SandGrid.GridColumn();
             this.gridColumnRate = new Divelements.SandGrid.GridColumn();
+            this.gridColumnAccountDescription = new Divelements.SandGrid.GridColumn();
             this.gridColumnSelect = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
             this.panelFootnote = new System.Windows.Forms.Panel();
             this.loadingRatesLabel = new System.Windows.Forms.Label();
             this.loadingImage = new System.Windows.Forms.PictureBox();
-            this.gridColumnAccountDescription = new Divelements.SandGrid.GridColumn();
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,14 +54,14 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.rateGrid.AllowMultipleSelection = false;
             this.rateGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rateGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
-            this.gridColumnProvider,          
+            this.gridColumnProvider,
             this.gridColumnService,
             this.gridColumnDays,
             this.gridColumnShipping,
-            this.gridColumnAccountDescription,
             this.gridColumnTax,
             this.gridColumnDuty,
             this.gridColumnRate,
+            this.gridColumnAccountDescription,
             this.gridColumnSelect});
             this.rateGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rateGrid.EmptyTextForeColor = System.Drawing.Color.DimGray;
@@ -254,6 +254,17 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnRate.MinimumWidth = 50;
             this.gridColumnRate.Width = 50;
             // 
+            // gridColumnAccountDescription
+            // 
+            this.gridColumnAccountDescription.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnAccountDescription.AutoSizeIncludeHeader = true;
+            this.gridColumnAccountDescription.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
+            this.gridColumnAccountDescription.Clickable = false;
+            this.gridColumnAccountDescription.HeaderText = "Account";
+            this.gridColumnAccountDescription.MinimumWidth = 20;
+            this.gridColumnAccountDescription.Visible = false;
+            this.gridColumnAccountDescription.Width = 40;
+            // 
             // gridColumnSelect
             // 
             this.gridColumnSelect.AllowEditing = false;
@@ -296,18 +307,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.loadingImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.loadingImage.TabIndex = 11;
             this.loadingImage.TabStop = false;
-            // 
-            // gridColumnAccountDescription
-            // 
-            this.gridColumnAccountDescription.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
-            this.gridColumnAccountDescription.AutoSizeIncludeHeader = true;
-            this.gridColumnAccountDescription.CellHorizontalAlignment = System.Drawing.StringAlignment.Far;
-            this.gridColumnAccountDescription.Clickable = false;
-            this.gridColumnAccountDescription.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.gridColumnAccountDescription.HeaderText = "Account";
-            this.gridColumnAccountDescription.Visible = false;
-            this.gridColumnAccountDescription.MinimumWidth = 20;
-            this.gridColumnAccountDescription.Width = 40;
             // 
             // RateControl
             // 
