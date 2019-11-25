@@ -196,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 request.AddJsonBody(body);
             }
 
-            log.LogRequest(request, client, "txt");
+            log.LogRequest(request, client, "json");
 
             var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(encryptedAuthKey);
 
@@ -204,7 +204,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             var response = await client.ExecuteTaskAsync<T>(request).ConfigureAwait(false);
 
-            log.LogResponse(response, "txt");
+            log.LogResponse(response, "json");
 
             if (response?.Data == null || response.Data.Errors != null)
             {
