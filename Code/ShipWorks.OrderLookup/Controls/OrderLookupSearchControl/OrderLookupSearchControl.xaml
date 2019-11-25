@@ -6,11 +6,9 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
-    xmlns:sw="http://schemas.shipworks.com/sw"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance orderLookupSearchControl:OrderLookupSearchViewModel}"
-    d:DesignWidth="1000"
+    d:DesignWidth="500"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     FontSize="20px"
     Foreground="Black"
@@ -40,11 +38,9 @@
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width=".2*" MaxWidth="140" />
-                <ColumnDefinition Width=".3*" />
-                <ColumnDefinition Width=".05*" />
-                <ColumnDefinition Width=".15*" />
-                <ColumnDefinition Width=".3*" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"
                        FontSize="20"
@@ -55,7 +51,8 @@
                        HorizontalAlignment="Left"/>
 
             <UserControl Grid.Column="1" 
-                         HorizontalAlignment="Stretch">
+                         HorizontalAlignment="Stretch"
+                         Margin="10 0 10 0">
                 <Border                    
                     BorderBrush="{StaticResource BorderColor}"
                     BorderThickness="1"
@@ -120,14 +117,11 @@
             </UserControl>
 
             <Button
-                Width="auto"
-                Margin="10 0 0 0"
                 Grid.Column="2"
                 VerticalAlignment="Center"
                 Command="{Binding ResetCommand}"
                 Content="Clear"
                 FontSize="14"
-                HorizontalAlignment="Left"
                 Style="{StaticResource Link}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
