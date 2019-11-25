@@ -1106,7 +1106,16 @@ namespace ShipWorks
         {
             heartBeat = new BatchModeUIHeartbeat(this);
 
-            windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            try
+            {
+                windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            }
+            
+            catch(AppearanceException ex)
+            {
+                windowLayoutProvider.LoadDefault();
+            }
+
             gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
 
             foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
@@ -1752,7 +1761,16 @@ namespace ShipWorks
             statusBar.MainStrip.Visible = true;
 
             // Load the user's saved state
-            windowLayoutProvider.LoadLayout(settings.WindowLayout);
+            try
+            {
+                windowLayoutProvider.LoadLayout(settings.WindowLayout);
+            }
+            catch(AppearanceException ex)
+            {
+                windowLayoutProvider.LoadDefault();
+                MessageHelper.ShowMessage(this, 
+                "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
+            }
 
             // Make sure any users upgrading from a previous version will always see (and
             // be made aware of) the rate panel; they can still choose to remove it later

@@ -100,6 +100,7 @@ namespace ShipWorks.ApplicationCore.Appearance
             ZipWriter zipWriter = new ZipWriter();
             zipWriter.Items.Add(new ZipWriterStringItem(StripLastFocusedInfo(dockManager.GetLayout()), Encoding.Unicode, "panels.xml"));
             zipWriter.Items.Add(new ZipWriterStringItem(ribbonManager.GetState(), Encoding.Unicode, "ribbon.xml"));
+            log.Debug($"Ribbon State:\n{ribbonManager.GetState()}");
 
             // Use a hard-coded LastModifiedTime so that binary comparisons on the zipfile work so we know
             // if the layout has actualy changed or not, and we don't get false-positives just due to the dates changing.
@@ -164,11 +165,16 @@ namespace ShipWorks.ApplicationCore.Appearance
             }
             catch (ArgumentException ex)
             {
-                throw new AppearanceException("The contents of ShipWorks layout file are corrupt.", ex);
+                throw new AppearanceException("The contents of ShipWorks the layout file are corrupt.", ex);
             }
             catch (XmlException ex)
             {
-                throw new AppearanceException("The contents of ShipWorks layout file are corrupt.", ex);
+                throw new AppearanceException("The contents of ShipWorks the layout file are corrupt.", ex);
+            }
+            catch (NullReferenceException ex)
+            {
+                log.Error("Ribbon Configuration Exception:", ex);
+                throw new AppearanceException("The contents of the ShipWorks layout file are corrupt", ex);
             }
         }
 
