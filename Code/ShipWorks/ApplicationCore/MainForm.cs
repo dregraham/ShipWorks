@@ -1109,8 +1109,7 @@ namespace ShipWorks
             try
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
-            }
-            
+            }          
             catch(AppearanceException ex)
             {
                 windowLayoutProvider.LoadDefault();
