@@ -1113,6 +1113,11 @@ namespace ShipWorks
             catch(AppearanceException ex)
             {
                 windowLayoutProvider.LoadDefault();
+                MessageHelper.ShowMessage(this,
+                "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
+
+                //Ensure that the defaults are saved.
+                SaveCurrentUserSettings();
             }
 
             gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
