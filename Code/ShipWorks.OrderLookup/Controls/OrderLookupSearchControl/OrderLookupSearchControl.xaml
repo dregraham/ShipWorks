@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
     xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:sw="http://schemas.shipworks.com/sw"
     d:DataContext="{d:DesignInstance orderLookupSearchControl:OrderLookupSearchViewModel}"
     d:DesignWidth="500"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
@@ -68,14 +69,13 @@
                             Grid.Column="0"
                             Height="32"
                             VerticalContentAlignment="Center"
-
+                            ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"
                             Background="{StaticResource InputControlBackgroundGradient}"
                             BorderBrush="{x:Null}"
                             BorderThickness="0"
                             FontSize="20"
-                            Text="{Binding OrderNumber, UpdateSourceTrigger=PropertyChanged}">
-                            <!-- Need to add the line below back to the above text box. This line is causing the designer to blow up. -->
-                            <!--ui:Focus.WhenMessageReceived="{x:Type sw:FocusQuickSearchMessage}"-->
+                            Text="{Binding OrderNumber, UpdateSourceTrigger=PropertyChanged}">                            
+                            
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Enter" Command="{Binding Path=GetOrderCommand}" />
                             </TextBox.InputBindings>
