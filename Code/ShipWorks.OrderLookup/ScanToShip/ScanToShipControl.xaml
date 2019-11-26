@@ -45,7 +45,7 @@
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left"
                                     Margin="0 5"
-                                    Width="500"/>
+                                    Width="650"/>
 
                                     <TabPanel Grid.Column="1"
                                           Background="Transparent"
