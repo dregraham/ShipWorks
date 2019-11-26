@@ -1769,6 +1769,9 @@ namespace ShipWorks
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this, 
                 "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
+
+                //Ensure that the defaults are saved.
+                SaveCurrentUserSettings();
             }
 
             // Make sure any users upgrading from a previous version will always see (and
