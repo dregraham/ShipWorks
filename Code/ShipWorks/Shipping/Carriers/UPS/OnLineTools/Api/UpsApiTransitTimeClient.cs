@@ -141,8 +141,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
 
-            // Pickup Date (assume today)
-            xmlWriter.WriteElementString("PickupDate", shipment.ShipDate.ToString("yyyyMMdd"));
+            // Pickup Date
+            var pickupDate = shipment.ShipDate;
+
+            //The shipping panel gives us the date as an unspecified Kind
+            //So we have to do a check here so we dont throw off the date.
+            if (shipment.ShipDate.Kind == DateTimeKind.Utc)
+            {
+                pickupDate = shipment.ShipDate.ToLocalTime();
+            }
+            
+            xmlWriter.WriteElementString("PickupDate", pickupDate.ToString("yyyyMMdd"));
 
             // Shipment Weight. UPS currently does not allow this to be over 150, even though thats wrong, since
             // a shipment can be - its the packages the can't.  We limit the weight to 150 to get around this, it
