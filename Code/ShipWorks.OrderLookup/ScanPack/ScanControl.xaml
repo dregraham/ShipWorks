@@ -7,11 +7,12 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
-             d:DesignHeight="800" d:DesignWidth="500">
+             d:DesignHeight="800" d:DesignWidth="500" >
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/GroupBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="20"/>
@@ -31,7 +32,6 @@
     <Grid>
         <GroupBox Header="Scan"
                   BorderBrush="Black"
-                  FontFamily="Tahoma"
                   BorderThickness="2"
                   FontSize="16"
                   Background="{x:Static SystemColors.ControlBrush}">
@@ -55,27 +55,27 @@
                             Style="{StaticResource Barcode}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForOrderScan}}"/>
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ListeningForOrderScan}, FallbackValue=Collapsed}"/>
                         <Path
                             Style="{StaticResource OpenBox}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderLoaded}}"/>
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderLoaded}, FallbackValue=Collapsed}"/>
                         <Path
                             Style="{StaticResource CheckboxCircle}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static scanPack:ScanPackState.ScanningItems}}"/>
+                                        ConverterParameter={x:Static scanPack:ScanPackState.ScanningItems}, FallbackValue=Collapsed}"/>
                         <Path
                             Style="{StaticResource CheckboxDecagram}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
-                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderVerified}}"/>
+                                        ConverterParameter={x:Static scanPack:ScanPackState.OrderVerified}, FallbackValue=Collapsed}"/>
                     </Canvas>
                 </Viewbox>
                 <Viewbox Grid.Row="1"
                          MaxWidth="360" MaxHeight="360"
-                         Visibility="{Binding Error, Converter={StaticResource BoolToVis}}">
+                         Visibility="{Binding Error, Converter={StaticResource BoolToVis}, FallbackValue=Collapsed}">
                     <Canvas Width="24" Height="24" >
                         <Path Style="{StaticResource Alert}"/>
                     </Canvas>

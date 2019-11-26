@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/GroupBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate x:Key="ItemsToScanTemplate">
@@ -31,16 +31,15 @@
         </Grid.IsEnabled>
         <GroupBox Header="Packed"
                   BorderBrush="Black"
-                  FontFamily="Tahoma"
                   BorderThickness="2"
                   FontSize="16"
                   Background="{x:Static SystemColors.ControlBrush}">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ItemsControl
-                ItemsSource="{Binding PackedItems}"
-                ItemTemplate="{StaticResource ItemsToScanTemplate}"
-                Background="{x:Static SystemColors.ControlBrush}"
-                Margin="5"/>
+                    ItemsSource="{Binding PackedItems}"
+                    ItemTemplate="{StaticResource ItemsToScanTemplate}"
+                    Background="{x:Static SystemColors.ControlBrush}"
+                    Margin="5"/>
             </ScrollViewer>
         </GroupBox>
     </Grid>

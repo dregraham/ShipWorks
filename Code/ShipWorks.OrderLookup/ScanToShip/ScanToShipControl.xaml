@@ -11,35 +11,35 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ScanToShipViewModel, IsDesignTimeCreatable=False}"
-             d:DesignHeight="450" d:DesignWidth="1000"
-             FontFamily="Tahoma"
+             d:DesignHeight="450" d:DesignWidth="1200"
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
              FontSize="11pt">
     <UserControl.Resources>
         <ResourceDictionary>
-        <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+            <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter"/>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVisHidden" Invert="False" False="Hidden"/>
 
             <Style TargetType="{x:Type TabControl}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabControl}">
-                        <Grid x:Name="templateRoot" ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabControl}">
+                            <Grid x:Name="templateRoot" ClipToBounds="True" SnapsToDevicePixels="True" KeyboardNavigation.TabNavigation="Local">
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
 
-                            <Grid Margin="15 0 5 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
+                                <Grid Margin="15 0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
 
-                                <orderLookupSearchControl:OrderLookupSearchControl
+                                    <orderLookupSearchControl:OrderLookupSearchControl
                                     Grid.Column="0"
                                     DataContext="{Binding SearchViewModel}"
                                     VerticalAlignment="Center"
@@ -47,16 +47,16 @@
                                     Margin="0 5"
                                     Width="500"/>
 
-                                <TabPanel Grid.Column="1"
+                                    <TabPanel Grid.Column="1"
                                           Background="Transparent"
                                           IsItemsHost="True"
                                           Margin="5 0"
                                           KeyboardNavigation.TabIndex="1"
                                           Panel.ZIndex="1"
                                           VerticalAlignment="Bottom"/>
-                            </Grid>
+                                </Grid>
 
-                            <Border Grid.Column="0"
+                                <Border Grid.Column="0"
                                     Grid.Row="1"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -64,63 +64,79 @@
                                     KeyboardNavigation.DirectionalNavigation="Contained"
                                     KeyboardNavigation.TabIndex="2"
                                     KeyboardNavigation.TabNavigation="Local">
-                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentTemplate="{TemplateBinding SelectedContentTemplate}" Content="{TemplateBinding SelectedContent}" ContentStringFormat="{TemplateBinding SelectedContentStringFormat}" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                            </Border>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                                    <ContentPresenter x:Name="PART_SelectedContentHost" 
+                                                      ContentTemplate="{TemplateBinding SelectedContentTemplate}" 
+                                                      Content="{TemplateBinding SelectedContent}"
+                                                      ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                                      ContentSource="SelectedContent"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                </Border>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-        <Style TargetType="{x:Type TabItem}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabItem}">
-                        <Grid x:Name="templateRoot" SnapsToDevicePixels="True" Height="32" Width="150">
-                            <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0"
+            <Style TargetType="{x:Type TabItem}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabItem}">
+                            <Grid x:Name="templateRoot" SnapsToDevicePixels="True" Height="42" Width="325">
+                                <Border x:Name="mainBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,1,1,0" Background="{TemplateBinding Background}" Margin="0"
                                     CornerRadius="4 4 0 0">
-                                <Border x:Name="innerBorder" BorderBrush="#FFACACAC" BorderThickness="1,1,1,0" Background="White" Margin="-1" Opacity="0" CornerRadius="4 4 0 0" />
-                            </Border>
-                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding HeaderTemplate}" Content="{TemplateBinding Header}" ContentStringFormat="{TemplateBinding HeaderStringFormat}" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
+                                    <Border x:Name="innerBorder" BorderBrush="#FFACACAC" BorderThickness="1,1,1,0" Background="White" Margin="-1" Opacity="0" CornerRadius="4 4 0 0" />
+                                </Border>
+                                <ContentPresenter x:Name="contentPresenter" 
+                                                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                  Content="{TemplateBinding Header}"
+                                                  ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                                  ContentSource="Header"
+                                                  Focusable="False"
+                                                  HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  RecognizesAccessKey="True" 
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                  VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
+                                                  TextBlock.FontSize="20"
+                                                  TextBlock.FontWeight="Bold"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
 
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="mainBorder">
-                                    <Setter.Value>
-                                        <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
-                                            <GradientStop Color="#FFECF4FC" Offset="0"/>
-                                            <GradientStop Color="#FFDCECFC" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="#FF7EB4EA"/>
-                            </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" TargetName="mainBorder">
+                                        <Setter.Value>
+                                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                                <GradientStop Color="#FFECF4FC" Offset="0"/>
+                                                <GradientStop Color="#FFDCECFC" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="BorderBrush" TargetName="mainBorder" Value="#FF7EB4EA"/>
+                                </Trigger>
 
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
-                                <Setter Property="Background" TargetName="mainBorder" Value="#FFF0F0F0"/>
-                                <Setter Property="BorderBrush" TargetName="mainBorder" Value="#FFD9D9D9"/>
-                            </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter Property="Opacity" TargetName="contentPresenter" Value="0.56"/>
+                                    <Setter Property="Background" TargetName="mainBorder" Value="#FFF0F0F0"/>
+                                    <Setter Property="BorderBrush" TargetName="mainBorder" Value="#FFD9D9D9"/>
+                                </Trigger>
 
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Panel.ZIndex" Value="1"/>
-                                <Setter Property="Margin" Value="-2,-2,-2,0"/>
-                                <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
-                            </Trigger>
-                            
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                                <Trigger Property="IsSelected" Value="true">
+                                    <Setter Property="Panel.ZIndex" Value="1"/>
+                                    <Setter Property="Margin" Value="-2,-2,-2,0"/>
+                                    <Setter Property="Opacity" TargetName="innerBorder" Value="1"/>
+                                </Trigger>
 
-
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -138,7 +154,7 @@
             </TabItem>
         </TabControl>
 
-        <Grid Grid.Row="1" Margin="5 5 10 0">
+        <Grid Grid.Row="1" Margin="5 5 20 0">
 
             <Grid.Visibility>
                 <Binding Path="SelectedTab" Converter="{StaticResource VisibleWhenEqualToParameter}">
@@ -149,11 +165,11 @@
             </Grid.Visibility>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock
-                Margin="10 0 10 0"
+                Margin="10 1 10 0"
                 Grid.Column="0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
@@ -174,9 +190,11 @@
                 Command="{Binding SearchViewModel.CreateLabelCommand}"
                 Content="Create Label"
                 Style="{StaticResource LargePrimaryButton}"
-                Width="300"
+                Width="650"
                 Visibility="{Binding SearchViewModel.ShowCreateLabel, Converter={StaticResource BoolToVisHidden}}"
-                HorizontalAlignment="Right"/>
+                HorizontalAlignment="Right"
+                VerticalContentAlignment="Center"
+                FontSize="20"/>
         </Grid>
     </Grid>
 </UserControl>
