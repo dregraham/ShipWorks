@@ -336,24 +336,19 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             LoadAddress(downloadedOrder, shipAdapter);
             LoadAddress(downloadedOrder, billAdapter);
-
-            billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
-
-            if (shipAdapter.FirstName == billAdapter.FirstName &&
-                shipAdapter.LastName == billAdapter.LastName &&
-                shipAdapter.City == billAdapter.City &&
-                shipAdapter.Street1 == billAdapter.Street1)
-            {
-                shipAdapter.Email = billAdapter.Email;
-            }
         }
         /// <summary>
         /// Loads the billing address.
         /// </summary>
         private void LoadAddress(RakutenOrder downloadedOrder, PersonAdapter adapter)
         {
-            var address = adapter.FieldPrefix.Equals("Ship") ? downloadedOrder.Shipping.DeliveryAddress :
-                downloadedOrder.Shipping.InvoiceAddress;
+
+            RakutenAddress address;
+            if (adapter.FieldPrefix.Equals("Ship")) address = downloadedOrder.Shipping.DeliveryAddress;
+            else if (adapter.FieldPrefix.Equals("Bill") && downloadedOrder.Shipping.InvoiceAddress == null) address = downloadedOrder.Shipping.DeliveryAddress;
+            else address = downloadedOrder.Shipping.InvoiceAddress;
+
+            adapter.Email = downloadedOrder.AnonymizedEmailAddress;
 
             if (address == null)
             {
@@ -374,7 +369,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             adapter.StateProvCode = ParseState(address.StateCode);
             adapter.PostalCode = address.PostalCode;
             adapter.CountryCode = address.CountryCode;
-            adapter.Phone = address.PhoneNumber;
+            adapter.Phone = address.PhoneNumber;      
         }
 
         /// <summary>
