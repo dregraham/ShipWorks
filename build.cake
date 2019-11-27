@@ -8,8 +8,8 @@
 
 // Constants
 var innoPath = @"C:\Program Files (x86)\Inno Setup 5\ISCC.EXE";
-var revisionFilePath = @"\\INTFS01\Development\CruiseControl\Configuration_MovedToAWS\Versioning\ShipWorks\NextRevision.txt";
-//var revisionFilePath = @"C:\Temp2\DevShare\NextRevision.txt";
+//var revisionFilePath = @"\\INTFS01\Development\CruiseControl\Configuration_MovedToAWS\Versioning\ShipWorks\NextRevision.txt";
+var revisionFilePath = @"\\intdev1201\NetworkShare\DevShare\BuildConfig\NextRevision.txt";
 
 DirectoryPath vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
 FilePath msBuildPathX64 = (vsLatest==null)
@@ -551,11 +551,13 @@ void CreateInternalInstaller()
 
 void CreatePublicInstaller()
 {
+	Information($"bracketParam: '{bracketParam}'");	
 	var labelForBuild = "0.0.0";
 	if (!bracketParam.IsNullOrWhiteSpace())
 	{
 		labelForBuild = bracketParam.Trim();
 	}
+	Information($"labelForBuild: {labelForBuild}");
 
 	string revisionNumber = GetRevisionNumber();
 	labelForBuild = $"{labelForBuild}.{revisionNumber}";
