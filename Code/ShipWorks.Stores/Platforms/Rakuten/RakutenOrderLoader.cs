@@ -67,6 +67,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 // Load order data
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
+                LoadDiscounts(orderToSave, downloadedOrder, orderElementFactory);
                 LoadItems(orderToSave, downloadedOrder, products, orderElementFactory);
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
@@ -395,7 +396,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             CreatePaymentDetail(orderElementFactory, orderToSave, "Payment ID", downloadedOrder.Payment.OrderPaymentID);
             CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Status", downloadedOrder.Payment.PaymentStatus);
             CreatePaymentDetail(orderElementFactory, orderToSave, "Payment Amount", downloadedOrder.Payment.PayAmount);
-            CreatePaymentDetail(orderElementFactory, orderToSave, "Point Amount", downloadedOrder.Payment.PointAmount);
         }
 
         /// <summary>
@@ -420,6 +420,42 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 orderToSave.RequestedShipping = carrier;
             }
+        }
+
+        private void LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,IOrderElementFactory orderElementFactory)
+        {
+            foreach(var campaign in downloadedOrder.Campaigns)
+            {
+                var info = campaign.CampaignInfo;
+                if (info.DiscountType == "PERCENT_OFF" || info.DiscountType == "AMOUNT_OFF")
+                {
+                    downloadedOrder.OrderTotal -= LoadCampaign(campaign, orderToSave, downloadedOrder.OrderTotal, orderElementFactory);
+                }              
+            }
+        }
+
+        private decimal LoadCampaign(RakutenCampaign campaign, RakutenOrderEntity orderToSave, decimal orderAmount, IOrderElementFactory orderElementFactory)
+        {
+            var campaignInfo = campaign.CampaignInfo;
+            var orderItem = orderElementFactory.CreateItem(orderToSave);
+            orderItem.Quantity = 1;
+            orderItem.Name = campaign.CampaignName;
+
+            decimal discount = 0;
+            if (campaignInfo.DiscountType == "PERCENT_OFF")
+            {
+                discount = orderAmount * ((decimal)campaignInfo.DiscountValue / 100);             
+                orderItem.UnitPrice = -discount;
+                
+            }
+
+            else
+            {
+                discount = (decimal) -campaignInfo.DiscountValue;
+                orderItem.UnitPrice = discount;
+            }
+
+            return discount;
         }
 
         /// <summary>

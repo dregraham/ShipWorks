@@ -106,5 +106,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// </summary>
         [JsonProperty("recyclingFeeTotal")]
         public decimal RecyclingFeeTotal { get; set; }
+
+        /// <summary>
+        /// Campaign information for the order
+        /// </summary>
+        [JsonProperty("campaigns")]
+        public IList<RakutenCampaign> Campaigns { get; set; }
     }
 }
