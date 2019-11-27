@@ -222,7 +222,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
                 AmazonSWAAccount.ReadMultiValue(v => shipment.AmazonSWA.AmazonSWAAccountID = (long) v);
 
                 service.ReadMultiValue(v => shipment.AmazonSWA.Service =  (int) v);
-                shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+                shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
 
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
             }
