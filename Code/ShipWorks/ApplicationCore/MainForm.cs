@@ -1731,6 +1731,7 @@ namespace ShipWorks
         private void ApplyCurrentUserLayout()
         {
             UserSettingsEntity settings = UserSession.User.Settings;
+            bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
 
             // Show the tool bar
             ribbon.ToolBar = quickAccessToolBar;
@@ -1738,6 +1739,11 @@ namespace ShipWorks
             // Add back in the tabs
             foreach (RibbonTab tab in ribbonTabs)
             {
+                if (!hasProductsPermissions && IsProductSpecificTab(tab))
+                {
+                    continue;
+                }
+
                 ribbon.Tabs.Add(tab);
 
                 // Preserve order
