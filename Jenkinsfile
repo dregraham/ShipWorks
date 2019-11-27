@@ -14,7 +14,7 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'cake rebuild[true]'
+				bat 'cake build:debug'
 			}
 		}
 		stage('Post-Compilation') {
