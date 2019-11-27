@@ -12,8 +12,7 @@
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance local:ScanToShipViewModel, IsDesignTimeCreatable=False}"
              d:DesignHeight="450" d:DesignWidth="1200"
-             FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
-             FontSize="11pt">
+             FontFamily="/ShipWorks.OrderLookup;component/#Roboto">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -21,6 +20,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenEqualToParameter"/>
             <ui:BooleanToVisibilityConverter x:Key="BoolToVisHidden" Invert="False" False="Hidden"/>
+            <ui:BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
             <Style TargetType="{x:Type TabControl}">
                 <Setter Property="Template">
@@ -150,7 +150,14 @@
                 <scanpack:ScanPackControl DataContext="{Binding ScanPackViewModel}"/>
             </TabItem>
             <TabItem Header="Ship">
-                <orderlookup:MainOrderLookupControl DataContext="{Binding OrderLookupViewModel}"/>
+                <Grid>
+                    <orderlookup:MainOrderLookupControl DataContext="{Binding OrderLookupViewModel}"/>
+                    <TextBlock Text="{Binding SearchViewModel.SearchMessage}"
+                               Visibility="{Binding SearchViewModel.ShowSearchMessage, Converter={StaticResource BoolToVis}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16"/>
+                </Grid>
             </TabItem>
         </TabControl>
 
