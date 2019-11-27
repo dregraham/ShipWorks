@@ -415,7 +415,9 @@
       <Output TaskParameter="Include" ItemName="AllArtifacts" />
     </CreateItem>
 
-    <Copy SourceFiles="@(AllArtifacts)" DestinationFolder="$(CCNetArtifactDirectory)ShipWorks$(CCNetLabel)\%(RecursiveDir)" />
+    <!-- 
+      <Copy SourceFiles="@(AllArtifacts)" DestinationFolder="$(CCNetArtifactDirectory)\ShipWorks$(CCNetLabel)\%(RecursiveDir)" />
+    -->
 
   </Target>
 

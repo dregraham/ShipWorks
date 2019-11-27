@@ -14,14 +14,14 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'bundle exec rake rebuild[true]'
+				bat 'bundle exec cake rebuild[true]'
 			}
 		}
 		stage('Post-Compilation') {
 			parallel {
 				stage('Unit tests') {
 					steps {
-						bat 'bundle exec rake test:units'
+						bat 'bundle exec cake test:units'
 					}
 				}
 				stage('NDepend') {
@@ -35,12 +35,12 @@ pipeline {
 			parallel {
 				stage('Integration tests') {
 					steps {
-						bat 'bundle exec rake test:integration[ContinuousIntegration]'
+						bat 'bundle exec cake test:integration[ContinuousIntegration]'
 					}
 				}
 				stage('Specs') {
 					steps {
-						bat 'bundle exec rake test:specs'
+						bat 'bundle exec cake test:specs'
 					}
 				}
 			}
