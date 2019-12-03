@@ -346,9 +346,18 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         {
 
             RakutenAddress address;
-            if (adapter.FieldPrefix.Equals("Ship")) address = downloadedOrder.Shipping.DeliveryAddress;
-            else if (adapter.FieldPrefix.Equals("Bill") && downloadedOrder.Shipping.InvoiceAddress == null) address = downloadedOrder.Shipping.DeliveryAddress;
-            else address = downloadedOrder.Shipping.InvoiceAddress;
+            if (adapter.FieldPrefix.Equals("Ship"))
+            {
+                address = downloadedOrder.Shipping.DeliveryAddress;
+            }
+            else if (adapter.FieldPrefix.Equals("Bill") && downloadedOrder.Shipping.InvoiceAddress == null)
+            {
+                address = downloadedOrder.Shipping.DeliveryAddress;
+            }
+            else
+            {
+                address = downloadedOrder.Shipping.InvoiceAddress;
+            }
 
             adapter.Email = downloadedOrder.AnonymizedEmailAddress;
 
