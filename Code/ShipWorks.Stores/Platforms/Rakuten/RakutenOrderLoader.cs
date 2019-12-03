@@ -423,6 +423,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
         }
 
+        /// <summary>
+        /// Loads any discounts attached to the order
+        /// </summary>
         private decimal LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,IOrderElementFactory orderElementFactory)
         {
             decimal discountAmount = 0;
@@ -440,6 +443,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             return discountAmount;
         }
 
+        /// <summary>
+        /// Loads campaign discounts
+        /// </summary>
         private decimal LoadCampaign(RakutenCampaign campaign, RakutenOrderEntity orderToSave, decimal orderAmount, IOrderElementFactory orderElementFactory)
         {
             var campaignInfo = campaign.CampaignInfo;
