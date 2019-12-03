@@ -1110,7 +1110,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
             }          
-            catch(AppearanceException ex)
+            catch(AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this,
@@ -1775,7 +1775,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(settings.WindowLayout);
             }
-            catch(AppearanceException ex)
+            catch (AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this, 
@@ -2591,8 +2591,6 @@ namespace ShipWorks
         private void OnBeforePopupApplicationMenu(object sender, BeforePopupEventArgs e)
         {
             UpdateLoginLogoffMenu();
-
-            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)
