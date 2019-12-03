@@ -2212,7 +2212,9 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReturnSaturdayPickup] [bit] NULL,
 [ReturnsClearance] [bit] NULL,
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ThirdPartyConsignee] [bit] NULL
+[ThirdPartyConsignee] [bit] NULL,
+[CreateCommercialInvoice] [bit] NULL,
+[FileElectronically] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'

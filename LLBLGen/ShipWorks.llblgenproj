@@ -1146,6 +1146,7 @@
       </EntityDefinition>
       <EntityDefinition Name="FedExProfile" ObjectID="59dac7b4-50ba-42fa-8b38-291cbb95f554">
         <Fields>
+          <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1154,6 +1155,7 @@
           <Field Name="EmailNotifyRecipient" Type="int" IsOptional="true" FieldIndex="16" />
           <Field Name="EmailNotifySender" Type="int" IsOptional="true" FieldIndex="15" />
           <Field Name="FedExAccountID" Type="long" IsOptional="true" FieldIndex="1" />
+          <Field Name="FileElectronically" Type="bool" IsOptional="true" FieldIndex="38" />
           <Field Name="NonStandardContainer" Type="bool" IsOptional="true" FieldIndex="5" />
           <Field Name="OriginResidentialDetermination" Type="int" IsOptional="true" FieldIndex="28" />
           <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="4" />
@@ -4585,7 +4587,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-10-24T18:01:22.6975293Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-03T16:39:35.9487337Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5017,10 +5019,10 @@
                     <Field Name="OrderItemID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderAddressID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="OrderProductID" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderProductID" Ordinal="4" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="IsDigitalItem" Ordinal="5" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="EventDate" Ordinal="6" IsOptional="true" DbType="4" />
-                    <Field Name="EventName" Ordinal="7" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="IsDigitalItem" Ordinal="4" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="EventDate" Ordinal="5" IsOptional="true" DbType="4" />
+                    <Field Name="EventName" Ordinal="6" IsOptional="true" DbType="12" Length="255" />
+                    <Field Name="ParentOrderProductID" Ordinal="7" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="BigCommerceStore">
@@ -5141,7 +5143,7 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
-                    <Field Name="DownloadDaysBack" Ordinal="10" DbType="22" Precision="3" />
+                    <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -5888,6 +5890,8 @@
                     <Field Name="ReturnsClearance" Ordinal="35" IsOptional="true" DbType="2" />
                     <Field Name="ReferenceFIMS" Ordinal="36" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
+                    <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
+                    <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6935,8 +6939,8 @@
                     <Field Name="GrouponOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
                     <Field Name="GrouponOrderID" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="4" DbType="0" Precision="19" />
-                    <Field Name="ParentOrderID" Ordinal="5" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ParentOrderID" Ordinal="4" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="GrouponStore">
@@ -7616,9 +7620,9 @@
                     <Field Name="Quantity" Ordinal="16" DbType="5" Precision="29" Scale="9" />
                     <Field Name="LocalStatus" Ordinal="17" DbType="12" Length="255" />
                     <Field Name="IsManual" Ordinal="18" DbType="2" />
-                    <Field Name="HarmonizedCode" Ordinal="19" DbType="12" Length="20" />
-                    <Field Name="OriginalOrderID" Ordinal="20" DbType="0" Precision="19" />
-                    <Field Name="TotalWeight" Ordinal="21" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="TotalWeight" Ordinal="19" IsOptional="true" IsComputed="true" DbType="5" Precision="38" Scale="6" />
+                    <Field Name="HarmonizedCode" Ordinal="20" DbType="12" Length="20" />
+                    <Field Name="OriginalOrderID" Ordinal="21" DbType="0" Precision="19" />
                     <Field Name="Length" Ordinal="22" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Width" Ordinal="23" DbType="5" Precision="10" Scale="2" />
                     <Field Name="Height" Ordinal="24" DbType="5" Precision="10" Scale="2" />
@@ -7739,9 +7743,9 @@
                   <Fields>
                     <Field Name="OverstockOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
-                    <Field Name="SalesChannelName" Ordinal="3" DbType="12" Length="50" />
-                    <Field Name="WarehouseCode" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
-                    <Field Name="OriginalOrderID" Ordinal="5" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="SalesChannelName" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="WarehouseCode" Ordinal="5" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OverstockStore">
@@ -11936,6 +11940,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfile" TargetName="ShipWorksLocal:dbo:FedExProfile">
           <FieldMappings>
+            <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -11944,6 +11949,7 @@
             <FieldMapping FieldName="EmailNotifyRecipient" TargetFieldName="EmailNotifyRecipient" />
             <FieldMapping FieldName="EmailNotifySender" TargetFieldName="EmailNotifySender" />
             <FieldMapping FieldName="FedExAccountID" TargetFieldName="FedExAccountID" />
+            <FieldMapping FieldName="FileElectronically" TargetFieldName="FileElectronically" />
             <FieldMapping FieldName="NonStandardContainer" TargetFieldName="NonStandardContainer" />
             <FieldMapping FieldName="OriginResidentialDetermination" TargetFieldName="OriginResidentialDetermination" />
             <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />

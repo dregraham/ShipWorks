@@ -3838,6 +3838,10 @@ namespace ShipWorks.Data.Model
 		ReferenceFIMS,
 		///<summary>ThirdPartyConsignee. </summary>
 		ThirdPartyConsignee,
+		///<summary>CreateCommercialInvoice. </summary>
+		CreateCommercialInvoice,
+		///<summary>FileElectronically. </summary>
+		FileElectronically,
 		/// <summary></summary>
 		AmountOfFields
 	}
