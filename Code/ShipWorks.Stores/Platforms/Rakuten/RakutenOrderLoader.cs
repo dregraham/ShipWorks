@@ -67,11 +67,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 // Load order data
                 LoadNotes(orderToSave, downloadedOrder, orderElementFactory);
-                LoadDiscounts(orderToSave, downloadedOrder, orderElementFactory);
+                var discounts = LoadDiscounts(orderToSave, downloadedOrder, orderElementFactory);
                 LoadItems(orderToSave, downloadedOrder, products, orderElementFactory);
                 LoadCharges(orderToSave, downloadedOrder, orderElementFactory);
                 LoadPayments(orderToSave, downloadedOrder, orderElementFactory);
-                SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
+                SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory, discounts);
             }
         }
 
@@ -88,14 +88,15 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Set the order total
         /// </summary>
-        private void SetOrderTotal(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory)
+        private void SetOrderTotal(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory, decimal discounts)
         {
-            orderToSave.OrderTotal = downloadedOrder.OrderTotal;
+            var adjustedTotal = downloadedOrder.OrderTotal - discounts;
+            orderToSave.OrderTotal = adjustedTotal;
 
             decimal calculatedTotal = orderChargeCalculator.CalculateTotal(orderToSave);
 
             // This should only happen if Rakuten doesn't send us the correct information somewhere
-            if (downloadedOrder.OrderTotal != calculatedTotal)
+            if (adjustedTotal != calculatedTotal)
             {
                 decimal adjustment = downloadedOrder.OrderTotal - calculatedTotal;
 
@@ -422,16 +423,21 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             }
         }
 
-        private void LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,IOrderElementFactory orderElementFactory)
+        private decimal LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,IOrderElementFactory orderElementFactory)
         {
-            foreach(var campaign in downloadedOrder.Campaigns)
+            decimal discountAmount = 0;
+            if(downloadedOrder.Campaigns != null)
             {
-                var info = campaign.CampaignInfo;
-                if (info.DiscountType == "PERCENT_OFF" || info.DiscountType == "AMOUNT_OFF")
+                foreach (var campaign in downloadedOrder.Campaigns)
                 {
-                    downloadedOrder.OrderTotal -= LoadCampaign(campaign, orderToSave, downloadedOrder.OrderTotal, orderElementFactory);
-                }              
+                    var info = campaign.CampaignInfo;
+                    if (info.DiscountType == "PERCENT_OFF" || info.DiscountType == "AMOUNT_OFF")
+                    {
+                        discountAmount += LoadCampaign(campaign, orderToSave, downloadedOrder.OrderTotal, orderElementFactory);
+                    }
+                }
             }
+            return discountAmount;
         }
 
         private decimal LoadCampaign(RakutenCampaign campaign, RakutenOrderEntity orderToSave, decimal orderAmount, IOrderElementFactory orderElementFactory)
@@ -451,8 +457,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             else
             {
-                discount = (decimal) -campaignInfo.DiscountValue;
-                orderItem.UnitPrice = discount;
+                discount = (decimal) campaignInfo.DiscountValue;
+                orderItem.UnitPrice = -discount;
             }
 
             return discount;
