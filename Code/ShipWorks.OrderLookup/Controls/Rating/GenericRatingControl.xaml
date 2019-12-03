@@ -98,14 +98,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Account"
-                                        Width="*"
-                                        Binding="{Binding Tag.AccountDescription}"
-                                        ElementStyle="{StaticResource DataGrid.Element.Default}"
-                                        Visibility="{Binding DataContext.ShowAccount,
-                                            Source={StaticResource ProxyElement},
-                                            Converter={StaticResource BooleanToVisibility}}"/>
-
                     <DataGridTextColumn
                         Width="*"
                         Binding="{Binding Description}"
@@ -129,6 +121,13 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Account"
+                                        Width="*"
+                                        Binding="{Binding Tag.AccountDescription}"
+                                        ElementStyle="{StaticResource DataGrid.Element.Default}"
+                                        Visibility="{Binding DataContext.ShowAccount,
+                                            Source={StaticResource ProxyElement},
+                                            Converter={StaticResource BooleanToVisibility}}"/>
                 </DataGrid.Columns>
             </DataGrid>
 

@@ -292,13 +292,13 @@ namespace ShipWorks.Shipping.Editing.Rating
                     GridRow row = new GridRow(new[]
                     {
                         new GridCell(rate.ProviderLogo),
-                        new GridCell((rate.Tag as BestRateResultTag)?.AccountDescription ?? ""),
                         new GridCell(rate.Description),
                         new GridCell(rate.Days),
                         new GridCell(rate.Selectable && rate.Shipping.HasValue ? rate.Shipping.Value.ToString("c") : ""),
-                        new GridCell(rate.Selectable && rate.Taxes.HasValue ? rate.Taxes.Value.ToString("c") : ""),
+                        new GridCell(rate.Selectable && rate.Taxes.HasValue ? rate.Taxes.Value.ToString("c") : ""),                       
                         new GridCell(rate.Selectable && rate.Duties.HasValue ? rate.Duties.Value.ToString("c") : ""),
-                        new GridCell(rate.Selectable ? rate.FormattedAmount : "", rate.AmountFootnote)
+                        new GridCell(rate.Selectable ? rate.FormattedAmount : "", rate.AmountFootnote),
+                        new GridCell((rate.Tag as BestRateResultTag)?.AccountDescription ?? "")
                     })
                     { Tag = rate };
 
@@ -414,7 +414,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridCell(""),
                         new GridCell(""),
                         new GridCell(""),
-                        new GridHyperlinkCell("More...")
+                        new GridHyperlinkCell("More...")                        
                     })
                     { Tag = showMoreRatesRateResult };
 
