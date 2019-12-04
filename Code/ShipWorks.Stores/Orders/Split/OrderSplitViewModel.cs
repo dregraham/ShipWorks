@@ -190,7 +190,10 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
+            var storeType = StoreTypeManager.GetType(order.Store.StoreTypeCode);
+
             CanChangeSplitType = licenseService.IsHub &&
+                storeType.ShouldUseHub(order.Store) &&
                 (order.CombineSplitStatus == CombineSplitStatusType.None || order.CombineSplitStatus == CombineSplitStatusType.Split);
             SplitType = CanChangeSplitType ? OrderSplitterType.Reroute : OrderSplitterType.Local;
             SelectedOrderNumber = order.OrderNumberComplete;
