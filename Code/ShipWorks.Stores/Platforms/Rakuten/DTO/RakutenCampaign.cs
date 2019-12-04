@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.DTO
 {
+    [Obfuscation(Exclude = true)]
     public class RakutenCampaign
     {
         [JsonProperty("campaignName")]
@@ -16,6 +13,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         public RakutenCampaignInfo CampaignInfo { get; set; }
     }
 
+    [Obfuscation(Exclude = true)]
     public class RakutenCampaignInfo
     {
         [JsonProperty("discountType")]
