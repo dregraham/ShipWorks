@@ -31,6 +31,7 @@ namespace ShipWorks.Stores.Orders.Split
         private readonly IOrderSplitDialog splitOrdersDialog;
         private readonly ILicenseService licenseService;
         private readonly PropertyChangedHandler handler;
+        private readonly IStoreTypeManager storeTypeManager;
 
         private string selectedOrderNumber;
         private string orderNumberPostfix;
@@ -42,11 +43,15 @@ namespace ShipWorks.Stores.Orders.Split
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderSplitViewModel(IAsyncMessageHelper messageHelper, IOrderSplitDialog splitOrdersDialog, ILicenseService licenseService)
+        public OrderSplitViewModel(IAsyncMessageHelper messageHelper,
+            IOrderSplitDialog splitOrdersDialog,
+            ILicenseService licenseService,
+            IStoreTypeManager storeTypeManager)
         {
             this.splitOrdersDialog = splitOrdersDialog;
             this.licenseService = licenseService;
             this.messageHelper = messageHelper;
+            this.storeTypeManager = storeTypeManager;
 
             //userSession.
 
@@ -190,7 +195,7 @@ namespace ShipWorks.Stores.Orders.Split
         {
             MethodConditions.EnsureArgumentIsNotNull(order, nameof(order));
 
-            var storeType = StoreTypeManager.GetType(order.Store.StoreTypeCode);
+            var storeType = storeTypeManager.GetType(order.Store.StoreTypeCode);
 
             CanChangeSplitType = licenseService.IsHub &&
                 storeType.ShouldUseHub(order.Store) &&
