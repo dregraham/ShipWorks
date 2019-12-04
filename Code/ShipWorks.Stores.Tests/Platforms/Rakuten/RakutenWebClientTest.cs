@@ -123,6 +123,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
             {
                 StatusCode = HttpStatusCode.OK,
                 ErrorException = null,
+                Data = mock.Create<RakutenBaseResponse>()
             };
 
             mock.FromFactory<IRakutenRestClientFactory>()
