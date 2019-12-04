@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -660,9 +661,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
                 }
 
+                foreach (var key in request.Headers.AllKeys.ToList())
+                {
+                    request.Headers.Add($"SW-{key}", request.Headers[key]);
+                    request.Headers.Remove(key);
+                }
+
                 // We want to send the request to the hub and have the hub be the one that actually executes the request.
                 // This means we need to swap out the original URI with the hub URI, and store the original one as a variable.
-                request.Headers.Add("originalRequestUrl", request.Uri.ToString());
+                request.Headers.Add("SW-originalRequestUrl", request.Uri.ToString());
                 request.Uri = mwsSettings.ProxyEndpoint;
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, Progress);
