@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -206,6 +208,22 @@ namespace ShipWorks.Actions
                 return;
             }
 
+            List<ActionTask> tasks;
+
+            using (var scope = IoC.BeginLifetimeScope())
+            {
+                tasks = ActionManager.LoadTasks(scope, action);
+            }
+
+            bool needsPermissionCheck = tasks.Any(x => x is CreateLabelTask);
+
+            if (needsPermissionCheck &&
+                !orderedSelection.All(x => UserSession.Security.HasPermission(Users.Security.PermissionType.ShipmentsCreateEditProcess, x)))
+            {
+                log.Info("Not executing action with 'Create Label' task because user does not have sufficient permissions.");
+                return;
+            }
+
             UserInitiatedTrigger trigger = (UserInitiatedTrigger) ActionManager.LoadTrigger(action);
 
             // We are potentially going to be saving selection along with dispatching the action, so do it in a transaction
@@ -274,7 +292,7 @@ namespace ShipWorks.Actions
 
             ActionQueueEntity entity = new ActionQueueEntity();
             entity.ActionID = action.ActionID;
-            entity.ActionQueueType = (int) DetermineActionQueueType(action); ;
+            entity.ActionQueueType = (int) DetermineActionQueueType(action);
             entity.ActionName = action.Name;
             entity.ActionVersion = action.RowVersion;
             entity.EntityID = objectID;
