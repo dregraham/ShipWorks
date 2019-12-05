@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -85,17 +86,17 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
                     foreach (var identifier in identifiers)
                     {
                         // Upload tracking number
-                        updateClient.ConfirmShipping(store, shipment, identifier);
+                        await updateClient.ConfirmShipping(store, shipment, identifier).ConfigureAwait(false);
                     }
                 }
-                catch (ArgumentException ex)
+                catch (Exception ex) when (ex is ArgumentException || ex is WebException)
                 {
-                    log.Error(ex.Message);
+                    log.Error($"An error occurred uploading tracking for order {order.OrderNumberComplete}: {ex.Message}");
                 }
             }
             else
             {
-                log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderID);
+                log.InfoFormat("Not uploading tracking number since order {0} is manual.", order.OrderNumberComplete);
             }
         }
     }

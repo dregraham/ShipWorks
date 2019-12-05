@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -18,6 +19,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.DTO
         /// </summary>
         [JsonProperty("specific")]
         public Dictionary<string, IList<RakutenError>> Specific { get; set; }
+
+        internal bool Any()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     [Obfuscation(Exclude = true)]
