@@ -66,7 +66,7 @@ namespace ShipWorks.Stores.Platforms.Overstock
 
                 await DownloadOrders(lastModified.Value, DateTime.UtcNow, offset).ConfigureAwait(false);
             }
-            catch (Exception ex) when (ex is OverstockException || ex is SqlForeignKeyException)
+            catch (Exception ex) when (ex is OverstockException || ex is SqlForeignKeyException || ex is FormatException)
             {
                 throw new DownloadException(ex.Message, ex);
             }

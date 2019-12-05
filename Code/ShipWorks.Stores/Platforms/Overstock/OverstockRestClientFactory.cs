@@ -40,6 +40,6 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         private string StoreUrl => InterapptiveOnly.Registry.GetValue("OverstockLiveServer", true) ?
             "https://api.supplieroasis.com" :
-            "https://api.test.supplieroasis.com";
+            InterapptiveOnly.Registry.GetValue("OverstockEndpoint", "https://api.test.supplieroasis.com");
     }
 }
