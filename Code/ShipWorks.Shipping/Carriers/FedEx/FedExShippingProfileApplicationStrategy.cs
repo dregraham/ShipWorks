@@ -86,6 +86,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ApplyProfileValue(fedExProfile.RmaReason, fedExShipment, FedExShipmentFields.RmaReason);
             ApplyProfileValue(fedExProfile.ReturnSaturdayPickup, fedExShipment, FedExShipmentFields.ReturnSaturdayPickup);
             ApplyProfileValue(fedExProfile.ThirdPartyConsignee, fedExShipment, FedExShipmentFields.ThirdPartyConsignee);
+
+            ApplyProfileValue(fedExProfile.CreateCommercialInvoice, fedExShipment, FedExShipmentFields.CommercialInvoice);
+            ApplyProfileValue(fedExProfile.FileElectronically, fedExShipment, FedExShipmentFields.CommercialInvoiceFileElectronically);
         }
 
         /// <summary>
