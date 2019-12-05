@@ -849,6 +849,7 @@ namespace ShipWorks.UI.Wizard
             int newIndex = pages.IndexOf(args.NextPage);
 
             await MoveToPage(newIndex, WizardStepReason.StepBack).ConfigureAwait(true);
+            FocusOnCurrentPage();
         }
 
         /// <summary>
@@ -1002,20 +1003,28 @@ namespace ShipWorks.UI.Wizard
             {
                 if (back.Focused)
                 {
-                        next.Focus();
+                    next.AllowClick = true;
+                    next.Focus();
                     interceptTab = true;
                     return true;
                 }
 
                 if (next.Focused && interceptTab)
                 {
-                    CurrentPage.Controls[1].Focus();
+                    next.AllowClick = false;
+                    FocusOnCurrentPage();
                     interceptTab = false;
                     return true;
                 }
             }
-
+            
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void FocusOnCurrentPage()
+        {
+            CurrentPage.Focus();
+            next.NotifyDefault(false);
         }
     }
 }

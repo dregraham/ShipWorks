@@ -17,6 +17,8 @@ namespace ShipWorks.UI.Controls
     {
         bool showShield = true;
 
+        public bool AllowClick { get; set; } = true;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -79,6 +81,14 @@ namespace ShipWorks.UI.Controls
             {
                 NativeMethods.SendMessage(Handle, NativeMethods.BCM_SETSHIELD, IntPtr.Zero, new IntPtr(ShowShield ? 1 : 0));
             }
+        }
+
+        protected override void OnClick(EventArgs e)
+        {
+            if (AllowClick)
+            {
+                base.OnClick(e);
+            }           
         }
     }
 }
