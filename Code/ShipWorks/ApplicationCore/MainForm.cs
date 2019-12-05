@@ -1110,7 +1110,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
             }          
-            catch(AppearanceException ex)
+            catch(AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this,
@@ -1775,7 +1775,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(settings.WindowLayout);
             }
-            catch(AppearanceException ex)
+            catch(AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this, 
