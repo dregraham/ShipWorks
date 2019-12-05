@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
+using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -30,6 +31,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
-        Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment);
+        Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment, RakutenUploadDetails details);
     }
 }

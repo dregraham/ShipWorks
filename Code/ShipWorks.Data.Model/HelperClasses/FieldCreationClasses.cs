@@ -24797,6 +24797,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OriginalOrderID);}
 		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenPackageID field instance</summary>
+		public static EntityField2 RakutenPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenPackageID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity RakutenStoreEntity</summary>

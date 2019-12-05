@@ -2841,6 +2841,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("RakutenOrderSearchEntity", "RakutenOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderSearchFieldIndex.RakutenOrderSearchID, 0, 0, 19);
 			this.AddElementFieldInfo("RakutenOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)RakutenOrderSearchFieldIndex.OrderID, 0, 0, 19);
 			this.AddElementFieldInfo("RakutenOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)RakutenOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderSearchEntity", "RakutenPackageID", typeof(System.String), false, false, false, false,  (int)RakutenOrderSearchFieldIndex.RakutenPackageID, 36, 0, 0);
 		}
 		/// <summary>Inits RakutenStoreEntity's FieldInfo objects</summary>
 		private void InitRakutenStoreEntityInfos()

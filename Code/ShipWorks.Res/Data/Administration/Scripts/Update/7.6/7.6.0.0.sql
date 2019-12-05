@@ -23,7 +23,8 @@ CREATE TABLE [dbo].[RakutenOrderSearch]
 (
 [RakutenOrderSearchID] [bigint] IDENTITY(1,1) NOT NULL,
 [OrderID] [bigint] NOT NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[RakutenPackageID] [nvarchar](36) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_RakutenOrderSearch] on [dbo].[RakutenOrderSearch]'

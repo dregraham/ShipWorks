@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
@@ -11,11 +12,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        void UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID);
+        Task UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID);
 
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        void UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment);
+        Task UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment);
     }
 }

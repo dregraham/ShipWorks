@@ -352,6 +352,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("RakutenPackageID", fieldHashtable);
 		}
 		#endregion
 
@@ -478,6 +480,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)RakutenOrderSearchFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)RakutenOrderSearchFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The RakutenPackageID property of the Entity RakutenOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "RakutenOrderSearch"."RakutenPackageID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 36<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String RakutenPackageID
+		{
+			get { return (System.String)GetValue((int)RakutenOrderSearchFieldIndex.RakutenPackageID, true); }
+			set	{ SetValue((int)RakutenOrderSearchFieldIndex.RakutenPackageID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'RakutenOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

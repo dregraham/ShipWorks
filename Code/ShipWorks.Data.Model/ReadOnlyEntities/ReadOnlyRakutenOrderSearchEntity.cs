@@ -39,6 +39,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RakutenOrderSearchID = source.RakutenOrderSearchID;
             OrderID = source.OrderID;
             OriginalOrderID = source.OriginalOrderID;
+            RakutenPackageID = source.RakutenPackageID;
             
             
             RakutenOrder = (IRakutenOrderEntity) source.RakutenOrder?.AsReadOnly(objectMap);
@@ -66,6 +67,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The RakutenPackageID property of the Entity RakutenOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "RakutenOrderSearch"."RakutenPackageID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 36<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String RakutenPackageID { get; }
         
         
         public IRakutenOrderEntity RakutenOrder { get; }

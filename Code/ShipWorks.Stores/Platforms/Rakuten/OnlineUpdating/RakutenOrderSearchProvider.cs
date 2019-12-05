@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -15,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
     /// Get order search identifiers for uploading shipment data
     /// </summary>
     [Component]
-    public class RakutenOrderSearchProvider : CombineOrderSearchBaseProvider<string>, IRakutenOrderSearchProvider
+    public class RakutenOrderSearchProvider : CombineOrderSearchBaseProvider<RakutenUploadDetails>, IRakutenOrderSearchProvider
     {
         /// <summary>
         /// Constructor
@@ -28,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Gets the online store's order identifier
         /// </summary>
-        protected override async Task<IEnumerable<string>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
+        protected override async Task<IEnumerable<RakutenUploadDetails>> GetCombinedOnlineOrderIdentifiers(IOrderEntity order)
         {
             QueryFactory factory = new QueryFactory();
 
@@ -38,7 +37,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 
             var query = factory.Create()
                 .From(from)
-                .Select(() => RakutenOrderSearchFields.OrderID.ToValue<string>())
+                .Select(() => new RakutenUploadDetails
+                {
+                    OrderNumber = OrderSearchFields.OrderNumberComplete.ToValue<string>(),
+                    PackageID = RakutenOrderSearchFields.RakutenPackageID.ToValue<string>()
+                })
                 .Distinct()
                 .Where(RakutenOrderSearchFields.OrderID == order.OrderID)
                 .AndWhere(OrderSearchFields.IsManual == false);
@@ -52,6 +55,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Gets the Rakuten online order identifier
         /// </summary>
-        protected override string GetOnlineOrderIdentifier(IOrderEntity order) => order.OrderNumberComplete;
+        protected override RakutenUploadDetails GetOnlineOrderIdentifier(IOrderEntity order)
+        {
+            return new RakutenUploadDetails
+            {
+                OrderNumber = order.OrderNumberComplete,
+                PackageID = ((IRakutenOrderEntity) order).RakutenPackageID
+            };
+        }
     }
 }

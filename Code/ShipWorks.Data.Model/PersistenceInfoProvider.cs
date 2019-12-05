@@ -2996,10 +2996,11 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits RakutenOrderSearchEntity's mappings</summary>
 		private void InitRakutenOrderSearchEntityMappings()
 		{
-			this.AddElementMapping("RakutenOrderSearchEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderSearch", 3, 0);
+			this.AddElementMapping("RakutenOrderSearchEntity", @"ShipWorksLocal", @"dbo", "RakutenOrderSearch", 4, 0);
 			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenOrderSearchID", "RakutenOrderSearchID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OrderID", "OrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("RakutenOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 2);
+			this.AddElementFieldMapping("RakutenOrderSearchEntity", "RakutenPackageID", "RakutenPackageID", false, "NVarChar", 36, 0, 0, false, "", null, typeof(System.String), 3);
 		}
 
 		/// <summary>Inits RakutenStoreEntity's mappings</summary>

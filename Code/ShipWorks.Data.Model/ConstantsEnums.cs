@@ -10578,6 +10578,8 @@ namespace ShipWorks.Data.Model
 		OrderID,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>RakutenPackageID. </summary>
+		RakutenPackageID,
 		/// <summary></summary>
 		AmountOfFields
 	}

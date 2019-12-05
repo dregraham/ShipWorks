@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -17,21 +18,24 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
     {
         private readonly ILog log;
         private readonly IRakutenWebClient updateClient;
+        private readonly IRakutenOrderSearchProvider orderSearchProvider;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RakutenOnlineUpdater(IRakutenWebClient updateClient,
+            IRakutenOrderSearchProvider orderSearchProvider,
             Func<Type, ILog> createLogger)
         {
             this.updateClient = updateClient;
+            this.orderSearchProvider = orderSearchProvider;
             log = createLogger(GetType());
         }
 
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public void UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID)
+        public async Task UploadTrackingNumber(IRakutenStoreEntity store, long shipmentID)
         {
             ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
             if (shipment == null)
@@ -47,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
         /// <summary>
         /// Upload the tracking number of the shipment
         /// </summary>
-        public void UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment)
+        public async Task UploadTrackingNumber(IRakutenStoreEntity store, ShipmentEntity shipment)
         {
             if (!shipment.Processed || shipment.Voided)
             {
@@ -76,8 +80,13 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
 
                 try
                 {
-                    // Upload tracking number
-                    updateClient.ConfirmShipping(store, shipment);
+                    var identifiers = await orderSearchProvider.GetOrderIdentifiers(order).ConfigureAwait(false);
+
+                    foreach (var identifier in identifiers)
+                    {
+                        // Upload tracking number
+                        updateClient.ConfirmShipping(store, shipment, identifier);
+                    }
                 }
                 catch (ArgumentException ex)
                 {

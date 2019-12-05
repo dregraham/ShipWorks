@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
 using ShipWorks.Stores.Platforms.Rakuten.DTO.Requests;
+using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 
 namespace ShipWorks.Stores.Platforms.Rakuten
 {
@@ -120,16 +121,9 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Mark order as shipped and upload tracking number
         /// </summary>
-        public async Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment)
+        public async Task<RakutenBaseResponse> ConfirmShipping(IRakutenStoreEntity store, ShipmentEntity shipment, RakutenUploadDetails details)
         {
-            var rakutenOrder = shipment.Order as RakutenOrderEntity;
-
-            if (rakutenOrder == null)
-            {
-                throw new ArgumentException("A non-Rakuten shipment was passed to the ConfirmShipping method.");
-            }
-
-            var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.ChannelOrderID, rakutenOrder.RakutenPackageID);
+            var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, details.OrderNumber, details.PackageID);
 
             var shippingInfo = new RakutenShippingInfo
             {
