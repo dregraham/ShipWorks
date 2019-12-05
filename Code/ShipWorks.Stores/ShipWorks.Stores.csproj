@@ -301,6 +301,7 @@
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenUploadDetails.cs" />
     <Compile Include="Platforms\Rakuten\RakutenCipherKey.cs" />
     <Compile Include="Platforms\Rakuten\RakutenRestClientFactory.cs" />
     <Compile Include="Platforms\Rakuten\RakutenRestRequestFactory.cs" />

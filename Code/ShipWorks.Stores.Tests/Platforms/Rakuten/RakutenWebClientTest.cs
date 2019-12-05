@@ -7,6 +7,7 @@ using RestSharp;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.Rakuten;
 using ShipWorks.Stores.Platforms.Rakuten.DTO;
+using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using Xunit;
 using It = Moq.It;
@@ -58,15 +59,15 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [Fact]
         public async Task ConfirmShipping_ReturnsResponse_WhenNoErrors()
         {
-            RakutenOrderEntity order = new RakutenOrderEntity
+            var shipment = new ShipmentEntity
             {
-                RakutenPackageID = ""
+                ShipmentTypeCode = Shipping.ShipmentTypeCode.FedEx
             };
 
-            ShipmentEntity shipment = new ShipmentEntity
+            var details = new RakutenUploadDetails
             {
-                ShipmentTypeCode = Shipping.ShipmentTypeCode.FedEx,
-                Order = order
+                OrderNumber = "test",
+                PackageID = "test"
             };
 
             IRestResponse<RakutenBaseResponse> response = new RestResponse<RakutenBaseResponse>()
@@ -86,7 +87,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
 
             IRakutenWebClient webClient = mock.Create<RakutenWebClient>();
 
-            RakutenBaseResponse testResponse = await webClient.ConfirmShipping(store, shipment);
+            RakutenBaseResponse testResponse = await webClient.ConfirmShipping(store, shipment, details);
 
             Assert.True(testResponse.Equals(response.Data));
         }

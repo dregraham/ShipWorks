@@ -336,31 +336,31 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             PersonAdapter shipAdapter = new PersonAdapter(orderToSave, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(orderToSave, "Bill");
 
-            LoadAddress(downloadedOrder, shipAdapter);
-            LoadAddress(downloadedOrder, billAdapter);
+            billAdapter.Email = downloadedOrder.AnonymizedEmailAddress;
+            var billingAddress = GetBillingAddress(downloadedOrder);
+
+            LoadAddress(shipAdapter, downloadedOrder.Shipping.DeliveryAddress);
+            LoadAddress(billAdapter, billingAddress);
+
+            // If shipping and billing are the same, copy over the email address
+            if (billAdapter.StreetAll == shipAdapter.StreetAll &&
+                billAdapter.ParsedName == shipAdapter.ParsedName)
+            {
+                shipAdapter.Email = billAdapter.Email;
+            }
         }
+
+        /// <summary>
+        /// Get the address to be used for the billing adapter
+        /// </summary>
+        private RakutenAddress GetBillingAddress(RakutenOrder order) =>
+            order.Shipping.InvoiceAddress ?? order.Shipping.DeliveryAddress;
+
         /// <summary>
         /// Loads the billing address.
         /// </summary>
-        private void LoadAddress(RakutenOrder downloadedOrder, PersonAdapter adapter)
+        private void LoadAddress(PersonAdapter adapter, RakutenAddress address)
         {
-
-            RakutenAddress address;
-            if (adapter.FieldPrefix.Equals("Ship"))
-            {
-                address = downloadedOrder.Shipping.DeliveryAddress;
-            }
-            else if (adapter.FieldPrefix.Equals("Bill") && downloadedOrder.Shipping.InvoiceAddress == null)
-            {
-                address = downloadedOrder.Shipping.DeliveryAddress;
-            }
-            else
-            {
-                address = downloadedOrder.Shipping.InvoiceAddress;
-            }
-
-            adapter.Email = downloadedOrder.AnonymizedEmailAddress;
-
             if (address == null)
             {
                 return;
@@ -380,7 +380,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             adapter.StateProvCode = ParseState(address.StateCode);
             adapter.PostalCode = address.PostalCode;
             adapter.CountryCode = address.CountryCode;
-            adapter.Phone = address.PhoneNumber;      
+            adapter.Phone = address.PhoneNumber;
         }
 
         /// <summary>
@@ -435,10 +435,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// Loads any discounts attached to the order
         /// </summary>
-        private decimal LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder,IOrderElementFactory orderElementFactory)
+        private decimal LoadDiscounts(RakutenOrderEntity orderToSave, RakutenOrder downloadedOrder, IOrderElementFactory orderElementFactory)
         {
             decimal discountAmount = 0;
-            if(downloadedOrder.Campaigns != null)
+            if (downloadedOrder.Campaigns != null)
             {
                 foreach (var campaign in downloadedOrder.Campaigns)
                 {
@@ -458,23 +458,21 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private decimal LoadCampaign(RakutenCampaign campaign, RakutenOrderEntity orderToSave, decimal orderAmount, IOrderElementFactory orderElementFactory)
         {
             var campaignInfo = campaign.CampaignInfo;
-            var orderItem = orderElementFactory.CreateItem(orderToSave);
-            orderItem.Quantity = 1;
-            orderItem.Name = campaign.CampaignName;
+            var orderCharge = orderElementFactory.CreateCharge(orderToSave);
+            orderCharge.Type = "DISCOUNT";
+            orderCharge.Description = campaign.CampaignName;
 
-            decimal discount = 0;
+            decimal discount = 0m;
             if (campaignInfo.DiscountType == "PERCENT_OFF")
             {
-                discount = orderAmount * ((decimal)campaignInfo.DiscountValue / 100);             
-                orderItem.UnitPrice = -discount;
-                
+                discount = orderAmount * ((decimal) campaignInfo.DiscountValue / 100m);
             }
-
             else
             {
                 discount = (decimal) campaignInfo.DiscountValue;
-                orderItem.UnitPrice = -discount;
             }
+
+            orderCharge.Amount = -discount;
 
             return discount;
         }
