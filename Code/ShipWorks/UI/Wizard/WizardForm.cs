@@ -335,6 +335,8 @@ namespace ShipWorks.UI.Wizard
         // List of pages that have been navigated to, so we know when its the first time or not
         private List<WizardPage> firstTimeStepInto = new List<WizardPage>();
 
+        private bool interceptTab = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -993,5 +995,27 @@ namespace ShipWorks.UI.Wizard
         /// Used by the designer to set the current page
         /// </summary>
         internal void SetCurrent(int index) => ShowPage(index);
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Tab)
+            {
+                if (back.Focused)
+                {
+                        next.Focus();
+                    interceptTab = true;
+                    return true;
+                }
+
+                if (next.Focused && interceptTab)
+                {
+                    CurrentPage.Controls[1].Focus();
+                    interceptTab = false;
+                    return true;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
     }
 }
