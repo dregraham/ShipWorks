@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 var order = (RakutenOrderEntity) result.Value;
 
                 order.Store = Store;
-
+                order.ChannelOrderID = rakutenOrder.OrderNumber;
                 orderLoader.LoadOrder(order, rakutenOrder, products, this);
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);

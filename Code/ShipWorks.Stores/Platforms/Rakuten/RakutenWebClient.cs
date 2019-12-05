@@ -129,7 +129,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 throw new ArgumentException("A non-Rakuten shipment was passed to the ConfirmShipping method.");
             }
 
-            var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.OrderNumberComplete, rakutenOrder.RakutenPackageID);
+            var path = string.Format(shippingPath, store.MarketplaceID, store.ShopURL, rakutenOrder.ChannelOrderID, rakutenOrder.RakutenPackageID);
 
             var shippingInfo = new RakutenShippingInfo
             {
