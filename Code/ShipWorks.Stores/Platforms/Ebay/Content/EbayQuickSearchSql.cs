@@ -27,6 +27,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
             string orderIdParamName = context.RegisterParameter(EbayOrderFields.EbayOrderID, searchText);
             string orderSellingMgrRecordParamName = context.RegisterParameter(EbayOrderFields.SellingManagerRecord, searchText);
             string orderItemCodeParamName = context.RegisterParameter(OrderItemFields.Code, searchText);
+            string extendedOrderIdParam = context.RegisterParameter(EbayOrderFields.ExtendedOrderID, searchText);
 
             List<string> selectStatements = new List<string>()
             {
@@ -49,6 +50,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayBuyerID LIKE {buyerIdParamName}");
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE EbayOrderID LIKE {orderIdParamName}");
                 selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE EbayOrderID LIKE {orderIdParamName}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrder] WHERE ExtendedOrderID LIKE {extendedOrderIdParam}");
+                selectStatements.Add($"SELECT OrderId FROM [EbayOrderSearch] WHERE ExtendedOrderID LIKE {extendedOrderIdParam}");
             }
 
             return selectStatements;

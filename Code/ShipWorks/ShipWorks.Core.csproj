@@ -1400,6 +1400,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />

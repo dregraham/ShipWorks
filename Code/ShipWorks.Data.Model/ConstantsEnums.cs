@@ -2826,6 +2826,8 @@ namespace ShipWorks.Data.Model
 		RollupPayPalAddressStatus,
 		///<summary>GuaranteedDelivery. </summary>
 		GuaranteedDelivery,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2940,6 +2942,8 @@ namespace ShipWorks.Data.Model
 		PayPalTransactionID,
 		///<summary>PayPalAddressStatus. </summary>
 		PayPalAddressStatus,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2958,6 +2962,8 @@ namespace ShipWorks.Data.Model
 		SellingManagerRecord,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
