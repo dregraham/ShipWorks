@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating
             }
             else
             {
-                UploadTrackingNumber(store, shipment);
+                await UploadTrackingNumber(store, shipment).ConfigureAwait(false);
             }
         }
 
