@@ -1386,6 +1386,18 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAddStoreWizardPage.Designer.cs">
+      <DependentUpon>ChannelAdvisorAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorExcludeFbaControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
@@ -8495,6 +8507,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Amazon\SFP\AmazonSFPShippingSettingsControl.resx">
       <DependentUpon>AmazonSFPShippingSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorAddStoreWizardPage.resx">
+      <DependentUpon>ChannelAdvisorAddStoreWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
