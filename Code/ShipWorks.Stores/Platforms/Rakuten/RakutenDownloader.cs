@@ -139,6 +139,14 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 }
 
                 await LoadOrder(order, products).ConfigureAwait(false);
+
+                // Add 1 millisecond so Rakuten doesn't send us the same order twice
+                var modifiedDate = order.LastModifiedDate.AddMilliseconds(1);
+
+                if (modifiedDate > downloadStartDate)
+                {
+                    downloadStartDate = modifiedDate;
+                }
             }
 
             return true;
@@ -165,14 +173,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
                 orderLoader.LoadOrder(order, rakutenOrder, products, this);
 
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-
-                // Add 1 millisecond so Rakuten doesn't send us the same order twice
-                var modifiedDate = rakutenOrder.LastModifiedDate.AddMilliseconds(1);
-
-                if (modifiedDate > downloadStartDate)
-                {
-                    downloadStartDate = modifiedDate;
-                }
             }
         }
     }
