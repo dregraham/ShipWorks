@@ -52,14 +52,14 @@
             this.sectionHeader.TabIndex = 15;
             this.sectionHeader.Text = "Download Criteria";
             // 
-            // ChannelAdvisorExcludeDBAControl
+            // ChannelAdvisorExcludeFbaControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.excludeFba);
             this.Controls.Add(this.sectionHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.Name = "ChannelAdvisorExcludeDBAControl";
+            this.Name = "ChannelAdvisorExcludeFbaControl";
             this.Size = new System.Drawing.Size(580, 60);
             this.ResumeLayout(false);
             this.PerformLayout();
