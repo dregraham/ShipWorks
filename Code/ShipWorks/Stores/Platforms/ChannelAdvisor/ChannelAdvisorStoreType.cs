@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
@@ -22,6 +23,7 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Filters;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
@@ -87,6 +89,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AmazonApiRegion = string.Empty;
             caStore.AmazonAuthToken = string.Empty;
             caStore.AmazonMerchantID = string.Empty;
+            caStore.ExcludeFBA = true;
 
             return caStore;
         }
@@ -385,6 +388,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             return editable;
+        }
+
+        public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
+        {
+            return scope.Resolve<IChannelAdvisorWizardPageFactory>().GetWizardPages(scope);
         }
 
         /// <summary>

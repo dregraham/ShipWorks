@@ -1,6 +1,8 @@
-﻿namespace ShipWorks.Stores.Platforms.ChannelAdvisor
+﻿using ShipWorks.Stores.Platforms.ChannelAdvisor;
+
+namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
-    partial class ChannelAdvisorAddStoreWizardPage
+    partial class ChannelAdvisorExcludeFbaWizardPage
     {
         /// <summary> 
         /// Required designer variable.
@@ -39,12 +41,12 @@
             this.excludeFba.Size = new System.Drawing.Size(580, 60);
             this.excludeFba.TabIndex = 0;
             // 
-            // ChannelAdvisorAddStoreWizardPage
+            // ChannelAdvisorExcludeFbaWizardPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.excludeFba);
-            this.Name = "ChannelAdvisorAddStoreWizardPage";
+            this.Name = "ChannelAdvisorExcludeFbaWizardPage";
             this.Size = new System.Drawing.Size(585, 150);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
