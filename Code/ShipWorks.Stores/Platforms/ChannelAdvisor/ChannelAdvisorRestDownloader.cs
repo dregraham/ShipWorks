@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken, true);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken, !caStore.ExcludeFBA);
 
                 string previousLink = String.Empty;
 
