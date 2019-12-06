@@ -4047,6 +4047,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadDaysBack);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ExcludeFBA field instance</summary>
+		public static EntityField2 ExcludeFBA
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ExcludeFBA);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>

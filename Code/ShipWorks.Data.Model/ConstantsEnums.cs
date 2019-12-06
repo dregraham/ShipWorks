@@ -1762,6 +1762,8 @@ namespace ShipWorks.Data.Model
 		RefreshToken,
 		///<summary>DownloadDaysBack. </summary>
 		DownloadDaysBack,
+		///<summary>ExcludeFBA. </summary>
+		ExcludeFBA,
 		/// <summary></summary>
 		AmountOfFields
 	}

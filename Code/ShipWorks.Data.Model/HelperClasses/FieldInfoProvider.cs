@@ -771,6 +771,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadDaysBack", typeof(System.Byte), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, 0, 0, 3);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
