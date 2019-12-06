@@ -18,7 +18,7 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
             return new List<WizardPage>
             {
                 scope.Resolve<ChannelAdvisorStoreSetupControlHost>(),
-                scope.Resolve<ChannelAdvisorExcludeFbaControl>()
+                scope.Resolve<ChannelAdvisorExcludeFbaWizardPage>()
             };
         }
     }

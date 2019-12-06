@@ -8,7 +8,7 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 {
-    public class IChannelAdvisorWizardPageFactory
+    public interface IChannelAdvisorWizardPageFactory
     {
         List<WizardPage> GetWizardPages(ILifetimeScope scope);
     }
