@@ -173,7 +173,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get orders from the start date for the store
         /// </summary>
-        public ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken)
+        public ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken, bool includeExternallyManagedDistributionCenters)
         {
             IHttpVariableRequestSubmitter getOrdersRequestSubmitter = CreateRequest(ordersEndpoint, HttpVerb.Get);
 
@@ -181,11 +181,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             var downloadStartDate = DateTime.UtcNow.AddDays(-clampedDaysBack);
 
-            getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
-            getOrdersRequestSubmitter.Variables.Add("$filter", "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped' OR ShippingStatus eq 'ThirdPartyManaged') AND " +
+
+            string ordersFilter = "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped' OR ShippingStatus eq 'ThirdPartyManaged') AND " +
                 "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
-                "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited') AND " +
-                $"(CreatedDateUtc ge {downloadStartDate.ToString("o")})");
+                "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited')";
+
+
+            if (includeExternallyManagedDistributionCenters)
+            {
+                ordersFilter = "(" + ordersFilter + ")" + "OR DistributionCenterTypeRollup eq 'ExternallyManaged'";
+            }
+
+            ordersFilter += $"AND (CreatedDateUtc ge {downloadStartDate.ToString("o")})";
+                
+            getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+            getOrdersRequestSubmitter.Variables.Add("$filter", ordersFilter);
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
             getOrdersRequestSubmitter.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)");
 
