@@ -29,12 +29,12 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     public class RakutenWebClient : IRakutenWebClient
     {
         private readonly LruCache<string, RakutenProductsResponse> productCache;
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IRakutenRestClientFactory clientFactory;
         private readonly IRakutenRestRequestFactory requestFactory;
         private readonly IInterapptiveOnly interapptiveOnly;
         private readonly ILogEntryFactory logFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
+        private readonly IEncryptionProvider encryptionProvider;
 
         private const string defaultEndpointBase = "https://openapi-rms.global.rakuten.com/2.0";
         private const string shippingPath = "/orders/{0}/{1}/{2}/shipping/{3}";
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             IInterapptiveOnly interapptiveOnly,
             ILogEntryFactory logFactory)
         {
-            this.encryptionProviderFactory = encryptionProviderFactory;
+            this.encryptionProvider = encryptionProviderFactory.CreateRakutenEncryptionProvider();
             this.clientFactory = clientFactory;
             this.requestFactory = requestFactory;
             this.interapptiveOnly = interapptiveOnly;
@@ -192,7 +192,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             log.LogRequest(request, client, "json");
 
-            var authKey = encryptionProviderFactory.CreateRakutenEncryptionProvider().Decrypt(encryptedAuthKey);
+            var authKey = encryptionProvider.Decrypt(encryptedAuthKey);
 
             request.AddHeader("Authorization", $"ESA {authKey}");
 
