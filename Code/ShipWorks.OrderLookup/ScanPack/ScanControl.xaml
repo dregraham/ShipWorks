@@ -7,7 +7,7 @@
              xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance scanPack:ScanPackViewModel}"
-             d:DesignHeight="800" d:DesignWidth="500" >
+             d:DesignHeight="800" d:DesignWidth="500">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,8 +33,7 @@
         <GroupBox Header="Scan"
                   BorderBrush="Black"
                   BorderThickness="2"
-                  FontSize="16"
-                  Background="{x:Static SystemColors.ControlBrush}">
+                  FontSize="20">
             <Grid Margin="10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

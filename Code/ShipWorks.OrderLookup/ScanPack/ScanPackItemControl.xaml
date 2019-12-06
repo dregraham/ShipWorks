@@ -10,7 +10,8 @@
              d:DesignWidth="300"
              d:DataContext="{d:DesignInstance scanPack:ScanPackItem}"
              BorderBrush="Black"
-             BorderThickness="1">
+             BorderThickness="1"
+             FontSize="20">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -36,14 +37,12 @@
             VerticalAlignment="Center"
             Text="{Binding Name}"
             Margin="10 0 10 0"
-            FontSize="20"
             TextWrapping="Wrap"
             TextTrimming="CharacterEllipsis"/>
         <TextBlock
             Grid.Column="2"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            FontSize="24"
             Text="{Binding Quantity, StringFormat='x{0}'}"/>
     </Grid>
 </UserControl>

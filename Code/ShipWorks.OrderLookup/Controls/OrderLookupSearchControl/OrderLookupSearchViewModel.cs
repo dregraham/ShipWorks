@@ -135,7 +135,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
             if (reason == OrderClearReason.NewSearch)
             {
                 ShowSearchMessage = true;
-                SearchMessage = "Loading Order...";
+                SearchMessage = "Loading order...";
             }
             else if (reason == OrderClearReason.ErrorLoadingOrder)
             {

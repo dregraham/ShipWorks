@@ -121,7 +121,7 @@
                 VerticalAlignment="Center"
                 Command="{Binding ResetCommand}"
                 Content="Clear"
-                FontSize="14"
+                FontSize="20"
                 Style="{StaticResource Link}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">

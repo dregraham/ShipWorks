@@ -4,7 +4,6 @@
              xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties;assembly=ShipWorks.UI"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
              xmlns:dd="urn:gong-wpf-dragdrop"
              xmlns:ui="http://schemas.shipworks.com/ui"
              xmlns:scanPack="clr-namespace:ShipWorks.OrderLookup.ScanPack"
