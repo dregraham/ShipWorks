@@ -67,7 +67,7 @@ namespace ShipWorks.UI.WPF
         public void SetAcceptButton(WinForms::Form form)
         {
             var windowFocused = FindWindowFocused(form);
-            if(windowFocused != null)
+            if (windowFocused != null)
             {
                 AcceptButton = form.AcceptButton;
             }           
@@ -80,7 +80,8 @@ namespace ShipWorks.UI.WPF
         {
             if (depObj != null)
             {
-                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                var numChildren = VisualTreeHelper.GetChildrenCount(depObj);
+                for (int i = 0; i < numChildren; i++)
                 {
                     DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
                     if (child != null && child is T)
