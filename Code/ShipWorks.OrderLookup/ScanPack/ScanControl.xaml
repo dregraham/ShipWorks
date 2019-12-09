@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml" />
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Shapes.xaml" />
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/GroupBoxStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="TextBlock">
@@ -60,13 +61,13 @@
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
                                         ConverterParameter={x:Static scanPack:ScanPackState.OrderLoaded}, FallbackValue=Collapsed}"/>
-                        <Path
-                            Style="{StaticResource CheckboxCircle}"
+                        <Path 
+                            Style="{StaticResource Check}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
                                         ConverterParameter={x:Static scanPack:ScanPackState.ScanningItems}, FallbackValue=Collapsed}"/>
                         <Path
-                            Style="{StaticResource CheckboxDecagram}"
+                            Style="{StaticResource CheckboxCircle}"
                             Visibility="{Binding State,
                                         Converter={StaticResource VisibleWhenEqualToParameter},
                                         ConverterParameter={x:Static scanPack:ScanPackState.OrderVerified}, FallbackValue=Collapsed}"/>

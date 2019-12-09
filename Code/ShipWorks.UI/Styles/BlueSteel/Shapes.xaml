@@ -45,6 +45,11 @@
         <Setter Property="Fill" Value="Red"/>
     </Style>
 
+    <Style x:Key="Check" TargetType="{x:Type Path}">
+        <Setter Property="Data" Value="M19,8 L10,17 L5,12 L6.41,10.59 L10,14.17 L17.59,6.58 L19,8"/>
+        <Setter Property="Fill" Value="#48BC23"/>
+    </Style>
+    
     <Style x:Key="CheckboxCircle" TargetType="{x:Type Path}">
         <Setter Property="Data" Value="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z"/>
         <Setter Property="Fill" Value="#48BC23"/>
