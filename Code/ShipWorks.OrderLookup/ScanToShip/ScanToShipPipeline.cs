@@ -5,7 +5,9 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
+using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Settings;
@@ -54,8 +56,30 @@ namespace ShipWorks.OrderLookup.ScanToShip
                     .Where(x => x.Order.Verified)
                     .Do(_ => scanToShipViewModel.IsOrderVerified = true)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                messenger.OfType<ShortcutMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Do(HandleNavigateMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe()
             );
+        }
+        
+        /// <summary>
+        /// Navigate to a specific tab
+        /// </summary>
+        private void HandleNavigateMessage(ShortcutMessage shortcutMessage)
+        {
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.NavigateToPackTab))
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.PackTab;
+            }
+
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.NavigateToShipTab))
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+            }
         }
 
         /// <summary>
