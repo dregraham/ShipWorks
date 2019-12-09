@@ -168,12 +168,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
                     ShowSearchMessage = true;
                     OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
                 }
-                else if (ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true)
-                {
-                    SearchMessage = "This order's shipment has been processed.";
-                    ShowSearchMessage = true;
-                    OrderNumber = ShipmentModel.SelectedOrder.OrderNumberComplete;
-                }
                 else
                 {
                     ClearOrderError(OrderClearReason.Reset);
