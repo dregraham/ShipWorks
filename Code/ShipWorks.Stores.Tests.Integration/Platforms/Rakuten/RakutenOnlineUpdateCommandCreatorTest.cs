@@ -7,9 +7,11 @@ using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Rakuten;
+using ShipWorks.Stores.Platforms.Rakuten.DTO;
 using ShipWorks.Stores.Platforms.Rakuten.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
@@ -46,6 +48,15 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
 #pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<RakutenStoreEntity>(StoreTypeCode.Rakuten).Save();
+
+            // Create a dummy order that serves as a guarantee that we're not just fetching all orders later
+            var dummyOrder = Create.Order(store, context.Customer).Save();
+
+            Create.Shipment(dummyOrder)
+                .AsOther(o => o.Set(x => x.Carrier, "Bad").Set(x => x.Service, "Bad"))
+                .Set(x => x.TrackingNumber, "track-999")
+                .Set(x => x.Processed, true)
+                .Save();
         }
 
         [Fact]
@@ -57,7 +68,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()));
+            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()), Times.Once);
         }
 
         [Fact]
@@ -66,13 +77,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
             ShipmentEntity manualShipment = CreateNormalShipment(2, "track-456", true);
             ShipmentEntity shipment = CreateNormalShipment(1, "track-123", false);
 
-
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { manualShipment.OrderID, shipment.OrderID });
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.ConfirmShipping(new RakutenStoreEntity(), new ShipmentEntity(), new RakutenUploadDetails()), Times.Never);
-            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()));
+            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()), Times.Once);
         }
 
         [Fact]
@@ -84,8 +93,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()));
-            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()));
+            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -97,8 +105,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.ConfirmShipping(new RakutenStoreEntity(), new ShipmentEntity(), new RakutenUploadDetails()), Times.Never);
-            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()));
+            webClient.Verify(x => x.ConfirmShipping(store, shipment, It.IsAny<RakutenUploadDetails>()), Times.Once());
         }
 
         [Fact]
@@ -107,32 +114,12 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Rakuten
             ShipmentEntity normalShipment = CreateNormalShipment(1, "track-123", false);
             ShipmentEntity combinedShipment = CreateCombinedShipment(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
 
-
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalShipment.OrderID, combinedShipment.OrderID });
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
 
-            webClient.Verify(x => x.ConfirmShipping(store, normalShipment, It.IsAny<RakutenUploadDetails>()));
-            webClient.Verify(x => x.ConfirmShipping(store, combinedShipment, It.IsAny<RakutenUploadDetails>()));
-            webClient.Verify(x => x.ConfirmShipping(store, combinedShipment, It.IsAny<RakutenUploadDetails>()));
-        }
-
-        [Fact]
-        public async Task UploadDetails_ContinuesUploading_WhenFailuresOccur()
-        {
-            ShipmentEntity normalShipment = CreateNormalShipment(1, "track-123", false);
-            ShipmentEntity combinedShipment = CreateCombinedShipment(4, "track-456", Tuple.Create(5, false), Tuple.Create(6, false));
-            ShipmentEntity normalShipment2 = CreateNormalShipment(7, "track-789", false);
-
-            webClient.Setup(x => x.ConfirmShipping(It.IsAny<RakutenStoreEntity>(), It.IsAny<ShipmentEntity>(), It.IsAny<RakutenUploadDetails>()))
-                .Throws(new WebException("foo"));
-
-            menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalShipment.OrderID, combinedShipment.OrderID, normalShipment2.OrderID });
-
-            await commandCreator.OnUploadDetails(menuContext.Object, store);
-
-            webClient.Verify(x => x.ConfirmShipping(store, normalShipment, It.IsAny<RakutenUploadDetails>()));
-            webClient.Verify(x => x.ConfirmShipping(store, combinedShipment, It.IsAny<RakutenUploadDetails>()));
+            webClient.Verify(x => x.ConfirmShipping(store, normalShipment, It.IsAny<RakutenUploadDetails>()), Times.Once);
+            webClient.Verify(x => x.ConfirmShipping(store, combinedShipment, It.IsAny<RakutenUploadDetails>()), Times.Exactly(2));
         }
 
         private ShipmentEntity CreateNormalShipment(int orderRoot, string trackingNumber, bool manual)
