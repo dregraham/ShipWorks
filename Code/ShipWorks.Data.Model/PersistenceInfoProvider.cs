@@ -1431,7 +1431,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
 		private void InitFedExProfileEntityMappings()
 		{
-			this.AddElementMapping("FedExProfileEntity", @"ShipWorksLocal", @"dbo", "FedExProfile", 37, 0);
+			this.AddElementMapping("FedExProfileEntity", @"ShipWorksLocal", @"dbo", "FedExProfile", 39, 0);
 			this.AddElementFieldMapping("FedExProfileEntity", "ShippingProfileID", "ShippingProfileID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("FedExProfileEntity", "FedExAccountID", "FedExAccountID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("FedExProfileEntity", "Service", "Service", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -1469,6 +1469,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("FedExProfileEntity", "ReturnsClearance", "ReturnsClearance", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 34);
 			this.AddElementFieldMapping("FedExProfileEntity", "ReferenceFIMS", "ReferenceFIMS", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 35);
 			this.AddElementFieldMapping("FedExProfileEntity", "ThirdPartyConsignee", "ThirdPartyConsignee", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 36);
+			this.AddElementFieldMapping("FedExProfileEntity", "CreateCommercialInvoice", "CreateCommercialInvoice", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 37);
+			this.AddElementFieldMapping("FedExProfileEntity", "FileElectronically", "FileElectronically", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 38);
 		}
 
 		/// <summary>Inits FedExProfilePackageEntity's mappings</summary>

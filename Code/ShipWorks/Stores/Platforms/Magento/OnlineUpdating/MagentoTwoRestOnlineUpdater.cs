@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -19,6 +20,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -40,6 +42,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
     {
         private readonly Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory;
         private readonly IDataProvider dataProvider;
+        private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
         private readonly MagentoStoreEntity store;
         private readonly ILog log;
         private readonly ICombineOrderSearchProvider<MagentoOrderSearchEntity> combineOrderSearchProvider;
@@ -47,15 +50,18 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         /// <summary>
         /// Initializes a new instance of the <see cref="MagentoTwoRestOnlineUpdater"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public MagentoTwoRestOnlineUpdater(MagentoStoreEntity store,
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
             IDataProvider dataProvider,
             IIndex<StoreTypeCode, ICombineOrderSearchProvider<MagentoOrderSearchEntity>> combineOrderSearchProviderFactory,
-            Func<Type, ILog> logFactory)
+            Func<Type, ILog> logFactory, 
+            ICarrierShipmentAdapterFactory shipmentAdapterFactory)
             : base(store)
         {
             this.webClientFactory = webClientFactory;
             this.dataProvider = dataProvider;
+            this.shipmentAdapterFactory = shipmentAdapterFactory;
             this.store = store;
             combineOrderSearchProvider = combineOrderSearchProviderFactory[StoreTypeCode.Magento];
             log = logFactory(typeof(MagentoTwoRestOnlineUpdater));
@@ -341,27 +347,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         /// </summary>
         private string GetShippingService(ShipmentEntity shipment)
         {
-            string service;
-            switch ((ShipmentTypeCode) shipment.ShipmentType)
-            {
-                case ShipmentTypeCode.FedEx:
-                    service = EnumHelper.GetDescription((FedExServiceType) shipment.FedEx.Service);
-                    break;
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    service = EnumHelper.GetDescription((UpsServiceType) shipment.Ups.Service);
-                    break;
-                case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
-                    service = EnumHelper.GetDescription((PostalServiceType) shipment.Postal.Service);
-                    break;
-                default:
-                    service = shipment.Other.Service;
-                    break;
-            }
+            string service = shipmentAdapterFactory.Get(shipment).ServiceTypeName;
 
             Regex rgx = new Regex("[^a-zA-Z0-9 -]");
             return rgx.Replace(service, "");

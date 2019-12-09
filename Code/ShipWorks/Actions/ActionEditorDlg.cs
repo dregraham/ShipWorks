@@ -19,6 +19,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Stores;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
@@ -688,13 +689,16 @@ namespace ShipWorks.Actions
                         return;
                     }
 
-                    // Only allow the create label task if the user has permission to create labels
-                    if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess))
+                    foreach (var store in StoreManager.GetAllStores())
                     {
-                        MessageHelper.ShowError(this, "The 'Create a label' task requires permission to create/edit/process shipments.");
-                        return;
+                        // Only allow the create label task if the user has permission to create labels
+                        if (!UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, store.StoreID))
+                        {
+                            MessageHelper.ShowError(this, $"The 'Create a label' task requires permission to create/edit/process shipments for store named '{store.StoreName}.'");
+                            return;
+                        }
                     }
-
+                    
                     // Warn the user that this task could cost them money
                     MessageHelper.ShowWarning(this, "The 'Create a label' task creates and processes shipments automatically which could result in charges to your carrier postage accounts. " +
                         "Please carefully ensure that your shipping settings are properly configured before enabling or editing this action to avoid any mistakes.");

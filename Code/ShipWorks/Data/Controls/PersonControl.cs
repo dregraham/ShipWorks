@@ -667,7 +667,7 @@ namespace ShipWorks.Data.Controls
                     newAddress.AddressValidationError = string.Empty;
                 }
 
-                if (hasOneEntity && lastValidatedAddress != null)
+                else if (hasOneEntity && lastValidatedAddress != null)
                 {
                     AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
                     lastValidatedAddress.CopyTo(personAddress);

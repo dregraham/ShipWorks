@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
                 service.ReadMultiValue(v => shipment.AmazonSFP.ShippingServiceID = v.ToString());
-                shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+                shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
                 referenceTemplateToken.ReadMultiText(v => shipment.AmazonSFP.Reference1 = v);
 
                 var shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);

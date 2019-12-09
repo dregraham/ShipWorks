@@ -9187,6 +9187,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ThirdPartyConsignee);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.CreateCommercialInvoice field instance</summary>
+		public static EntityField2 CreateCommercialInvoice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.CreateCommercialInvoice);}
+		}
+		/// <summary>Creates a new FedExProfileEntity.FileElectronically field instance</summary>
+		public static EntityField2 FileElectronically
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.FileElectronically);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>

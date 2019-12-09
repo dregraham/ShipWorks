@@ -170,6 +170,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(profile, ShippingProfileFields.ReturnProfileID, applyReturnProfile, returnProfileID);
             AddValueMapping(profile, ShippingProfileFields.ApplyReturnProfile, applyReturnProfileState, applyReturnProfile);
 
+            // Customs
+            AddValueMapping(fedex, FedExProfileFields.CreateCommercialInvoice, createCommercialInvoiceState, createCommercialInvoice);
+            AddValueMapping(fedex, FedExProfileFields.FileElectronically, fileElectronicallyState, fileElectronically);
+
             // Map parent/child relationships
             SetParentCheckBox(includeReturnState, includeReturn, applyReturnProfileState, applyReturnProfile);
             SetParentCheckBox(applyReturnProfileState, applyReturnProfile, applyReturnProfileState, returnProfileID);
@@ -181,6 +185,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             SetParentCheckBox(returnShipmentState, returnShipment, rmaReasonState, labelRmaReason);
             SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, rmaNumber);
             SetParentCheckBox(returnShipmentState, returnShipment, rmaNumberState, labelRmaNumber);
+            SetParentCheckBox(createCommercialInvoiceState, createCommercialInvoice, fileElectronicallyState, fileElectronically);
 
             packagesState.Checked = profile.Packages.Count > 0;
             packagesCount.SelectedIndex = packagesState.Checked ? profile.Packages.Count - 1 : -1;
