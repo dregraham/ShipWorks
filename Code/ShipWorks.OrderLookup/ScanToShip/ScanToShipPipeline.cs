@@ -45,35 +45,17 @@ namespace ShipWorks.OrderLookup.ScanToShip
                 messenger.OfType<ShipmentsProcessedMessage>()
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Where(x => x.Shipments.All(s => s.Shipment.Processed))
-                    .Do(HandleShipmentProcessed)
+                    .Do(_ => scanToShipViewModel.IsOrderProcessed = true)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe(),
 
                 messenger.OfType<OrderVerifiedMessage>()
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Where(x => x.Order.Verified)
-                    .Do(HandleOrderVerified)
+                    .Do(_ => scanToShipViewModel.IsOrderVerified = true)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe()
             );
-        }
-
-        /// <summary>
-        /// Handle the shipment processed message
-        /// </summary>
-        private void HandleShipmentProcessed(ShipmentsProcessedMessage shipmentsProcessedMessage)
-        {
-            // maybe check if same order
-            scanToShipViewModel.IsOrderProcessed = true;
-        }
-
-        /// <summary>
-        /// Handle the shipment processed message
-        /// </summary>
-        private void HandleOrderVerified(OrderVerifiedMessage orderVerifiedMessage)
-        {
-            // maybe check if same order
-            scanToShipViewModel.IsOrderVerified = true;
         }
 
         /// <summary>
