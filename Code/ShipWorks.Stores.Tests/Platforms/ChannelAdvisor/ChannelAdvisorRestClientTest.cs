@@ -30,6 +30,8 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         private readonly Mock<IHttpResponseReader> responseReader;
 
+        private const string IncludeFbaFilter = "OR DistributionCenterTypeRollup eq 'ExternallyManaged'";
+
         public ChannelAdvisorRestClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -190,6 +192,24 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
             testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
+        }
+
+        [Fact]
+        public void GetOrders_IncludesFbaOrders_WhenSpecified()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(1, "token", true);
+
+            variableRequestSubmitter.Verify(s=>s.Variables.Add("$filter", It.Is<string>(v=>v.Contains(IncludeFbaFilter))), Times.Once);
+        }
+
+        [Fact]
+        public void GetOrders_DoesNotIncludeFbaOrders_WhenSpecified()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(1, "token", false);
+
+            variableRequestSubmitter.Verify(s => s.Variables.Add("$filter", It.Is<string>(v => v.Contains(IncludeFbaFilter))), Times.Never);
         }
 
         [Fact]

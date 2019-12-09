@@ -12,6 +12,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Get the wizard pages.
         /// </summary>
-        List<WizardPage> GetWizardPages(ILifetimeScope scope);
+        List<WizardPage> GetWizardPages();
     }
 }

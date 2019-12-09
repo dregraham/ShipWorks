@@ -181,18 +181,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             var downloadStartDate = DateTime.UtcNow.AddDays(-clampedDaysBack);
 
-
             string ordersFilter = "(ShippingStatus eq 'Unshipped' OR ShippingStatus eq 'PendingShipment' OR ShippingStatus eq 'PartiallyShipped' OR ShippingStatus eq 'ThirdPartyManaged') AND " +
                 "(CheckoutStatus eq 'Completed' OR CheckoutStatus eq 'CompletedAndVisited' OR CheckoutStatus eq 'CompletedOffline') AND " +
                 "(PaymentStatus eq 'Cleared' OR PaymentStatus eq 'Submitted' OR PaymentStatus eq 'Deposited')";
-
 
             if (includeExternallyManagedDistributionCenters)
             {
                 ordersFilter = "(" + ordersFilter + ")" + "OR DistributionCenterTypeRollup eq 'ExternallyManaged'";
             }
 
-            ordersFilter += $"AND (CreatedDateUtc ge {downloadStartDate.ToString("o")})";
+            ordersFilter += $"AND (CreatedDateUtc ge {downloadStartDate:o})";
                 
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             getOrdersRequestSubmitter.Variables.Add("$filter", ordersFilter);

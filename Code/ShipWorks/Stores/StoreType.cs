@@ -252,7 +252,6 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Create the pages, in order, that will be displayed in the Add Store Wizard
         /// </summary>
-        /// <param name="scope"></param>
         public virtual List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
             return CreateAddStoreWizardPagesViaIoC(scope);

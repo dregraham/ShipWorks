@@ -38,6 +38,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         private readonly IDownloadEntity downloadLog;
         private readonly Mock<IChannelAdvisorRestClient> client;
         private readonly ChannelAdvisorOrder order;
+        private readonly ChannelAdvisorStoreEntity store;
 
         public ChannelAdvisorRestDownloaderTest(DatabaseFixture db)
         {
@@ -52,7 +53,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
             mock = context.Mock;
             mockProgressReporter = mock.Mock<IProgressReporter>();
 
-            var store = Create.Store<ChannelAdvisorStoreEntity>()
+            store = Create.Store<ChannelAdvisorStoreEntity>()
                 .WithAddress("123 Main St.", "Suite 456", "St. Louis", "MO", "63123", "US")
                 .Set(x => x.StoreName, "Channel Store")
                 .Set(x => x.StoreTypeCode = StoreTypeCode.ChannelAdvisor)
@@ -121,6 +122,17 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ChannelAdvisor
         {
             await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
             client.Verify(c => c.GetDistributionCenters("refreshToken"), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(true,false)]
+        [InlineData(false, true)]
+        public async Task Download_RequestsFbaOrders_WhenStoreSetToDownloadFbaOrders(bool excludeFba, bool includeExternallyManagedDistributionCenters)
+        {
+            Modify.Store(store).Set(s => s.ExcludeFBA = excludeFba).Save();
+            await testObject.Download(mockProgressReporter.Object, downloadLog, dbConnection);
+            client.Verify(c=>c.GetOrders(It.IsAny<int>(), It.IsAny<string>(), includeExternallyManagedDistributionCenters), 
+                Times.Once);
         }
 
         [Fact]

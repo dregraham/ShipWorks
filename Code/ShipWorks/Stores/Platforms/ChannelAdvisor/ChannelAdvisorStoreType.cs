@@ -390,9 +390,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return editable;
         }
 
+        /// <summary>
+        /// Create the pages, in order, that will be displayed in the Add Store Wizard
+        /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages(ILifetimeScope scope)
         {
-            return scope.Resolve<IChannelAdvisorWizardPageFactory>().GetWizardPages(scope);
+            return scope.Resolve<IChannelAdvisorWizardPageFactory>().GetWizardPages();
         }
 
         /// <summary>
