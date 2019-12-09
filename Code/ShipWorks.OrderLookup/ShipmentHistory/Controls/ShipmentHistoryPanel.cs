@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Users;
 

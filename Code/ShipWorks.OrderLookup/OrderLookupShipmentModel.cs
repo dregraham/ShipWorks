@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.FieldManager;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.OrderLookup.ShipmentModelPipelines;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -375,6 +376,7 @@ namespace ShipWorks.OrderLookup
                 ShipmentLoaded?.Invoke(this, EventArgs.Empty);
                 messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
                 ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
+                messenger.Send(new ScanToShipShipmentLoadedMessage(this, ShipmentAdapter.Shipment));
             }
         }
 

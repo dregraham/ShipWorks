@@ -5,12 +5,15 @@ using System.Reactive.Linq;
 using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Settings;
+using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup.ScanToShip
 {
@@ -24,16 +27,23 @@ namespace ShipWorks.OrderLookup.ScanToShip
         private readonly ILog log;
         private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly IMainForm mainForm;
+        private readonly ILicenseService licenseService;
+        private readonly IUserSession userSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanToShipPipeline(IMessenger messenger, IScanToShipViewModel scanToShipViewModel, IMainForm mainForm, Func<Type, ILog> createLogger)
+        public ScanToShipPipeline(IMessenger messenger, IScanToShipViewModel scanToShipViewModel, IMainForm mainForm,
+                                  ILicenseService licenseService, IUserSession userSession, Func<Type, ILog> createLogger)
         {
             this.messenger = messenger;
             this.scanToShipViewModel = scanToShipViewModel;
             this.mainForm = mainForm;
+            this.licenseService = licenseService;
+            this.userSession = userSession;
             log = createLogger(GetType());
+
+            scanToShipViewModel.SelectedTab = (int) (licenseService.IsHub ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
         }
 
         /// <summary>
@@ -44,6 +54,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
             Dispose();
 
             subscriptions = new CompositeDisposable(
+
+                messenger.OfType<ScanToShipShipmentLoadedMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Do(HandleShipmentLoadedMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
                 messenger.OfType<ShipmentsProcessedMessage>()
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Where(x => x.Shipments.All(s => s.Shipment.Processed))
@@ -54,7 +71,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
                 messenger.OfType<OrderVerifiedMessage>()
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Where(x => x.Order.Verified)
-                    .Do(_ => scanToShipViewModel.IsOrderVerified = true)
+                    .Do(HandleOrderVerifiedMessage)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe(),
 
@@ -64,6 +81,42 @@ namespace ShipWorks.OrderLookup.ScanToShip
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe()
             );
+        }
+
+        /// <summary>
+        /// Does the user have the auto advance setting enabled
+        /// </summary>
+        private bool IsAutoAdvanceEnabled => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
+
+        /// <summary>
+        /// Handle the shipment loaded message
+        /// </summary>
+        private void HandleShipmentLoadedMessage(ScanToShipShipmentLoadedMessage shipmentLoadedMessage)
+        {
+            scanToShipViewModel.ShowVerificationError = false;
+            scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment.Order.Verified ?? false;
+            scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
+
+            if (IsAutoAdvanceEnabled)
+            {
+                scanToShipViewModel.SelectedTab = (int) (scanToShipViewModel.IsOrderVerified ?
+                    ScanToShipTab.ShipTab :
+                    ScanToShipTab.PackTab);
+            }
+        }
+
+        /// <summary>
+        /// Handle the order verified message
+        /// </summary>
+        private void HandleOrderVerifiedMessage(OrderVerifiedMessage orderVerifiedMessage)
+        {
+            scanToShipViewModel.ShowVerificationError = false;
+            scanToShipViewModel.IsOrderVerified = true;
+
+            if (IsAutoAdvanceEnabled)
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+            }
         }
         
         /// <summary>

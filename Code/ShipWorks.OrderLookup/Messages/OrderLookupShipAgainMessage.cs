@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 
-namespace ShipWorks.OrderLookup
+namespace ShipWorks.OrderLookup.Messages
 {
     /// <summary>
     /// Request that a shipment be shipped again

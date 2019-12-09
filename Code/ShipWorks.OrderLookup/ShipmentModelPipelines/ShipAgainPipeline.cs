@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 
