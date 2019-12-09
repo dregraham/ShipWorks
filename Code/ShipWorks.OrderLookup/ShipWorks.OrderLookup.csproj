@@ -362,7 +362,9 @@
     <Compile Include="ScanToShip\ScanToShipControlHost.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ScanToShip\ScanToShipPipeline.cs" />
     <Compile Include="ScanToShip\ScanToShipTab.cs" />
+    <Compile Include="ScanToShip\ScanToShipTabItem.cs" />
     <Compile Include="ScanToShip\ScanToShipViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
@@ -638,6 +640,10 @@
     <Page Include="ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\ScanPackItemControl.xaml" />
     <Page Include="ScanToShip\ScanToShipControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScanToShip\ScanToShipTabItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -135,7 +135,7 @@ namespace ShipWorks.OrderLookup
                 messenger.OfType<OrderLookupClearOrderMessage>()
                 .Where(x => CanProcessSearchMessage())
                 .Where(x => x.Reason == OrderClearReason.Reset)
-                .Do(x => scanToShipViewModel.ScanPackViewModel.Reset())
+                .Do(x => scanToShipViewModel.Reset())
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
