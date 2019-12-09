@@ -3,7 +3,7 @@ GO
 IF NOT EXISTS(SELECT column_id FROM sys.all_columns WHERE object_id = OBJECT_ID('EbayOrder') AND [name] = 'ExtendedOrderID')
 BEGIN
 	ALTER TABLE EbayOrder
-		ADD ExtendedOrderID VARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrder_ExtendedOrderID] DEFAULT('')
+		ADD ExtendedOrderID NVARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrder_ExtendedOrderID] DEFAULT('')
 END
 GO
 
@@ -12,7 +12,7 @@ GO
 IF NOT EXISTS(SELECT column_id FROM sys.all_columns WHERE object_id = OBJECT_ID('EbayOrderItem') AND [name] = 'ExtendedOrderID')
 BEGIN
 	ALTER TABLE EbayOrderItem
-		ADD ExtendedOrderID VARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrderItem_ExtendedOrderID] DEFAULT('')
+		ADD ExtendedOrderID NVARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrderItem_ExtendedOrderID] DEFAULT('')
 END
 GO
 
@@ -21,7 +21,7 @@ GO
 IF NOT EXISTS(SELECT column_id FROM sys.all_columns WHERE object_id = OBJECT_ID('EbayOrderSearch') AND [name] = 'ExtendedOrderID')
 BEGIN
 	ALTER TABLE EbayOrderSearch
-		ADD ExtendedOrderID VARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrderSearch_ExtendedOrderID] DEFAULT('')
+		ADD ExtendedOrderID NVARCHAR(25) NOT NULL CONSTRAINT [DF_EbayOrderSearch_ExtendedOrderID] DEFAULT('')
 END
 GO
 

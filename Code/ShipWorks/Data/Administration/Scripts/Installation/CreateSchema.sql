@@ -183,7 +183,7 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupPayPalAddressStatus] [int] NULL,
 [GuaranteedDelivery] [bit] NOT NULL,
-[ExtendedOrderID] VARCHAR(25) NOT NULL
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -1676,7 +1676,7 @@ CREATE TABLE [dbo].[EbayOrderItem]
 [MyEbayShipped] [bit] NOT NULL,
 [PayPalTransactionID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PayPalAddressStatus] [int] NOT NULL,
-[ExtendedOrderID] VARCHAR(25) NOT NULL
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderItem] on [dbo].[EbayOrderItem]'
@@ -6814,7 +6814,7 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellingManagerRecord] [int] NULL,
 [OriginalOrderID] [bigint] NOT NULL,
-[ExtendedOrderID] VARCHAR(25) NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
