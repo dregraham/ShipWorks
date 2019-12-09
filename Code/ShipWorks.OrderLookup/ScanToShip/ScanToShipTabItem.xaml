@@ -15,7 +15,7 @@
                     <Grid x:Name="templateRoot" SnapsToDevicePixels="True">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Border x:Name="mainBorder" 
@@ -34,14 +34,14 @@
                                           RecognizesAccessKey="True"
                                           HorizontalAlignment="Center"
                                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"
+                                          VerticalAlignment="Center"
                                           TextBlock.FontSize="20"
                                           TextBlock.FontWeight="Bold"
                                           Grid.Column="1"/>
                         <Viewbox Grid.Column="2"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Center"
-                                 Margin="5">
+                                 Margin="0 5 3 5">
                             <Grid>
                                 <Path Style="{StaticResource CheckboxCircle}" Visibility="{TemplateBinding Success, Converter={StaticResource BoolToVis}}"/>
                                 <Path Style="{StaticResource Alert}" Visibility="{TemplateBinding Error, Converter={StaticResource BoolToVis}}"/>
