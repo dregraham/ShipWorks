@@ -3,8 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
@@ -60,11 +58,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     refreshToken = redirectTokenResult.Value.refreshToken;
                 }
 
-                logEntry.LogRequest(restRequest, "json");
+                IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
+
+                logEntry.LogRequest(restRequest, restClient, "json");
 
                 restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
-
-                IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
 
                 restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
                 logEntry.LogResponse(restResponse, "json");

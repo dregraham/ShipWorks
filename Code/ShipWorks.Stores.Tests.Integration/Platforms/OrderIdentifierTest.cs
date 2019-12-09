@@ -22,6 +22,7 @@ using ShipWorks.Stores.Platforms.MarketplaceAdvisor;
 using ShipWorks.Stores.Platforms.NetworkSolutions;
 using ShipWorks.Stores.Platforms.OrderMotion;
 using ShipWorks.Stores.Platforms.PayPal;
+using ShipWorks.Stores.Platforms.Rakuten;
 using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Stores.Platforms.Shopify;
 using ShipWorks.Stores.Platforms.ThreeDCart;
@@ -188,6 +189,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.PayPal, typeof(PayPalOrderIdentifier) },
             { StoreTypeCode.PowersportsSupport, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.PrestaShop, typeof(AlphaNumericOrderIdentifier) },
+            { StoreTypeCode.Rakuten, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.RevolutionParts, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.SearchFit, typeof(AlphaNumericOrderIdentifier) },
             { StoreTypeCode.Sears, typeof(SearsOrderIdentifier) },

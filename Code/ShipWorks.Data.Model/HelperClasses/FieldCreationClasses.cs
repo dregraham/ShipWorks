@@ -24314,6 +24314,701 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity RakutenOrderEntity</summary>
+	public partial class RakutenOrderFields
+	{
+		/// <summary>Creates a new RakutenOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID_Order
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderID_Order);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.CustomerID field instance</summary>
+		public static EntityField2 CustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.CustomerID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OrderNumber field instance</summary>
+		public static EntityField2 OrderNumber
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderNumber);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OrderNumberComplete field instance</summary>
+		public static EntityField2 OrderNumberComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderNumberComplete);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OrderDate field instance</summary>
+		public static EntityField2 OrderDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderDate);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OrderTotal field instance</summary>
+		public static EntityField2 OrderTotal
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderTotal);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OnlineLastModified field instance</summary>
+		public static EntityField2 OnlineLastModified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OnlineLastModified);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OnlineCustomerID field instance</summary>
+		public static EntityField2 OnlineCustomerID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OnlineCustomerID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OnlineStatus field instance</summary>
+		public static EntityField2 OnlineStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OnlineStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OnlineStatusCode field instance</summary>
+		public static EntityField2 OnlineStatusCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OnlineStatusCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RequestedShipping field instance</summary>
+		public static EntityField2 RequestedShipping
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RequestedShipping);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillFirstName field instance</summary>
+		public static EntityField2 BillFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillFirstName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillMiddleName field instance</summary>
+		public static EntityField2 BillMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillMiddleName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillLastName field instance</summary>
+		public static EntityField2 BillLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillLastName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillCompany field instance</summary>
+		public static EntityField2 BillCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillCompany);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillStreet1 field instance</summary>
+		public static EntityField2 BillStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillStreet1);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillStreet2 field instance</summary>
+		public static EntityField2 BillStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillStreet2);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillStreet3 field instance</summary>
+		public static EntityField2 BillStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillStreet3);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillCity field instance</summary>
+		public static EntityField2 BillCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillCity);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillStateProvCode field instance</summary>
+		public static EntityField2 BillStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillStateProvCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillPostalCode field instance</summary>
+		public static EntityField2 BillPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillPostalCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillCountryCode field instance</summary>
+		public static EntityField2 BillCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillCountryCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillPhone field instance</summary>
+		public static EntityField2 BillPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillPhone);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillFax field instance</summary>
+		public static EntityField2 BillFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillFax);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillEmail field instance</summary>
+		public static EntityField2 BillEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillEmail);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillWebsite field instance</summary>
+		public static EntityField2 BillWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillWebsite);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 BillAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillAddressValidationStatus field instance</summary>
+		public static EntityField2 BillAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillAddressValidationStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillAddressValidationError field instance</summary>
+		public static EntityField2 BillAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillAddressValidationError);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillResidentialStatus field instance</summary>
+		public static EntityField2 BillResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillResidentialStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillPOBox field instance</summary>
+		public static EntityField2 BillPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillPOBox);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillUSTerritory field instance</summary>
+		public static EntityField2 BillUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillUSTerritory);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillMilitaryAddress field instance</summary>
+		public static EntityField2 BillMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillMilitaryAddress);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipFirstName field instance</summary>
+		public static EntityField2 ShipFirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipFirstName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipMiddleName field instance</summary>
+		public static EntityField2 ShipMiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipMiddleName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipLastName field instance</summary>
+		public static EntityField2 ShipLastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipLastName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipCompany field instance</summary>
+		public static EntityField2 ShipCompany
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipCompany);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipStreet1 field instance</summary>
+		public static EntityField2 ShipStreet1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipStreet1);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipStreet2 field instance</summary>
+		public static EntityField2 ShipStreet2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipStreet2);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipStreet3 field instance</summary>
+		public static EntityField2 ShipStreet3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipStreet3);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipCity field instance</summary>
+		public static EntityField2 ShipCity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipCity);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipStateProvCode field instance</summary>
+		public static EntityField2 ShipStateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipStateProvCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipPostalCode field instance</summary>
+		public static EntityField2 ShipPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipPostalCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipCountryCode field instance</summary>
+		public static EntityField2 ShipCountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipCountryCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipPhone field instance</summary>
+		public static EntityField2 ShipPhone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipPhone);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipFax field instance</summary>
+		public static EntityField2 ShipFax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipFax);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipEmail field instance</summary>
+		public static EntityField2 ShipEmail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipEmail);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipWebsite field instance</summary>
+		public static EntityField2 ShipWebsite
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipWebsite);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipAddressValidationSuggestionCount field instance</summary>
+		public static EntityField2 ShipAddressValidationSuggestionCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipAddressValidationSuggestionCount);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipAddressValidationStatus field instance</summary>
+		public static EntityField2 ShipAddressValidationStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipAddressValidationStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipAddressValidationError field instance</summary>
+		public static EntityField2 ShipAddressValidationError
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipAddressValidationError);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipResidentialStatus field instance</summary>
+		public static EntityField2 ShipResidentialStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipResidentialStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipPOBox field instance</summary>
+		public static EntityField2 ShipPOBox
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipPOBox);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipUSTerritory field instance</summary>
+		public static EntityField2 ShipUSTerritory
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipUSTerritory);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipMilitaryAddress field instance</summary>
+		public static EntityField2 ShipMilitaryAddress
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipMilitaryAddress);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemCount field instance</summary>
+		public static EntityField2 RollupItemCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemCount);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemName field instance</summary>
+		public static EntityField2 RollupItemName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemCode field instance</summary>
+		public static EntityField2 RollupItemCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemCode);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemSKU field instance</summary>
+		public static EntityField2 RollupItemSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemSKU);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemLocation field instance</summary>
+		public static EntityField2 RollupItemLocation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemLocation);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemQuantity field instance</summary>
+		public static EntityField2 RollupItemQuantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemQuantity);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupItemTotalWeight field instance</summary>
+		public static EntityField2 RollupItemTotalWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupItemTotalWeight);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RollupNoteCount field instance</summary>
+		public static EntityField2 RollupNoteCount
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RollupNoteCount);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillNameParseStatus field instance</summary>
+		public static EntityField2 BillNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillNameParseStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.BillUnparsedName field instance</summary>
+		public static EntityField2 BillUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.BillUnparsedName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipNameParseStatus field instance</summary>
+		public static EntityField2 ShipNameParseStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipNameParseStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipUnparsedName field instance</summary>
+		public static EntityField2 ShipUnparsedName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipUnparsedName);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipSenseHashKey field instance</summary>
+		public static EntityField2 ShipSenseHashKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipSenseHashKey);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipSenseRecognitionStatus field instance</summary>
+		public static EntityField2 ShipSenseRecognitionStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipSenseRecognitionStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipAddressType field instance</summary>
+		public static EntityField2 ShipAddressType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipAddressType);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.CombineSplitStatus field instance</summary>
+		public static EntityField2 CombineSplitStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.CombineSplitStatus);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ChannelOrderID field instance</summary>
+		public static EntityField2 ChannelOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ChannelOrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.ShipByDate field instance</summary>
+		public static EntityField2 ShipByDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.ShipByDate);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom1 field instance</summary>
+		public static EntityField2 Custom1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom1);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom2 field instance</summary>
+		public static EntityField2 Custom2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom2);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom3 field instance</summary>
+		public static EntityField2 Custom3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom3);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom4 field instance</summary>
+		public static EntityField2 Custom4
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom4);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom5 field instance</summary>
+		public static EntityField2 Custom5
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom5);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.HubOrderID field instance</summary>
+		public static EntityField2 HubOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.HubOrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.HubSequence);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Verified field instance</summary>
+		public static EntityField2 Verified
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Verified);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.VerifiedBy field instance</summary>
+		public static EntityField2 VerifiedBy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.VerifiedBy);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.VerifiedDate field instance</summary>
+		public static EntityField2 VerifiedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.VerifiedDate);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom6 field instance</summary>
+		public static EntityField2 Custom6
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom6);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom7 field instance</summary>
+		public static EntityField2 Custom7
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom7);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom8 field instance</summary>
+		public static EntityField2 Custom8
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom8);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom9 field instance</summary>
+		public static EntityField2 Custom9
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom9);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.Custom10 field instance</summary>
+		public static EntityField2 Custom10
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.Custom10);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderEntity.RakutenPackageID field instance</summary>
+		public static EntityField2 RakutenPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderFieldIndex.RakutenPackageID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity RakutenOrderSearchEntity</summary>
+	public partial class RakutenOrderSearchFields
+	{
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenOrderSearchID field instance</summary>
+		public static EntityField2 RakutenOrderSearchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenOrderSearchID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.OriginalOrderID field instance</summary>
+		public static EntityField2 OriginalOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new RakutenOrderSearchEntity.RakutenPackageID field instance</summary>
+		public static EntityField2 RakutenPackageID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenOrderSearchFieldIndex.RakutenPackageID);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity RakutenStoreEntity</summary>
+	public partial class RakutenStoreFields
+	{
+		/// <summary>Creates a new RakutenStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID_Store
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.StoreID_Store);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.License field instance</summary>
+		public static EntityField2 License
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.License);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Edition field instance</summary>
+		public static EntityField2 Edition
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Edition);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.TypeCode field instance</summary>
+		public static EntityField2 TypeCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.TypeCode);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Enabled field instance</summary>
+		public static EntityField2 Enabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Enabled);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.SetupComplete field instance</summary>
+		public static EntityField2 SetupComplete
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.SetupComplete);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.StoreName field instance</summary>
+		public static EntityField2 StoreName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.StoreName);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Company);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.City);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Fax field instance</summary>
+		public static EntityField2 Fax
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Fax);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Email);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.Website);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.AutoDownload field instance</summary>
+		public static EntityField2 AutoDownload
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.AutoDownload);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.AutoDownloadMinutes field instance</summary>
+		public static EntityField2 AutoDownloadMinutes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.AutoDownloadMinutes);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.AutoDownloadOnlyAway field instance</summary>
+		public static EntityField2 AutoDownloadOnlyAway
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.AutoDownloadOnlyAway);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.DomesticAddressValidationSetting field instance</summary>
+		public static EntityField2 DomesticAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.DomesticAddressValidationSetting);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.InternationalAddressValidationSetting field instance</summary>
+		public static EntityField2 InternationalAddressValidationSetting
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.InternationalAddressValidationSetting);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ComputerDownloadPolicy field instance</summary>
+		public static EntityField2 ComputerDownloadPolicy
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ComputerDownloadPolicy);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.DefaultEmailAccountID field instance</summary>
+		public static EntityField2 DefaultEmailAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.DefaultEmailAccountID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ManualOrderPrefix field instance</summary>
+		public static EntityField2 ManualOrderPrefix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ManualOrderPrefix);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ManualOrderPostfix field instance</summary>
+		public static EntityField2 ManualOrderPostfix
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ManualOrderPostfix);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.InitialDownloadDays field instance</summary>
+		public static EntityField2 InitialDownloadDays
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.InitialDownloadDays);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.InitialDownloadOrder field instance</summary>
+		public static EntityField2 InitialDownloadOrder
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.InitialDownloadOrder);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.InsureShipClientID field instance</summary>
+		public static EntityField2 InsureShipClientID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.InsureShipClientID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.InsureShipApiKey field instance</summary>
+		public static EntityField2 InsureShipApiKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.InsureShipApiKey);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.WarehouseStoreID field instance</summary>
+		public static EntityField2 WarehouseStoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.WarehouseStoreID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.StoreID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.AuthKey field instance</summary>
+		public static EntityField2 AuthKey
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.AuthKey);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.MarketplaceID field instance</summary>
+		public static EntityField2 MarketplaceID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.MarketplaceID);}
+		}
+		/// <summary>Creates a new RakutenStoreEntity.ShopURL field instance</summary>
+		public static EntityField2 ShopURL
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ShopURL);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity ResourceEntity</summary>
 	public partial class ResourceFields
 	{

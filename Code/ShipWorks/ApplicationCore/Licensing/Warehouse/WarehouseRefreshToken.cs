@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using Newtonsoft.Json;
 using RestSharp;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -32,7 +32,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public async Task<GenericResult<TokenResponse>> RefreshToken(string refreshToken)
         {
-            WebClientEnvironment  webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            WebClientEnvironment webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
             IRestRequest restRequest = new RestRequest(WarehouseEndpoints.RefreshToken, Method.POST)
             {
                 RequestFormat = DataFormat.Json
@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, "RefreshToken");
-            logEntry.LogRequest(restRequest, "json");
+            logEntry.LogRequest(restRequest, restClient, "json");
 
             IRestResponse restResponse = await restClient.ExecuteTaskAsync(restRequest)
                 .ConfigureAwait(false);

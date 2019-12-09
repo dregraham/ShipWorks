@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml;
 using Interapptive.Shared.Net;
 using Rebex.Mail;
+using RestSharp;
 using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
@@ -59,6 +60,22 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.AppDomainHelpers
         }
 
         public void LogRequest(MailMessage mailMessage)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Log an IRestRequest
+        /// </summary>
+        public void LogRequest(IRestRequest request, IRestClient client, string extension)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Log an IRestResponse
+        /// </summary>
+        public void LogResponse(IRestResponse response, string extension)
         {
             throw new NotImplementedException();
         }

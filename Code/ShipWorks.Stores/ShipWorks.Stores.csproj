@@ -282,16 +282,54 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
+    <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />
+    <Compile Include="Platforms\Rakuten\Content\RakutenSplitOrderAction.cs" />
+    <Compile Include="Platforms\Rakuten\CoreExtensions\Actions\RakutenShipmentUploadTask.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenCampaign.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOptionalCheckoutInfo.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenBaseResponse.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenPayment.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenProductsResponse.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenShopKey.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetProductsRequest.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenPatchOperation.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
+    <Compile Include="Platforms\Rakuten\Enums\RakutenOrderStatus.cs" />
+    <Compile Include="Platforms\Rakuten\IRakutenRestClientFactory.cs" />
+    <Compile Include="Platforms\Rakuten\IRakutenRestRequestFactory.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\IRakutenOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOrderSearchProvider.cs" />
+    <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenUploadDetails.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenCipherKey.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenRestClientFactory.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenRestRequestFactory.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenStoreType.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockStore.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockStoreDtoFactory.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseItem.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrder.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenOrderLoader.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOrder.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenOrderItem.cs" />
+    <Compile Include="Platforms\Rakuten\DTO\RakutenShipment.cs" />
+    <Compile Include="Platforms\Rakuten\IRakutenDownloader.cs" />
+    <Compile Include="Platforms\Rakuten\IRakutenWebClient.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenDownloader.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStoreDtoFactory.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseItem.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrder.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrderFactory.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
+    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\IWalmartWebClientSettings.cs" />
     <Compile Include="Platforms\Walmart\Warehouse\WalmartStore.cs" />
@@ -968,6 +1006,7 @@
     <Compile Include="Warehouse\IStoreDtoFactory.cs" />
     <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
+    <Compile Include="Warehouse\StoreData\RakutenStore.cs" />
     <Compile Include="Warehouse\UploadOrdersRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\EbayStore.cs" />
@@ -1037,6 +1076,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

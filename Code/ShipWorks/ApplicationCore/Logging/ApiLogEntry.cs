@@ -35,7 +35,7 @@ namespace ShipWorks.ApplicationCore.Logging
         ApiLogEncryption encryption = ApiLogEncryption.Default;
 
         // The name of the log entry. Used as a base name for result file.
-        string name;
+        readonly string name;
 
         // The entry number of this object
         int lognumber = -1;
@@ -44,8 +44,8 @@ namespace ShipWorks.ApplicationCore.Logging
         static int logcount = 0;
 
         // For private log source encryption
-        static byte[] cryptoKey = new byte[] { 138, 93, 185, 133, 67, 44, 244, 240, 16, 54, 134, 138, 120, 144, 76, 213, 141, 89, 88, 153, 107, 76, 73, 73, 148, 17, 198, 118, 61, 30, 100, 146 };
-        static byte[] cryptoIV = new byte[] { 232, 28, 7, 50, 134, 234, 13, 195, 111, 182, 111, 224, 92, 44, 70, 237 };
+        static readonly byte[] cryptoKey = new byte[] { 138, 93, 185, 133, 67, 44, 244, 240, 16, 54, 134, 138, 120, 144, 76, 213, 141, 89, 88, 153, 107, 76, 73, 73, 148, 17, 198, 118, 61, 30, 100, 146 };
+        static readonly byte[] cryptoIV = new byte[] { 232, 28, 7, 50, 134, 234, 13, 195, 111, 182, 111, 224, 92, 44, 70, 237 };
 
         /// <summary>
         /// Constructor.
@@ -122,7 +122,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Log an IRestRequest
         /// </summary>
-        public void LogRequest(IRestRequest request, string extension)
+        public void LogRequest(IRestRequest request, IRestClient client, string extension)
         {
             var requestToLog = new
             {
@@ -134,9 +134,10 @@ namespace ShipWorks.ApplicationCore.Logging
                     type = parameter.Type.ToString()
                 }),
                 method = request.Method.ToString(),
+                uri = client.BuildUri(request),
             };
 
-            string toLog = JsonConvert.SerializeObject(requestToLog);
+            string toLog = request.JsonSerializer.Serialize(requestToLog);
 
             WriteLog(toLog, extension, ApiLogCategory.Request, null);
         }
