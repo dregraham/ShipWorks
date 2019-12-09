@@ -253,17 +253,17 @@
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.designer.cs">
+      <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.Designer.cs">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.Designer.cs">
-      <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAuthorizationControl.xaml.cs">
       <DependentUpon>ChannelAdvisorRestAuthorizationControl.xaml</DependentUpon>
@@ -659,11 +659,11 @@
     <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
-      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.resx">
       <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
+      <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorRestAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorRestAccountSettingsControl.cs</DependentUpon>

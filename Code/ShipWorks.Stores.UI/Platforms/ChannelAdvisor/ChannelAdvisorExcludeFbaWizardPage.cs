@@ -1,19 +1,26 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.ComponentRegistration.Ordering;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
-using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
     /// <summary>
-    /// Wizard page for ChannelAdvisor
+    /// Setup wizard page for specifying which type of orders to download from ChannelAdvisor
     /// </summary>
     [Component(RegistrationType.Self)]
     public partial class ChannelAdvisorExcludeFbaWizardPage : AddStoreWizardPage
     {
         /// <summary>
-        /// constructor
+        /// Constructor
         /// </summary>
         public ChannelAdvisorExcludeFbaWizardPage()
         {
@@ -21,11 +28,23 @@ namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
         }
 
         /// <summary>
-        /// Save excludeFba when leaving page
+        /// Stepping into the options page
         /// </summary>
-        private void OnStepNext(object sender, ShipWorks.UI.Wizard.WizardStepEventArgs e)
+        private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            excludeFba.SaveToEntity(GetStore<ChannelAdvisorStoreEntity>());
+            ChannelAdvisorStoreEntity store = GetStore<ChannelAdvisorStoreEntity>();
+
+            excludeFba.Checked = store.ExcludeFBA;
+        }
+
+        /// <summary>
+        /// Stepping next
+        /// </summary>
+        private void OnStepNext(object sender, WizardStepEventArgs e)
+        {
+            ChannelAdvisorStoreEntity store = GetStore<ChannelAdvisorStoreEntity>();
+
+            store.ExcludeFBA = excludeFba.Checked;
         }
     }
 }
