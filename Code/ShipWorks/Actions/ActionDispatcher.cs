@@ -220,10 +220,21 @@ namespace ShipWorks.Actions
             if (needsPermissionCheck &&
                 !orderedSelection.All(x => UserSession.Security.HasPermission(Users.Security.PermissionType.ShipmentsCreateEditProcess, x)))
             {
-                log.Info("Not executing action with 'Create Label' task because user does not have sufficient permissions.");
+                log.Info($"Not executing action '{action.Name}' with 'Create Label' task because user does not have sufficient permissions.");
                 return;
             }
 
+            PerformDispatch(action, orderedSelection);
+
+            // Ensure the action processor is working
+            ActionProcessor.StartProcessing();
+        }
+
+        /// <summary>
+        /// Actually perform the dispatch of the user-initated action
+        /// </summary>
+        private static void PerformDispatch(ActionEntity action, IEnumerable<long> orderedSelection)
+        {
             UserInitiatedTrigger trigger = (UserInitiatedTrigger) ActionManager.LoadTrigger(action);
 
             // We are potentially going to be saving selection along with dispatching the action, so do it in a transaction
@@ -272,9 +283,6 @@ namespace ShipWorks.Actions
 
                 adapter.Commit();
             }
-
-            // Ensure the action processor is working
-            ActionProcessor.StartProcessing();
         }
 
         /// <summary>
