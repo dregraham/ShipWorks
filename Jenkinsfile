@@ -7,7 +7,6 @@ pipeline {
 	environment {
 		versionNumber = readFile ".build-label"
 		tagName="ShipWorks_TEST_${env.versionNumber.trim()}"
-		gitMsg="\"TEST - Jenkins Build ${env.tagName}\""
 		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"Tagging\" "
 		gitPush="\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
 	}
@@ -21,15 +20,14 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-					echo "Start Tagging"
+					//echo "Start Tagging"
 					//bat 'versionNumber="cat .build-label"'
 					//bat 'env.versionNumber = readFile "output.txt"'
-					echo "${env.versionNumber}"
+					//echo "${env.versionNumber}"
 					//bat 'env.tagName="ShipWorks_TEST_${env.versionNumber}"'
 					echo "Tagging build as ${env.tagName}"
-					echo "gitMsg:   ${env.gitMsg}"
-					echo "gitTag:   ${env.gitTag}"
-					echo "gitPush:  ${env.gitPush}"
+					//echo "gitTag:   ${env.gitTag}"
+					//echo "gitPush:  ${env.gitPush}"
 					   //bat '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
 					bat "${env.gitTag}"
 					echo "Pushing tag to origin"
