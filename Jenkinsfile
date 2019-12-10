@@ -56,7 +56,7 @@ pipeline {
 					sh("versionNumber=`cat .build-label`")
 					sh("tagName=`ShipWorks_TEST_$versionNumber`")
 					sh("echo `Tagging build as $tagName`")
-					sh("git tag -a $tagName -m "TEST - Jenkins Build $versionNumber"")
+					sh("git tag -a $tagName -m `TEST - Jenkins Build $versionNumber`")
 					sh("echo `Pushing tag to origin`")
 					sh("git push https://github.com/shipworks/ShipWorks.git $tagName")
 				}
