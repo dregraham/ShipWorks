@@ -31,7 +31,7 @@ pipeline {
 					echo "gitTag:   ${env.gitTag}"
 					echo "gitPush:  ${env.gitPush}"
 					   //bat '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
-					//bat "${env.gitTag}"
+					bat "${env.gitTag}"
 					echo "Pushing tag to origin"
 					   //bat '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
 					bat "${env.gitPush}"
