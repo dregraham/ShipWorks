@@ -6,7 +6,7 @@ pipeline {
   	}
 	environment {
 		versionNumber = readFile ".build-label"
-		tagName="ShipWorks_TEST_${env.versionNumber}"
+		tagName="ShipWorks_TEST_${env.versionNumber.trim()}"
 		gitMsg="\"TEST - Jenkins Build ${env.tagName}\""
 		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"Tagging\" "
 		gitPush="\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
