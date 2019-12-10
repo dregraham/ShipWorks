@@ -34,7 +34,7 @@ pipeline {
 					//bat "${env.gitTag}"
 					echo "Pushing tag to origin"
 					   //bat '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
-					//bat "${env.gitPush}"
+					bat "${env.gitPush}"
 				//bat 'bundle exec rake build:quick'
 			}
 		}
