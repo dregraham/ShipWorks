@@ -14,13 +14,13 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-					sh("echo `Start Tagging`")
-					sh("versionNumber=`cat .build-label`")
-					sh("tagName=`ShipWorks_TEST_$versionNumber`")
-					sh("echo `Tagging build as $tagName`")
-					sh("git tag -a $tagName -m `TEST - Jenkins Build $versionNumber`")
-					sh("echo `Pushing tag to origin`")
-					sh("git push https://github.com/shipworks/ShipWorks.git $tagName")
+					echo "Start Tagging"
+					versionNumber="cat .build-label"
+					tagName="ShipWorks_TEST_$versionNumber"
+					echo "Tagging build as $tagName"
+					git tag -a $tagName -m "TEST - Jenkins Build $versionNumber"
+					echo "Pushing tag to origin"
+					git push https://github.com/shipworks/ShipWorks.git $tagName
 				//bat 'bundle exec rake build:quick'
 			}
 		}
