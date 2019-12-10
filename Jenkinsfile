@@ -13,8 +13,8 @@ pipeline {
 			label 'windows'
 			customWorkspace "d:/jenkins-builds/SB_${BUILD_FOLDER}"
 			gitMsg "TEST - Jenkins Build ${env.tagName}"
-			gitTag '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m '"${env.gitMsg}"'
-			gitPush '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
+			gitTag "\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"${env.gitMsg}\""
+			gitPush "\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
 		}
 	}
 	stages {
