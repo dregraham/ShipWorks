@@ -873,15 +873,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
             if (entity is ChannelAdvisorOrderEntity caOrder)
             {
-                using (SqlAdapter adapter = SqlAdapter.Create(false))
-                {
-                    if (caOrder.OrderItems.None())
-                    {
-                        adapter.FetchEntityCollection(caOrder.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == caOrder.OrderID));
-                    }
-                }
-
-                return caOrder.OrderItems.OfType<ChannelAdvisorOrderItemEntity>().Any(i => i.IsFBA);
+                string billStreet1 = GetEntityFieldValue<string>(entity, "BillStreet1");
+                return billStreet1.Equals("BillStreet1", StringComparison.OrdinalIgnoreCase);
             }
             
             return false;
