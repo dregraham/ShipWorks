@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -33,6 +34,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ScanToShipPipeline(IMessenger messenger, IScanToShipViewModel scanToShipViewModel, IMainForm mainForm,
                                   ILicenseService licenseService, IUserSession userSession, Func<Type, ILog> createLogger)
         {

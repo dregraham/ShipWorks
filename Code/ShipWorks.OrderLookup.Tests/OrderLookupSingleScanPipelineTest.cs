@@ -41,6 +41,7 @@ namespace ShipWorks.OrderLookup.Tests
         private readonly Mock<IOrderLookupAutoPrintService> autoPrintService;
         private readonly OrderEntity order;
         private readonly Mock<IScanPackViewModel> scanPackViewModel;
+        private readonly Mock<IScanToShipViewModel> scanToShipViewModel;
         private bool isPackTabActive = true;
                
         public OrderLookupSingleScanPipelineTest()
@@ -84,8 +85,8 @@ namespace ShipWorks.OrderLookup.Tests
 
 
             scanPackViewModel = mock.Mock<IScanPackViewModel>();
-            var scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
-            
+            scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
+
             scanToShipViewModel.SetupGet(m => m.IsPackTabActive).Returns(() => isPackTabActive);
             scanToShipViewModel.SetupGet(m => m.ScanPackViewModel).Returns(scanPackViewModel.Object);
             scanToShipViewModel.SetupGet(m => m.SearchViewModel).Returns(mock.Mock<IOrderLookupSearchViewModel>().Object);
@@ -283,7 +284,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Reset());
+            scanToShipViewModel.Verify(s => s.Reset());
         }
 
         [Fact]
