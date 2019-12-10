@@ -14,7 +14,14 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'bundle exec rake build:quick'
+					sh("echo `Start Tagging`")
+					sh("versionNumber=`cat .build-label`")
+					sh("tagName=`ShipWorks_TEST_$versionNumber`")
+					sh("echo `Tagging build as $tagName`")
+					sh("git tag -a $tagName -m `TEST - Jenkins Build $versionNumber`")
+					sh("echo `Pushing tag to origin`")
+					sh("git push https://github.com/shipworks/ShipWorks.git $tagName")
+				//bat 'bundle exec rake build:quick'
 			}
 		}
 /*
@@ -50,6 +57,7 @@ pipeline {
 	}
 	post {
 		always {
+					sh("echo `Start Tagging`")
 					sh("versionNumber=`cat .build-label`")
 					sh("tagName=`ShipWorks_TEST_$versionNumber`")
 					sh("echo `Tagging build as $tagName`")
