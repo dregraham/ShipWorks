@@ -50,17 +50,12 @@ pipeline {
 	}
 	post {
 		always {
-			stage('Label Build'){
-				steps
-				{
 					sh("versionNumber=`cat .build-label`")
 					sh("tagName=`ShipWorks_TEST_$versionNumber`")
 					sh("echo `Tagging build as $tagName`")
 					sh("git tag -a $tagName -m `TEST - Jenkins Build $versionNumber`")
 					sh("echo `Pushing tag to origin`")
 					sh("git push https://github.com/shipworks/ShipWorks.git $tagName")
-				}
-			}
 			step([$class: 'XUnitBuilder',
 				    thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
 				    tools: [[$class: 'XUnitDotNetTestType', pattern: 'TestResults/*.xml', failIfNotNew: true, deleteOutputFiles: true, stopProcessingIfError: true]]])
