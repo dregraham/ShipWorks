@@ -27,14 +27,14 @@ pipeline {
 					echo "${env.versionNumber}"
 					//bat 'env.tagName="ShipWorks_TEST_${env.versionNumber}"'
 					echo "Tagging build as ${env.tagName}"
-					echo "${env.gitMsg}"
-					echo "${env.gitTag}"
-					echo "${env.gitPush}"
-					//bat '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
-					bat "${env.gitTag}"
+					echo "gitMsg:   ${env.gitMsg}"
+					echo "gitTag:   ${env.gitTag}"
+					echo "gitPush:  ${env.gitPush}"
+					   //bat '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
+					//bat "${env.gitTag}"
 					echo "Pushing tag to origin"
-					//bat '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
-					bat "${env.gitPush}"
+					   //bat '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
+					//bat "${env.gitPush}"
 				//bat 'bundle exec rake build:quick'
 			}
 		}
