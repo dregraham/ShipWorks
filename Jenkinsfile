@@ -4,6 +4,10 @@ pipeline {
 	options {
     	disableConcurrentBuilds()
   	}
+	environment {
+		versionNumber = readFile ".build-label"
+		tagName="ShipWorks_TEST_${env.versionNumber}"
+	}
 	agent {
 		node {
 			label 'windows'
@@ -16,9 +20,9 @@ pipeline {
 				echo "Build on ${NODE_NAME}"
 					echo "Start Tagging"
 					//bat 'versionNumber="cat .build-label"'
-					bat 'env.versionNumber = readFile "output.txt"'
+					//bat 'env.versionNumber = readFile "output.txt"'
 					echo "${env.versionNumber}"
-					bat 'env.tagName="ShipWorks_TEST_${env.versionNumber}"'
+					//bat 'env.tagName="ShipWorks_TEST_${env.versionNumber}"'
 					echo "Tagging build as ${env.tagName}"
 					bat 'git tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
 					echo "Pushing tag to origin"
