@@ -48,6 +48,18 @@ pipeline {
 	}
 	post {
 		always {
+			sshagent(credentials: ["shipworks_github"]) {
+					//def repository = "git@" + env.GIT_URL.replaceFirst(".+://", "").replaceFirst("/", ":")
+					//sh("git remote set-url origin $repository")
+					//sh("git tag --force build-${env.BRANCH_NAME}")
+					//sh("git push --force origin build-${env.BRANCH_NAME}")
+					sh("versionNumber=`cat .build-label`")
+					sh("tagName=\"ShipWorks_TEST_$versionNumber\"")
+					sh("echo \"Tagging build as $tagName\"")
+					sh("git tag -a $tagName -m "TEST - Jenkins Build $versionNumber"")
+					sh("echo \"Pushing tag to origin\"")
+					sh("git push https://github.com/shipworks/ShipWorks.git $tagName")
+				}
 			step([$class: 'XUnitBuilder',
 				    thresholds: [[$class: 'FailedThreshold', unstableThreshold: '1']],
 				    tools: [[$class: 'XUnitDotNetTestType', pattern: 'TestResults/*.xml', failIfNotNew: true, deleteOutputFiles: true, stopProcessingIfError: true]]])
