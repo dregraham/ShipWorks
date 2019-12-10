@@ -20,7 +20,7 @@ pipeline {
 					echo "Tagging build as $tagName"
 					git tag -a $tagName -m "TEST - Jenkins Build $versionNumber"
 					echo "Pushing tag to origin"
-					git push https\://github.com/shipworks/ShipWorks.git $tagName
+					git push 'https://github.com/shipworks/ShipWorks.git' $tagName
 				//bat 'bundle exec rake build:quick'
 			}
 		}
