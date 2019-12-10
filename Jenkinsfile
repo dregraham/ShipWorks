@@ -7,7 +7,7 @@ pipeline {
 	environment {
 		versionNumber = readFile ".build-label"
 		tagName="ShipWorks_TEST_${env.versionNumber}"
-		gitMsg="TEST - Jenkins Build ${env.tagName}"
+		gitMsg="\"TEST - Jenkins Build ${env.tagName}\""
 		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"${env.gitMsg}\""
 		gitPush="\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
 	}
@@ -31,10 +31,10 @@ pipeline {
 					echo "${env.gitTag}"
 					echo "${env.gitPush}"
 					//bat '"C:/Program Files/Git/bin/git.exe" tag -a ${env.tagName} -m "TEST - Jenkins Build ${env.tagName}"'
-					bat '${env.gitMsg}'
+					bat "${env.gitTag}"
 					echo "Pushing tag to origin"
 					//bat '"C:/Program Files/Git/bin/git.exe" push https://github.com/shipworks/ShipWorks.git ${env.tagName}'
-					bat '${env.gitPush}'
+					bat "${env.gitPush}"
 				//bat 'bundle exec rake build:quick'
 			}
 		}
