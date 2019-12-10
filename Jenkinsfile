@@ -7,9 +7,9 @@ pipeline {
 	environment {
 		versionNumber = readFile ".build-label"
 		tagName="ShipWorks_TEST_${env.versionNumber}"
-		gitMsg "TEST - Jenkins Build ${env.tagName}"
-		gitTag "\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"${env.gitMsg}\""
-		gitPush "\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
+		gitMsg="TEST - Jenkins Build ${env.tagName}"
+		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"${env.gitMsg}\""
+		gitPush="\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
 	}
 	agent {
 		node {
