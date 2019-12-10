@@ -212,6 +212,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return;
                 }
 
+                if (!(result.Value is ChannelAdvisorOrderEntity))
+                {
+                    log.InfoFormat("Failed to load '{0}'.", caOrder.ID);
+                    return;
+                }
+
                 ChannelAdvisorOrderEntity order = (ChannelAdvisorOrderEntity) result.Value;
 
                 // Required by order loader
