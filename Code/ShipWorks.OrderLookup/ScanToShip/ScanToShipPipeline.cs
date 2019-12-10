@@ -96,7 +96,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         private void HandleShipmentLoadedMessage(ScanToShipShipmentLoadedMessage shipmentLoadedMessage)
         {
             scanToShipViewModel.ShowVerificationError = false;
-            scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment.Order.Verified ?? false;
+            scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
             if (IsAutoAdvanceEnabled)
