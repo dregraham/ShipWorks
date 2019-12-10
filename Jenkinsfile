@@ -17,6 +17,7 @@ pipeline {
 				bat 'bundle exec rake build:quick'
 			}
 		}
+/*
 		stage('Post-Compilation') {
 			parallel {
 				stage('Unit tests') {
@@ -45,6 +46,7 @@ pipeline {
 				}
 			}
 		}
+*/
 	}
 	post {
 		always {
