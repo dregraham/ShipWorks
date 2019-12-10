@@ -814,6 +814,7 @@
           <Field Name="CombinedLocally" Type="bool" FieldIndex="2" />
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="EbayOrderID" Type="long" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="24" />
           <Field Name="GspCity" Type="string" MaxLength="128" FieldIndex="10" />
           <Field Name="GspCountryCode" Type="string" MaxLength="2" FieldIndex="13" />
           <Field Name="GspEligible" Type="bool" FieldIndex="5" />
@@ -844,6 +845,7 @@
           <Field Name="EbayTransactionID" Type="long" FieldIndex="2" />
           <Field Name="EffectiveCheckoutStatus" Type="int" FieldIndex="4" />
           <Field Name="EffectivePaymentMethod" Type="int" FieldIndex="5" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="FeedbackLeftComments" Type="string" MaxLength="80" FieldIndex="10" />
           <Field Name="FeedbackLeftType" Type="int" FieldIndex="9" />
           <Field Name="FeedbackReceivedComments" Type="string" MaxLength="80" FieldIndex="12" />
@@ -863,6 +865,7 @@
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="6" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
           <Field Name="SellingManagerRecord" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
@@ -5536,6 +5539,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
+                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="24" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5559,6 +5563,7 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
+                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="24" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -5570,6 +5575,7 @@
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="24" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -11691,6 +11697,7 @@
             <FieldMapping FieldName="CombinedLocally" TargetFieldName="CombinedLocally" />
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="GspCity" TargetFieldName="GspCity" />
             <FieldMapping FieldName="GspCountryCode" TargetFieldName="GspCountryCode" />
             <FieldMapping FieldName="GspEligible" TargetFieldName="GspEligible" />
@@ -11722,6 +11729,7 @@
             <FieldMapping FieldName="EbayTransactionID" TargetFieldName="EbayTransactionID" />
             <FieldMapping FieldName="EffectiveCheckoutStatus" TargetFieldName="EffectiveCheckoutStatus" />
             <FieldMapping FieldName="EffectivePaymentMethod" TargetFieldName="EffectivePaymentMethod" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="FeedbackLeftComments" TargetFieldName="FeedbackLeftComments" />
             <FieldMapping FieldName="FeedbackLeftType" TargetFieldName="FeedbackLeftType" />
             <FieldMapping FieldName="FeedbackReceivedComments" TargetFieldName="FeedbackReceivedComments" />
@@ -11742,6 +11750,7 @@
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
             <FieldMapping FieldName="EbayOrderSearchID" TargetFieldName="EbayOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="SellingManagerRecord" TargetFieldName="SellingManagerRecord" />

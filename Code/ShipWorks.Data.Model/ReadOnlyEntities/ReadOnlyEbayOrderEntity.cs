@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RollupFeedbackReceivedComments = source.RollupFeedbackReceivedComments;
             RollupPayPalAddressStatus = source.RollupPayPalAddressStatus;
             GuaranteedDelivery = source.GuaranteedDelivery;
+            ExtendedOrderID = source.ExtendedOrderID;
             
             
             
@@ -216,6 +217,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean GuaranteedDelivery { get; }
+        /// <summary> The ExtendedOrderID property of the Entity EbayOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EbayOrder"."ExtendedOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ExtendedOrderID { get; }
         
         
         

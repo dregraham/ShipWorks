@@ -10,21 +10,19 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Compare 2 EbayOrderSearchEntities
         /// </summary>
-        public bool Equals(EbayOrderSearchEntity x, EbayOrderSearchEntity y)
-        {
-            return x.EbayOrderID.Equals(y.EbayOrderID) &&
-                   x.EbayBuyerID.Equals(y.EbayBuyerID) &&
-                   x.SellingManagerRecord.Equals(y.SellingManagerRecord);
-        }
+        public bool Equals(EbayOrderSearchEntity x, EbayOrderSearchEntity y) =>
+            x.EbayOrderID.Equals(y.EbayOrderID) &&
+            x.EbayBuyerID.Equals(y.EbayBuyerID) &&
+            x.SellingManagerRecord.Equals(y.SellingManagerRecord) &&
+            x.ExtendedOrderID.Equals(y.ExtendedOrderID);
 
         /// <summary>
         /// Get hash code for an EbayOrderSearchEntity
         /// </summary>
-        public int GetHashCode(EbayOrderSearchEntity ebayOrderSearchEntity)
-        {
-            return ebayOrderSearchEntity.EbayOrderID.GetHashCode() ^
-                   ebayOrderSearchEntity.EbayBuyerID.GetHashCode() ^
-                   ebayOrderSearchEntity.SellingManagerRecord.GetHashCode();
-        }
+        public int GetHashCode(EbayOrderSearchEntity ebayOrderSearchEntity) =>
+            ebayOrderSearchEntity.EbayOrderID.GetHashCode() ^
+            ebayOrderSearchEntity.EbayBuyerID.GetHashCode() ^
+            ebayOrderSearchEntity.SellingManagerRecord.GetHashCode() ^
+            ebayOrderSearchEntity.ExtendedOrderID.GetHashCode();
     }
 }

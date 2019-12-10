@@ -6547,6 +6547,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.GuaranteedDelivery);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ExtendedOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderItemEntity</summary>
@@ -6822,6 +6827,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.PayPalAddressStatus);}
 		}
+		/// <summary>Creates a new EbayOrderItemEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.ExtendedOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderSearchEntity</summary>
@@ -6856,6 +6866,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.ExtendedOrderID);}
 		}
 	}
 

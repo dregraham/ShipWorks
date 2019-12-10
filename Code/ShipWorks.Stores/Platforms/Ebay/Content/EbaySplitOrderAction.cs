@@ -26,6 +26,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Content
             orderSearchEntity.EbayOrderID = order.EbayOrderID;
             orderSearchEntity.EbayBuyerID = order.EbayBuyerID;
             orderSearchEntity.SellingManagerRecord = order.SellingManagerRecord;
+            orderSearchEntity.ExtendedOrderID = order.ExtendedOrderID;
 
             orderSearchEntity.OriginalOrderID = originalOrderID;
         }

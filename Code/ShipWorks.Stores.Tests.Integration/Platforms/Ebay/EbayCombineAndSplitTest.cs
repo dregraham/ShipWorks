@@ -460,6 +460,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
                 .Set(x => x.SellingManagerRecord, sellerManagerRecord)
                 .Set(x => x.OrderNumber, orderNumber)
                 .Set(x => x.OrderNumberComplete, orderNumber.ToString())
+                .Set(x => x.ExtendedOrderID, $"EO{orderNumber}")
                 .Save();
         }
 
@@ -470,7 +471,8 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             {
                 EbayOrderID = ebayOrder.EbayOrderID,
                 EbayBuyerID = ebayOrder.EbayBuyerID,
-                SellingManagerRecord = ebayOrder.SellingManagerRecord
+                SellingManagerRecord = ebayOrder.SellingManagerRecord,
+                ExtendedOrderID = $"EO{order.OrderNumber}",
             };
         }
 
