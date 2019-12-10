@@ -14,7 +14,7 @@ pipeline {
 		stage('Compile the solution') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-				bat 'bundle exec rake rebuild[true]'
+				bat 'bundle exec rake build:quick'
 			}
 		}
 		stage('Post-Compilation') {
