@@ -17,10 +17,10 @@ pipeline {
 					echo "Start Tagging"
 					bat 'versionNumber="cat .build-label"'
 					bat 'tagName="ShipWorks_TEST_$versionNumber"'
-					echo "Tagging build as $tagName"'
+					echo "Tagging build as $tagName"
 					bat 'git tag -a $tagName -m "TEST - Jenkins Build $versionNumber"'
-					echo "Pushing tag to origin"'
-					bat 'git push 'https://github.com/shipworks/ShipWorks.git' $tagName'
+					echo "Pushing tag to origin"
+					bat 'git push https://github.com/shipworks/ShipWorks.git $tagName'
 				//bat 'bundle exec rake build:quick'
 			}
 		}
