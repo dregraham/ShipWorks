@@ -187,7 +187,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
             if (includeExternallyManagedDistributionCenters)
             {
-                ordersFilter = "(" + ordersFilter + ")" + "OR DistributionCenterTypeRollup eq 'ExternallyManaged'";
+                ordersFilter = "(" + ordersFilter + ")" + "OR DistributionCenterTypeRollup eq 'ExternallyManaged' ";
+            }
+            else
+            {
+                ordersFilter += "AND DistributionCenterTypeRollup ne 'ExternallyManaged' ";
             }
 
             ordersFilter += $"AND (CreatedDateUtc ge {downloadStartDate:o})";
