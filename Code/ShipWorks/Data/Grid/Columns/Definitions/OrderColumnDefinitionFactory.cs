@@ -874,7 +874,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
             if (entity is ChannelAdvisorOrderEntity caOrder)
             {
                 string billStreet1 = GetEntityFieldValue<string>(entity, "BillStreet1");
-                return billStreet1.Equals("BillStreet1", StringComparison.OrdinalIgnoreCase);
+                return billStreet1.Equals("Redacted By Amazon", StringComparison.OrdinalIgnoreCase);
             }
             
             return false;
