@@ -4,6 +4,9 @@ pipeline {
 	options {
     	disableConcurrentBuilds()
   	}
+	parameters {
+		stringParam(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
+	}
 	environment {
 		versionNumber = readFile ".build-label"
 		tagName="ShipWorks_TEST_${env.versionNumber.trim()}"
