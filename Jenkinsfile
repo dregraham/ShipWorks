@@ -8,7 +8,7 @@ pipeline {
 		string(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
 	}
 	environment {
-		versionNumber = readFile ".build-label"
+		versionNumber1 = readFile ".build-label"
 		versionNumber = params.versionNumber
 		tagName="ShipWorks_TEST_${env.versionNumber.trim()}"
 		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"Tagging\" "
