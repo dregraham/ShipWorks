@@ -8,9 +8,9 @@ pipeline {
 		string(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
 	}
 	environment {
-		versionNumber1 = readFile ".build-label"
-		versionNumber = params.versionNumber
-		tagName="ShipWorks_TEST_${env.versionNumber.trim()}"
+		versionNumber = readFile ".build-label"
+		//versionNumber = params.versionNumber
+		tagName="ShipWorks_TEST_${params.versionNumber.trim()}"
 		gitTag="\"C:/Program Files/Git/bin/git.exe\" tag -a ${env.tagName} -m \"Tagging\" "
 		gitPush="\"C:/Program Files/Git/bin/git.exe\" push https://github.com/shipworks/ShipWorks.git ${env.tagName}"
 	}
