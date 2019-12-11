@@ -42,12 +42,17 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Whether or not to show the verification error
         /// </summary>
-        bool ShowVerificationError { get; set; }
+        bool ShowOrderVerificationError { get; set; }
 
         /// <summary>
         /// Returns the numeric value of the selected tab
         /// </summary>
         int SelectedTab { get; set; }
+
+        /// <summary>
+        /// Show the order verification error when appropriate
+        /// </summary>
+        void UpdateOrderVerificationError();
 
         /// <summary>
         /// Reset the state

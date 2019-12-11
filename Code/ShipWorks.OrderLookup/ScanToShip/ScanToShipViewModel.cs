@@ -20,7 +20,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         private ScanToShipTab selectedTab;
         private bool isOrderProcessed;
         private bool isOrderVerified;
-        private bool showVerificationError;
+        private bool showOrderVerificationError;
 
         /// <summary>
         /// Constructor
@@ -75,28 +75,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
 
                 SearchViewModel.SelectedTab = (ScanToShipTab) value;
 
-                // If we're not on the pack tab, and require validation is on, show the verification error
-                if (!IsPackTabActive && (userSession?.Settings?.AutoPrintRequireValidation ?? false))
-                {
-                    ShowVerificationError = true;
-                }
-                else
-                {
-                    ShowVerificationError = false;
-                }
+                UpdateOrderVerificationError();
             }
-        }
-
-        /// <summary>
-        /// Reset the state
-        /// </summary>
-        public void Reset()
-        {
-            ShowVerificationError = false;
-            IsOrderVerified = false;
-            IsOrderProcessed = false;
-
-            ScanPackViewModel.Reset();
         }
 
         /// <summary>
@@ -123,10 +103,40 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// Whether or not to show the verification error
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ShowVerificationError
+        public bool ShowOrderVerificationError
         {
-            get => showVerificationError;
-            set => Set(ref showVerificationError, value);
+            get => showOrderVerificationError;
+            set => Set(ref showOrderVerificationError, value);
+        }
+
+        /// <summary>
+        /// Show the order verification error when appropriate
+        /// </summary>
+        public void UpdateOrderVerificationError()
+        {
+            // If we have an unverified order, we're not on the pack tab, and require validation is on, show the verification error
+            if ((!shipmentModel?.SelectedOrder?.Verified ?? false) &&
+                !IsPackTabActive &&
+                (userSession?.Settings?.AutoPrintRequireValidation ?? false))
+            {
+                ShowOrderVerificationError = true;
+            }
+            else
+            {
+                ShowOrderVerificationError = false;
+            }
+        }
+
+        /// <summary>
+        /// Reset the state
+        /// </summary>
+        public void Reset()
+        {
+            ShowOrderVerificationError = false;
+            IsOrderVerified = false;
+            IsOrderProcessed = false;
+
+            ScanPackViewModel.Reset();
         }
 
         /// <summary>

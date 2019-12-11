@@ -96,7 +96,7 @@
                     SelectedIndex="{Binding SelectedTab}">
             <local:ScanToShipTabItem Header="Scan"
                                      Success="{Binding IsOrderVerified}"
-                                     Error="{Binding ShowVerificationError}">
+                                     Error="{Binding ShowOrderVerificationError}">
                 <scanpack:ScanPackControl DataContext="{Binding ScanPackViewModel}"/>
             </local:ScanToShipTabItem>
             <local:ScanToShipTabItem Header="Ship"

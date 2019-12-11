@@ -95,7 +95,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         private void HandleShipmentLoadedMessage(ScanToShipShipmentLoadedMessage shipmentLoadedMessage)
         {
-            scanToShipViewModel.ShowVerificationError = false;
+            scanToShipViewModel.UpdateOrderVerificationError();
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
@@ -112,7 +112,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         private void HandleOrderVerifiedMessage(OrderVerifiedMessage orderVerifiedMessage)
         {
-            scanToShipViewModel.ShowVerificationError = false;
+            scanToShipViewModel.ShowOrderVerificationError = false;
             scanToShipViewModel.IsOrderVerified = true;
 
             if (IsAutoAdvanceEnabled)
