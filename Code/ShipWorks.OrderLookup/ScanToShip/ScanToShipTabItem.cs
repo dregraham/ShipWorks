@@ -7,6 +7,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
     /// <summary>
     /// TabItem for the ScanToShipControl
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ScanToShipTabItem : TabItem
     {
         public static readonly DependencyProperty SuccessProperty = DependencyProperty.Register("Success", typeof(bool), typeof(ScanToShipTabItem), new PropertyMetadata(false));
@@ -15,7 +16,6 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Whether or not this tabs operation was successful
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public bool Success
         {
             get => (bool) GetValue(SuccessProperty);
@@ -25,7 +25,6 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// <summary>
         /// Whether or not there is an error on this tab
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public bool Error
         {
             get => (bool) GetValue(ErrorProperty);
