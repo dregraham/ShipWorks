@@ -926,8 +926,8 @@
     <CreateItem Include="$(OutDir)*.exe; $(OutDir)*.dll; $(OutDir)*.pdb; $(OutDir)*.config">
       <Output TaskParameter="Include" ItemName="BuildOutputs" />
     </CreateItem>
-    <Message Text="Copying output to libraries directory:" Importance="high" />
-    <Message Text="     %(BuildOutputs.Filename)%(BuildOutputs.Extension)" Importance="high" />
+    <!-- <Message Text="Copying output to libraries directory:" Importance="high" />
+    <Message Text="     %(BuildOutputs.Filename)%(BuildOutputs.Extension)" Importance="high" /> -->
     <Copy SourceFiles="@(BuildOutputs)" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Libraries\" />
   </Target>
 </Project>

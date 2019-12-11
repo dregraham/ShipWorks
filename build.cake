@@ -8,31 +8,14 @@
 
 // Constants
 var innoPath = @"C:\Program Files (x86)\Inno Setup 5\ISCC.EXE";
-//var revisionFilePath = @"\\INTFS01\Development\CruiseControl\Configuration_MovedToAWS\Versioning\ShipWorks\NextRevision.txt";
 var revisionFilePath = @"\\intdev1201\NetworkShare\DevShare\BuildConfig\NextRevision.txt";
+var devRevisionFilePath = @"\\intfs01\development\NetworkShare\DevShare\BuildConfig\NextRevision.txt";
 
-DirectoryPath vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
-FilePath msBuildPathX64 = (vsLatest==null)
-                            ? null
-                            : vsLatest.CombineWithFilePath("./MSBuild/Current/Bin/MSBuild.exe");
-							
-if (msBuildPathX64 == null || !System.IO.File.Exists(msBuildPathX64.FullPath))
-{
-	vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
-	msBuildPathX64 = (vsLatest == null) ? null : vsLatest.CombineWithFilePath("./MSBuild/15.0/Bin/MSBuild.exe");
-}
-else if (msBuildPathX64==null || !System.IO.File.Exists(msBuildPathX64.FullPath))
-{
-	vsLatest  = VSWhereLatest();
-	msBuildPathX64 = (vsLatest == null) ? null : vsLatest.CombineWithFilePath("./MSBuild/Current/Bin/MSBuild.exe");
-}
-
-Information("msBuildPathX64: " + msBuildPathX64);
-LogStartMessage("Getting args");
+FilePath msBuildPathX64 = SetBuildPath();
 
 // Get the params argument that was passed in
 // We default to Build and Debug in case no param is passed in
-var args = ""; // Argument("params", "Build#DebugNoAnalyzers");
+var args = ""; 
 var target = Argument("Target", "Build");
 var configuration = Argument("configuration", "Debug");
 var bracketParam = "";
@@ -55,58 +38,56 @@ if (target.Contains(":"))
 		var targetRight = splitTarget[1].ToLower();
 		Information("    targetRight " + targetRight);
 
+		// If rake commands are passed in, convert them to their cake
+		// equivilents.
 		if (targetRight != string.Empty)
 		{
-			if (targetRight == "units")
-			{
-				target = "TestUnits";
-			}
-			if (targetRight == "specs")
-			{
-				target = "TestSpecs";
-			}
-			else if (targetRight == "clean")
-			{
-				target = "Clean";
-			}
-			else if (targetRight == "restore")
-			{
-				target = "Restore-NuGet-Packages";
-			}
-			else if (targetRight == "quick")
-			{
-				target = "BuildQuick";
-			}
-			else if (targetRight == "debug32")
-			{
-				target = "BuildDebug32";
-			}
-			else if (targetRight == "release")
-			{
-				target = "BuildRelease";
-			}
-			else if (targetRight.StartsWith("debug_installer"))
-			{
-				target = "DebugInstaller";
-			}
-			else if (targetRight.StartsWith("internal_installer"))
-			{
-				target = "InternalInstaller";
-			}
-			else if (targetRight.StartsWith("public_installer"))
-			{
-				target = "PublicInstaller";
-			}
-			else if (targetRight == "quiet")
-			{
-				verbosity = Verbosity.Quiet;
-			}
-			else if (targetRight.StartsWith("integration"))
-			{
-				target = "TestIntegration";
-				testCategory = targetRight.Substring(targetRight.IndexOf("[") + 1, targetRight.Length - targetRight.IndexOf("[") - 2);
-			}
+            switch (targetRight)
+            {
+                case "units":
+                    target = "TestUnits";
+                    break;
+                case "specs":
+                    target = "TestSpecs";
+                    break;
+                case "clean":
+                    target = "Clean";
+                    break;
+                case "restore":
+                    target = "RestoreNuGetPackages";
+                    break;
+                case "quick":
+                    target = "BuildQuick";
+                    break;
+                case "debug32":
+                    target = "BuildDebug32";
+                    break;
+                case "release":
+                    target = "BuildRelease";
+					configuration = "Release";
+                    break;
+                case "quiet":
+                    verbosity = Verbosity.Quiet;
+                    break;
+                case string s when s.StartsWith("debug_installer"):
+                    target = "DebugInstaller";
+                    break;
+                case string s when s.StartsWith("internal_installer"):
+                    target = "InternalInstaller";
+					configuration = "Release";
+                    break;
+                case string s when s.StartsWith("public_installer"):
+                    target = "PublicInstaller";
+					configuration = "Release";
+                    break;
+                case string s when s.StartsWith("integration"):
+                    target = "TestIntegration";
+                    testCategory = ParseBracketParam(targetRight);
+                    break;
+            }
 		}
+
+		bracketParam = ParseBracketParam(targetRight);
 	}
 }
 
@@ -118,12 +99,9 @@ Information("+++++++++++++++++++++++++++++++++++++++++++++");
 
 ParseParams();
 
-//////////////////////////////////////////////////////////////////////
-// TASKS
-//////////////////////////////////////////////////////////////////////
-
-
-// ************** Clean **************
+/// <summary>
+/// Clean
+/// </summary>
 Task("Clean")
     .Does(() =>
 	{
@@ -134,21 +112,18 @@ Task("Clean")
 
 		LogStartMessage("cleaning solution");
 
-		var settings = new MSBuildSettings()
-		{
-			Verbosity = verbosity,
-			ToolPath = msBuildPathX64,
-			PlatformTarget = PlatformTarget.MSIL,
-			Configuration = configuration
-		};
-		MSBuild("./ShipWorks.sln", 
-			settings.WithTarget("Clean"));
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("Clean");
+		
+		MSBuild("./ShipWorks.sln", settings);
 	
 		LogFinishedMessage("cleaning solution");
 	});
 
-// ************** Restore-NuGet-Packages **************
-Task("Restore-NuGet-Packages")
+/// <summary>
+/// RestoreNuGetPackages
+/// </summary>
+Task("RestoreNuGetPackages")
     .IsDependentOn("Clean")
     .Does(() =>
 	{
@@ -157,28 +132,24 @@ Task("Restore-NuGet-Packages")
 		LogFinishedMessage("NuGetRestore");
 	});
 
-// ************** Build **************
+/// <summary>
+/// Build
+/// </summary>
 Task("Build")
-    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("RestoreNuGetPackages")
     .Does(() =>
 	{
 		LogStartMessage("build");
 
-		var settings = new MSBuildSettings()
-		{
-			Verbosity = verbosity, // Verbosity.Diagnostic
-			// ToolVersion = MSBuildToolVersion.VS2017,
-			ToolPath = msBuildPathX64,
-			PlatformTarget = PlatformTarget.MSIL,
-			Configuration = configuration
-		};
-		MSBuild("./ShipWorks.sln", settings
-				.WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors));
+		var settings = CreateBuildSettings(configuration);
+		MSBuild("./ShipWorks.sln", settings);
 
 		LogFinishedMessage("build");
 	});
 
-// ************** BuildForCI **************
+/// <summary>
+/// BuildForCI
+/// </summary>
 Task("BuildForCI")
     .IsDependentOn("ReplaceInstanceID")
 	.Does(() => 
@@ -188,7 +159,9 @@ Task("BuildForCI")
 		LogFinishedMessage("BuildForCI");	
 	});
 
-// ************** BuildQuick **************
+/// <summary>
+/// BuildQuick
+/// </summary>
 Task("BuildQuick")
 	.Does(() => 
 	{ 
@@ -203,13 +176,15 @@ Task("BuildQuick")
 		LogFinishedMessage("BuildQuick");	
 	});
 
-// ************** BuildDebug32 **************
+/// <summary>
+/// BuildDebug32
+/// </summary>
 Task("BuildDebug32")
 	.Does(() => 
 	{ 
 		LogStartMessage("BuildDebug32");
 
-		configuration = "DebugNoAnalyzers";
+		configuration = "Debug (No Analyzers)";
 		SetBuildDir();
 
 		RunTarget("Build");
@@ -218,7 +193,9 @@ Task("BuildDebug32")
 		LogFinishedMessage("BuildDebug32");	
 	});
 
-// ************** BuildRelease **************
+/// <summary>
+/// BuildRelease
+/// </summary>
 Task("BuildRelease")
 	.Does(() => 
 	{ 
@@ -232,8 +209,11 @@ Task("BuildRelease")
 		LogFinishedMessage("BuildRelease");	
 	});
 
-// ************** DebugInstaller **************
+/// <summary>
+/// DebugInstaller
+/// </summary>
 Task("DebugInstaller")
+    .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
 		LogStartMessage("DebugInstaller");
@@ -243,31 +223,37 @@ Task("DebugInstaller")
 		LogFinishedMessage("DebugInstaller");	
 	});
 
-// ************** DebugInstaller **************
+/// <summary>
+/// InternalInstaller
+/// </summary>
 Task("InternalInstaller")
-    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
 		LogStartMessage("InternalInstaller");
 		
-		CreateInternalInstaller();
+		CreateInstaller("Internal", false, false);
 
 		LogFinishedMessage("InternalInstaller");	
 	});
 
-// ************** DebugInstaller **************
+/// <summary>
+/// PublicInstaller
+/// </summary>
 Task("PublicInstaller")
-    .IsDependentOn("Restore-NuGet-Packages")
+    .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
 		LogStartMessage("PublicInstaller");
 		
-		CreatePublicInstaller();
+		CreateInstaller("Public", true, true);
 
 		LogFinishedMessage("PublicInstaller");	
 	});
 
-// ************** ReplaceInstanceID **************
+/// <summary>
+/// ReplaceInstanceID
+/// </summary>
 Task("ReplaceInstanceID")
     .Does(() =>
 	{
@@ -283,7 +269,9 @@ Task("ReplaceInstanceID")
 		LogFinishedMessage("ReplaceInstanceID");
 	});
 
-// ************** DeleteOldUnitTestRuns **************
+/// <summary>
+/// DeleteOldUnitTestRuns
+/// </summary>
 Task("DeleteOldUnitTestRuns")
     .Does(() =>
 	{
@@ -292,53 +280,42 @@ Task("DeleteOldUnitTestRuns")
 		LogFinishedMessage("delete old unit test runs");
 	});
 
-// ************** Unit Tests **************
+/// <summary>
+/// Unit Tests
+/// </summary>
 Task("TestUnits")
     .IsDependentOn("DeleteOldUnitTestRuns")
     .Does(() =>
 	{
 		LogStartMessage("unit tests");
-
-		var settings = new MSBuildSettings()
-		{
-			Verbosity = Verbosity.Minimal, 
-			ToolPath = msBuildPathX64,
-			PlatformTarget = PlatformTarget.x86,
-			Configuration = configuration,
-		};
-		MSBuild("./tests.msbuild", 
-			settings
-				.WithTarget("Units")
-				.WithProperty("m", "4")
-		);
+		
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("Units");
+		MSBuild("./tests.msbuild", settings);
 	
 		LogFinishedMessage("unit tests");
 	});
 
-// ************** Spec Tests **************
+/// <summary>
+/// Spec Tests
+/// </summary>
 Task("TestSpecs")
     .IsDependentOn("DeleteOldUnitTestRuns")
     .Does(() =>
 	{
 		LogStartMessage("specs tests");
-
-		var settings = new MSBuildSettings()
-		{
-			Verbosity = Verbosity.Quiet, 
-			ToolPath = msBuildPathX64,
-			PlatformTarget = PlatformTarget.x86,
-			Configuration = configuration,
-		};
-		MSBuild("./tests.msbuild", 
-		settings
-			.WithTarget("Specs")
-			.WithProperty("m", "4")
-		);
+		
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("Specs");
+		settings.Verbosity = Verbosity.Quiet;
+		MSBuild("./tests.msbuild", settings);
 	
 		LogFinishedMessage("specs tests");
 	});
 
-// ************** DeleteOldUnitTestRuns **************
+/// <summary>
+/// DeleteOldIntegrationTestRuns
+/// </summary>
 Task("DeleteOldIntegrationTestRuns")
     .Does(() =>
 	{
@@ -347,32 +324,30 @@ Task("DeleteOldIntegrationTestRuns")
 		LogFinishedMessage("delete old integration test runs");
 	});
 
-// ************** Integration Tests **************
+/// <summary>
+/// Integration Tests
+/// </summary>
 Task("TestIntegration")
     .IsDependentOn("DeleteOldIntegrationTestRuns")
     .Does(() =>
 	{
 		LogStartMessage("integration tests");
 
-		var settings = new MSBuildSettings()
+		if (testCategory.ToLower() == string.Empty)
 		{
-			Verbosity = verbosity,
-			ToolPath = msBuildPathX64,
-			PlatformTarget = PlatformTarget.x86,
-			Configuration = configuration,
-		};
+			testCategory = "ContinuousIntegration";
+		}
 
-		MSBuild("./tests.msbuild", 
-			settings
-				.WithTarget("Integration")
-				.WithProperty("m", "5")
-				.WithProperty("IncludeTraits", $"Category={testCategory}".Quote())
-			);
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("Integration");
+		MSBuild("./tests.msbuild", settings);
 		
 		LogFinishedMessage("integration tests");
 	});
 
-// ************** Zip Layout Files **************
+/// <summary>
+/// Zip Layout Files
+/// </summary>
 Task("ZipLayout")
     .Does(() =>
 	{
@@ -384,7 +359,9 @@ Task("ZipLayout")
 		LogFinishedMessage("zip layout files");
 	});
 
-// ************** Zip Template Files **************
+/// <summary>
+/// Zip Template Files
+/// </summary>
 Task("ZipTemplates")
     .Does(() =>
 	{
@@ -396,19 +373,58 @@ Task("ZipTemplates")
 		LogFinishedMessage("zip template files");
 	});
 
-//////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
-
+/// <summary>
+/// Default task
+/// </summary>
 Task("Default")
     .IsDependentOn("Build");
 
-//////////////////////////////////////////////////////////////////////
-// EXECUTION
-//////////////////////////////////////////////////////////////////////
-
+/// <summary>
+/// Execute the target
+/// </summary>
 RunTarget(target);
 
+/// <summary>
+/// Parse the given value to extract the value contained within the brackets;
+/// </summary>
+string ParseBracketParam(string rightValue)
+{
+	if (rightValue.Contains("["))
+	{
+		return rightValue.Substring(rightValue.IndexOf("[") + 1, rightValue.Length - rightValue.IndexOf("[") - 2);
+	}
+
+	return string.Empty;
+}
+
+/// <summary>
+/// Get and set the MS build path
+/// </summary>
+FilePath SetBuildPath()
+{
+	DirectoryPath vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
+	FilePath msBuildPathX64 = (vsLatest==null)
+								? null
+								: vsLatest.CombineWithFilePath("./MSBuild/Current/Bin/MSBuild.exe");
+								
+	if (msBuildPathX64 == null || !System.IO.File.Exists(msBuildPathX64.FullPath))
+	{
+		vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
+		msBuildPathX64 = (vsLatest == null) ? null : vsLatest.CombineWithFilePath("./MSBuild/15.0/Bin/MSBuild.exe");
+	}
+	else if (msBuildPathX64==null || !System.IO.File.Exists(msBuildPathX64.FullPath))
+	{
+		vsLatest  = VSWhereLatest();
+		msBuildPathX64 = (vsLatest == null) ? null : vsLatest.CombineWithFilePath("./MSBuild/Current/Bin/MSBuild.exe");
+	}
+
+	Information("msBuildPathX64: " + msBuildPathX64);
+	return msBuildPathX64;
+}
+
+/// <summary>
+/// Parse and set params
+/// </summary>
 void ParseParams()
 {
 	Information("*************************************************************");
@@ -460,11 +476,40 @@ void ParseParams()
 	Information("bracketParam: " + bracketParam);
 }
 
+/// <summary>
+/// Set the build output dir
+/// </summary>
 void SetBuildDir()
 {
-	buildDir = Directory("./Artifacts/Application"); // + Directory(configuration);
+	buildDir = Directory("./Artifacts/Application");
 }
 
+/// <summary>
+/// Create default build settings
+/// </summary>
+MSBuildSettings CreateBuildSettings(string configurationOverride)
+{
+	var settings = new MSBuildSettings()
+	{
+		Verbosity = verbosity,
+		ToolPath = msBuildPathX64,
+		Configuration = configurationOverride,
+	};
+
+	settings = settings.SetMaxCpuCount(4)
+			.WithProperty("TreatWarningsAsErrors", treatWarningsAsErrors);
+
+	if (!testCategory.IsNullOrWhiteSpace())
+	{
+		settings = settings.WithProperty("IncludeTraits", $"Category={testCategory}".Quote());
+	}
+
+	return settings;
+}
+
+/// <summary>
+/// Make the exe 32 bit
+/// </summary>
 void Make32Bit()
 {
 	string corFlagsPath = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6.1 Tools\CorFlags.exe";
@@ -484,6 +529,9 @@ void Make32Bit()
 	}	
 }
 
+/// <summary>
+/// Create a debug installer
+/// </summary>
 void CreateDebugInstaller()
 {
 	System.IO.Directory.CreateDirectory("./Artifacts/Application/Win32");
@@ -514,7 +562,10 @@ void CreateDebugInstaller()
 	);	
 }
 
-void CreateInternalInstaller()
+/// <summary>
+/// Create an installer
+/// </summary>
+void CreateInstaller(string releaseType, bool obfuscate, bool packageModules)
 {
 	Information($"bracketParam: '{bracketParam}'");	
 	var labelForBuild = "0.0.0";
@@ -530,79 +581,83 @@ void CreateInternalInstaller()
 
 	System.IO.File.WriteAllText(".build-label", labelForBuild);
 
-	var settings = new MSBuildSettings()
-	{
-		Verbosity = verbosity, // Verbosity.Diagnostic Quiet
-		ToolPath = msBuildPathX64,
-		Configuration = "Release"
-	};
-	MSBuild("./Build/ShipWorks.proj", settings
+	var settings = CreateBuildSettings("Release")
 			.WithProperty("TreatWarningsAsErrors", "False")
 			.WithProperty("CreateInstaller", "true")
 			.WithProperty("Tests", "None")
-			.WithProperty("Obfuscate", "False")
-			.WithProperty("ReleaseType", "Internal")
+			.WithProperty("Obfuscate", obfuscate ? "True" : "False")
+			.WithProperty("ReleaseType", releaseType)
 			.WithProperty("BuildType", "Automated")
 			.WithProperty("ProjectRevisionFile", revisionFilePath)
 			.WithProperty("CCNetLabel", labelForBuild)
-			.WithProperty("Platform", "Mixed Platforms")
-			);
-}
+			.WithProperty("Platform", "Mixed Platforms");
 
-void CreatePublicInstaller()
-{
-	Information($"bracketParam: '{bracketParam}'");	
-	var labelForBuild = "0.0.0";
-	if (!bracketParam.IsNullOrWhiteSpace())
+	if (packageModules)
 	{
-		labelForBuild = bracketParam.Trim();
+		settings = settings
+			.WithProperty("PackageModules", "True");
 	}
-	Information($"labelForBuild: {labelForBuild}");
 
-	string revisionNumber = GetRevisionNumber();
-	labelForBuild = $"{labelForBuild}.{revisionNumber}";
-	Information($"labelForBuild: {labelForBuild}");
+	MSBuild("./Build/ShipWorks.proj", settings);
 
-	System.IO.File.WriteAllText(".build-label", labelForBuild);
-
-	var settings = new MSBuildSettings()
-	{
-		Verbosity = verbosity, // Verbosity.Diagnostic Quiet
-		ToolPath = msBuildPathX64,
-		Configuration = "Release"
-	};
-	MSBuild("./Build/ShipWorks.proj", settings
-			.WithProperty("TreatWarningsAsErrors", "False")
-			.WithProperty("CreateInstaller", "true")
-			.WithProperty("Tests", "None")
-			.WithProperty("Obfuscate", "True")
-			.WithProperty("ReleaseType", "Public")
-			.WithProperty("BuildType", "Automated")
-			.WithProperty("ProjectRevisionFile", revisionFilePath)
-			.WithProperty("CCNetLabel", labelForBuild)
-			.WithProperty("Platform", "Mixed Platforms")
-			.WithProperty("PackageModules", "True")
-			);
+	var setupFilename = System.IO.Directory.GetFiles(@".\Artifacts\Distribute\", "ShipWorksSetup_*.exe").First();
+	var sha = ComputeSHA256CheckSum(setupFilename);
+	System.IO.File.WriteAllText(@".\Artifacts\Distribute\Sha256.txt", sha);
 }
 
+/// <summary>
+/// Calculate the SHA256 value of the given file
+/// </summary>
+string ComputeSHA256CheckSum(string filename)
+{
+	using (System.Security.Cryptography.SHA256 sha = System.Security.Cryptography.SHA256.Create())
+	{
+		using (System.IO.FileStream fileStream = System.IO.File.OpenRead(filename))
+		{
+			byte[] hash = sha.ComputeHash(fileStream);
+			return BitConverter.ToString(hash).Replace("-", string.Empty);
+		}
+	}
+}
+
+/// <summary>
+/// Get the current revision number
+/// </summary>
 string GetRevisionNumber()
 {
-	return System.IO.File.ReadAllText(revisionFilePath);
+	if (System.IO.File.Exists(revisionFilePath))
+	{
+		return System.IO.File.ReadAllText(revisionFilePath);
+	}
+	
+	if (System.IO.File.Exists(devRevisionFilePath))
+	{
+		revisionFilePath = devRevisionFilePath;
+		return System.IO.File.ReadAllText(devRevisionFilePath);
+	}
+
+	throw new Exception("Unable to find next revision text file.");
 }
 
-// Log START message
+/// <summary>
+/// Log START message
+/// </summary>
 void LogStartMessage(string msg)
 {
 	LogMessage($"Starting {msg}");
 }
 
-// Log FINISHED message
+/// <summary>
+/// Log FINISHED message
+/// </summary>
 void LogFinishedMessage(string msg)
 {
 	LogMessage($"Finished {msg}");
 }
 
-// Log a message
+/// <summary>
+/// Log a message
+/// </summary>
 void LogMessage(string msg)
 {
 	Information("{0} at ({1})", msg, DateTime.Now.TimeOfDay.ToString());
