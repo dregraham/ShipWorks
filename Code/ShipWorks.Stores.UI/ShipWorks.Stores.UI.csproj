@@ -253,6 +253,12 @@
     <Compile Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.Designer.cs">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.designer.cs">
+      <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -282,6 +288,7 @@
       <DependentUpon>ChannelAdvisorStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorModule.cs" />
+    <Compile Include="Platforms\ChannelAdvisor\ChannelAdvisorWizardPageFactory.cs" />
     <Compile Include="Platforms\GenericFile\GenericStoreHubControl.xaml.cs">
       <DependentUpon>GenericStoreHubControl.xaml</DependentUpon>
     </Compile>
@@ -651,6 +658,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\BigCommerce\WizardPages\BigCommerceStoreSettingsPage.resx">
       <DependentUpon>BigCommerceStoreSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaWizardPage.resx">
+      <DependentUpon>ChannelAdvisorExcludeFbaWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ChannelAdvisor\ChannelAdvisorAccountSettingsControl.resx">
       <DependentUpon>ChannelAdvisorAccountSettingsControl.cs</DependentUpon>

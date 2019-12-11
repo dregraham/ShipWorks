@@ -1,11 +1,13 @@
 using System;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
@@ -14,6 +16,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Grid;
@@ -868,6 +871,12 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                 return GetEntityFieldValue<bool>(entity, "IsFBA");
             }
 
+            if (entity is ChannelAdvisorOrderEntity caOrder)
+            {
+                string billStreet1 = GetEntityFieldValue<string>(entity, "BillStreet1");
+                return billStreet1.Equals("Redacted By Amazon", StringComparison.OrdinalIgnoreCase);
+            }
+            
             return false;
         }
 

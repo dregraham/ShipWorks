@@ -1386,6 +1386,13 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorExcludeFbaControl.Designer.cs">
+      <DependentUpon>ChannelAdvisorExcludeFbaControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorWizardPageFactory.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />

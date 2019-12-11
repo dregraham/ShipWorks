@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
-                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken);
+                ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken, !caStore.ExcludeFBA);
 
                 string previousLink = String.Empty;
 
@@ -209,6 +209,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 if (result.Failure)
                 {
                     log.InfoFormat("Skipping order '{0}': {1}.", caOrder.ID, result.Message);
+                    return;
+                }
+
+                if (!(result.Value is ChannelAdvisorOrderEntity))
+                {
+                    log.InfoFormat("Failed to load '{0}'.", caOrder.ID);
                     return;
                 }
 

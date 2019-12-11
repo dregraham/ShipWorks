@@ -30,6 +30,9 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
 
         private readonly Mock<IHttpResponseReader> responseReader;
 
+        private const string IncludeFbaFilter = "OR DistributionCenterTypeRollup eq 'ExternallyManaged'";
+        private const string ExcludeFbaFilter = "AND DistributionCenterTypeRollup ne 'ExternallyManaged'";
+
         public ChannelAdvisorRestClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
@@ -150,7 +153,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsRequestVerbToGet()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(1, "token");
+            testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.VerifySet(r => r.Verb = HttpVerb.Get);
         }
@@ -159,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsUriToOrdersEndPoint()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(1, "token");
+            testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.VerifySet(r => r.Uri = new Uri("https://api.channeladvisor.com/v1/Orders"));
         }
@@ -168,7 +171,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsExpandVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(1, "token");
+            testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("$expand", "Fulfillments,Items($expand=FulfillmentItems)"));
         }
@@ -177,7 +180,7 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_SetsAccesstokenVariable()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(1, "token");
+            testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("access_token", "atoken"));
         }
@@ -186,10 +189,28 @@ namespace ShipWorks.Stores.Tests.Platforms.ChannelAdvisor
         public void GetOrders_UsesCachedAccessToken()
         {
             var testObject = mock.Create<ChannelAdvisorRestClient>();
-            testObject.GetOrders(1, "token");
-            testObject.GetOrders(1, "token");
+            testObject.GetOrders(1, "token", true);
+            testObject.GetOrders(1, "token", true);
 
             variableRequestSubmitter.Verify(s => s.Variables.Add("grant_type", "refresh_token"), Times.Once);
+        }
+
+        [Fact]
+        public void GetOrders_IncludesFbaOrders_WhenSpecified()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(1, "token", true);
+
+            variableRequestSubmitter.Verify(s=>s.Variables.Add("$filter", It.Is<string>(v=>v.Contains(IncludeFbaFilter))), Times.Once);
+        }
+
+        [Fact]
+        public void GetOrders_DoesNotIncludeFbaOrders_WhenSpecified()
+        {
+            var testObject = mock.Create<ChannelAdvisorRestClient>();
+            testObject.GetOrders(1, "token", false);
+
+            variableRequestSubmitter.Verify(s => s.Variables.Add("$filter", It.Is<string>(v => v.Contains(ExcludeFbaFilter))), Times.Once);
         }
 
         [Fact]

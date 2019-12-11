@@ -790,7 +790,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits ChannelAdvisorStoreEntity's mappings</summary>
 		private void InitChannelAdvisorStoreEntityMappings()
 		{
-			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 10, 0);
+			this.AddElementMapping("ChannelAdvisorStoreEntity", @"ShipWorksLocal", @"dbo", "ChannelAdvisorStore", 11, 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "StoreID", "StoreID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AccountKey", "AccountKey", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 1);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ProfileID", "ProfileID", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -801,6 +801,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "AmazonApiRegion", "AmazonApiRegion", false, "Char", 2, 0, 0, false, "", null, typeof(System.String), 7);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "RefreshToken", "RefreshToken", false, "NVarChar", 200, 0, 0, false, "", null, typeof(System.String), 8);
 			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "DownloadDaysBack", "DownloadDaysBack", false, "TinyInt", 0, 3, 0, false, "", null, typeof(System.Byte), 9);
+			this.AddElementFieldMapping("ChannelAdvisorStoreEntity", "ExcludeFBA", "ExcludeFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 10);
 		}
 
 		/// <summary>Inits ClickCartProOrderEntity's mappings</summary>
