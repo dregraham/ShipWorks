@@ -195,6 +195,5 @@
                 Checking rates...
             </ui:WaitSpinner>
         </Grid>
-        <TextBlock Text="This order's shipment has been processed." Visibility="{Binding ShipmentModel.ShipmentAdapter.Shipment.Processed, Mode=OneWay, Converter={StaticResource BooleanToVisibility}}" />
     </StackPanel>
 </UserControl>
