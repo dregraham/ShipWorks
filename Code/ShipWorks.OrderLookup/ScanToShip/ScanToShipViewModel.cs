@@ -135,8 +135,6 @@ namespace ShipWorks.OrderLookup.ScanToShip
             ShowOrderVerificationError = false;
             IsOrderVerified = false;
             IsOrderProcessed = false;
-
-            ScanPackViewModel.Reset();
         }
 
         /// <summary>

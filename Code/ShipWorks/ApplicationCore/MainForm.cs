@@ -1241,7 +1241,7 @@ namespace ShipWorks
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
 
-            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            foreach (IScanToShipPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IScanToShipPipeline>>())
             {
                 service.InitializeForCurrentScope();
             }

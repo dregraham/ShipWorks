@@ -7,7 +7,7 @@ namespace ShipWorks.OrderLookup
     /// Interface for initializing order lookup pipelines under a top level lifetime scope
     /// </summary>
     [Service]
-    public interface IOrderLookupPipeline : IDisposable
+    public interface IScanToShipPipeline : IDisposable
     {
         /// <summary>
         /// Initialize the pipeline under the current scope

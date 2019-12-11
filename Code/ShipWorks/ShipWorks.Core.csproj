@@ -913,7 +913,7 @@
     <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldLayoutProviderHost.cs" />
-    <Compile Include="OrderLookup\IOrderLookupPipeline.cs" />
+    <Compile Include="OrderLookup\IScanToShipPipeline.cs" />
     <Compile Include="OrderLookup\IOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />

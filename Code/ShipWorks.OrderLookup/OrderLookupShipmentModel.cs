@@ -582,6 +582,7 @@ namespace ShipWorks.OrderLookup
             ShipmentLoaded?.Invoke(this, EventArgs.Empty);
             messenger.Send(new ShipmentSelectionChangedMessage(this, new[] { ShipmentAdapter.Shipment.ShipmentID }, ShipmentAdapter));
             ShipmentLoadedComplete?.Invoke(this, EventArgs.Empty);
+            messenger.Send(new ScanToShipShipmentLoadedMessage(this, ShipmentAdapter.Shipment));
         }
 
         /// <summary>
