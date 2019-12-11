@@ -5,7 +5,7 @@ pipeline {
     	disableConcurrentBuilds()
   	}
 	parameters {
-		stringParam(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
+		string(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
 	}
 	environment {
 		versionNumber = readFile ".build-label"
