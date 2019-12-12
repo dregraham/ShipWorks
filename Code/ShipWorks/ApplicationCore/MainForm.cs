@@ -2164,7 +2164,17 @@ namespace ShipWorks
         /// <summary>
         /// Select the order lookup tab
         /// </summary>
-        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+        public void SelectOrderLookupTab()
+        {
+            if (ribbon.InvokeRequired)
+            {
+                ribbon.Invoke((MethodInvoker) SelectOrderLookupTab);
+            }
+            else
+            {
+                ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+            }
+        }
 
         /// <summary>
         /// Get the shipment dock control
