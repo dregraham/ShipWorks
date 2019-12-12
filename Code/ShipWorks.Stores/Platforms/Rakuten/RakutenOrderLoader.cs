@@ -373,7 +373,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             adapter.LastName = name.Last;
 
             // If we have both address lines they are reversed by the API
-            if(address.Address2 != null)
+            if (address.Address2 != null)
             {
                 adapter.Street1 = address.Address2;
                 adapter.Street2 = address.Address1;
