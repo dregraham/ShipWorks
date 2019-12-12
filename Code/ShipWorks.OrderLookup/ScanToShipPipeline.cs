@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
@@ -22,6 +23,8 @@ using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.OrderLookup.Messages;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
@@ -47,6 +50,8 @@ namespace ShipWorks.OrderLookup
         private readonly ILicenseService licenseService;
         private readonly IUserSession userSession;
         private readonly IShortcutManager shortcutManager;
+        private readonly IShippingManager shippingManager;
+        private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -79,7 +84,9 @@ namespace ShipWorks.OrderLookup
             IScanToShipViewModel scanToShipViewModel,
             ILicenseService licenseService,
             IUserSession userSession,
-            IShortcutManager shortcutManager)
+            IShortcutManager shortcutManager,
+            IShippingManager shippingManager,
+            IMessageHelper messageHelper)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -95,6 +102,8 @@ namespace ShipWorks.OrderLookup
             this.licenseService = licenseService;
             this.userSession = userSession;
             this.shortcutManager = shortcutManager;
+            this.shippingManager = shippingManager;
+            this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
 
@@ -184,7 +193,10 @@ namespace ShipWorks.OrderLookup
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Do(HandleNavigateMessage)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
-                    .Subscribe()
+                    .Subscribe(),
+
+                messenger.OfType<OrderLookupShipAgainMessage>()
+                .Subscribe(x => ShipAgain(x))
 
             );
         }
@@ -454,6 +466,23 @@ namespace ShipWorks.OrderLookup
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
                 shortcutManager.ShowShortcutIndicator(shortcutMessage);
+            }
+        }
+
+        /// <summary>
+        /// Ship an order again
+        /// </summary>
+        private async void ShipAgain(OrderLookupShipAgainMessage message)
+        {
+            using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
+            {
+                ICarrierShipmentAdapter shipmentAdapter = shippingManager.GetShipment(message.ShipmentID);
+                ShipmentEntity shipment = shippingManager.CreateShipmentCopy(shipmentAdapter.Shipment);
+
+                await LoadOrder(shipment.Order).ConfigureAwait(false);
+
+                mainForm.SelectOrderLookupTab();
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
             }
         }
 

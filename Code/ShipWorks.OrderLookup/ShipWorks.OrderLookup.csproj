@@ -411,7 +411,6 @@
     <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
-    <Compile Include="ShipmentModelPipelines\ShipAgainPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ShipmentProcessedPipeline.cs" />
   </ItemGroup>
   <ItemGroup>
