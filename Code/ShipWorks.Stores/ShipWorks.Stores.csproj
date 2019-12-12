@@ -312,7 +312,6 @@
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseItem.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrder.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseStore.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartStore.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenErrors.cs" />
     <Compile Include="Platforms\Rakuten\DTO\RakutenOrdersResponse.cs" />
