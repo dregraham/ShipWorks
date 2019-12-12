@@ -473,15 +473,15 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async void ShipAgain(OrderLookupShipAgainMessage message)
         {
+            scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+
             using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
             {
                 ICarrierShipmentAdapter shipmentAdapter = shippingManager.GetShipment(message.ShipmentID);
                 ShipmentEntity shipment = shippingManager.CreateShipmentCopy(shipmentAdapter.Shipment);
 
                 await LoadOrder(shipment.Order).ConfigureAwait(false);
-
-                mainForm.SelectOrderLookupTab();
-                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+                mainForm.SelectScanToShipTab();
             }
         }
 

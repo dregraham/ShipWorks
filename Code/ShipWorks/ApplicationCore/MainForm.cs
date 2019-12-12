@@ -2164,11 +2164,11 @@ namespace ShipWorks
         /// <summary>
         /// Select the order lookup tab
         /// </summary>
-        public void SelectOrderLookupTab()
+        public void SelectScanToShipTab()
         {
             if (ribbon.InvokeRequired)
             {
-                ribbon.Invoke((MethodInvoker) SelectOrderLookupTab);
+                ribbon.Invoke((MethodInvoker) SelectScanToShipTab);
             }
             else
             {
