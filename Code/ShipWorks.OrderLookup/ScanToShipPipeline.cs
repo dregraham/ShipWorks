@@ -57,7 +57,7 @@ namespace ShipWorks.OrderLookup
         private bool processingScan = false;
         private object loadingOrderLock = new object();
         bool allowScanPack = true;
-        private bool autoAdvanceEnabled;
+        private bool AutoAdvanceEnabled => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -116,7 +116,6 @@ namespace ShipWorks.OrderLookup
 
             allowScanPack = licenseService.IsHub;
             scanToShipViewModel.ScanPackViewModel.Enabled = allowScanPack;
-            autoAdvanceEnabled = licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
             subscriptions = new CompositeDisposable(
 
@@ -429,7 +428,7 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
-            if (autoAdvanceEnabled)
+            if (AutoAdvanceEnabled)
             {
                 scanToShipViewModel.SelectedTab = (int) (scanToShipViewModel.IsOrderVerified ?
                     ScanToShipTab.ShipTab :
@@ -445,7 +444,7 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.ShowOrderVerificationError = false;
             scanToShipViewModel.IsOrderVerified = true;
 
-            if (autoAdvanceEnabled)
+            if (AutoAdvanceEnabled)
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
             }
