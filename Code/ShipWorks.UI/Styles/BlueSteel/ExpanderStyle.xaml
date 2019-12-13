@@ -19,7 +19,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Border Padding="{TemplateBinding Padding}" BorderThickness="1" BorderBrush="{StaticResource Expander.Header.Border}">
+                    <Border Padding="{TemplateBinding Padding}" BorderThickness="1" BorderBrush="{StaticResource Expander.Border}">
                         <Grid SnapsToDevicePixels="False" MinHeight="36"
                               Background="{StaticResource Expander.Header.Background}">                            
                             <Grid.ColumnDefinitions>
@@ -60,7 +60,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
                     <Grid>
-                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="true">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3" SnapsToDevicePixels="true" Margin="-2 0 0 0">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="2" ShadowDepth="3" Opacity="0.3" Color="{StaticResource Expander.DropShadow}" />
                             </Border.Effect>
@@ -70,16 +70,21 @@
                             <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" Content="{TemplateBinding Header}" DockPanel.Dock="Top" Foreground="{TemplateBinding Foreground}" FocusVisualStyle="{StaticResource Expander.HeaderFocusVisual}" 
                                           FontWeight="Bold" 
                                           FontStyle="Normal" 
-                                          FontSize="12" 
+                                          FontSize="20"
                                           FontStretch="{TemplateBinding FontStretch}"
                                           FontFamily="/ShipWorks.OrderLookup;component/#Roboto" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Style="{StaticResource Expander.DownHeaderStyle}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                            <Border x:Name="ExpandSiteBorder" BorderBrush="{StaticResource Expander.Border}" BorderThickness="0">
                             <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Bottom" Focusable="false" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Visibility="Collapsed" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               Margin="{TemplateBinding Padding}"/>
+                            </Border>
                         </DockPanel>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsExpanded" Value="true">
                             <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                            <Setter Property="BorderThickness" TargetName="ExpandSiteBorder" Value="1 0 0 0"/>
+                            <Setter Property="Margin" TargetName="ExpandSiteBorder" Value="1 -1 0 -1"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
                             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>

@@ -49,10 +49,5 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Current state of the view model
         /// </summary>
         ScanPackState State { get; set; }
-
-        /// <summary>
-        /// Event handler for when state changes
-        /// </summary>
-        event EventHandler OrderVerified;
     }
 }

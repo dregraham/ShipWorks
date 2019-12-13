@@ -7,8 +7,6 @@
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookup"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:orderLookupSearchControl="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookupSearchControl"
-    xmlns:ui="http://schemas.shipworks.com/ui"
     d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d"
@@ -31,12 +29,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <ScrollViewer
-            Grid.Row="1"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto"
             Visibility="{Binding ShowColumns}">

@@ -57,6 +57,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookupSearchControl
         /// <summary>
         /// Clears the order error
         /// </summary>
-        void ClearOrderError(OrderClearReason reason);
+        void ClearSearchMessage(OrderClearReason reason);
     }
 }

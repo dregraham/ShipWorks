@@ -1254,7 +1254,7 @@ namespace ShipWorks
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
 
-            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            foreach (IScanToShipPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IScanToShipPipeline>>())
             {
                 service.InitializeForCurrentScope();
             }
@@ -2195,7 +2195,17 @@ namespace ShipWorks
         /// <summary>
         /// Select the order lookup tab
         /// </summary>
-        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+        public void SelectScanToShipTab()
+        {
+            if (ribbon.InvokeRequired)
+            {
+                ribbon.Invoke((MethodInvoker) SelectScanToShipTab);
+            }
+            else
+            {
+                ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+            }
+        }
 
         /// <summary>
         /// Get the shipment dock control

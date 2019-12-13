@@ -6,26 +6,35 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Common.IO.KeyboardShortcuts;
+using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
+using ShipWorks.IO.KeyboardShortcuts;
+using ShipWorks.Messaging.Messages.Orders;
+using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Users;
 
 namespace ShipWorks.OrderLookup
 {
     /// <summary>
     /// Listens for scan. Sends OrderFound message when the scan corresponds to an order
     /// </summary>
-    public class OrderLookupSingleScanPipeline : IOrderLookupPipeline
+    public class ScanToShipPipeline : IScanToShipPipeline
     {
         private readonly IMessenger messenger;
         private readonly IMainForm mainForm;
@@ -39,11 +48,16 @@ namespace ShipWorks.OrderLookup
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IScanToShipViewModel scanToShipViewModel;
         private readonly ILicenseService licenseService;
+        private readonly IUserSession userSession;
+        private readonly IShortcutManager shortcutManager;
+        private readonly IShippingManager shippingManager;
+        private readonly IMessageHelper messageHelper;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
         private object loadingOrderLock = new object();
         bool allowScanPack = true;
+        private bool AutoAdvanceEnabled => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -55,7 +69,7 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderLookupSingleScanPipeline(
+        public ScanToShipPipeline(
             IMessenger messenger,
             IMainForm mainForm,
             IOrderLookupOrderRepository orderRepository,
@@ -68,7 +82,11 @@ namespace ShipWorks.OrderLookup
             Func<string, ITrackedDurationEvent> telemetryFactory,
             IOrderLookupOrderIDRetriever orderIDRetriever,
             IScanToShipViewModel scanToShipViewModel,
-            ILicenseService licenseService)
+            ILicenseService licenseService,
+            IUserSession userSession,
+            IShortcutManager shortcutManager,
+            IShippingManager shippingManager,
+            IMessageHelper messageHelper)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -82,6 +100,10 @@ namespace ShipWorks.OrderLookup
             this.orderIDRetriever = orderIDRetriever;
             this.scanToShipViewModel = scanToShipViewModel;
             this.licenseService = licenseService;
+            this.userSession = userSession;
+            this.shortcutManager = shortcutManager;
+            this.shippingManager = shippingManager;
+            this.messageHelper = messageHelper;
             log = createLogger(GetType());
         }
 
@@ -94,6 +116,7 @@ namespace ShipWorks.OrderLookup
 
             allowScanPack = licenseService.IsHub;
             scanToShipViewModel.ScanPackViewModel.Enabled = allowScanPack;
+            scanToShipViewModel.SelectedTab = (int) (allowScanPack ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
 
             subscriptions = new CompositeDisposable(
 
@@ -139,19 +162,58 @@ namespace ShipWorks.OrderLookup
                 .CatchAndContinue((Exception ex) => HandleException(ex))
                 .Subscribe(),
 
-                messenger
-                .OfType<OrderLookupClearOrderMessage>()
-                .Where(x =>
-                        x.Reason == OrderClearReason.Reset ||
-                        x.Reason == OrderClearReason.NewSearch ||
-                        x.Reason == OrderClearReason.ErrorLoadingOrder)
-                .Subscribe(x => ClearOrderError(x.Reason))
+                messenger.OfType<OrderLookupClearOrderMessage>()
+                    .Subscribe(x => HandleClearOrderMessage(x.Reason)),
+
+                // Shipment loaded
+                messenger.OfType<ScanToShipShipmentLoadedMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Do(HandleShipmentLoadedMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                // Shipment processed
+                messenger.OfType<ShipmentsProcessedMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Where(x => x.Shipments.All(s => s.Shipment.Processed))
+                    .Do(_ => scanToShipViewModel.IsOrderProcessed = true)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                // Order verified
+                messenger.OfType<OrderVerifiedMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Where(x => x.Order.Verified)
+                    .Do(HandleOrderVerifiedMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                // Tab navigation shortcut
+                messenger.OfType<ShortcutMessage>()
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
+                    .Do(HandleNavigateMessage)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                messenger.OfType<OrderLookupShipAgainMessage>()
+                .Subscribe(x => ShipAgain(x))
+
             );
         }
 
-        private void ClearOrderError(OrderClearReason reason)
+        /// <summary>
+        /// Clear any messages or feedback related to the selected order.
+        /// </summary>
+        private void HandleClearOrderMessage(OrderClearReason orderClearReason)
         {
-            scanToShipViewModel.SearchViewModel.ClearOrderError(reason);
+            scanToShipViewModel.Reset();
+
+            if (orderClearReason == OrderClearReason.Reset ||
+                orderClearReason == OrderClearReason.NewSearch ||
+                orderClearReason == OrderClearReason.ErrorLoadingOrder)
+            {
+                scanToShipViewModel.SearchViewModel.ClearSearchMessage(orderClearReason);
+            }
         }
 
         /// <summary>
@@ -191,7 +253,7 @@ namespace ShipWorks.OrderLookup
         /// Logs the exception and reconnect pipeline.
         /// </summary>
         private void HandleException(Exception ex) =>
-            log.Error("Error occurred while handling scan message in OrderLookupSingleScanPipeline.", ex);
+            log.Error("Error occurred while handling scan message in ScanToShipPipeline.", ex);
 
         /// <summary>
         /// Download order, auto print if needed, send order message
@@ -355,6 +417,69 @@ namespace ShipWorks.OrderLookup
             finally
             {
                 processingScan = false;
+            }
+        }
+
+        /// <summary>
+        /// Handle the shipment loaded message
+        /// </summary>
+        private void HandleShipmentLoadedMessage(ScanToShipShipmentLoadedMessage shipmentLoadedMessage)
+        {
+            scanToShipViewModel.UpdateOrderVerificationError();
+            scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
+            scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
+
+            scanToShipViewModel.SelectedTab = userSession?.Settings?.AutoPrintRequireValidation ?? false ?
+                (int) ScanToShipTab.PackTab :
+                (int) ScanToShipTab.ShipTab;
+        }
+
+        /// <summary>
+        /// Handle the order verified message
+        /// </summary>
+        private void HandleOrderVerifiedMessage(OrderVerifiedMessage orderVerifiedMessage)
+        {
+            scanToShipViewModel.ShowOrderVerificationError = false;
+            scanToShipViewModel.IsOrderVerified = true;
+
+            if (AutoAdvanceEnabled)
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+            }
+        }
+
+        /// <summary>
+        /// Navigate to a specific tab
+        /// </summary>
+        private void HandleNavigateMessage(ShortcutMessage shortcutMessage)
+        {
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.NavigateToPackTab))
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.PackTab;
+                shortcutManager.ShowShortcutIndicator(shortcutMessage);
+            }
+
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.NavigateToShipTab))
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+                shortcutManager.ShowShortcutIndicator(shortcutMessage);
+            }
+        }
+
+        /// <summary>
+        /// Ship an order again
+        /// </summary>
+        private async void ShipAgain(OrderLookupShipAgainMessage message)
+        {
+            scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+
+            using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
+            {
+                ICarrierShipmentAdapter shipmentAdapter = shippingManager.GetShipment(message.ShipmentID);
+                ShipmentEntity shipment = shippingManager.CreateShipmentCopy(shipmentAdapter.Shipment);
+
+                await LoadOrder(shipment.Order).ConfigureAwait(false);
+                mainForm.SelectScanToShipTab();
             }
         }
 

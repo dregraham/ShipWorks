@@ -26,8 +26,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
-        public event EventHandler OrderVerified;
-
         private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
         private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
@@ -117,15 +115,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         public ScanPackState State
         {
             get => state;
-            set
-            {
-                Set(ref state, value);
-
-                if (value == ScanPackState.OrderVerified)
-                {
-                    OrderVerified?.Invoke(this, EventArgs.Empty);
-                }
-            }
+            set => Set(ref state, value);
         }
 
         /// <summary>
