@@ -182,7 +182,8 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackReceivedType] [int] NULL,
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupPayPalAddressStatus] [int] NULL,
-[GuaranteedDelivery] [bit] NOT NULL
+[GuaranteedDelivery] [bit] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -1674,7 +1675,8 @@ CREATE TABLE [dbo].[EbayOrderItem]
 [MyEbayPaid] [bit] NOT NULL,
 [MyEbayShipped] [bit] NOT NULL,
 [PayPalTransactionID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PayPalAddressStatus] [int] NOT NULL
+[PayPalAddressStatus] [int] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderItem] on [dbo].[EbayOrderItem]'
@@ -2227,7 +2229,9 @@ CREATE TABLE [dbo].[FedExProfile]
 [ReturnSaturdayPickup] [bit] NULL,
 [ReturnsClearance] [bit] NULL,
 [ReferenceFIMS] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ThirdPartyConsignee] [bit] NULL
+[ThirdPartyConsignee] [bit] NULL,
+[CreateCommercialInvoice] [bit] NULL,
+[FileElectronically] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExProfile] on [dbo].[FedExProfile]'
@@ -6809,7 +6813,8 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [EbayOrderID] [bigint] NOT NULL,
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellingManagerRecord] [int] NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
@@ -7219,6 +7224,52 @@ GO
 PRINT N'Adding foreign keys to [dbo].[OverstockStore]'
 GO
 ALTER TABLE [dbo].[OverstockStore] ADD CONSTRAINT [FK_OverstockStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+PRINT N'Creating [dbo].[RakutenOrder]'
+GO
+CREATE TABLE [dbo].[RakutenOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[RakutenPackageID] [nvarchar](36) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_RakutenOrder] on [dbo].[RakutenOrder]'
+GO
+ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [PK_RakutenOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+CREATE TABLE [dbo].[RakutenOrderSearch]
+(
+[RakutenOrderSearchID] [bigint] IDENTITY(1,1) NOT NULL,
+[OrderID] [bigint] NOT NULL,
+[OriginalOrderID] [bigint] NOT NULL,
+[RakutenPackageID] [nvarchar](36) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_RakutenOrderSearch] on [dbo].[RakutenOrderSearch]'
+GO
+ALTER TABLE [dbo].[RakutenOrderSearch] ADD CONSTRAINT [PK_RakutenOrderSearch] PRIMARY KEY CLUSTERED  ([RakutenOrderSearchID])
+GO
+PRINT N'Creating [dbo].[RakutenStore]'
+GO
+CREATE TABLE [dbo].[RakutenStore]
+(
+[StoreID] [bigint] NOT NULL,
+[AuthKey] [nvarchar](100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[MarketplaceID] [nvarchar](10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShopURL] [nvarchar](50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_RakutenStore] on [dbo].[RakutenStore]'
+GO
+ALTER TABLE [dbo].[RakutenStore] ADD CONSTRAINT [PK_RakutenStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[RakutenOrder]'
+GO
+ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [FK_RakutenOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[RakutenStore]'
+GO
+ALTER TABLE [dbo].[RakutenStore] ADD CONSTRAINT [FK_RakutenStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Creating custom types'
 GO

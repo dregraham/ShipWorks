@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Save the other fields
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                shipDate.ReadMultiDate(v => shipment.ShipDate = v);
+                shipDate.ReadMultiDate(v => shipment.ShipDate = v.Date.ToUniversalTime());
                 weight.ReadMultiWeight(v => shipment.ContentWeight = v);
                 serviceLevel.ReadMultiValue(v => shipment.BestRate.ServiceLevel = (int) v);
             }

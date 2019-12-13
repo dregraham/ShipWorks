@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Xml;
 using Rebex.Mail;
+using RestSharp;
 
 namespace Interapptive.Shared.Net
 {
@@ -40,6 +41,16 @@ namespace Interapptive.Shared.Net
         /// Log the request as the given mail message
         /// </summary>
         void LogRequest(MailMessage mailMessage);
+
+        /// <summary>
+        /// Log an IRestRequest
+        /// </summary>
+        void LogRequest(IRestRequest request, IRestClient client, string extension);
+
+        /// <summary>
+        /// Log an IRestResponse
+        /// </summary>
+        void LogResponse(IRestResponse response, string extension);
 
         /// <summary>
         /// Log the API's response to ShipWorks

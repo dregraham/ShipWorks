@@ -490,6 +490,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RollupPayPalAddressStatus", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("GuaranteedDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ExtendedOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -808,6 +810,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderFieldIndex.GuaranteedDelivery, true); }
 			set	{ SetValue((int)EbayOrderFieldIndex.GuaranteedDelivery, value); }
+		}
+
+		/// <summary> The ExtendedOrderID property of the Entity EbayOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EbayOrder"."ExtendedOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ExtendedOrderID
+		{
+			get { return (System.String)GetValue((int)EbayOrderFieldIndex.ExtendedOrderID, true); }
+			set	{ SetValue((int)EbayOrderFieldIndex.ExtendedOrderID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EbayCombinedOrderRelationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -1401,6 +1401,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\XamlNamespaces.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
@@ -1408,6 +1409,8 @@
     <Compile Include="Stores\Platforms\GenericFile\WizardPages\IGenericStoreHubPage.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
+    <Compile Include="Stores\Platforms\Rakuten\IRakutenStoreSetupControlViewModel.cs" />
+    <Compile Include="Stores\Platforms\Rakuten\OnlineUpdating\IRakutenOnlineUpdater.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\BackgroundAsyncMessageHelper.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
@@ -1419,6 +1422,7 @@
     <Compile Include="UI\Controls\SandRibbon\RibbonMenuItem.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="UI\WPF\WPFInterop.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />

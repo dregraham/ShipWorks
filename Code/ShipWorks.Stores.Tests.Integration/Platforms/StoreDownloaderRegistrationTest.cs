@@ -32,6 +32,7 @@ using ShipWorks.Stores.Platforms.OrderMotion;
 using ShipWorks.Stores.Platforms.Overstock;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.ProStores;
+using ShipWorks.Stores.Platforms.Rakuten;
 using ShipWorks.Stores.Platforms.Sears;
 using ShipWorks.Stores.Platforms.Shopify;
 using ShipWorks.Stores.Platforms.ShopSite;
@@ -134,6 +135,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms
             { StoreTypeCode.Overstock, typeof(OverstockDownloader) },
             { StoreTypeCode.PayPal, typeof(PayPalDownloader) },
             { StoreTypeCode.ProStores, typeof(ProStoresDownloader) },
+            { StoreTypeCode.Rakuten, typeof(RakutenDownloader) },
             { StoreTypeCode.Sears, typeof(SearsDownloader) },
             { StoreTypeCode.Shopify, typeof(ShopifyDownloader) },
             { StoreTypeCode.ShopSite, typeof(ShopSiteDownloader) },

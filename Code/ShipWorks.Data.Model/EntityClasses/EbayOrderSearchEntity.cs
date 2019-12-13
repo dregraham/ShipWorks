@@ -358,6 +358,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("SellingManagerRecord", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OriginalOrderID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ExtendedOrderID", fieldHashtable);
 		}
 		#endregion
 
@@ -514,6 +516,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderSearchFieldIndex.OriginalOrderID, true); }
 			set	{ SetValue((int)EbayOrderSearchFieldIndex.OriginalOrderID, value); }
+		}
+
+		/// <summary> The ExtendedOrderID property of the Entity EbayOrderSearch<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EbayOrderSearch"."ExtendedOrderID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ExtendedOrderID
+		{
+			get { return (System.String)GetValue((int)EbayOrderSearchFieldIndex.ExtendedOrderID, true); }
+			set	{ SetValue((int)EbayOrderSearchFieldIndex.ExtendedOrderID, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'EbayOrderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

@@ -126,8 +126,8 @@ namespace ShipWorks.ApplicationCore.Logging
         SellerCloud,
         InfiPlex,
         Walmart,
-		SellerActive,
-		GeekSeller,
+        SellerActive,
+        GeekSeller,
         UpsLocalRating,
         GoogleMaps,
         Jet,
@@ -146,5 +146,7 @@ namespace ShipWorks.ApplicationCore.Logging
         AmazonSWA,
         [ApiPrivateLogSource]
         ShipWorksWarehouse,
+
+        Rakuten,
     }
 }

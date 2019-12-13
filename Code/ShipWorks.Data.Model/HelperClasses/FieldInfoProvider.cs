@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			this.InitClass( (238 + 2));
+			this.InitClass( (241 + 2));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -212,6 +212,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitProStoresOrderEntityInfos();
 			InitProStoresOrderSearchEntityInfos();
 			InitProStoresStoreEntityInfos();
+			InitRakutenOrderEntityInfos();
+			InitRakutenOrderSearchEntityInfos();
+			InitRakutenStoreEntityInfos();
 			InitResourceEntityInfos();
 			InitScanFormBatchEntityInfos();
 			InitSearchEntityInfos();
@@ -1029,6 +1032,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedComments", typeof(System.String), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, 80, 0, 0);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupPayPalAddressStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupPayPalAddressStatus, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderEntity", "GuaranteedDelivery", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GuaranteedDelivery, 0, 0, 0);
+			this.AddElementFieldInfo("EbayOrderEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayOrderItemEntity's FieldInfo objects</summary>
 		private void InitEbayOrderItemEntityInfos()
@@ -1052,6 +1056,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderItemEntity", "MyEbayShipped", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderItemFieldIndex.MyEbayShipped, 0, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalTransactionID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalTransactionID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalAddressStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalAddressStatus, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderItemEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayOrderSearchEntity's FieldInfo objects</summary>
 		private void InitEbayOrderSearchEntityInfos()
@@ -1063,6 +1068,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayBuyerID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("EbayOrderSearchEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayStoreEntity's FieldInfo objects</summary>
 		private void InitEbayStoreEntityInfos()
@@ -1401,6 +1407,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExProfileEntity", "ReturnsClearance", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ReturnsClearance, 0, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "ReferenceFIMS", typeof(System.String), false, false, false, true,  (int)FedExProfileFieldIndex.ReferenceFIMS, 300, 0, 0);
 			this.AddElementFieldInfo("FedExProfileEntity", "ThirdPartyConsignee", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.ThirdPartyConsignee, 0, 0, 0);
+			this.AddElementFieldInfo("FedExProfileEntity", "CreateCommercialInvoice", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.CreateCommercialInvoice, 0, 0, 0);
+			this.AddElementFieldInfo("FedExProfileEntity", "FileElectronically", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)FedExProfileFieldIndex.FileElectronically, 0, 0, 0);
 		}
 		/// <summary>Inits FedExProfilePackageEntity's FieldInfo objects</summary>
 		private void InitFedExProfilePackageEntityInfos()
@@ -2823,6 +2831,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPrefix", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPrefix, 30, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyPassword", typeof(System.String), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyPassword, 150, 0, 0);
 			this.AddElementFieldInfo("ProStoresStoreEntity", "LegacyCanUpgrade", typeof(System.Boolean), false, false, false, false,  (int)ProStoresStoreFieldIndex.LegacyCanUpgrade, 0, 0, 0);
+		}
+		/// <summary>Inits RakutenOrderEntity's FieldInfo objects</summary>
+		private void InitRakutenOrderEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(RakutenOrderFieldIndex), "RakutenOrderEntity");
+			this.AddElementFieldInfo("RakutenOrderEntity", "OrderID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderEntity", "RakutenPackageID", typeof(System.String), false, false, false, false,  (int)RakutenOrderFieldIndex.RakutenPackageID, 36, 0, 0);
+		}
+		/// <summary>Inits RakutenOrderSearchEntity's FieldInfo objects</summary>
+		private void InitRakutenOrderSearchEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(RakutenOrderSearchFieldIndex), "RakutenOrderSearchEntity");
+			this.AddElementFieldInfo("RakutenOrderSearchEntity", "RakutenOrderSearchID", typeof(System.Int64), true, false, true, false,  (int)RakutenOrderSearchFieldIndex.RakutenOrderSearchID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderSearchEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)RakutenOrderSearchFieldIndex.OrderID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)RakutenOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenOrderSearchEntity", "RakutenPackageID", typeof(System.String), false, false, false, false,  (int)RakutenOrderSearchFieldIndex.RakutenPackageID, 36, 0, 0);
+		}
+		/// <summary>Inits RakutenStoreEntity's FieldInfo objects</summary>
+		private void InitRakutenStoreEntityInfos()
+		{
+			this.AddFieldIndexEnumForElementName(typeof(RakutenStoreFieldIndex), "RakutenStoreEntity");
+			this.AddElementFieldInfo("RakutenStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)RakutenStoreFieldIndex.StoreID, 0, 0, 19);
+			this.AddElementFieldInfo("RakutenStoreEntity", "AuthKey", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.AuthKey, 100, 0, 0);
+			this.AddElementFieldInfo("RakutenStoreEntity", "MarketplaceID", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.MarketplaceID, 10, 0, 0);
+			this.AddElementFieldInfo("RakutenStoreEntity", "ShopURL", typeof(System.String), false, false, false, false,  (int)RakutenStoreFieldIndex.ShopURL, 50, 0, 0);
 		}
 		/// <summary>Inits ResourceEntity's FieldInfo objects</summary>
 		private void InitResourceEntityInfos()

@@ -34,8 +34,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.AmazonOrder] = 8;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrder] = 11;
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderItem] = 10;
-            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 25;
-            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 18;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrder] = 26;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderItem] = 19;
             tableBitCount[(int) FilterNodeColumnMaskTable.MarketplaceAdvisorOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
@@ -60,7 +60,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ChannelAdvisorOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.ClickCartProOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrderSearch] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 6;
+            tableBitCount[(int) FilterNodeColumnMaskTable.EbayOrderSearch] = 7;
             tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.LemonStandOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderSearch] = 7;

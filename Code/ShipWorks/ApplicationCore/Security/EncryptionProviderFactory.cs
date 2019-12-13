@@ -87,7 +87,6 @@ namespace ShipWorks.ApplicationCore.Security
         /// <summary>
         /// Creates the ChannelAdvisor encryption provider.
         /// </summary>
-        /// <returns></returns>
         public IEncryptionProvider CreateChannelAdvisorEncryptionProvider() =>
             new AesEncryptionProvider(cipherKeyFactory[CipherContext.ChannelAdvisor]);
 
@@ -96,5 +95,11 @@ namespace ShipWorks.ApplicationCore.Security
         /// </summary>
         public IEncryptionProvider CreateOverstockEncryptionProvider() =>
             new AesEncryptionProvider(cipherKeyFactory[CipherContext.Overstock]);
+
+        /// <summary>
+        /// Creates the Rakuten encryption provider
+        /// </summary>
+        public IEncryptionProvider CreateRakutenEncryptionProvider() =>
+            new AesEncryptionProvider(cipherKeyFactory[CipherContext.Rakuten]);
     }
 }

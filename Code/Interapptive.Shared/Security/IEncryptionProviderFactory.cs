@@ -44,13 +44,16 @@
         /// <summary>
         /// Creates the ChannelAdvisor encryption provider.
         /// </summary>
-        /// <returns></returns>
         IEncryptionProvider CreateChannelAdvisorEncryptionProvider();
 
         /// <summary>
         /// Creates the Overstock encryption provider.
         /// </summary>
-        /// <returns></returns>
         IEncryptionProvider CreateOverstockEncryptionProvider();
+
+        /// <summary>
+        /// Creates the Rakuten encryption provider.
+        /// </summary>
+        IEncryptionProvider CreateRakutenEncryptionProvider();
     }
 }

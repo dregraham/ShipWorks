@@ -248,6 +248,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 EbayOrderID = 0,
                 EbayBuyerID = "",
+                ExtendedOrderID = "",
 
                 SelectedShippingMethod = (int) EbayShippingMethod.DirectToBuyer,
 
@@ -301,6 +302,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 PayPalAddressStatus = (int) AddressStatusCodeType.None,
                 PayPalTransactionID = "",
+                ExtendedOrderID = "",
+
 
                 SellingManagerRecord = 0
             };
@@ -497,6 +500,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ElementOutline outline = container.AddElement("eBay");
             outline.AddElement("LastModifiedDate", () => order.Value.OnlineLastModified);
             outline.AddElement("BuyerID", () => order.Value.EbayBuyerID);
+            outline.AddElement("OrderNumber", () => order.Value.ExtendedOrderID);
             outline.AddElement("RecordNumber", () => order.Value.SellingManagerRecord);
 
             // Selling Manager record (legacy way)

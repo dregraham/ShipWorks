@@ -243,6 +243,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Boolean> ThirdPartyConsignee { get; }
+        /// <summary> The CreateCommercialInvoice property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CreateCommercialInvoice"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> CreateCommercialInvoice { get; }
+        /// <summary> The FileElectronically property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."FileElectronically"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Boolean> FileElectronically { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         

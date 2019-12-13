@@ -563,6 +563,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.5\7.5.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.5\7.5.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.5\7.5.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.5\7.5.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.6\7.6.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.6\7.6.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\7.6\7.6.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\7.6\7.6.0.3.sql" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />

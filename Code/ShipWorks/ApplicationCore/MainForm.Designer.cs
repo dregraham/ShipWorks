@@ -224,7 +224,6 @@ namespace ShipWorks
             this.mainMenuItemOptions = new RibbonMainMenuItem();
             this.mainMenuItemSupport = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuItemDatabase = new Divelements.SandRibbon.MainMenuItem();
-            this.mainMenuItemViewMode = new Divelements.SandRibbon.MainMenuItem();
             this.mainMenuLogon = new Divelements.SandRibbon.MainMenuItem();
             this.ribbonTabGridViewHome = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkOrders = new Divelements.SandRibbon.RibbonChunk();
@@ -2284,7 +2283,6 @@ namespace ShipWorks
             this.mainMenuItemOptions,
             this.mainMenuItemSupport,
             this.mainMenuItemDatabase,
-            this.mainMenuItemViewMode,
             this.mainMenuLogon});
             this.applicationMenu.OptionsButtonImage = ((System.Drawing.Image) (resources.GetObject("applicationMenu.OptionsButtonImage")));
             this.applicationMenu.OptionsButtonText = "ShipWorks Opt&ions";
@@ -2318,15 +2316,6 @@ namespace ShipWorks
             menu2});
             this.ribbonSecurityProvider.SetPermission(this.mainMenuItemDatabase, ShipWorks.Users.Security.PermissionType.DatabaseSetup);
             this.mainMenuItemDatabase.Text = "Database";
-            //
-            // mainMenuItemViewMode
-            //
-            this.mainMenuItemViewMode.GroupName = "View Mode";
-            this.mainMenuItemViewMode.Guid = new System.Guid("9bcb14b5-0a25-4dac-bbe6-5c609fc343ec");
-            this.mainMenuItemViewMode.Image = global::ShipWorks.Properties.Resources.windows;
-            this.mainMenuItemViewMode.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
-            this.uiModeMenu});
-            this.mainMenuItemViewMode.Text = "Shipping View";
             //
             // mainMenuLogon
             //
@@ -3662,7 +3651,6 @@ namespace ShipWorks
         private RibbonMenuItem menuItemBuySupplies;
         private Divelements.SandRibbon.Separator separator2;
         private Divelements.SandRibbon.MainMenuItem mainMenuItemDatabase;
-        private Divelements.SandRibbon.MainMenuItem mainMenuItemViewMode;
         private System.Windows.Forms.ToolStripMenuItem contextOrderCustomActions;
         private System.Windows.Forms.ToolStripSeparator contextCustomerCustomActionsSep;
         private System.Windows.Forms.ToolStripMenuItem contextCustomerCustomActions;

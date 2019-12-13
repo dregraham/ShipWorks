@@ -278,7 +278,6 @@ namespace Interapptive.Shared.Net
             webRequest.ServicePoint.Expect100Continue = expect100Continue;
             webRequest.KeepAlive = keepAlive;
             webRequest.UserAgent = DefaultUserAgent;
-            webRequest.Proxy = null;
 
             SetAllowAutoRedirect(webRequest);
 

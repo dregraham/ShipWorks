@@ -271,6 +271,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 order.OrderDate = DetermineOrderDate(orderType);
             }
 
+            if (string.IsNullOrWhiteSpace(order.ExtendedOrderID))
+            {
+                order.ExtendedOrderID = orderType.ExtendedOrderID;
+            }
+
             // Update last modified
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
@@ -903,6 +908,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             if (string.IsNullOrWhiteSpace(orderItem.Name))
             {
                 orderItem.Name = transaction.Item.Title;
+            }
+
+            if (string.IsNullOrWhiteSpace(orderItem.ExtendedOrderID))
+            {
+                orderItem.ExtendedOrderID = transaction.ExtendedOrderID;
             }
 
             UpdateTransactionSKU(orderItem, transaction.Item.SKU ?? "");

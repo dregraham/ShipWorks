@@ -45,7 +45,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         OrderID = EbayOrderSearchFields.OrderID.As("EOSFOrderID").ToValue<long>(),
                         OriginalOrderID = EbayOrderSearchFields.OriginalOrderID.ToValue<long>(),
                         EbayBuyerID = EbayOrderSearchFields.EbayBuyerID.ToValue<string>(),
-                        SellingManagerRecord = EbayOrderSearchFields.SellingManagerRecord.ToValue<int>()
+                        SellingManagerRecord = EbayOrderSearchFields.SellingManagerRecord.ToValue<int>(),
+                        ExtendedOrderID = EbayOrderSearchFields.ExtendedOrderID.ToValue<string>(),
                     })
                 .Distinct()
                 .Where(EbayOrderSearchFields.OrderID == order.OrderID)
@@ -71,7 +72,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 OriginalOrderID = ebayOrder.OrderID,
                 EbayOrderID = ebayOrder.EbayOrderID,
                 EbayBuyerID = ebayOrder.EbayBuyerID,
-                SellingManagerRecord = ebayOrder.SellingManagerRecord
+                SellingManagerRecord = ebayOrder.SellingManagerRecord,
+                ExtendedOrderID = ebayOrder.ExtendedOrderID,
             };
         }
     }

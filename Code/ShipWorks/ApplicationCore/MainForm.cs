@@ -1106,7 +1106,20 @@ namespace ShipWorks
         {
             heartBeat = new BatchModeUIHeartbeat(this);
 
-            windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            try
+            {
+                windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
+            }          
+            catch(AppearanceException)
+            {
+                windowLayoutProvider.LoadDefault();
+                MessageHelper.ShowMessage(this,
+                "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
+
+                //Ensure that the defaults are saved.
+                SaveCurrentUserSettings();
+            }
+
             gridMenuLayoutProvider.LoadLayout(user.Settings.GridMenuLayout);
 
             foreach (DockingPanelContentHolder holder in GetDockingPanelContentHolders())
@@ -1731,6 +1744,7 @@ namespace ShipWorks
         private void ApplyCurrentUserLayout()
         {
             UserSettingsEntity settings = UserSession.User.Settings;
+            bool hasProductsPermissions = UserSession.Security.HasPermission(PermissionType.ManageProducts);
 
             // Show the tool bar
             ribbon.ToolBar = quickAccessToolBar;
@@ -1738,6 +1752,11 @@ namespace ShipWorks
             // Add back in the tabs
             foreach (RibbonTab tab in ribbonTabs)
             {
+                if (!hasProductsPermissions && IsProductSpecificTab(tab))
+                {
+                    continue;
+                }
+
                 ribbon.Tabs.Add(tab);
 
                 // Preserve order
@@ -1752,7 +1771,19 @@ namespace ShipWorks
             statusBar.MainStrip.Visible = true;
 
             // Load the user's saved state
-            windowLayoutProvider.LoadLayout(settings.WindowLayout);
+            try
+            {
+                windowLayoutProvider.LoadLayout(settings.WindowLayout);
+            }
+            catch (AppearanceException)
+            {
+                windowLayoutProvider.LoadDefault();
+                MessageHelper.ShowMessage(this, 
+                "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
+
+                //Ensure that the defaults are saved.
+                SaveCurrentUserSettings();
+            }
 
             // Make sure any users upgrading from a previous version will always see (and
             // be made aware of) the rate panel; they can still choose to remove it later
@@ -2570,8 +2601,6 @@ namespace ShipWorks
         private void OnBeforePopupApplicationMenu(object sender, BeforePopupEventArgs e)
         {
             UpdateLoginLogoffMenu();
-
-            mainMenuItemViewMode.Visible = UserSession.IsLoggedOn;
 
             // Only show backup \ restore if logged on
             if (!UserSession.IsLoggedOn)

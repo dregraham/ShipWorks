@@ -10,11 +10,14 @@ pipeline {
 	options {
     	disableConcurrentBuilds()
   	}
+	parameters {
+		string(defaultValue: "0.0.0", description: 'Version number (0.0.0)', name: 'versionNumber')
+	}
 	stages {
 		stage('Build') {
 			steps {
 				echo "Build on ${NODE_NAME}"
-                bat 'bundle exec rake build:public_installer[0.0.0]'
+                		bat "bundle exec rake build:public_installer[${params.versionNumber.trim()}]"
 				archiveArtifacts artifacts: 'Artifacts/Distribute/*.*,Artifacts/Logs/*.*', fingerprint: true
 			}
 		}
