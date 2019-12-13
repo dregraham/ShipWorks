@@ -116,6 +116,7 @@ namespace ShipWorks.OrderLookup
 
             allowScanPack = licenseService.IsHub;
             scanToShipViewModel.ScanPackViewModel.Enabled = allowScanPack;
+            scanToShipViewModel.SelectedTab = (int) (allowScanPack ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
 
             subscriptions = new CompositeDisposable(
 
