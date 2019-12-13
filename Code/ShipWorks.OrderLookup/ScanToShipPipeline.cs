@@ -428,12 +428,9 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
-            if (AutoAdvanceEnabled)
-            {
-                scanToShipViewModel.SelectedTab = (int) (scanToShipViewModel.IsOrderVerified ?
-                    ScanToShipTab.ShipTab :
-                    ScanToShipTab.PackTab);
-            }
+            scanToShipViewModel.SelectedTab = userSession?.Settings?.AutoPrintRequireValidation ?? false ?
+                (int) ScanToShipTab.PackTab :
+                (int) ScanToShipTab.ShipTab;
         }
 
         /// <summary>
