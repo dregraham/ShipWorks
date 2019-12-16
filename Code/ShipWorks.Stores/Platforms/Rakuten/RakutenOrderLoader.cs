@@ -372,9 +372,16 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             adapter.MiddleName = name.Middle;
             adapter.LastName = name.Last;
 
-            // These are reversed by the API
-            adapter.Street1 = address.Address2;
-            adapter.Street2 = address.Address1;
+            // If we have both address lines they are reversed by the API
+            if (address.Address2 != null)
+            {
+                adapter.Street1 = address.Address2;
+                adapter.Street2 = address.Address1;
+            }
+            else
+            {
+                adapter.Street1 = address.Address1;
+            }
 
             adapter.City = address.CityName;
             adapter.StateProvCode = ParseState(address.StateCode);
