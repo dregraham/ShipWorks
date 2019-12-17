@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Linq;
+using System.Reflection;
 using GalaSoft.MvvmLight;
 
 namespace ShipWorks.OrderLookup.ScanPack
@@ -13,16 +15,13 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Constructor
         /// </summary>
-        public ScanPackItem(long orderItemID, string name, string imageUrl, double quantity, string itemUpc, string itemCode, string productUpc, string sku)
+        public ScanPackItem(long orderItemID, string name, string imageUrl, double quantity, params string[] barcodes)
         {
             OrderItemID = orderItemID;
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
-            ItemUpc = itemUpc;
-            ItemCode = itemCode;
-            ProductUpc = productUpc;
-            Sku = sku;
+            Barcodes = barcodes;
         }
 
         /// <summary>
@@ -54,27 +53,19 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// The Item's UPC
+        /// A collection of barcodes that can be matched on
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ItemUpc { get; set; }
+        public string[] Barcodes { get; }
 
         /// <summary>
-        /// The Item's code
+        /// Does the barcode match the item
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ItemCode { get; }
+        public bool IsMatch(string barcodeText) => Barcodes.Any(b => b.Equals(barcodeText, StringComparison.InvariantCultureIgnoreCase));
 
         /// <summary>
-        /// The Product's UPC
+        /// Creates a copy of this ScanPackItem
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string ProductUpc { get; }
-
-        /// <summary>
-        /// The Item's SKU
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string Sku { get; set; }
+        public ScanPackItem Copy() => new ScanPackItem(OrderItemID, Name, ImageUrl, Quantity, Barcodes);
     }
 }
