@@ -124,7 +124,6 @@ Task("Clean")
 /// RestoreNuGetPackages
 /// </summary>
 Task("RestoreNuGetPackages")
-    .IsDependentOn("Clean")
     .Does(() =>
 	{
 		LogStartMessage("NuGetRestore");
@@ -152,6 +151,7 @@ Task("Build")
 /// </summary>
 Task("BuildForCI")
     .IsDependentOn("ReplaceInstanceID")
+    .IsDependentOn("Clean")
 	.Does(() => 
 	{ 
 		LogStartMessage("BuildForCI");
@@ -197,6 +197,7 @@ Task("BuildDebug32")
 /// BuildRelease
 /// </summary>
 Task("BuildRelease")
+    .IsDependentOn("Clean")
 	.Does(() => 
 	{ 
 		LogStartMessage("BuildRelease");
@@ -213,6 +214,7 @@ Task("BuildRelease")
 /// DebugInstaller
 /// </summary>
 Task("DebugInstaller")
+    .IsDependentOn("Clean")
     .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
@@ -227,6 +229,7 @@ Task("DebugInstaller")
 /// InternalInstaller
 /// </summary>
 Task("InternalInstaller")
+    .IsDependentOn("Clean")
     .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
@@ -241,6 +244,7 @@ Task("InternalInstaller")
 /// PublicInstaller
 /// </summary>
 Task("PublicInstaller")
+    .IsDependentOn("Clean")
     .IsDependentOn("RestoreNuGetPackages")
 	.Does(() => 
 	{ 
