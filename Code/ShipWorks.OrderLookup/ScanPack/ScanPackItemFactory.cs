@@ -72,7 +72,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             string productUpc = product?.UPC ?? string.Empty;
             string sku = item.SKU ?? string.Empty;
 
-            return new ScanPackItem(item.OrderItemID, name, imageUrl, item.Quantity, itemCode, itemUpc, productUpc, sku);
+            return new ScanPackItem(item.OrderItemID, name, imageUrl, item.Quantity, itemCode, itemUpc, productUpc, sku, product.EAN, product.FNSku);
         }
     }
 }
