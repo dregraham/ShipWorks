@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Timers;
 using System.Windows.Forms;
 using Autofac;
@@ -12,6 +6,7 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Data.Administration;
 
 namespace ShipWorks.ApplicationCore.MessageBoxes
@@ -22,9 +17,8 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
     public partial class NeedUpgradeShipWorks : Form
     {
         private int TimeLimit = 30;
-        private System.Timers.Timer timer;
-        private IShipWorksCommunicationBridge communicationBridge;
-        private IUpdateService updateService;
+        private readonly System.Timers.Timer timer;
+        private readonly IUpdateService updateService;
 
         /// <summary>
         /// Constructor
@@ -33,19 +27,28 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
         {
             InitializeComponent();
 
-            communicationBridge = IoC.UnsafeGlobalLifetimeScope.Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString()));
+            IShipWorksCommunicationBridge communicationBridge = IoC.UnsafeGlobalLifetimeScope.
+                Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString()));
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (communicationBridge.IsAvailable())
+            if (AutoUpdateSettings.FailedLastAutoUpdate)
             {
-                close.Text = "Cancel";
-                update.Visible = true;
-                timer = new System.Timers.Timer(1000)
+                close.Text = "Close";
+                update.Visible = false;
+            }
+            else
+            {
+                if (communicationBridge.IsAvailable())
                 {
-                    Enabled = true,
-                    AutoReset = true
-                };
-                timer.Elapsed += OnCountdownTick;
+                    close.Text = "Cancel";
+                    update.Visible = true;
+                    timer = new System.Timers.Timer(1000)
+                    {
+                        Enabled = true,
+                        AutoReset = true
+                    };
+                    timer.Elapsed += OnCountdownTick;
+                }
             }
         }
 

@@ -23,6 +23,8 @@ namespace ShipWorks.Escalator
         private readonly IFileWriter fileWriter;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
+        private readonly string failedAutoUpdateFilePath = Path.Combine(EscalatorDataPath.AppLocation, "FailedAutoUpdate.txt");
+        private const int MaxRetryCount = 3;
 
         /// <summary>
         /// Constructor
@@ -49,26 +51,50 @@ namespace ShipWorks.Escalator
         public async Task Upgrade(Version version)
         {
             bool relaunchShipWorks = true;
+            bool shouldRetry = true;
+            int retryCount = 0;
 
-            try
+            while (shouldRetry && retryCount < MaxRetryCount)
             {
-                log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
-
-                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(version).ConfigureAwait(false);
-
-                if (shipWorksRelease == null)
+                try
                 {
-                    log.InfoFormat("Version {0} not found by webclient.", version);
+                    log.InfoFormat("ShipWorksUpgrade attempting to upgrade to version {0}", version);
+
+                    ShipWorksRelease shipWorksRelease =
+                        await updaterWebClient.GetVersionToDownload(version).ConfigureAwait(false);
+
+                    if (shipWorksRelease == null)
+                    {
+                        log.InfoFormat("Version {0} not found by webclient.", version);
+                    }
+                    else
+                    {
+                        Result installResult = await Install(shipWorksRelease, false).ConfigureAwait(false);
+                        relaunchShipWorks = installResult.Failure;
+
+                        if (installResult.Success)
+                        {
+                            shouldRetry = false;
+                            DeleteFailedAutoUpdateFile();
+                        }
+                        else
+                        {
+                            log.Error("Failed to install update automatically. Retrying.");
+                            retryCount++;
+                        }
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    Result installResult = await Install(shipWorksRelease, false).ConfigureAwait(false);
-                    relaunchShipWorks = installResult.Failure;
+                    log.Error("Error trying to upgrade by version", ex);
+                    retryCount++;
                 }
             }
-            catch (Exception ex)
+
+            if (shouldRetry && retryCount >= MaxRetryCount)
             {
-                log.Error("Error trying to upgrade by version", ex);
+                log.Error($"Failed to auto update {MaxRetryCount} times. Stopping auto updates until next successful install. User should try updating manually.");
+                CreateFailedAutoUpdateFile();
             }
 
             if (relaunchShipWorks)
@@ -83,33 +109,60 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
-            try
+            bool shouldRetry = true;
+            int retryCount = 0;
+
+            while (shouldRetry && retryCount < MaxRetryCount)
             {
-                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-                ShipWorksRelease shipWorksRelease = await updaterWebClient.GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
-                if (shipWorksRelease == null)
+                try
                 {
-                    log.InfoFormat("New version not found for tango customer {0} running version {1}", tangoCustomerId, currentVersion);
-                    return;
-                }
+                    Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-                Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
-                if (releaseVersion <= currentVersion)
+                    ShipWorksRelease shipWorksRelease = await updaterWebClient
+                        .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+                    if (shipWorksRelease == null)
+                    {
+                        log.InfoFormat("New version not found for tango customer {0} running version {1}",
+                                       tangoCustomerId, currentVersion);
+                        return;
+                    }
+
+                    Version releaseVersion = Version.Parse(shipWorksRelease.ReleaseVersion);
+                    if (releaseVersion <= currentVersion)
+                    {
+                        log.InfoFormat(
+                            "No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
+                            currentVersion,
+                            shipWorksRelease.ReleaseVersion);
+                        return;
+                    }
+
+                    log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
+
+                    Result installResult = await Install(shipWorksRelease, true).ConfigureAwait(false);
+
+                    if (installResult.Success)
+                    {
+                        shouldRetry = false;
+                        DeleteFailedAutoUpdateFile();
+                    }
+                    else
+                    {
+                        log.Error("Failed to install update automatically. Retrying.");
+                        retryCount++;
+                    }
+                }
+                catch (Exception ex)
                 {
-                    log.InfoFormat("No upgrade needed. ShipWorks client is on version {0} and version returned by tango was {1}.",
-                         currentVersion,
-                        shipWorksRelease.ReleaseVersion);
-                    return;
+                    log.Error("Error trying to upgrade by customer id", ex);
+                    retryCount++;
                 }
-
-                log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
-
-                await Install(shipWorksRelease, true).ConfigureAwait(false);
             }
-            catch (Exception ex)
+
+            if (shouldRetry && retryCount >= MaxRetryCount)
             {
-                log.Error("Error trying to upgrade by customer id", ex);
+                log.Error($"Failed to auto update {MaxRetryCount} times. Stopping auto updates until next successful install. User should try updating manually.");
+                CreateFailedAutoUpdateFile();
             }
         }
 
@@ -131,6 +184,7 @@ namespace ShipWorks.Escalator
                 InstallFile newVersion = await updaterWebClient.Download(shipWorksRelease.DownloadUri, shipWorksRelease.Hash).ConfigureAwait(false);
 
                 log.Info("Attempting to install new version");
+
                 Result installationResult = shipWorksInstaller.Install(newVersion, upgradeDatabase);
                 if (installationResult.Failure)
                 {
@@ -148,6 +202,24 @@ namespace ShipWorks.Escalator
         {
             string fileName = Path.GetFileNameWithoutExtension(newVersion.LocalPath);
             return Process.GetProcessesByName(fileName).Any();
+        }
+
+        private void CreateFailedAutoUpdateFile()
+        {
+            // If the auto update failed and the file does not exist, create it.
+            if (!File.Exists(failedAutoUpdateFilePath))
+            {
+                File.Create(failedAutoUpdateFilePath);
+            }
+        }
+
+        private void DeleteFailedAutoUpdateFile()
+        {
+            // Removing the failure flag, so delete the file if it exists.
+            if (File.Exists(failedAutoUpdateFilePath))
+            {
+                File.Delete(failedAutoUpdateFilePath);
+            }
         }
     }
 }
