@@ -1,4 +1,4 @@
-SKU,Alias SKUs,Bundled SKUs,Name,UPC,ASIN,ISBN,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,EAN,FSKU,Active
+SKU,Alias SKUs,Bundled SKUs,Name,UPC,ASIN,ISBN,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,EAN,FNSKU,Active
 ,SKU : Name | SKU : Name,SKU : Qty | SKU : Qty,,,,,,,,,,,,,,,,
 AB-1,eBay-AB-1 : eBay | Amazon-AB-1 : Amazon,Sku3 : 1 | Sku4 : 2,A bundled product,123456789012,B00005N5P3,978-0060731333,3.25,6,6,7,c:\image.jpg,Shelf 2 Bin 2,56.78,US,123457,MyEan,MyFsku,TRUE
 Sku3,,,Product with Sku3,123456789013,B00005N5P4,978-0060731334,4,8,8,9,https://www.yourwebsite.com/windows-tile-310x150.png,Bin 3,10,UK,123458,,,TRUE
