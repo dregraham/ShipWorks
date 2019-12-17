@@ -2417,6 +2417,8 @@
           <Field Name="CountryOfOrigin" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
+          <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -4207,11 +4209,6 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4">
-        <FieldRelationships>
-          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
-        </FieldRelationships>
-      </NormalRelationship>
       <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
@@ -4628,7 +4625,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-05T18:14:45.368935Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-17T17:19:17.3394266Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5539,7 +5536,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
-                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5563,7 +5560,7 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
-                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -5575,7 +5572,7 @@
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -8019,6 +8016,8 @@
                     <Field Name="HarmonizedCode" Ordinal="15" IsOptional="true" DbType="12" Length="20" />
                     <Field Name="DeclaredValue" Ordinal="16" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -10662,11 +10661,6 @@
             <ForeignKeyConstraint Name="dbo:RakutenOrder:FK_RakutenOrder_Order">
               <FieldPairs>
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
-              </FieldPairs>
-            </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder">
-              <FieldPairs>
-                <FieldPair PkField="dbo:RakutenOrder:OrderID" FkField="dbo:RakutenOrderSearch:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
@@ -13341,6 +13335,8 @@
             <FieldMapping FieldName="CountryOfOrigin" TargetFieldName="CountryOfOrigin" />
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
+            <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />

@@ -123,6 +123,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String CountryOfOrigin { get; }
+        /// <summary> The FNSku property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."FNSku"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String FNSku { get; }
+        /// <summary> The EAN property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."EAN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String EAN { get; }
         
         
         IProductEntity Product { get; }

@@ -2772,6 +2772,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "FNSku", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "EAN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN, 30, 0, 0);
 		}
 		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
 		private void InitProductVariantAliasEntityInfos()

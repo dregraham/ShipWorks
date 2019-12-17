@@ -8095,7 +8095,9 @@ CREATE TABLE [dbo].[ProductVariant]
 [BinLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DeclaredValue] [money] NULL,
-[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FNSku] [nvarchar](300) NULL,
+[EAN] [nvarchar](30) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
