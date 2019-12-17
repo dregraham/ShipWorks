@@ -82,6 +82,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 SetOrderTotal(orderToSave, downloadedOrder, orderElementFactory);
             }
+
+            if (orderToSave.OnlineLastModified == DateTime.MinValue)
+            {
+                orderToSave.OnlineLastModified = orderToSave.OrderDate;
+            }
         }
 
         /// <summary>
