@@ -13,7 +13,7 @@ using ShipWorks.Warehouse.DTO.Orders;
 namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
 {
     /// <summary>
-    /// Shopify warehouse order factory
+    /// Rakuten warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Rakuten)]
     public class RakutenWarehouseOrderFactory : WarehouseOrderFactory

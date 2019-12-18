@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
-using ShipWorks.Stores.Platforms.Rakuten.DTO;
 
 namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
 {
@@ -13,9 +10,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
     public class RakutenWarehouseOrder
     {
         /// <summary>
-        /// Order number postfix
+        /// Rakuten Package ID for shipping
         /// </summary>
-        /// <value></value>
         [JsonProperty("packageId")]
         public string PackageID { get; set; }
     }
