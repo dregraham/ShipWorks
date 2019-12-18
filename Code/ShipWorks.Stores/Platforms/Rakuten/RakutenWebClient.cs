@@ -155,7 +155,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 if (!testStore.ShopURL.Equals("fake"))
                 {
-                    return new ArgumentException("Shop Name must be \"fake\" when using fake stores.");
+                    return new ArgumentException("Shop URL must be \"fake\" when using fake stores.");
                 }
 
                 return true;

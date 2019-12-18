@@ -16,6 +16,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
         /// Order number postfix
         /// </summary>
         /// <value></value>
+        [JsonProperty("packageId")]
         public string PackageID { get; set; }
     }
 }
