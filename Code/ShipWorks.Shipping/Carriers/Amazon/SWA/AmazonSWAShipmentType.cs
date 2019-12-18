@@ -102,18 +102,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
                 orderManager.PopulateOrderDetails(shipment);
             }
 
-            var storeTypeCode = shipment.Order.Store.StoreTypeCode;
-
-            if (storeTypeCode == StoreTypeCode.ChannelAdvisor)
-            {
-                var order = shipment.Order as ChannelAdvisorOrderEntity;
-
-                if (order != null && order.MarketplaceNames != null)
-                {
-                    return false;
-                }
-            }
-
             IAmazonOrder amazonOrder = shipment.Order as IAmazonOrder;
 
             AmazonShippingPolicyTarget target = new AmazonShippingPolicyTarget()
