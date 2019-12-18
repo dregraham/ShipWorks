@@ -104,20 +104,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 
             var storeTypeCode = shipment.Order.Store.StoreTypeCode;
 
-            // Due to TOS don't allow SWA for Walmart or eBay
-            if (storeTypeCode == StoreTypeCode.Walmart || storeTypeCode == StoreTypeCode.Ebay)
-            {
-                return false;
-            }
-
             if (storeTypeCode == StoreTypeCode.ChannelAdvisor)
             {
                 var order = shipment.Order as ChannelAdvisorOrderEntity;
 
-                if (order != null &&
-                    order.MarketplaceNames != null &&
-                    (order.MarketplaceNames.Contains("Walmart", StringComparison.OrdinalIgnoreCase) ||
-                    order.MarketplaceNames.Contains("eBay", StringComparison.OrdinalIgnoreCase)))
+                if (order != null && order.MarketplaceNames != null)
                 {
                     return false;
                 }
