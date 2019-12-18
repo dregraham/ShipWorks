@@ -8,7 +8,6 @@ using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Common.Net;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -56,13 +55,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             IRestRequest restRequest = new RestRequest(WarehouseEndpoints.Login, Method.POST)
             {
-                RequestFormat = DataFormat.Json,
-                JsonSerializer = new RestSharpJsonNetSerializer(new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore,
-                    DateFormatString = "yyyy-MM-ddTHH:mm:ss.fffZ"
-                })        
+                RequestFormat = DataFormat.Json
             };
 
             restRequest.AddJsonBody(new { redirectToken = redirectToken });
