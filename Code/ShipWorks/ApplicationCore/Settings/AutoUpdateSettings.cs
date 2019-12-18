@@ -51,17 +51,40 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Whether or not most recent attempt to auto update failed
         /// </summary>
-        public static bool FailedLastAutoUpdate
+        public static bool LastAutoUpdateSucceeded
         {
             get
             {
                 try
                 {
-                    return File.Exists(failedAutoUpdateFilePath);
+                    return !File.Exists(failedAutoUpdateFilePath);
                 }
                 catch (Exception)
                 {
-                    return false;
+                    return true;
+                }
+            }
+            set
+            {
+                try
+                {
+                    if (LastAutoUpdateSucceeded != value)
+                    {
+                        if (value && File.Exists(failedAutoUpdateFilePath))
+                        {
+                            // Auto update succeeded, so delete the failure file if it exists.
+                            File.Delete(failedAutoUpdateFilePath);
+                        }
+                        else if (!value && !File.Exists(failedAutoUpdateFilePath))
+                        {
+                            // If auto update failed and the file does not exist, create it.
+                            File.Create(failedAutoUpdateFilePath);
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // don't want to show an error or hold anything up because of this.
                 }
             }
         }

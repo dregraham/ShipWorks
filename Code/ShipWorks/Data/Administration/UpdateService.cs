@@ -119,7 +119,7 @@ namespace ShipWorks.Data.Administration
                 return Result.FromError("An update was just installed, skipping updates.");
             }
 
-            if (AutoUpdateSettings.FailedLastAutoUpdate)
+            if (!AutoUpdateSettings.LastAutoUpdateSucceeded)
             {
                 return Result.FromError("Auto update recently failed. Skipping update.");
             }

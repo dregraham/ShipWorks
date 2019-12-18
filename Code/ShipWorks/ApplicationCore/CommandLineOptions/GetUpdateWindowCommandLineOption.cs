@@ -42,7 +42,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 return Task.CompletedTask;
             }
 
-            if (AutoUpdateSettings.FailedLastAutoUpdate)
+            if (!AutoUpdateSettings.LastAutoUpdateSucceeded)
             {
                 log.Info("Autoupdate recently failed. Not sending window");
                 return Task.CompletedTask;
