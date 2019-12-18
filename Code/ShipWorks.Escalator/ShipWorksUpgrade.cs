@@ -23,7 +23,8 @@ namespace ShipWorks.Escalator
         private readonly IFileWriter fileWriter;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
-        private readonly string failedAutoUpdateFilePath = Path.Combine(EscalatorDataPath.AppLocation, "FailedAutoUpdate.txt");
+        private readonly string failedAutoUpdateFilePath;
+
         private const int MaxRetryCount = 3;
 
         /// <summary>
@@ -35,13 +36,17 @@ namespace ShipWorks.Escalator
 			IFileWriter fileWriter,
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
-            IShipWorksLauncher shipWorksLauncher)
+            IShipWorksLauncher shipWorksLauncher,
+            IServiceName serviceName)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
             this.fileWriter = fileWriter;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.shipWorksLauncher = shipWorksLauncher;
+            failedAutoUpdateFilePath =
+                Path.Combine(EscalatorDataPath.InstanceRoot, serviceName.GetInstanceID().ToString("B"), "FailedAutoUpdate.txt");
+
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 

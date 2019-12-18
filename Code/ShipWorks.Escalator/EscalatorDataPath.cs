@@ -16,10 +16,5 @@ namespace ShipWorks.Escalator
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 @"Interapptive\ShipWorks\Instances");
-
-        /// <summary>
-        /// Gets the folder path containing the ShipWorks executable.
-        /// </summary>
-        public static string AppLocation => Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
     }
 }
