@@ -137,7 +137,8 @@ namespace ShipWorks.ApplicationCore.Logging
                 uri = client.BuildUri(request),
             };
 
-            var toLog = request.JsonSerializer != null ? request.JsonSerializer.Serialize(requestToLog) : request.ToString();
+            var toLog = request.JsonSerializer != null ? request.JsonSerializer.Serialize(requestToLog) : JsonConvert.SerializeObject(requestToLog);
+
             WriteLog(toLog, extension, ApiLogCategory.Request, null);
         }
 
