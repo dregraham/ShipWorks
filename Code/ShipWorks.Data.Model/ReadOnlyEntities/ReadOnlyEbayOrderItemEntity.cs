@@ -167,7 +167,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ExtendedOrderID property of the Entity EbayOrderItem<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "EbayOrderItem"."ExtendedOrderID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ExtendedOrderID { get; }
         

@@ -4208,7 +4208,7 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4">
+      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -4629,7 +4629,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-06T17:30:45.7022212Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-18T19:38:42.4448622Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5186,7 +5186,7 @@
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
                     <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
-		    <Field Name="ExcludeFBA" Ordinal="11" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
+                    <Field Name="ExcludeFBA" Ordinal="11" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -5541,7 +5541,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
-                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5565,7 +5565,7 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
-                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -5577,7 +5577,7 @@
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
-                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="24" Length="25" />
+                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -10666,7 +10666,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder">
+            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:RakutenOrder:OrderID" FkField="dbo:RakutenOrderSearch:OrderID" />
               </FieldPairs>

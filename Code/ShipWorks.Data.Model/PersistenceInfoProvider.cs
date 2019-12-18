@@ -1079,7 +1079,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayOrderEntity", "RollupFeedbackReceivedComments", "RollupFeedbackReceivedComments", true, "VarChar", 80, 0, 0, false, "", null, typeof(System.String), 22);
 			this.AddElementFieldMapping("EbayOrderEntity", "RollupPayPalAddressStatus", "RollupPayPalAddressStatus", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 23);
 			this.AddElementFieldMapping("EbayOrderEntity", "GuaranteedDelivery", "GuaranteedDelivery", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 24);
-			this.AddElementFieldMapping("EbayOrderEntity", "ExtendedOrderID", "ExtendedOrderID", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("EbayOrderEntity", "ExtendedOrderID", "ExtendedOrderID", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 25);
 		}
 
 		/// <summary>Inits EbayOrderItemEntity's mappings</summary>
@@ -1104,7 +1104,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayOrderItemEntity", "MyEbayShipped", "MyEbayShipped", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 15);
 			this.AddElementFieldMapping("EbayOrderItemEntity", "PayPalTransactionID", "PayPalTransactionID", false, "VarChar", 50, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("EbayOrderItemEntity", "PayPalAddressStatus", "PayPalAddressStatus", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 17);
-			this.AddElementFieldMapping("EbayOrderItemEntity", "ExtendedOrderID", "ExtendedOrderID", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 18);
+			this.AddElementFieldMapping("EbayOrderItemEntity", "ExtendedOrderID", "ExtendedOrderID", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 18);
 		}
 
 		/// <summary>Inits EbayOrderSearchEntity's mappings</summary>
@@ -1117,7 +1117,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EbayOrderSearchEntity", "EbayBuyerID", "EbayBuyerID", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 3);
 			this.AddElementFieldMapping("EbayOrderSearchEntity", "SellingManagerRecord", "SellingManagerRecord", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 4);
 			this.AddElementFieldMapping("EbayOrderSearchEntity", "OriginalOrderID", "OriginalOrderID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 5);
-			this.AddElementFieldMapping("EbayOrderSearchEntity", "ExtendedOrderID", "ExtendedOrderID", false, "VarChar", 25, 0, 0, false, "", null, typeof(System.String), 6);
+			this.AddElementFieldMapping("EbayOrderSearchEntity", "ExtendedOrderID", "ExtendedOrderID", false, "NVarChar", 25, 0, 0, false, "", null, typeof(System.String), 6);
 		}
 
 		/// <summary>Inits EbayStoreEntity's mappings</summary>

@@ -7268,6 +7268,10 @@ PRINT N'Adding foreign keys to [dbo].[RakutenOrder]'
 GO
 ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [FK_RakutenOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
+PRINT N'Adding foreign keys to [dbo].[RakutenOrderSearch]'
+GO
+ALTER TABLE [dbo].[RakutenOrderSearch] ADD CONSTRAINT [FK_RakutenOrderSearch_RakutenOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[RakutenOrder] ([OrderID]) ON DELETE CASCADE
+GO
 PRINT N'Adding foreign keys to [dbo].[RakutenStore]'
 GO
 ALTER TABLE [dbo].[RakutenStore] ADD CONSTRAINT [FK_RakutenStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
