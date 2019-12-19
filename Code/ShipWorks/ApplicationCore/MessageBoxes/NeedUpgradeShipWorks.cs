@@ -36,19 +36,16 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
                 close.Text = "Close";
                 update.Visible = false;
             }
-            else
+            else if (communicationBridge.IsAvailable())
             {
-                if (communicationBridge.IsAvailable())
+                close.Text = "Cancel";
+                update.Visible = true;
+                timer = new System.Timers.Timer(1000)
                 {
-                    close.Text = "Cancel";
-                    update.Visible = true;
-                    timer = new System.Timers.Timer(1000)
-                    {
-                        Enabled = true,
-                        AutoReset = true
-                    };
-                    timer.Elapsed += OnCountdownTick;
-                }
+                    Enabled = true,
+                    AutoReset = true
+                };
+                timer.Elapsed += OnCountdownTick;
             }
         }
 
