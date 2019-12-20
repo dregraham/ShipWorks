@@ -21,7 +21,7 @@ namespace ShipWorks.OrderLookup.ScanPack
             Name = name;
             ImageUrl = imageUrl;
             Quantity = quantity;
-            Barcodes = barcodes;
+            Barcodes = barcodes.Where(b=>!string.IsNullOrWhiteSpace(b)).ToArray();
         }
 
         /// <summary>
