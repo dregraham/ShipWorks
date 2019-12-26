@@ -214,7 +214,10 @@ namespace ShipWorks.Escalator
             // If the auto update failed and the file does not exist, create it.
             if (!File.Exists(failedAutoUpdateFilePath))
             {
-                File.Create(failedAutoUpdateFilePath);
+                using (File.Create(failedAutoUpdateFilePath))
+                {
+                    // In a using so we know the file will be closed.
+                }
             }
         }
 
