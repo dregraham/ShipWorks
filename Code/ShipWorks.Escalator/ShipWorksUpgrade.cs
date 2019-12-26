@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
@@ -217,12 +219,22 @@ namespace ShipWorks.Escalator
                 // If the auto update failed and the file does not exist, create it.
                 if (!File.Exists(failedAutoUpdateFilePath))
                 {
-                    log.Info("File exists");
+                    log.Info("File does not already exist");
+                    // In a using so we know the file will be closed.
                     using (File.Create(failedAutoUpdateFilePath))
                     {
-                        // In a using so we know the file will be closed.
+                        DirectoryInfo directoryInfo = new DirectoryInfo(failedAutoUpdateFilePath);
+                        DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
+                        SecurityIdentifier securityIdentifier = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+                        FileSystemAccessRule fileSystemAccessRule = new FileSystemAccessRule(
+                            securityIdentifier, FileSystemRights.FullControl,
+                            InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit,
+                            PropagationFlags.NoPropagateInherit, AccessControlType.Allow);
+
+                        directorySecurity.AddAccessRule(fileSystemAccessRule);
+                        directoryInfo.SetAccessControl(directorySecurity);
                     }
-                    log.Info("File created sucessfully.");
+                    log.Info("File created successfully.");
                 }
             }
             catch (Exception ex)
