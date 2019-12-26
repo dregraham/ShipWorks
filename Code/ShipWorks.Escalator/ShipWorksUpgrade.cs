@@ -211,22 +211,45 @@ namespace ShipWorks.Escalator
 
         private void CreateFailedAutoUpdateFile()
         {
-            // If the auto update failed and the file does not exist, create it.
-            if (!File.Exists(failedAutoUpdateFilePath))
+            try
             {
-                using (File.Create(failedAutoUpdateFilePath))
+                log.Info($"Creating file {failedAutoUpdateFilePath}'");
+                // If the auto update failed and the file does not exist, create it.
+                if (!File.Exists(failedAutoUpdateFilePath))
                 {
-                    // In a using so we know the file will be closed.
+                    log.Info("File exists");
+                    using (File.Create(failedAutoUpdateFilePath))
+                    {
+                        // In a using so we know the file will be closed.
+                    }
+                    log.Info("File created sucessfully.");
                 }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in CreateFailedAutoUpdateFile.", ex);
+                throw;
             }
         }
 
         private void DeleteFailedAutoUpdateFile()
         {
-            // Removing the failure flag, so delete the file if it exists.
-            if (File.Exists(failedAutoUpdateFilePath))
+            try
             {
-                File.Delete(failedAutoUpdateFilePath);
+                log.Info($"Deleting file {failedAutoUpdateFilePath}'");
+
+                // Removing the failure flag, so delete the file if it exists.
+                if (File.Exists(failedAutoUpdateFilePath))
+                {
+                    log.Info("File exists");
+                    File.Delete(failedAutoUpdateFilePath);
+                    log.Info("File deleted sucessfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error in DeleteFailedAutoUpdateFile.", ex);
+                throw;
             }
         }
     }

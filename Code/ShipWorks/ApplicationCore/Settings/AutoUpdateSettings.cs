@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using log4net;
 
 namespace ShipWorks.ApplicationCore.Settings
 {
@@ -10,6 +11,7 @@ namespace ShipWorks.ApplicationCore.Settings
     {
         private static readonly string disableAutoUpdateFilePath = Path.Combine(DataPath.SharedSettings, "DisableAutoUpdate.txt");
         private static readonly string failedAutoUpdateFilePath = Path.Combine(DataPath.InstanceRoot, "FailedAutoUpdate.txt");
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoUpdateSettings));
 
         /// <summary>
         /// Whether or not auto update is enabled for this machine
@@ -22,31 +24,46 @@ namespace ShipWorks.ApplicationCore.Settings
                 {
                     return File.Exists(disableAutoUpdateFilePath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    log.Error($"Failed to read file '{disableAutoUpdateFilePath}' in IsAutoUpdateDisabled", ex);
                     return false;
                 }
             }
             set
             {
-                if (IsAutoUpdateDisabled != value)
+                try
                 {
-                    // If we are disabling auto updates and the disable file does not exist, create it.
-                    if (value && !File.Exists(disableAutoUpdateFilePath))
+
+                    if (IsAutoUpdateDisabled != value)
                     {
-                        using (File.Create(disableAutoUpdateFilePath)) 
-                        { 
-                            // make sure the file closes.
-                        };
-                    }
-                    else
-                    {
-                        // We are enabling auto updates, so delete the disable file if it exists.
-                        if (File.Exists(disableAutoUpdateFilePath))
+                        log.Info($"Checking if '{disableAutoUpdateFilePath}' exists");
+                        // If we are disabling auto updates and the disable file does not exist, create it.
+                        if (value && !File.Exists(disableAutoUpdateFilePath))
                         {
-                            File.Delete(disableAutoUpdateFilePath);
+                            log.Info($"Creating file {disableAutoUpdateFilePath}");
+                            using (File.Create(disableAutoUpdateFilePath))
+                            {
+                                // make sure the file closes.
+                            };
+                            log.Info("File created without error");
+                        }
+                        else
+                        {
+                            log.Info($"Locating file {disableAutoUpdateFilePath}");
+                            // We are enabling auto updates, so delete the disable file if it exists.
+                            if (File.Exists(disableAutoUpdateFilePath))
+                            {
+                                log.Info($"File '{disableAutoUpdateFilePath}' exists. Deleting.");
+                                File.Delete(disableAutoUpdateFilePath);
+                            }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error updating value of IsAutoUpdateDisabled. Rethrowing.", ex);
+                    throw;
                 }
             }
         }
@@ -62,9 +79,10 @@ namespace ShipWorks.ApplicationCore.Settings
                 {
                     return !File.Exists(failedAutoUpdateFilePath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return true;
+                    log.Error($"Failed to read file '{failedAutoUpdateFilePath}' in LastAutoUpdateSucceeded", ex);
+                    return false;
                 }
             }
             set
@@ -73,23 +91,29 @@ namespace ShipWorks.ApplicationCore.Settings
                 {
                     if (LastAutoUpdateSucceeded != value)
                     {
+                        log.Info($"Checking if '{failedAutoUpdateFilePath}' exists");
                         if (value && File.Exists(failedAutoUpdateFilePath))
                         {
+                            log.Info($"File '{failedAutoUpdateFilePath}' exists. Deleting.");
                             // Auto update succeeded, so delete the failure file if it exists.
                             File.Delete(failedAutoUpdateFilePath);
                         }
                         else if (!value && !File.Exists(failedAutoUpdateFilePath))
                         {
+                            log.Info($"Creating file {failedAutoUpdateFilePath}");
                             // If auto update failed and the file does not exist, create it.
                             using (File.Create(failedAutoUpdateFilePath))
                             {
                                 // make sure the file closes.
                             }
+                            log.Info("File created without error");
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    log.Error("Error updating value of LastAutoUpdateSucceeded.", ex);
+
                     // don't want to show an error or hold anything up because of this.
                 }
             }
