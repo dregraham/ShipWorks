@@ -219,22 +219,18 @@ namespace ShipWorks.Escalator
                 // If the auto update failed and the file does not exist, create it.
                 if (!File.Exists(failedAutoUpdateFilePath))
                 {
-                    log.Info("File does not already exist");
-                    // In a using so we know the file will be closed.
-                    using (File.Create(failedAutoUpdateFilePath))
-                    {
-                        DirectoryInfo directoryInfo = new DirectoryInfo(failedAutoUpdateFilePath);
-                        DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
-                        SecurityIdentifier securityIdentifier = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
-                        FileSystemAccessRule fileSystemAccessRule = new FileSystemAccessRule(
-                            securityIdentifier, FileSystemRights.FullControl,
-                            InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit,
-                            PropagationFlags.NoPropagateInherit, AccessControlType.Allow);
+                    log.Info("File exists");
 
-                        directorySecurity.AddAccessRule(fileSystemAccessRule);
-                        directoryInfo.SetAccessControl(directorySecurity);
+                    using (var file = File.Create(failedAutoUpdateFilePath))
+                    {
+                        var accessControl = file.GetAccessControl();
+                        accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Modify, AccessControlType.Allow));
+                        accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Write, AccessControlType.Allow));
+
+                        file.SetAccessControl(accessControl);
+                        // In a using so we know the file will be closed.
                     }
-                    log.Info("File created successfully.");
+                    log.Info("File created sucessfully.");
                 }
             }
             catch (Exception ex)
