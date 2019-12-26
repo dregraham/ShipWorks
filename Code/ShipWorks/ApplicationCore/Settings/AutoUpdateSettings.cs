@@ -34,7 +34,10 @@ namespace ShipWorks.ApplicationCore.Settings
                     // If we are disabling auto updates and the disable file does not exist, create it.
                     if (value && !File.Exists(disableAutoUpdateFilePath))
                     {
-                        File.Create(disableAutoUpdateFilePath);
+                        using (File.Create(disableAutoUpdateFilePath)) 
+                        { 
+                            // make sure the file closes.
+                        };
                     }
                     else
                     {
@@ -78,7 +81,10 @@ namespace ShipWorks.ApplicationCore.Settings
                         else if (!value && !File.Exists(failedAutoUpdateFilePath))
                         {
                             // If auto update failed and the file does not exist, create it.
-                            File.Create(failedAutoUpdateFilePath);
+                            using (File.Create(failedAutoUpdateFilePath))
+                            {
+                                // make sure the file closes.
+                            }
                         }
                     }
                 }
