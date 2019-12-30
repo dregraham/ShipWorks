@@ -969,7 +969,20 @@ namespace ShipWorks
 
                 currentUserSettings.SetUIMode(uiMode);
 
+                OrderEntity selectedOrder = null;
+                // If there is a single order selected, save it so we can pull it up in the new mode.
+                if (gridControl.Selection.Keys.Count() == 1)
+                {
+                    selectedOrder = OrderUtility.FetchOrder(gridControl.Selection.Keys.First());
+                }
+
                 UpdateUIMode(UserSession.User, true, modeChangeBehavior);
+
+                // If we went from batch mode to scan to ship mode and we had an order selected, load it in scan to ship.
+                if (UIMode == UIMode.OrderLookup && selectedOrder != null)
+                {
+                    Messenger.Current.Send(new OrderLookupLoadOrderMessage(this, selectedOrder));
+                }
             }
         }
 
@@ -1003,6 +1016,7 @@ namespace ShipWorks
             }
 
             ToggleUiModeCheckbox(currentMode);
+
             EnableUiMode(currentMode, user);
 
             UIMode = currentMode;
