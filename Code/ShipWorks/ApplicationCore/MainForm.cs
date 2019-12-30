@@ -1306,10 +1306,7 @@ namespace ShipWorks
             if (orderLookupLifetimeScope != null)
             {
                 OrderEntity order = orderLookupControl?.Order;
-                if (order != null)
-                {
-                    orderLookupOrderShortcut = orderLookupLifetimeScope.Resolve<ISingleScanOrderShortcut>().GetShortcutText(order);
-                }
+                orderLookupOrderShortcut = order != null ? orderLookupLifetimeScope.Resolve<ISingleScanOrderShortcut>().GetShortcutText(order) : string.Empty;
 
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
                 panelDockingArea.Controls.Remove(shipmentHistory?.Control);
