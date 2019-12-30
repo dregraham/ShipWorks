@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.SingleScan
@@ -59,6 +60,12 @@ namespace ShipWorks.SingleScan
         {
             return barcodeText.StartsWith(ShipWorksOrderPrefix) && barcodeText.EndsWith(ShipWorksOrderSuffix);
         }
+
+        /// <summary>
+        /// Get the given orders shortcut
+        /// </summary>
+        public string GetShortcutText(OrderEntity order) =>
+            ShipWorksOrderPrefix + order.OrderID;
 
         /// <summary>
         /// Returns the OrderId from the given barcode

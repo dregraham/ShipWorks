@@ -10,11 +10,11 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target.
         /// </summary>
-        ISearchDefinitionProvider Create(FilterTarget target, bool isBarcodeSearch);
+        ISearchDefinitionProvider Create(FilterTarget target, bool isBarcodeSearch, string searchText);
 
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target and FilterDefinition
         /// </summary>
-        ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition, bool isBarcodeSearch);
+        ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition, bool isBarcodeSearch, string searchText);
     }
 }

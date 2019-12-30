@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Filters.Search
             userSession.Setup(u => u.Settings).Returns(userSettings);
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
-            var filterDefinitionProvider = testObject.Create(target, null, isScan);
+            var filterDefinitionProvider = testObject.Create(target, null, isScan, string.Empty);
 
             Assert.IsType(expectedType, filterDefinitionProvider);
         }
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Filters.Search
             userSession.Setup(u => u.Settings).Returns(userSettings);
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
-            var filterDefinitionProvider = testObject.Create(target, isScan);
+            var filterDefinitionProvider = testObject.Create(target, isScan, string.Empty);
 
             Assert.IsType(expectedType, filterDefinitionProvider);
         }
@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Filters.Search
             userSession.Setup(u => u.Settings).Returns(userSettings);
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
-            var filterDefinitionProvider = testObject.Create(target, new FilterDefinition(target), isScan);
+            var filterDefinitionProvider = testObject.Create(target, new FilterDefinition(target), isScan, string.Empty);
 
             Assert.IsType<AdvancedSearchDefinitionProvider>(filterDefinitionProvider);
         }
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Filters.Search
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
 
-            Assert.Throws<IndexOutOfRangeException>(() => testObject.Create(target, isScan));
+            Assert.Throws<IndexOutOfRangeException>(() => testObject.Create(target, isScan, string.Empty));
         }
 
         [Fact]
@@ -168,7 +168,7 @@ namespace ShipWorks.Tests.Filters.Search
             mock.Mock<IStoreManager>().Setup(m => m.GetUniqueStoreTypes()).Returns(new[] { amazonStoreType.Object });
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
-            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false);
+            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false, string.Empty);
             var filterDefinition = filterDefinitionProvider.GetDefinition("hi");
 
             IEnumerable<QuickSearchCondition> quickSearchConditions = filterDefinition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();
@@ -208,7 +208,7 @@ namespace ShipWorks.Tests.Filters.Search
             mock.Mock<IStoreManager>().Setup(m => m.GetUniqueStoreTypes()).Returns(new[] { mock.Mock<StoreType>().Object });
 
             var testObject = mock.Create<SearchDefinitionProviderFactory>();
-            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false);
+            var filterDefinitionProvider = testObject.Create(FilterTarget.Orders, false, string.Empty);
             var filterDefinition = filterDefinitionProvider.GetDefinition("hi");
 
             IEnumerable<QuickSearchCondition> quickSearchConditions = filterDefinition.RootContainer.FirstGroup.Conditions.Cast<QuickSearchCondition>();

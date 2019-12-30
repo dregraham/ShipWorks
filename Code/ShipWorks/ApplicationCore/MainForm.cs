@@ -148,6 +148,7 @@ namespace ShipWorks
         private ILifetimeScope orderLookupLifetimeScope;
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
+        private string orderLookupOrderShortcut = string.Empty;
         private IShipmentHistory shipmentHistory;
         private IUpdateService updateService;
         private IProductsMode productsMode;
@@ -1109,7 +1110,7 @@ namespace ShipWorks
             try
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
-            }          
+            }
             catch(AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
@@ -1145,6 +1146,11 @@ namespace ShipWorks
             SelectInitialFilter(user.Settings);
 
             SendPanelStateMessages();
+
+            if (!string.IsNullOrWhiteSpace(orderLookupOrderShortcut))
+            {
+                gridControl.PerformBarcodeSearch(orderLookupOrderShortcut);
+            }
         }
 
         /// <summary>
@@ -1285,6 +1291,12 @@ namespace ShipWorks
         {
             if (orderLookupLifetimeScope != null)
             {
+                OrderEntity order = orderLookupControl?.Order;
+                if (order != null)
+                {
+                    orderLookupOrderShortcut = orderLookupLifetimeScope.Resolve<ISingleScanOrderShortcut>().GetShortcutText(order);
+                }
+
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
                 panelDockingArea.Controls.Remove(shipmentHistory?.Control);
                 orderLookupControl.Unload();
@@ -1778,7 +1790,7 @@ namespace ShipWorks
             catch (AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
-                MessageHelper.ShowMessage(this, 
+                MessageHelper.ShowMessage(this,
                 "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
 
                 //Ensure that the defaults are saved.
@@ -1996,8 +2008,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            
-            shipmentHistory?.SaveGridColumnState();            
+
+            shipmentHistory?.SaveGridColumnState();
         }
 
         /// <summary>
