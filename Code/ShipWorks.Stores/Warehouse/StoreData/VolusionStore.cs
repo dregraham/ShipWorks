@@ -17,17 +17,17 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The username to login to the store
         /// </summary>
-        public string WebUserName { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
         /// The api password
         /// </summary>
-        public string ApiPassword { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
         /// The list of order statuses to download
         /// </summary>
-        public string DownloadOrderStatuses { get; set; }
+        public string[] DownloadOrderStatuses { get; set; }
 
         /// <summary>
         /// The timezone the server is in

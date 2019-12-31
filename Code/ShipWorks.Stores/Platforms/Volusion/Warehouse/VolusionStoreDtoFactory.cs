@@ -35,9 +35,9 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
             var store = helpers.PopulateCommonData(storeEntity, new VolusionStore());
 
             store.StoreUrl = storeEntity.StoreUrl;
-            store.WebUserName = storeEntity.WebUserName;
-            store.ApiPassword = await helpers.EncryptSecret(storeEntity.ApiPassword).ConfigureAwait(false);
-            store.DownloadOrderStatuses = storeEntity.DownloadOrderStatuses;
+            store.Username = storeEntity.WebUserName;
+            store.Password = await helpers.EncryptSecret(storeEntity.ApiPassword).ConfigureAwait(false);
+            store.DownloadOrderStatuses = storeEntity.DownloadOrderStatuses.Split(',');
             store.ServerTimeZone = storeEntity.ServerTimeZone;
 
             return store;
