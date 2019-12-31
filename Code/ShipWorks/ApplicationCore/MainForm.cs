@@ -971,7 +971,7 @@ namespace ShipWorks
 
                 OrderEntity selectedOrder = null;
                 // If there is a single order selected, save it so we can pull it up in the new mode.
-                if (gridControl.Selection.Keys.Count() == 1)
+                if (gridControl.Selection.Keys.IsCountEqualTo(1))
                 {
                     selectedOrder = OrderUtility.FetchOrder(gridControl.Selection.Keys.First());
                 }
@@ -1305,7 +1305,7 @@ namespace ShipWorks
         {
             if (orderLookupLifetimeScope != null)
             {
-                OrderEntity order = orderLookupControl?.Order;
+                IOrderEntity order = orderLookupControl?.Order;
                 orderLookupOrderShortcut = order != null ? orderLookupLifetimeScope.Resolve<ISingleScanOrderShortcut>().GetShortcutText(order) : string.Empty;
 
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);

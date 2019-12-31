@@ -1,5 +1,5 @@
 ﻿using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.SingleScan
@@ -64,7 +64,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Get the given orders shortcut
         /// </summary>
-        public string GetShortcutText(OrderEntity order) =>
+        public string GetShortcutText(IOrderEntity order) =>
             ShipWorksOrderPrefix + order.OrderID;
 
         /// <summary>

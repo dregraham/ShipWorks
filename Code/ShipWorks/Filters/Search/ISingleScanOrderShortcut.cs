@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Search
 {
@@ -22,7 +22,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Get the given orders shortcut
         /// </summary>
-        string GetShortcutText(OrderEntity order);
+        string GetShortcutText(IOrderEntity order);
 
         /// <summary>
         /// Whether or not the scan result starts with the ShipWorks order prefix
