@@ -159,5 +159,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             return base.GridOnlineColumnSupported(column);
         }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }
