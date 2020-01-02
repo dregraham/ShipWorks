@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
@@ -25,8 +23,7 @@ namespace ShipWorks.Escalator
         private readonly IFileWriter fileWriter;
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
-        private readonly string failedAutoUpdateFilePath;
-
+        private readonly IFailedUpgradeFile failedUpgradeFile;
         private const int MaxRetryCount = 3;
 
         /// <summary>
@@ -39,16 +36,14 @@ namespace ShipWorks.Escalator
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
-            IServiceName serviceName)
+            IFailedUpgradeFile failedUpgradeFile)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
             this.fileWriter = fileWriter;
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.shipWorksLauncher = shipWorksLauncher;
-            failedAutoUpdateFilePath =
-                Path.Combine(EscalatorDataPath.InstanceRoot, serviceName.GetInstanceID().ToString("B"), "FailedAutoUpdate.txt");
-
+            this.failedUpgradeFile = failedUpgradeFile;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -73,6 +68,7 @@ namespace ShipWorks.Escalator
                     if (shipWorksRelease == null)
                     {
                         log.InfoFormat("Version {0} not found by webclient.", version);
+                        shouldRetry = false;
                     }
                     else
                     {
@@ -82,7 +78,7 @@ namespace ShipWorks.Escalator
                         if (installResult.Success)
                         {
                             shouldRetry = false;
-                            DeleteFailedAutoUpdateFile();
+                            failedUpgradeFile.DeleteFailedAutoUpdateFile();
                         }
                         else
                         {
@@ -101,7 +97,7 @@ namespace ShipWorks.Escalator
             if (shouldRetry && retryCount >= MaxRetryCount)
             {
                 log.Error($"Failed to auto update {MaxRetryCount} times. Stopping auto updates until next successful install. User should try updating manually.");
-                CreateFailedAutoUpdateFile();
+                failedUpgradeFile.CreateFailedAutoUpdateFile();
             }
 
             if (relaunchShipWorks)
@@ -151,7 +147,7 @@ namespace ShipWorks.Escalator
                     if (installResult.Success)
                     {
                         shouldRetry = false;
-                        DeleteFailedAutoUpdateFile();
+                        failedUpgradeFile.DeleteFailedAutoUpdateFile();
                     }
                     else
                     {
@@ -169,7 +165,7 @@ namespace ShipWorks.Escalator
             if (shouldRetry && retryCount >= MaxRetryCount)
             {
                 log.Error($"Failed to auto update {MaxRetryCount} times. Stopping auto updates until next successful install. User should try updating manually.");
-                CreateFailedAutoUpdateFile();
+                failedUpgradeFile.CreateFailedAutoUpdateFile();
             }
         }
 
@@ -209,53 +205,6 @@ namespace ShipWorks.Escalator
         {
             string fileName = Path.GetFileNameWithoutExtension(newVersion.LocalPath);
             return Process.GetProcessesByName(fileName).Any();
-        }
-
-        private void CreateFailedAutoUpdateFile()
-        {
-            try
-            {
-                log.Info($"Creating file {failedAutoUpdateFilePath}'");
-                // If the auto update failed and the file does not exist, create it.
-                if (!File.Exists(failedAutoUpdateFilePath))
-                {
-                    log.Info("File exists");
-
-                    File.WriteAllText(failedAutoUpdateFilePath, string.Empty);
-                    var accessControl = File.GetAccessControl(failedAutoUpdateFilePath);
-                    accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Modify, AccessControlType.Allow));
-                    accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Write, AccessControlType.Allow));
-                    File.SetAccessControl(failedAutoUpdateFilePath, accessControl);
-
-                    log.Info("File created sucessfully.");
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error in CreateFailedAutoUpdateFile.", ex);
-                throw;
-            }
-        }
-
-        private void DeleteFailedAutoUpdateFile()
-        {
-            try
-            {
-                log.Info($"Deleting file {failedAutoUpdateFilePath}'");
-
-                // Removing the failure flag, so delete the file if it exists.
-                if (File.Exists(failedAutoUpdateFilePath))
-                {
-                    log.Info("File exists");
-                    File.Delete(failedAutoUpdateFilePath);
-                    log.Info("File deleted sucessfully");
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("Error in DeleteFailedAutoUpdateFile.", ex);
-                throw;
-            }
         }
     }
 }
