@@ -221,15 +221,12 @@ namespace ShipWorks.Escalator
                 {
                     log.Info("File exists");
 
-                    using (var file = File.Create(failedAutoUpdateFilePath))
-                    {
-                        var accessControl = file.GetAccessControl();
-                        accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Modify, AccessControlType.Allow));
-                        accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Write, AccessControlType.Allow));
+                    File.WriteAllText(failedAutoUpdateFilePath, string.Empty);
+                    var accessControl = File.GetAccessControl(failedAutoUpdateFilePath);
+                    accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Modify, AccessControlType.Allow));
+                    accessControl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), FileSystemRights.Write, AccessControlType.Allow));
+                    File.SetAccessControl(failedAutoUpdateFilePath, accessControl);
 
-                        file.SetAccessControl(accessControl);
-                        // In a using so we know the file will be closed.
-                    }
                     log.Info("File created sucessfully.");
                 }
             }
