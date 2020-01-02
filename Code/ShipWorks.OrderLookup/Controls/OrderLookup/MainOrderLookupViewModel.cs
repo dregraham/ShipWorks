@@ -12,10 +12,12 @@ using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.OrderLookup.FieldManager;
 using ShipWorks.OrderLookup.Layout;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.OrderLookup.Controls.OrderLookup
 {
@@ -61,10 +63,20 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
-                    .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns))),
+                    .Subscribe(_ => HandleOrderLoaded()),
                 messages.OfType<OrderLookupClearOrderMessage>()
-                    .Subscribe(_ => handler.RaisePropertyChanged(nameof(ShowColumns)))
+                    .Subscribe(_ => HandleOrderLoaded())
                 );
+        }
+
+        /// <summary>
+        /// Update the UI when the order changes
+        /// </summary>
+        private void HandleOrderLoaded()
+        {
+            handler.RaisePropertyChanged(nameof(ShowColumns));
+            handler.RaisePropertyChanged(nameof(ShowTracking));
+            handler.RaisePropertyChanged(nameof(TrackingImageSource));
         }
 
         /// <summary>
@@ -162,7 +174,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns => ShipmentModel.ShipmentAdapter == null ? Visibility.Collapsed : Visibility.Visible;
+        public Visibility ShowColumns => ShipmentModel.ShipmentAdapter == null ||
+                                         ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true ?
+                                            Visibility.Collapsed :
+                                            Visibility.Visible;
+
+        /// <summary>
+        /// Should the tracking info be displayed?
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Visibility ShowTracking => ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true &&
+                                          ShipmentModel?.ShipmentAdapter?.Shipment?.Voided == false ?
+                                            Visibility.Visible :
+                                            Visibility.Collapsed;
 
         /// <summary>
         /// Width of the left column
@@ -201,6 +225,19 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
                 handler.Set(nameof(RightColumnWidth), ref rightColumnWidth, value);
                 layout.Save(this);
+            }
+        }
+
+        [Obfuscation(Exclude = true)]
+        public string TrackingImageSource
+        {
+            get
+            {
+                ShipmentTypeCode? shipmentTypeCode = ShipmentModel?.ShipmentAdapter?.ShipmentTypeCode;
+
+                return shipmentTypeCode.HasValue ?
+                    EnumHelper.GetWpfImageSource(shipmentTypeCode.Value) :
+                    null;
             }
         }
 

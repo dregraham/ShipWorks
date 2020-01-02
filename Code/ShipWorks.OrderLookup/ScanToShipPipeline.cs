@@ -346,7 +346,7 @@ namespace ShipWorks.OrderLookup
             processingScan = true;
 
             // If the order doesn't have any shipments, load them.
-            if (order.Shipments.None())
+            if (order != null && order.Shipments.None())
             {
                 ShipmentsLoadedEventArgs loadedOrders =
                     await orderLoader.LoadAsync(new[] {order.OrderID}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)

@@ -26,6 +26,8 @@
             <DataTemplate x:Key="SectionItemTemplate">
                 <basic:OrderLookupPanelControl />
             </DataTemplate>
+
+            <BitmapImage x:Key="DefaultTrackingImage" UriSource="/ShipWorks.UI;component/Resources/use-shipworks.png"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -88,5 +90,23 @@
                 <GridSplitter Grid.Column="3" DragCompleted="OnGridSplitterDragComplete" />
             </Grid>
         </ScrollViewer>
+
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Visibility="{Binding ShowTracking}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Grid.Column="0"
+                   Source="{Binding TrackingImageSource, FallbackValue={StaticResource DefaultTrackingImage}}"
+                   Width="50"
+                   VerticalAlignment="Center"
+                   Margin="0 0 10 0"/>
+            <TextBlock Grid.Column="1"
+                       FontSize="20"
+                       VerticalAlignment="Center"
+                       Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.TrackingNumber, StringFormat=Tracking Number: {0}}"/>
+        </Grid>
     </Grid>
 </UserControl>

@@ -24,6 +24,7 @@ namespace Interapptive.Shared.Utility
             public DescriptionAttribute DescriptionAttribute { get; set; }
             public DetailsAttribute DetailsAttribute { get; set; }
             public Image Image { get; set; }
+            public WpfImageSourceAttribute WpfImageSourceAttribute { get; set; }
             public bool Deprecated { get; set; }
             public int? SortOrder { get; set; }
             public string ApiValue { get; set; }
@@ -194,6 +195,14 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
+        /// Get the WPF Image source for the given enum value
+        /// </summary>
+        public static string GetWpfImageSource(Enum value)
+        {
+            return GetEnumMetadata(value).WpfImageSourceAttribute?.ImageSource ?? string.Empty;
+        }
+
+        /// <summary>
         /// Returns the API enum value based on another enum's ApiValue
         /// </summary>
         public static TApiValue? GetApiValue<TApiValue>(Enum shipmentRoleType) where TApiValue : struct
@@ -259,6 +268,7 @@ namespace Interapptive.Shared.Utility
                 RawValue = Convert.ToInt32(fieldInfo.GetRawConstantValue()),
                 DescriptionAttribute = (DescriptionAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DescriptionAttribute)),
                 DetailsAttribute = (DetailsAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(DetailsAttribute)),
+                WpfImageSourceAttribute = (WpfImageSourceAttribute) Attribute.GetCustomAttribute(fieldInfo, typeof(WpfImageSourceAttribute)),
                 Hidden = Attribute.GetCustomAttribute(fieldInfo, typeof(HiddenAttribute)) != null,
                 Image = fieldInfo.GetCustomAttribute<ImageResourceAttribute>()?.ResourceImage,
                 SortOrder = fieldInfo.GetCustomAttribute<SortOrderAttribute>()?.Position,

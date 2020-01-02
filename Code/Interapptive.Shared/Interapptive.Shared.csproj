@@ -576,6 +576,7 @@
     <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
+    <Compile Include="Utility\WpfImageSourceAttribute.cs" />
     <Compile Include="Utility\XmlUtility.cs" />
     <Compile Include="Utility\XPathNamespaceNavigator.cs" />
     <Compile Include="Utility\XPathUtility.cs" />
