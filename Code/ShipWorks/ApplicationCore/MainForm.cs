@@ -1432,9 +1432,16 @@ namespace ShipWorks
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd)
         {
-            // first remove everything
-            panelDockingArea.Controls.Remove(shipmentHistory?.Control);
-            panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            // Remove the existing control before we add the new one.
+            if (toAdd != shipmentHistory?.Control)
+            {
+                panelDockingArea.Controls.Remove(shipmentHistory?.Control);
+            }
+
+            if (toAdd != orderLookupControl?.Control)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            }
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {

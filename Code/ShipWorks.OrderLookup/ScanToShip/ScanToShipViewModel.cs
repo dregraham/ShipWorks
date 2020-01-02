@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using GalaSoft.MvvmLight;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
@@ -115,9 +114,9 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public void UpdateOrderVerificationError()
         {
             // If we have an unverified order, we're not on the pack tab, and require validation is on, show the verification error
-            if ((!shipmentModel?.SelectedOrder?.Verified ?? false) &&
+            if (shipmentModel?.SelectedOrder?.Verified == false &&
                 !IsPackTabActive &&
-                (userSession?.Settings?.AutoPrintRequireValidation ?? false))
+                userSession?.Settings?.AutoPrintRequireValidation == true)
             {
                 ShowOrderVerificationError = true;
             }

@@ -59,7 +59,6 @@ namespace ShipWorks.OrderLookup
         private bool processingScan = false;
         private object loadingOrderLock = new object();
         bool allowScanPack = true;
-        private bool AutoAdvanceEnabled => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -448,9 +447,10 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
-            scanToShipViewModel.SelectedTab = userSession?.Settings?.AutoPrintRequireValidation ?? false ?
-                (int) ScanToShipTab.PackTab :
-                (int) ScanToShipTab.ShipTab;
+            if (userSession?.Settings?.AutoPrintRequireValidation == true)
+            {
+                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.PackTab;
+            }
         }
 
         /// <summary>
@@ -461,7 +461,7 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.ShowOrderVerificationError = false;
             scanToShipViewModel.IsOrderVerified = true;
 
-            if (AutoAdvanceEnabled)
+            if (licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true)
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
             }
