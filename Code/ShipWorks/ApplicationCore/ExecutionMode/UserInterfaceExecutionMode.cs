@@ -116,8 +116,19 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             if (!InterapptiveOnly.MagicKeysDown && !InterapptiveOnly.AllowMultipleInstances)
             {
+                bool isShipWorksRunning = true;
                 // If the application is already running, open it now and exit.
-                if (SingleInstance.ActivateRunningInstance())
+                for (int i = 0; i < 5; i++)
+                {
+                    if (!SingleInstance.ActivateRunningInstance())
+                    {
+                        isShipWorksRunning = false;
+                        break;
+                    }
+                    Thread.Sleep(TimeSpan.FromSeconds(1));
+                }
+
+                if (isShipWorksRunning)
                 {
                     // User does not have the permissions to run multiple instances of ShipWorks
                     throw new UserInterfaceAlreadyOpenException("An instance of ShipWorks is already running.");
