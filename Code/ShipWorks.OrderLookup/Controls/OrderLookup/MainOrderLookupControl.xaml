@@ -7,6 +7,8 @@
     xmlns:dd="urn:gong-wpf-dragdrop"
     xmlns:local="clr-namespace:ShipWorks.OrderLookup.Controls.OrderLookup"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
     d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d"
@@ -28,6 +30,18 @@
             </DataTemplate>
 
             <BitmapImage x:Key="DefaultTrackingImage" UriSource="/ShipWorks.UI;component/Resources/use-shipworks.png"/>
+
+            <Style x:Key="LinkStyle" TargetType="{x:Type Hyperlink}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding TrackingUri}" Value="{x:Null}">
+                        <Setter Property="Foreground" Value="Black"/>
+                        <Setter Property="TextBlock.TextDecorations" Value="{x:Null}"/>
+                        <Setter Property="Cursor" Value="Arrow"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -96,17 +110,38 @@
               Visibility="{Binding ShowTracking}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0"
                    Source="{Binding TrackingImageSource, FallbackValue={StaticResource DefaultTrackingImage}}"
                    Width="50"
                    VerticalAlignment="Center"
                    Margin="0 0 10 0"/>
+
             <TextBlock Grid.Column="1"
                        FontSize="20"
                        VerticalAlignment="Center"
-                       Text="{Binding ShipmentModel.ShipmentAdapter.Shipment.TrackingNumber, StringFormat=Tracking Number: {0}}"/>
+                       Text="Tracking Number: "/>
+
+            <TextBlock Grid.Column="2"
+                       FontSize="20"
+                       VerticalAlignment="Center">
+                <Hyperlink ui:Link.OpenInBrowser="True" NavigateUri="{Binding TrackingUri}" Style="{StaticResource LinkStyle}">
+                    <TextBlock Text="{Binding TrackingNumber}" />
+                </Hyperlink>
+            </TextBlock>
+
+            <Button Grid.Column="3"
+                    Command="{Binding CopyTrackingCommand}"
+                    Margin="5 0 0 0"
+                    Visibility="{Binding TrackingNumber, Converter={StaticResource VisibleWhenNotEqualToParameter}, ConverterParameter={x:Static sys:String.Empty}}"
+                    ToolTip="Copy this tracking number to your clipboard"
+                    Style="{StaticResource Button.Copy}"
+                    Height="30"
+                    Width="26">
+            </Button>
         </Grid>
     </Grid>
 </UserControl>

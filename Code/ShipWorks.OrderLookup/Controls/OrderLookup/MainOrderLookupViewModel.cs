@@ -7,7 +7,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using Autofac;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -40,6 +42,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         private readonly IOrderLookupLayout layout;
         private readonly ILifetimeScope scope;
         private readonly IDropTarget dropTarget;
+        private readonly IShipmentTypeManager shipmentTypeManager;
 
         /// <summary>
         /// Constructor
@@ -48,10 +51,12 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             IOrderLookupLayout layout,
             ILifetimeScope scope,
             IObservable<IShipWorksMessage> messages,
-            IDropTarget dropTarget)
+            IDropTarget dropTarget,
+            IShipmentTypeManager shipmentTypeManager)
         {
             this.scope = scope;
             this.dropTarget = dropTarget;
+            this.shipmentTypeManager = shipmentTypeManager;
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
             ShipmentModel = shipmentModel;
             ShipmentModel.ShipmentUnloading += OnShipmentModelShipmentUnloading;
@@ -60,6 +65,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             this.layout = layout;
             layout.Apply(this, scope);
             LeftColumn.Concat(MiddleColumn).Concat(RightColumn).ForEach(p => p.PropertyChanged += PanelPropertyChanged);
+
+            CopyTrackingCommand = new RelayCommand(() => Clipboard.SetText(TrackingNumber),
+                                                   () => TrackingNumber != null);
 
             subscriptions = new CompositeDisposable(
                 messages.OfType<ShipmentSelectionChangedMessage>()
@@ -77,6 +85,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             handler.RaisePropertyChanged(nameof(ShowColumns));
             handler.RaisePropertyChanged(nameof(ShowTracking));
             handler.RaisePropertyChanged(nameof(TrackingImageSource));
+            handler.RaisePropertyChanged(nameof(TrackingNumber));
         }
 
         /// <summary>
@@ -174,17 +183,15 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns => ShipmentModel.ShipmentAdapter == null ||
-                                         ShipmentModel.ShipmentAdapter?.Shipment?.Processed == true ?
-                                            Visibility.Collapsed :
-                                            Visibility.Visible;
+        public Visibility ShowColumns => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Unprocessed ?
+                                            Visibility.Visible :
+                                            Visibility.Collapsed;
 
         /// <summary>
         /// Should the tracking info be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowTracking => ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == true &&
-                                          ShipmentModel?.ShipmentAdapter?.Shipment?.Voided == false ?
+        public Visibility ShowTracking => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Processed ?
                                             Visibility.Visible :
                                             Visibility.Collapsed;
 
@@ -228,6 +235,9 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             }
         }
 
+        /// <summary>
+        /// Carrier image to display with tracking info
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string TrackingImageSource
         {
@@ -240,6 +250,53 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
                     null;
             }
         }
+
+        /// <summary>
+        /// Tracking url for the shipment (if any)
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Uri TrackingUri
+        {
+            get
+            {
+                ShipmentTypeCode? shipmentTypeCode = ShipmentModel?.ShipmentAdapter?.ShipmentTypeCode;
+                if (shipmentTypeCode.HasValue)
+                {
+                    ShipmentType shipmentType = shipmentTypeManager.Get(shipmentTypeCode.Value);
+
+                    string url = shipmentType.GetCarrierTrackingUrl(ShipmentModel.ShipmentAdapter.Shipment);
+
+                    return string.IsNullOrWhiteSpace(url) ?
+                        null :
+                        new Uri(url);
+                }
+
+                // return null if no shipment
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// The tracking number for the shipment (if any)
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string TrackingNumber
+        {
+            get
+            {
+                string trackingNumber = ShipmentModel?.ShipmentAdapter?.Shipment?.TrackingNumber;
+
+                return string.IsNullOrWhiteSpace(trackingNumber) ?
+                    string.Empty :
+                    trackingNumber;
+            }
+        }
+
+        /// <summary>
+        /// Command for copying tracking number to clipboard
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand CopyTrackingCommand { get; }
 
         /// <summary>
         /// Updates the current drag state
