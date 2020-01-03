@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public AmazonSFPShipmentTypeTest()
         {
             mock = AutoMock.GetLoose();
-            trackedShipment = new ShipmentEntity { TrackingNumber = "foo" };
+            trackedShipment = new ShipmentEntity { TrackingNumber = "foo", Processed = true };
 
             dataProvider = mock.Mock<IDataProvider>();
             dataProvider.Setup(d => d.GetEntity(nonAmazonOrderID, It.IsAny<bool>()))

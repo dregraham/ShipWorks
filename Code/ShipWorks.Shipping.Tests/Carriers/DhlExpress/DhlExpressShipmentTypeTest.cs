@@ -248,6 +248,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             Assert.Equal(expectedTotalWeight, parcelDetail.TotalWeight);
         }
+
+
+        [Theory]
+        [InlineData("", true, "")]
+        [InlineData("foo", false, "")]
+        [InlineData("foo", true, "http://www.dhl.com/en/express/tracking.html?AWB=foo&brand=DHL")]
+        public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string trackingNumber, bool processed, string expectedUrl)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                TrackingNumber = trackingNumber,
+                Processed = processed
+            };
+
+            var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
+            Assert.Equal(expectedUrl, trackingUrl);
+        }
         public void Dispose()
         {
             mock.Dispose();
