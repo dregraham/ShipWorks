@@ -369,6 +369,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Get postal Tracking link
+        /// </summary>
+        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        {
+            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
+            {
+                return string.Empty;
+            }
+
+            return $"https://www.ontrac.com/trackingresults.asp?tracking_number={shipment.TrackingNumber}";
+        }
+
+        /// <summary>
         /// Get the OnTrac account to be used for the given shipment
         /// </summary>
         public static OnTracAccountEntity GetAccountForShipment(ShipmentEntity shipment)

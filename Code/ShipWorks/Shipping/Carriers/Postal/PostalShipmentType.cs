@@ -320,7 +320,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
-        /// GetCarrierTrackingUrl
+        /// Get postal Tracking link
         /// </summary>
         public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
         {
