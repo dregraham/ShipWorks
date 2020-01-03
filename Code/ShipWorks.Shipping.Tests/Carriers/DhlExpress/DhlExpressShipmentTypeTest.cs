@@ -265,6 +265,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
             Assert.Equal(expectedUrl, trackingUrl);
         }
+
         public void Dispose()
         {
             mock.Dispose();

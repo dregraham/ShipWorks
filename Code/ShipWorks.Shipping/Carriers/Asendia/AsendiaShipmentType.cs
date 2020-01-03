@@ -327,5 +327,20 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 return new TrackingResult { Summary = $"<a href='http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}' style='color:blue; background-color:white'>Click here to view tracking information online</a>" };
             }
         }
+
+        /// <summary>
+        /// Get DhlExpressShipment Tracking URL
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        {
+            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
+            {
+                return string.Empty;
+            }
+
+            return $"http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}";
+        }
     }
 }
