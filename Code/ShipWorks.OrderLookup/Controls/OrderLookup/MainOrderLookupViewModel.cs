@@ -85,6 +85,7 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
             handler.RaisePropertyChanged(nameof(ShowColumns));
             handler.RaisePropertyChanged(nameof(ShowTracking));
             handler.RaisePropertyChanged(nameof(TrackingImageSource));
+            handler.RaisePropertyChanged(nameof(TrackingUri));
             handler.RaisePropertyChanged(nameof(TrackingNumber));
         }
 
