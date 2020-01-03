@@ -1,11 +1,6 @@
 ﻿using System;
 using Xunit;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Data.Model.EntityClasses;
 using Autofac.Extras.Moq;
