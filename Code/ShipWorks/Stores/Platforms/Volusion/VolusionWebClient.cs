@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -32,13 +33,16 @@ namespace ShipWorks.Stores.Platforms.Volusion
     public class VolusionWebClient : IVolusionWebClient
     {
         private readonly ILog log;
+        private readonly IInterapptiveOnly interapptiveOnly;
+        private const string liveRegKey = "VolusionLiveServer";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public VolusionWebClient(Func<Type, ILog> createLogger)
+        public VolusionWebClient(Func<Type, ILog> createLogger, IInterapptiveOnly interapptiveOnly)
         {
             log = createLogger(GetType());
+            this.interapptiveOnly = interapptiveOnly;
         }
 
         /// <summary>
@@ -354,7 +358,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
             try
             {
                 string url = store.StoreUrl;
-
                 if (!url.EndsWith("aspx", StringComparison.OrdinalIgnoreCase))
                 {
                     if (!url.EndsWith("/"))
@@ -362,7 +365,14 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         url += "/";
                     }
 
-                    url += "net/WebService.aspx";
+                    if (interapptiveOnly.UseFakeAPI(liveRegKey))
+                    {
+                        url += "channels/volusion";
+                    }
+                    else
+                    {
+                        url += "net/WebService.aspx";
+                    }                     
                 }
 
                 return new Uri(url);

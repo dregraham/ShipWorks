@@ -7,6 +7,7 @@ using log4net;
 using System.Web;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -44,6 +45,9 @@ namespace ShipWorks.Stores.Platforms.Volusion
         // cookie container for session conversation
         private CookieContainer cookieContainer = null;
 
+        private readonly IInterapptiveOnly interapptiveOnly;
+
+        private const string liveRegKey = "VolusionLiveServer";
         /// <summary>
         /// Constructor
         /// </summary>
@@ -55,6 +59,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
 
             this.storeUrl = storeUrl;
+            this.interapptiveOnly = new InterapptiveOnlyWrapper();
         }
 
         /// <summary>
@@ -62,6 +67,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public bool LogOn(string username, string password)
         {
+            if (interapptiveOnly.UseFakeAPI(liveRegKey))
+            {
+                return true;
+            }
+
             if (loggedIn)
             {
                 loggedIn = false;
@@ -620,7 +630,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public string RetrieveEncryptedPassword()
         {
-            if (!loggedIn)
+            if (!loggedIn && !interapptiveOnly.UseFakeAPI(liveRegKey))
             {
                 throw new InvalidOperationException("Must be logged in to perform this operation.");
             }
