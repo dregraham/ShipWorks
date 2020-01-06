@@ -331,15 +331,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Get DhlExpressShipment Tracking URL
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment)
         {
-            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
-            {
-                return string.Empty;
-            }
-
             return $"http://tracking.asendiausa.com/t.aspx?p={shipment.TrackingNumber}";
         }
     }

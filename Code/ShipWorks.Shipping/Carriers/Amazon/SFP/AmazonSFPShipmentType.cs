@@ -256,13 +256,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         /// <summary>
         /// Try to determine carrier, if we can, send back the tracking URL
         /// </summary>
-        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment)
         {
-            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
-            {
-                return string.Empty;
-            }
-
             string trackingLink = string.Empty;
 
             string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);

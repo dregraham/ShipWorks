@@ -322,12 +322,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Get postal Tracking link
         /// </summary>
-        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment)
         {
-            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
-            {
-                return string.Empty;
-            }
             if (ShipmentTypeManager.IsDhlSmartMail((PostalServiceType) shipment.Postal.Service))
             {
                 return $"http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={shipment.TrackingNumber}";

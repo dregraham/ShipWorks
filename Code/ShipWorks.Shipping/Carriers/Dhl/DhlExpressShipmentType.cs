@@ -437,17 +437,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Get DhlExpressShipment Tracking URL
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
-        {
-            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
-            {
-                return string.Empty;
-            }
-
-            return $"http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL";
-        }
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) => 
+            $"http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL";
 
         /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).
