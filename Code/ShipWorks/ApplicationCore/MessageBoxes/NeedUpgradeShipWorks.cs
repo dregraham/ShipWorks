@@ -31,7 +31,7 @@ namespace ShipWorks.ApplicationCore.MessageBoxes
                 Resolve<IShipWorksCommunicationBridge>(new TypedParameter(typeof(string), ShipWorksSession.InstanceID.ToString()));
             updateService = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpdateService>();
 
-            if (!AutoUpdateSettings.LastAutoUpdateSucceeded)
+            if (!AutoUpdateSettings.LastAutoUpdateSucceeded || AutoUpdateSettings.IsAutoUpdateDisabled)
             {
                 close.Text = "Close";
                 update.Visible = false;
