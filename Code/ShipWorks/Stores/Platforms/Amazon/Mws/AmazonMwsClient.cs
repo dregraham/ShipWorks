@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,6 +19,8 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -48,6 +51,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         // Throttling request submitter
         private AmazonMwsRequestThrottle throttler;
         private readonly IShippingManager shippingManager;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly AmazonStoreType storeType;
 
         /// <summary>
@@ -56,10 +60,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public AmazonMwsClient(AmazonStoreEntity store,
             IShippingManager shippingManager,
             Func<StoreEntity, AmazonStoreType> getStoreType,
-            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings)
+            Func<IAmazonCredentials, IAmazonMwsWebClientSettings> getWebClientSettings,
+            WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             storeType = getStoreType(store);
             this.shippingManager = shippingManager;
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             this.store = store;
@@ -125,12 +131,21 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             catch (AmazonException ex)
             {
+                // Throw if the proxy throws its own error
+                if (ex.Code.Equals("ShipWorksProxyError", StringComparison.OrdinalIgnoreCase))
+                {
+                    log.Error(ex);
+                    throw new AmazonException("Error communicating with Amazon.");
+                }
+
                 // if we received the expected InvalidParameterValue, we authenticated just fine
                 if (String.Compare(ex.Code, "InvalidParameterValue", StringComparison.OrdinalIgnoreCase) == 0 &&
                                   !ex.Message.Contains(dummyNumber))
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
+
+                // At this point, we know the error is "InvalidParameterValue" which is the error we want.
             }
         }
 
@@ -645,6 +660,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 {
                     logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
                 }
+
+                foreach (var key in request.Headers.AllKeys.ToList())
+                {
+                    request.Headers.Add($"SW-{key}", request.Headers[key]);
+                    request.Headers.Remove(key);
+                }
+
+                // We want to send the request to the hub and have the hub be the one that actually executes the request.
+                // This means we need to swap out the original URI with the hub URI, and store the original one as a variable.
+                request.Headers.Add("SW-originalRequestUrl", request.Uri.ToString());
+                request.Uri = mwsSettings.ProxyEndpoint;
 
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, Progress);
 

@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 byte[] hash = md5.ComputeHash(encodedContent);
                 string md5Hash = Convert.ToBase64String(hash);
 
-                e.HttpWebRequest.Headers.Add("Content-MD5", md5Hash);
+                e.HttpWebRequest.Headers.Add("SW-Content-MD5", md5Hash);
             }
         }
     }

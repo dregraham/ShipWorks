@@ -26,8 +26,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
-        private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
-        private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IVerifiedOrderService verifiedOrderService;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
@@ -44,14 +42,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Constructor
         /// </summary>
         public ScanPackViewModel(
-            IOrderLookupOrderIDRetriever orderIDRetriever,
-            IOrderLoader orderLoader,
             IScanPackItemFactory scanPackItemFactory,
             IVerifiedOrderService verifiedOrderService,
             IOrderLookupAutoPrintService orderLookupAutoPrintService)
         {
-            this.orderIDRetriever = orderIDRetriever;
-            this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
             this.verifiedOrderService = verifiedOrderService;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
@@ -277,30 +271,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             {
                 ProcessItemScan(sourceItem, sourceItems, targetItems);
             }
-        }
-
-        /// <summary>
-        /// Get an order with an order number matching the scanned text
-        /// </summary>
-        private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
-        {
-            ScanHeader = "Loading order...";
-            ScanFooter = string.Empty;
-
-            TelemetricResult<long?> orderID = await orderIDRetriever
-                .GetOrderID(scannedOrderNumber, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
-
-            OrderEntity order = null;
-            if (orderID.Value.HasValue)
-            {
-                ShipmentsLoadedEventArgs loadedOrders = await orderLoader
-                    .LoadAsync(new[] {orderID.Value.Value}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
-                    .ConfigureAwait(true);
-
-                order = loadedOrders?.Shipments?.FirstOrDefault()?.Order;
-            }
-
-            return order;
         }
 
         /// <summary>

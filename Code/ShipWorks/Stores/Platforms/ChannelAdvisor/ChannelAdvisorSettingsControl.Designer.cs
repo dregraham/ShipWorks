@@ -33,6 +33,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.consolidator = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorConsolidatorSettingsControl();
             this.attributes = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorAttributesSettingsControl();
             this.amazon = new ShipWorks.Shipping.Carriers.Amazon.SFP.AmazonSFPShippingSettingsControl();
+            this.excludeFba = new ShipWorks.Stores.Platforms.ChannelAdvisor.ChannelAdvisorExcludeFbaControl();
             this.SuspendLayout();
             // 
             // consolidator
@@ -64,6 +65,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.amazon.Size = new System.Drawing.Size(582, 129);
             this.amazon.TabIndex = 2;
             // 
+            // excludeFba
+            // 
+            this.excludeFba.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.excludeFba.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.excludeFba.Location = new System.Drawing.Point(0, 376);
+            this.excludeFba.Name = "excludeFba";
+            this.excludeFba.Size = new System.Drawing.Size(724, 60);
+            this.excludeFba.TabIndex = 3;
+            // 
             // ChannelAdvisorSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -72,6 +82,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             this.Controls.Add(this.amazon);
             this.Controls.Add(this.consolidator);
             this.Controls.Add(this.attributes);
+            this.Controls.Add(this.excludeFba);
             this.Name = "ChannelAdvisorSettingsControl";
             this.Size = new System.Drawing.Size(582, 500);
             this.ResumeLayout(false);
@@ -84,5 +95,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         private ChannelAdvisorAttributesSettingsControl attributes;
         private ChannelAdvisorConsolidatorSettingsControl consolidator;
         private AmazonSFPShippingSettingsControl amazon;
+        private ChannelAdvisorExcludeFbaControl excludeFba;
     }
 }

@@ -45,6 +45,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AmazonApiRegion = source.AmazonApiRegion;
             RefreshToken = source.RefreshToken;
             DownloadDaysBack = source.DownloadDaysBack;
+            ExcludeFBA = source.ExcludeFBA;
             
             
             
@@ -107,6 +108,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Byte DownloadDaysBack { get; }
+        /// <summary> The ExcludeFBA property of the Entity ChannelAdvisorStore<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ChannelAdvisorStore"."ExcludeFBA"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ExcludeFBA { get; }
         
         
         

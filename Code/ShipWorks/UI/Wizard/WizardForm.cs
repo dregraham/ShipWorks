@@ -860,6 +860,8 @@ namespace ShipWorks.UI.Wizard
             int newIndex = pages.IndexOf(args.NextPage);
 
             await MoveToPage(newIndex, WizardStepReason.StepBack).ConfigureAwait(true);
+
+            buttonInterop.ClearStyles();
             SetInteropHooks();
         }
 
@@ -1050,7 +1052,10 @@ namespace ShipWorks.UI.Wizard
             {
                 buttonInterop.HookEvents(this, elementHost);
             }
-            buttonInterop.AcceptButton = this.AcceptButton;
+            var button = this.AcceptButton as Button;
+            buttonInterop.AcceptButton = button;
+            buttonInterop.DefaultAcceptButton = button;
+            button.Focus();
         }
     }
 }

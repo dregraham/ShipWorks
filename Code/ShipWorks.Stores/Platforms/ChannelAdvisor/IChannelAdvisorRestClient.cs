@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// GetOrders from the given start time
         /// </summary>
-        ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken);
+        ChannelAdvisorOrderResult GetOrders(int daysBack, string refreshToken, bool includeExternallyManagedDistributionCenters);
 
         /// <summary>
         /// GetOrders from the given next token

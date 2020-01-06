@@ -1534,7 +1534,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4))
+[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4)),
+[ExcludeFBA] [bit] NOT NULL CONSTRAINT [DF_ChannelAdvisorStore_ExcludeFBA] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -7266,6 +7267,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[RakutenOrder]'
 GO
 ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [FK_RakutenOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[RakutenOrderSearch]'
+GO
+ALTER TABLE [dbo].[RakutenOrderSearch] ADD CONSTRAINT [FK_RakutenOrderSearch_RakutenOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[RakutenOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[RakutenStore]'
 GO
