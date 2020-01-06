@@ -52,13 +52,13 @@ namespace ShipWorks.Products.Tests.Import
         {
             File.WriteAllLines(filename, new[]
             {
-                "SKU,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                "SKU,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active,FNSKU,EAN",
                 ",SKU | SKU ,SKU: Qty | SKU: Qty ,,,,,lbs,inches,inches,inches,,,,,,"
             });
 
             var results = testObject.LoadImportFile(filename);
 
-            Assert.True(results.Success);
+            Assert.True(results.Success, results.Message);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace ShipWorks.Products.Tests.Import
         {
             File.WriteAllLines(filename, new[]
             {
-                "SKU,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                "SKU,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active,FNSKU,EAN",
             });
 
             var results = testObject.LoadImportFile(filename);
@@ -79,7 +79,7 @@ namespace ShipWorks.Products.Tests.Import
         {
             File.WriteAllLines(filename, new[]
             {
-                "SK U,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                "SK U,Alias SKUs,Bundled SKUs,Name,UPC ,ASIN ,ISBN ,Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active,FNSKU,EAN",
                 ",SKU | SKU ,SKU: Qty | SKU: Qty ,,,,,lbs,inches,inches,inches,,,,,,",
                 "2,1,1,Pink,111,222,333,1,2,3,2,https://www.com/1,bin 2,11,US,420212,active"
             });
@@ -95,14 +95,14 @@ namespace ShipWorks.Products.Tests.Import
         {
             File.WriteAllLines(filename, new[]
             {
-                "SKU ,Alias SKUs,Bundled SKUs,Name, UPC , ASIN ,ISBN , Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                "SKU ,Alias SKUs,Bundled SKUs,Name, UPC , ASIN ,ISBN , Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active,FNSKU,EAN",
                 ",SKU | SKU ,SKU: Qty | SKU: Qty ,,,,,lbs,inches,inches,inches,,,,,,",
                 "2,1,1,Pink,111,222,333,xxx,xxxx,xxx,xxx,https://www.com/1,bin 2,xxxxx,US,420212,active"
             });
 
             var results = testObject.LoadImportFile(filename);
 
-            Assert.True(results.Success);
+            Assert.True(results.Success, results.Message);
         }
 
         [Fact]
@@ -110,14 +110,14 @@ namespace ShipWorks.Products.Tests.Import
         {
             File.WriteAllLines(filename, new[]
             {
-                "SKU ,Alias SKUs,Bundled SKUs,Name, UPC , ASIN ,ISBN , Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active",
+                "SKU ,Alias SKUs,Bundled SKUs,Name, UPC , ASIN ,ISBN , Weight,Length,Width,Height,Image URL,Warehouse-Bin Location,Declared Value,Country of Origin,Harmonized Code,Active,FNSKU,EAN",
                 ",SKU : Name | SKU : Name ,SKU: Qty | SKU: Qty ,,,,,lbs,inches,inches,inches,,,,,,",
                 "2,AliasSku:AliasName,1,Pink,111,222,333,xxx,xxxx,xxx,xxx,https://www.com/1,bin 2,xxxxx,US,420212,active"
             });
 
             var results = testObject.LoadImportFile(filename);
 
-            Assert.True(results.Success);
+            Assert.True(results.Success, results.Message);
             Assert.Equal("AliasName", results.Value.BundleRows.First().AliasSkuList.First().Name);
             Assert.Equal("AliasSku", results.Value.BundleRows.First().AliasSkuList.First().Sku);
         }
