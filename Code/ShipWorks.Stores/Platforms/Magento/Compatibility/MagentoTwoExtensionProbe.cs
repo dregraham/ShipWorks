@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Stores.Platforms.Magento.Enums;
+using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Stores.Platforms.Magento.Compatibility
 {
@@ -16,6 +17,16 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
     [KeyedComponent(typeof(IMagentoProbe), MagentoVersion.MagentoTwo)]
     public class MagentoTwoExtensionProbe : IMagentoProbe
     {
+        private readonly ILicenseService licenseService;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public MagentoTwoExtensionProbe(ILicenseService licenseService)
+        {
+            this.licenseService = licenseService;
+        }
+
         /// <summary>
         /// Check to see if the store is compatible with Magento 1
         /// </summary>
@@ -33,6 +44,13 @@ namespace ShipWorks.Stores.Platforms.Magento.Compatibility
             {
                 request.Uri = new Uri($"{url.TrimEnd('/')}/rest/V1/shipworks");
                 request.AllowAutoRedirect = false;
+
+                // the hub is not compatible with the Magento 2 Module, force these users to use the REST API
+                if (licenseService.IsHub)
+                {
+                    return GenericResult.FromError("ShipWorks could not find a compatible module at the given url.", request.Uri);
+                }
+
                 using (IHttpResponseReader response = request.GetResponse())
                 {
                     string resultXml = response.ReadResult(Encoding.UTF8);
