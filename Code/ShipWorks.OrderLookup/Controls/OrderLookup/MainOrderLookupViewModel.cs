@@ -184,17 +184,13 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         /// Should the columns be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowColumns => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Unprocessed ?
-                                            Visibility.Visible :
-                                            Visibility.Collapsed;
+        public bool ShowColumns => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Unprocessed;
 
         /// <summary>
         /// Should the tracking info be displayed?
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public Visibility ShowTracking => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Processed ?
-                                            Visibility.Visible :
-                                            Visibility.Collapsed;
+        public bool ShowTracking => ShipmentModel?.ShipmentAdapter?.Shipment?.Status == ShipmentStatus.Processed;
 
         /// <summary>
         /// Width of the left column

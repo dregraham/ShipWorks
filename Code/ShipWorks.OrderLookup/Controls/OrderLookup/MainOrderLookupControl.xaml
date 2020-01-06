@@ -41,6 +41,7 @@
                 </Style.Triggers>
             </Style>
 
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -48,7 +49,7 @@
         <ScrollViewer
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto"
-            Visibility="{Binding ShowColumns}">
+            Visibility="{Binding ShowColumns, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid x:Name="ColumnGrid" SizeChanged="OnGridControlSizeChanged"
                   MaxWidth="{Binding ElementName=OrderLookupControl, Path=ActualWidth}">
                 <Grid.ColumnDefinitions>
@@ -107,7 +108,7 @@
 
         <Grid HorizontalAlignment="Center"
               VerticalAlignment="Center"
-              Visibility="{Binding ShowTracking}">
+              Visibility="{Binding ShowTracking, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
