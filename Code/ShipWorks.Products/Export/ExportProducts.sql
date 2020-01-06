@@ -14,6 +14,8 @@
 			CONVERT(NVARCHAR(50), pv.[DeclaredValue]) AS [Declared Value],
 			pv.[CountryOfOrigin] AS [Country of Origin],
 			pv.[HarmonizedCode] AS [Harmonized Code],
+			pv.[EAN] AS [EAN],
+			pv.[FNSku] AS [FNSKU],
 			pv.[IsActive] AS [Active]
 	from Product p, ProductVariant pv
 	cross apply
