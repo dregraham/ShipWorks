@@ -116,10 +116,12 @@
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0"
                    Source="{Binding TrackingImageSource, FallbackValue={StaticResource DefaultTrackingImage}}"
-                   Width="50"
+                   MaxWidth="180"
+                   MaxHeight="100"
                    VerticalAlignment="Center"
-                   Margin="0 0 10 0"/>
-
+                   Margin="0 0 10 0"
+                   StretchDirection="DownOnly"
+                   Stretch="Uniform"/>
             <TextBlock Grid.Column="1"
                        FontSize="20"
                        VerticalAlignment="Center"

@@ -621,12 +621,12 @@
     <Page Include="Styles\BlueSteel\GroupBoxStyle.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\amazon.png" />
-    <Content Include="Resources\asendia.png" />
-    <Content Include="Resources\dhl.png" />
-    <Content Include="Resources\express1.png" />
-    <Content Include="Resources\endicia.png" />
-    <Content Include="Resources\ontrac.png" />
+    <Resource Include="Resources\amazon.png" />
+    <Resource Include="Resources\asendia.png" />
+    <Resource Include="Resources\dhl.png" />
+    <Resource Include="Resources\express1.png" />
+    <Resource Include="Resources\endicia.png" />
+    <Resource Include="Resources\ontrac.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
