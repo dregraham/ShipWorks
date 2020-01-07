@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.shipworks.com/ui"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:shippingUI="clr-namespace:ShipWorks.Shipping.UI.ValueConverters;assembly=ShipWorks.Shipping.UI"
     d:DataContext="{d:DesignInstance local:MainOrderLookupViewModel}"
     FontFamily="/ShipWorks.OrderLookup;component/#Roboto"
     mc:Ignorable="d"
@@ -43,6 +44,7 @@
 
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <ui:VisibleWhenEqualToParameterConverter x:Key="VisibleWhenNotEqualToParameter" Invert="True"/>
+            <shippingUI:ShipmentTypeToImageConverter x:Key="ShipmentTypeToImageConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -116,7 +118,9 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Image Grid.Column="0"
-                   Source="{Binding TrackingImageSource, FallbackValue={StaticResource DefaultTrackingImage}}"
+                   Source="{Binding ShipmentModel.ShipmentAdapter.ShipmentTypeCode,
+                        Converter={StaticResource ShipmentTypeToImageConverter},
+                        FallbackValue={StaticResource DefaultTrackingImage}}"
                    MaxWidth="180"
                    MaxHeight="100"
                    VerticalAlignment="Center"

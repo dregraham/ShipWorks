@@ -84,7 +84,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
         {
             handler.RaisePropertyChanged(nameof(ShowColumns));
             handler.RaisePropertyChanged(nameof(ShowTracking));
-            handler.RaisePropertyChanged(nameof(TrackingImageSource));
             handler.RaisePropertyChanged(nameof(TrackingUri));
             handler.RaisePropertyChanged(nameof(TrackingNumber));
         }
@@ -229,22 +228,6 @@ namespace ShipWorks.OrderLookup.Controls.OrderLookup
 
                 handler.Set(nameof(RightColumnWidth), ref rightColumnWidth, value);
                 layout.Save(this);
-            }
-        }
-
-        /// <summary>
-        /// Carrier image to display with tracking info
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string TrackingImageSource
-        {
-            get
-            {
-                ShipmentTypeCode? shipmentTypeCode = ShipmentModel?.ShipmentAdapter?.ShipmentTypeCode;
-
-                return shipmentTypeCode.HasValue ?
-                    EnumHelper.GetWpfImageSource(shipmentTypeCode.Value) :
-                    null;
             }
         }
 
