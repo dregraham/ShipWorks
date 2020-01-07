@@ -402,7 +402,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 if (retryCount >= 0)
                 {
-                    await UploadOrderToHubWithRetry(orders, madeProgress ? 3 : retryCount--);
+                    await UploadOrderToHubWithRetry(orders, madeProgress ? 3 : retryCount - 1);
                 }
                 else
                 {
