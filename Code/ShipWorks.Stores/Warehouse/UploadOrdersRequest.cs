@@ -38,6 +38,12 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// The version to use
+        /// </summary>
+        [JsonProperty("version")]
+        public int Version => 1;
+
+        /// <summary>
         /// The batch
         /// </summary>
         [JsonProperty("batch")]
