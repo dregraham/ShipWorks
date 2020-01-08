@@ -343,7 +343,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
-                    verifiedOrderService.Save(orderBeingPacked);
+                    verifiedOrderService.Save(orderBeingPacked, true);
 
                     if (itemScanned)
                     {

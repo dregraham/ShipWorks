@@ -21,6 +21,7 @@ using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
 using ShipWorks.OrderLookup.Messages;
+using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
@@ -52,6 +53,7 @@ namespace ShipWorks.OrderLookup
         private readonly IShortcutManager shortcutManager;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
+        private readonly IVerifiedOrderService verifiedOrderService;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -85,7 +87,8 @@ namespace ShipWorks.OrderLookup
             IUserSession userSession,
             IShortcutManager shortcutManager,
             IShippingManager shippingManager,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            IVerifiedOrderService verifiedOrderService)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -103,6 +106,7 @@ namespace ShipWorks.OrderLookup
             this.shortcutManager = shortcutManager;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
+            this.verifiedOrderService = verifiedOrderService;
             log = createLogger(GetType());
         }
 
@@ -187,10 +191,16 @@ namespace ShipWorks.OrderLookup
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe(),
 
-                // Tab navigation shortcut
+                // Handle Shortcuts
                 messenger.OfType<ShortcutMessage>()
                     .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
-                    .Do(HandleNavigateMessage)
+                    .Do(HandleShortcutMessages)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe(),
+
+                messenger.OfType<OrderLookupUnverifyMessage>()
+                    .Where(_ =>mainForm.UIMode == UIMode.OrderLookup)
+                    .Do(HandleUnverifyOrderMessage)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe(),
 
@@ -449,9 +459,25 @@ namespace ShipWorks.OrderLookup
         }
 
         /// <summary>
-        /// Navigate to a specific tab
+        /// Handle the unverify order message
         /// </summary>
-        private void HandleNavigateMessage(ShortcutMessage shortcutMessage)
+        private async void HandleUnverifyOrderMessage(OrderLookupUnverifyMessage orderLookupUnverifyMessage)
+        {
+            if (shipmentModel.SelectedOrder.OrderID != orderLookupUnverifyMessage.OrderID)
+            {
+                // should never really happen
+                log.Error("In HandleUnverifyOrderMessage, message orderid != SelectedOrderID");
+                return;
+            }
+
+            verifiedOrderService.Save(shipmentModel.SelectedOrder, false);
+            await LoadOrder(shipmentModel.SelectedOrder).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Handle Shortcuts
+        /// </summary>
+        private void HandleShortcutMessages(ShortcutMessage shortcutMessage)
         {
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.NavigateToPackTab))
             {
@@ -463,6 +489,31 @@ namespace ShipWorks.OrderLookup
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
                 shortcutManager.ShowShortcutIndicator(shortcutMessage);
+            }
+
+            if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.UnverifyOrder))
+            {
+                HandleUnverifyShortcutMessage();
+            }
+        }
+
+        /// <summary>
+        /// Handle UnverifyShortcutMessage
+        /// </summary>
+        private void HandleUnverifyShortcutMessage()
+        {
+            long? orderID = shipmentModel?.SelectedOrder?.OrderID;
+            if (orderID == null)
+            {
+                messageHelper.ShowBarcodePopup("Order not selected - Cannot unverify.");
+            }
+            else if (shipmentModel.SelectedOrder.Shipments?.Any(s => s.Processed) == true)
+            {
+                messageHelper.ShowBarcodePopup("Cannot unverify a processed order.");
+            }
+            else
+            {
+                messenger.Send(new OrderLookupUnverifyMessage(this, orderID.Value));
             }
         }
 
