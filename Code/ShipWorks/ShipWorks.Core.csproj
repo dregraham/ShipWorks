@@ -11048,6 +11048,7 @@
     <None Include="Resources\bonanza.png" />
     <Content Include="Resources\box_tall_32.png" />
     <Resource Include="Resources\buttonEndSearchDisabled.png" />
+    <None Include="Resources\checkbox_circle_32.png" />
     <Content Include="Resources\data_16.png" />
     <Content Include="Resources\data_error_16.png" />
     <Content Include="Resources\data_ok_16.png" />

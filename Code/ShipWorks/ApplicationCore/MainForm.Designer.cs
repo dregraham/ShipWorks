@@ -1,4 +1,5 @@
 using System;
+using ShipWorks.UI;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks
@@ -2666,7 +2667,7 @@ namespace ShipWorks
             // buttonOrderLookupViewUnverify
             //
             this.buttonOrderLookupViewUnverify.Guid = new System.Guid("11d0afcb-9e08-4f4a-9596-00be8a8937ac");
-            this.buttonOrderLookupViewUnverify.Image = global::ShipWorks.Properties.Resources.box_closed_add32;
+            this.buttonOrderLookupViewUnverify.Image = global::ShipWorks.Properties.Resources.checkbox_circle_32;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewUnverify, ShipWorks.Users.Security.PermissionType.OrdersModify);
             this.buttonOrderLookupViewUnverify.QuickAccessKey = "U";
             this.buttonOrderLookupViewUnverify.Text = "Un-verify";
