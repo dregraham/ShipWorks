@@ -4,6 +4,7 @@
                     xmlns:ui="http://schemas.shipworks.com/ui">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Shapes.xaml" />
+        <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/Colors.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <ui:BooleanToVisibilityConverter x:Key="BoolToVis" False="Hidden"/>
@@ -43,8 +44,11 @@
                                  HorizontalAlignment="Center"
                                  Margin="0 5 3 5">
                             <Grid>
-                                <Path Style="{StaticResource CheckboxCircle}" Visibility="{TemplateBinding Success, Converter={StaticResource BoolToVis}}"/>
-                                <Path Style="{StaticResource Alert}" Visibility="{TemplateBinding Error, Converter={StaticResource BoolToVis}}"/>
+                                <Path Style="{StaticResource CheckboxCircle}"
+                                      Fill="{StaticResource SuccessColor}"
+                                      Visibility="{TemplateBinding Success, Converter={StaticResource BoolToVis}}"/>
+                                <Path Style="{StaticResource Alert}"
+                                      Visibility="{TemplateBinding Error, Converter={StaticResource BoolToVis}}"/>
                             </Grid>
                         </Viewbox>
                     </Grid>
