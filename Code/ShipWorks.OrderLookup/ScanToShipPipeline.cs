@@ -199,14 +199,15 @@ namespace ShipWorks.OrderLookup
                     .Subscribe(),
 
                 messenger.OfType<OrderLookupUnverifyMessage>()
-                    .Where(_ =>mainForm.UIMode == UIMode.OrderLookup)
+                    .Where(_ => mainForm.UIMode == UIMode.OrderLookup)
                     .Do(HandleUnverifyOrderMessage)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe(),
 
                 messenger.OfType<OrderLookupShipAgainMessage>()
-                .Subscribe(x => ShipAgain(x))
-
+                .Do(x => ShipAgain(x))
+                .CatchAndContinue((Exception ex) => HandleException(ex))
+                .Subscribe()
             );
         }
 
@@ -526,10 +527,16 @@ namespace ShipWorks.OrderLookup
 
             using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
             {
-                ICarrierShipmentAdapter shipmentAdapter = shippingManager.GetShipment(message.ShipmentID);
-                ShipmentEntity shipment = shippingManager.CreateShipmentCopy(shipmentAdapter.Shipment);
+                var sourceShipment = scanToShipViewModel.OrderLookupViewModel.ShipmentModel.ShipmentAdapter?.Shipment;
+                if (sourceShipment == null || sourceShipment.ShipmentID != message.ShipmentID)
+                {
+                    throw new InvalidOperationException("ShipmentID of message doesn't match the selected shipment");
+                }
+                
+                ShipmentEntity shipment = shippingManager.CreateShipmentCopy(sourceShipment);
+                scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder.Shipments.Add(shipment);
 
-                await LoadOrder(shipment.Order).ConfigureAwait(false);
+                await LoadOrder(scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder).ConfigureAwait(false);
                 mainForm.SelectScanToShipTab();
             }
         }

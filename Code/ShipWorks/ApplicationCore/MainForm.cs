@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,6 +74,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.OrderLookup;
 using ShipWorks.Products;
@@ -194,8 +196,13 @@ namespace ShipWorks
         private void SetShipmentButtonEnabledState()
         {
             // Listen for message to enable Create Label button
-            Messenger.Current.Subscribe(x =>
+            Messenger.Current
+                .Subscribe(x =>
             {
+
+                // The reason we are checking UIMode after the message is that when we add it to a Where above the subscribe,
+                // UIMode is null when we get our first message.
+
                 if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
                     var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
@@ -203,6 +210,11 @@ namespace ShipWorks
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
 
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
+                }
+
+                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) && 
+                currentUserSettings.GetUIMode() == UIMode.OrderLookup) 
+                {
                     buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
                 }
             });

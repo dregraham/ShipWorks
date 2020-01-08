@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Shipping.Profiles;

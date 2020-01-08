@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
 
-namespace ShipWorks.OrderLookup.Messages
+namespace ShipWorks.Messaging.Messages.Orders
 {
     /// <summary>
     /// Request that a order be unverified
