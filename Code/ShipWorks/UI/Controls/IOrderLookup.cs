@@ -37,6 +37,11 @@ namespace ShipWorks.UI.Controls
         bool ShipAgainAllowed();
 
         /// <summary>
+        /// Allow Unverify Order
+        /// </summary>
+        bool UnverifyOrderAllowed();
+
+        /// <summary>
         /// Ship the shipment again
         /// </summary>
         void ShipAgain();

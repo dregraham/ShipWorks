@@ -130,6 +130,14 @@ namespace ShipWorks.OrderLookup.ScanToShip
         }
 
         /// <summary>
+        /// Allow unverify order
+        /// </summary>
+        public bool UnverifyOrderAllowed()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
         /// Expose the Control
         /// </summary>
         public UserControl Control => this;
