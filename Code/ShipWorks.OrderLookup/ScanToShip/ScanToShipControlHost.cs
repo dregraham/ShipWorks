@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -134,7 +135,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         public bool UnverifyOrderAllowed()
         {
-            throw new NotImplementedException();
+            var order = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder;
+            if (order?.Verified == true && order?.Shipments?.Any(s => s.Processed) != true)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
