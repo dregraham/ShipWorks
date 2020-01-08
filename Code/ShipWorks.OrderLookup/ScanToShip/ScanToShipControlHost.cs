@@ -107,6 +107,19 @@ namespace ShipWorks.OrderLookup.ScanToShip
         }
 
         /// <summary>
+        /// Unverify the order
+        /// </summary>
+        public void Unverify()
+        {
+            long? orderId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder?.OrderID;
+
+            if (orderId.HasValue && orderId.Value != 0)
+            {
+                messenger.Send(new OrderLookupUnverifyMessage(this, orderId.Value));
+            }
+        }
+
+        /// <summary>
         /// Register the profile handler
         /// </summary>
         public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration)
@@ -136,12 +149,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public bool UnverifyOrderAllowed()
         {
             var order = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder;
-            if (order?.Verified == true && order?.Shipments?.Any(s => s.Processed) != true)
+            // if the order verified and there are no processed shipments
+            if (order?.Verified == true && order?.Shipments?.Any(s => s.Processed) == false)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         /// <summary>

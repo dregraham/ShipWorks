@@ -203,6 +203,7 @@ namespace ShipWorks
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
 
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
+                    buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
                 }
             });
         }
@@ -266,6 +267,14 @@ namespace ShipWorks
         private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
         {
             orderLookupControl.ShipAgain();
+        }
+
+        /// <summary>
+        /// User clicks the OrderLookupViewUnverify button
+        /// </summary>
+        private void OnButtonOrderLookupViewUnverify(object sender, EventArgs e)
+        {
+            orderLookupControl.Unverify();
         }
 
         #region Initialization \ Shutdown
@@ -1276,6 +1285,7 @@ namespace ShipWorks
             buttonOrderLookupViewCreateLabel.Enabled = false;
             buttonOrderLookupViewApplyProfile.Enabled = false;
             buttonOrderLookupViewShipShipAgain.Enabled = false;
+            buttonOrderLookupViewUnverify.Enabled = false;
         }
 
         /// <summary>

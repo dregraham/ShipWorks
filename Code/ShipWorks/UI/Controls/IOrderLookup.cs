@@ -40,11 +40,16 @@ namespace ShipWorks.UI.Controls
         /// Allow Unverify Order
         /// </summary>
         bool UnverifyOrderAllowed();
-
+        
         /// <summary>
         /// Ship the shipment again
         /// </summary>
         void ShipAgain();
+
+        /// <summary>
+        /// Unverify the order
+        /// </summary>
+        void Unverify();
 
         /// <summary>
         /// Register the profile handler
