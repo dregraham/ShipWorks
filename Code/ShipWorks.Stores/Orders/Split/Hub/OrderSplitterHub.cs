@@ -139,7 +139,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
                                 Quantity = iq.Value
                             }),
                     Charges = definition.ChargeAmounts
-                        .Where(c => c.Value > 0)
+                        .Where(c => c.Value != 0)
                         .Select(c =>
                             new OrderCharge()
                             {
