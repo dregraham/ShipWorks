@@ -428,10 +428,39 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
-            if (userSession?.Settings?.AutoPrintRequireValidation == true)
+            scanToShipViewModel.SelectedTab = (int) GetInitialTab();
+        }
+
+        /// <summary>
+        /// Gets the initial tab when loading an order
+        /// </summary>
+        private ScanToShipTab GetInitialTab()
+        {
+            var selectedTab = (ScanToShipTab) scanToShipViewModel.SelectedTab;
+
+            if (!licenseService.IsHub)
             {
-                scanToShipViewModel.SelectedTab = (int) ScanToShipTab.PackTab;
+                return selectedTab;
             }
+
+            if (userSession?.Settings?.AutoPrintRequireValidation == true && !scanToShipViewModel.IsOrderVerified)
+            {
+                selectedTab = ScanToShipTab.PackTab;
+            }
+
+            if (userSession?.Settings?.ScanToShipAutoAdvance == true)
+            {
+                if (scanToShipViewModel.IsOrderVerified)
+                {
+                    selectedTab = ScanToShipTab.ShipTab;
+                }
+                else
+                {
+                    selectedTab = ScanToShipTab.PackTab;
+                }
+            }
+
+            return selectedTab;
         }
 
         /// <summary>
