@@ -343,10 +343,9 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
-                    verifiedOrderService.Save(orderBeingPacked, true);
-
                     if (itemScanned)
                     {
+                        verifiedOrderService.Save(orderBeingPacked, true);
                         orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
                     }
 

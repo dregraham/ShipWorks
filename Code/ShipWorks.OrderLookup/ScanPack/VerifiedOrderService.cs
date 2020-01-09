@@ -38,7 +38,7 @@ namespace ShipWorks.OrderLookup.ScanPack
         {
             order.Verified = verified;
             order.VerifiedBy = verified ? (long?) userSession.User.UserID : null;
-            order.VerifiedDate = verified? (DateTime?) dateTimeProvider.UtcNow : null;
+            order.VerifiedDate = verified ? (DateTime?) dateTimeProvider.UtcNow : null;
 
             orderRepository.Save(order);
 
