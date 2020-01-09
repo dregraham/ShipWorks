@@ -494,14 +494,14 @@ namespace ShipWorks.OrderLookup
 
             if (shortcutMessage.AppliesTo(KeyboardShortcutCommand.UnverifyOrder))
             {
-                HandleUnverifyShortcutMessage();
+                HandleUnverifyShortcutMessage(shortcutMessage);
             }
         }
 
         /// <summary>
         /// Handle UnverifyShortcutMessage
         /// </summary>
-        private void HandleUnverifyShortcutMessage()
+        private void HandleUnverifyShortcutMessage(ShortcutMessage shortcutMessage)
         {
             long? orderID = shipmentModel?.SelectedOrder?.OrderID;
             if (orderID == null)
@@ -515,6 +515,7 @@ namespace ShipWorks.OrderLookup
             else
             {
                 messenger.Send(new OrderLookupUnverifyMessage(this, orderID.Value));
+                shortcutManager.ShowShortcutIndicator(shortcutMessage);
             }
         }
 
