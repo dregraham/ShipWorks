@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         {
             if (shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
             {
-                var tag = rateResult.Tag as BestRateResultTag;
+                var tag = rateResult?.Tag as BestRateResultTag;
                 shipment.CarrierAccount = tag?.AccountDescription;
             }
 
