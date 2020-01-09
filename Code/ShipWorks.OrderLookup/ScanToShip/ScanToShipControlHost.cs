@@ -150,13 +150,9 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public bool UnverifyOrderAllowed()
         {
             var order = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder;
-            // if the order verified and there are no processed shipments
-            if (order?.Verified == true && order?.Shipments?.Any(s => s.Processed) == false)
-            {
-                return true;
-            }
-
-            return false;
+            
+            // Return true if the order verified and there are no processed shipments
+            return order?.Verified == true && order?.Shipments?.Any(s => s.Processed) == false ;
         }
 
         /// <summary>
