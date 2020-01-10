@@ -8,7 +8,9 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using ShipWorks.UI.Wizard.Design;
+using ShipWorks.UI.WPF;
 
 namespace ShipWorks.UI.Wizard
 {
@@ -335,6 +337,15 @@ namespace ShipWorks.UI.Wizard
         // List of pages that have been navigated to, so we know when its the first time or not
         private List<WizardPage> firstTimeStepInto = new List<WizardPage>();
 
+        // Provides interoperability between WPF and WinForms buttons
+        private WPFButtonInterop buttonInterop = new WPFButtonInterop();
+
+        // The element host for the currently hosted WPF control
+        private ElementHost elementHost = null;
+
+        // If we need to intercept the tab and move to the correct tab position
+        private bool interceptTab = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -369,6 +380,8 @@ namespace ShipWorks.UI.Wizard
             {
                 await MoveToPage(0, WizardStepReason.StepForward);
             }
+
+            SetInteropHooks();
         }
 
         #region Collection Handling
@@ -847,6 +860,9 @@ namespace ShipWorks.UI.Wizard
             int newIndex = pages.IndexOf(args.NextPage);
 
             await MoveToPage(newIndex, WizardStepReason.StepBack).ConfigureAwait(true);
+
+            buttonInterop.ClearStyles();
+            SetInteropHooks();
         }
 
         /// <summary>
@@ -946,6 +962,7 @@ namespace ShipWorks.UI.Wizard
             {
                 DialogResult = result;
             }
+            SetInteropHooks();
         }
 
         /// <summary>
@@ -993,5 +1010,52 @@ namespace ShipWorks.UI.Wizard
         /// Used by the designer to set the current page
         /// </summary>
         internal void SetCurrent(int index) => ShowPage(index);
+      
+        /// <summary>
+        /// Custom command key processing for hitting tab so that our tab order is correct
+        /// </summary>
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Tab)
+            {
+                if (back.Focused)
+                {
+                    next.Focus();
+                    interceptTab = true;
+                    return true;
+                }
+
+                else if (next.Focused && interceptTab)
+                {
+                    CurrentPage.Focus();
+                    interceptTab = false;
+                    return true;
+                }
+
+                buttonInterop.SetAcceptButton(this);
+            }
+            
+            if(elementHost != null && (keyData == Keys.Enter || keyData == Keys.Return))
+            {
+                buttonInterop.InvokeClick();
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        /// <summary>
+        /// Sets the button interop hooks if we have an element host
+        /// </summary>
+        private void SetInteropHooks()
+        {
+            var elementHost = CurrentPage.Controls[0] as ElementHost;
+            if (elementHost != null)
+            {
+                buttonInterop.HookEvents(this, elementHost);
+            }
+            var button = this.AcceptButton as Button;
+            buttonInterop.AcceptButton = button;
+            buttonInterop.DefaultAcceptButton = button;
+            button.Focus();
+        }
     }
 }

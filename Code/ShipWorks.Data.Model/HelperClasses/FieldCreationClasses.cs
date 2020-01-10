@@ -4197,6 +4197,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.DownloadDaysBack);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ExcludeFBA field instance</summary>
+		public static EntityField2 ExcludeFBA
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ExcludeFBA);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>
@@ -6547,6 +6552,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.GuaranteedDelivery);}
 		}
+		/// <summary>Creates a new EbayOrderEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderFieldIndex.ExtendedOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderItemEntity</summary>
@@ -6822,6 +6832,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.PayPalAddressStatus);}
 		}
+		/// <summary>Creates a new EbayOrderItemEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderItemFieldIndex.ExtendedOrderID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EbayOrderSearchEntity</summary>
@@ -6856,6 +6871,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OriginalOrderID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.OriginalOrderID);}
+		}
+		/// <summary>Creates a new EbayOrderSearchEntity.ExtendedOrderID field instance</summary>
+		public static EntityField2 ExtendedOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayOrderSearchFieldIndex.ExtendedOrderID);}
 		}
 	}
 
@@ -23486,6 +23506,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CountryOfOrigin
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.CountryOfOrigin);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.FNSku field instance</summary>
+		public static EntityField2 FNSku
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.FNSku);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.EAN field instance</summary>
+		public static EntityField2 EAN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.EAN);}
 		}
 	}
 

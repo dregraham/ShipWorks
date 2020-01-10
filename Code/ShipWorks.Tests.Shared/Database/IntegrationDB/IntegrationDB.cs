@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using Interapptive.Shared.Data;
 
 namespace ShipWorks.Tests.Shared.Database.IntegrationDB
 {
@@ -124,10 +125,11 @@ END",
             var sw = Stopwatch.StartNew();
 
             using (var conn = this.OpenMaster())
-            using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = string.Format(
-                    @"
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = string.Format(
+                        @"
 DECLARE @FILENAME as varchar(255)
 DECLARE @LOGFILENAME as varchar(255)
 SET @FILENAME =    CONVERT(VARCHAR(255), SERVERPROPERTY('instancedefaultdatapath')) + '{0}.mdf';
@@ -136,10 +138,29 @@ EXEC ('CREATE DATABASE [{0}]
         ON PRIMARY (NAME = [{0}], FILENAME = ''' + @FILENAME + ''' )
         LOG ON (NAME = [{0}_Log], FILENAME = ''' + @LOGFILENAME + ''' )
             ')",
-                    this.databaseName);
+                        this.databaseName);
 
-                cmd.ExecuteNonQuery();
+                    cmd.ExecuteNonQuery();
+                }
+
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+DECLARE @productVersionText nvarchar(100) = CONVERT(NVARCHAR(100), SERVERPROPERTY ('productversion'));
+DECLARE @productVersion int = CONVERT(INT, LEFT(@productVersionText, CHARINDEX('.', @productVersionText) - 1));
+
+IF @productVersion >= 14 
+BEGIN
+	EXEC sp_configure 'show advanced options', 1
+	RECONFIGURE;
+	EXEC sp_configure 'clr strict security', 0;
+	RECONFIGURE;
+END;
+";
+                    cmd.ExecuteNonQuery();
+                }
             }
+
 
             sw.Stop();
             Console.WriteLine("CreateDatabase completed in {0} ms.", sw.ElapsedMilliseconds);

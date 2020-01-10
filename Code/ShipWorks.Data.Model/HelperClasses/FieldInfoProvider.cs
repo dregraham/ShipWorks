@@ -774,6 +774,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "AmazonApiRegion", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, 2, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "RefreshToken", typeof(System.String), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.RefreshToken, 200, 0, 0);
 			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "DownloadDaysBack", typeof(System.Byte), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, 0, 0, 3);
+			this.AddElementFieldInfo("ChannelAdvisorStoreEntity", "ExcludeFBA", typeof(System.Boolean), false, false, false, false,  (int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, 0, 0, 0);
 		}
 		/// <summary>Inits ClickCartProOrderEntity's FieldInfo objects</summary>
 		private void InitClickCartProOrderEntityInfos()
@@ -1032,6 +1033,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupFeedbackReceivedComments", typeof(System.String), false, false, false, true,  (int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, 80, 0, 0);
 			this.AddElementFieldInfo("EbayOrderEntity", "RollupPayPalAddressStatus", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderFieldIndex.RollupPayPalAddressStatus, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderEntity", "GuaranteedDelivery", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderFieldIndex.GuaranteedDelivery, 0, 0, 0);
+			this.AddElementFieldInfo("EbayOrderEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayOrderItemEntity's FieldInfo objects</summary>
 		private void InitEbayOrderItemEntityInfos()
@@ -1055,6 +1057,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderItemEntity", "MyEbayShipped", typeof(System.Boolean), false, false, false, false,  (int)EbayOrderItemFieldIndex.MyEbayShipped, 0, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalTransactionID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalTransactionID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderItemEntity", "PayPalAddressStatus", typeof(System.Int32), false, false, false, false,  (int)EbayOrderItemFieldIndex.PayPalAddressStatus, 0, 0, 10);
+			this.AddElementFieldInfo("EbayOrderItemEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderItemFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayOrderSearchEntity's FieldInfo objects</summary>
 		private void InitEbayOrderSearchEntityInfos()
@@ -1066,6 +1069,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "EbayBuyerID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.EbayBuyerID, 50, 0, 0);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "SellingManagerRecord", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EbayOrderSearchFieldIndex.SellingManagerRecord, 0, 0, 10);
 			this.AddElementFieldInfo("EbayOrderSearchEntity", "OriginalOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayOrderSearchFieldIndex.OriginalOrderID, 0, 0, 19);
+			this.AddElementFieldInfo("EbayOrderSearchEntity", "ExtendedOrderID", typeof(System.String), false, false, false, false,  (int)EbayOrderSearchFieldIndex.ExtendedOrderID, 25, 0, 0);
 		}
 		/// <summary>Inits EbayStoreEntity's FieldInfo objects</summary>
 		private void InitEbayStoreEntityInfos()
@@ -2769,6 +2773,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "FNSku", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "EAN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN, 30, 0, 0);
 		}
 		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
 		private void InitProductVariantAliasEntityInfos()

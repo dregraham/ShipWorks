@@ -589,6 +589,7 @@
           <Field Name="AttributesToDownload" Type="string" MaxLength="2147483647" FieldIndex="2" />
           <Field Name="ConsolidatorAsUsps" Type="bool" FieldIndex="3" />
           <Field Name="DownloadDaysBack" Type="byte" Precision="3" FieldIndex="8" />
+          <Field Name="ExcludeFBA" Type="bool" FieldIndex="9" />
           <Field Name="ProfileID" Type="int" FieldIndex="1" />
           <Field Name="RefreshToken" Type="string" MaxLength="200" FieldIndex="7" />
         </Fields>
@@ -814,6 +815,7 @@
           <Field Name="CombinedLocally" Type="bool" FieldIndex="2" />
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="EbayOrderID" Type="long" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="24" />
           <Field Name="GspCity" Type="string" MaxLength="128" FieldIndex="10" />
           <Field Name="GspCountryCode" Type="string" MaxLength="2" FieldIndex="13" />
           <Field Name="GspEligible" Type="bool" FieldIndex="5" />
@@ -844,6 +846,7 @@
           <Field Name="EbayTransactionID" Type="long" FieldIndex="2" />
           <Field Name="EffectiveCheckoutStatus" Type="int" FieldIndex="4" />
           <Field Name="EffectivePaymentMethod" Type="int" FieldIndex="5" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="FeedbackLeftComments" Type="string" MaxLength="80" FieldIndex="10" />
           <Field Name="FeedbackLeftType" Type="int" FieldIndex="9" />
           <Field Name="FeedbackReceivedComments" Type="string" MaxLength="80" FieldIndex="12" />
@@ -863,6 +866,7 @@
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="6" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
           <Field Name="SellingManagerRecord" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
@@ -2414,6 +2418,8 @@
           <Field Name="CountryOfOrigin" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
+          <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -4204,7 +4210,7 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
-      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4">
+      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
@@ -4625,7 +4631,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-05T18:14:45.368935Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-18T19:38:42.4448622Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5182,6 +5188,7 @@
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
                     <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
+                    <Field Name="ExcludeFBA" Ordinal="11" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ClickCartProOrder">
@@ -5536,6 +5543,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
+                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5559,6 +5567,7 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
+                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -5570,6 +5579,7 @@
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -8013,6 +8023,8 @@
                     <Field Name="HarmonizedCode" Ordinal="15" IsOptional="true" DbType="12" Length="20" />
                     <Field Name="DeclaredValue" Ordinal="16" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -10658,7 +10670,7 @@
                 <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
               </FieldPairs>
             </ForeignKeyConstraint>
-            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder">
+            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:RakutenOrder:OrderID" FkField="dbo:RakutenOrderSearch:OrderID" />
               </FieldPairs>
@@ -11468,6 +11480,7 @@
             <FieldMapping FieldName="AttributesToDownload" TargetFieldName="AttributesToDownload" />
             <FieldMapping FieldName="ConsolidatorAsUsps" TargetFieldName="ConsolidatorAsUsps" />
             <FieldMapping FieldName="DownloadDaysBack" TargetFieldName="DownloadDaysBack" />
+            <FieldMapping FieldName="ExcludeFBA" TargetFieldName="ExcludeFBA" />
             <FieldMapping FieldName="ProfileID" TargetFieldName="ProfileID" />
             <FieldMapping FieldName="RefreshToken" TargetFieldName="RefreshToken" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
@@ -11691,6 +11704,7 @@
             <FieldMapping FieldName="CombinedLocally" TargetFieldName="CombinedLocally" />
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="GspCity" TargetFieldName="GspCity" />
             <FieldMapping FieldName="GspCountryCode" TargetFieldName="GspCountryCode" />
             <FieldMapping FieldName="GspEligible" TargetFieldName="GspEligible" />
@@ -11722,6 +11736,7 @@
             <FieldMapping FieldName="EbayTransactionID" TargetFieldName="EbayTransactionID" />
             <FieldMapping FieldName="EffectiveCheckoutStatus" TargetFieldName="EffectiveCheckoutStatus" />
             <FieldMapping FieldName="EffectivePaymentMethod" TargetFieldName="EffectivePaymentMethod" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="FeedbackLeftComments" TargetFieldName="FeedbackLeftComments" />
             <FieldMapping FieldName="FeedbackLeftType" TargetFieldName="FeedbackLeftType" />
             <FieldMapping FieldName="FeedbackReceivedComments" TargetFieldName="FeedbackReceivedComments" />
@@ -11742,6 +11757,7 @@
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
             <FieldMapping FieldName="EbayOrderSearchID" TargetFieldName="EbayOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="SellingManagerRecord" TargetFieldName="SellingManagerRecord" />
@@ -13332,6 +13348,8 @@
             <FieldMapping FieldName="CountryOfOrigin" TargetFieldName="CountryOfOrigin" />
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
+            <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />

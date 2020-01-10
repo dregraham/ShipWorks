@@ -182,7 +182,8 @@ CREATE TABLE [dbo].[EbayOrder]
 [RollupFeedbackReceivedType] [int] NULL,
 [RollupFeedbackReceivedComments] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RollupPayPalAddressStatus] [int] NULL,
-[GuaranteedDelivery] [bit] NOT NULL
+[GuaranteedDelivery] [bit] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrder] on [dbo].[EbayOrder]'
@@ -1533,7 +1534,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [AmazonAuthToken] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonApiRegion] [char] (2) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RefreshToken] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4))
+[DownloadDaysBack] [tinyint] NOT NULL DEFAULT ((4)),
+[ExcludeFBA] [bit] NOT NULL CONSTRAINT [DF_ChannelAdvisorStore_ExcludeFBA] DEFAULT ((1))
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1674,7 +1676,8 @@ CREATE TABLE [dbo].[EbayOrderItem]
 [MyEbayPaid] [bit] NOT NULL,
 [MyEbayShipped] [bit] NOT NULL,
 [PayPalTransactionID] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PayPalAddressStatus] [int] NOT NULL
+[PayPalAddressStatus] [int] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderItem] on [dbo].[EbayOrderItem]'
@@ -6811,7 +6814,8 @@ CREATE TABLE [dbo].[EbayOrderSearch]
 [EbayOrderID] [bigint] NOT NULL,
 [EbayBuyerID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SellingManagerRecord] [int] NULL,
-[OriginalOrderID] [bigint] NOT NULL
+[OriginalOrderID] [bigint] NOT NULL,
+[ExtendedOrderID] NVARCHAR(25) NOT NULL,
 )
 GO
 PRINT N'Creating primary key [PK_EbayOrderSearch] on [dbo].[EbayOrderSearch]'
@@ -7263,6 +7267,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[RakutenOrder]'
 GO
 ALTER TABLE [dbo].[RakutenOrder] ADD CONSTRAINT [FK_RakutenOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[RakutenOrderSearch]'
+GO
+ALTER TABLE [dbo].[RakutenOrderSearch] ADD CONSTRAINT [FK_RakutenOrderSearch_RakutenOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[RakutenOrder] ([OrderID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[RakutenStore]'
 GO
@@ -8092,7 +8100,9 @@ CREATE TABLE [dbo].[ProductVariant]
 [BinLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DeclaredValue] [money] NULL,
-[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FNSku] [nvarchar](300) NULL,
+[EAN] [nvarchar](30) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'

@@ -67,6 +67,18 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Print Pick List
         /// </summary>
         [Description("Print Pick List")]
-        PrintPickList = 9
+        PrintPickList = 9,
+
+        /// <summary>
+        /// Print Pick List
+        /// </summary>
+        [Description("Navigate To Scan Tab")]
+        NavigateToPackTab = 10,
+
+        /// <summary>
+        /// Print Pick List
+        /// </summary>
+        [Description("Navigate To Ship Tab")]
+        NavigateToShipTab = 11
     }
 }

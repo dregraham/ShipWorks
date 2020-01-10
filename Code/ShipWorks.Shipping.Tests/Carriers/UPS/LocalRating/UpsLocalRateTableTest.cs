@@ -206,6 +206,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             using (ExcelEngine excelEngine = new ExcelEngine())
             {
+                excelEngine.Excel.UseNativeStorage = false;
                 IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
                 using (MemoryStream stream = new MemoryStream())
                 {
@@ -231,6 +232,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             using (ExcelEngine excelEngine = new ExcelEngine())
             {
+                excelEngine.Excel.UseNativeStorage = false;
                 IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
                 using (MemoryStream stream = new MemoryStream())
                 {
@@ -257,6 +259,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.LocalRating
         {
             using (ExcelEngine excelEngine = new ExcelEngine())
             {
+                excelEngine.Excel.UseNativeStorage = false;
                 IWorkbook workbook = excelEngine.Excel.Workbooks.Create(2);
                 using (MemoryStream stream = new MemoryStream())
                 {

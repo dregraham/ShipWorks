@@ -1822,6 +1822,8 @@ namespace ShipWorks.Data.Model
 		RefreshToken,
 		///<summary>DownloadDaysBack. </summary>
 		DownloadDaysBack,
+		///<summary>ExcludeFBA. </summary>
+		ExcludeFBA,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2826,6 +2828,8 @@ namespace ShipWorks.Data.Model
 		RollupPayPalAddressStatus,
 		///<summary>GuaranteedDelivery. </summary>
 		GuaranteedDelivery,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2940,6 +2944,8 @@ namespace ShipWorks.Data.Model
 		PayPalTransactionID,
 		///<summary>PayPalAddressStatus. </summary>
 		PayPalAddressStatus,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2958,6 +2964,8 @@ namespace ShipWorks.Data.Model
 		SellingManagerRecord,
 		///<summary>OriginalOrderID. </summary>
 		OriginalOrderID,
+		///<summary>ExtendedOrderID. </summary>
+		ExtendedOrderID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10026,6 +10034,10 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>CountryOfOrigin. </summary>
 		CountryOfOrigin,
+		///<summary>FNSku. </summary>
+		FNSku,
+		///<summary>EAN. </summary>
+		EAN,
 		/// <summary></summary>
 		AmountOfFields
 	}

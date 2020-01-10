@@ -27,7 +27,7 @@ using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.OrderLookup.Tests
 {
-    public class OrderLookupSingleScanPipelineTest
+    public class ScanToShipPipelineTest
     {
         private readonly AutoMock mock;
         readonly TestMessenger testMessenger;
@@ -35,15 +35,16 @@ namespace ShipWorks.OrderLookup.Tests
         private readonly Mock<IOrderLookupOrderRepository> orderRepository;
         private readonly Mock<IMainForm> mainForm;
         private readonly Mock<IOrderLookupOrderIDRetriever> orderIdRetriever;
-        private readonly OrderLookupSingleScanPipeline testObject;
+        private readonly ScanToShipPipeline testObject;
         private readonly TestScheduler scheduler;
         private readonly Mock<IOnDemandDownloader> downloader;
         private readonly Mock<IOrderLookupAutoPrintService> autoPrintService;
         private readonly OrderEntity order;
         private readonly Mock<IScanPackViewModel> scanPackViewModel;
+        private readonly Mock<IScanToShipViewModel> scanToShipViewModel;
         private bool isPackTabActive = true;
                
-        public OrderLookupSingleScanPipelineTest()
+        public ScanToShipPipelineTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
@@ -84,8 +85,8 @@ namespace ShipWorks.OrderLookup.Tests
 
 
             scanPackViewModel = mock.Mock<IScanPackViewModel>();
-            var scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
-            
+            scanToShipViewModel = mock.Mock<IScanToShipViewModel>();
+
             scanToShipViewModel.SetupGet(m => m.IsPackTabActive).Returns(() => isPackTabActive);
             scanToShipViewModel.SetupGet(m => m.ScanPackViewModel).Returns(scanPackViewModel.Object);
             scanToShipViewModel.SetupGet(m => m.SearchViewModel).Returns(mock.Mock<IOrderLookupSearchViewModel>().Object);
@@ -96,7 +97,7 @@ namespace ShipWorks.OrderLookup.Tests
             orderIdRetriever = mock.Mock<IOrderLookupOrderIDRetriever>();
             orderIdRetriever.Setup(o => o.GetOrderID("Foo", It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => telemetricResult);
 
-            testObject = mock.Create<OrderLookupSingleScanPipeline>();
+            testObject = mock.Create<ScanToShipPipeline>();
         }
 
         [Fact]
@@ -283,7 +284,7 @@ namespace ShipWorks.OrderLookup.Tests
 
             scheduler.Start();
 
-            scanPackViewModel.Verify(s => s.Reset());
+            scanToShipViewModel.Verify(s => s.Reset());
         }
 
         [Fact]

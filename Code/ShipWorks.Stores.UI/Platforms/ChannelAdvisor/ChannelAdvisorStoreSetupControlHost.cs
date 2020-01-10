@@ -7,8 +7,7 @@ using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.UI.Platforms.ChannelAdvisor
 {
-    [KeyedComponent(typeof(WizardPage), StoreTypeCode.ChannelAdvisor, ExternallyOwned = true)]
-    [Order(typeof(WizardPage), Order.Unordered)]
+    [Component(RegistrationType.Self)]
     public partial class ChannelAdvisorStoreSetupControlHost : AddStoreWizardPage
     {
         private readonly IChannelAdvisorAccountSettingsViewModel viewModel;

@@ -198,7 +198,7 @@
             this.requireVerificationForAutoPrint.Name = "requireVerificationForAutoPrint";
             this.requireVerificationForAutoPrint.Size = new System.Drawing.Size(253, 17);
             this.requireVerificationForAutoPrint.TabIndex = 47;
-            this.requireVerificationForAutoPrint.Text = "Require orders to be verified before auto printing";
+            this.requireVerificationForAutoPrint.Text = "Require orders to be verified before printing";
             this.requireVerificationForAutoPrint.UseVisualStyleBackColor = true;
             this.requireVerificationForAutoPrint.CheckedChanged += new System.EventHandler(this.OnChangeSingleScanSettings);
             // 

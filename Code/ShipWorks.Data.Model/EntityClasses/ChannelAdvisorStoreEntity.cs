@@ -349,6 +349,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RefreshToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("DownloadDaysBack", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ExcludeFBA", fieldHashtable);
 		}
 		#endregion
 
@@ -490,6 +492,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Byte)GetValue((int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, value); }
+		}
+
+		/// <summary> The ExcludeFBA property of the Entity ChannelAdvisorStore<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ExcludeFBA"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ExcludeFBA
+		{
+			get { return (System.Boolean)GetValue((int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

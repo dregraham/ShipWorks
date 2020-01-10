@@ -22,6 +22,12 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         public long EbayTransactionID { get; set; }
 
         /// <summary>
+        /// The ExtendedOrderID of the EbayOrderItem
+        /// </summary>
+        [JsonProperty("extendedOrderId")]
+        public string ExtendedOrderID { get; set; }
+
+        /// <summary>
         /// The SellingManagerRecord of the EbayOrderItem
         /// </summary>
         public int SellingManagerRecord { get; set; }

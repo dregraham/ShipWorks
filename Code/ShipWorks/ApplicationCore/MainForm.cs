@@ -1254,7 +1254,7 @@ namespace ShipWorks
 
             orderLookupLifetimeScope = IoC.BeginLifetimeScopeWithOverrides<IOrderLookupRegistrationOverride>();
 
-            foreach (IOrderLookupPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IOrderLookupPipeline>>())
+            foreach (IScanToShipPipeline service in orderLookupLifetimeScope.Resolve<IEnumerable<IScanToShipPipeline>>())
             {
                 service.InitializeForCurrentScope();
             }
@@ -1268,9 +1268,6 @@ namespace ShipWorks
                     new Guid("98602808-B402-48F9-A5D1-EE10FCE16565"),
                     getShipment,
                     onApply));
-
-            panelDockingArea.Controls.Add(orderLookupControl.Control);
-            orderLookupControl.Control.BringToFront();
 
             // Since no order will be selected when they change modes, set these to false.
             buttonOrderLookupViewCreateLabel.Enabled = false;
@@ -1323,6 +1320,7 @@ namespace ShipWorks
         /// </summary>
         private void DisableBatchModeControls()
         {
+            panelDockingArea.Visible = false;
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
             {
@@ -1336,6 +1334,7 @@ namespace ShipWorks
 
             // Clear Filter Trees
             ClearFilterTrees();
+            panelDockingArea.Visible = true;
         }
 
         /// <summary>
@@ -1374,23 +1373,23 @@ namespace ShipWorks
             else if (IsOrderLookupSpecificTab(ribbon.SelectedTab))
             {
                 ChangeUIMode(UIMode.OrderLookup);
+
+                if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+                {
+                    ToggleVisiblePanel(orderLookupControl?.Control);
+                    shipmentHistory?.Deactivate();
+                }
+                else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
+                {
+                    // Save the order in case changes were made before switching to this tab
+                    orderLookupControl?.Save();
+                    ToggleVisiblePanel(shipmentHistory?.Control);
+                    shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
+                }
             }
             else if (IsProductSpecificTab(ribbon.SelectedTab))
             {
                 ChangeUIMode(UIMode.Products);
-            }
-
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
-            {
-                ToggleVisiblePanel(orderLookupControl?.Control);
-                shipmentHistory?.Deactivate();
-            }
-            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
-            {
-                // Save the order in case changes were made before switching to this tab
-                orderLookupControl?.Save();
-                ToggleVisiblePanel(shipmentHistory?.Control);
-                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
 
             UpdateStatusBar();
@@ -1409,13 +1408,21 @@ namespace ShipWorks
         /// </summary>
         private void ToggleVisiblePanel(Control toAdd)
         {
-            // first remove everything
-            panelDockingArea.Controls.Remove(shipmentHistory?.Control);
-            panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            // Remove the existing control before we add the new one.
+            if (toAdd != shipmentHistory?.Control)
+            {
+                panelDockingArea.Controls.Remove(shipmentHistory?.Control);
+            }
+
+            if (toAdd != orderLookupControl?.Control)
+            {
+                panelDockingArea.Controls.Remove(orderLookupControl?.Control);
+            }
 
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
                 panelDockingArea.Controls.Add(toAdd);
+                toAdd.BringToFront();
             }
         }
 
@@ -2195,7 +2202,17 @@ namespace ShipWorks
         /// <summary>
         /// Select the order lookup tab
         /// </summary>
-        public void SelectOrderLookupTab() => ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+        public void SelectScanToShipTab()
+        {
+            if (ribbon.InvokeRequired)
+            {
+                ribbon.Invoke((MethodInvoker) SelectScanToShipTab);
+            }
+            else
+            {
+                ribbon.SelectedTab = ribbonTabOrderLookupViewShipping;
+            }
+        }
 
         /// <summary>
         /// Get the shipment dock control

@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Messaging.Messages.SingleScan;
+using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Shipping;
 using ShipWorks.Users;
 
@@ -233,6 +234,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
+            Visible = false;
+
             base.OnLoad(e);
 
             Dock = DockStyle.Fill;
@@ -246,6 +249,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             });
 
             shipmentGrid.LoadState();
+
+            Visible = true;
         }
 
         /// <summary>

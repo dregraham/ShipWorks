@@ -25,3 +25,6 @@ BEGIN
 
     SET @r = @@ROWCOUNT;
 END
+
+SET NOCOUNT OFF;
+GO;

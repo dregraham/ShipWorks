@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <SolidColorBrush x:Key="OrderLookupBackgroundColor" Color="#e7eef7"/>
+    <SolidColorBrush x:Key="OrderLookupBackgroundColor" Color="White"/>
 
     <SolidColorBrush x:Key="BorderColor" Color="#d7d7d7"/>
     <SolidColorBrush x:Key="IconColor" Color="#4a4a4a"/>
@@ -26,7 +26,7 @@
     <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#206eb5"/>
 
     <!-- Expander Colors -->
-    <SolidColorBrush x:Key="Expander.Header.Border" Color="#d9d9d9"/>
+    <SolidColorBrush x:Key="Expander.Border" Color="#d9d9d9"/>
     <SolidColorBrush x:Key="Expander.Header.Background" Color="#FAFAFA"/>
     <Color x:Key="Expander.DropShadow">#FF646464</Color>
 

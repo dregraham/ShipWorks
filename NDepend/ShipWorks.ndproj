@@ -162,7 +162,8 @@
   <SourceFileRebasing FromPath="" ToPath="" />
   <PathVariables />
   <RuleFiles />
-  <ProjectRules AreActive="True" /><Queries>
+  <ProjectRules AreActive="True" />
+  <Queries>
     <Group Name="Code Quality" Active="False" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types 
@@ -4231,6 +4232,7 @@ select new { n, n.NbLinesOfCode } ]]></Query>
 warnif count > 0 from m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
 
   m.CyclomaticComplexity > 20 &&
+ (m.SourceDecls.Any() && !m.SourceDecls.First().SourceFile.FileName.ToLower().EndsWith(".designer.cs")) &&
   !m.HasAttribute("Interapptive.Shared.NDependIgnoreComplexMethodAttribute")
   orderby m.CyclomaticComplexity descending
 
@@ -4239,6 +4241,7 @@ select new { m, m.CyclomaticComplexity }]]></Query>
 warnif  count > 586
 from  m in JustMyCode.Methods where !m.ParentAssembly.Name.Contains("ShipWorks.SqlServer") &&
   m.NbLinesOfCode > 30 &&
+ (m.SourceDecls.Any() && !m.SourceDecls.First().SourceFile.FileName.ToLower().EndsWith(".designer.cs")) &&
   !(m.ParentType.HasAttribute("Interapptive.Shared.NDependIgnoreAttribute") ||
    m.HasAttribute("Interapptive.Shared.NDependIgnoreLongMethodAttribute"))
 
@@ -4352,4 +4355,5 @@ orderby m.NbParameters
 select new { m, m.NbParameters }
 ]]></Query>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>

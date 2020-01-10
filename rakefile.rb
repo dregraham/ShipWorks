@@ -51,17 +51,18 @@ namespace :build do
 	task :analyze
 
 	msbuild :clean_internal do |msb|
-		msb.targets :Clean
-	end
-
-	desc "Cleans the ShipWorks solution"
-	task :clean => ["build:clean_internal"] do |msb|
 		print "Cleaning solution...\r\n\r\n"
 
 		Dir["Code/**/bin", "Code/**/obj"].map do |d|
 			puts "Deleting " + d + "\r\n"
 			FileUtils.rm_rf d
 		end
+
+		msb.targets :Clean
+	end
+
+	desc "Cleans the ShipWorks solution"
+	task :clean => ["build:clean_internal"] do |msb|
 	end
 
 	desc "Zip the layout files"
@@ -102,6 +103,7 @@ namespace :build do
 		print "Building solution with the debug config...\r\n\r\n"
 
 		msb.properties :configuration => :Debug, TreatWarningsAsErrors: true
+		msb.verbosity = 'minimal'
 		msb.targets :Build
 	end
 

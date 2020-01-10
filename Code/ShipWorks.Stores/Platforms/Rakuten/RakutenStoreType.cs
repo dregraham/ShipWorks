@@ -89,10 +89,10 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
         /// Online Status filter.
         /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices() => 
+        public override ICollection<string> GetOnlineStatusChoices() =>
             EnumHelper.GetEnumList<RakutenOrderStatus>().Select(status => status.Description).ToList();
 
-            /// <summary>
+        /// <summary>
         /// Specifies the download policy for the online store
         /// </summary>
         public override InitialDownloadPolicy InitialDownloadPolicy =>

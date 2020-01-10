@@ -195,11 +195,11 @@ namespace Interapptive.Shared.Data
 		                
 	                END TRY  
 	                BEGIN CATCH  
-		                DECLARE @ErrorMsg nvarchar(max) = ERROR_MESSAGE(); 
+		                DECLARE @ErrorMsg nvarchar(max) = N'Error occurred during sql execution.  Database has been put back into multi user mode. Error message: ' + ERROR_MESSAGE(); 
 		                
 		                ALTER DATABASE [{dbName}] SET MULTI_USER WITH ROLLBACK IMMEDIATE
 
-		                RAISERROR (N'Error occurred during sql execution.  Database has been put back into multi user mode.', 16, 1)
+		                RAISERROR (@ErrorMsg, 16, 1)
 		                
 	                END CATCH;  
 	                

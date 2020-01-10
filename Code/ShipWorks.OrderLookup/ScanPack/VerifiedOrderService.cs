@@ -1,7 +1,9 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Stores.Orders;
 using ShipWorks.Users;
 
@@ -16,15 +18,17 @@ namespace ShipWorks.OrderLookup.ScanPack
         private readonly IOrderRepository orderRepository;
         private readonly IUserSession userSession;
         private readonly IDateTimeProvider dateTimeProvider;
+        private readonly IMessenger messenger;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public VerifiedOrderService(IOrderRepository orderRepository, IUserSession userSession, IDateTimeProvider dateTimeProvider)
+        public VerifiedOrderService(IOrderRepository orderRepository, IUserSession userSession, IDateTimeProvider dateTimeProvider, IMessenger messenger)
         {
             this.orderRepository = orderRepository;
             this.userSession = userSession;
             this.dateTimeProvider = dateTimeProvider;
+            this.messenger = messenger;
         }
 
         /// <summary>
@@ -37,6 +41,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             order.VerifiedDate = dateTimeProvider.UtcNow;
 
             orderRepository.Save(order);
+
+            messenger.Send(new OrderVerifiedMessage(this, order));
         }
     }
 }
