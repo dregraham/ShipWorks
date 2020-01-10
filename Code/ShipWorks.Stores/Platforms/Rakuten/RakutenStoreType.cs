@@ -77,7 +77,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// <summary>
         /// This is a string that uniquely identifies the store.
         /// </summary>
-        protected override string InternalLicenseIdentifier => RakutenStore.AuthKey;
+        protected override string InternalLicenseIdentifier => RakutenStore.ShopURL;
 
         /// <summary>
         /// Do we support online columns

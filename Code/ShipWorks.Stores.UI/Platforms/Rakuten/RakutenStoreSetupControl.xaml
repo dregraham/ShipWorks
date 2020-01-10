@@ -65,7 +65,7 @@
                  Text="{Binding MarketplaceID, UpdateSourceTrigger=PropertyChanged}" />
         <Label Grid.Row="3" 
                Grid.Column="1" 
-               HorizontalAlignment="Right">Shop Name:</Label>
+               HorizontalAlignment="Right">Shop URL:</Label>
         <TextBox Grid.Row="3" 
                  Grid.Column="2"
                  Height="23"
