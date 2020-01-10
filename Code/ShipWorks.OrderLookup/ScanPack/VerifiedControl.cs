@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace ShipWorks.OrderLookup.ScanPack
 {
-    public partial class PackedControl : UserControl
+    public partial class VerifiedControl : UserControl
     {
-        public PackedControl()
+        public VerifiedControl()
         {
             InitializeComponent();
         }
