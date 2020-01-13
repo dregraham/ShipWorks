@@ -548,6 +548,9 @@ namespace ShipWorks
 
                 LogonToShipWorks(user);
 
+                // If we successfully logged on, the last update must have succeeded.
+                AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+
                 ShipSenseLoader.LoadDataAsync();
             }
             else

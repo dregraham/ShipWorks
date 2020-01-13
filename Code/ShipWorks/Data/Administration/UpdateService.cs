@@ -53,29 +53,11 @@ namespace ShipWorks.Data.Administration
         /// <returns></returns>
         public Result TryUpdate()
         {
-            if (!sqlSession.CanConnect())
+            Result errorResult = CheckForErrors();
+
+            if (errorResult.Failure)
             {
-                return Result.FromError(string.Empty);
-            }
-
-            // Check to see if we just launched shipworks after attempting to update the exe
-            if (File.Exists(updateInProgressFilePath))
-            {
-                string version = File.ReadAllText(updateInProgressFilePath);
-
-                try
-                {
-                    File.Delete(updateInProgressFilePath);
-                }
-                catch (IOException)
-                {
-                    // this technically should never happen but if the file is in use
-                    // deleting it will fail, in that case ignore the error
-                }
-
-                // We are starting back up after installing an update, dont update again because that
-                // could get us stuck in an update loop
-                return Result.FromError("An update was just installed, skipping updates.");
+                return errorResult;
             }
 
             // For localdb we manually check to see if a new version is available, this is because
@@ -107,6 +89,42 @@ namespace ShipWorks.Data.Administration
 
             // No updates return an empty error so the consumer doesn't think that an update is kicking off
             return Result.FromError(string.Empty);
+        }
+
+        /// <summary>
+        /// Check for errors before proceeding with update
+        /// </summary>
+        private Result CheckForErrors()
+        {
+            if (!sqlSession.CanConnect())
+            {
+                return Result.FromError(string.Empty);
+            }
+
+            // Check to see if we just launched shipworks after attempting to update the exe
+            if (File.Exists(updateInProgressFilePath))
+            {
+                try
+                {
+                    File.Delete(updateInProgressFilePath);
+                }
+                catch (IOException)
+                {
+                    // this technically should never happen but if the file is in use
+                    // deleting it will fail, in that case ignore the error
+                }
+
+                // We are starting back up after installing an update, dont update again because that
+                // could get us stuck in an update loop
+                return Result.FromError("An update was just installed, skipping updates.");
+            }
+
+            if (!AutoUpdateSettings.LastAutoUpdateSucceeded)
+            {
+                return Result.FromError("Auto update recently failed. Skipping update.");
+            }
+
+            return Result.FromSuccess();
         }
 
         /// <summary>
