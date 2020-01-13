@@ -33,17 +33,15 @@ namespace ShipWorks.ApplicationCore.Settings
         private readonly IScannerConfigurationRepository scannerRepo;
         private IUserSession userSession;
         private readonly IMessenger messenger;
-        private readonly ICurrentUserSettings currentUserSettings;
         private readonly IMessageHelper messageHelper;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private UserSettingsEntity settings;
         private readonly IWin32Window owner;
         private readonly ILifetimeScope scope;
         private SingleScanSettings singleScanSettingsOnLoad;
-        private IPrintJobFactory printJobFactory;
+        private readonly IPrintJobFactory printJobFactory;
         private IDisposable singleScanShortcutMessage;
-        private ILicenseService licenseService;
-        bool warehouseEnabled;
+        private readonly bool warehouseEnabled;
 
         /// <summary>
         /// Constructor
@@ -57,13 +55,11 @@ namespace ShipWorks.ApplicationCore.Settings
             userSession = scope.Resolve<IUserSession>();
             messenger = scope.Resolve<IMessenger>();
             printJobFactory = scope.Resolve<IPrintJobFactory>();
-            currentUserSettings = scope.Resolve<ICurrentUserSettings>();
-            licenseService = scope.Resolve<ILicenseService>();
             settings = userSession?.User?.Settings;
             this.owner = owner;
             this.scope = scope;
 
-            warehouseEnabled = licenseService.CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
+            warehouseEnabled = scope.Resolve<ILicenseService>().CheckRestriction(EditionFeature.Warehouse, null) == EditionRestrictionLevel.None;
         }
 
         /// <summary>
@@ -72,21 +68,12 @@ namespace ShipWorks.ApplicationCore.Settings
         public override void Save()
         {
             if (userSession.IsLoggedOn)
-            {
-                if (displayShortcutIndicator.Checked)
-                {
-                    currentUserSettings.StartShowingNotification(UserConditionalNotificationType.ShortcutIndicator);
-                }
-                else
-                {
-                    currentUserSettings.StopShowingNotification(UserConditionalNotificationType.ShortcutIndicator);
-                }
-
+            {                
                 if (autoPrint.Checked)
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
                 }
-                else if (singleScan.Checked)
+                else if (enableScanner.Checked)
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.Scan;
                 }
@@ -96,8 +83,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
 
                 settings.AutoWeigh = autoWeigh.Checked;
-                settings.AutoPrintRequireValidation = requireVerificationForAutoPrint.Checked;
-                settings.ScanToShipAutoAdvance = autoAdvance.Checked;
+                settings.AutoPrintRequireValidation = requireVerificationToShip.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -125,18 +111,14 @@ namespace ShipWorks.ApplicationCore.Settings
                     .ObserveOn(this)
                     .Subscribe(ReloadSingleScanSetting);
 
-                displayShortcutIndicator.Checked =
-                    currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator);
-
                 // Load single scan settings and update ui
-                singleScan.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
+                enableScanner.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
 
                 LoadRequireVerificationSetting();
 
-                requireVerificationForAutoPrint.Checked = settings.AutoPrintRequireValidation;
-                autoAdvance.Checked = settings.ScanToShipAutoAdvance;
+                requireVerificationToShip.Checked = settings.AutoPrintRequireValidation;
 
                 UpdateSingleScanSettingsUI();
 
@@ -165,13 +147,15 @@ namespace ShipWorks.ApplicationCore.Settings
             // disable the checkbox and set its value to false.
             if (warehouseEnabled)
             {
-                infoTipRequireVerification.Visible = false;
+                infoTipVerificationWarehouseOnly.Visible = false;
+                requireVerificationToShip.Enabled = true;
             }
             else
             {
                 settings.AutoPrintRequireValidation = false;
-                settings.ScanToShipAutoAdvance = false;
-                infoTipRequireVerification.Visible = true;                
+                infoTipVerificationWarehouseOnly.Visible = true;
+                requireVerificationToShip.Checked = false;
+                requireVerificationToShip.Enabled = false;
             }
         }
 
@@ -217,7 +201,7 @@ namespace ShipWorks.ApplicationCore.Settings
         private void UpdateSingleScanSettingsUI()
         {
             // Only allow auto print to be checked when single scan is enabled
-            if (!singleScan.Checked)
+            if (!enableScanner.Checked)
             {
                 autoPrint.Checked = false;
                 autoPrint.Enabled = false;
@@ -230,27 +214,6 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoPrint.Enabled = true;
                 registerScannerLabel.Visible = string.IsNullOrWhiteSpace(scannerRepo.GetScannerName().Value);
                 autoWeigh.Enabled = true;
-            }
-
-            // Only allow require verification when auto print is checked
-            if (autoPrint.Checked && warehouseEnabled)
-            {
-                requireVerificationForAutoPrint.Enabled = true;
-            }
-            else
-            {
-                requireVerificationForAutoPrint.Checked = false;
-                requireVerificationForAutoPrint.Enabled = false;
-            }
-
-            if (warehouseEnabled)
-            {
-                autoAdvance.Enabled = true;
-            }
-            else
-            {
-                autoAdvance.Enabled = false;
-                autoAdvance.Checked = false;
             }
         }
 
