@@ -83,7 +83,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 }
 
                 settings.AutoWeigh = autoWeigh.Checked;
-                settings.AutoPrintRequireValidation = requireVerificationToShip.Checked;
+                settings.RequireVerificationToShip = requireVerificationToShip.Checked;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -118,7 +118,7 @@ namespace ShipWorks.ApplicationCore.Settings
 
                 LoadRequireVerificationSetting();
 
-                requireVerificationToShip.Checked = settings.AutoPrintRequireValidation;
+                requireVerificationToShip.Checked = settings.RequireVerificationToShip;
 
                 UpdateSingleScanSettingsUI();
 
@@ -152,7 +152,7 @@ namespace ShipWorks.ApplicationCore.Settings
             }
             else
             {
-                settings.AutoPrintRequireValidation = false;
+                settings.RequireVerificationToShip = false;
                 infoTipVerificationWarehouseOnly.Visible = true;
                 requireVerificationToShip.Checked = false;
                 requireVerificationToShip.Enabled = false;
