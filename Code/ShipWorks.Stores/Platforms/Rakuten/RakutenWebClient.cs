@@ -162,7 +162,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             try
             {
-                await GetOrders(testStore, DateTime.Now);
+                await GetOrders(testStore, DateTime.Now).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
