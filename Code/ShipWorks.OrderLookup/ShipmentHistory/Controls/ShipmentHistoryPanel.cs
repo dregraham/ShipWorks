@@ -85,7 +85,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button reprintButton, Divelements.SandRibbon.Button shipAgainButton)
         {
-            kryptonHeader.Values.Heading = "Today's Shipments for " + getCurrentUserSettings().UserSession.User.Username;
+            kryptonHeader.Values.Heading = "Today's Shipments";
             shipmentGrid.Reload();
 
             Deactivate();

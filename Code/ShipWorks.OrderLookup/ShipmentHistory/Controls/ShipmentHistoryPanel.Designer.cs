@@ -50,7 +50,7 @@
             this.kryptonHeader.StateCommon.Content.LongText.Color1 = System.Drawing.SystemColors.ControlDarkDark;
             this.kryptonHeader.StateCommon.Content.LongText.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.kryptonHeader.TabIndex = 0;
-            this.kryptonHeader.Values.Heading = "Today's Shipments for ...";
+            this.kryptonHeader.Values.Heading = "Today's Shipments ...";
             this.kryptonHeader.Values.Description = "";
             this.kryptonHeader.Values.Image = ShipWorks.Properties.Resources.box_closed16;
             // 
