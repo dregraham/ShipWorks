@@ -79,6 +79,12 @@ namespace ShipWorks.IO.KeyboardShortcuts
         /// Print Pick List
         /// </summary>
         [Description("Navigate To Ship Tab")]
-        NavigateToShipTab = 11
+        NavigateToShipTab = 11,
+
+        /// <summary>
+        /// Unverify Order
+        /// </summary>
+        [Description("Un-verify Order")]
+        UnverifyOrder = 12
     }
 }

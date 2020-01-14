@@ -69,4 +69,7 @@
         <GradientStop Color="#E6E6E6" Offset="1"/>
         <GradientStop Color="#B4B4B4" Offset="0"/>
     </LinearGradientBrush>
+
+    <!-- Icon Colors -->
+    <SolidColorBrush x:Key="SuccessColor" Color="#48BC23"/>
 </ResourceDictionary>

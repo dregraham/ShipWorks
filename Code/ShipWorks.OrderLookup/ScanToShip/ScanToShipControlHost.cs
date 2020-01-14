@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using System.Windows.Input;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.OrderLookup.Messages;
 using ShipWorks.Shipping.Profiles;
@@ -109,6 +111,19 @@ namespace ShipWorks.OrderLookup.ScanToShip
         }
 
         /// <summary>
+        /// Unverify the order
+        /// </summary>
+        public void Unverify()
+        {
+            long? orderId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder?.OrderID;
+
+            if (orderId.HasValue && orderId.Value != 0)
+            {
+                messenger.Send(new OrderLookupUnverifyMessage(this, orderId.Value));
+            }
+        }
+
+        /// <summary>
         /// Register the profile handler
         /// </summary>
         public void RegisterProfileHandler(Func<Func<ShipmentEntity>, Action<IShippingProfile>, IDisposable> profileRegistration)
@@ -130,6 +145,17 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public bool CreateLabelAllowed()
         {
             return scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
+        }
+
+        /// <summary>
+        /// Allow unverify order
+        /// </summary>
+        public bool UnverifyOrderAllowed()
+        {
+            var order = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder;
+            
+            // Return true if the order verified and there are no processed shipments
+            return order?.Verified == true && order?.Shipments?.Any(s => s.Processed) == false ;
         }
 
         /// <summary>
