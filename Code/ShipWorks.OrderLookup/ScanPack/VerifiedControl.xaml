@@ -1,4 +1,4 @@
-<UserControl x:Class="ShipWorks.OrderLookup.ScanPack.PackedControl"
+<UserControl x:Class="ShipWorks.OrderLookup.ScanPack.VerifiedControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -28,7 +28,7 @@
                 </Binding.ConverterParameter>
             </Binding>
         </Grid.IsEnabled>
-        <GroupBox Header="Packed"
+        <GroupBox Header="Verified"
                   BorderBrush="Black"
                   BorderThickness="2"
                   FontSize="20">
