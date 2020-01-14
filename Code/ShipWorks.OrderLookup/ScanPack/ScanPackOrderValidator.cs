@@ -17,7 +17,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     public class ScanPackOrderValidator : IScanPackOrderValidator
     {
         private readonly ILicenseService licenseService;
-        private readonly IMainForm mainForm;
         private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
 
         /// <summary>
@@ -25,11 +24,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public ScanPackOrderValidator(
             ILicenseService licenseService,
-            IMainForm mainForm,
             ISingleScanAutomationSettings singleScanAutomationSettings)
         {
             this.licenseService = licenseService;
-            this.mainForm = mainForm;
             this.singleScanAutomationSettings = singleScanAutomationSettings;
         }
 

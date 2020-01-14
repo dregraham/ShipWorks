@@ -22,7 +22,6 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         private readonly AutoMock mock;
         private readonly ScanPackOrderValidator testObject;
         private readonly Mock<ILicenseService> licenseService;
-        private readonly Mock<IMainForm> mainForm;
         private readonly Mock<ISingleScanAutomationSettings> singleScanAutomationSettings;
         private readonly OrderEntity order = new OrderEntity() { Verified = true };
 
@@ -31,14 +30,10 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             licenseService = mock.Mock<ILicenseService>();
-            mainForm = mock.Mock<IMainForm>();
-            singleScanAutomationSettings = mock.Mock<ISingleScanAutomationSettings>();
-
             licenseService.Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
                 .Returns(EditionRestrictionLevel.None);
 
-            mainForm.SetupGet(m => m.UIMode).Returns(UIMode.OrderLookup);
-
+            singleScanAutomationSettings = mock.Mock<ISingleScanAutomationSettings>();
             singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
                 .Returns(true);
 
@@ -53,47 +48,24 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             licenseService.Verify(l => l.CheckRestriction(EditionFeature.Warehouse, null));
         }
 
-        [Fact]
-        public void CanProcessShipment_ReturnsSuccess_WhenUIModeIsNotOrderLookup()
-        {
-            mainForm.SetupGet(m => m.UIMode).Returns(UIMode.Batch);
-
-            var result = testObject.CanProcessShipment(order);
-
-            Assert.True(result.Success);
-        }
-
-        [Fact]
-        public void CanProcessShipment_ReturnsError_WhenUIModeIsOrderLookupAndOrderIsNotVerified()
-        {
-            order.Verified = false;
-            var result = testObject.CanProcessShipment(order);
-
-            Assert.True(result.Failure);
-        }
-
-        [Fact]
-        public void CanProcessShipment_ReturnsSuccess_WhenNotWarehouseCustomer()
+        [Theory]
+        [InlineData(EditionRestrictionLevel.None, true, false, false)]
+        [InlineData(EditionRestrictionLevel.None, true, true, true)]
+        [InlineData(EditionRestrictionLevel.None, false, true, true)]
+        [InlineData(EditionRestrictionLevel.None, false, false, true)]
+        [InlineData(EditionRestrictionLevel.Forbidden, true, true, true)]
+        public void CanProcessShipment_ReturnsExpectedResult(EditionRestrictionLevel editionRestrictionLevel, bool requireValidation, bool orderVerified, bool resultShouldBeSuccess)
         {
             licenseService.Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
-                .Returns(EditionRestrictionLevel.Forbidden);
-
-            order.Verified = false;
-            var result = testObject.CanProcessShipment(order);
-
-            Assert.True(result.Success);
-        }
-
-        [Fact]
-        public void CanProcessShipment_ReturnsSuccess_WhenRequireValidationIsDisabled()
-        {
+                .Returns(editionRestrictionLevel);
             singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
-                .Returns(false);
+                .Returns(requireValidation);
 
-            order.Verified = false;
+            order.Verified = orderVerified;
+
             var result = testObject.CanProcessShipment(order);
 
-            Assert.True(result.Success);
+            Assert.Equal(resultShouldBeSuccess, result.Success);
         }
     }
 }
