@@ -92,7 +92,7 @@
             // 
             this.registerScannerLabel.AutoSize = true;
             this.registerScannerLabel.ForeColor = System.Drawing.Color.Red;
-            this.registerScannerLabel.Location = new System.Drawing.Point(302, 47);
+            this.registerScannerLabel.Location = new System.Drawing.Point(183, 47);
             this.registerScannerLabel.Name = "registerScannerLabel";
             this.registerScannerLabel.Size = new System.Drawing.Size(97, 13);
             this.registerScannerLabel.TabIndex = 36;
@@ -100,7 +100,7 @@
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(186, 42);
+            this.registerScannerButton.Location = new System.Drawing.Point(427, 42);
             this.registerScannerButton.Name = "registerScannerButton";
             this.registerScannerButton.Size = new System.Drawing.Size(110, 23);
             this.registerScannerButton.TabIndex = 35;
@@ -136,7 +136,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleShipping.Location = new System.Drawing.Point(10, 10);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
-            this.sectionTitleShipping.Size = new System.Drawing.Size(434, 22);
+            this.sectionTitleShipping.Size = new System.Drawing.Size(527, 22);
             this.sectionTitleShipping.TabIndex = 42;
             this.sectionTitleShipping.Text = "Shipping Automation";
             // 
@@ -144,14 +144,14 @@
             // 
             this.profileShortcutsLabel.Location = new System.Drawing.Point(17, 123);
             this.profileShortcutsLabel.Name = "profileShortcutsLabel";
-            this.profileShortcutsLabel.Size = new System.Drawing.Size(279, 29);
+            this.profileShortcutsLabel.Size = new System.Drawing.Size(404, 29);
             this.profileShortcutsLabel.TabIndex = 44;
             this.profileShortcutsLabel.Text = "You can add custom keyboard and barcode shortcuts to your Shipping Profiles to ap" +
     "ply shipping settings easily.";
             // 
             // manageProfilesButton
             // 
-            this.manageProfilesButton.Location = new System.Drawing.Point(186, 156);
+            this.manageProfilesButton.Location = new System.Drawing.Point(427, 123);
             this.manageProfilesButton.Name = "manageProfilesButton";
             this.manageProfilesButton.Size = new System.Drawing.Size(110, 24);
             this.manageProfilesButton.TabIndex = 45;
@@ -161,11 +161,11 @@
             // 
             // printBarcodeButton
             // 
-            this.printBarcodeButton.Location = new System.Drawing.Point(76, 227);
+            this.printBarcodeButton.Location = new System.Drawing.Point(427, 162);
             this.printBarcodeButton.Name = "printBarcodeButton";
-            this.printBarcodeButton.Size = new System.Drawing.Size(220, 23);
+            this.printBarcodeButton.Size = new System.Drawing.Size(110, 23);
             this.printBarcodeButton.TabIndex = 46;
-            this.printBarcodeButton.Text = "Print All Keyboard && Barcode Shortcuts...";
+            this.printBarcodeButton.Text = "Print Shortcuts...";
             this.printBarcodeButton.UseVisualStyleBackColor = true;
             this.printBarcodeButton.Click += new System.EventHandler(this.OnClickPrintShortcuts);
             // 
@@ -173,7 +173,7 @@
             // 
             this.requireVerificationToShip.AutoSize = true;
             this.requireVerificationToShip.Enabled = false;
-            this.requireVerificationToShip.Location = new System.Drawing.Point(21, 305);
+            this.requireVerificationToShip.Location = new System.Drawing.Point(21, 242);
             this.requireVerificationToShip.Name = "requireVerificationToShip";
             this.requireVerificationToShip.Size = new System.Drawing.Size(281, 17);
             this.requireVerificationToShip.TabIndex = 47;
@@ -184,7 +184,7 @@
             // infoTipVerificationWarehouseOnly
             // 
             this.infoTipVerificationWarehouseOnly.Caption = "This feature is only available on warehouse plans.";
-            this.infoTipVerificationWarehouseOnly.Location = new System.Drawing.Point(304, 306);
+            this.infoTipVerificationWarehouseOnly.Location = new System.Drawing.Point(304, 243);
             this.infoTipVerificationWarehouseOnly.Name = "infoTipVerificationWarehouseOnly";
             this.infoTipVerificationWarehouseOnly.Size = new System.Drawing.Size(12, 12);
             this.infoTipVerificationWarehouseOnly.TabIndex = 48;
@@ -192,9 +192,9 @@
             // 
             // printShortcutsLabel
             // 
-            this.printShortcutsLabel.Location = new System.Drawing.Point(17, 194);
+            this.printShortcutsLabel.Location = new System.Drawing.Point(17, 162);
             this.printShortcutsLabel.Name = "printShortcutsLabel";
-            this.printShortcutsLabel.Size = new System.Drawing.Size(279, 50);
+            this.printShortcutsLabel.Size = new System.Drawing.Size(404, 31);
             this.printShortcutsLabel.TabIndex = 49;
             this.printShortcutsLabel.Text = "You can print preconfigured keyboard and barcode shortcuts that automate shipping" +
     ".";
@@ -203,9 +203,9 @@
             // 
             this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitle1.Location = new System.Drawing.Point(10, 269);
+            this.sectionTitle1.Location = new System.Drawing.Point(10, 206);
             this.sectionTitle1.Name = "sectionTitle1";
-            this.sectionTitle1.Size = new System.Drawing.Size(434, 22);
+            this.sectionTitle1.Size = new System.Drawing.Size(527, 22);
             this.sectionTitle1.TabIndex = 43;
             this.sectionTitle1.Text = "Shipping Workflow";
             // 
@@ -230,7 +230,7 @@
             this.Controls.Add(this.autoPrint);
             this.Controls.Add(this.enableScanner);
             this.Name = "SettingsPageScanToShip";
-            this.Size = new System.Drawing.Size(471, 333);
+            this.Size = new System.Drawing.Size(547, 333);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
