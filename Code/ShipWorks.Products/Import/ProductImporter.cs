@@ -243,6 +243,8 @@ namespace ShipWorks.Products.Import
             productVariant.UPC = row.Upc;
             productVariant.ASIN = row.Asin;
             productVariant.ISBN = row.Isbn;
+            productVariant.EAN = row.Ean;
+            productVariant.FNSku = row.Fnsku;
             productVariant.Weight = ProductToImportDto.GetValue<decimal?>(row.Weight, nameof(row.Weight), null);
             productVariant.Length = ProductToImportDto.GetValue<decimal?>(row.Length, nameof(row.Length), null);
             productVariant.Width = ProductToImportDto.GetValue<decimal?>(row.Width, nameof(row.Width), null);

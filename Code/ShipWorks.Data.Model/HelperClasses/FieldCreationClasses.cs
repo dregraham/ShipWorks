@@ -23507,6 +23507,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.CountryOfOrigin);}
 		}
+		/// <summary>Creates a new ProductVariantEntity.FNSku field instance</summary>
+		public static EntityField2 FNSku
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.FNSku);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.EAN field instance</summary>
+		public static EntityField2 EAN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.EAN);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductVariantAliasEntity</summary>

@@ -26,8 +26,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     /// </summary>
     public class ScanPackViewModel : ViewModelBase, IScanPackViewModel, IDropTarget
     {
-        private readonly IOrderLookupOrderIDRetriever orderIDRetriever;
-        private readonly IOrderLoader orderLoader;
         private readonly IScanPackItemFactory scanPackItemFactory;
         private readonly IVerifiedOrderService verifiedOrderService;
         private readonly IOrderLookupAutoPrintService orderLookupAutoPrintService;
@@ -44,14 +42,10 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// Constructor
         /// </summary>
         public ScanPackViewModel(
-            IOrderLookupOrderIDRetriever orderIDRetriever,
-            IOrderLoader orderLoader,
             IScanPackItemFactory scanPackItemFactory,
             IVerifiedOrderService verifiedOrderService,
             IOrderLookupAutoPrintService orderLookupAutoPrintService)
         {
-            this.orderIDRetriever = orderIDRetriever;
-            this.orderLoader = orderLoader;
             this.scanPackItemFactory = scanPackItemFactory;
             this.verifiedOrderService = verifiedOrderService;
             this.orderLookupAutoPrintService = orderLookupAutoPrintService;
@@ -280,30 +274,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         }
 
         /// <summary>
-        /// Get an order with an order number matching the scanned text
-        /// </summary>
-        private async Task<OrderEntity> GetOrder(string scannedOrderNumber)
-        {
-            ScanHeader = "Loading order...";
-            ScanFooter = string.Empty;
-
-            TelemetricResult<long?> orderID = await orderIDRetriever
-                .GetOrderID(scannedOrderNumber, string.Empty, string.Empty, string.Empty).ConfigureAwait(true);
-
-            OrderEntity order = null;
-            if (orderID.Value.HasValue)
-            {
-                ShipmentsLoadedEventArgs loadedOrders = await orderLoader
-                    .LoadAsync(new[] {orderID.Value.Value}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
-                    .ConfigureAwait(true);
-
-                order = loadedOrders?.Shipments?.FirstOrDefault()?.Order;
-            }
-
-            return order;
-        }
-
-        /// <summary>
         /// Check both lists for scanned item and update quantities accordingly
         /// </summary>
         private void ProcessItemScan(ScanPackItem sourceItem, ObservableCollection<ScanPackItem> sourceItems, ObservableCollection<ScanPackItem> targetItems)
@@ -327,7 +297,9 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.OrderItemID, sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ItemCode, sourceItem.ProductUpc, sourceItem.Sku));
+                ScanPackItem targetItem = sourceItem.Copy();
+                targetItem.Quantity = quantityPacked;
+                targetItems.Add(targetItem);
             }
             else
             {
@@ -371,10 +343,9 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
-                    verifiedOrderService.Save(orderBeingPacked);
-
                     if (itemScanned)
                     {
+                        verifiedOrderService.Save(orderBeingPacked);
                         orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
                     }
 
@@ -400,9 +371,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// again for a sku matching the scanned text
         /// </summary>
         private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
-            listToSearch.FirstOrDefault(x => x.ProductUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.ItemUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.ItemCode?.Equals(scannedText, StringComparison.InvariantCulture) ?? false);
+            listToSearch.FirstOrDefault(x => x.IsMatch(scannedText));
     }
 }

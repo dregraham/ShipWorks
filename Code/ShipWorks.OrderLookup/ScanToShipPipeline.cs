@@ -59,7 +59,6 @@ namespace ShipWorks.OrderLookup
         private bool processingScan = false;
         private object loadingOrderLock = new object();
         bool allowScanPack = true;
-        private bool AutoAdvanceEnabled => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
 
         private const string AutoPrintTelemetryTimeSliceName = "AutoPrint.DurationInMilliseconds";
         private const string DataLoadingTelemetryTimeSliceName = "Data.Load.DurationInMilliseconds";
@@ -448,9 +447,39 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.IsOrderVerified = shipmentLoadedMessage?.Shipment?.Order?.Verified ?? false;
             scanToShipViewModel.IsOrderProcessed = shipmentLoadedMessage?.Shipment?.Processed ?? false;
 
-            scanToShipViewModel.SelectedTab = userSession?.Settings?.AutoPrintRequireValidation ?? false ?
-                (int) ScanToShipTab.PackTab :
-                (int) ScanToShipTab.ShipTab;
+            scanToShipViewModel.SelectedTab = (int) GetInitialTab();
+        }
+
+        /// <summary>
+        /// Gets the initial tab when loading an order
+        /// </summary>
+        private ScanToShipTab GetInitialTab()
+        {
+            var selectedTab = (ScanToShipTab) scanToShipViewModel.SelectedTab;
+
+            if (!licenseService.IsHub)
+            {
+                return selectedTab;
+            }
+
+            if (userSession?.Settings?.AutoPrintRequireValidation == true && !scanToShipViewModel.IsOrderVerified)
+            {
+                selectedTab = ScanToShipTab.PackTab;
+            }
+
+            if (userSession?.Settings?.ScanToShipAutoAdvance == true)
+            {
+                if (scanToShipViewModel.IsOrderVerified)
+                {
+                    selectedTab = ScanToShipTab.ShipTab;
+                }
+                else
+                {
+                    selectedTab = ScanToShipTab.PackTab;
+                }
+            }
+
+            return selectedTab;
         }
 
         /// <summary>
@@ -461,7 +490,7 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.ShowOrderVerificationError = false;
             scanToShipViewModel.IsOrderVerified = true;
 
-            if (AutoAdvanceEnabled)
+            if (licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true)
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
             }

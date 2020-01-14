@@ -18,34 +18,45 @@ namespace ShipWorks.Stores.Platforms.Rakuten.Warehouse
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Rakuten)]
     public class RakutenWarehouseOrderFactory : WarehouseOrderFactory
     {
+        private const string rakutenEntryKey = "rakuten";
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public RakutenWarehouseOrderFactory(IOrderElementFactory orderElementFactory,
-                                                   Func<Type, ILog> logFactory) : base(orderElementFactory)
+            Func<Type, ILog> logFactory) : base(orderElementFactory)
         {
             log = logFactory(typeof(RakutenWarehouseOrderFactory));
         }
 
         /// <summary>
-        /// Create an order entity with a Rakuten identifier
+        /// Create an order entity from the Rakuten order number
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
-            long RakutenOrderID = long.Parse(warehouseOrder.OrderNumber);
-
             // get the order instance
             GenericResult<OrderEntity> result = await orderElementFactory
-                .CreateOrder(new OrderNumberIdentifier(RakutenOrderID)).ConfigureAwait(false);
+                .CreateOrder(new AlphaNumericOrderIdentifier(warehouseOrder.OrderNumber)).ConfigureAwait(false);
 
             if (result.Failure)
             {
-                log.InfoFormat("Skipping order '{0}': {1}.", RakutenOrderID, result.Message);
+                log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, result.Message);
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Load Rakuten order details
+        /// </summary>
+        protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            RakutenOrderEntity rakutenOrderEntity = (RakutenOrderEntity) orderEntity;
+            var rakutenWarehouseOrder = warehouseOrder.AdditionalData[rakutenEntryKey].ToObject<RakutenWarehouseOrder>();
+
+            rakutenOrderEntity.ChangeOrderNumber(warehouseOrder.OrderNumber);
+            rakutenOrderEntity.RakutenPackageID = rakutenWarehouseOrder.PackageID;
         }
     }
 }
