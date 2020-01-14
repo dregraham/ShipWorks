@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         public AmazonSFPShipmentTypeTest()
         {
             mock = AutoMock.GetLoose();
-            trackedShipment = new ShipmentEntity { TrackingNumber = "foo" };
+            trackedShipment = new ShipmentEntity { TrackingNumber = "foo", Processed = true };
 
             dataProvider = mock.Mock<IDataProvider>();
             dataProvider.Setup(d => d.GetEntity(nonAmazonOrderID, It.IsAny<bool>()))
@@ -217,6 +217,36 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             mock.Mock<IEditionManager>()
                 .Setup(e => e.ActiveRestrictions)
                 .Returns(mockedEditionRestrictionSet.Object);
+        }
+
+        [Theory]
+        [InlineData("ups", "", true, "")]
+        [InlineData("ups", "foo", false, "")]
+        [InlineData("ups", "foo", true, "http://wwwapps.ups.com/WebTracking/processInputRequest?HTMLVersion=5.0&amp;loc=en_US&amp;Requester=UPSHome&amp;tracknum=foo&amp;AgreeToTermsAndConditions=yes&amp;track.x=46&amp;track.y=9")]
+        [InlineData("DHL SM X", "foo", true, "http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber=foo")]
+        [InlineData("USPS X", "foo", true, "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=foo")]
+        [InlineData("fedex FIMS", "foo", true, "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=foo")]
+        [InlineData("fedeX", "foo", true, "http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers=foo")]
+        [InlineData("blah", "foo", true, "")]
+        public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string serviceUsed, string trackingNumber, bool processed, string expectedUrl)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                AmazonSFP = new AmazonSFPShipmentEntity
+                {
+                    ShippingServiceName = serviceUsed
+                },
+                TrackingNumber = trackingNumber,
+                Processed = processed
+            };
+
+            mock.Mock<IShippingManager>()
+                .Setup(m => m.GetOverriddenServiceUsed(It.IsAny<ShipmentEntity>()))
+                .Returns(serviceUsed);
+
+            var testObject = mock.Create<AmazonSFPShipmentType>();
+            var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
+            Assert.Equal(expectedUrl, trackingUrl);
         }
 
         public void Dispose()

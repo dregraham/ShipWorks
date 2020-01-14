@@ -12,6 +12,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Show the product editor
         /// </summary>
-        Task<bool?> ShowProductEditor(ProductVariantEntity product, string dialogTitle);
+        Task<bool?> ShowProductEditor(ProductVariantEntity productToLoad, string dialogTitle);
     }
 }

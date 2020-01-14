@@ -57,6 +57,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             {
                 RequestFormat = DataFormat.Json
             };
+
             restRequest.AddJsonBody(new { redirectToken = redirectToken });
 
             var restClient = new RestClient(webClientEnvironment.WarehouseUrl);

@@ -10034,6 +10034,10 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>CountryOfOrigin. </summary>
 		CountryOfOrigin,
+		///<summary>FNSku. </summary>
+		FNSku,
+		///<summary>EAN. </summary>
+		EAN,
 		/// <summary></summary>
 		AmountOfFields
 	}

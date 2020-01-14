@@ -549,6 +549,9 @@ namespace ShipWorks
 
                 LogonToShipWorks(user);
 
+                // If we successfully logged on, the last update must have succeeded.
+                AutoUpdateSettings.LastAutoUpdateSucceeded = true;
+
                 ShipSenseLoader.LoadDataAsync();
             }
             else
@@ -1289,9 +1292,6 @@ namespace ShipWorks
                     getShipment,
                     onApply));
 
-            panelDockingArea.Controls.Add(orderLookupControl.Control);
-            orderLookupControl.Control.BringToFront();
-
             // Since no order will be selected when they change modes, set these to false.
             buttonOrderLookupViewCreateLabel.Enabled = false;
             buttonOrderLookupViewApplyProfile.Enabled = false;
@@ -1346,6 +1346,7 @@ namespace ShipWorks
         /// </summary>
         private void DisableBatchModeControls()
         {
+            panelDockingArea.Visible = false;
             // Hide all dock windows.  Hide them first so they don't attempt to save when the filter changes (due to the tree being cleared)
             foreach (DockControl control in Panels)
             {
@@ -1359,6 +1360,7 @@ namespace ShipWorks
 
             // Clear Filter Trees
             ClearFilterTrees();
+            panelDockingArea.Visible = true;
         }
 
         /// <summary>
@@ -1397,23 +1399,23 @@ namespace ShipWorks
             else if (IsOrderLookupSpecificTab(ribbon.SelectedTab))
             {
                 ChangeUIMode(UIMode.OrderLookup);
+
+                if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
+                {
+                    ToggleVisiblePanel(orderLookupControl?.Control);
+                    shipmentHistory?.Deactivate();
+                }
+                else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
+                {
+                    // Save the order in case changes were made before switching to this tab
+                    orderLookupControl?.Save();
+                    ToggleVisiblePanel(shipmentHistory?.Control);
+                    shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
+                }
             }
             else if (IsProductSpecificTab(ribbon.SelectedTab))
             {
                 ChangeUIMode(UIMode.Products);
-            }
-
-            if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipping)
-            {
-                ToggleVisiblePanel(orderLookupControl?.Control);
-                shipmentHistory?.Deactivate();
-            }
-            else if (ribbon.SelectedTab == ribbonTabOrderLookupViewShipmentHistory)
-            {
-                // Save the order in case changes were made before switching to this tab
-                orderLookupControl?.Save();
-                ToggleVisiblePanel(shipmentHistory?.Control);
-                shipmentHistory.Activate(buttonOrderLookupViewVoid, buttonOrderLookupViewReprint, buttonOrderLookupViewShipAgain);
             }
 
             UpdateStatusBar();
@@ -1446,6 +1448,7 @@ namespace ShipWorks
             if (!panelDockingArea.Controls.Contains(toAdd) && toAdd != null)
             {
                 panelDockingArea.Controls.Add(toAdd);
+                toAdd.BringToFront();
             }
         }
 

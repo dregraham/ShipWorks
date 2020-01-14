@@ -221,10 +221,13 @@ namespace ShipWorks.UI.WPF
         /// </summary>
         public void ClearStyles()
         {
-            foreach(var button in wpfButtons)
+            if (wpfButtons != null)
             {
-                ClearWPFStyle(button);
-            }          
+                foreach(var button in wpfButtons)
+                {
+                    ClearWPFStyle(button);
+                }
+            }
         }
 
         /// <summary>

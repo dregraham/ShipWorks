@@ -54,10 +54,10 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
+            Visible = false;
             Dock = DockStyle.Fill;
 
             base.OnLoad(e);
-
             scanToShipControl = new ScanToShipControl()
             {
                 DataContext = scanToShipViewModel
@@ -70,6 +70,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             };
 
             Controls.Add(host);
+            Visible = true;
         }
 
         /// <summary>
@@ -179,7 +180,13 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// </summary>
         private IInputElement FindFocusedInputElement(DependencyObject container)
         {
-            DependencyObject focusScope = FocusManager.GetFocusScope(scanToShipControl);
+            DependencyObject focusScope = null;
+
+            if (container != null)
+            {
+                focusScope = FocusManager.GetFocusScope(container);
+            }
+
             return focusScope == null ?
                 null :
                 FocusManager.GetFocusedElement(focusScope);
