@@ -9,6 +9,7 @@ using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Communication.Throttling;
@@ -23,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
     [Component(RegisterAs = RegistrationType.ImplementedInterfaces)]
     public class ThreeDCartRestWebClient : IThreeDCartRestWebClient
     {
-        private const string HttpHost = "https://apirest.3dcart.com/3dCartWebAPI";
+        private const string LiveHttpHost = "https://apirest.3dcart.com/3dCartWebAPI";
         private const string OrderApiVersion = "v1";
         private const string ProductApiVersion = "v1";
         private const string OrderUrlExtension = "Orders";
@@ -37,16 +38,22 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         private readonly string token;
         private readonly ThreeDCartWebClientRequestThrottle throttler = new ThreeDCartWebClientRequestThrottle();
         private IProgressReporter progressReporter;
+        private readonly string httpHost = LiveHttpHost;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ThreeDCartRestWebClient"/> class.
         /// </summary>
-        public ThreeDCartRestWebClient(ThreeDCartStoreEntity store)
+        public ThreeDCartRestWebClient(ThreeDCartStoreEntity store, IInterapptiveOnly interapptiveOnly)
         {
             MethodConditions.EnsureArgumentIsNotNull(store, nameof(store));
 
             secureUrl = store.StoreUrl;
             token = store.ApiUserKey;
+
+            if (!interapptiveOnly.Registry.GetValue("3DCartLive", true))
+            {
+                httpHost = secureUrl;
+            }
         }
 
         /// <summary>
@@ -72,7 +79,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
             HttpJsonVariableRequestSubmitter submitter = GetSubmitter();
             submitter.Verb = HttpVerb.Get;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}");
+            submitter.Uri = new Uri($"{httpHost}/{OrderApiVersion}/{OrderUrlExtension}");
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
             submitter.Variables.Add("limit", GetOrderLimit);
             submitter.Variables.Add("offset", offset.ToString());
@@ -97,7 +104,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
         {
             HttpJsonVariableRequestSubmitter submitter = GetSubmitter();
             submitter.Verb = HttpVerb.Get;
-            submitter.Uri = new Uri($"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}");
+            submitter.Uri = new Uri($"{httpHost}/{OrderApiVersion}/{OrderUrlExtension}");
             submitter.Variables.Add("datestart", startDate.ToShortDateString());
             submitter.Variables.Add("limit", GetOrderLimit);
             submitter.Variables.Add("offset", offset.ToString());
@@ -144,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
                 HttpJsonVariableRequestSubmitter submitter = GetSubmitter();
 
                 submitter.Verb = HttpVerb.Get;
-                submitter.Uri = new Uri($"{HttpHost}/{ProductApiVersion}/{ProductUrlExtension}/{catalogID}");
+                submitter.Uri = new Uri($"{httpHost}/{ProductApiVersion}/{ProductUrlExtension}/{catalogID}");
 
                 string response = string.Empty;
 
@@ -217,7 +224,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.RestApi
             submitter.Verb = HttpVerb.Put;
             submitter.Uri =
                 new Uri(
-                    $"{HttpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
+                    $"{httpHost}/{OrderApiVersion}/{OrderUrlExtension}/{shipment.OrderID}/{ShipmentUrlExtension}/{shipment.ShipmentID}");
             submitter.RequestBody = JsonConvert.SerializeObject(shipment, Formatting.None,
                 new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
 

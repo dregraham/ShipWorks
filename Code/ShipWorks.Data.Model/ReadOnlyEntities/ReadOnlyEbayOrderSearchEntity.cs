@@ -42,6 +42,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             EbayBuyerID = source.EbayBuyerID;
             SellingManagerRecord = source.SellingManagerRecord;
             OriginalOrderID = source.OriginalOrderID;
+            ExtendedOrderID = source.ExtendedOrderID;
             
             
             EbayOrder = (IEbayOrderEntity) source.EbayOrder?.AsReadOnly(objectMap);
@@ -87,6 +88,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Int64 OriginalOrderID { get; }
+        /// <summary> The ExtendedOrderID property of the Entity EbayOrderSearch<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EbayOrderSearch"."ExtendedOrderID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.String ExtendedOrderID { get; }
         
         
         public IEbayOrderEntity EbayOrder { get; }

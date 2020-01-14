@@ -73,6 +73,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnsClearance = source.ReturnsClearance;
             ReferenceFIMS = source.ReferenceFIMS;
             ThirdPartyConsignee = source.ThirdPartyConsignee;
+            CreateCommercialInvoice = source.CreateCommercialInvoice;
+            FileElectronically = source.FileElectronically;
             
             ShippingProfile = (IShippingProfileEntity) source.ShippingProfile?.AsReadOnly(objectMap);
             
@@ -304,6 +306,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> ThirdPartyConsignee { get; }
+        /// <summary> The CreateCommercialInvoice property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."CreateCommercialInvoice"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> CreateCommercialInvoice { get; }
+        /// <summary> The FileElectronically property of the Entity FedExProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExProfile"."FileElectronically"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Boolean> FileElectronically { get; }
         
         public IShippingProfileEntity ShippingProfile { get; }
         

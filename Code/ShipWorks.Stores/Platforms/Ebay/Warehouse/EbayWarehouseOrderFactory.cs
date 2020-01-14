@@ -79,6 +79,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             ebayOrderEntity.GspReferenceID = ebayWarehouseOrder.GspReferenceID;
             ebayOrderEntity.GuaranteedDelivery = ebayWarehouseOrder.GuaranteedDelivery;
 
+            if (string.IsNullOrWhiteSpace(ebayOrderEntity.ExtendedOrderID))
+            {
+                ebayOrderEntity.ExtendedOrderID = ebayWarehouseOrder.ExtendedOrderID;
+            }
+
             // If all items are shipped set the local status to shipped
             if (warehouseOrder.Items.All(item =>
             {
@@ -106,6 +111,11 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             ebayItemEntity.CompleteStatus = ebayWarehouseItem.CompleteStatus;
             ebayItemEntity.MyEbayPaid = ebayWarehouseItem.MyEbayPaid;
             ebayItemEntity.MyEbayShipped = ebayWarehouseItem.MyEbayShipped;
+
+            if (string.IsNullOrWhiteSpace(ebayItemEntity.ExtendedOrderID))
+            {
+                ebayItemEntity.ExtendedOrderID = ebayWarehouseItem.ExtendedOrderID;
+            }
         }
     }
 }

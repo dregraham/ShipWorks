@@ -13,7 +13,7 @@ namespace ShipWorks.Filters.Content.Conditions
     /// <summary>
     /// Base class for conditions that provide the user with a list of choices from which to choose a value
     /// </summary>
-    public abstract class ValueChoiceCondition<T> : Condition where T: struct
+    public abstract class ValueChoiceCondition<T> : Condition
     {
         T value = default(T);
 

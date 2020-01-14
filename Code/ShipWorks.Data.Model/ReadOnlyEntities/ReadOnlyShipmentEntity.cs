@@ -115,6 +115,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ReturnProfileID = source.ReturnProfileID;
             LoggedShippedToHub = source.LoggedShippedToHub;
             LoggedVoidToHub = source.LoggedVoidToHub;
+            CarrierAccount = source.CarrierAccount;
             
             AmazonSFP = (IAmazonSFPShipmentEntity) source.AmazonSFP?.AsReadOnly(objectMap);
             AmazonSWA = (IAmazonSWAShipmentEntity) source.AmazonSWA?.AsReadOnly(objectMap);
@@ -616,6 +617,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Boolean> LoggedVoidToHub { get; }
+        /// <summary> The CarrierAccount property of the Entity Shipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Shipment"."CarrierAccount"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String CarrierAccount { get; }
         
         public IAmazonSFPShipmentEntity AmazonSFP { get; }
         

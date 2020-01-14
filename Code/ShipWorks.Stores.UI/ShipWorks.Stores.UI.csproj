@@ -525,6 +525,22 @@
       <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
     </Compile>
     <Compile Include="Platforms\Overstock\OverstockStoreSetupControlViewModel.cs" />
+    <Compile Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.Designer.cs">
+      <DependentUpon>RakutenAccountSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControl.xaml.cs">
+      <DependentUpon>RakutenStoreSetupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlHost.Designer.cs">
+      <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Platforms\Rakuten\RakutenStoreSetupControlViewModel.cs" />
     <Compile Include="Platforms\Shopify\ShopifyCreateTokenDialog.xaml.cs">
       <DependentUpon>ShopifyCreateTokenDialog.xaml</DependentUpon>
     </Compile>
@@ -758,6 +774,12 @@
     <EmbeddedResource Include="Platforms\Overstock\OverstockStoreSetupControlHost.resx">
       <DependentUpon>OverstockStoreSetupControlHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Rakuten\RakutenAccountSettingsControlHost.resx">
+      <DependentUpon>RakutenAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Platforms\Rakuten\RakutenStoreSetupControlHost.resx">
+      <DependentUpon>RakutenStoreSetupControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Platforms\ShopSite\ShopSiteAccountSettingsControl.resx">
       <DependentUpon>ShopSiteAccountSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -941,6 +963,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Platforms\Overstock\OverstockStoreSetupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Platforms\Rakuten\RakutenStoreSetupControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

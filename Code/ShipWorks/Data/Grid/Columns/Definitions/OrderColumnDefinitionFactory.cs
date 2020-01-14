@@ -674,13 +674,20 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Ebay
                         },
 
-                    new GridColumnDefinition("{CA085EE9-4F6E-4D5C-99D4-00CBE576CBE8}", true,
+                    new GridColumnDefinition("{D0DD9601-2476-483A-AD52-94A407086AA0}", true,
+                        new GridTextDisplayType(), "eBay Order Number", "32-ab32c-32af3",
+                        EbayOrderFields.ExtendedOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.Ebay,
+                        },
+
+                    new GridColumnDefinition("{CA085EE9-4F6E-4D5C-99D4-00CBE576CBE8}", false,
                         new GridTextDisplayType(), "eBay Order ID", 12345,
                         EbayOrderFields.EbayOrderID)
                         {
                             StoreTypeCode = StoreTypeCode.Ebay,
                         },
-                   
+
                     new GridColumnDefinition("{053FF282-5FDE-472e-8BB4-C9D984FA8041}", true,
                         new GridEnumDisplayType<EbayEffectivePaymentMethod>(EnumSortMethod.Description).Decorate(new GridRollupDecorator(EbayOrderFields.RollupEbayItemCount, GridRollupStrategy.SameValueOrNull)), "Payment Method", EbayEffectivePaymentMethod.PayPal,
                         EbayOrderFields.RollupEffectivePaymentMethod)
@@ -826,6 +833,21 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{C5DFE9A8-B4DF-4308-88D4-87FD089F093C}",
                         new GridTextDisplayType(), "Custom Field 5", "Custom Field 5", OrderFields.Custom5),
+
+                    new GridColumnDefinition("{90584A5D-3F5E-4B70-9E93-99C66B0B641C}",
+                        new GridTextDisplayType(), "Custom Field 6", "Custom Field 6", OrderFields.Custom6),
+
+                    new GridColumnDefinition("{0EA3EF5F-B23F-49CA-B70A-26C05951EC5C}",
+                        new GridTextDisplayType(), "Custom Field 7", "Custom Field 7", OrderFields.Custom7),
+
+                    new GridColumnDefinition("{68089611-1C60-4A2C-BC1B-84534A69DBE2}",
+                        new GridTextDisplayType(), "Custom Field 8", "Custom Field 8", OrderFields.Custom8),
+
+                    new GridColumnDefinition("{F42BFE4E-030E-4A42-AB50-43370F962DEC}",
+                        new GridTextDisplayType(), "Custom Field 9", "Custom Field 9", OrderFields.Custom9),
+
+                    new GridColumnDefinition("{A46661E9-8240-4187-9CFE-8BBC5F5BB42E}",
+                        new GridTextDisplayType(), "Custom Field 10", "Custom Field 10", OrderFields.Custom10),
 
                     new GridColumnDefinition("{386E5954-AEA6-4227-81C6-23767C72C31D}",
                         new GridBooleanDisplayType() { TrueText = "Yes", FalseText = "No" },

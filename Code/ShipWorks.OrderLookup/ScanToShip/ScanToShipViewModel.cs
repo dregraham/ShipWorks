@@ -1,10 +1,6 @@
 using System;
 using System.Reflection;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
-using Interapptive.Shared.Metrics;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Editions;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
 using ShipWorks.OrderLookup.Controls.OrderLookupSearchControl;
 using ShipWorks.OrderLookup.ScanPack;
@@ -18,10 +14,12 @@ namespace ShipWorks.OrderLookup.ScanToShip
     public class ScanToShipViewModel : ViewModelBase, IScanToShipViewModel, IDisposable
     {
         private readonly IUserSession userSession;
-        private readonly ILicenseService licenseService;
         private readonly IOrderLookupShipmentModel shipmentModel;
 
         private ScanToShipTab selectedTab;
+        private bool isOrderProcessed;
+        private bool isOrderVerified;
+        private bool showOrderVerificationError;
 
         /// <summary>
         /// Constructor
@@ -29,20 +27,14 @@ namespace ShipWorks.OrderLookup.ScanToShip
         public ScanToShipViewModel(MainOrderLookupViewModel orderLookupViewModel,
                                    IScanPackViewModel scanScanPackViewModel,
                                    OrderLookupSearchViewModel searchViewModel,
-                                   IUserSession userSession,
-                                   ILicenseService licenseService)
+                                   IUserSession userSession)
         {
             OrderLookupViewModel = orderLookupViewModel;
             ScanPackViewModel = scanScanPackViewModel;
             SearchViewModel = searchViewModel;
             this.userSession = userSession;
-            this.licenseService = licenseService;
 
             shipmentModel = orderLookupViewModel.ShipmentModel;
-            ScanPackViewModel.OrderVerified += OnOrderVerified;
-            shipmentModel.ShipmentLoadedComplete += OnShipmentLoadedComplete;
-
-            SelectedTab = (int) (licenseService.IsHub ? ScanToShipTab.PackTab : ScanToShipTab.ShipTab);
         }
 
         /// <summary>
@@ -81,47 +73,74 @@ namespace ShipWorks.OrderLookup.ScanToShip
                 Set(ref selectedTab, (ScanToShipTab) value);
 
                 SearchViewModel.SelectedTab = (ScanToShipTab) value;
+
+                UpdateOrderVerificationError();
             }
         }
 
         /// <summary>
-        /// When an order has been verified,
+        /// Has the current order been verified
         /// </summary>
-        private void OnOrderVerified(object sender, EventArgs e)
+        [Obfuscation(Exclude = true)]
+        public bool IsOrderVerified
         {
-            // If the selected order is null, that means we are still in the process of loading the order, so don't
-            // change tabs yet. It will get picked up by the shipment loaded event.
-            if (ShouldAutoAdvance && shipmentModel.SelectedOrder != null && IsPackTabActive)
-            {
-                SelectedTab = (int) ScanToShipTab.ShipTab;
-            }
+            get => isOrderVerified;
+            set => Set(ref isOrderVerified, value);
         }
 
         /// <summary>
-        /// When a shipment is loaded, if we are currently on the pack tab and the order has already been verified,
-        /// switch to ship tab.
+        /// Has the current order been processed
         /// </summary>
-        private void OnShipmentLoadedComplete(object sender, EventArgs e)
+        [Obfuscation(Exclude = true)]
+        public bool IsOrderProcessed
         {
-            if (ShouldAutoAdvance)
+            get => isOrderProcessed;
+            set => Set(ref isOrderProcessed, value);
+        }
+
+        /// <summary>
+        /// Whether or not to show the verification error
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowOrderVerificationError
+        {
+            get => showOrderVerificationError;
+            set => Set(ref showOrderVerificationError, value);
+        }
+
+        /// <summary>
+        /// Show the order verification error when appropriate
+        /// </summary>
+        public void UpdateOrderVerificationError()
+        {
+            // If we have an unverified order, we're not on the pack tab, and require validation is on, show the verification error
+            if (shipmentModel?.SelectedOrder?.Verified == false &&
+                !IsPackTabActive &&
+                userSession?.Settings?.AutoPrintRequireValidation == true)
             {
-                SelectedTab = (int) (shipmentModel.SelectedOrder.Verified ? ScanToShipTab.ShipTab : ScanToShipTab.PackTab);
+                ShowOrderVerificationError = true;
+            }
+            else
+            {
+                ShowOrderVerificationError = false;
             }
         }
 
         /// <summary>
-        /// Does the user have the auto advance setting enabled
+        /// Reset the state
         /// </summary>
-        private bool ShouldAutoAdvance => licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true;
+        public void Reset()
+        {
+            ShowOrderVerificationError = false;
+            IsOrderVerified = false;
+            IsOrderProcessed = false;
+        }
 
         /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose()
         {
-            ScanPackViewModel.OrderVerified -= OnOrderVerified;
-            shipmentModel.ShipmentLoadedComplete -= OnShipmentLoadedComplete;
-
             shipmentModel?.Dispose();
             OrderLookupViewModel?.Dispose();
             SearchViewModel?.Dispose();

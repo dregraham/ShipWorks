@@ -98,22 +98,22 @@ BEGIN
 
 	/* Disable all triggers */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Disable all triggers'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@DisableAllTriggersSql);
 
 	/* Disable all indexes */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Disable all indexes'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@DisableAllIndexesSql);
 
 	/* Disable all change tracking */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Disable change tracking'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@DisableAllChangeTrackingSql);
 
 	/* Disable all foreign keys */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Disable all foreign keys'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@DisableAllForeignKeysSql);
 
 	/*******************************************************************/
@@ -130,7 +130,7 @@ BEGIN
 		ORDER BY EntityID
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 10 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	/*******************************************************************/
 	/* Delete based on ShipmentIDs.                                    */
 	/*******************************************************************/
@@ -172,7 +172,7 @@ BEGIN
 	DELETE FROM FedExEndOfDayClose WHERE CloseDate %orderDateComparer% '%orderDate%'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 20 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/*******************************************************************/
 	/* Delete ScanForms based on deleted Shipments.                    */
@@ -225,7 +225,7 @@ BEGIN
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 30 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/*******************************************************************/
 	/* Populate the list of OrderItemAttributeIDs to delete.           */
@@ -251,7 +251,7 @@ BEGIN
 	exec PurgeEntities 'MivaOrderItemAttribute', 'OrderItemAttributeID', 'OrderItemAttributeID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 40 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/*******************************************************************/
 	/* Populate the list of OrderItemIDs to delete.                    */
@@ -296,7 +296,7 @@ BEGIN
 	exec PurgeEntities 'OrderItem', 'OrderItemID', 'OrderItemID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 50 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/*******************************************************************/
 	/* Populate the list of OrderIDs to delete.                        */
@@ -330,6 +330,7 @@ BEGIN
 	exec PurgeEntities 'OrderMotionOrderSearch', 'OrderID', 'OrderMotionOrderSearchID'
 	exec PurgeEntities 'PayPalOrderSearch', 'OrderID', 'PayPalOrderSearchID'
 	exec PurgeEntities 'ProStoresOrderSearch', 'OrderID', 'ProStoresOrderSearchID'
+	exec PurgeEntities 'RakutenOrderSearch', 'OrderID', 'RakutenOrderSearchID'
 	exec PurgeEntities 'SearsOrderSearch', 'OrderID', 'SearsOrderSearchID'
 	exec PurgeEntities 'ShopifyOrderSearch', 'OrderID', 'ShopifyOrderSearchID'
 	exec PurgeEntities 'ThreeDCartOrderSearch', 'OrderID', 'ThreeDCartOrderSearchID'
@@ -356,6 +357,7 @@ BEGIN
 	exec PurgeEntities 'OrderPaymentDetail', 'OrderID', 'OrderPaymentDetailID'
 	exec PurgeEntities 'OrderSearch', 'OrderID', 'OrderSearchID'
 	exec PurgeEntities 'PayPalOrder', 'OrderID', 'OrderID'
+	exec PurgeEntities 'RakutenOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'SearsOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ShopifyOrder', 'OrderID', 'OrderID'
 	exec PurgeEntities 'ThreeDCartOrder', 'OrderID', 'OrderID'
@@ -375,7 +377,7 @@ BEGIN
 	exec PurgeEntities 'Order', 'OrderID', 'OrderID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 70 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/* Now do matching Audit entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
@@ -389,7 +391,7 @@ BEGIN
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 80 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/* Now do matching AuditChange entries */
 	DROP TABLE  dbo.[EntityIDsToDelete]
@@ -403,7 +405,7 @@ BEGIN
 	exec PurgeEntities 'Audit', 'AuditID', 'AuditID'
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 90 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/*************************************/
 	/*   Purge Abandoned Resources       */
@@ -416,26 +418,26 @@ BEGIN
 	/* Cleanup */
 	/* Enable all triggers */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Enable all triggers.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@EnableAllTriggersSql);
 
 	/* Enable all indexes */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Rebuild all indexes.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@EnableAllIndexesSql);
 
 	/* Enable all change tracking */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Enable change tracking.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@EnableAllChangeTrackingSql);
 
 	/* Enable all foreign keys */
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - Enable all foreign keys.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 	exec (@EnableAllForeignKeysSql);
 
 	SET @RaiseErrorMsg = 'OrderArchiveInfo: (' + db_name() + ') - 100 percent processed.'
-    RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
+	RAISERROR (@RaiseErrorMsg, 0, 1) WITH NOWAIT
 
 	/* Drop id holding tables */
 	IF EXISTS(SELECT * FROM sys.tables WHERE name = 'OrderIDsToDelete')

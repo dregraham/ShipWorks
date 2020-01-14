@@ -837,6 +837,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("VerifiedBy", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("VerifiedDate", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom6", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom7", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom8", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom9", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("Custom10", fieldHashtable);
 		}
 		#endregion
 
@@ -1905,6 +1915,56 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)OrderFieldIndex.VerifiedDate, false); }
 			set	{ SetValue((int)OrderFieldIndex.VerifiedDate, value); }
+		}
+
+		/// <summary> The Custom6 property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Custom6"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom6
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.Custom6, true); }
+			set	{ SetValue((int)OrderFieldIndex.Custom6, value); }
+		}
+
+		/// <summary> The Custom7 property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Custom7"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom7
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.Custom7, true); }
+			set	{ SetValue((int)OrderFieldIndex.Custom7, value); }
+		}
+
+		/// <summary> The Custom8 property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Custom8"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom8
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.Custom8, true); }
+			set	{ SetValue((int)OrderFieldIndex.Custom8, value); }
+		}
+
+		/// <summary> The Custom9 property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Custom9"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom9
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.Custom9, true); }
+			set	{ SetValue((int)OrderFieldIndex.Custom9, value); }
+		}
+
+		/// <summary> The Custom10 property of the Entity Order<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Order"."Custom10"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Custom10
+		{
+			get { return (System.String)GetValue((int)OrderFieldIndex.Custom10, true); }
+			set	{ SetValue((int)OrderFieldIndex.Custom10, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'NoteEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

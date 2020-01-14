@@ -399,8 +399,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     return;
                 }
 
-                SaveToDatabase();
-
+                SaveToDatabase();                
                 AllowEditing = false;
 
                 messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment },

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Services;
@@ -136,5 +137,15 @@ namespace ShipWorks.Shipping
         /// Validate that the given store is licensed to ship.
         /// </summary>
         Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache);
+
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
+        ICarrierAccount GetCarrierAccount(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Get the carrier account associated with a processed shipment.
+        /// </summary>
+        ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment);
     }
 }

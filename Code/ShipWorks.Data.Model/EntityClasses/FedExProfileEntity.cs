@@ -423,6 +423,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferenceFIMS", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ThirdPartyConsignee", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("CreateCommercialInvoice", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FileElectronically", fieldHashtable);
 		}
 		#endregion
 
@@ -889,6 +893,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.ThirdPartyConsignee, false); }
 			set	{ SetValue((int)FedExProfileFieldIndex.ThirdPartyConsignee, value); }
+		}
+
+		/// <summary> The CreateCommercialInvoice property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."CreateCommercialInvoice"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> CreateCommercialInvoice
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.CreateCommercialInvoice, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.CreateCommercialInvoice, value); }
+		}
+
+		/// <summary> The FileElectronically property of the Entity FedExProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "FedExProfile"."FileElectronically"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> FileElectronically
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)FedExProfileFieldIndex.FileElectronically, false); }
+			set	{ SetValue((int)FedExProfileFieldIndex.FileElectronically, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

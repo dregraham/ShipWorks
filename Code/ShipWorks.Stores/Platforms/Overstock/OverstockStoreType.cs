@@ -134,5 +134,10 @@ namespace ShipWorks.Stores.Platforms.Overstock
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(OverstockShipmentUploadTask));
+
+        /// <summary>
+        /// Should this store be used in the Hub
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
     }
 }

@@ -68,6 +68,10 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnFieldValueProvider(ShipmentFields.ShipmentType),
                     new GridColumnSortProvider(e => ShipmentTypeManager.GetSortValue((ShipmentTypeCode) ((ShipmentEntity) e).ShipmentType))) { DefaultWidth = 46 },
 
+                new GridColumnDefinition("{D96C97AA-6B9F-417C-AC45-6BF084478FF5}", true,
+                    new ShipmentCarrierAccountDisplayType(), "Account", "123456789",
+                    ShipmentFields.CarrierAccount),
+
                 new GridColumnDefinition("{E6E060A0-6773-4872-9FBA-9C2D20C43C07}", false,
                     new GridBooleanDisplayType()
                     {

@@ -80,6 +80,6 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Can this warehouse be linked with the given GUID
         /// </summary>
         public bool CanBeLinkedWith(Guid guid) =>
-            !IsAlreadyLinked || shipWorksLink == guid.ToString();
+            !IsAlreadyLinked || shipWorksLink == guid.ToString("N");
     }
 }

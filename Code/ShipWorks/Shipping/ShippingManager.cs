@@ -1148,5 +1148,41 @@ namespace ShipWorks.Shipping
             bucket.PredicateExpression.AddWithAnd(ShipmentFields.ShipmentType == (int) shipmentTypeCode);
             return bucket;
         }
+
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
+        public static ICarrierAccount GetCarrierAccount(ShipmentEntity shipment, long? accountID)
+        {
+            return GetCarrierAccount(accountID, shipment.ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Get the carrier account associated with a processed shipment.
+        /// </summary>
+        public static ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment,long? accountID)
+        {
+            var shipment = GetShipment(processedShipment.ShipmentID);
+            return GetCarrierAccount(accountID, shipment.ShipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
+        private static ICarrierAccount GetCarrierAccount(long? accountID, ShipmentTypeCode shipmentType)
+        {
+            ICarrierAccount account = null;
+            if (accountID != null)
+            {
+                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                {
+                    IShippingAccountListProvider accountListProvider = scope.Resolve<IShippingAccountListProvider>();
+                    account = accountListProvider.GetAvailableAccounts(shipmentType).Where(s => s.AccountId == accountID)
+                                                                                    .FirstOrDefault();
+                }
+            }
+            return account;
+        }
+        
     }
 }

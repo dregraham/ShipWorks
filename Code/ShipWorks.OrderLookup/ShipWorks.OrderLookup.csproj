@@ -326,6 +326,8 @@
     <Compile Include="Layout\OrderLookupLayout.cs" />
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
     <Compile Include="Layout\PanelInfo.cs" />
+    <Compile Include="Messages\OrderLookupShipAgainMessage.cs" />
+    <Compile Include="Messages\ScanToShipShipmentLoadedMessage.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupOrderIDRetriever.cs" />
     <Compile Include="ScanPack\IScanPackItemFactory.cs" />
@@ -363,13 +365,13 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="ScanToShip\ScanToShipTab.cs" />
+    <Compile Include="ScanToShip\ScanToShipTabItem.cs" />
     <Compile Include="ScanToShip\ScanToShipViewModel.cs" />
     <Compile Include="ShipmentModelPipelines\CreateLabelShortcutPipeline.cs" />
     <Compile Include="OrderLookupModule.cs" />
     <Compile Include="OrderLookupPanelFactory.cs" />
     <Compile Include="OrderLookupPreviousShipmentLocator.cs" />
     <Compile Include="OrderLookupRegistrationOverride.cs" />
-    <Compile Include="OrderLookupShipAgainMessage.cs" />
     <Compile Include="OrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookupViewModelBase.cs" />
     <Compile Include="PreviousProcessedShipmentDetails.cs" />
@@ -400,7 +402,7 @@
     <Compile Include="IOrderLookupOrderRepository.cs" />
     <Compile Include="OrderLookupAutoPrintService.cs" />
     <Compile Include="OrderLookupOrderRepository.cs" />
-    <Compile Include="OrderLookupSingleScanPipeline.cs" />
+    <Compile Include="ScanToShipPipeline.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryEntityGateway.cs" />
     <Compile Include="ShipmentHistory\ShipmentHistoryHeader.cs" />
@@ -409,7 +411,6 @@
     <Compile Include="ShipmentModelPipelines\SettingsChangedPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\FocusQuickSearchPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ClearSearchPipeline.cs" />
-    <Compile Include="ShipmentModelPipelines\ShipAgainPipeline.cs" />
     <Compile Include="ShipmentModelPipelines\ShipmentProcessedPipeline.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -638,6 +639,10 @@
     <Page Include="ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\ScanPackItemControl.xaml" />
     <Page Include="ScanToShip\ScanToShipControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScanToShip\ScanToShipTabItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

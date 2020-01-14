@@ -10,6 +10,7 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Editing;
@@ -400,5 +401,20 @@ namespace ShipWorks.Shipping.Services
         /// </remarks>
         public Exception ValidateLicense(StoreEntity store, IDictionary<long, Exception> licenseCheckCache) =>
             ShippingManager.ValidateLicense(store, licenseCheckCache);
+
+        /// <summary>
+        /// Get the carrier account associated with a shipment. Returns null if the account hasn't been set yet.
+        /// </summary>
+        public ICarrierAccount GetCarrierAccount(ShipmentEntity shipment) =>
+            ShippingManager.GetCarrierAccount(shipment, GetShipmentAdapter(shipment).AccountId);
+
+        /// <summary>
+        /// Get the carrier account associated with a processed shipment.
+        /// </summary>
+        public ICarrierAccount GetCarrierAccount(ProcessedShipmentEntity processedShipment)
+        {
+            var id = GetShipment(processedShipment.ShipmentID).AccountId;
+            return ShippingManager.GetCarrierAccount(processedShipment, id);
+        }
     }
 }

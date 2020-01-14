@@ -815,6 +815,7 @@
           <Field Name="CombinedLocally" Type="bool" FieldIndex="2" />
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="1" />
           <Field Name="EbayOrderID" Type="long" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="24" />
           <Field Name="GspCity" Type="string" MaxLength="128" FieldIndex="10" />
           <Field Name="GspCountryCode" Type="string" MaxLength="2" FieldIndex="13" />
           <Field Name="GspEligible" Type="bool" FieldIndex="5" />
@@ -845,6 +846,7 @@
           <Field Name="EbayTransactionID" Type="long" FieldIndex="2" />
           <Field Name="EffectiveCheckoutStatus" Type="int" FieldIndex="4" />
           <Field Name="EffectivePaymentMethod" Type="int" FieldIndex="5" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="17" />
           <Field Name="FeedbackLeftComments" Type="string" MaxLength="80" FieldIndex="10" />
           <Field Name="FeedbackLeftType" Type="int" FieldIndex="9" />
           <Field Name="FeedbackReceivedComments" Type="string" MaxLength="80" FieldIndex="12" />
@@ -864,6 +866,7 @@
           <Field Name="EbayBuyerID" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="EbayOrderID" Type="long" Precision="19" FieldIndex="2" />
           <Field Name="EbayOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="ExtendedOrderID" Type="string" MaxLength="25" FieldIndex="6" />
           <Field Name="OrderID" Type="long" FieldIndex="1" />
           <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="5" />
           <Field Name="SellingManagerRecord" Type="int" IsOptional="true" Precision="10" FieldIndex="4" />
@@ -1147,6 +1150,7 @@
       </EntityDefinition>
       <EntityDefinition Name="FedExProfile" ObjectID="59dac7b4-50ba-42fa-8b38-291cbb95f554">
         <Fields>
+          <Field Name="CreateCommercialInvoice" Type="bool" IsOptional="true" FieldIndex="37" />
           <Field Name="DropoffType" Type="int" IsOptional="true" FieldIndex="27" />
           <Field Name="EmailNotifyBroker" Type="int" IsOptional="true" FieldIndex="26" />
           <Field Name="EmailNotifyMessage" Type="string" IsOptional="true" MaxLength="120" FieldIndex="19" />
@@ -1155,6 +1159,7 @@
           <Field Name="EmailNotifyRecipient" Type="int" IsOptional="true" FieldIndex="16" />
           <Field Name="EmailNotifySender" Type="int" IsOptional="true" FieldIndex="15" />
           <Field Name="FedExAccountID" Type="long" IsOptional="true" FieldIndex="1" />
+          <Field Name="FileElectronically" Type="bool" IsOptional="true" FieldIndex="38" />
           <Field Name="NonStandardContainer" Type="bool" IsOptional="true" FieldIndex="5" />
           <Field Name="OriginResidentialDetermination" Type="int" IsOptional="true" FieldIndex="28" />
           <Field Name="PackagingType" Type="int" IsOptional="true" FieldIndex="4" />
@@ -1428,7 +1433,7 @@
       </EntityDefinition>
       <EntityDefinition Name="FilterNodeContent" ObjectID="3e6cfa53-8512-412e-b2a7-52ce0aabd8dc">
         <Fields>
-          <Field Name="ColumnMask" Type="byte[]" MaxLength="100" FieldIndex="6" />
+          <Field Name="ColumnMask" Type="byte[]" MaxLength="150" FieldIndex="6" />
           <Field Name="Cost" Type="int" FieldIndex="8" />
           <Field Name="Count" Type="int" FieldIndex="9" />
           <Field Name="CountVersion" Type="long" FieldIndex="2" />
@@ -2001,10 +2006,15 @@
           <Field Name="ChannelOrderID" Type="string" MaxLength="50" FieldIndex="75" />
           <Field Name="CombineSplitStatus" Type="CombineSplitStatusType" FieldIndex="74" />
           <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="77" />
+          <Field Name="Custom10" Type="string" MaxLength="50" FieldIndex="91" />
           <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="78" />
           <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="79" />
           <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="80" />
           <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="81" />
+          <Field Name="Custom6" Type="string" MaxLength="50" FieldIndex="87" />
+          <Field Name="Custom7" Type="string" MaxLength="50" FieldIndex="88" />
+          <Field Name="Custom8" Type="string" MaxLength="50" FieldIndex="89" />
+          <Field Name="Custom9" Type="string" MaxLength="50" FieldIndex="90" />
           <Field Name="CustomerID" Type="long" IsAutoCreated="true" FieldIndex="3" />
           <Field Name="HubOrderID" Type="guid" IsOptional="true" FieldIndex="82" />
           <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="83" />
@@ -2076,13 +2086,18 @@
       </EntityDefinition>
       <EntityDefinition Name="OrderItem" ObjectID="2b2b0d77-3ba1-479f-a10e-dc96506ac0d2" InheritanceType="2">
         <Fields>
-          <Field Name="Brand" Type="string" MaxLength="50" FieldIndex="23" />
+          <Field Name="Brand" Type="string" MaxLength="50" FieldIndex="22" />
           <Field Name="Code" Type="string" MaxLength="300" FieldIndex="4" />
-          <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="25" />
-          <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="26" />
-          <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="27" />
-          <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="28" />
-          <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="29" />
+          <Field Name="Custom1" Type="string" MaxLength="50" FieldIndex="24" />
+          <Field Name="Custom10" Type="string" MaxLength="50" FieldIndex="34" />
+          <Field Name="Custom2" Type="string" MaxLength="50" FieldIndex="25" />
+          <Field Name="Custom3" Type="string" MaxLength="50" FieldIndex="26" />
+          <Field Name="Custom4" Type="string" MaxLength="50" FieldIndex="27" />
+          <Field Name="Custom5" Type="string" MaxLength="50" FieldIndex="28" />
+          <Field Name="Custom6" Type="string" MaxLength="50" FieldIndex="30" />
+          <Field Name="Custom7" Type="string" MaxLength="50" FieldIndex="31" />
+          <Field Name="Custom8" Type="string" MaxLength="50" FieldIndex="32" />
+          <Field Name="Custom9" Type="string" MaxLength="50" FieldIndex="33" />
           <Field Name="Description" Type="string" MaxLength="2147483647" FieldIndex="8" />
           <Field Name="HarmonizedCode" Type="string" MaxLength="20" FieldIndex="18" />
           <Field Name="Height" Type="decimal" Precision="10" Scale="2" FieldIndex="22" />
@@ -2403,6 +2418,8 @@
           <Field Name="CountryOfOrigin" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
+          <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -2467,6 +2484,26 @@
           <Field Name="LoginMethod" Type="int" FieldIndex="2" />
           <Field Name="ShortName" Type="string" MaxLength="30" FieldIndex="0" />
           <Field Name="Username" Type="string" MaxLength="50" FieldIndex="1" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RakutenOrder" ObjectID="a13acdfa-94f8-460d-99a2-59eb5b4e14a6" InheritanceType="2">
+        <Fields>
+          <Field Name="RakutenPackageID" Type="string" MaxLength="36" FieldIndex="0" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RakutenOrderSearch" ObjectID="a3a1c3f4-da75-4beb-98b4-7c75d61ee93a">
+        <Fields>
+          <Field Name="OrderID" Type="long" FieldIndex="1" />
+          <Field Name="OriginalOrderID" Type="long" Precision="19" FieldIndex="2" />
+          <Field Name="RakutenOrderSearchID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="RakutenPackageID" Type="string" MaxLength="36" FieldIndex="3" />
+        </Fields>
+      </EntityDefinition>
+      <EntityDefinition Name="RakutenStore" ObjectID="ec302b33-362c-4419-8131-175e23b7a68d" InheritanceType="2">
+        <Fields>
+          <Field Name="AuthKey" Type="string" MaxLength="100" FieldIndex="0" />
+          <Field Name="MarketplaceID" Type="string" MaxLength="10" FieldIndex="1" />
+          <Field Name="ShopURL" Type="string" MaxLength="50" FieldIndex="2" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="Resource" ObjectID="d46aa2e7-b8c5-4c78-b223-79af1f84e6dd">
@@ -2586,6 +2623,7 @@
           <Field Name="BestRateEvents" Type="byte" FieldIndex="66" />
           <Field Name="BilledType" Type="int" FieldIndex="71" />
           <Field Name="BilledWeight" Type="double" FieldIndex="72" />
+          <Field Name="CarrierAccount" Type="string" IsOptional="true" MaxLength="25" FieldIndex="79" />
           <Field Name="ContentWeight" Type="double" FieldIndex="4" />
           <Field Name="CustomsGenerated" Type="bool" FieldIndex="17" />
           <Field Name="CustomsValue" Type="decimal" Precision="19" Scale="4" FieldIndex="18" />
@@ -4172,6 +4210,11 @@
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
         </FieldRelationships>
       </NormalRelationship>
+      <NormalRelationship Name="RakutenOrderSearch.RakutenOrder-RakutenOrder.RakutenOrderSearch" Start=":RakutenOrderSearch" End=":RakutenOrder" StartNavigator="RakutenOrder" EndNavigator="RakutenOrderSearch" Type="4" DeleteRuleAction="1">
+        <FieldRelationships>
+          <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
+        </FieldRelationships>
+      </NormalRelationship>
       <NormalRelationship Name="SearsOrderSearch.SearsOrder-SearsOrder.SearsOrderSearch" Start=":SearsOrderSearch" End=":SearsOrder" StartNavigator="SearsOrder" EndNavigator="SearsOrderSearch" Type="4" DeleteRuleAction="1">
         <FieldRelationships>
           <FieldFieldRelationship FkField="OrderID" PkField="OrderID" />
@@ -4506,6 +4549,8 @@
       <InheritanceHierarchy SuperType=":Store" SubType=":PayPalStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":ProStoresOrder" />
       <InheritanceHierarchy SuperType=":Store" SubType=":ProStoresStore" />
+      <InheritanceHierarchy SuperType=":Order" SubType=":RakutenOrder" />
+      <InheritanceHierarchy SuperType=":Store" SubType=":RakutenStore" />
       <InheritanceHierarchy SuperType=":Order" SubType=":SearsOrder" />
       <InheritanceHierarchy SuperType=":OrderItem" SubType=":SearsOrderItem" />
       <InheritanceHierarchy SuperType=":Store" SubType=":SearsStore" />
@@ -4586,7 +4631,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-06T17:30:45.7022212Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-18T19:38:42.4448622Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5142,7 +5187,7 @@
                     <Field Name="AmazonAuthToken" Ordinal="7" DbType="12" Length="100" />
                     <Field Name="AmazonApiRegion" Ordinal="8" DbType="3" Length="2" />
                     <Field Name="RefreshToken" Ordinal="9" DbType="12" Length="200" />
-                    <Field Name="DownloadDaysBack" Ordinal="10" DbType="22" Precision="3" />
+                    <Field Name="DownloadDaysBack" Ordinal="10" HasDefaultValue="true" DefaultValue="(4)" DbType="22" Precision="3" />
                     <Field Name="ExcludeFBA" Ordinal="11" HasDefaultValue="true" DefaultValue="(1)" DbType="2" />
                   </Fields>
                 </Table>
@@ -5498,6 +5543,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="GuaranteedDelivery" Ordinal="25" DbType="2" />
+                    <Field Name="ExtendedOrderID" Ordinal="26" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderItem">
@@ -5521,6 +5567,7 @@
                     <Field Name="MyEbayShipped" Ordinal="16" DbType="2" />
                     <Field Name="PayPalTransactionID" Ordinal="17" DbType="24" Length="50" />
                     <Field Name="PayPalAddressStatus" Ordinal="18" DbType="8" Precision="10" />
+                    <Field Name="ExtendedOrderID" Ordinal="19" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayOrderSearch">
@@ -5532,6 +5579,7 @@
                     <Field Name="EbayBuyerID" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="SellingManagerRecord" Ordinal="5" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="OriginalOrderID" Ordinal="6" DbType="0" Precision="19" />
+                    <Field Name="ExtendedOrderID" Ordinal="7" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="EbayStore">
@@ -5890,6 +5938,8 @@
                     <Field Name="ReturnsClearance" Ordinal="35" IsOptional="true" DbType="2" />
                     <Field Name="ReferenceFIMS" Ordinal="36" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="ThirdPartyConsignee" Ordinal="37" IsOptional="true" DbType="2" />
+                    <Field Name="CreateCommercialInvoice" Ordinal="38" IsOptional="true" DbType="2" />
+                    <Field Name="FileElectronically" Ordinal="39" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="FedExProfilePackage">
@@ -6701,7 +6751,7 @@
                     <Field Name="Status" Ordinal="4" DbType="16" Precision="5" />
                     <Field Name="InitialCalculation" Ordinal="5" DbType="12" Length="2147483647" />
                     <Field Name="UpdateCalculation" Ordinal="6" DbType="12" Length="2147483647" />
-                    <Field Name="ColumnMask" Ordinal="7" DbType="23" Length="100" />
+                    <Field Name="ColumnMask" Ordinal="7" DbType="23" Length="150" />
                     <Field Name="JoinMask" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="Cost" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="Count" Ordinal="10" DbType="8" Precision="10" />
@@ -7567,6 +7617,11 @@
                     </Field>
                     <Field Name="VerifiedBy" Ordinal="86" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="VerifiedDate" Ordinal="87" IsOptional="true" DbType="4" />
+                    <Field Name="Custom6" Ordinal="88" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="89" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="90" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="91" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="92" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderCharge">
@@ -7632,6 +7687,11 @@
                     <Field Name="Custom4" Ordinal="30" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="Custom5" Ordinal="31" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="HubItemID" Ordinal="32" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="Custom6" Ordinal="33" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom7" Ordinal="34" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom8" Ordinal="35" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom9" Ordinal="36" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="Custom10" Ordinal="37" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="OrderItemAttribute">
@@ -7963,6 +8023,8 @@
                     <Field Name="HarmonizedCode" Ordinal="15" IsOptional="true" DbType="12" Length="20" />
                     <Field Name="DeclaredValue" Ordinal="16" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -8022,6 +8084,31 @@
                     <Field Name="LegacyPrefix" Ordinal="15" DbType="24" Length="30" />
                     <Field Name="LegacyPassword" Ordinal="16" DbType="24" Length="150" />
                     <Field Name="LegacyCanUpgrade" Ordinal="17" DbType="2" />
+                  </Fields>
+                </Table>
+                <Table Name="RakutenOrder">
+                  <PkConstraintName Name="PK_RakutenOrder" />
+                  <Fields>
+                    <Field Name="OrderID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="RakutenPackageID" Ordinal="2" DbType="12" Length="36" />
+                  </Fields>
+                </Table>
+                <Table Name="RakutenOrderSearch">
+                  <PkConstraintName Name="PK_RakutenOrderSearch" />
+                  <Fields>
+                    <Field Name="RakutenOrderSearchID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="OrderID" Ordinal="2" DbType="0" Precision="19" />
+                    <Field Name="OriginalOrderID" Ordinal="3" DbType="0" Precision="19" />
+                    <Field Name="RakutenPackageID" Ordinal="4" DbType="12" Length="36" />
+                  </Fields>
+                </Table>
+                <Table Name="RakutenStore">
+                  <PkConstraintName Name="PK_RakutenStore" />
+                  <Fields>
+                    <Field Name="StoreID" Ordinal="1" IsPrimaryKey="true" DbType="0" Precision="19" />
+                    <Field Name="AuthKey" Ordinal="2" DbType="12" Length="100" />
+                    <Field Name="MarketplaceID" Ordinal="3" DbType="12" Length="10" />
+                    <Field Name="ShopURL" Ordinal="4" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Resource">
@@ -8437,6 +8524,7 @@
                     <Field Name="ReturnProfileID" Ordinal="77" HasDefaultValue="true" DefaultValue="(-1)" DbType="0" Precision="19" />
                     <Field Name="LoggedShippedToHub" Ordinal="78" IsOptional="true" DbType="2" />
                     <Field Name="LoggedVoidToHub" Ordinal="79" IsOptional="true" DbType="2" />
+                    <Field Name="CarrierAccount" Ordinal="80" IsOptional="true" DbType="12" Length="25" />
                   </Fields>
                 </Table>
                 <Table Name="ShipmentCustomsItem">
@@ -10577,6 +10665,21 @@
                 <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:ProStoresStore:StoreID" />
               </FieldPairs>
             </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenOrder:FK_RakutenOrder_Order">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Order:OrderID" FkField="dbo:RakutenOrder:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenOrderSearch:FK_RakutenOrderSearch_RakutenOrder" DeleteRuleAction="1">
+              <FieldPairs>
+                <FieldPair PkField="dbo:RakutenOrder:OrderID" FkField="dbo:RakutenOrderSearch:OrderID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
+            <ForeignKeyConstraint Name="dbo:RakutenStore:FK_RakutenStore_Store">
+              <FieldPairs>
+                <FieldPair PkField="dbo:Store:StoreID" FkField="dbo:RakutenStore:StoreID" />
+              </FieldPairs>
+            </ForeignKeyConstraint>
             <ForeignKeyConstraint Name="dbo:Scheduling_CRON_TRIGGERS:FK_Scheduling_CRON_TRIGGERS_Scheduling_TRIGGERS" DeleteRuleAction="1">
               <FieldPairs>
                 <FieldPair PkField="dbo:Scheduling_TRIGGERS:SCHED_NAME" FkField="dbo:Scheduling_CRON_TRIGGERS:SCHED_NAME" />
@@ -11601,6 +11704,7 @@
             <FieldMapping FieldName="CombinedLocally" TargetFieldName="CombinedLocally" />
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="GspCity" TargetFieldName="GspCity" />
             <FieldMapping FieldName="GspCountryCode" TargetFieldName="GspCountryCode" />
             <FieldMapping FieldName="GspEligible" TargetFieldName="GspEligible" />
@@ -11632,6 +11736,7 @@
             <FieldMapping FieldName="EbayTransactionID" TargetFieldName="EbayTransactionID" />
             <FieldMapping FieldName="EffectiveCheckoutStatus" TargetFieldName="EffectiveCheckoutStatus" />
             <FieldMapping FieldName="EffectivePaymentMethod" TargetFieldName="EffectivePaymentMethod" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="FeedbackLeftComments" TargetFieldName="FeedbackLeftComments" />
             <FieldMapping FieldName="FeedbackLeftType" TargetFieldName="FeedbackLeftType" />
             <FieldMapping FieldName="FeedbackReceivedComments" TargetFieldName="FeedbackReceivedComments" />
@@ -11652,6 +11757,7 @@
             <FieldMapping FieldName="EbayBuyerID" TargetFieldName="EbayBuyerID" />
             <FieldMapping FieldName="EbayOrderID" TargetFieldName="EbayOrderID" />
             <FieldMapping FieldName="EbayOrderSearchID" TargetFieldName="EbayOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="ExtendedOrderID" TargetFieldName="ExtendedOrderID" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
             <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
             <FieldMapping FieldName="SellingManagerRecord" TargetFieldName="SellingManagerRecord" />
@@ -11939,6 +12045,7 @@
         </EntityMapping>
         <EntityMapping EntityName=":FedExProfile" TargetName="ShipWorksLocal:dbo:FedExProfile">
           <FieldMappings>
+            <FieldMapping FieldName="CreateCommercialInvoice" TargetFieldName="CreateCommercialInvoice" />
             <FieldMapping FieldName="DropoffType" TargetFieldName="DropoffType" />
             <FieldMapping FieldName="EmailNotifyBroker" TargetFieldName="EmailNotifyBroker" />
             <FieldMapping FieldName="EmailNotifyMessage" TargetFieldName="EmailNotifyMessage" />
@@ -11947,6 +12054,7 @@
             <FieldMapping FieldName="EmailNotifyRecipient" TargetFieldName="EmailNotifyRecipient" />
             <FieldMapping FieldName="EmailNotifySender" TargetFieldName="EmailNotifySender" />
             <FieldMapping FieldName="FedExAccountID" TargetFieldName="FedExAccountID" />
+            <FieldMapping FieldName="FileElectronically" TargetFieldName="FileElectronically" />
             <FieldMapping FieldName="NonStandardContainer" TargetFieldName="NonStandardContainer" />
             <FieldMapping FieldName="OriginResidentialDetermination" TargetFieldName="OriginResidentialDetermination" />
             <FieldMapping FieldName="PackagingType" TargetFieldName="PackagingType" />
@@ -12821,10 +12929,15 @@
             <FieldMapping FieldName="ChannelOrderID" TargetFieldName="ChannelOrderID" />
             <FieldMapping FieldName="CombineSplitStatus" TargetFieldName="CombineSplitStatus" />
             <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom10" TargetFieldName="Custom10" />
             <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
             <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
             <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
             <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
+            <FieldMapping FieldName="Custom6" TargetFieldName="Custom6" />
+            <FieldMapping FieldName="Custom7" TargetFieldName="Custom7" />
+            <FieldMapping FieldName="Custom8" TargetFieldName="Custom8" />
+            <FieldMapping FieldName="Custom9" TargetFieldName="Custom9" />
             <FieldMapping FieldName="CustomerID" TargetFieldName="CustomerID" />
             <FieldMapping FieldName="HubOrderID" TargetFieldName="HubOrderID" />
             <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
@@ -12899,10 +13012,15 @@
             <FieldMapping FieldName="Brand" TargetFieldName="Brand" />
             <FieldMapping FieldName="Code" TargetFieldName="Code" />
             <FieldMapping FieldName="Custom1" TargetFieldName="Custom1" />
+            <FieldMapping FieldName="Custom10" TargetFieldName="Custom10" />
             <FieldMapping FieldName="Custom2" TargetFieldName="Custom2" />
             <FieldMapping FieldName="Custom3" TargetFieldName="Custom3" />
             <FieldMapping FieldName="Custom4" TargetFieldName="Custom4" />
             <FieldMapping FieldName="Custom5" TargetFieldName="Custom5" />
+            <FieldMapping FieldName="Custom6" TargetFieldName="Custom6" />
+            <FieldMapping FieldName="Custom7" TargetFieldName="Custom7" />
+            <FieldMapping FieldName="Custom8" TargetFieldName="Custom8" />
+            <FieldMapping FieldName="Custom9" TargetFieldName="Custom9" />
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
@@ -13230,6 +13348,8 @@
             <FieldMapping FieldName="CountryOfOrigin" TargetFieldName="CountryOfOrigin" />
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
+            <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
@@ -13296,6 +13416,28 @@
             <FieldMapping FieldName="ShortName" TargetFieldName="ShortName" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
             <FieldMapping FieldName="Username" TargetFieldName="Username" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenOrder" TargetName="ShipWorksLocal:dbo:RakutenOrder">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="RakutenPackageID" TargetFieldName="RakutenPackageID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenOrderSearch" TargetName="ShipWorksLocal:dbo:RakutenOrderSearch">
+          <FieldMappings>
+            <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
+            <FieldMapping FieldName="OriginalOrderID" TargetFieldName="OriginalOrderID" />
+            <FieldMapping FieldName="RakutenOrderSearchID" TargetFieldName="RakutenOrderSearchID" SequenceToUse="SCOPE_IDENTITY()" />
+            <FieldMapping FieldName="RakutenPackageID" TargetFieldName="RakutenPackageID" />
+          </FieldMappings>
+        </EntityMapping>
+        <EntityMapping EntityName=":RakutenStore" TargetName="ShipWorksLocal:dbo:RakutenStore">
+          <FieldMappings>
+            <FieldMapping FieldName="AuthKey" TargetFieldName="AuthKey" />
+            <FieldMapping FieldName="MarketplaceID" TargetFieldName="MarketplaceID" />
+            <FieldMapping FieldName="ShopURL" TargetFieldName="ShopURL" />
+            <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":Resource" TargetName="ShipWorksLocal:dbo:Resource">
@@ -13412,6 +13554,7 @@
             <FieldMapping FieldName="BestRateEvents" TargetFieldName="BestRateEvents" />
             <FieldMapping FieldName="BilledType" TargetFieldName="BilledType" />
             <FieldMapping FieldName="BilledWeight" TargetFieldName="BilledWeight" />
+            <FieldMapping FieldName="CarrierAccount" TargetFieldName="CarrierAccount" />
             <FieldMapping FieldName="ContentWeight" TargetFieldName="ContentWeight" />
             <FieldMapping FieldName="CustomsGenerated" TargetFieldName="CustomsGenerated" />
             <FieldMapping FieldName="CustomsValue" TargetFieldName="CustomsValue" />

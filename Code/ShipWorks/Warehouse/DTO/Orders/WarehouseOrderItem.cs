@@ -37,21 +37,26 @@ namespace ShipWorks.Warehouse.DTO.Orders
         [JsonProperty("id")]
         public string ID { get; set; }
 
-        [JsonProperty("custom_1")]
         public string Custom1 { get; set; }
 
-        [JsonProperty("custom_2")]
         public string Custom2 { get; set; }
 
-        [JsonProperty("custom_3")]
         public string Custom3 { get; set; }
 
-        [JsonProperty("custom_4")]
         public string Custom4 { get; set; }
 
-        [JsonProperty("custom_5")]
         public string Custom5 { get; set; }
-        
+
+        public string Custom6 { get; set; }
+
+        public string Custom7 { get; set; }
+
+        public string Custom8 { get; set; }
+
+        public string Custom9 { get; set; }
+
+        public string Custom10 { get; set; }
+
         public IEnumerable<WarehouseOrderItemAttribute> ItemAttributes { get; set; }
 
         [JsonExtensionData]

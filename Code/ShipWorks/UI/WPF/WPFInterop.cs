@@ -23,7 +23,11 @@ namespace ShipWorks.UI.WPF
     {
         public object AcceptButton { get; set; }
 
+        public WinForms::Button DefaultAcceptButton { get; set; }
+
         private IEnumerable<WinForms::Button> winButtons;
+
+        private IEnumerable<Button> wpfButtons;
 
         private WinForms::Form form;
 
@@ -32,6 +36,8 @@ namespace ShipWorks.UI.WPF
         private Thickness defaultThickness = new Thickness(1);
 
         private SolidColorBrush acceptBrush = (SolidColorBrush) (new BrushConverter().ConvertFrom("#00a2ed"));
+
+        private SolidColorBrush buttonBackground = (SolidColorBrush) (new BrushConverter().ConvertFrom("#DDD"));
 
         /// <summary>
         /// Sets the event handlers for providing the AcceptButton
@@ -43,14 +49,20 @@ namespace ShipWorks.UI.WPF
             control.PreviewKeyDown -= HandleWpfKeyEvent;
             control.PreviewKeyDown += HandleWpfKeyEvent;
 
-            var buttons = FindVisualChildren<Button>(control);
-            foreach (var button in buttons)
+            wpfButtons = FindVisualChildren<Button>(control);
+            foreach (var button in wpfButtons)
             {
                 button.GotFocus -= GotFocusHandler;
                 button.GotFocus += GotFocusHandler;
 
                 button.LostFocus -= LostFocusHandler;
                 button.LostFocus += LostFocusHandler;
+
+                button.MouseEnter -= MouseEnterHandler;
+                button.MouseEnter += MouseEnterHandler;
+
+                button.MouseLeave -= MouseLeaveHandler;
+                button.MouseLeave += MouseLeaveHandler;
             }
 
             winButtons = form.Controls.OfType<WinForms::Button>();
@@ -138,6 +150,7 @@ namespace ShipWorks.UI.WPF
             var button = sender as WinForms::Button;
             button.NotifyDefault(true);
             AcceptButton = button;
+            ClearStyles();
         }
 
         /// <summary>
@@ -167,20 +180,64 @@ namespace ShipWorks.UI.WPF
         /// </summary>
         private void LostFocusHandler(object sender, EventArgs e)
         {
-            ClearWPFStyle();
+            var button = AcceptButton as Button;
+
+            if (button != null)
+            {
+                ClearWPFStyle(button);
+                DefaultAcceptButton.Focus();
+            }        
+        }
+
+        private void MouseEnterHandler(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                button.BorderBrush = acceptBrush;
+                button.BorderThickness = defaultThickness;
+                button.Background = System.Windows.SystemColors.HighlightBrush;
+            }
+        }
+
+        private void MouseLeaveHandler(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button != null)
+            {
+                if(button == AcceptButton)
+                {
+                    SetWPFStyle();
+                }
+
+                else
+                {
+                    ClearWPFStyle(button);
+                }
+            }
+        }
+        /// <summary>
+        /// Clears the button styles from the AcceptButton
+        /// </summary>
+        public void ClearStyles()
+        {
+            if (wpfButtons != null)
+            {
+                foreach(var button in wpfButtons)
+                {
+                    ClearWPFStyle(button);
+                }
+            }
         }
 
         /// <summary>
         /// Clears the wpf button style from the AcceptButton
         /// </summary>
-        private void ClearWPFStyle()
+        private void ClearWPFStyle(Button button)
         {
-            var oldButton = AcceptButton as Button;
-            if (oldButton != null)
-            {
-                oldButton.BorderBrush = System.Windows.SystemColors.ActiveBorderBrush;
-                oldButton.BorderThickness = defaultThickness;
-            }
+            button.BorderBrush = System.Windows.SystemColors.ActiveBorderBrush;
+            button.BorderThickness = defaultThickness;
+            button.Background = buttonBackground;
         }
 
         /// <summary>
@@ -193,6 +250,7 @@ namespace ShipWorks.UI.WPF
             {
                 button.BorderBrush = acceptBrush;
                 button.BorderThickness = acceptThickness;
+                button.Background = buttonBackground;
             }
         }      
     }

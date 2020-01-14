@@ -30,6 +30,11 @@ namespace ShipWorks.Data.Model.EntityClasses
         public string AccountDescription => Description;
 
         /// <summary>
+        /// Gets the shortened account description.
+        /// </summary>
+        public string ShortAccountDescription => AccountNumber;
+
+        /// <summary>
         /// Applies account to shipment
         /// </summary>
         public void ApplyTo(ShipmentEntity shipment) =>

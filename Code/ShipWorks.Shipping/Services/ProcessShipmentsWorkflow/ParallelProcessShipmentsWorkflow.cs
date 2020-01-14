@@ -4,10 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Services.ShipmentProcessorSteps;
 using ShipWorks.Users.Audit;
@@ -80,6 +84,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             // Get shipment count with automatic returns
             int shipmentCount = 0;
+            
             foreach (ShipmentEntity shipment in shipments)
             {
                 shipmentCount++;
@@ -87,8 +92,10 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 {
                     shipmentCount++;
                 }
-            }
 
+                SetShipmentCarrierAccount(shipment, chosenRateResult);
+            }
+            
             workProgress.Detail = $"Shipment 1 of {shipmentCount}";
 
             var results = Consume(
@@ -117,6 +124,23 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
             ProcessShipmentsWorkflowResult result = await results;
             workProgress.Completed();
             return result;
+        }
+
+        /// <summary>
+        /// Set the CarrierAccount property of the shipment
+        /// </summary>
+        private void SetShipmentCarrierAccount(ShipmentEntity shipment, RateResult rateResult)
+        {
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.BestRate)
+            {
+                var tag = rateResult?.Tag as BestRateResultTag;
+                shipment.CarrierAccount = tag?.AccountDescription;
+            }
+
+            else if (shipment.ShipmentTypeCode != ShipmentTypeCode.iParcel)
+            {
+                shipment.CarrierAccount = shippingManager.GetCarrierAccount(shipment)?.ShortAccountDescription;
+            }
         }
 
         /// <summary>

@@ -44,7 +44,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Select the order lookup tab
         /// </summary>
-        void SelectOrderLookupTab();
+        void SelectScanToShipTab();
 
         /// <summary>
         /// Start the printing or previewing of the given print job

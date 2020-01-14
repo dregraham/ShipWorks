@@ -36,7 +36,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [InlineData("Foo")]
         public async Task GetSplitDetailsFromUser_SetsData_WhenOrderIsNotNull(string orderNumber)
         {
-            OrderEntity order = new OrderEntity();
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             order.ChangeOrderNumber(orderNumber);
 
             await testObject.GetSplitDetailsFromUser(order, "foo").Recover(_ => null);
@@ -48,7 +52,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailsFromUser_PopulatesOrderItems()
         {
-            var order = Create.Order(new StoreEntity(), new CustomerEntity())
+            OrderEntity order = Create.Order(new StoreEntity(), new CustomerEntity())
                 .WithItem(i => i.Set(x => x.Quantity, 2).Set(x => x.Name, "Foo"))
                 .WithItem(i => i.Set(x => x.Quantity, 3).Set(x => x.Name, "Bar"))
                 .Build();
@@ -62,7 +66,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailsFromUser_PopulatesOrderCharges()
         {
-            var order = Create.Order(new StoreEntity(), new CustomerEntity())
+            OrderEntity order = Create.Order(new StoreEntity(), new CustomerEntity())
                 .WithCharge(c => c.Set(x => x.Amount, 2).Set(x => x.Type, "Foo"))
                 .WithCharge(i => i.Set(x => x.Amount, 3).Set(x => x.Type, "Bar"))
                 .Build();
@@ -79,11 +83,16 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailsFromUser_DataContext_IsSetToViewModel()
         {
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
                 .Callback((Func<IDialog> func) => func());
 
-            await testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo").Recover(_ => null);
+            await testObject.GetSplitDetailsFromUser(order, "foo").Recover(_ => null);
 
             mock.Mock<IOrderSplitDialog>().VerifySet(x => x.DataContext = testObject);
         }
@@ -91,12 +100,22 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsFailure_WhenDialogIsCancelled()
         {
-            await Assert.ThrowsAsync<CanceledException>(() => testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo"));
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
+            await Assert.ThrowsAsync<CanceledException>(() => testObject.GetSplitDetailsFromUser(order, "foo"));
         }
 
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsCorrectOrderNumber_WhenDialogIsNotCancelled()
         {
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
                 .Callback(() =>
@@ -106,7 +125,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 })
                 .ReturnsAsync(true);
 
-            var details = await testObject.GetSplitDetailsFromUser(new OrderEntity(), "foo");
+            OrderSplitDefinition details = await testObject.GetSplitDetailsFromUser(order, "foo");
 
             Assert.Equal("123456-2", details.NewOrderNumber);
         }
@@ -114,7 +133,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsSplitItemQuantities_WhenDialogIsNotCancelled()
         {
-            var order = new OrderEntity();
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
                 .Callback(() =>
@@ -127,7 +150,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 })
                 .ReturnsAsync(true);
 
-            var details = await testObject.GetSplitDetailsFromUser(order, "foo");
+            OrderSplitDefinition details = await testObject.GetSplitDetailsFromUser(order, "foo");
 
             Assert.Equal(1, details.ItemQuantities[1050]);
             Assert.Equal(2, details.ItemQuantities[2050]);
@@ -136,7 +159,11 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsSplitChargeQuantities_WhenDialogIsNotCancelled()
         {
-            var order = new OrderEntity();
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
                 .Callback(() =>
@@ -149,7 +176,7 @@ namespace ShipWorks.Stores.Tests.Orders.Split
                 })
                 .ReturnsAsync(true);
 
-            var details = await testObject.GetSplitDetailsFromUser(order, "foo");
+            OrderSplitDefinition details = await testObject.GetSplitDetailsFromUser(order, "foo");
 
             Assert.Equal(1, details.ChargeAmounts[1050]);
             Assert.Equal(2, details.ChargeAmounts[2050]);
@@ -158,12 +185,16 @@ namespace ShipWorks.Stores.Tests.Orders.Split
         [Fact]
         public async Task GetSplitDetailFromUser_ReturnsOrder_WhenDialogIsNotCancelled()
         {
-            var order = new OrderEntity();
+            var order = new OrderEntity
+            {
+                Store = new StoreEntity()
+            };
+
             mock.Mock<IAsyncMessageHelper>()
                 .Setup(x => x.ShowDialog(It.IsAny<Func<IDialog>>()))
-                .ReturnsAsync((bool?) true);
+                .ReturnsAsync(true);
 
-            var details = await testObject.GetSplitDetailsFromUser(order, "foo");
+            OrderSplitDefinition details = await testObject.GetSplitDetailsFromUser(order, "foo");
 
             Assert.Equal(order, details.Order);
         }

@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.UI.Settings
                     BestRateAccount account = new BestRateAccount
                     {
                         AccountID = carrierAccount.AccountId,
-                        AccountDescription = AccountDescription(carrierAccount)
+                        AccountDescription = carrierAccount.ShortAccountDescription
                     };
 
                     // if the account was successfully removed from the list, it should be excluded
@@ -104,32 +104,6 @@ namespace ShipWorks.Shipping.UI.Settings
             }
 
             return accounts;
-        }
-
-        /// <summary>
-        /// Get the accounts description
-        /// </summary>
-        private string AccountDescription(ICarrierAccount acccount)
-        {
-            switch (acccount)
-            {
-                case ReadOnlyUpsAccountEntity a:
-                    return a.AccountNumber;
-                case ReadOnlyUspsAccountEntity a:
-                    return a.Username;
-                case ReadOnlyEndiciaAccountEntity a:
-                    return a.AccountNumber;
-                case ReadOnlyFedExAccountEntity a:
-                    return a.AccountNumber;
-                case ReadOnlyOnTracAccountEntity a:
-                    return a.AccountNumber.ToString();
-                case ReadOnlyDhlExpressAccountEntity a:
-                    return a.AccountNumber.ToString();
-                case ReadOnlyAsendiaAccountEntity a:
-                    return a.AccountNumber.ToString();
-                default:
-                    return acccount.AccountDescription;
-            }
         }
     }
 }

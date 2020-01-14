@@ -124,6 +124,25 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                          new GridColumnDefinition("{02870994-3692-4842-B59C-3624B9A4F97B}", false,
                              new GridTextDisplayType(), "Custom Field 5", "Custom Field 5",
                              OrderItemFields.Custom5),
+                         new GridColumnDefinition("{A289970B-0FFC-49D3-9FA3-6590ABD9C057}", false,
+                             new GridTextDisplayType(), "Custom Field 6", "Custom Field 6",
+                             OrderItemFields.Custom6),
+
+                         new GridColumnDefinition("{3CBFB325-BCB5-4124-B3A8-283407349A59}", false,
+                             new GridTextDisplayType(), "Custom Field 7", "Custom Field 7",
+                             OrderItemFields.Custom7),
+
+                         new GridColumnDefinition("{A4D57683-C5F7-4F81-BD15-157C8A802C13}", false,
+                             new GridTextDisplayType(), "Custom Field 8", "Custom Field 8",
+                             OrderItemFields.Custom8),
+
+                         new GridColumnDefinition("{C33D334C-248C-4B3A-957F-1199F6317F54}", false,
+                             new GridTextDisplayType(), "Custom Field 9", "Custom Field 9",
+                             OrderItemFields.Custom9),
+
+                         new GridColumnDefinition("{BA2C8978-4E47-442D-91E7-B3F5EBEAD447}", false,
+                             new GridTextDisplayType(), "Custom Field 10", "Custom Field 10",
+                             OrderItemFields.Custom10),
 
                         #region Infopia
 

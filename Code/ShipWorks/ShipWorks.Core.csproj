@@ -874,23 +874,35 @@
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom10Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom3Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom4Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom5Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom6Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom7Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom8Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\OrderItems\Custom9Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\MpnCondition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\BrandCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\ChannelOrderIdCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom10Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom5Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom3Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom2Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Custom4Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom6Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom7Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom8Condition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Custom9Condition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\ShipByDateCondition.cs" />
     <Compile Include="Common\Threading\ProgressFactory.cs" />
     <Compile Include="Data\ProductCatalogTelemetryService.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\VerifiedCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\AccountCondition.cs" />
+    <Compile Include="Messaging\Messages\Orders\OrderVerifiedMessage.cs" />
     <Compile Include="OrderLookup\CoreOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutProvider.cs" />
     <Compile Include="OrderLookup\FieldManager\IOrderLookupFieldLayoutRepository.cs" />
@@ -901,7 +913,7 @@
     <Compile Include="Messaging\Messages\Shipping\FocusQuickSearchMessage.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldManager.cs" />
     <Compile Include="OrderLookup\IOrderLookupFieldLayoutProviderHost.cs" />
-    <Compile Include="OrderLookup\IOrderLookupPipeline.cs" />
+    <Compile Include="OrderLookup\IScanToShipPipeline.cs" />
     <Compile Include="OrderLookup\IOrderLookupRegistrationOverride.cs" />
     <Compile Include="OrderLookup\IOrderLookupShipmentModel.cs" />
     <Compile Include="OrderLookup\IOrderLookupViewModel.cs" />
@@ -1151,7 +1163,10 @@
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Response\FedExUploadImagesResponse.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\AmazonSWAServiceType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
+    <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimValidator.cs" />
@@ -1393,6 +1408,7 @@
       <DependentUpon>ChannelAdvisorExcludeFbaControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\ChannelAdvisor\IChannelAdvisorWizardPageFactory.cs" />
+    <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderNumberCondition.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Sources\Warehouse\GenericFileSourceWarehouseType.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStoreClient.cs" />
     <Compile Include="Stores\Platforms\GenericFile\Warehouse\GenericFileStore.cs" />
@@ -1400,6 +1416,8 @@
     <Compile Include="Stores\Platforms\GenericFile\WizardPages\IGenericStoreHubPage.cs" />
     <Compile Include="Stores\Platforms\Ebay\CoreExtensions\Filters\EbayOrderIDCondition.cs" />
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
+    <Compile Include="Stores\Platforms\Rakuten\IRakutenStoreSetupControlViewModel.cs" />
+    <Compile Include="Stores\Platforms\Rakuten\OnlineUpdating\IRakutenOnlineUpdater.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\BackgroundAsyncMessageHelper.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />

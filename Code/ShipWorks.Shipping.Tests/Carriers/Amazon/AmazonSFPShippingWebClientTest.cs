@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
         readonly ShipmentRequestDetails request;
         readonly CreateShipmentResponse response;
         readonly Mock<IAmazonMwsWebClientSettings> settings;
+        private Uri proxy;
 
         public AmazonSFPShippingWebClientTest()
         {
@@ -67,9 +68,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
                 .Setup(x => x.Decrypt(It.IsAny<string>()))
                 .Returns("FooKey");
 
+            proxy = new Uri("http://www.example.com/proxy");
             settings = mock.CreateMock<IAmazonMwsWebClientSettings>();
             settings.SetupGet(x => x.Endpoint).Returns("http://www.example.com");
             settings.Setup(x => x.GetApiNamespace(It.IsAny<AmazonMwsApiCall>())).Returns(XNamespace.Get("https://mws.amazonservices.com/MerchantFulfillment/2015-06-01"));
+            settings.SetupGet(s => s.ProxyEndpoint).Returns(proxy);
 
             var settingsFactory = mock.Mock<IAmazonMwsWebClientSettingsFactory>();
 
@@ -94,6 +97,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             var result = testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult);
 
             Assert.NotNull(result);
+        }
+
+        [Fact]
+        public void CreateShipment_UsesProxy_WhenShipping()
+        {
+            var testObject = mock.Create<AmazonSFPShippingWebClient>();
+
+            testObject.CreateShipment(request, new AmazonSFPShipmentEntity(), telemetricResult);
+            
+            mock.Mock<IHttpVariableRequestSubmitter>()
+                .VerifySet(r=>r.Uri=proxy);
         }
 
         public void Dispose() => mock.Dispose();

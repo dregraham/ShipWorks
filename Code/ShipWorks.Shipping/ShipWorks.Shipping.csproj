@@ -98,6 +98,7 @@
     <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75" />
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
       <Private>True</Private>
@@ -535,8 +536,6 @@
     <Compile Include="Rating\ExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Rating\InformationFootnoteViewModel.cs" />
     <Compile Include="ReturnItemRepository.cs" />
-    <Compile Include="Services\Accounts\IShippingAccountListProvider.cs" />
-    <Compile Include="Services\Accounts\ShippingAccountListProvider.cs" />
     <Compile Include="Services\Builders\ShipmentPackageTypesBuilderFactory.cs" />
     <Compile Include="Services\Builders\ShipmentServicesBuilderFactory.cs" />
     <Compile Include="Services\CarrierAccountRetrieverFactory.cs" />

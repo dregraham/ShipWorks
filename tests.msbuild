@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <Target Name="Units">
+    <MakeDir Directories="TestResults;" />
     <xunit Assemblies="@(UnitsAssemblies)"
         Xml="TestResults\units.xml"
         ParallelizeAssemblies="true"
@@ -25,6 +26,7 @@
   <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
   		 If they are not run in parallel, some async tests will deadlock -->
   <Target Name="Integration">
+    <MakeDir Directories="TestResults;" />
     <xunit Assemblies="@(IntegrationAssemblies)"
       Xml="TestResults\integration.xml"
       IncludeTraits="$(IncludeTraits)"
@@ -35,6 +37,7 @@
   <!-- We need the specs to run in parallel so that the correct synchronization context gets set.
        If they are not run in parallel, some async tests will deadlock -->
   <Target Name="Specs">
+    <MakeDir Directories="TestResults;" />
     <xunit Assemblies="@(SpecsAssemblies)"
       Xml="TestResults\specs.xml"
       IncludeTraits="$(IncludeTraits)"

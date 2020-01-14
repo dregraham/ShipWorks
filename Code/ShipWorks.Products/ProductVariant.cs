@@ -51,6 +51,8 @@ namespace ShipWorks.Products
             outline.AddElement("UPC", () => variant.UPC);
             outline.AddElement("ASIN", () => variant.ASIN);
             outline.AddElement("ISBN", () => variant.ISBN);
+            outline.AddElement("EAN", () => variant.EAN);
+            outline.AddElement("FNSKU", () => variant.FNSku);
             outline.AddElement("Weight", () => (double?) variant.Weight);
             outline.AddElement("Length", () => (double?) variant.Length);
             outline.AddElement("Width", () => (double?) variant.Width);
