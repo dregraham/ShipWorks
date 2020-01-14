@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         private const string FimsMailViewShipUrl = "http://www.fimsform.com/pkgFedex/pkgFormService";
         private const string FimsMailViewTrackUrlFormat = "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={0}";
 
+        private const string FedExMailTrackingUrlFormat = "https://www.fedex.com/apps/fedextrack/?tracknumbers={0}";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExSettings" /> class.
         /// </summary>
@@ -103,6 +105,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// Get the FedEx endpoint URL to use
         /// </summary>
         public string EndpointUrl => settingsRepository.UseTestServer ? TestingUrl : ProductionUrl;
+
+        /// <summary>
+        /// Get the non-FIMS tracking endpoint URL to use
+        /// </summary>
+        public string FedExTrackEndpointUrlFormat => FedExMailTrackingUrlFormat;
 
         /// <summary>
         /// Get the FedEx FIMS tracking endpoint URL to use

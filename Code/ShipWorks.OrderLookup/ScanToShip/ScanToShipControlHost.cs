@@ -42,6 +42,8 @@ namespace ShipWorks.OrderLookup.ScanToShip
             this.scanToShipViewModel.ScanPackViewModel.CanAcceptFocus = () => Visible && CanFocus;
         }
 
+        public OrderEntity Order => scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder;
+
         /// <summary>
         /// A shipment is about to be saved
         /// </summary>
@@ -126,7 +128,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
         /// Allow the creation of a label
         /// </summary>
         public bool CreateLabelAllowed()
-        {            
+        {
             return scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.ShipmentAdapter?.Shipment?.Processed == false;
         }
 

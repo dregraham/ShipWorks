@@ -918,11 +918,11 @@ namespace ShipWorks.ApplicationCore
                 ISearchDefinitionProvider definitionProvider;
                 if (AdvancedSearchResultsActive && filterEditor.SaveDefinition())
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition, isBarcodeSearch);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, filterEditor.FilterDefinition, isBarcodeSearch, searchText);
                 }
                 else
                 {
-                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch);
+                    definitionProvider = definitionProviderFactory.Create(ActiveFilterTarget, isBarcodeSearch, searchText);
                 }
 
                 return definitionProvider.GetDefinition(searchText);

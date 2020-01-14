@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
@@ -52,6 +53,7 @@ namespace ShipWorks.OrderLookup
         private readonly IShortcutManager shortcutManager;
         private readonly IShippingManager shippingManager;
         private readonly IMessageHelper messageHelper;
+        private readonly IOrderLoader orderLoader;
         private readonly ILog log;
         private IDisposable subscriptions;
         private bool processingScan = false;
@@ -85,7 +87,8 @@ namespace ShipWorks.OrderLookup
             IUserSession userSession,
             IShortcutManager shortcutManager,
             IShippingManager shippingManager,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            IOrderLoader orderLoader)
         {
             this.messenger = messenger;
             this.mainForm = mainForm;
@@ -103,6 +106,7 @@ namespace ShipWorks.OrderLookup
             this.shortcutManager = shortcutManager;
             this.shippingManager = shippingManager;
             this.messageHelper = messageHelper;
+            this.orderLoader = orderLoader;
             log = createLogger(GetType());
         }
 
@@ -339,6 +343,21 @@ namespace ShipWorks.OrderLookup
         public async Task LoadOrder(OrderEntity order)
         {
             processingScan = true;
+
+            // If the order doesn't have any shipments, load them.
+            if (order != null && order.Shipments.None())
+            {
+                ShipmentsLoadedEventArgs loadedOrders =
+                    await orderLoader.LoadAsync(new[] {order.OrderID}, ProgressDisplayOptions.NeverShow, true, Timeout.Infinite)
+                        .ConfigureAwait(true);
+
+                OrderEntity orderWithShipments = loadedOrders?.Shipments?.FirstOrDefault()?.Order;
+
+                if (orderWithShipments != null)
+                {
+                    order = orderWithShipments;
+                }
+            }
 
             shipmentModel.LoadOrder(order);
 
