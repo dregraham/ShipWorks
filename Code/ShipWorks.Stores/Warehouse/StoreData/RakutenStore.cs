@@ -27,6 +27,6 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The market place id for this store
         /// </summary>
-        public string MarketplaceID { get; set; }
+        public string MarketplaceId { get; set; }
     }
 }

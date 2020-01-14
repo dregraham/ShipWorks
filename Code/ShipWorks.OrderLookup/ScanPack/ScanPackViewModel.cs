@@ -320,8 +320,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
             {
-                ScanHeader = "Ready to scan and pack";
-                ScanFooter = "Scan an order barcode to begin";
+                ScanHeader = "Scan an order barcode to begin";
+                ScanFooter = string.Empty;
             }
             else
             {

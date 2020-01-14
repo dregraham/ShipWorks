@@ -16,6 +16,8 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         UserControl Control { get; }
 
+        OrderEntity Order { get; }
+
         /// <summary>
         /// Unload the order
         /// </summary>

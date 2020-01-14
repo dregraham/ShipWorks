@@ -196,5 +196,26 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             packageAdapters = testObject.GetPackageAdapters(shipment);
             Assert.False(packageAdapters.First().InsuranceChoice.Insured);
         }
+
+        [Theory]
+        [InlineData(PostalServiceType.ExpressMail, "", true, "")]
+        [InlineData(PostalServiceType.ExpressMail,"foo", false, "")]
+        [InlineData(PostalServiceType.ExpressMail, "foo", true, "https://tools.usps.com/go/TrackConfirmAction.action?tLabels=foo")]
+        [InlineData(PostalServiceType.DhlParcelPlusGround, "foo", true, "http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber=foo")]
+        public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(PostalServiceType serviceType, string trackingNumber, bool processed, string expectedUrl)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                Postal = new PostalShipmentEntity
+                {
+                    Service = (int) serviceType
+                },
+                TrackingNumber = trackingNumber,
+                Processed = processed
+            };
+
+            var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
+            Assert.Equal(expectedUrl, trackingUrl);
+        }
     }
 }
