@@ -173,7 +173,7 @@
             // 
             this.requireVerificationToShip.AutoSize = true;
             this.requireVerificationToShip.Enabled = false;
-            this.requireVerificationToShip.Location = new System.Drawing.Point(21, 243);
+            this.requireVerificationToShip.Location = new System.Drawing.Point(20, 243);
             this.requireVerificationToShip.Name = "requireVerificationToShip";
             this.requireVerificationToShip.Size = new System.Drawing.Size(281, 17);
             this.requireVerificationToShip.TabIndex = 47;
