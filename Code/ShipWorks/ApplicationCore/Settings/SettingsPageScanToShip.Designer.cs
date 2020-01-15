@@ -100,7 +100,7 @@
             // 
             // registerScannerButton
             // 
-            this.registerScannerButton.Location = new System.Drawing.Point(429, 42);
+            this.registerScannerButton.Location = new System.Drawing.Point(425, 42);
             this.registerScannerButton.Name = "registerScannerButton";
             this.registerScannerButton.Size = new System.Drawing.Size(108, 23);
             this.registerScannerButton.TabIndex = 35;
@@ -136,7 +136,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleShipping.Location = new System.Drawing.Point(10, 10);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
-            this.sectionTitleShipping.Size = new System.Drawing.Size(527, 22);
+            this.sectionTitleShipping.Size = new System.Drawing.Size(523, 22);
             this.sectionTitleShipping.TabIndex = 42;
             this.sectionTitleShipping.Text = "Shipping Automation";
             // 
@@ -151,7 +151,7 @@
             // 
             // manageProfilesButton
             // 
-            this.manageProfilesButton.Location = new System.Drawing.Point(429, 123);
+            this.manageProfilesButton.Location = new System.Drawing.Point(425, 123);
             this.manageProfilesButton.Name = "manageProfilesButton";
             this.manageProfilesButton.Size = new System.Drawing.Size(108, 24);
             this.manageProfilesButton.TabIndex = 45;
@@ -161,7 +161,7 @@
             // 
             // printBarcodeButton
             // 
-            this.printBarcodeButton.Location = new System.Drawing.Point(429, 165);
+            this.printBarcodeButton.Location = new System.Drawing.Point(425, 165);
             this.printBarcodeButton.Name = "printBarcodeButton";
             this.printBarcodeButton.Size = new System.Drawing.Size(108, 23);
             this.printBarcodeButton.TabIndex = 46;
@@ -192,9 +192,9 @@
             // 
             // printShortcutsLabel
             // 
-            this.printShortcutsLabel.Location = new System.Drawing.Point(17, 170);
+            this.printShortcutsLabel.Location = new System.Drawing.Point(17, 165);
             this.printShortcutsLabel.Name = "printShortcutsLabel";
-            this.printShortcutsLabel.Size = new System.Drawing.Size(410, 18);
+            this.printShortcutsLabel.Size = new System.Drawing.Size(406, 34);
             this.printShortcutsLabel.TabIndex = 49;
             this.printShortcutsLabel.Text = "You can print preconfigured keyboard and barcode shortcuts that automate shipping" +
     ".";
@@ -205,7 +205,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitle1.Location = new System.Drawing.Point(10, 207);
             this.sectionTitle1.Name = "sectionTitle1";
-            this.sectionTitle1.Size = new System.Drawing.Size(527, 22);
+            this.sectionTitle1.Size = new System.Drawing.Size(523, 22);
             this.sectionTitle1.TabIndex = 43;
             this.sectionTitle1.Text = "Shipping Workflow";
             // 
