@@ -184,7 +184,7 @@
             // infoTipVerificationWarehouseOnly
             // 
             this.infoTipVerificationWarehouseOnly.Caption = "This feature is only available on warehouse plans.";
-            this.infoTipVerificationWarehouseOnly.Location = new System.Drawing.Point(304, 244);
+            this.infoTipVerificationWarehouseOnly.Location = new System.Drawing.Point(308, 244);
             this.infoTipVerificationWarehouseOnly.Name = "infoTipVerificationWarehouseOnly";
             this.infoTipVerificationWarehouseOnly.Size = new System.Drawing.Size(12, 12);
             this.infoTipVerificationWarehouseOnly.TabIndex = 48;
