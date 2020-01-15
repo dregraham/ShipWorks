@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
                     return;
                 }
 
-                SaveToDatabase();                
+                SaveToDatabase();
                 AllowEditing = false;
 
                 messenger.Send(new ProcessShipmentsMessage(this, new[] { ShipmentAdapter.Shipment },
@@ -519,6 +519,7 @@ namespace ShipWorks.Shipping.UI.ShippingPanel
             // long.MinValue is not special, it's just meant to clear the field since it is not a valid account id
             AccountId = long.MinValue;
             OriginAddressType = long.MinValue;
+            ShipmentViewModel?.Dispose();
         }
 
         /// <summary>
