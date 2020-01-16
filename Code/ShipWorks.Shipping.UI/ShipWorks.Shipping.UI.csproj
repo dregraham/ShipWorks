@@ -530,6 +530,7 @@
     <Compile Include="ShippingModule.cs" />
     <Compile Include="ShippingRibbon\ShippingRibbonService.cs" />
     <Compile Include="ValueConverters\OriginAddressListConverter.cs" />
+    <Compile Include="ValueConverters\ShipmentTypeToImageConverter.cs" />
     <Compile Include="ValueConverters\ShipmentTypeToOriginAddressesConverter.cs" />
   </ItemGroup>
   <ItemGroup>

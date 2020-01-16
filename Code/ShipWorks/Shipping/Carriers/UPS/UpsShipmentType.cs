@@ -608,6 +608,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Get UPS tracking URL
+        /// </summary>
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) =>
+            $"https://www.ups.com/track?loc=en_US&tracknum={shipment.TrackingNumber}";
+        
+
+        /// <summary>
         /// Determines whether [is mail innovations enabled] for OLT.
         /// </summary>
         /// <returns></returns>

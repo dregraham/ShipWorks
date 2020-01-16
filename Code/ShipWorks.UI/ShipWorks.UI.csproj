@@ -620,6 +620,14 @@
   <ItemGroup>
     <Page Include="Styles\BlueSteel\GroupBoxStyle.xaml" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\amazon.png" />
+    <Resource Include="Resources\asendia.png" />
+    <Resource Include="Resources\dhl.png" />
+    <Resource Include="Resources\express1.png" />
+    <Resource Include="Resources\endicia.png" />
+    <Resource Include="Resources\ontrac.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -100,7 +100,7 @@
                     Grid.Column="2"
                     DataContext="{Binding .}"
                     IsEnabled="{Binding Enabled}"/>
-                <scanPack:PackedControl
+                <scanPack:VerifiedControl
                     Grid.Column="4"
                     Margin="0,0,4,0"
                     DataContext="{Binding .}"

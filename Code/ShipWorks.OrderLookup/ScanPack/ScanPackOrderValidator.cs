@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                 !order.Verified
                 )
             {
-                return Result.FromError("This order must be scanned and packed before a label can be printed.");
+                return Result.FromError("This order must be verified before a label can be printed.");
             }
 
             return Result.FromSuccess();

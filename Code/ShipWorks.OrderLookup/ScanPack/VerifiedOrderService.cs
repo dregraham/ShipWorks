@@ -34,15 +34,18 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Save verified order data
         /// </summary>
-        public void Save(OrderEntity order)
+        public void Save(OrderEntity order, bool verified)
         {
-            order.Verified = true;
-            order.VerifiedBy = userSession.User.UserID;
-            order.VerifiedDate = dateTimeProvider.UtcNow;
+            order.Verified = verified;
+            order.VerifiedBy = verified ? (long?) userSession.User.UserID : null;
+            order.VerifiedDate = verified ? (DateTime?) dateTimeProvider.UtcNow : null;
 
             orderRepository.Save(order);
 
-            messenger.Send(new OrderVerifiedMessage(this, order));
+            if (verified)
+            {
+                messenger.Send(new OrderVerifiedMessage(this, order));
+            }
         }
     }
 }

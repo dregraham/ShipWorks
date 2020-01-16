@@ -16,6 +16,8 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         UserControl Control { get; }
 
+        OrderEntity Order { get; }
+
         /// <summary>
         /// Unload the order
         /// </summary>
@@ -37,9 +39,19 @@ namespace ShipWorks.UI.Controls
         bool ShipAgainAllowed();
 
         /// <summary>
+        /// Allow Unverify Order
+        /// </summary>
+        bool UnverifyOrderAllowed();
+        
+        /// <summary>
         /// Ship the shipment again
         /// </summary>
         void ShipAgain();
+
+        /// <summary>
+        /// Unverify the order
+        /// </summary>
+        void Unverify();
 
         /// <summary>
         /// Register the profile handler

@@ -175,8 +175,10 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Unsubscribe from shortcut messages
         /// </summary>
-        private void OnHandleDestroyed(object sender, EventArgs e)
+        protected override void OnHandleDestroyed(EventArgs eventArgs)
         {
+            base.OnHandleDestroyed(eventArgs);
+
             singleScanShortcutMessage?.Dispose();
         }
 

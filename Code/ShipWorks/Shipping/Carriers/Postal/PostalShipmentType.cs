@@ -320,6 +320,19 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Get postal Tracking link
+        /// </summary>
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment)
+        {
+            if (ShipmentTypeManager.IsDhlSmartMail((PostalServiceType) shipment.Postal.Service))
+            {
+                return $"http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={shipment.TrackingNumber}";
+            }
+
+            return $"https://tools.usps.com/go/TrackConfirmAction.action?tLabels={shipment.TrackingNumber}";
+        }
+
+        /// <summary>
         /// Gets all of the confirmation types that are available to a particular implementation of PostalShipmentType. The types available
         /// to all postal implementations are available here. Derived classes may have additional confirmation types.
         /// </summary>
