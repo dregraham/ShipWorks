@@ -576,6 +576,7 @@ void CreateInstaller(string releaseType, bool obfuscate, bool packageModules)
 	if (!bracketParam.IsNullOrWhiteSpace())
 	{
 		labelForBuild = bracketParam.Trim();
+		Version ver = Version.Parse(labelForBuild);
 		labelForBuild = $"{ver.Major}.{ver.Minor}.{(ver.Build == -1 ? 0 : ver.Build)}";
 	}
 	Information($"labelForBuild: {labelForBuild}");
