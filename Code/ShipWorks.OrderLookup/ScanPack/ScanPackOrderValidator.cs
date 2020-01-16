@@ -42,7 +42,7 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             if (restrictionLevel == EditionRestrictionLevel.None &&
                 mainForm.UIMode == UIMode.OrderLookup &&
-                singleScanAutomationSettings.AutoPrintScanPackRequireValidation &&
+                singleScanAutomationSettings.RequireVerificationToShip &&
                 !order.Verified
                 )
             {

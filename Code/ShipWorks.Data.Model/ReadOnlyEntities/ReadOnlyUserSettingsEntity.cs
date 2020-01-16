@@ -57,10 +57,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             UIMode = source.UIMode;
             OrderLookupLayout = source.OrderLookupLayout;
             LastReleaseNotesSeen = source.LastReleaseNotesSeen;
-            AutoPrintRequireValidation = source.AutoPrintRequireValidation;
+            RequireVerificationToShip = source.RequireVerificationToShip;
             MinimizeRibbon = source.MinimizeRibbon;
             ShowQAToolbarBelowRibbon = source.ShowQAToolbarBelowRibbon;
-            ScanToShipAutoAdvance = source.ScanToShipAutoAdvance;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -196,12 +195,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String LastReleaseNotesSeen { get; }
-        /// <summary> The AutoPrintRequireValidation property of the Entity UserSettings<br/><br/>
+        /// <summary> The RequireVerificationToShip property of the Entity UserSettings<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."AutoPrintRequireValidation"<br/>
+        /// <remarks>Mapped on table field: "UserSettings"."RequireVerificationToShip"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Boolean AutoPrintRequireValidation { get; }
+        public System.Boolean RequireVerificationToShip { get; }
         /// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UserSettings"."MinimizeRibbon"<br/>
@@ -214,12 +213,6 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ShowQAToolbarBelowRibbon { get; }
-        /// <summary> The ScanToShipAutoAdvance property of the Entity UserSettings<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."ScanToShipAutoAdvance"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        public System.Boolean ScanToShipAutoAdvance { get; }
         
         public IUserEntity User { get; }
         

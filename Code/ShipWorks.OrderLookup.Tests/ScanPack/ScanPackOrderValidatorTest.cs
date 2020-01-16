@@ -39,7 +39,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             mainForm.SetupGet(m => m.UIMode).Returns(UIMode.OrderLookup);
 
-            singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
+            singleScanAutomationSettings.SetupGet(s => s.RequireVerificationToShip)
                 .Returns(true);
 
             testObject = mock.Create<ScanPackOrderValidator>();
@@ -87,7 +87,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         [Fact]
         public void CanProcessShipment_ReturnsSuccess_WhenRequireValidationIsDisabled()
         {
-            singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
+            singleScanAutomationSettings.SetupGet(s => s.RequireVerificationToShip)
                 .Returns(false);
 
             order.Verified = false;

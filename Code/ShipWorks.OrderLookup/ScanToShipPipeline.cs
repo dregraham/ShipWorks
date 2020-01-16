@@ -473,21 +473,9 @@ namespace ShipWorks.OrderLookup
                 return selectedTab;
             }
 
-            if (userSession?.Settings?.AutoPrintRequireValidation == true && !scanToShipViewModel.IsOrderVerified)
+            if (userSession?.Settings?.RequireVerificationToShip == true)
             {
-                selectedTab = ScanToShipTab.PackTab;
-            }
-
-            if (userSession?.Settings?.ScanToShipAutoAdvance == true)
-            {
-                if (scanToShipViewModel.IsOrderVerified)
-                {
-                    selectedTab = ScanToShipTab.ShipTab;
-                }
-                else
-                {
-                    selectedTab = ScanToShipTab.PackTab;
-                }
+                selectedTab = scanToShipViewModel.IsOrderVerified ? ScanToShipTab.ShipTab : ScanToShipTab.PackTab;
             }
 
             return selectedTab;
@@ -501,7 +489,7 @@ namespace ShipWorks.OrderLookup
             scanToShipViewModel.ShowOrderVerificationError = false;
             scanToShipViewModel.IsOrderVerified = true;
 
-            if (licenseService.IsHub && userSession?.Settings?.ScanToShipAutoAdvance == true)
+            if (licenseService.IsHub && userSession?.Settings?.RequireVerificationToShip == true)
             {
                 scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
             }
