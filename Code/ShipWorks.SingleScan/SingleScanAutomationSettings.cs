@@ -34,7 +34,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Whether or not to require orders to be scan pack validated
         /// </summary>
-        public bool AutoPrintScanPackRequireValidation => userSession.Settings?.AutoPrintRequireValidation ?? false;
+        public bool RequireVerificationToShip => userSession.Settings?.RequireVerificationToShip ?? false;
 
         /// <summary>
         /// Should shipments be auto created

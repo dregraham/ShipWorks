@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -73,6 +74,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.Filters.Search;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Messaging.Messages.Orders;
 using ShipWorks.Messaging.Messages.Panels;
 using ShipWorks.OrderLookup;
 using ShipWorks.Products;
@@ -148,6 +150,7 @@ namespace ShipWorks
         private ILifetimeScope orderLookupLifetimeScope;
         private ILifetimeScope productsLifetimeScope;
         private IOrderLookup orderLookupControl;
+        private string orderLookupOrderShortcut = string.Empty;
         private IShipmentHistory shipmentHistory;
         private IUpdateService updateService;
         private IProductsMode productsMode;
@@ -194,8 +197,13 @@ namespace ShipWorks
         private void SetShipmentButtonEnabledState()
         {
             // Listen for message to enable Create Label button
-            Messenger.Current.Subscribe(x =>
+            Messenger.Current
+                .Subscribe(x =>
             {
+
+                // The reason we are checking UIMode after the message is that when we add it to a Where above the subscribe,
+                // UIMode is null when we get our first message.
+
                 if (x is ShipmentSelectionChangedMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
                     var canProcess = orderLookupControl?.CreateLabelAllowed() == true;
@@ -203,6 +211,12 @@ namespace ShipWorks
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
 
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
+                }
+
+                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) && 
+                currentUserSettings.GetUIMode() == UIMode.OrderLookup) 
+                {
+                    buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
                 }
             });
         }
@@ -266,6 +280,14 @@ namespace ShipWorks
         private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
         {
             orderLookupControl.ShipAgain();
+        }
+
+        /// <summary>
+        /// User clicks the OrderLookupViewUnverify button
+        /// </summary>
+        private void OnButtonOrderLookupViewUnverify(object sender, EventArgs e)
+        {
+            orderLookupControl.Unverify();
         }
 
         #region Initialization \ Shutdown
@@ -971,7 +993,20 @@ namespace ShipWorks
 
                 currentUserSettings.SetUIMode(uiMode);
 
+                OrderEntity selectedOrder = null;
+                // If there is a single order selected, save it so we can pull it up in the new mode.
+                if (gridControl.Selection.Keys.IsCountEqualTo(1))
+                {
+                    selectedOrder = OrderUtility.FetchOrder(gridControl.Selection.Keys.First());
+                }
+
                 UpdateUIMode(UserSession.User, true, modeChangeBehavior);
+
+                // If we went from batch mode to scan to ship mode and we had an order selected, load it in scan to ship.
+                if (UIMode == UIMode.OrderLookup && selectedOrder != null)
+                {
+                    Messenger.Current.Send(new OrderLookupLoadOrderMessage(this, selectedOrder));
+                }
             }
         }
 
@@ -1005,6 +1040,7 @@ namespace ShipWorks
             }
 
             ToggleUiModeCheckbox(currentMode);
+
             EnableUiMode(currentMode, user);
 
             UIMode = currentMode;
@@ -1112,7 +1148,7 @@ namespace ShipWorks
             try
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
-            }          
+            }
             catch(AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
@@ -1148,6 +1184,11 @@ namespace ShipWorks
             SelectInitialFilter(user.Settings);
 
             SendPanelStateMessages();
+
+            if (!string.IsNullOrWhiteSpace(orderLookupOrderShortcut))
+            {
+                gridControl.PerformBarcodeSearch(orderLookupOrderShortcut);
+            }
         }
 
         /// <summary>
@@ -1276,6 +1317,7 @@ namespace ShipWorks
             buttonOrderLookupViewCreateLabel.Enabled = false;
             buttonOrderLookupViewApplyProfile.Enabled = false;
             buttonOrderLookupViewShipShipAgain.Enabled = false;
+            buttonOrderLookupViewUnverify.Enabled = false;
         }
 
         /// <summary>
@@ -1285,6 +1327,9 @@ namespace ShipWorks
         {
             if (orderLookupLifetimeScope != null)
             {
+                IOrderEntity order = orderLookupControl?.Order;
+                orderLookupOrderShortcut = order != null ? orderLookupLifetimeScope.Resolve<ISingleScanOrderShortcut>().GetShortcutText(order) : string.Empty;
+
                 panelDockingArea.Controls.Remove(orderLookupControl?.Control);
                 panelDockingArea.Controls.Remove(shipmentHistory?.Control);
                 orderLookupControl.Unload();
@@ -1788,7 +1833,7 @@ namespace ShipWorks
             catch (AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
-                MessageHelper.ShowMessage(this, 
+                MessageHelper.ShowMessage(this,
                 "Your appearance settings file has been corrupted. Appearance settings have been reset to the defaults.");
 
                 //Ensure that the defaults are saved.
@@ -2006,8 +2051,8 @@ namespace ShipWorks
                 // Save the grid column state
                 gridControl.SaveGridColumnState();
             }
-            
-            shipmentHistory?.SaveGridColumnState();            
+
+            shipmentHistory?.SaveGridColumnState();
         }
 
         /// <summary>

@@ -29,8 +29,8 @@ namespace ShipWorks.Filters.Search
         /// <param name="userSession">The user session</param>
         /// <param name="singleScanShortcut">Prefix that identifies a scan result as a ShipWorks order</param>
         /// <param name="storeSqls">List of store specific quick search SQL generators</param>
-        public SearchDefinitionProviderFactory(IStoreManager storeManager, 
-            IUserSession userSession, 
+        public SearchDefinitionProviderFactory(IStoreManager storeManager,
+            IUserSession userSession,
             ISingleScanOrderShortcut singleScanShortcut,
             IEnumerable<IQuickSearchStoreSql> storeSqls)
         {
@@ -46,7 +46,7 @@ namespace ShipWorks.Filters.Search
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target.
         /// </summary>
-        public ISearchDefinitionProvider Create(FilterTarget target, bool isBarcodeSearch) => Create(target, null, isBarcodeSearch);
+        public ISearchDefinitionProvider Create(FilterTarget target, bool isBarcodeSearch, string searchText) => Create(target, null, isBarcodeSearch, searchText);
 
         /// <summary>
         /// Creates a SearchDefinitionProvider for the specified target and FilterDefinition
@@ -54,7 +54,7 @@ namespace ShipWorks.Filters.Search
         /// <remarks>
         /// If advancedSearchDefinition is null, a quick search definition provider is returned. If not, an AdvancedSearch provider is returned.
         /// </remarks>
-        public ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition, bool isBarcodeSearch)
+        public ISearchDefinitionProvider Create(FilterTarget target, FilterDefinition advancedSearchDefinition, bool isBarcodeSearch, string searchText)
         {
             ISearchDefinitionProvider quickSearchDefinitionProvider;
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Filters.Search
                     quickSearchDefinitionProvider = new CustomerQuickSearchDefinitionProvider();
                     break;
                 case FilterTarget.Orders:
-                    if (singleScanSettings != SingleScanSettings.Disabled && isBarcodeSearch)
+                    if ((singleScanSettings != SingleScanSettings.Disabled && isBarcodeSearch) || singleScanShortcut.AppliesTo(searchText))
                     {
                         quickSearchDefinitionProvider = new SingleScanSearchDefinitionProvider(singleScanShortcut);
                     }

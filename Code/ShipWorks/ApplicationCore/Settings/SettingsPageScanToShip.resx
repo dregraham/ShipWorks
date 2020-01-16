@@ -117,7 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="instructionsLabel.Text" xml:space="preserve">
-    <value>You can create custom keyboard and barcode shortcuts for your Shipping Profiles to apply shipping settings easily. ShipWorks also has several preconfigured keyboard and barcode shortcuts to speed up your shipping process. </value>
-  </data>
 </root>

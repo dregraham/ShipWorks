@@ -147,12 +147,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 25<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String LastReleaseNotesSeen { get; }
-        /// <summary> The AutoPrintRequireValidation property of the Entity UserSettings<br/><br/>
+        /// <summary> The RequireVerificationToShip property of the Entity UserSettings<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."AutoPrintRequireValidation"<br/>
+        /// <remarks>Mapped on table field: "UserSettings"."RequireVerificationToShip"<br/>
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean AutoPrintRequireValidation { get; }
+        System.Boolean RequireVerificationToShip { get; }
         /// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "UserSettings"."MinimizeRibbon"<br/>
@@ -165,12 +165,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean ShowQAToolbarBelowRibbon { get; }
-        /// <summary> The ScanToShipAutoAdvance property of the Entity UserSettings<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UserSettings"."ScanToShipAutoAdvance"<br/>
-        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-        System.Boolean ScanToShipAutoAdvance { get; }
         
         IUserEntity User { get; }
         

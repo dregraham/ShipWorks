@@ -38,11 +38,11 @@ namespace ShipWorks.OrderLookup.ScanPack
             EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
 
             if (restrictionLevel == EditionRestrictionLevel.None &&
-                singleScanAutomationSettings.AutoPrintScanPackRequireValidation &&
-                !order.Verified
-                )
+                mainForm.UIMode == UIMode.OrderLookup &&
+                singleScanAutomationSettings.RequireVerificationToShip &&
+                !order.Verified)
             {
-                return Result.FromError("This order must be scanned and packed before a label can be printed.");
+                return Result.FromError("This order must be verified before a label can be printed.");
             }
 
             return Result.FromSuccess();

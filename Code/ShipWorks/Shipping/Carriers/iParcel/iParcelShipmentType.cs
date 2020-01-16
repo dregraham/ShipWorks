@@ -447,23 +447,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Returns a url to the carrier's website for the specified shipment
         /// </summary>
-        public override string GetCarrierTrackingUrl(ShipmentEntity shipment)
-        {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
-
-            ShipmentEntity shipmentEntity = shipment;
-
-            if (!string.IsNullOrWhiteSpace(shipmentEntity.TrackingNumber))
-            {
-                return string.Format("https://tracking.i-parcel.com/secure/track.aspx?track={0}", shipmentEntity.TrackingNumber);
-            }
-
-            return string.Empty;
-        }
-
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) =>
+              string.Format("https://tracking.i-parcel.com/secure/track.aspx?track={0}", shipment.TrackingNumber);
+        
         /// <summary>
         /// Load all the label data for the given shipmentID
         /// </summary>

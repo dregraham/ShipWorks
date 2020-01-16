@@ -38,7 +38,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             userSession.SetupGet(s => s.User).Returns(new UserEntity { UserID = 42 });
             var now = DateTime.Now;
             dateTimeProvider.SetupGet(d => d.UtcNow).Returns(now);
-            testObject.Save(order);
+            testObject.Save(order, true);
 
             Assert.True(order.Verified);
             Assert.Equal(42, order.VerifiedBy);
@@ -51,7 +51,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
             OrderEntity order = new OrderEntity();
             userSession.SetupGet(s => s.User).Returns(new UserEntity { UserID = 42 });
             
-            testObject.Save(order);
+            testObject.Save(order, true);
 
             orderRepository.Verify(r => r.Save(order), Times.Once);
         }

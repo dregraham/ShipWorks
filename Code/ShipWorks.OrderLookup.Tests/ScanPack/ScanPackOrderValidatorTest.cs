@@ -34,7 +34,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
                 .Returns(EditionRestrictionLevel.None);
 
             singleScanAutomationSettings = mock.Mock<ISingleScanAutomationSettings>();
-            singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
+            singleScanAutomationSettings.SetupGet(s => s.RequireVerificationToShip)
                 .Returns(true);
 
             testObject = mock.Create<ScanPackOrderValidator>();
@@ -58,11 +58,10 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
         {
             licenseService.Setup(l => l.CheckRestriction(EditionFeature.Warehouse, null))
                 .Returns(editionRestrictionLevel);
-            singleScanAutomationSettings.SetupGet(s => s.AutoPrintScanPackRequireValidation)
+            singleScanAutomationSettings.SetupGet(s => s.RequireVerificationToShip)
                 .Returns(requireValidation);
 
             order.Verified = orderVerified;
-
             var result = testObject.CanProcessShipment(order);
 
             Assert.Equal(resultShouldBeSuccess, result.Success);
