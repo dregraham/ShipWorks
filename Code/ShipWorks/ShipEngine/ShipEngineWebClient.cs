@@ -475,5 +475,65 @@ namespace ShipWorks.ShipEngine
                 return GenericResult.FromError<string>(error);
             }
         }
+
+        /// <summary>
+        /// Add a new store to ShipEngine
+        /// </summary>
+        public Guid? AddStore(ApiOrderSourceAccountInformationRequest accountInfo)
+        {
+            try
+            {
+                var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
+                var apiKey = GetApiKey().Result;
+
+                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey);
+                return response.OrderSourceId;
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Update a stores credentials in ShipEngine
+        /// </summary>
+        public Guid? UpdateStoreCredentials(ApiOrderSourceAccountInformationRequest accountInfo, Guid? orderSourceId)
+        {
+            try
+            {
+                var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
+                var apiKey = GetApiKey().Result;
+
+                //ShipEngine doesn't expose a way to update store credentials so we
+                //have to delete the store and add a new one
+                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey);
+
+                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey);
+                return response.OrderSourceId;
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Remove a store from ShipEngine
+        /// </summary>
+        public void DeleteStore(Guid? orderSourceId)
+        {
+            try
+            {
+                var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
+                var apiKey = GetApiKey().Result;
+
+                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey);
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
     }
 }

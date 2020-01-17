@@ -26,5 +26,10 @@ namespace ShipWorks.ShipEngine
         /// Create the Labels Api
         /// </summary>
         ILabelsApi CreateLabelsApi();
+
+        /// <summary>
+        /// Create the Orders Source Api
+        /// </summary>
+        IOrderSourceAccountsApi CreateOrderSourceApi();
     }
 }
