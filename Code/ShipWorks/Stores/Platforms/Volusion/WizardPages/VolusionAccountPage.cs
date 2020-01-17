@@ -6,6 +6,8 @@ using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ShipEngine;
+using ShipWorks.ShipEngine.AddStoreRequests;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
@@ -178,6 +180,18 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                     MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
                     e.NextPage = this;
                 }
+                else
+                {
+                    try
+                    {
+                        store.ShipEngineOrderSourceId = AddShipEngineStore(store, lifetimeScope);
+                    }
+                    catch (ShipEngineException ex)
+                    {
+                        MessageHelper.ShowError(this, ex.Message);
+                        e.NextPage = this;
+                    }
+                }
             }
         }
 
@@ -214,6 +228,18 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                             {
                                 MessageHelper.ShowError(this, "ShipWorks located the encrypted password for your Volusion store, but it appears to be invalid.");
                                 return false;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    store.ShipEngineOrderSourceId = AddShipEngineStore(store, lifetimeScope);
+                                }
+                                catch (ShipEngineException ex)
+                                {
+                                    MessageHelper.ShowError(this, ex.Message);
+                                    return false;
+                                }
                             }
                         }
 
@@ -300,6 +326,13 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 log.ErrorFormat("Unable to get Payment Methods from the Volusion Store: {0}", ex.Message);
                 store.PaymentMethods = "";
             }
+        }
+
+        private Guid? AddShipEngineStore(VolusionStoreEntity store, ILifetimeScope lifetimeScope)
+        {
+            var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+            var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
+            return webClient.AddStore(accountInfo);
         }
     }
 }
