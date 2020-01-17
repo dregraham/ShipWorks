@@ -1155,6 +1155,7 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="ShipEngine\AddStoreRequests\VolusionAddStoreRequest.cs" />
     <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
