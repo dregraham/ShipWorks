@@ -821,7 +821,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             decimal salesTax = 0m;
 
-            if (orderType.ShippingDetails.SalesTax != null && orderType.ShippingDetails.SalesTax.SalesTaxAmount != null)
+            // PER EBAY DOCS REGUARDING TAXES
+            // Type defining the Taxes container, which contains detailed sales tax information for an
+            // order line item.The Taxes container is only returned if the seller is using the Vertex-
+            // based Premium Sales Tax Engine solution.The information in this container
+
+            // supercedes / overrides the sales tax information in the ShippingDetails.SalesTax container.
+            if (orderType.TransactionArray.Any(t => t.Taxes?.TotalTaxAmount?.Value > 0))
+            {
+                salesTax = (decimal) orderType.TransactionArray.Sum(t => t.Taxes.TotalTaxAmount.Value);
+            }
+            else if (orderType.ShippingDetails.SalesTax != null && orderType.ShippingDetails.SalesTax.SalesTaxAmount != null)
             {
                 salesTax = (decimal) orderType.ShippingDetails.SalesTax.SalesTaxAmount.Value;
             }
