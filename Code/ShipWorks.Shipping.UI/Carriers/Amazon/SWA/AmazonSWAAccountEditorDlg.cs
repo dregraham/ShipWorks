@@ -9,12 +9,15 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.ShipEngine;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA
 {
     /// <summary>
     /// AmazonSWA Account Editor Dialog
     /// </summary>
+    [SuppressMessage("SonarQube", "S3215: \"interface\" instances should not be cast to concrete types",
+        Justification = "We're casting to test results")]
     [KeyedComponent(typeof(ICarrierAccountEditorDlg),ShipmentTypeCode.AmazonSWA)]
     public partial class AmazonSWAAccountEditorDlg : Form, ICarrierAccountEditorDlg
     {
