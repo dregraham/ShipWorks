@@ -3,8 +3,9 @@ using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Web client for communicating with ShipEngine

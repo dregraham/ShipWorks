@@ -7,7 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Business;
 using ShipWorks.Common.IO.Hardware.Printers;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity

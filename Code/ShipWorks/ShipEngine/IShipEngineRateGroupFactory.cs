@@ -1,8 +1,9 @@
 ﻿using ShipEngine.ApiClient.Model;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Collections.Generic;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {   
     /// <summary>
     /// Factory for creating a RateGroup from a ShipEngine rate response

@@ -4,8 +4,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
 using System.Linq;
+using ShipWorks.Shipping;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Base class for creating ShipEngine shipment requests

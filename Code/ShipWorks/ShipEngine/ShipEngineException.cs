@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// An exception thrown in a ShipEngine related process

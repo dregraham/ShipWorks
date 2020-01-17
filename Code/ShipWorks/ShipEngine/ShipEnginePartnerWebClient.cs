@@ -8,7 +8,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Client to the ShipEngine Partner API

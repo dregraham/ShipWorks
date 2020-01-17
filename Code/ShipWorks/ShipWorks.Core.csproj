@@ -301,6 +301,9 @@
       <HintPath>..\..\packages\SD.Tools.OrmProfiler.Interceptor.1.5.20150715\lib\net35\SD.Tools.OrmProfiler.Shared.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+    </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>
@@ -1152,6 +1155,28 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\IShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
+    <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineWebClient.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
+    <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
+    <Compile Include="ShipEngine\ShipEngineException.cs" />
+    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
+    <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
+    <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />

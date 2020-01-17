@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System.Threading.Tasks;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Api key for communicating with ShipEngine

@@ -1,7 +1,7 @@
 ﻿using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Tracking;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Factory for creating ShipWorks TrackingResult from the ShipEngine TrackingInformation

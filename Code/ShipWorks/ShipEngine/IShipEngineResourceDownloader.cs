@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace ShipWorks.Shipping.ShipEngine
+namespace ShipWorks.ShipEngine
 {
     /// <summary>
     /// Represents a resource downloader for shipengine
