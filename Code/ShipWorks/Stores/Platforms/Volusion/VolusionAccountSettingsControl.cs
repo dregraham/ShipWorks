@@ -7,6 +7,8 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.ShipEngine;
+using ShipWorks.ShipEngine.AddStoreRequests;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Volusion
@@ -94,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// Perform the save
         /// </summary>
         /// <returns></returns>
-        private bool PerformSave(IVolusionStoreEntity store, string webPassword)
+        private bool PerformSave(VolusionStoreEntity store, string webPassword)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -116,6 +118,21 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     if (!session.LogOn(store.WebUserName, webPassword))
                     {
                         MessageHelper.ShowError(this, "ShipWorks was unable to logon to the Volusion website using the provided settings.");
+                        return false;
+                    }
+                }
+
+                if(store.ShipEngineOrderSourceId != null)
+                {
+                    try
+                    {
+                        var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
+                        store.ShipEngineOrderSourceId = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceId);
+                    }
+                    catch (ShipEngineException ex)
+                    {
+                        MessageHelper.ShowError(this, ex.Message);
                         return false;
                     }
                 }

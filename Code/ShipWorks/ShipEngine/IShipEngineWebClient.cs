@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
@@ -72,5 +73,21 @@ namespace ShipWorks.ShipEngine
         /// Track a shipment using the label ID
         /// </summary>
         Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// Add a new store to ShipEngine
+        /// </summary>
+        Guid? AddStore(ApiOrderSourceAccountInformationRequest accountInfo);
+
+        /// <summary>
+        /// Update a stores credentials in ShipEngine
+        /// </summary>
+        Guid? UpdateStoreCredentials(ApiOrderSourceAccountInformationRequest accountInfo, Guid? orderSourceId);
+
+
+        /// <summary>
+        /// Remove a store from ShipEngine
+        /// </summary>
+        void DeleteStore(Guid? orderSourceId);
     }
 }
