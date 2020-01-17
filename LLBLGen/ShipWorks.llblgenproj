@@ -2970,6 +2970,7 @@
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
+          <Field Name="ShipEngineAccountID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="35" />
           <Field Name="ShipEngineOrderSourceID" Type="guid" IsOptional="true" FieldIndex="34" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
@@ -4630,7 +4631,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-17T04:46:40.8352054Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-17T16:17:52.0913305Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5262,6 +5263,7 @@
                     <Field Name="AutoUpdateStartDate" Ordinal="21" DbType="29" Precision="7" />
                     <Field Name="WarehouseID" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="WarehouseName" Ordinal="23" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
+                    <Field Name="ShipEngineAccountID" Ordinal="24" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -8850,6 +8852,7 @@
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
                     <Field Name="ShipEngineOrderSourceID" Ordinal="35" IsOptional="true" DbType="25" />
+                    <Field Name="ShipEngineAccountID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -13904,6 +13907,7 @@
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
+            <FieldMapping FieldName="ShipEngineAccountID" TargetFieldName="ShipEngineAccountID" />
             <FieldMapping FieldName="ShipEngineOrderSourceID" TargetFieldName="ShipEngineOrderSourceID" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" SequenceToUse="SCOPE_IDENTITY()" />
