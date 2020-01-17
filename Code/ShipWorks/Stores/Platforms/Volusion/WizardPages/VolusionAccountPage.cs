@@ -184,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 {
                     try
                     {
-                        store.ShipEngineOrderSourceId = AddShipEngineStore(store, lifetimeScope);
+                        store.ShipEngineOrderSourceID = AddShipEngineStore(store, lifetimeScope);
                     }
                     catch (ShipEngineException ex)
                     {
@@ -233,7 +233,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                             {
                                 try
                                 {
-                                    store.ShipEngineOrderSourceId = AddShipEngineStore(store, lifetimeScope);
+                                    store.ShipEngineOrderSourceID = AddShipEngineStore(store, lifetimeScope);
                                 }
                                 catch (ShipEngineException ex)
                                 {

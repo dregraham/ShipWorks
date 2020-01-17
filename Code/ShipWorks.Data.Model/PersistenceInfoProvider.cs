@@ -3556,7 +3556,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("StoreEntity", "InsureShipClientID", "InsureShipClientID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 31);
 			this.AddElementFieldMapping("StoreEntity", "InsureShipApiKey", "InsureShipApiKey", true, "NVarChar", 255, 0, 0, false, "", null, typeof(System.String), 32);
 			this.AddElementFieldMapping("StoreEntity", "WarehouseStoreID", "WarehouseStoreID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 33);
-			this.AddElementFieldMapping("StoreEntity", "ShipEngineOrderSourceId", "ShipEngineOrderSourceId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 34);
+			this.AddElementFieldMapping("StoreEntity", "ShipEngineOrderSourceID", "ShipEngineOrderSourceID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 34);
 		}
 
 		/// <summary>Inits SystemDataEntity's mappings</summary>

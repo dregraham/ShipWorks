@@ -93,7 +93,7 @@ namespace ShipWorks.Data
             securityContext.DemandPermission(PermissionType.ManageStores, store.StoreID);
 
             deletingStore = true;
-            var seOrderSourceId = store.ShipEngineOrderSourceId;
+            var seOrderSourceId = store.ShipEngineOrderSourceID;
 
             try
             {

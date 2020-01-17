@@ -1432,10 +1432,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new AmazonStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new AmazonStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new AmazonStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -1877,10 +1877,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new AmeriCommerceStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new AmeriCommerceStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmeriCommerceStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new AmeriCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -2737,10 +2737,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new BigCommerceStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new BigCommerceStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(BigCommerceStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new BigCommerceStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -3192,10 +3192,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new BuyDotComStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new BuyDotComStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(BuyDotComStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new BuyDotComStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -4167,10 +4167,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new ChannelAdvisorStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new ChannelAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -7077,10 +7077,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new EbayStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new EbayStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new EbayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -8602,10 +8602,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new EtsyStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new EtsyStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(EtsyStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new EtsyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -10742,10 +10742,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new GenericFileStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new GenericFileStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(GenericFileStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new GenericFileStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -11707,10 +11707,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new GenericModuleStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new GenericModuleStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new GenericModuleStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -12837,10 +12837,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new GrouponStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new GrouponStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new GrouponStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -13237,10 +13237,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new InfopiaStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new InfopiaStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(InfopiaStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new InfopiaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -14467,10 +14467,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new JetStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new JetStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(JetStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new JetStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -15437,10 +15437,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new LemonStandStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new LemonStandStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(LemonStandStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new LemonStandStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -16162,10 +16162,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new MagentoStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new MagentoStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -17002,10 +17002,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(MarketplaceAdvisorStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new MarketplaceAdvisorStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -17267,10 +17267,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new MivaStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new MivaStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID_GenericModuleStore
@@ -18102,10 +18102,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new NetworkSolutionsStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new NetworkSolutionsStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(NetworkSolutionsStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new NetworkSolutionsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -19012,10 +19012,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new NeweggStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new NeweggStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new NeweggStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -19327,10 +19327,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new OdbcStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new OdbcStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(OdbcStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new OdbcStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -21072,10 +21072,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new OrderMotionStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new OrderMotionStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(OrderMotionStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new OrderMotionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -22097,10 +22097,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new OverstockStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new OverstockStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(OverstockStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new OverstockStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -22857,10 +22857,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new PayPalStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new PayPalStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(PayPalStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new PayPalStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -24357,10 +24357,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new ProStoresStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new ProStoresStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProStoresStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new ProStoresStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -25122,10 +25122,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new RakutenStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new RakutenStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(RakutenStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new RakutenStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -26147,10 +26147,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new SearsStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new SearsStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(SearsStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new SearsStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -28332,10 +28332,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new ShopifyStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new ShopifyStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopifyStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new ShopifyStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -28557,10 +28557,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new ShopSiteStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new ShopSiteStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new ShopSiteStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -28837,10 +28837,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new SparkPayStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new SparkPayStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(SparkPayStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new SparkPayStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -29072,10 +29072,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new StoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new StoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(StoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 	}
 
@@ -30242,10 +30242,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new ThreeDCartStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new ThreeDCartStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(ThreeDCartStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new ThreeDCartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -32072,10 +32072,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new VolusionStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new VolusionStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new VolusionStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -33027,10 +33027,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new WalmartStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new WalmartStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(WalmartStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new WalmartStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -34672,10 +34672,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.WarehouseStoreID);}
 		}
-		/// <summary>Creates a new YahooStoreEntity.ShipEngineOrderSourceId field instance</summary>
-		public static EntityField2 ShipEngineOrderSourceId
+		/// <summary>Creates a new YahooStoreEntity.ShipEngineOrderSourceID field instance</summary>
+		public static EntityField2 ShipEngineOrderSourceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.ShipEngineOrderSourceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(YahooStoreFieldIndex.ShipEngineOrderSourceID);}
 		}
 		/// <summary>Creates a new YahooStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID

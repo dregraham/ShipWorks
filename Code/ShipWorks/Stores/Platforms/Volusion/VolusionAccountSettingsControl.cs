@@ -122,13 +122,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     }
                 }
 
-                if(store.ShipEngineOrderSourceId != null)
+                if(store.ShipEngineOrderSourceID != null)
                 {
                     try
                     {
                         var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
                         var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
-                        store.ShipEngineOrderSourceId = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceId);
+                        store.ShipEngineOrderSourceID = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceID);
                     }
                     catch (ShipEngineException ex)
                     {
