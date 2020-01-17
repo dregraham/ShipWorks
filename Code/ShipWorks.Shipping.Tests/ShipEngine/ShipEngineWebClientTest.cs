@@ -7,7 +7,7 @@ using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using Xunit;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Net;

@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;
 

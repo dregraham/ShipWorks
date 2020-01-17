@@ -14,7 +14,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {

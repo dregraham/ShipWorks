@@ -3,7 +3,7 @@ using Interapptive.Shared.Security;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
 using Xunit;

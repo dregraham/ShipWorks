@@ -330,33 +330,6 @@
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
-    <Compile Include="Platforms\Volusion\IVolusionWebClient.cs" />
-    <Compile Include="Platforms\Volusion\VolusionAccountSettingsControl.cs" />
-    <Compile Include="Platforms\Volusion\VolusionAccountSettingsControl.Designer.cs">
-      <DependentUpon>VolusionAccountSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Volusion\VolusionCodeImportMode.cs" />
-    <Compile Include="Platforms\Volusion\VolusionCodeRefreshDialog.cs" />
-    <Compile Include="Platforms\Volusion\VolusionCodeRefreshDialog.Designer.cs">
-      <DependentUpon>VolusionCodeRefreshDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Volusion\VolusionDownloader.cs" />
-    <Compile Include="Platforms\Volusion\VolusionException.cs" />
-    <Compile Include="Platforms\Volusion\VolusionPaymentMethod.cs" />
-    <Compile Include="Platforms\Volusion\VolusionPaymentMethods.cs" />
-    <Compile Include="Platforms\Volusion\VolusionSetupConfiguration.cs" />
-    <Compile Include="Platforms\Volusion\VolusionShippingMethods.cs" />
-    <Compile Include="Platforms\Volusion\VolusionStoreSettingsControl.cs" />
-    <Compile Include="Platforms\Volusion\VolusionStoreSettingsControl.Designer.cs">
-      <DependentUpon>VolusionStoreSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Volusion\VolusionStoreType.cs" />
-    <Compile Include="Platforms\Volusion\VolusionTimeZoneControl.cs" />
-    <Compile Include="Platforms\Volusion\VolusionTimeZoneControl.Designer.cs">
-      <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Platforms\Volusion\VolusionWebClient.cs" />
-    <Compile Include="Platforms\Volusion\VolusionWebSession.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionStoreDtoFactory.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Walmart\WalmartWebClientSettings.cs" />
@@ -1099,18 +1072,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\ArchiveOrderData.sql" />
-    <EmbeddedResource Include="Platforms\Volusion\VolusionAccountSettingsControl.resx">
-      <DependentUpon>VolusionAccountSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Volusion\VolusionCodeRefreshDialog.resx">
-      <DependentUpon>VolusionCodeRefreshDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Volusion\VolusionStoreSettingsControl.resx">
-      <DependentUpon>VolusionStoreSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Platforms\Volusion\VolusionTimeZoneControl.resx">
-      <DependentUpon>VolusionTimeZoneControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\CopyDatabase.sql" />
@@ -1118,10 +1079,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Orders\Archive\GetArchiveTriggers.sql" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Platforms\Volusion\CoreExtensions\Actions\" />
-    <Folder Include="Platforms\Volusion\WizardPages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

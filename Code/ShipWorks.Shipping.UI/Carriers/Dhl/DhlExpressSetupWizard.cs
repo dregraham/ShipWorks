@@ -14,7 +14,7 @@ using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 

@@ -1,7 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Net;

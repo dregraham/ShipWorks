@@ -10,7 +10,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.UI;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 
 namespace ShipWorks.Shipping.UI.Amazon.SWA
 {

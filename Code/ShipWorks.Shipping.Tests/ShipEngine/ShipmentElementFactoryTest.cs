@@ -3,7 +3,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Services;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Collections.Generic;

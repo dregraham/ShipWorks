@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Asendia;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.ExtensionMethods;

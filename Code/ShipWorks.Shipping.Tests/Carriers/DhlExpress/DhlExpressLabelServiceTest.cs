@@ -6,7 +6,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
 using System.Threading.Tasks;

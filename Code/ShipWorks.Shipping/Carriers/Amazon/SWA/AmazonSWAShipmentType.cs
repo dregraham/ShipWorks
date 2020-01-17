@@ -22,7 +22,7 @@ using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;

@@ -4,7 +4,7 @@ using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Utility;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl

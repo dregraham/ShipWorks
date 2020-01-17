@@ -2,7 +2,7 @@
 using ShipEngine.ApiClient.Model;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
-using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.SWA
 {
