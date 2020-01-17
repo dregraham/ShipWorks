@@ -2970,6 +2970,7 @@
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
+          <Field Name="ShipEngineOrderSourceId" Type="guid" IsOptional="true" FieldIndex="34" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StoreName" Type="string" MaxLength="75" FieldIndex="7" />
@@ -4629,7 +4630,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2019-12-18T19:38:42.4448622Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-17T04:01:39.4644078Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8848,6 +8849,7 @@
                     <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
+                    <Field Name="ShipEngineOrderSourceId" Ordinal="35" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -13902,6 +13904,7 @@
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
+            <FieldMapping FieldName="ShipEngineOrderSourceId" TargetFieldName="ShipEngineOrderSourceId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="StoreName" TargetFieldName="StoreName" />

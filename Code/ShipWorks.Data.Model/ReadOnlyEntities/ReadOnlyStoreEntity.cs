@@ -70,6 +70,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             InsureShipClientID = source.InsureShipClientID;
             InsureShipApiKey = source.InsureShipApiKey;
             WarehouseStoreID = source.WarehouseStoreID;
+            ShipEngineOrderSourceId = source.ShipEngineOrderSourceId;
             
             
             
@@ -284,6 +285,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Guid> WarehouseStoreID { get; }
+        /// <summary> The ShipEngineOrderSourceId property of the Entity Store<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "Store"."ShipEngineOrderSourceId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> ShipEngineOrderSourceId { get; }
         
         
         

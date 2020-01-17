@@ -420,6 +420,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("InsureShipApiKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("WarehouseStoreID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineOrderSourceId", fieldHashtable);
 		}
 		#endregion
 
@@ -823,6 +825,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)StoreFieldIndex.WarehouseStoreID, false); }
 			set	{ SetValue((int)StoreFieldIndex.WarehouseStoreID, value); }
+		}
+
+		/// <summary> The ShipEngineOrderSourceId property of the Entity Store<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "Store"."ShipEngineOrderSourceId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> ShipEngineOrderSourceId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)StoreFieldIndex.ShipEngineOrderSourceId, false); }
+			set	{ SetValue((int)StoreFieldIndex.ShipEngineOrderSourceId, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
