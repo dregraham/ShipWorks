@@ -38,7 +38,6 @@ namespace ShipWorks.OrderLookup.ScanPack
             EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
 
             if (restrictionLevel == EditionRestrictionLevel.None &&
-                mainForm.UIMode == UIMode.OrderLookup &&
                 singleScanAutomationSettings.RequireVerificationToShip &&
                 !order.Verified)
             {
