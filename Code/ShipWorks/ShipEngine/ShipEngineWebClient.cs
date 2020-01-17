@@ -484,9 +484,8 @@ namespace ShipWorks.ShipEngine
             try
             {
                 var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
-                var apiKey = GetApiKey().Result;
 
-                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey);
+                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
                 return response.OrderSourceId;
             }
             catch (ApiException ex)
@@ -503,13 +502,12 @@ namespace ShipWorks.ShipEngine
             try
             {
                 var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
-                var apiKey = GetApiKey().Result;
 
                 //ShipEngine doesn't expose a way to update store credentials so we
                 //have to delete the store and add a new one
-                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey);
+                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
 
-                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey);
+                var response = orderSourceApi.ApiOrderSourceAccountConnect(accountInfo, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
                 return response.OrderSourceId;
             }
             catch (ApiException ex)
@@ -526,9 +524,8 @@ namespace ShipWorks.ShipEngine
             try
             {
                 var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
-                var apiKey = GetApiKey().Result;
 
-                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey);
+                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
             }
             catch (ApiException ex)
             {
