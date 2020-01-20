@@ -75,14 +75,24 @@ namespace ShipWorks.ShipEngine
         Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
 
         /// <summary>
+        /// Get an account ID from a WhoAmI request
+        /// </summary>
+        Task<string> GetAccountIDAsync();
+
+        /// <summary>
+        /// Get an account ID synchronously from a WhoAmI request
+        /// </summary>
+        string GetAccountID();
+
+        /// <summary>
         /// Add a new store to ShipEngine
         /// </summary>
-        Guid? AddStore(ApiOrderSourceAccountInformationRequest accountInfo);
+        Guid? AddStore(ApiOrderSourceAccountInformationRequest accountInfo, string resource);
 
         /// <summary>
         /// Update a stores credentials in ShipEngine
         /// </summary>
-        Guid? UpdateStoreCredentials(ApiOrderSourceAccountInformationRequest accountInfo, Guid? orderSourceId);
+        Guid? UpdateStoreCredentials(ApiOrderSourceAccountInformationRequest accountInfo, Guid? orderSourceId, string resource);
 
 
         /// <summary>

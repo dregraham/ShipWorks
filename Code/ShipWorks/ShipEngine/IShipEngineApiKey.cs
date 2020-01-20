@@ -14,9 +14,14 @@ namespace ShipWorks.ShipEngine
 
 
         /// <summary>
+        /// Ensures the ApiKey contains a value ascynchronously
+        /// </summary>
+        Task ConfigureAsync();
+
+        /// <summary>
         /// Ensures the ApiKey contains a value
         /// </summary>
-        Task Configure();
+        void Configure();
 
         /// <summary>
         /// Get the partner api key

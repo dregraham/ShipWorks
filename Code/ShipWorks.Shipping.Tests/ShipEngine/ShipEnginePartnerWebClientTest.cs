@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            var accountId = await testObject.CreateNewAccount("partnerKey");
+            var accountId = await testObject.CreateNewAccountAsync("partnerKey");
 
             Assert.Equal("1234", accountId);
         }
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));        
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccountAsync("partnerKey"));        
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccountAsync("partnerKey"));
         }
 
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            var apiKey = await testObject.GetApiKey("partnerKey", "accountId");
+            var apiKey = await testObject.GetApiKeyAsync("partnerKey", "accountId");
 
             Assert.Equal("1234", apiKey);
         }
@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKeyAsync("partnerKey", "accountId"));
         }
 
         [Fact]
@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
+            await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKeyAsync("partnerKey", "accountId"));
         }
 
 

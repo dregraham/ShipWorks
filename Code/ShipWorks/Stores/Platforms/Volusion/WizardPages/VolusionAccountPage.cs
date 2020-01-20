@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Security;
@@ -184,7 +185,10 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 {
                     try
                     {
-                        store.ShipEngineOrderSourceID = AddShipEngineStore(store, lifetimeScope);
+                        var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                        store.ShipEngineAccountID = seWebClient.GetAccountID();
+                        store.ShipEngineOrderSourceID = seWebClient.AddStore(accountInfo, "volusion");
                     }
                     catch (ShipEngineException ex)
                     {
@@ -233,7 +237,10 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                             {
                                 try
                                 {
-                                    store.ShipEngineOrderSourceID = AddShipEngineStore(store, lifetimeScope);
+                                    var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
+                                    var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                                    store.ShipEngineAccountID = seWebClient.GetAccountID();
+                                    store.ShipEngineOrderSourceID = seWebClient.AddStore(accountInfo, "volusion");
                                 }
                                 catch (ShipEngineException ex)
                                 {
@@ -326,13 +333,6 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 log.ErrorFormat("Unable to get Payment Methods from the Volusion Store: {0}", ex.Message);
                 store.PaymentMethods = "";
             }
-        }
-
-        private Guid? AddShipEngineStore(VolusionStoreEntity store, ILifetimeScope lifetimeScope)
-        {
-            var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-            var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
-            return webClient.AddStore(accountInfo);
         }
     }
 }

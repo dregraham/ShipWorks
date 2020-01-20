@@ -23,7 +23,7 @@ namespace ShipWorks.ShipEngine.AddStoreRequests
         /// <summary>
         /// Constructor for configuring the ApiUrl
         /// </summary
-        public VolusionAddStoreRequest(string username, string encryptedPassword, string baseUrl)
+        public VolusionAddStoreRequest(string username, string encryptedPassword, string baseUrl, string nickname)
         {
             if(baseUrl[baseUrl.Length - 1] == '/')
             {
@@ -31,6 +31,7 @@ namespace ShipWorks.ShipEngine.AddStoreRequests
             }
 
             ApiUrl = $"{baseUrl}/net/WebService.aspx?Login={username}&EncryptedPassword={encryptedPassword}&EDI_Name=Generic\\Orders";
+            OrderSourceNickname = nickname;
         }
     }
 }

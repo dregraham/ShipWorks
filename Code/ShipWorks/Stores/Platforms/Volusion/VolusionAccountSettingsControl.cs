@@ -127,8 +127,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     try
                     {
                         var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
-                        store.ShipEngineOrderSourceID = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceID);
+                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                        store.ShipEngineOrderSourceID = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceID, "volusion");
                     }
                     catch (ShipEngineException ex)
                     {

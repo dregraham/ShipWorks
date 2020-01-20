@@ -38,7 +38,7 @@ namespace ShipWorks.ShipEngine
         /// <summary>
         /// Ensures the ApiKey contains a value
         /// </summary>
-        public async Task Configure()
+        public async Task ConfigureAsync()
         {
             ShippingSettingsEntity settings = shippingSettings.Fetch();
             string apiKey = settings.ShipEngineApiKey;
@@ -46,7 +46,34 @@ namespace ShipWorks.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = await GetNewApiKey();
+                    apiKey = await GetNewApiKeyAsync();
+                    settings.ShipEngineApiKey = apiKey;
+
+                    shippingSettings.Save(settings);
+                }
+            }
+            catch (ShipEngineException)
+            {
+                // do nothing. if this exception was thrown, apiKey will be blank and that
+                // is what value will be set as...
+            }
+
+            Value = apiKey;
+        }
+
+
+        /// <summary>
+        /// Ensures the ApiKey contains a value
+        /// </summary>
+        public void Configure()
+        {
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+            string apiKey = settings.ShipEngineApiKey;
+            try
+            {
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    apiKey = GetNewApiKey();
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -64,12 +91,23 @@ namespace ShipWorks.ShipEngine
         /// <summary>
         /// Creates a new account and gets the API Key from ShipEngine
         /// </summary>
-        private async Task<string> GetNewApiKey()
+        private async Task<string> GetNewApiKeyAsync()
         {
             string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey);
+            string shipEngineAccountId = await partnerWebClient.CreateNewAccountAsync(partnerApiKey);
 
-            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
+            return await partnerWebClient.GetApiKeyAsync(partnerApiKey, shipEngineAccountId);            
+        }
+
+        /// <summary>
+        /// Creates a new account and gets the API Key from ShipEngine
+        /// </summary>
+        private string GetNewApiKey()
+        {
+            string partnerApiKey = GetPartnerApiKey();
+            string shipEngineAccountId = partnerWebClient.CreateNewAccount(partnerApiKey);
+
+            return partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);
         }
 
         /// <summary>
