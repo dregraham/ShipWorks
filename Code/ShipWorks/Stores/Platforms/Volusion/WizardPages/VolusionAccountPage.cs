@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -6,6 +7,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ShipEngine;
 using ShipWorks.ShipEngine.AddStoreRequests;
@@ -175,11 +177,15 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                if (!webClient.ValidateCredentials(store))
+                if (!licenseService.IsHub)
                 {
-                    MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
-                    e.NextPage = this;
+                    if (!webClient.ValidateCredentials(store))
+                    {
+                        MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
+                        e.NextPage = this;
+                    }
                 }
                 else
                 {
@@ -192,7 +198,15 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                     }
                     catch (ShipEngineException ex)
                     {
-                        MessageHelper.ShowError(this, ex.Message);
+                        var webEx = ex.InnerException as WebException;
+                        if (webEx != null && webEx.Status == WebExceptionStatus.ProtocolError)
+                        {
+                            MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
+                        }
+                        else
+                        {
+                            MessageHelper.ShowError(this, ex.Message);
+                        }   
                         e.NextPage = this;
                     }
                 }
