@@ -32,7 +32,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
 
         private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IDateTimeProvider dateTimeProvider;
-        private readonly IUserSession userSession;
         private readonly LruCache<long, ProcessedShipmentEntity> cache;
         private ImmutableArray<ShipmentHistoryHeader> shipmentHeaders;
         private ImmutableArray<ShipmentHistoryHeader> filteredList;
@@ -48,7 +47,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         {
             sqlAdapterFactory = copyFrom.sqlAdapterFactory;
             dateTimeProvider = copyFrom.dateTimeProvider;
-            userSession = copyFrom.userSession;
             shipmentHeaders = copyFrom.shipmentHeaders;
             cache = copyFrom.cache;
             fetchDataTask = copyFrom.fetchDataTask;
@@ -61,9 +59,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentHistoryEntityGateway(ISqlAdapterFactory sqlAdapterFactory, IDateTimeProvider dateTimeProvider, IUserSession userSession)
+        public ShipmentHistoryEntityGateway(ISqlAdapterFactory sqlAdapterFactory, IDateTimeProvider dateTimeProvider)
         {
-            this.userSession = userSession;
             this.dateTimeProvider = dateTimeProvider;
             this.sqlAdapterFactory = sqlAdapterFactory;
             cache = new LruCache<long, ProcessedShipmentEntity>(1000);
@@ -92,8 +89,7 @@ namespace ShipWorks.OrderLookup.ShipmentHistory
 
             var factory = new QueryFactory();
             var queryStarter = factory.ProcessedShipment
-                    .Where(ProcessedShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date)
-                    .AndWhere(ProcessedShipmentFields.ProcessedUserID == userSession.User.UserID);
+                    .Where(ProcessedShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date);
 
             var sortedQuery = sortDefinition.SortExpression
                 .OfType<ISortClause>()

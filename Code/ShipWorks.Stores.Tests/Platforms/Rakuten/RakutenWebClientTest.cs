@@ -120,16 +120,16 @@ namespace ShipWorks.Stores.Tests.Platforms.Rakuten
         [Fact]
         public async Task TestConnection_ReturnsTrueWhenNoError()
         {
-            IRestResponse<RakutenBaseResponse> response = new RestResponse<RakutenBaseResponse>()
+            IRestResponse<RakutenOrdersResponse> response = new RestResponse<RakutenOrdersResponse>()
             {
                 StatusCode = HttpStatusCode.OK,
                 ErrorException = null,
-                Data = mock.Create<RakutenBaseResponse>()
+                Data = mock.Create<RakutenOrdersResponse>()
             };
 
             mock.FromFactory<IRakutenRestClientFactory>()
                .Mock(x => x.Create(It.IsAny<string>()))
-               .Setup(x => x.ExecuteTaskAsync<RakutenBaseResponse>(It.IsAny<IRestRequest>()))
+               .Setup(x => x.ExecuteTaskAsync<RakutenOrdersResponse>(It.IsAny<IRestRequest>()))
                .Returns(Task.FromResult(response));
 
             IRakutenWebClient webClient = mock.Create<RakutenWebClient>();

@@ -4325,10 +4325,9 @@ CREATE TABLE [dbo].[UserSettings]
 [UIMode] [int] NOT NULL,
 [OrderLookupLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS,
 [LastReleaseNotesSeen] [varchar](25) NOT NULL CONSTRAINT [DF_UserSettings_LastReleaseNotesSeen] DEFAULT '0.0.0.0',
-[AutoPrintRequireValidation] [bit] NOT NULL,
+[RequireVerificationToShip] [bit] NOT NULL,
 [MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
 [ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0,
-[ScanToShipAutoAdvance] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
@@ -8100,7 +8099,9 @@ CREATE TABLE [dbo].[ProductVariant]
 [BinLocation] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [HarmonizedCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [DeclaredValue] [money] NULL,
-[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[FNSku] [nvarchar](300) NULL,
+[EAN] [nvarchar](30) NULL,
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'

@@ -69,9 +69,9 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("itemUpc");
 
-            Assert.True(testObject.PackedItems.Any(x => x.ItemUpc.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.True(testObject.PackedItems.Any(x => x.OrderItemID == 1));
             Assert.True(testObject.ItemsToScan
-                            .FirstOrDefault(x => x.ItemUpc.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase)).Quantity
+                            .FirstOrDefault(x => x.OrderItemID==1).Quantity
                             .IsEquivalentTo(1));
         }
 
@@ -118,7 +118,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             await testObject.LoadOrder(order).ConfigureAwait(false);
 
-            Assert.True(testObject.ItemsToScan.Any(x => x.ItemUpc.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.True(testObject.ItemsToScan.Any(x => x.Barcodes.Any(b => b.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase))));
         }
 
         [Theory]
@@ -223,7 +223,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("itemUpc");
 
-            verifiedOrderService.Verify(x => x.Save(It.IsAny<OrderEntity>()));
+            verifiedOrderService.Verify(x => x.Save(It.IsAny<OrderEntity>(), true));
         }
 
         [Theory]
@@ -257,7 +257,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("productUpc");
 
-            Assert.True(testObject.PackedItems.Any(x => x.ProductUpc.Equals("productUpc", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.True(testObject.PackedItems.Any(x => x.Barcodes.Any(b=>b.Equals("productUpc", StringComparison.InvariantCultureIgnoreCase))));
         }
 
         [Theory]
@@ -273,7 +273,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("itemUpc");
 
-            Assert.True(testObject.PackedItems.Any(x => x.ItemUpc.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.True(testObject.PackedItems.Any(x => x.Barcodes.Any(b=>b.Equals("itemUpc", StringComparison.InvariantCultureIgnoreCase))));
         }
 
         [Theory]
@@ -289,7 +289,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("sku");
 
-            Assert.True(testObject.PackedItems.Any(x => x.Sku.Equals("sku", StringComparison.InvariantCultureIgnoreCase)));
+            Assert.True(testObject.PackedItems.Any(x => x.Barcodes.Any(b=>b.Equals("sku", StringComparison.InvariantCultureIgnoreCase))));
         }
 
         [Theory]

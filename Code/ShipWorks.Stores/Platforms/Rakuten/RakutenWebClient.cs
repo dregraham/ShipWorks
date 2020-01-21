@@ -41,7 +41,6 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         private const string ordersResource = "ordersearch";
         private const string shippingResource = "orders/";
         private const string productResource = "products/{0}";
-        private const string testResource = "configurations/{0}/labels/";
         private const string liveRegKey = "RakutenLiveServer";
         private readonly string endpointBase;
 
@@ -155,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             {
                 if (!testStore.ShopURL.Equals("fake"))
                 {
-                    return new ArgumentException("Shop Name must be \"fake\" when using fake stores.");
+                    return new ArgumentException("Shop URL must be \"fake\" when using fake stores.");
                 }
 
                 return true;
@@ -163,9 +162,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
 
             try
             {
-                var resource = string.Format(testResource, testStore.MarketplaceID);
-
-                await SubmitRequest<RakutenBaseResponse>(testStore.AuthKey, resource, Method.GET, null, "TestConnection").ConfigureAwait(false);
+                await GetOrders(testStore, DateTime.Now).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

@@ -2773,6 +2773,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "HarmonizedCode", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.HarmonizedCode, 20, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "DeclaredValue", typeof(Nullable<System.Decimal>), false, false, false, true,  (int)ProductVariantFieldIndex.DeclaredValue, 0, 4, 19);
 			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "FNSku", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "EAN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN, 30, 0, 0);
 		}
 		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
 		private void InitProductVariantAliasEntityInfos()
@@ -3784,10 +3786,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "UIMode", typeof(ShipWorks.Settings.UIMode), false, false, false, false,  (int)UserSettingsFieldIndex.UIMode, 0, 0, 10);
 			this.AddElementFieldInfo("UserSettingsEntity", "OrderLookupLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderLookupLayout, 2147483647, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "LastReleaseNotesSeen", typeof(System.String), false, false, false, false,  (int)UserSettingsFieldIndex.LastReleaseNotesSeen, 25, 0, 0);
-			this.AddElementFieldInfo("UserSettingsEntity", "AutoPrintRequireValidation", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.AutoPrintRequireValidation, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "RequireVerificationToShip", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.RequireVerificationToShip, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "MinimizeRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.MinimizeRibbon, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "ShowQAToolbarBelowRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, 0, 0, 0);
-			this.AddElementFieldInfo("UserSettingsEntity", "ScanToShipAutoAdvance", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ScanToShipAutoAdvance, 0, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

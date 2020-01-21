@@ -17,7 +17,6 @@ namespace ShipWorks.OrderLookup.ScanPack
     public class ScanPackOrderValidator : IScanPackOrderValidator
     {
         private readonly ILicenseService licenseService;
-        private readonly IMainForm mainForm;
         private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
 
         /// <summary>
@@ -25,11 +24,9 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// </summary>
         public ScanPackOrderValidator(
             ILicenseService licenseService,
-            IMainForm mainForm,
             ISingleScanAutomationSettings singleScanAutomationSettings)
         {
             this.licenseService = licenseService;
-            this.mainForm = mainForm;
             this.singleScanAutomationSettings = singleScanAutomationSettings;
         }
 
@@ -41,12 +38,10 @@ namespace ShipWorks.OrderLookup.ScanPack
             EditionRestrictionLevel restrictionLevel = licenseService.CheckRestriction(EditionFeature.Warehouse, null);
 
             if (restrictionLevel == EditionRestrictionLevel.None &&
-                mainForm.UIMode == UIMode.OrderLookup &&
-                singleScanAutomationSettings.AutoPrintScanPackRequireValidation &&
-                !order.Verified
-                )
+                singleScanAutomationSettings.RequireVerificationToShip &&
+                !order.Verified)
             {
-                return Result.FromError("This order must be scanned and packed before a label can be printed.");
+                return Result.FromError("This order must be verified before a label can be printed.");
             }
 
             return Result.FromSuccess();

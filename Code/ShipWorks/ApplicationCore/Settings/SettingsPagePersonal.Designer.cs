@@ -48,6 +48,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.filterInitialSort = new System.Windows.Forms.ComboBox();
             this.infotipWeightFormat = new ShipWorks.UI.Controls.InfoTip();
             this.infotipMinimizeRibbon = new ShipWorks.UI.Controls.InfoTip();
+            this.displayShortcutIndicator = new System.Windows.Forms.CheckBox();
             this.panelInitialFilter.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,7 +98,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.sectionTitleRibbon.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleRibbon.Location = new System.Drawing.Point(10, 99);
+            this.sectionTitleRibbon.Location = new System.Drawing.Point(10, 113);
             this.sectionTitleRibbon.Name = "sectionTitleRibbon";
             this.sectionTitleRibbon.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleRibbon.TabIndex = 4;
@@ -106,7 +107,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // showQatBelowRibbon
             // 
             this.showQatBelowRibbon.AutoSize = true;
-            this.showQatBelowRibbon.Location = new System.Drawing.Point(28, 127);
+            this.showQatBelowRibbon.Location = new System.Drawing.Point(28, 141);
             this.showQatBelowRibbon.Name = "showQatBelowRibbon";
             this.showQatBelowRibbon.Size = new System.Drawing.Size(242, 17);
             this.showQatBelowRibbon.TabIndex = 5;
@@ -116,7 +117,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // minimizeRibbon
             // 
             this.minimizeRibbon.AutoSize = true;
-            this.minimizeRibbon.Location = new System.Drawing.Point(28, 150);
+            this.minimizeRibbon.Location = new System.Drawing.Point(28, 164);
             this.minimizeRibbon.Name = "minimizeRibbon";
             this.minimizeRibbon.Size = new System.Drawing.Size(120, 17);
             this.minimizeRibbon.TabIndex = 6;
@@ -127,7 +128,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.sectionTitleFilters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleFilters.Location = new System.Drawing.Point(10, 181);
+            this.sectionTitleFilters.Location = new System.Drawing.Point(10, 195);
             this.sectionTitleFilters.Name = "sectionTitleFilters";
             this.sectionTitleFilters.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleFilters.TabIndex = 7;
@@ -136,7 +137,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // labelInitialFilter
             // 
             this.labelInitialFilter.AutoSize = true;
-            this.labelInitialFilter.Location = new System.Drawing.Point(25, 211);
+            this.labelInitialFilter.Location = new System.Drawing.Point(25, 225);
             this.labelInitialFilter.Name = "labelInitialFilter";
             this.labelInitialFilter.Size = new System.Drawing.Size(234, 13);
             this.labelInitialFilter.TabIndex = 8;
@@ -179,7 +180,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionTitleShipping.Location = new System.Drawing.Point(10, 316);
+            this.sectionTitleShipping.Location = new System.Drawing.Point(10, 330);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
             this.sectionTitleShipping.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleShipping.TabIndex = 12;
@@ -188,7 +189,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // labelWeightFormat
             // 
             this.labelWeightFormat.AutoSize = true;
-            this.labelWeightFormat.Location = new System.Drawing.Point(25, 349);
+            this.labelWeightFormat.Location = new System.Drawing.Point(25, 363);
             this.labelWeightFormat.Name = "labelWeightFormat";
             this.labelWeightFormat.Size = new System.Drawing.Size(153, 13);
             this.labelWeightFormat.TabIndex = 13;
@@ -198,7 +199,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.comboWeightFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboWeightFormat.FormattingEnabled = true;
-            this.comboWeightFormat.Location = new System.Drawing.Point(184, 346);
+            this.comboWeightFormat.Location = new System.Drawing.Point(184, 360);
             this.comboWeightFormat.Name = "comboWeightFormat";
             this.comboWeightFormat.Size = new System.Drawing.Size(173, 21);
             this.comboWeightFormat.TabIndex = 14;
@@ -206,7 +207,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // labelFilterSortOrder
             // 
             this.labelFilterSortOrder.AutoSize = true;
-            this.labelFilterSortOrder.Location = new System.Drawing.Point(25, 284);
+            this.labelFilterSortOrder.Location = new System.Drawing.Point(25, 298);
             this.labelFilterSortOrder.Name = "labelFilterSortOrder";
             this.labelFilterSortOrder.Size = new System.Drawing.Size(212, 13);
             this.labelFilterSortOrder.TabIndex = 10;
@@ -219,7 +220,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterRecent);
             this.panelInitialFilter.Controls.Add(this.filterComboBox);
             this.panelInitialFilter.Controls.Add(this.radioInitialFilterAlways);
-            this.panelInitialFilter.Location = new System.Drawing.Point(47, 227);
+            this.panelInitialFilter.Location = new System.Drawing.Point(47, 242);
             this.panelInitialFilter.Name = "panelInitialFilter";
             this.panelInitialFilter.Size = new System.Drawing.Size(488, 51);
             this.panelInitialFilter.TabIndex = 9;
@@ -228,7 +229,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.filterInitialSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.filterInitialSort.FormattingEnabled = true;
-            this.filterInitialSort.Location = new System.Drawing.Point(236, 281);
+            this.filterInitialSort.Location = new System.Drawing.Point(236, 295);
             this.filterInitialSort.Name = "filterInitialSort";
             this.filterInitialSort.Size = new System.Drawing.Size(264, 21);
             this.filterInitialSort.TabIndex = 11;
@@ -237,7 +238,7 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.infotipWeightFormat.Caption = "Regardless of the format the weight is displayed as, you can enter the weight in " +
     "any format.";
-            this.infotipWeightFormat.Location = new System.Drawing.Point(363, 350);
+            this.infotipWeightFormat.Location = new System.Drawing.Point(363, 364);
             this.infotipWeightFormat.Name = "infotipWeightFormat";
             this.infotipWeightFormat.Size = new System.Drawing.Size(12, 12);
             this.infotipWeightFormat.TabIndex = 20;
@@ -247,19 +248,29 @@ namespace ShipWorks.ApplicationCore.Settings
             // 
             this.infotipMinimizeRibbon.Caption = "When the ribbon is minimized it has the appearance of a regular Windows menu.  \r\n" +
     "\r\nThe Ribbon can also be minimized by double-clicking a Ribbon tab. ";
-            this.infotipMinimizeRibbon.Location = new System.Drawing.Point(147, 152);
+            this.infotipMinimizeRibbon.Location = new System.Drawing.Point(147, 166);
             this.infotipMinimizeRibbon.Name = "infotipMinimizeRibbon";
             this.infotipMinimizeRibbon.Size = new System.Drawing.Size(12, 12);
             this.infotipMinimizeRibbon.TabIndex = 21;
             this.infotipMinimizeRibbon.Title = "Minimize the Ribbon";
             // 
-            // OptionPagePersonal
+            // displayShortcutIndicator
+            // 
+            this.displayShortcutIndicator.AutoSize = true;
+            this.displayShortcutIndicator.Location = new System.Drawing.Point(28, 93);
+            this.displayShortcutIndicator.Name = "displayShortcutIndicator";
+            this.displayShortcutIndicator.Size = new System.Drawing.Size(239, 17);
+            this.displayShortcutIndicator.TabIndex = 44;
+            this.displayShortcutIndicator.Text = "Show keyboard && barcode shortcut indicator";
+            this.displayShortcutIndicator.UseVisualStyleBackColor = true;
+            // 
+            // SettingsPagePersonal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoScroll = true;
             this.AutoScrollMargin = new System.Drawing.Size(0, 15);
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.displayShortcutIndicator);
             this.Controls.Add(this.infotipMinimizeRibbon);
             this.Controls.Add(this.infotipWeightFormat);
             this.Controls.Add(this.filterInitialSort);
@@ -278,7 +289,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.Controls.Add(this.labelColorScheme);
             this.Controls.Add(this.sectionDisplay);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "OptionPagePersonal";
+            this.Name = "SettingsPagePersonal";
             this.Size = new System.Drawing.Size(556, 652);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelInitialFilter.ResumeLayout(false);
@@ -310,5 +321,6 @@ namespace ShipWorks.ApplicationCore.Settings
         private System.Windows.Forms.ComboBox filterInitialSort;
         private UI.Controls.InfoTip infotipWeightFormat;
         private UI.Controls.InfoTip infotipMinimizeRibbon;
+        private System.Windows.Forms.CheckBox displayShortcutIndicator;
     }
 }

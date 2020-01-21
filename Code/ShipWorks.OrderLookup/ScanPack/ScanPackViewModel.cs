@@ -297,7 +297,9 @@ namespace ShipWorks.OrderLookup.ScanPack
 
             if (matchingTargetItem == null)
             {
-                targetItems.Add(new ScanPackItem(sourceItem.OrderItemID, sourceItem.Name, sourceItem.ImageUrl, quantityPacked, sourceItem.ItemUpc, sourceItem.ItemCode, sourceItem.ProductUpc, sourceItem.Sku));
+                ScanPackItem targetItem = sourceItem.Copy();
+                targetItem.Quantity = quantityPacked;
+                targetItems.Add(targetItem);
             }
             else
             {
@@ -318,8 +320,8 @@ namespace ShipWorks.OrderLookup.ScanPack
             // No order scanned yet
             if (totalItemCount.IsEquivalentTo(0))
             {
-                ScanHeader = "Ready to scan and pack";
-                ScanFooter = "Scan an order barcode to begin";
+                ScanHeader = "Scan an order barcode to begin";
+                ScanFooter = string.Empty;
             }
             else
             {
@@ -341,10 +343,9 @@ namespace ShipWorks.OrderLookup.ScanPack
                 }
                 else
                 {
-                    verifiedOrderService.Save(orderBeingPacked);
-
                     if (itemScanned)
                     {
+                        verifiedOrderService.Save(orderBeingPacked, true);
                         orderLookupAutoPrintService.AutoPrintShipment(orderBeingPacked.OrderID, orderBeingPacked.OrderNumberComplete);
                     }
 
@@ -370,9 +371,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// again for a sku matching the scanned text
         /// </summary>
         private ScanPackItem GetScanPackItem(string scannedText, ObservableCollection<ScanPackItem> listToSearch) =>
-            listToSearch.FirstOrDefault(x => x.ProductUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.ItemUpc?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.Sku?.Equals(scannedText, StringComparison.InvariantCultureIgnoreCase) ?? false) ??
-            listToSearch.FirstOrDefault(x => x.ItemCode?.Equals(scannedText, StringComparison.InvariantCulture) ?? false);
+            listToSearch.FirstOrDefault(x => x.IsMatch(scannedText));
     }
 }

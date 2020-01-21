@@ -73,7 +73,14 @@
                  VerticalContentAlignment="Center"
                  Text="{Binding ShopUrl, UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Grid.Column="2"
-                   Grid.Row="4" 
+                   Grid.Row="4"
+                   FontSize="6.5 pt"
+                   FontStyle="Italic"
+                   Margin="0,0,0,10">
+            This is the Shop URL in Settings -> Seller Information, not the web URL of your Rakuten store.
+        </TextBlock>
+        <TextBlock Grid.Column="2"
+                   Grid.Row="5" 
                    TextWrapping="WrapWithOverflow">
             For help getting your Rakuten API Credentials,
             <Hyperlink

@@ -85,7 +85,6 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         public void Activate(Divelements.SandRibbon.Button voidButton, Divelements.SandRibbon.Button reprintButton, Divelements.SandRibbon.Button shipAgainButton)
         {
-            kryptonHeader.Values.Heading = "Today's Shipments for " + getCurrentUserSettings().UserSession.User.Username;
             shipmentGrid.Reload();
 
             Deactivate();
@@ -234,6 +233,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
+            Visible = false;
+
             base.OnLoad(e);
 
             Dock = DockStyle.Fill;
@@ -247,6 +248,8 @@ namespace ShipWorks.OrderLookup.ShipmentHistory.Controls
             });
 
             shipmentGrid.LoadState();
+
+            Visible = true;
         }
 
         /// <summary>

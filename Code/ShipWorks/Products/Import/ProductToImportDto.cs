@@ -40,6 +40,12 @@ namespace ShipWorks.Products.Import
         [DisplayName("ISBN")]
         public string Isbn { get; set; }
 
+        [DisplayName("FNSKU")]
+        public string Fnsku { get; set; }
+
+        [DisplayName("EAN")]
+        public string Ean { get; set; }
+
         [DisplayName("Weight")]
         public string Weight { get; set; }
 

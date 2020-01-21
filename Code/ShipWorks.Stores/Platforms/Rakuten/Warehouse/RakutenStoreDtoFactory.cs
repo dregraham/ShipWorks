@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Warehouse
             store.AuthKey = await helpers.EncryptSecret(authKey).ConfigureAwait(false);
             store.DownloadStartDate = storeEntity.InitialDownloadDays ?? 30;
             store.ShopUrl = storeEntity.ShopURL;
-            store.MarketplaceID = storeEntity.MarketplaceID;
+            store.MarketplaceId = storeEntity.MarketplaceID;
             return store;
         }
     }
