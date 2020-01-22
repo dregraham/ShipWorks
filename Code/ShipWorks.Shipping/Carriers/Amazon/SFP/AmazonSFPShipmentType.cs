@@ -16,6 +16,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
@@ -341,7 +342,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            shipment.RequestedLabelFormat = shipment.AmazonSFP.RequestedLabelFormat;
+            if (shipment.AmazonSFP != null)
+            {
+                shipment.RequestedLabelFormat = shipment.AmazonSFP.RequestedLabelFormat;
+                shipment.Insurance = shipment.AmazonSFP.Insurance;
+            }
+
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
     }
 }
