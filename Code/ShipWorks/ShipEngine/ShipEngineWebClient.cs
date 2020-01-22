@@ -33,9 +33,9 @@ namespace ShipWorks.ShipEngine
         private readonly IInterapptiveOnly interapptiveOnly;
 
         private const string liveRegKey = "ShipEngineLive";
-        private const string defaultEndpointBase = "https://api.shipengine.com";
-        private const string apiVersionBeta = "v-beta";
-        private const string apiVersion1 = "v1";
+        private const string defaultEndpointBase = "https://api.shipengine.com/v1";
+        private const string proxyEndpoint = "https://proxy.hub.shipworks.com/shipEngine";
+        private const string addStoreResource = "connections/order_sources";
 
         /// <summary>
         /// Constructor
@@ -115,7 +115,7 @@ namespace ShipWorks.ShipEngine
                 submitter.Headers.Add($"Content-Type: application/json");
                 submitter.Headers.Add($"api-key: {apiKey}");
                 submitter.Verb = HttpVerb.Delete;
-                submitter.Uri = new Uri($"{GetEndpointBase()}/{apiVersion1}/connections/carriers/amazon_shipping_us/{accountId}");
+                submitter.Uri = new Uri($"{GetEndpointBase()}/connections/carriers/amazon_shipping_us/{accountId}");
 
                 // Delete request returns no content, this is not an error
                 submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
@@ -495,7 +495,7 @@ namespace ShipWorks.ShipEngine
             whoAmIRequest.Headers.Add($"Content-Type: application/json");
             whoAmIRequest.Headers.Add($"api-key: {apiKey}");
             whoAmIRequest.Verb = HttpVerb.Get;
-            whoAmIRequest.Uri = new Uri($"{GetEndpointBase()}/{apiVersion1}/environment/whoami");
+            whoAmIRequest.Uri = new Uri($"{GetEndpointBase()}/environment/whoami");
 
             EnumResult<HttpStatusCode> result =
                 whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
@@ -511,7 +511,7 @@ namespace ShipWorks.ShipEngine
             whoAmIRequest.Headers.Add($"Content-Type: application/json");
             whoAmIRequest.Headers.Add($"api-key: {GetApiKey()}");
             whoAmIRequest.Verb = HttpVerb.Get;
-            whoAmIRequest.Uri = new Uri($"{GetEndpointBase()}/{apiVersion1}/environment/whoami");
+            whoAmIRequest.Uri = new Uri($"{GetEndpointBase()}/environment/whoami");
 
             EnumResult<HttpStatusCode> result =
                 whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
@@ -546,17 +546,44 @@ namespace ShipWorks.ShipEngine
         public Guid? AddStore(ApiOrderSourceAccountInformationRequest accountInfo, string storeResource)
         {
             HttpJsonVariableRequestSubmitter addStoreRequest = new HttpJsonVariableRequestSubmitter();
-            addStoreRequest.Headers.Add($"Content-Type: application/json");
             addStoreRequest.Headers.Add($"api-key: {apiKey.GetPartnerApiKey()}");
             addStoreRequest.Headers.Add($"On-Behalf-Of: se-{GetAccountID()}");
+            SetupRequestProxy(addStoreRequest, storeResource);
+            addStoreRequest.Headers.Add($"Content-Type: application/json");
             addStoreRequest.Verb = HttpVerb.Post;
-            addStoreRequest.Uri = new Uri($"{GetEndpointBase()}/{apiVersionBeta}/connections/order_sources/{storeResource}");
             addStoreRequest.RequestBody = JsonConvert.SerializeObject(accountInfo);
 
             EnumResult<HttpStatusCode> result =
                 addStoreRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "AddStore"), typeof(ShipEngineException));
             string orderSourceId = JObject.Parse(result.Message)["order_source_id"].ToString();
             return Guid.Parse(orderSourceId);
+        }
+
+        /// <summary>
+        /// Set URI and headers for proxy if not using fake stores
+        /// </summary>
+        private void SetupRequestProxy(IHttpRequestSubmitter request, string storeResource)
+        {
+            var actualEndpoint = GetEndpointBase();
+
+            // We're not using fake stores, so send the request through the proxy
+            if (actualEndpoint == defaultEndpointBase)
+            {
+                // Add "SW-" to each header to prevent them from being stripped out by AWS
+                foreach (var key in request.Headers.AllKeys.ToList())
+                {
+                    request.Headers.Add($"SW-{key}", request.Headers[key]);
+                    request.Headers.Remove(key);
+                }
+
+                request.Headers.Add($"SW-originalRequestResource: {addStoreResource}/{storeResource}");
+
+                request.Uri = new Uri(proxyEndpoint);
+            }
+            else
+            {
+                request.Uri = new Uri($"{actualEndpoint}/{addStoreResource}/{storeResource}");
+            }
         }
 
         /// <summary>

@@ -21,8 +21,7 @@ namespace ShipWorks.ShipEngine
         private readonly string CreateApiKeyUrl;
 
         private const string liveRegKey = "ShipEngineLive";
-        private const string defaultEndpointBase = "https://api.shipengine.com";
-        private const string apiVersion1 = "v1";
+        private const string defaultEndpointBase = "https://api.shipengine.com/v1";
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
@@ -42,7 +41,7 @@ namespace ShipWorks.ShipEngine
             this.interapptiveOnly = interapptiveOnly;
             log = logFactory(typeof(ShipEnginePartnerWebClient));
 
-            CreateAccountUrl = $"{GetEndpointBase()}/{apiVersion1}/partners/accounts";
+            CreateAccountUrl = $"{GetEndpointBase()}/partners/accounts";
             CreateApiKeyUrl = CreateAccountUrl + "{0}/api_keys";
         }
 
