@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Security;
@@ -192,7 +191,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                     try
                     {
                         var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
                         store.ShipEngineAccountID = seWebClient.GetAccountID();
                         store.ShipEngineOrderSourceID = seWebClient.AddStore(accountInfo, "volusion");
                     }
@@ -206,7 +205,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                         else
                         {
                             MessageHelper.ShowError(this, ex.Message);
-                        }   
+                        }
                         e.NextPage = this;
                     }
                 }
@@ -252,7 +251,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                                 try
                                 {
                                     var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                                    var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                                    var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
                                     store.ShipEngineAccountID = seWebClient.GetAccountID();
                                     store.ShipEngineOrderSourceID = seWebClient.AddStore(accountInfo, "volusion");
                                 }

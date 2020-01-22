@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 using ShipEngine.ApiClient.Model;
 
 namespace ShipWorks.ShipEngine.AddStoreRequests
@@ -23,15 +24,15 @@ namespace ShipWorks.ShipEngine.AddStoreRequests
         /// <summary>
         /// Constructor for configuring the ApiUrl
         /// </summary
-        public VolusionAddStoreRequest(string username, string encryptedPassword, string baseUrl, string nickname)
+        public VolusionAddStoreRequest(string username, string encryptedPassword, string baseUrl)
         {
-            if(baseUrl[baseUrl.Length - 1] == '/')
-            {
-                baseUrl = baseUrl.Substring(0, baseUrl.Length - 1);
-            }
+            baseUrl = baseUrl.TrimEnd('/');
 
             ApiUrl = $"{baseUrl}/net/WebService.aspx?Login={username}&EncryptedPassword={encryptedPassword}&EDI_Name=Generic\\Orders";
-            OrderSourceNickname = nickname;
+
+            // There's nothing special about using a guid here, this could be any string.
+            // We never use this value anywhere, ShipEngine just requires it to be set.
+            OrderSourceNickname = Guid.NewGuid().ToString();
         }
     }
 }

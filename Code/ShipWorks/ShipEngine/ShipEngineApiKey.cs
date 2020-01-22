@@ -1,8 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using System.Threading.Tasks;
 
 namespace ShipWorks.ShipEngine
 {
@@ -46,7 +46,7 @@ namespace ShipWorks.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = await GetNewApiKeyAsync();
+                    apiKey = await GetNewApiKeyAsync().ConfigureAwait(false);
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -68,13 +68,12 @@ namespace ShipWorks.ShipEngine
         public void Configure()
         {
             ShippingSettingsEntity settings = shippingSettings.Fetch();
-            string apiKey = settings.ShipEngineApiKey;
+
             try
             {
-                if (string.IsNullOrEmpty(apiKey))
+                if (string.IsNullOrEmpty(settings.ShipEngineApiKey))
                 {
-                    apiKey = GetNewApiKey();
-                    settings.ShipEngineApiKey = apiKey;
+                    settings.ShipEngineApiKey = GetNewApiKey();
 
                     shippingSettings.Save(settings);
                 }
@@ -85,7 +84,7 @@ namespace ShipWorks.ShipEngine
                 // is what value will be set as...
             }
 
-            Value = apiKey;
+            Value = settings.ShipEngineApiKey;
         }
 
         /// <summary>
@@ -94,9 +93,9 @@ namespace ShipWorks.ShipEngine
         private async Task<string> GetNewApiKeyAsync()
         {
             string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = await partnerWebClient.CreateNewAccountAsync(partnerApiKey);
+            string shipEngineAccountId = await partnerWebClient.CreateNewAccountAsync(partnerApiKey).ConfigureAwait(false);
 
-            return await partnerWebClient.GetApiKeyAsync(partnerApiKey, shipEngineAccountId);            
+            return await partnerWebClient.GetApiKeyAsync(partnerApiKey, shipEngineAccountId);
         }
 
         /// <summary>

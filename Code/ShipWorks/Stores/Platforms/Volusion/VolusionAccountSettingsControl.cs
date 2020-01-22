@@ -8,7 +8,6 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.ShipEngine;
 using ShipWorks.ShipEngine.AddStoreRequests;
 using ShipWorks.Stores.Management;
@@ -127,12 +126,12 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         }
                     }
                 }
-                if(store.ShipEngineOrderSourceID != null)
+                if (store.ShipEngineOrderSourceID != null)
                 {
                     try
                     {
                         var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl, Guid.NewGuid().ToString());
+                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
                         store.ShipEngineOrderSourceID = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceID, "volusion");
                     }
                     catch (ShipEngineException ex)
@@ -145,7 +144,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         else
                         {
                             MessageHelper.ShowError(this, ex.Message);
-                        }                      
+                        }
                         return false;
                     }
                 }

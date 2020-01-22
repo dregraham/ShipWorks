@@ -40,12 +40,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
-            if (result.Failure)
-            {
-                log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, result.Message);
-            }
-
-            return result;
+            return result.OnFailure(x => log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, x.Message));
         }
     }
 }

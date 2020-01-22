@@ -354,6 +354,9 @@ namespace ShipWorks.Data
             }
         }
 
+        /// <summary>
+        /// Delete a store from ShipEngine
+        /// </summary>
         private static void DeleteShipEngineStore(Guid? orderSourceId)
         {
             if (orderSourceId != null)

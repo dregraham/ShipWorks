@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 
 namespace ShipWorks.Stores.Warehouse.StoreData
 {
+    /// <summary>
+    /// A ShipEngine Store
+    /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ShipEngineStore : Store
     {
         /// <summary>

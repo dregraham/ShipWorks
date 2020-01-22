@@ -94,7 +94,6 @@ namespace ShipWorks.ShipEngine
         /// </summary>
         Guid? UpdateStoreCredentials(ApiOrderSourceAccountInformationRequest accountInfo, Guid? orderSourceId, string resource);
 
-
         /// <summary>
         /// Remove a store from ShipEngine
         /// </summary>
