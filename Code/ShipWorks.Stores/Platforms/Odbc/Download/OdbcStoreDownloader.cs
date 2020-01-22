@@ -324,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 noOrdersMessage = "No orders to upload.";
             }
-            
+
             int orderCount = orderGroups.Count;
 
             Progress.Detail = orderCount == 0 ? noOrdersMessage : $"{orderCount} orders found.";
@@ -339,6 +339,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             List<OrderEntity> ordersToSendToHub = new List<OrderEntity>();
 
+            var lastOrder = orderGroups.Last();
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
                 if (Progress.IsCancelRequested)
@@ -364,10 +365,10 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                         {
                             ordersToSendToHub.Add(downloadedOrder.Value);
 
-                            if (ordersToSendToHub.Count >= UploadOrdersBatchSize)
+                            if (ordersToSendToHub.Count >= UploadOrdersBatchSize || odbcRecordsForOrder == lastOrder)
                             {
                                 await UploadOrderToHubWithRetry(ordersToSendToHub);
-                                
+
                                 await hubDownloadCallback().ConfigureAwait(false);
                             }
 
@@ -376,10 +377,9 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                     else
                     {
                         await SaveOrder(downloadedOrder).ConfigureAwait(false);
+                        Progress.PercentComplete = 100 * QuantitySaved / totalCount;
                     }
                 }
-
-                Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
         }
 
@@ -442,7 +442,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result =
                     await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store, true).ConfigureAwait(false);
                 if (result.Failure)
                 {
@@ -463,7 +463,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result =
                     await warehouseOrderClient.UploadOrders(downloadedOrders, store, false).ConfigureAwait(false);
                 if (result.Failure)
                 {
