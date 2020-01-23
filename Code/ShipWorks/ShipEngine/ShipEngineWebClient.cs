@@ -555,7 +555,7 @@ namespace ShipWorks.ShipEngine
 
             EnumResult<HttpStatusCode> result =
                 addStoreRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "AddStore"), typeof(ShipEngineException));
-            string orderSourceId = JObject.Parse(result.Message)["order_source_id"].ToString();
+            string orderSourceId = JObject.Parse(result.Message)["order_source_id"]?.ToString() ?? string.Empty;
             return Guid.Parse(orderSourceId);
         }
 
