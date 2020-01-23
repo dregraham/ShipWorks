@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
@@ -998,10 +999,27 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Returns a url to the carrier's website for the specified shipment
         /// </summary>
-        public virtual string GetCarrierTrackingUrl(ShipmentEntity shipment)
+        [SuppressMessage("ShipWorks", "SW0002:Identifier should not be obfuscated",
+        Justification = "Identifier is not being used for data binding")]
+        public string GetCarrierTrackingUrl(ShipmentEntity shipment)
         {
-            return string.Empty;
+            if (shipment == null)
+            {
+                throw new ArgumentNullException(nameof(shipment));
+            }
+
+            if (!shipment.Processed || string.IsNullOrEmpty(shipment.TrackingNumber))
+            {
+                return string.Empty;
+            }
+
+            return GetCarrierTrackingUrlInternal(shipment);
         }
+
+        /// <summary>
+        /// Common tracking method
+        /// </summary>
+        protected virtual string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) => string.Empty;
 
         /// <summary>
         /// Determines if a shipment will be domestic or international

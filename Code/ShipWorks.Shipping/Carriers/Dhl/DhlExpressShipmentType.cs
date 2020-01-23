@@ -435,6 +435,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
+        /// Get DhlExpressShipment Tracking URL
+        /// </summary>
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment) => 
+            $"http://www.dhl.com/en/express/tracking.html?AWB={shipment.TrackingNumber}&brand=DHL";
+
+        /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not been excluded).
         /// </summary>
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)

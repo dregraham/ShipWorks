@@ -2418,6 +2418,8 @@
           <Field Name="CountryOfOrigin" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
+          <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -3348,7 +3350,6 @@
       </EntityDefinition>
       <EntityDefinition Name="UserSettings" ObjectID="0a760366-50e9-43c5-ac70-297e816a8038">
         <Fields>
-          <Field Name="AutoPrintRequireValidation" Type="bool" FieldIndex="21" />
           <Field Name="AutoWeigh" Type="bool" FieldIndex="16" />
           <Field Name="CustomerFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="14" />
           <Field Name="CustomerFilterLastActive" Type="long" FieldIndex="13" />
@@ -3364,7 +3365,7 @@
           <Field Name="OrderFilterExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="9" />
           <Field Name="OrderFilterLastActive" Type="long" FieldIndex="8" />
           <Field Name="OrderLookupLayout" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="19" />
-          <Field Name="ScanToShipAutoAdvance" Type="bool" FieldIndex="24" />
+          <Field Name="RequireVerificationToShip" Type="bool" FieldIndex="21" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
@@ -8024,6 +8025,8 @@
                     <Field Name="HarmonizedCode" Ordinal="15" IsOptional="true" DbType="12" Length="20" />
                     <Field Name="DeclaredValue" Ordinal="16" IsOptional="true" DbType="9" Precision="19" Scale="4" />
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
+                    <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -9394,10 +9397,9 @@
                     <Field Name="UIMode" Ordinal="19" DbType="8" Precision="10" />
                     <Field Name="OrderLookupLayout" Ordinal="20" IsOptional="true" DbType="12" Length="2147483647" />
                     <Field Name="LastReleaseNotesSeen" Ordinal="21" HasDefaultValue="true" DefaultValue="'0.0.0.0'" DbType="24" Length="25" />
-                    <Field Name="AutoPrintRequireValidation" Ordinal="22" DbType="2" />
+                    <Field Name="RequireVerificationToShip" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="ScanToShipAutoAdvance" Ordinal="25" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13349,6 +13351,8 @@
             <FieldMapping FieldName="CountryOfOrigin" TargetFieldName="CountryOfOrigin" />
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
+            <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
@@ -14289,7 +14293,6 @@
         </EntityMapping>
         <EntityMapping EntityName=":UserSettings" TargetName="ShipWorksLocal:dbo:UserSettings">
           <FieldMappings>
-            <FieldMapping FieldName="AutoPrintRequireValidation" TargetFieldName="AutoPrintRequireValidation" />
             <FieldMapping FieldName="AutoWeigh" TargetFieldName="AutoWeigh" />
             <FieldMapping FieldName="CustomerFilterExpandedFolders" TargetFieldName="CustomerFilterExpandedFolders" />
             <FieldMapping FieldName="CustomerFilterLastActive" TargetFieldName="CustomerFilterLastActive" />
@@ -14305,7 +14308,7 @@
             <FieldMapping FieldName="OrderFilterExpandedFolders" TargetFieldName="OrderFilterExpandedFolders" />
             <FieldMapping FieldName="OrderFilterLastActive" TargetFieldName="OrderFilterLastActive" />
             <FieldMapping FieldName="OrderLookupLayout" TargetFieldName="OrderLookupLayout" />
-            <FieldMapping FieldName="ScanToShipAutoAdvance" TargetFieldName="ScanToShipAutoAdvance" />
+            <FieldMapping FieldName="RequireVerificationToShip" TargetFieldName="RequireVerificationToShip" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />

@@ -392,13 +392,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("LastReleaseNotesSeen", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("AutoPrintRequireValidation", fieldHashtable);
+			_fieldsCustomProperties.Add("RequireVerificationToShip", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("MinimizeRibbon", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShowQAToolbarBelowRibbon", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("ScanToShipAutoAdvance", fieldHashtable);
 		}
 		#endregion
 
@@ -707,14 +705,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UserSettingsFieldIndex.LastReleaseNotesSeen, value); }
 		}
 
-		/// <summary> The AutoPrintRequireValidation property of the Entity UserSettings<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UserSettings"."AutoPrintRequireValidation"<br/>
+		/// <summary> The RequireVerificationToShip property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."RequireVerificationToShip"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean AutoPrintRequireValidation
+		public virtual System.Boolean RequireVerificationToShip
 		{
-			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, true); }
-			set	{ SetValue((int)UserSettingsFieldIndex.AutoPrintRequireValidation, value); }
+			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.RequireVerificationToShip, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.RequireVerificationToShip, value); }
 		}
 
 		/// <summary> The MinimizeRibbon property of the Entity UserSettings<br/><br/></summary>
@@ -735,16 +733,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, value); }
-		}
-
-		/// <summary> The ScanToShipAutoAdvance property of the Entity UserSettings<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UserSettings"."ScanToShipAutoAdvance"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean ScanToShipAutoAdvance
-		{
-			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ScanToShipAutoAdvance, true); }
-			set	{ SetValue((int)UserSettingsFieldIndex.ScanToShipAutoAdvance, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

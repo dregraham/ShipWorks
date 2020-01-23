@@ -52,7 +52,7 @@ namespace ShipWorks.ApplicationCore.Settings
             messenger = scope.Resolve<IMessenger>();
             messenger.Send(new DisableSingleScanInputFilterMessage(this));
 
-            settingsPages["My Settings"] = InitializeSettingsPage(new SettingsPagePersonal());
+            settingsPages["My Settings"] = InitializeSettingsPage(new SettingsPagePersonal(scope));
 
             settingsPages["Logging"] = InitializeSettingsPage(new SettingsPageLogging());
             settingsPages["Scan-to-Ship"] = InitializeSettingsPage(new SettingsPageScanToShip(this, scope));

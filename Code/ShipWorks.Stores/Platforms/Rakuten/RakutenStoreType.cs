@@ -103,5 +103,8 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl() =>
             new OnlineUpdateShipmentUpdateActionControl(typeof(RakutenShipmentUploadTask));
+
+        public override bool ShouldUseHub(IStoreEntity store) => true;
+
     }
 }

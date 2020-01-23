@@ -23727,6 +23727,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.CountryOfOrigin);}
 		}
+		/// <summary>Creates a new ProductVariantEntity.FNSku field instance</summary>
+		public static EntityField2 FNSku
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.FNSku);}
+		}
+		/// <summary>Creates a new ProductVariantEntity.EAN field instance</summary>
+		public static EntityField2 EAN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.EAN);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductVariantAliasEntity</summary>
@@ -31657,10 +31667,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastReleaseNotesSeen);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.AutoPrintRequireValidation field instance</summary>
-		public static EntityField2 AutoPrintRequireValidation
+		/// <summary>Creates a new UserSettingsEntity.RequireVerificationToShip field instance</summary>
+		public static EntityField2 RequireVerificationToShip
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.AutoPrintRequireValidation);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.RequireVerificationToShip);}
 		}
 		/// <summary>Creates a new UserSettingsEntity.MinimizeRibbon field instance</summary>
 		public static EntityField2 MinimizeRibbon
@@ -31671,11 +31681,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShowQAToolbarBelowRibbon
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
-		}
-		/// <summary>Creates a new UserSettingsEntity.ScanToShipAutoAdvance field instance</summary>
-		public static EntityField2 ScanToShipAutoAdvance
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ScanToShipAutoAdvance);}
 		}
 	}
 

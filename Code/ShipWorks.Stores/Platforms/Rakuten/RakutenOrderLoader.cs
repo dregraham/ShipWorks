@@ -343,8 +343,11 @@ namespace ShipWorks.Stores.Platforms.Rakuten
             LoadAddress(billAdapter, billingAddress);
 
             // If shipping and billing are the same, copy over the email address
-            if (billAdapter.StreetAll == shipAdapter.StreetAll &&
-                billAdapter.ParsedName == shipAdapter.ParsedName)
+            if (orderToSave.BillUnparsedName == orderToSave.ShipUnparsedName &&
+                orderToSave.BillStreet1 == orderToSave.ShipStreet1 &&
+                orderToSave.BillStreet2 == orderToSave.ShipStreet2 &&
+                orderToSave.BillCity == orderToSave.ShipCity &&
+                orderToSave.BillPostalCode == orderToSave.ShipPostalCode)
             {
                 shipAdapter.Email = billAdapter.Email;
             }

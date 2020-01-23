@@ -10122,6 +10122,10 @@ namespace ShipWorks.Data.Model
 		DeclaredValue,
 		///<summary>CountryOfOrigin. </summary>
 		CountryOfOrigin,
+		///<summary>FNSku. </summary>
+		FNSku,
+		///<summary>EAN. </summary>
+		EAN,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13550,14 +13554,12 @@ namespace ShipWorks.Data.Model
 		OrderLookupLayout,
 		///<summary>LastReleaseNotesSeen. </summary>
 		LastReleaseNotesSeen,
-		///<summary>AutoPrintRequireValidation. </summary>
-		AutoPrintRequireValidation,
+		///<summary>RequireVerificationToShip. </summary>
+		RequireVerificationToShip,
 		///<summary>MinimizeRibbon. </summary>
 		MinimizeRibbon,
 		///<summary>ShowQAToolbarBelowRibbon. </summary>
 		ShowQAToolbarBelowRibbon,
-		///<summary>ScanToShipAutoAdvance. </summary>
-		ScanToShipAutoAdvance,
 		/// <summary></summary>
 		AmountOfFields
 	}

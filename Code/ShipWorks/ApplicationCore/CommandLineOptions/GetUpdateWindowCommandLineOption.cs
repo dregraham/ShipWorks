@@ -36,9 +36,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         public Task Execute(List<string> args)
         {
             log.Info("Executing getupdatewindow commandline");
-            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            if (!ShouldUpgrade())
             {
-                log.Info("Autoupdate disabled. Not sending window");
                 return Task.CompletedTask;
             }
 
@@ -47,15 +46,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 log.Info("Autoupdate enabled.");
                 SqlSession.Initialize();
 
-                if (!SqlSession.Current.CanConnect())
+                if (!ShouldUpgradeSql())
                 {
-                    log.Info("Cannot connect to SQL Server. Not sending window");
-                    return Task.CompletedTask;
-                }
-
-                if (SqlSchemaUpdater.IsUpgradeRequired())
-                {
-                    log.Info("Update required. Not sending window");
                     return Task.CompletedTask;
                 }
 
@@ -63,11 +55,9 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 log.Info("Fetching config data");
                 ConfigurationEntity config = ConfigurationData.Fetch();
+                Initialize();
 
                 log.Info("Fetching customer id");
-                DataProvider.InitializeForApplication();
-                StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
-                UserSession.InitializeForCurrentDatabase();
                 string tangoCustomerId = TangoWebClient.GetTangoCustomerId();
 
                 UpdateWindowData updateData = new UpdateWindowData()
@@ -92,6 +82,56 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
             log.Info("GetUpdateWindowCommandLineOption Complete.");
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Initializes SW
+        /// </summary>
+        private static void Initialize()
+        {
+            DataProvider.InitializeForApplication();
+            StoreManager.InitializeForCurrentSession(SecurityContext.EmptySecurityContext);
+            UserSession.InitializeForCurrentDatabase();
+        }
+
+        /// <summary>
+        /// Returns true if can connect to SQL and SQL is up to date
+        /// </summary>
+        private bool ShouldUpgradeSql()
+        {
+            if (!SqlSession.Current.CanConnect())
+            {
+                log.Info("Cannot connect to SQL Server. Not sending window");
+                return false;
+            }
+
+            if (SqlSchemaUpdater.IsUpgradeRequired())
+            {
+                log.Info("Update required. Not sending window");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Return true if last update succeeded and AutoUpdate enabled
+        /// </summary>
+        public bool ShouldUpgrade()
+        {
+            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            {
+                log.Info("Autoupdate disabled. Not sending window");
+                return false;
+            }
+
+            if (!AutoUpdateSettings.LastAutoUpdateSucceeded)
+            {
+                log.Info("Autoupdate recently failed. Not sending window");
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -327,7 +327,6 @@
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrder.cs" />
     <Compile Include="Platforms\ThreeDCart\Warehouse\ThreeDCartWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenStoreDtoFactory.cs" />
-    <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseItem.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrder.cs" />
     <Compile Include="Platforms\Rakuten\Warehouse\RakutenWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Volusion\Warehouse\VolusionStoreDtoFactory.cs" />

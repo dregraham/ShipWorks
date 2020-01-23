@@ -1,3 +1,5 @@
+using System;
+using ShipWorks.UI;
 using ShipWorks.UI.Controls.SandRibbon;
 
 namespace ShipWorks
@@ -260,6 +262,7 @@ namespace ShipWorks
             this.ribbonChunkProductCatalogViewActions = new Divelements.SandRibbon.RibbonChunk();
             this.buttonOrderLookupViewCreateLabel = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonOrderLookupViewShipShipAgain = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewUnverify = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogAddProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogEditProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.buttonProductCatalogExportProduct = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
@@ -2575,7 +2578,8 @@ namespace ShipWorks
             this.ribbonChunkOrderLookupViewShipping.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
             this.ribbonChunkOrderLookupViewShipping.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
             this.buttonOrderLookupViewCreateLabel,
-            this.buttonOrderLookupViewShipShipAgain
+            this.buttonOrderLookupViewShipShipAgain,
+            this.buttonOrderLookupViewUnverify
             });
             this.ribbonChunkOrderLookupViewShipping.Text = "Shipping";
             //
@@ -2659,6 +2663,16 @@ namespace ShipWorks
             this.buttonOrderLookupViewShipShipAgain.Text = "Ship\r\nAgain";
             this.buttonOrderLookupViewShipShipAgain.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonOrderLookupViewShipShipAgain.Activate += OnButtonOrderLookupViewShipAgain;
+            //
+            // buttonOrderLookupViewUnverify
+            //
+            this.buttonOrderLookupViewUnverify.Guid = new System.Guid("11d0afcb-9e08-4f4a-9596-00be8a8937ac");
+            this.buttonOrderLookupViewUnverify.Image = global::ShipWorks.Properties.Resources.checkbox_circle_32;
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewUnverify, ShipWorks.Users.Security.PermissionType.OrdersModify);
+            this.buttonOrderLookupViewUnverify.QuickAccessKey = "U";
+            this.buttonOrderLookupViewUnverify.Text = "Un-verify";
+            this.buttonOrderLookupViewUnverify.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonOrderLookupViewUnverify.Activate += OnButtonOrderLookupViewUnverify;
             //
             // ribbonChunkOrderLookupViewProfiles
             //
@@ -3361,6 +3375,7 @@ namespace ShipWorks
             buttonOrderLookupViewReprint.TelemetryEventName = "OrderLookup.Reprint";
             buttonOrderLookupViewShipAgain.TelemetryEventName = "OrderLookup.History.ShipAgain";
             buttonOrderLookupViewShipShipAgain.TelemetryEventName = "OrderLookup.Ship.ShipAgain";
+            buttonOrderLookupViewUnverify.TelemetryEventName = "OrderLookup.Unverify";
             buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
             buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
             buttonCreateLabel.TelemetryEventName = "CreateLabel";
@@ -3664,6 +3679,7 @@ namespace ShipWorks
         private Divelements.SandRibbon.RibbonChunk ribbonChunkProductCatalogViewActions;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewCreateLabel;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipShipAgain;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewUnverify;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewApplyProfile;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewManageProfiles;
         private Divelements.SandRibbon.Popup popup1;

@@ -213,6 +213,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
             Assert.Equal(insuranceValue, parcel.Insurance.InsuranceValue);
         }
 
+        [Theory]
+        [InlineData("", true, "")]
+        [InlineData("foo", false, "")]
+        [InlineData("foo", true, "http://tracking.asendiausa.com/t.aspx?p=foo")]
+        public void GetCarrierTrackingUrl_ReturnsCorrectTrackingUrl(string trackingNumber, bool processed, string expectedUrl)
+        {
+            ShipmentEntity shipment = new ShipmentEntity
+            {
+                TrackingNumber = trackingNumber,
+                Processed = processed
+            };
+
+            var testObject = mock.Create<AsendiaShipmentType>();
+            var trackingUrl = testObject.GetCarrierTrackingUrl(shipment);
+            Assert.Equal(expectedUrl, trackingUrl);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

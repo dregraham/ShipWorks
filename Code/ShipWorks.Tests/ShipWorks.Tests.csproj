@@ -461,6 +461,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\Authentication\OnTracAuthenticationRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\BestRate\OnTracBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapterTest.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Rates\OnTracRateRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Shipment\OnTracShipmentRequestTest.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\Tracking\OnTracTrackingRequestTest.cs" />
