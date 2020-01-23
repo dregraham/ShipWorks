@@ -7,6 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
@@ -175,7 +176,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKeyAsync_ReturnsApiKey_FromResponse()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -196,7 +197,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void GetApiKey_ReturnsApiKey_FromResponse()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -216,7 +217,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKeyAsync_PartnerKeyIsAddedToTheRequest()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -236,7 +237,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void GetApiKey_PartnerKeyIsAddedToTheRequest()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -256,7 +257,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKeyAsync_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -274,7 +275,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void GetApiKey_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -292,7 +293,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKeyAsync_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -311,7 +312,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public void GetApiKey_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
