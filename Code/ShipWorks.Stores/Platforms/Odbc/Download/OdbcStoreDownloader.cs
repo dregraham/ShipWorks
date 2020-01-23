@@ -108,7 +108,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 IOdbcCommand downloadCommand = downloadCommandFactory.CreateDownloadCommand(store, orderNumber, fieldMap.Value);
                 AddTelemetryData(trackedDurationEvent, downloadCommand);
-                await Download(downloadCommand).ConfigureAwait(false);
+                await Download(downloadCommand, null).ConfigureAwait(false);
             }
             catch (ShipWorksOdbcException ex)
             {
@@ -167,6 +167,15 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <exception cref="DownloadException"></exception>
         protected override async Task Download(TrackedDurationEvent trackedDurationEvent)
         {
+            await Download(trackedDurationEvent, null).ConfigureAwait(false);
+        }
+
+
+        /// <summary>
+        /// Import ODBC Orders from external data source.
+        /// </summary>
+        private async Task Download(TrackedDurationEvent trackedDurationEvent, Func<Task> hubDownloadCallback)
+        {
             try
             {
                 if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
@@ -180,7 +189,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 IOdbcCommand downloadCommand = await GenerateDownloadCommand(trackedDurationEvent).ConfigureAwait(false);
                 AddTelemetryData(trackedDurationEvent, downloadCommand);
 
-                await Download(downloadCommand).ConfigureAwait(false);
+                await Download(downloadCommand, hubDownloadCallback).ConfigureAwait(false);
             }
             catch (ShipWorksOdbcException ex)
             {
@@ -218,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                 {
                     using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
                     {
-                        await Download(trackedDurationEvent).ConfigureAwait(false);
+                        await Download(trackedDurationEvent, () => base.DownloadWarehouseOrders(batchId)).ConfigureAwait(false);
 
                         CollectDownloadTelemetry(trackedDurationEvent);
                     }
@@ -244,7 +253,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Download using the download command
         /// </summary>
-        private async Task Download(IOdbcCommand downloadCommand)
+        private async Task Download(IOdbcCommand downloadCommand, Func<Task> hubDownloadCallback)
         {
             IEnumerable<OdbcRecord> downloadedOrders = downloadCommand.Execute();
             List<IGrouping<string, OdbcRecord>> orderGroups =
@@ -256,7 +265,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 EnsureRecordIdentifiersAreNotNull(orderGroups);
 
-                await LoadOrders(orderGroups, orderCount).ConfigureAwait(false);
+                await LoadOrders(orderGroups, orderCount, hubDownloadCallback).ConfigureAwait(false);
             }
         }
 
@@ -315,7 +324,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             {
                 noOrdersMessage = "No orders to upload.";
             }
-            
+
             int orderCount = orderGroups.Count;
 
             Progress.Detail = orderCount == 0 ? noOrdersMessage : $"{orderCount} orders found.";
@@ -326,10 +335,11 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         /// <summary>
         /// Loads the order information into order entities
         /// </summary>
-        private async Task LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount)
+        private async Task LoadOrders(List<IGrouping<string, OdbcRecord>> orderGroups, int totalCount, Func<Task> hubDownloadCallback)
         {
             List<OrderEntity> ordersToSendToHub = new List<OrderEntity>();
 
+            var lastOrder = orderGroups.Last();
             foreach (IGrouping<string, OdbcRecord> odbcRecordsForOrder in orderGroups)
             {
                 if (Progress.IsCancelRequested)
@@ -337,14 +347,14 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                     return;
                 }
 
-                Progress.Detail = $"Processing order {QuantitySaved + 1}";
-
                 GenericResult<OrderEntity> downloadedOrder = await LoadOrder(odbcRecordsForOrder).ConfigureAwait(false);
 
                 if (downloadedOrder.Success)
                 {
                     if (IsWarehouseAllowed())
                     {
+                        Progress.Detail = $"Uploading orders to the hub.";
+
                         if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.OnDemand)
                         {
                             await UploadOrderToHub(downloadedOrder.Value).ConfigureAwait(false);
@@ -354,31 +364,49 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
                         if (odbcStore.Value.ImportStrategy == (int) OdbcImportStrategy.ByModifiedTime)
                         {
                             ordersToSendToHub.Add(downloadedOrder.Value);
+
+                            if (ordersToSendToHub.Count >= UploadOrdersBatchSize || odbcRecordsForOrder == lastOrder)
+                            {
+                                await UploadOrderToHubWithRetry(ordersToSendToHub);
+
+                                await hubDownloadCallback().ConfigureAwait(false);
+                            }
+
                         }
                     }
                     else
                     {
                         await SaveOrder(downloadedOrder).ConfigureAwait(false);
+                        Progress.PercentComplete = 100 * QuantitySaved / totalCount;
                     }
                 }
-
-                Progress.PercentComplete = 100 * QuantitySaved / totalCount;
             }
+        }
 
-            if (ordersToSendToHub.Any())
+        /// <summary>
+        /// Upload orders to the hub with retry logic
+        /// </summary>
+        private async Task UploadOrderToHubWithRetry(List<OrderEntity> orders, int retryCount = 3)
+        {
+            await UploadOrdersToHub(orders).ConfigureAwait(false);
+
+            store.WarehouseLastModified = orders.Where(x => x.HubOrderID != null).Max(x => x.OnlineLastModified);
+            storeManager.SaveStore(store);
+
+            // if we made progress then reset the retry counter
+            bool madeProgress = orders.Where(o => o.HubOrderID != null).Any();
+
+            orders.RemoveAll(o => o.HubOrderID != null);
+
+            if (orders.Any())
             {
-                int ordersUploaded = 0;
-                List<OrderEntity> batchToUpload = ordersToSendToHub.Take(UploadOrdersBatchSize).ToList();
-
-                while (batchToUpload.Any())
+                if (retryCount >= 0)
                 {
-                    await UploadOrdersToHub(batchToUpload).ConfigureAwait(false);
-
-                    store.WarehouseLastModified = batchToUpload.Max(x => x.OnlineLastModified);
-                    storeManager.SaveStore(store);
-
-                    ordersUploaded += batchToUpload.Count;
-                    batchToUpload = ordersToSendToHub.Skip(ordersUploaded).Take(UploadOrdersBatchSize).ToList();
+                    await UploadOrderToHubWithRetry(orders, madeProgress ? 3 : retryCount - 1);
+                }
+                else
+                {
+                    throw new DownloadException("Error saving ODBC Orders.");
                 }
             }
         }
@@ -414,7 +442,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result =
                     await warehouseOrderClient.UploadOrders(new[] { downloadedOrder }, store, true).ConfigureAwait(false);
                 if (result.Failure)
                 {
@@ -435,7 +463,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
         {
             if (store.WarehouseStoreID.HasValue)
             {
-                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result = 
+                GenericResult<IEnumerable<WarehouseUploadOrderResponse>> result =
                     await warehouseOrderClient.UploadOrders(downloadedOrders, store, false).ConfigureAwait(false);
                 if (result.Failure)
                 {

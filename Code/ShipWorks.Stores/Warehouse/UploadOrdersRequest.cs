@@ -38,6 +38,12 @@ namespace ShipWorks.Stores.Warehouse
         }
 
         /// <summary>
+        /// The version to use
+        /// </summary>
+        [JsonProperty("version")]
+        public int Version { get; private set; }
+
+        /// <summary>
         /// The batch
         /// </summary>
         [JsonProperty("batch")]
@@ -54,6 +60,11 @@ namespace ShipWorks.Stores.Warehouse
         /// </summary>
         public async Task<GenericResult<IEnumerable<WarehouseUploadOrderResponse>>> Submit(IEnumerable<OrderEntity> orders, IStoreEntity store, bool assignBatch)
         {
+            if (store.TypeCode == (int) StoreTypeCode.Odbc)
+            {
+                Version = 1;
+            }
+
             IRestRequest request = createRateRequest(WarehouseEndpoints.UploadOrders, Method.POST);
 
             request.JsonSerializer = new RestSharpJsonNetSerializer(GetJsonSerializerSettings());
