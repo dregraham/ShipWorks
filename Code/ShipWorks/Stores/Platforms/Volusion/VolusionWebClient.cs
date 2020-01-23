@@ -365,14 +365,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                         url += "/";
                     }
 
-                    if (interapptiveOnly.UseFakeAPI(liveRegKey))
-                    {
-                        url += "channels/volusion";
-                    }
-                    else
-                    {
-                        url += "net/WebService.aspx";
-                    }                     
+                    url += "net/WebService.aspx";                    
                 }
 
                 return new Uri(url);

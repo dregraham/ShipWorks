@@ -240,11 +240,15 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                         using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+                            var licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                            if (!webClient.ValidateCredentials(store))
+                            if (!licenseService.IsHub)
                             {
-                                MessageHelper.ShowError(this, "ShipWorks located the encrypted password for your Volusion store, but it appears to be invalid.");
-                                return false;
+                                if (!webClient.ValidateCredentials(store))
+                                {
+                                    MessageHelper.ShowError(this, "ShipWorks located the encrypted password for your Volusion store, but it appears to be invalid.");
+                                    return false;
+                                }
                             }
                             else
                             {

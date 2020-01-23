@@ -48,6 +48,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         private readonly IInterapptiveOnly interapptiveOnly;
 
         private const string liveRegKey = "VolusionLiveServer";
+        private const string endpointKey = "VolusionEndpoint";
         /// <summary>
         /// Constructor
         /// </summary>
@@ -67,11 +68,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public bool LogOn(string username, string password)
         {
-            if (interapptiveOnly.UseFakeAPI(liveRegKey))
-            {
-                return true;
-            }
-
             if (loggedIn)
             {
                 loggedIn = false;
@@ -86,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 cookieContainer = new CookieContainer();
 
                 // setup the two urls to be hit
-                string loginUrl = $"https://my.volusion.com/TransferLogin.aspx?HostName={GetStoreHostName().Replace(".", "%2E")}&PageName=login.asp";
+                string loginUrl = $"{GetLoginBaseUrl()}/TransferLogin.aspx?HostName={GetStoreHostName().Replace(".", "%2E")}&PageName=login.asp";
                 string adminUrl = GetUrl("admin/");
 
                 HttpWebRequest request = CreateWebRequest(adminUrl, "GET");
@@ -317,6 +313,18 @@ namespace ShipWorks.Stores.Platforms.Volusion
             url += relativePath;
 
             return url;
+        }
+
+        private string GetLoginBaseUrl()
+        {
+            if (interapptiveOnly.UseFakeAPI(liveRegKey))
+            {
+                return interapptiveOnly.Registry.GetValue(endpointKey, "http://localhost:4004/channels/volusion");
+            }
+            else
+            {
+                return "https://my.volusion.com";
+            }
         }
 
         /// <summary>
@@ -630,7 +638,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// </summary>
         public string RetrieveEncryptedPassword()
         {
-            if (!loggedIn && !interapptiveOnly.UseFakeAPI(liveRegKey))
+            if (!loggedIn)
             {
                 throw new InvalidOperationException("Must be logged in to perform this operation.");
             }
