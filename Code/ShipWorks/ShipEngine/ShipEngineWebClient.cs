@@ -33,8 +33,7 @@ namespace ShipWorks.ShipEngine
         private readonly IInterapptiveOnly interapptiveOnly;
 
         private const string liveRegKey = "ShipEngineLive";
-        private const string defaultEndpointBase = "https://api.shipengine.com/v1";
-        private const string proxyEndpoint = "https://proxy.hub.shipworks.com/shipEngine";
+        private const string defaultEndpointBase = "https://api.shipengine.com";
         private const string addStoreResource = "connections/order_sources";
 
         /// <summary>
@@ -56,7 +55,7 @@ namespace ShipWorks.ShipEngine
         /// <summary>
         /// Get the base endpoint for ShipEngine requests
         /// </summary>
-        private string GetEndpointBase()
+        private string GetEndpointBase(bool isBeta = false)
         {
             if (interapptiveOnly.UseFakeAPI(liveRegKey))
             {
@@ -67,7 +66,9 @@ namespace ShipWorks.ShipEngine
                 }
             }
 
-            return defaultEndpointBase;
+            string version = isBeta ? "v-beta" : "v1";
+
+            return $"{defaultEndpointBase}/{version}";
         }
 
         /// <summary>
@@ -548,42 +549,15 @@ namespace ShipWorks.ShipEngine
             HttpJsonVariableRequestSubmitter addStoreRequest = new HttpJsonVariableRequestSubmitter();
             addStoreRequest.Headers.Add($"api-key: {apiKey.GetPartnerApiKey()}");
             addStoreRequest.Headers.Add($"On-Behalf-Of: se-{GetAccountID()}");
-            SetupRequestProxy(addStoreRequest, storeResource);
             addStoreRequest.Headers.Add($"Content-Type: application/json");
             addStoreRequest.Verb = HttpVerb.Post;
+            addStoreRequest.Uri = new Uri($"{GetEndpointBase(true)}/{addStoreResource}/{storeResource}");
             addStoreRequest.RequestBody = JsonConvert.SerializeObject(accountInfo);
 
             EnumResult<HttpStatusCode> result =
                 addStoreRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "AddStore"), typeof(ShipEngineException));
             string orderSourceId = JObject.Parse(result.Message)["order_source_id"]?.ToString() ?? string.Empty;
             return Guid.Parse(orderSourceId);
-        }
-
-        /// <summary>
-        /// Set URI and headers for proxy if not using fake stores
-        /// </summary>
-        private void SetupRequestProxy(IHttpRequestSubmitter request, string storeResource)
-        {
-            var actualEndpoint = GetEndpointBase();
-
-            // We're not using fake stores, so send the request through the proxy
-            if (actualEndpoint == defaultEndpointBase)
-            {
-                // Add "SW-" to each header to prevent them from being stripped out by AWS
-                foreach (var key in request.Headers.AllKeys.ToList())
-                {
-                    request.Headers.Add($"SW-{key}", request.Headers[key]);
-                    request.Headers.Remove(key);
-                }
-
-                request.Headers.Add($"SW-originalRequestResource: {addStoreResource}/{storeResource}");
-
-                request.Uri = new Uri(proxyEndpoint);
-            }
-            else
-            {
-                request.Uri = new Uri($"{actualEndpoint}/{addStoreResource}/{storeResource}");
-            }
         }
 
         /// <summary>
