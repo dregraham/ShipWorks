@@ -41,7 +41,7 @@ namespace ShipWorks.ShipEngine
             this.interapptiveOnly = interapptiveOnly;
             log = logFactory(typeof(ShipEnginePartnerWebClient));
 
-            CreateAccountUrl = $"{GetEndpointBase()}/partners/accounts";
+            CreateAccountUrl = $"{GetEndpointBase()}/partners/accounts/";
             CreateApiKeyUrl = CreateAccountUrl + "{0}/api_keys";
         }
 
