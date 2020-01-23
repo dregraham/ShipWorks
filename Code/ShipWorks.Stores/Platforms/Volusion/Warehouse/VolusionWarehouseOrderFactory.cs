@@ -9,6 +9,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Stores.Platforms.Volusion;
 
 namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
 {
@@ -41,6 +42,19 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
                 .CreateOrder(new OrderNumberIdentifier(orderNumber)).ConfigureAwait(false);
 
             return result.OnFailure(x => log.InfoFormat("Skipping order '{0}': {1}.", warehouseOrder.OrderNumber, x.Message));
+        }
+
+        protected override void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
+        {
+            base.LoadOrderData(warehouseOrder, orderEntity);
+            if(storeEntity != null)
+            {
+                var shippingMethods = new VolusionShippingMethods((VolusionStoreEntity) storeEntity);
+                if (int.TryParse(orderEntity.RequestedShipping, out int id))
+                {
+                    orderEntity.RequestedShipping = shippingMethods.GetShippingMethods(id);
+                }
+            }
         }
     }
 }
