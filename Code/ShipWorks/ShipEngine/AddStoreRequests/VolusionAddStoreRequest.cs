@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Newtonsoft.Json;
 using ShipEngine.ApiClient.Model;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.ShipEngine.AddStoreRequests
     /// <summary>
     /// The add store request for adding volusion to ShipEngine
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class VolusionAddStoreRequest : ApiOrderSourceAccountInformationRequest
     {
         /// <summary>
