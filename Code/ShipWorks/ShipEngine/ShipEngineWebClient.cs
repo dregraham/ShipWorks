@@ -556,6 +556,7 @@ namespace ShipWorks.ShipEngine
 
             EnumResult<HttpStatusCode> result =
                 addStoreRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "AddStore"), typeof(ShipEngineException));
+
             string orderSourceId = JObject.Parse(result.Message)["order_source_id"]?.ToString() ?? string.Empty;
             return Guid.Parse(orderSourceId);
         }
@@ -571,7 +572,7 @@ namespace ShipWorks.ShipEngine
 
                 //ShipEngine doesn't expose a way to update store credentials so we
                 //have to delete the store and add a new one
-                orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
+                DeleteStore(orderSourceId);
                 return AddStore(accountInfo, storeEndpoint);
             }
             catch (ApiException ex)
@@ -588,7 +589,7 @@ namespace ShipWorks.ShipEngine
             try
             {
                 var orderSourceApi = shipEngineApiFactory.CreateOrderSourceApi();
-
+                ConfigureLogging(orderSourceApi, ApiLogSource.ShipEngine, "DeleteStore", LogActionType.Other);
                 orderSourceApi.ApiOrderSourceAccountDeactivate(orderSourceId, apiKey.GetPartnerApiKey(), $"se-{GetAccountID()}");
             }
             catch (ApiException ex)
