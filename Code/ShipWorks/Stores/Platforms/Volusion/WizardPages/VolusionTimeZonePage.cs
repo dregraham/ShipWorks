@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.UI.Wizard;
+using Autofac;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
 {
@@ -70,6 +68,19 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                 // check the ones that are selected
                 bool chosen = selectedStatuses.Contains(status);
                 statuses.Items.Add(status, chosen);
+            }
+
+            // Hide status selection for Hub users
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
+
+                if (licenseService.IsHub)
+                {
+                    this.Controls.Remove(this.statuses);
+                    this.Controls.Remove(this.label1);
+                    this.Controls.Remove(this.label2);
+                }
             }
         }
     }

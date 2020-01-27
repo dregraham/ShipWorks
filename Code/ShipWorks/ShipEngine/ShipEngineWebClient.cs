@@ -553,6 +553,7 @@ namespace ShipWorks.ShipEngine
             addStoreRequest.Verb = HttpVerb.Post;
             addStoreRequest.Uri = new Uri($"{GetEndpointBase(true)}/{addStoreResource}/{storeResource}");
             addStoreRequest.RequestBody = JsonConvert.SerializeObject(accountInfo);
+            addStoreRequest.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
 
             EnumResult<HttpStatusCode> result =
                 addStoreRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "AddStore"), typeof(ShipEngineException));
