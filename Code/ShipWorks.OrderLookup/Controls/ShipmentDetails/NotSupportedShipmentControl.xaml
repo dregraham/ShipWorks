@@ -83,7 +83,7 @@
                     <Paragraph>
                         Modifying
                         <Run Text="{Binding ShipmentTypeCode, Converter={StaticResource EnumDescription}}" />
-                        shipment details is not supported in Order Lookup Mode. You can:
+                        shipment details is not supported in Scan-To-Ship. You can:
                     </Paragraph>
                     <List >
                         <ListItem>
@@ -93,7 +93,7 @@
                             <Paragraph>Apply a shipping profile then create the label.</Paragraph>
                         </ListItem>
                         <ListItem>
-                            <Paragraph>Process the shipment in Batch Grid mode.</Paragraph>
+                            <Paragraph>Process the shipment in the Home tab.</Paragraph>
                         </ListItem>
                     </List>
                 </FlowDocument>
