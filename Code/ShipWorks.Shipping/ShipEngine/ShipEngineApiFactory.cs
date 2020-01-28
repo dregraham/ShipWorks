@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using ShipEngine.ApiClient.Api;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Factory for creating ShipEngine CarrierAccountsApi

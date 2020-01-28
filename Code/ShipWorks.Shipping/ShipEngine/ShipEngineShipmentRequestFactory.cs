@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Services;
 using System.Linq;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Base class for creating ShipEngine shipment requests

@@ -10,7 +10,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
 using ShipWorks.Shipping;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Factory for creating a RateGroup from a ShipEngine rate response

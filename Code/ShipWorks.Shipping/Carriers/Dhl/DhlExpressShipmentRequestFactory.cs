@@ -1,4 +1,4 @@
-﻿using ShipWorks.ShipEngine;
+﻿using ShipWorks.Shipping.ShipEngine;
 using System.Collections.Generic;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;

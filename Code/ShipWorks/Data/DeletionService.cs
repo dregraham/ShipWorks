@@ -17,7 +17,6 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Messaging.Messages;
-using ShipWorks.ShipEngine;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -138,7 +137,6 @@ namespace ShipWorks.Data
             // not have run to force the check yet.
             StoreManager.CheckForChanges();
             NudgeManager.Refresh(StoreManager.GetAllStores());
-            DeleteShipEngineStore(seOrderSourceId);
         }
 
         /// <summary>
@@ -350,30 +348,6 @@ namespace ShipWorks.Data
                     bucket.Relations.Add(relation);
 
                     adapter.DeleteEntitiesDirectly(EntityTypeProvider.GetSystemType(subTypeEntityName), bucket);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Delete a store from ShipEngine
-        /// </summary>
-        private static void DeleteShipEngineStore(Guid? orderSourceId)
-        {
-            if (orderSourceId != null)
-            {
-                try
-                {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        var webClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                        webClient.DeleteStore(orderSourceId);
-                    }
-                }
-                catch (ShipEngineException)
-                {
-                    //If we cant delete a store from ShipEngine do nothing.
-                    //This doesnt hurt us and at this point the store 
-                    //should already be out of our system so we cant fail here.
                 }
             }
         }

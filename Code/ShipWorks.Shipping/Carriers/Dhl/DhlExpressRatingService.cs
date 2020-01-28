@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;

@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {

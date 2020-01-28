@@ -1,6 +1,6 @@
 ﻿using ShipEngine.ApiClient.Api;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Interface for creating ShipEngine API Calls

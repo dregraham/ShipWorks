@@ -1,7 +1,7 @@
 ﻿using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Interface for creating carrier specific RateShipmentRequests

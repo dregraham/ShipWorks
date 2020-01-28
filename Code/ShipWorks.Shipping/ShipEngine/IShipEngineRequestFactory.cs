@@ -3,7 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using System.Collections.Generic;
 using ShipWorks.Shipping.Services;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Factory to create a RateShipmentRequest from a ShipmentEntity

@@ -20,7 +20,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 

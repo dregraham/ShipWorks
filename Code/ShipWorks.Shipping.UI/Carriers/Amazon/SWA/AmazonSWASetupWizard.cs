@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Amazon.SWA;

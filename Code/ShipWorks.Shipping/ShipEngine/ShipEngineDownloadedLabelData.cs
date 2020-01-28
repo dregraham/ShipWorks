@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using static ShipEngine.ApiClient.Model.Label;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Base class for saving ShipEngine label data

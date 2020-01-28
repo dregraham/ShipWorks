@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipEngine.ApiClient.Model;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {

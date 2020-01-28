@@ -8,8 +8,6 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ShipEngine;
-using ShipWorks.ShipEngine.AddStoreRequests;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Volusion
@@ -124,28 +122,6 @@ namespace ShipWorks.Stores.Platforms.Volusion
                             MessageHelper.ShowError(this, "ShipWorks was unable to logon to the Volusion website using the provided settings.");
                             return false;
                         }
-                    }
-                }
-                if (store.ShipEngineOrderSourceID != null)
-                {
-                    try
-                    {
-                        var seWebClient = lifetimeScope.Resolve<IShipEngineWebClient>();
-                        var accountInfo = new VolusionAddStoreRequest(store.WebUserName, store.ApiPassword, store.StoreUrl);
-                        store.ShipEngineOrderSourceID = seWebClient.UpdateStoreCredentials(accountInfo, store.ShipEngineOrderSourceID, "volusion");
-                    }
-                    catch (ShipEngineException ex)
-                    {
-                        var webEx = ex.InnerException as WebException;
-                        if (webEx != null && webEx.Status == WebExceptionStatus.ProtocolError)
-                        {
-                            MessageHelper.ShowError(this, "ShipWorks was unable to connect to Volusion using the provided settings.\n\nPlease check that you entered the Encrypted Password, and not your regular login password.");
-                        }
-                        else
-                        {
-                            MessageHelper.ShowError(this, ex.Message);
-                        }
-                        return false;
                     }
                 }
             }

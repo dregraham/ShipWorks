@@ -7,7 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Profiles;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using Interapptive.Shared.Enums;
 using ShipWorks.Shipping.Carriers.Asendia;
 

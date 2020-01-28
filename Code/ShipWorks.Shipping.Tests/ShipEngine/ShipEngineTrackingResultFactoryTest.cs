@@ -1,6 +1,6 @@
 ﻿using Autofac.Extras.Moq;
 using ShipEngine.ApiClient.Model;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Shipping.Tracking;
 using ShipWorks.Tests.Shared;
 using System;

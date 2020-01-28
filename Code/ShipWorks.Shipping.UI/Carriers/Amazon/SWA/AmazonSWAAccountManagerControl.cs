@@ -13,7 +13,7 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.Custom;
 using Interapptive.Shared.Collections;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using Interapptive.Shared.Utility;

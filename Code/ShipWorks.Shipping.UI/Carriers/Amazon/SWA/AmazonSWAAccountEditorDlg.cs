@@ -8,7 +8,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.ShipEngine;
+using ShipWorks.Shipping.ShipEngine;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.UI.Carriers.Amazon.SWA

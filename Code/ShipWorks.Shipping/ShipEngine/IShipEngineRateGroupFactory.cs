@@ -3,7 +3,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Collections.Generic;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {   
     /// <summary>
     /// Factory for creating a RateGroup from a ShipEngine rate response

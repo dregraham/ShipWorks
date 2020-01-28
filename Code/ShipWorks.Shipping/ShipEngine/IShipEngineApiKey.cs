@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace ShipWorks.ShipEngine
+namespace ShipWorks.Shipping.ShipEngine
 {
     /// <summary>
     /// Api key for communicating with ShipEngine
@@ -16,12 +16,7 @@ namespace ShipWorks.ShipEngine
         /// <summary>
         /// Ensures the ApiKey contains a value ascynchronously
         /// </summary>
-        Task ConfigureAsync();
-
-        /// <summary>
-        /// Ensures the ApiKey contains a value
-        /// </summary>
-        void Configure();
+        Task Configure();
 
         /// <summary>
         /// Get the partner api key
