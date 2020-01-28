@@ -1008,7 +1008,6 @@
     <Compile Include="Warehouse\IUploadOrdersRequest.cs" />
     <Compile Include="Warehouse\IWarehouseOrderDtoFactory.cs" />
     <Compile Include="Warehouse\StoreData\RakutenStore.cs" />
-    <Compile Include="Warehouse\StoreData\ShipEngineStore.cs" />
     <Compile Include="Warehouse\StoreData\VolusionStore.cs" />
     <Compile Include="Warehouse\UploadOrdersRequest.cs" />
     <Compile Include="Warehouse\WarehouseOrderDtoFactory.cs" />

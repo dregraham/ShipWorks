@@ -23,4 +23,5 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// The api password
         /// </summary>
         public string EncryptedPassword { get; set; }
+    }
 }
