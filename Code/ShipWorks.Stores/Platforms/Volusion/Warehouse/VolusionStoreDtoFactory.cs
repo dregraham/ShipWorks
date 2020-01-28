@@ -32,10 +32,11 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
         public async Task<Store> Create(StoreEntity baseStoreEntity)
         {
             var storeEntity = baseStoreEntity as VolusionStoreEntity;
-            var store = helpers.PopulateCommonData(storeEntity, new ShipEngineStore());
+            var store = helpers.PopulateCommonData(storeEntity, new VolusionStore());
 
-            store.AccountId = storeEntity.ShipEngineAccountID;
-            store.OrderSourceId = storeEntity.ShipEngineOrderSourceID.ToString();
+            store.Username = storeEntity.WebUserName;
+            store.EncryptedPassword = storeEntity.ApiPassword;
+            store.BaseUrl = storeEntity.StoreUrl;
 
             return store;
         }

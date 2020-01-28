@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The URL of the Volusion store
         /// </summary>
-        public string StoreUrl { get; set; }
+        public string BaseUrl { get; set; }
 
         /// <summary>
         /// The username to login to the store
@@ -22,16 +22,5 @@ namespace ShipWorks.Stores.Warehouse.StoreData
         /// <summary>
         /// The api password
         /// </summary>
-        public string Password { get; set; }
-
-        /// <summary>
-        /// The list of order statuses to download
-        /// </summary>
-        public string[] DownloadOrderStatuses { get; set; }
-
-        /// <summary>
-        /// The timezone the server is in
-        /// </summary>
-        public string ServerTimeZone { get; set; }
-    }
+        public string EncryptedPassword { get; set; }
 }
