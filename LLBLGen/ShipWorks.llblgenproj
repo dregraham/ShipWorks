@@ -2419,7 +2419,9 @@
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
           <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="EAN_" Type="string" IsOptional="true" MaxLength="30" FieldIndex="20" />
           <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
+          <Field Name="FNSku_" Type="string" IsOptional="true" MaxLength="300" FieldIndex="19" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -2972,8 +2974,6 @@
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
           <Field Name="SetupComplete" Type="bool" FieldIndex="6" />
-          <Field Name="ShipEngineAccountID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="35" />
-          <Field Name="ShipEngineOrderSourceID" Type="guid" IsOptional="true" FieldIndex="34" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="StoreID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="StoreName" Type="string" MaxLength="75" FieldIndex="7" />
@@ -4632,7 +4632,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-17T16:17:52.0913305Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-28T17:34:09.0169021Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5264,7 +5264,6 @@
                     <Field Name="AutoUpdateStartDate" Ordinal="21" DbType="29" Precision="7" />
                     <Field Name="WarehouseID" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
                     <Field Name="WarehouseName" Ordinal="23" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="50" />
-                    <Field Name="ShipEngineAccountID" Ordinal="24" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="Customer">
@@ -13352,7 +13351,9 @@
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
             <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="EAN_" TargetFieldName="EAN" />
             <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
+            <FieldMapping FieldName="FNSku_" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
@@ -13911,8 +13912,6 @@
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
             <FieldMapping FieldName="SetupComplete" TargetFieldName="SetupComplete" />
-            <FieldMapping FieldName="ShipEngineAccountID" TargetFieldName="ShipEngineAccountID" />
-            <FieldMapping FieldName="ShipEngineOrderSourceID" TargetFieldName="ShipEngineOrderSourceID" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="StoreID" TargetFieldName="StoreID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="StoreName" TargetFieldName="StoreName" />

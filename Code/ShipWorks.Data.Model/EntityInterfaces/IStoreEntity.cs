@@ -225,18 +225,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Guid> WarehouseStoreID { get; }
-        /// <summary> The ShipEngineOrderSourceID property of the Entity Store<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Store"."ShipEngineOrderSourceID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Guid> ShipEngineOrderSourceID { get; }
-        /// <summary> The ShipEngineAccountID property of the Entity Store<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "Store"."ShipEngineAccountID"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        System.String ShipEngineAccountID { get; }
         
         
         

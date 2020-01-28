@@ -998,9 +998,7 @@ CREATE TABLE [dbo].[Store]
 [InitialDownloadOrder] [bigint] NULL,
 [InsureShipClientID] [bigint] NULL,
 [InsureShipApiKey] [nvarchar] (255) NULL,
-[WarehouseStoreID] [uniqueidentifier] NULL,
-[ShipEngineOrderSourceID] [uniqueidentifier] NULL,
-[ShipEngineAccountID] [nvarchar](50) NULL
+[WarehouseStoreID] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_Store] on [dbo].[Store]'

@@ -2775,6 +2775,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "FNSku", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku, 300, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "EAN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN, 30, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "FNSku_", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku_, 300, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "EAN_", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN_, 30, 0, 0);
 		}
 		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
 		private void InitProductVariantAliasEntityInfos()
@@ -3368,8 +3370,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("StoreEntity", "InsureShipClientID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StoreFieldIndex.InsureShipClientID, 0, 0, 19);
 			this.AddElementFieldInfo("StoreEntity", "InsureShipApiKey", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.InsureShipApiKey, 255, 0, 0);
 			this.AddElementFieldInfo("StoreEntity", "WarehouseStoreID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.WarehouseStoreID, 0, 0, 0);
-			this.AddElementFieldInfo("StoreEntity", "ShipEngineOrderSourceID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)StoreFieldIndex.ShipEngineOrderSourceID, 0, 0, 0);
-			this.AddElementFieldInfo("StoreEntity", "ShipEngineAccountID", typeof(System.String), false, false, false, true,  (int)StoreFieldIndex.ShipEngineAccountID, 50, 0, 0);
 		}
 		/// <summary>Inits SystemDataEntity's FieldInfo objects</summary>
 		private void InitSystemDataEntityInfos()
