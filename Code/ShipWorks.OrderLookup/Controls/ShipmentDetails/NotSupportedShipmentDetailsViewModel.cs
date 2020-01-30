@@ -46,7 +46,7 @@ namespace ShipWorks.OrderLookup.Controls.ShipmentDetails
         /// Error Message of the section
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string ErrorMessage => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Order Lookup mode.";
+        public string ErrorMessage => $"Shipping with {EnumHelper.GetDescription(ShipmentModel.ShipmentAdapter.ShipmentTypeCode)} is not supported in Scan-To-Ship.";
 
         /// <summary>
         /// Shipment type code

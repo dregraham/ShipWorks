@@ -334,6 +334,7 @@ VALUES
 (3, 70, '-FO-', 1),
 (3, 67, '-CL-', 8),
 (3, 80, '' , 9),
-(null, null, '-NP-' ,10),
-(null, null, '-NS-' , 11);
+(null, null, '-NP-', 10),
+(null, null, '-NS-', 11),
+(null, null, '-UV-', 12);
 GO

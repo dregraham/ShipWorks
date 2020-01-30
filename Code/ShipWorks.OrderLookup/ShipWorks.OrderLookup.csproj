@@ -336,8 +336,8 @@
       <DependentUpon>ItemsToScanControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\IVerifiedOrderService.cs" />
-    <Compile Include="ScanPack\PackedControl.xaml.cs">
-      <DependentUpon>PackedControl.xaml</DependentUpon>
+    <Compile Include="ScanPack\VerifiedControl.cs">
+      <DependentUpon>VerifiedControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ScanPack\ScanControl.xaml.cs">
       <DependentUpon>ScanControl.xaml</DependentUpon>
@@ -634,7 +634,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ScanPack\ItemsToScanControl.xaml" />
-    <Page Include="ScanPack\PackedControl.xaml" />
+    <Page Include="ScanPack\VerifiedControl.xaml" />
     <Page Include="ScanPack\ScanControl.xaml" />
     <Page Include="ScanPack\ScanPackControl.xaml" />
     <Page Include="ScanPack\ScanPackItemControl.xaml" />

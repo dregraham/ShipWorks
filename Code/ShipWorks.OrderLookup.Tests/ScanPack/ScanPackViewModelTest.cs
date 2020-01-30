@@ -223,7 +223,7 @@ namespace ShipWorks.OrderLookup.Tests.ScanPack
 
             testObject.ProcessItemScan("itemUpc");
 
-            verifiedOrderService.Verify(x => x.Save(It.IsAny<OrderEntity>()));
+            verifiedOrderService.Verify(x => x.Save(It.IsAny<OrderEntity>(), true));
         }
 
         [Theory]

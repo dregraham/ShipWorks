@@ -16,6 +16,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Enums;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Settings;
@@ -246,6 +247,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 return new TrackingResult { Summary = "No tracking number found..." };
             }
 
+            string trackingLink = GetCarrierTrackingUrl(shipment);
+
+            return string.IsNullOrWhiteSpace(trackingLink) ?
+                new TrackingResult { Summary = "No tracking information available..." } :
+                new TrackingResult { Summary = $"<a style='background-color:#FAFAFA; color:#2266AA;' href ={trackingLink}> Click here for tracking</a>" };
+        }
+
+        /// <summary>
+        /// Try to determine carrier, if we can, send back the tracking URL
+        /// </summary>
+        protected override string GetCarrierTrackingUrlInternal(ShipmentEntity shipment)
+        {
             string trackingLink = string.Empty;
 
             string serviceUsed = shippingManager.GetOverriddenServiceUsed(shipment);
@@ -271,9 +284,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
                 trackingLink = $"http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={shipment.TrackingNumber}";
             }
 
-            return string.IsNullOrWhiteSpace(trackingLink) ?
-                new TrackingResult { Summary = "No tracking information available..." } :
-                new TrackingResult { Summary = $"<a style='background-color:#FAFAFA; color:#2266AA;' href ={trackingLink}> Click here for tracking</a>" };
+            return trackingLink;
         }
 
         /// <summary>
@@ -331,7 +342,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            shipment.RequestedLabelFormat = shipment.AmazonSFP.RequestedLabelFormat;
+            if (shipment.AmazonSFP != null)
+            {
+                shipment.RequestedLabelFormat = shipment.AmazonSFP.RequestedLabelFormat;
+                shipment.Insurance = shipment.AmazonSFP.Insurance;
+            }
+
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
     }
 }

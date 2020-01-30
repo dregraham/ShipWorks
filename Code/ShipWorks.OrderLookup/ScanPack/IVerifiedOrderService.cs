@@ -11,6 +11,6 @@ namespace ShipWorks.OrderLookup.ScanPack
         /// <summary>
         /// Save verified order data
         /// </summary>
-        void Save(OrderEntity order);
+        void Save(OrderEntity order, bool verified);
     }
 }

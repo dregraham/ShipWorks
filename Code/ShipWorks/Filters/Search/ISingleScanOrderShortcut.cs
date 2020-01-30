@@ -1,4 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Filters.Search
 {
@@ -17,6 +18,11 @@ namespace ShipWorks.Filters.Search
         /// Get the OrderID from the barcodeText
         /// </summary>
         long GetOrderID(string barcodeText);
+
+        /// <summary>
+        /// Get the given orders shortcut
+        /// </summary>
+        string GetShortcutText(IOrderEntity order);
 
         /// <summary>
         /// Whether or not the scan result starts with the ShipWorks order prefix

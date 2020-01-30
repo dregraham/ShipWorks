@@ -146,6 +146,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.FedEx
             var shipment = Create.Shipment(context.Order)
                 .AsFedEx(x => x.WithPackage().Set(y => y.Service, (int) FedExServiceType.FedExFimsStandard))
                     .Set(x => x.TrackingNumber = "123456")
+                    .Set(x => x.Processed = true)
                 .Build();
 
             FedExShipmentType testObject = context.Mock.Create<FedExShipmentType>();

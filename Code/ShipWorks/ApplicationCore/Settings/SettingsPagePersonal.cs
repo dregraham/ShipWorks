@@ -1,6 +1,8 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.Data.Connection;
@@ -17,16 +19,21 @@ namespace ShipWorks.ApplicationCore.Settings
     /// </summary>
     public partial class SettingsPagePersonal : SettingsPageBase
     {
+        private readonly IUserSession userSession;
+        private readonly ICurrentUserSettings currentUserSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SettingsPagePersonal()
+        public SettingsPagePersonal(ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
             EnumHelper.BindComboBox<FilterInitialSortType>(filterInitialSort);
             EnumHelper.BindComboBox<WeightDisplayFormat>(comboWeightFormat);
+
+            userSession = lifetimeScope.Resolve<IUserSession>();
+            currentUserSettings = lifetimeScope.Resolve<ICurrentUserSettings>();
         }
 
         /// <summary>
@@ -34,9 +41,9 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (UserSession.IsLoggedOn)
+            if (userSession.IsLoggedOn)
             {
-                UserSettingsEntity settings = UserSession.User.Settings;
+                UserSettingsEntity settings = userSession.User.Settings;
 
                 colorScheme.SelectedIndex = (int) ShipWorksDisplay.ColorScheme;
                 systemTray.Checked = ShipWorksDisplay.HideInSystemTray;
@@ -63,6 +70,9 @@ namespace ShipWorks.ApplicationCore.Settings
                 filterInitialSort.SelectedValue = (FilterInitialSortType) settings.FilterInitialSortType;
 
                 comboWeightFormat.SelectedValue = (WeightDisplayFormat) settings.ShippingWeightFormat;
+
+                displayShortcutIndicator.Checked =
+                    currentUserSettings.ShouldShowNotification(UserConditionalNotificationType.ShortcutIndicator);
             }
             else
             {
@@ -82,9 +92,9 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         public override void Save()
         {
-            if (UserSession.IsLoggedOn)
+            if (userSession.IsLoggedOn)
             {
-                UserSettingsEntity settings = UserSession.User.Settings;
+                UserSettingsEntity settings = userSession.User.Settings;
 
                 ShipWorksDisplay.ColorScheme = (ColorScheme) colorScheme.SelectedIndex;
                 ShipWorksDisplay.HideInSystemTray = systemTray.Checked;
@@ -98,6 +108,15 @@ namespace ShipWorks.ApplicationCore.Settings
                 settings.FilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
 
                 settings.ShippingWeightFormat = (int) comboWeightFormat.SelectedValue;
+
+                if (displayShortcutIndicator.Checked)
+                {
+                    currentUserSettings.StartShowingNotification(UserConditionalNotificationType.ShortcutIndicator);
+                }
+                else
+                {
+                    currentUserSettings.StopShowingNotification(UserConditionalNotificationType.ShortcutIndicator);
+                }
 
                 using (SqlAdapter adapter = new SqlAdapter())
                 {

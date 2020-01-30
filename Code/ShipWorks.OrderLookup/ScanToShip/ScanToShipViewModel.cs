@@ -116,7 +116,7 @@ namespace ShipWorks.OrderLookup.ScanToShip
             // If we have an unverified order, we're not on the pack tab, and require validation is on, show the verification error
             if (shipmentModel?.SelectedOrder?.Verified == false &&
                 !IsPackTabActive &&
-                userSession?.Settings?.AutoPrintRequireValidation == true)
+                userSession?.Settings?.RequireVerificationToShip == true)
             {
                 ShowOrderVerificationError = true;
             }
