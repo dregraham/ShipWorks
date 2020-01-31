@@ -38,7 +38,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
             store.EncryptedPassword = storeEntity.ApiPassword;
             store.BaseUrl = storeEntity.StoreUrl;
 
-            return store;
+            return await Task.FromResult(store);
         }
     }
 }

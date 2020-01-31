@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
-        private readonly IShipEngineApiKey apiKey;
+        private readonly IShipEngineApiKey seApiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.ShipEngine
 
         private const string liveRegKey = "ShipEngineLive";
         private const string defaultEndpointBase = "https://api.shipengine.com";
-        private const string addStoreResource = "connections/order_sources";
 
         /// <summary>
         /// Constructor
@@ -45,7 +44,7 @@ namespace ShipWorks.Shipping.ShipEngine
             IStoreManager storeManager,
             IInterapptiveOnly interapptiveOnly)
         {
-            this.apiKey = apiKey;
+            this.seApiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
@@ -156,7 +155,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     merchantSellerId: store.MerchantID,
                     mwsAuthToken: store.AuthToken);
 
-                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, apiKey.GetPartnerApiKey(), $"se-{accountId}");
+                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, seApiKey.GetPartnerApiKey(), $"se-{accountId}");
                 return Result.FromSuccess();
             }
             catch (ApiException ex)
@@ -196,7 +195,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
                 return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
-                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, apiKey.GetPartnerApiKey(), $"se-{accountId}"));
+                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, seApiKey.GetPartnerApiKey(), $"se-{accountId}"));
             }
             catch (ApiException ex)
             {
@@ -415,12 +414,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<string> GetApiKey()
         {
-            if (string.IsNullOrWhiteSpace(apiKey.Value))
+            if (string.IsNullOrWhiteSpace(seApiKey.Value))
             {
-                await apiKey.Configure().ConfigureAwait(false);
+                await seApiKey.Configure().ConfigureAwait(false);
             }
 
-            return apiKey.Value;
+            return seApiKey.Value;
         }
 
         /// <summary>
