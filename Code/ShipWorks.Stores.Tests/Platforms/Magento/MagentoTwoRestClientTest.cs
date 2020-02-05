@@ -29,17 +29,18 @@ namespace ShipWorks.Stores.Tests.Platforms.Magento
         }
 
         [Theory]
-        [InlineData("   test")]
-        [InlineData("\"test\"")]
-        [InlineData("       \" test \"")]
-        [InlineData("test")]
-        [InlineData(" \"test\"")]
-        [InlineData(" \"test")]
-        [InlineData("\n\n\t\n\"\t    test\"")]
+        [InlineData("   zjami83rplavi5tzmygipk9kwqynovv8")]
+        [InlineData("\"zjami83rplavi5tzmygipk9kwqynovv8\"")]
+        [InlineData("       \" zjami83rplavi5tzmygipk9kwqynovv8 \"")]
+        [InlineData("zjami83rplavi5tzmygipk9kwqynovv8")]
+        [InlineData(" \"zjami83rplavi5tzmygipk9kwqynovv8\"")]
+        [InlineData(" \"zjami83rplavi5tzmygipk9kwqynovv8")]
+        [InlineData("\n\n\t\n\"\t    zjami83rplavi5tzmygipk9kwqynovv8\"")]
+        [InlineData("    \"zjami83rplavi5tzmygipk9kwqynovv8")]
         public void TrimToken_RemovesWhiteSpaceAndDoubleQuotes(string token)
         {
             var result = testObject.TrimToken(token);
-            Assert.Equal("test", result);
+            Assert.Equal("zjami83rplavi5tzmygipk9kwqynovv8", result);
         }
 
         public void Dispose()
