@@ -98,7 +98,10 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw new MagentoException("An error occurred when communicating with Magento");
             }
 
-            return tokenResponse.Trim('"');
+            log.Info("Pre-processed Magento token: " + tokenResponse);
+
+            // The three .Trim()s here first remove all whitespace, then any double-quotes, then any remaining whitespace
+            return tokenResponse.Trim().Trim('"').Trim();
         }
 
         /// <summary>
