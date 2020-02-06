@@ -73,14 +73,8 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         public string TrimToken(string token)
         {
-            log.Info("Pre-processed Magento token: " + token);
-
             // The three .Trim()s here first remove all whitespace, then any double-quotes, then any remaining whitespace
-            string trimmedToken = token.Trim().Trim('"').Trim();
-
-            log.Info("Post-processed Magento token: " + trimmedToken);
-
-            return trimmedToken;
+            return token.Trim().Trim('"').Trim();
         }
 
         /// <summary>
