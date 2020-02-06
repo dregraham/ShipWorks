@@ -69,6 +69,15 @@ namespace ShipWorks.Stores.Platforms.Magento
         }
 
         /// <summary>
+        /// Removes whitespace and double quotes from around the Magento token
+        /// </summary>
+        public string TrimToken(string token)
+        {
+            // The three .Trim()s here first remove all whitespace, then any double-quotes, then any remaining whitespace
+            return token.Trim().Trim('"').Trim();
+        }
+
+        /// <summary>
         /// Get an admin token for the given credentials
         /// </summary>
         public string GetToken()
@@ -98,7 +107,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                 throw new MagentoException("An error occurred when communicating with Magento");
             }
 
-            return tokenResponse.Trim('"');
+            return TrimToken(tokenResponse);
         }
 
         /// <summary>
