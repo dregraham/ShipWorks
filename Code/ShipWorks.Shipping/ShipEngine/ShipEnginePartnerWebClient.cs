@@ -1,13 +1,12 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -17,15 +16,11 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component(SingleInstance = true)]
     public class ShipEnginePartnerWebClient : IShipEnginePartnerWebClient
     {
-        private readonly string CreateAccountUrl;
-        private readonly string CreateApiKeyUrl;
-
-        private const string liveRegKey = "ShipEngineLive";
-        private const string defaultEndpointBase = "https://api.shipengine.com/v1";
+        private const string CreateAccountUrl = "https://api.shipengine.com/v1/partners/accounts";
+        private const string CreateApiKeyUrl = "https://api.shipengine.com/v1/partners/accounts/{0}/api_keys";
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
-        private readonly IInterapptiveOnly interapptiveOnly;
         private readonly ILog log;
 
         /// <summary>
@@ -33,33 +28,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
             Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            Func<Type, ILog> logFactory,
-            IInterapptiveOnly interapptiveOnly)
+            Func<Type, ILog> logFactory)
         {
             this.requestFactory = requestFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
-            this.interapptiveOnly = interapptiveOnly;
             log = logFactory(typeof(ShipEnginePartnerWebClient));
-
-            CreateAccountUrl = $"{GetEndpointBase()}/partners/accounts/";
-            CreateApiKeyUrl = CreateAccountUrl + "{0}/api_keys";
-        }
-
-        /// <summary>
-        /// Get the base endpoint for ShipEngine requests
-        /// </summary>
-        private string GetEndpointBase()
-        {
-            if (interapptiveOnly.UseFakeAPI(liveRegKey))
-            {
-                var endpointOverride = interapptiveOnly.Registry.GetValue("ShipEngineEndpoint", string.Empty);
-                if (!string.IsNullOrWhiteSpace(endpointOverride))
-                {
-                    return endpointOverride.TrimEnd('/');
-                }
-            }
-
-            return defaultEndpointBase;
         }
 
         /// <summary>
@@ -86,18 +59,18 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<string> SendPartnerRequest(string partnerApiKey, string requestUrl, string postText, string logName, string responseFieldName)
         {
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, logName);
-            JToken responseToken = null;
-
             IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(postText, "application/json");
             request.Headers.Add("api-key", partnerApiKey);
             request.Uri = new Uri(requestUrl);
 
+            JToken responseToken = null;
+
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, logName);
             apiLogEntry.LogRequest(request);
 
             try
             {
-                IHttpResponseReader response = await request.GetResponseAsync().ConfigureAwait(false);
+                IHttpResponseReader response = await request.GetResponseAsync();
                 string result = response.ReadResult();
 
                 apiLogEntry.LogResponse(result);

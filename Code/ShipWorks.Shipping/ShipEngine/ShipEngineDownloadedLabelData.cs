@@ -6,7 +6,6 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping;
 using static ShipEngine.ApiClient.Model.Label;
 
 namespace ShipWorks.Shipping.ShipEngine

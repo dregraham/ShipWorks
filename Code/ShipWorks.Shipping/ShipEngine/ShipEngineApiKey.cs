@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = await GetNewApiKey().ConfigureAwait(false);
+                    apiKey = await GetNewApiKey();
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -67,9 +67,9 @@ namespace ShipWorks.Shipping.ShipEngine
         private async Task<string> GetNewApiKey()
         {
             string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey).ConfigureAwait(false);
+            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey);
 
-            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);
+            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
         }
 
         /// <summary>

@@ -11,11 +11,9 @@ using Newtonsoft.Json.Linq;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -26,14 +24,10 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
-        private readonly IShipEngineApiKey seApiKey;
+        private readonly IShipEngineApiKey apiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
-        private readonly IInterapptiveOnly interapptiveOnly;
-
-        private const string liveRegKey = "ShipEngineLive";
-        private const string defaultEndpointBase = "https://api.shipengine.com";
 
         /// <summary>
         /// Constructor
@@ -41,33 +35,12 @@ namespace ShipWorks.Shipping.ShipEngine
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
             ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory,
-            IStoreManager storeManager,
-            IInterapptiveOnly interapptiveOnly)
+            IStoreManager storeManager)
         {
-            this.seApiKey = apiKey;
+            this.apiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
-            this.interapptiveOnly = interapptiveOnly;
-        }
-
-        /// <summary>
-        /// Get the base endpoint for ShipEngine requests
-        /// </summary>
-        private string GetEndpointBase(bool isBeta = false)
-        {
-            if (interapptiveOnly.UseFakeAPI(liveRegKey))
-            {
-                var endpointOverride = interapptiveOnly.Registry.GetValue("ShipEngineEndpoint", string.Empty);
-                if (!string.IsNullOrWhiteSpace(endpointOverride))
-                {
-                    return endpointOverride.TrimEnd('/');
-                }
-            }
-
-            string version = isBeta ? "v-beta" : "v1";
-
-            return $"{defaultEndpointBase}/{version}";
         }
 
         /// <summary>
@@ -90,9 +63,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
                 return await ConnectCarrierAccount(apiInstance, ApiLogSource.DHLExpress, "ConnectDHLExpressAccount",
-                    apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, apiKey)).ConfigureAwait(false);
+                    apiInstance.DHLExpressAccountCarrierConnectAccountAsync(dhlAccountInfo, await GetApiKey()));
             }
             catch (ApiException ex)
             {
@@ -109,13 +81,11 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
-
                 HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
                 submitter.Headers.Add($"Content-Type: application/json");
-                submitter.Headers.Add($"api-key: {apiKey}");
+                submitter.Headers.Add($"api-key: {await GetApiKey()}");
                 submitter.Verb = HttpVerb.Delete;
-                submitter.Uri = new Uri($"{GetEndpointBase()}/connections/carriers/amazon_shipping_us/{accountId}");
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{accountId}");
 
                 // Delete request returns no content, this is not an error
                 submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
@@ -146,7 +116,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // first we have to get the account id
-                string accountId = await GetAccountID().ConfigureAwait(false);
+                string accountId = await GetAccountID();
 
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
@@ -155,7 +125,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     merchantSellerId: store.MerchantID,
                     mwsAuthToken: store.AuthToken);
 
-                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, seApiKey.GetPartnerApiKey(), $"se-{accountId}");
+                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, apiKey.GetPartnerApiKey(), $"se-{accountId}");
                 return Result.FromSuccess();
             }
             catch (ApiException ex)
@@ -178,7 +148,7 @@ namespace ShipWorks.Shipping.ShipEngine
             try
             {
                 // first we have to get the account id
-                string accountId = await GetAccountID().ConfigureAwait(false);
+                string accountId = await GetAccountID();
 
                 AmazonStoreEntity store = storeManager.GetEnabledStores()
                     .FirstOrDefault(s => s.StoreTypeCode == StoreTypeCode.Amazon) as AmazonStoreEntity;
@@ -195,7 +165,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
                 return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
-                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, seApiKey.GetPartnerApiKey(), $"se-{accountId}"));
+                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, apiKey.GetPartnerApiKey(), $"se-{accountId}"));
             }
             catch (ApiException ex)
             {
@@ -236,9 +206,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
                 return await ConnectCarrierAccount(apiInstance, ApiLogSource.Asendia, "ConnectAsendiaAccount",
-                apiInstance.AsendiaAccountCarrierConnectAccountAsync(ascendiaAccountInfo, apiKey)).ConfigureAwait(false);
+                apiInstance.AsendiaAccountCarrierConnectAccountAsync(ascendiaAccountInfo, await GetApiKey()));
             }
             catch (ApiException ex)
             {
@@ -259,7 +228,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<GenericResult<string>> GetCarrierId(string accountNumber)
         {
-            string key = await GetApiKey().ConfigureAwait(false);
+            string key = await GetApiKey();
             // If for some reason the key is blank show an error because we have to have the key to make the request
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -319,8 +288,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
-                return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, apiKey).ConfigureAwait(false);
+                return await labelsApi.LabelsPurchaseLabelWithRateAsync(rateId, request, await GetApiKey());
             }
             catch (ApiException ex)
             {
@@ -337,7 +305,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ConfigureLogging(labelsApi, apiLogSource, "PurchaseLabel", LogActionType.Other);
             try
             {
-                string localApiKey = await GetApiKey().ConfigureAwait(false);
+                string localApiKey = await GetApiKey();
 
                 Label label = await telemetricResult.RunTimedEventAsync(TelemetricEventType.GetLabel,
                         () => labelsApi.LabelsPurchaseLabelAsync(request, localApiKey)
@@ -363,8 +331,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ConfigureLogging(ratesApi, apiLogSource, "RateShipment", LogActionType.GetRates);
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
-                return await ratesApi.RatesRateShipmentAsync(request, apiKey);
+                return await ratesApi.RatesRateShipmentAsync(request, await GetApiKey());
             }
             catch (ApiException ex)
             {
@@ -382,8 +349,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
-                return await labelsApi.LabelsVoidLabelAsync(labelId, apiKey);
+                return await labelsApi.LabelsVoidLabelAsync(labelId, await GetApiKey());
             }
             catch (ApiException ex)
             {
@@ -400,8 +366,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ConfigureLogging(labelsApi, apiLogSource, "Track", LogActionType.GetRates);
             try
             {
-                var apiKey = await GetApiKey().ConfigureAwait(false);
-                return await labelsApi.LabelsTrackAsync(labelId, apiKey);
+                return await labelsApi.LabelsTrackAsync(labelId, await GetApiKey());
             }
             catch (ApiException ex)
             {
@@ -414,12 +379,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<string> GetApiKey()
         {
-            if (string.IsNullOrWhiteSpace(seApiKey.Value))
+            if (string.IsNullOrWhiteSpace(apiKey.Value))
             {
-                await seApiKey.Configure().ConfigureAwait(false);
+                await apiKey.Configure().ConfigureAwait(false);
             }
 
-            return seApiKey.Value;
+            return apiKey.Value;
         }
 
         /// <summary>
@@ -475,14 +440,13 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get an account ID from a WhoAmI request
         /// </summary>
-        public async Task<string> GetAccountID()
+        private async Task<string> GetAccountID()
         {
-            var apiKey = await GetApiKey().ConfigureAwait(false);
             HttpJsonVariableRequestSubmitter whoAmIRequest = new HttpJsonVariableRequestSubmitter();
             whoAmIRequest.Headers.Add($"Content-Type: application/json");
-            whoAmIRequest.Headers.Add($"api-key: {apiKey}");
+            whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
             whoAmIRequest.Verb = HttpVerb.Get;
-            whoAmIRequest.Uri = new Uri($"{GetEndpointBase()}/environment/whoami");
+            whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
 
             EnumResult<HttpStatusCode> result =
                 whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
@@ -494,7 +458,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<GenericResult<string>> GetAmazonShippingCarrierID()
         {
-            string key = await GetApiKey().ConfigureAwait(false);
+            string key = await GetApiKey();
             ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
             ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"ListCarriers", LogActionType.Other);
 

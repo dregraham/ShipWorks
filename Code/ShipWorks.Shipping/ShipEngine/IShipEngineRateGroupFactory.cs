@@ -1,5 +1,4 @@
 ﻿using ShipEngine.ApiClient.Model;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Collections.Generic;
 

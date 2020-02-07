@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
 
         /// <summary>
-        /// Ensures the ApiKey contains a value ascynchronously
+        /// Ensures the ApiKey contains a value
         /// </summary>
         Task Configure();
 

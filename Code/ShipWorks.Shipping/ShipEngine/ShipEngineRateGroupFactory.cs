@@ -8,7 +8,6 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
-using ShipWorks.Shipping;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
