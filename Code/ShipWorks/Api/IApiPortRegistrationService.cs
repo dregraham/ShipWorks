@@ -3,7 +3,7 @@
     /// <summary>
     /// Represents the Api Port Registration Service
     /// </summary>
-    interface IApiPortRegistrationService
+    public interface IApiPortRegistrationService
     {
         /// <summary>
         /// Register the given port number
