@@ -31,4 +31,8 @@
     <PackageReference Include="Autofac" Version="4.6.2" />
     <PackageReference Include="Autofac.WebApi" Version="3.1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
+  </ItemGroup>
 </Project>
