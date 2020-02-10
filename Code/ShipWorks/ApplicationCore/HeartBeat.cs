@@ -5,6 +5,7 @@ using Autofac;
 using Interapptive.Shared;
 using log4net;
 using ShipWorks.Actions;
+using ShipWorks.Api;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Enums;
@@ -158,6 +159,8 @@ namespace ShipWorks.ApplicationCore
             try
             {
                 InternalDoHeartbeat(options);
+
+                IoC.UnsafeGlobalLifetimeScope.Resolve<IApiService>().Start();
             }
             finally
             {
