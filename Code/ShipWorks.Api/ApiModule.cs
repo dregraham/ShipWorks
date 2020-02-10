@@ -20,6 +20,7 @@ namespace ShipWorks.Api
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            
         }
     }
 }

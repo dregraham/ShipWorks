@@ -8,11 +8,14 @@ using Microsoft.Web.Http;
 using Microsoft.Web.Http.Routing;
 using Owin;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ExecutionMode;
-
+using Autofac.Integration.WebApi;
 
 namespace ShipWorks.Api
 {
+    /// <summary>
+    /// An local web server leveraging Owin infrastructure that can be
+    /// self-hosted within ShipWorks.
+    /// </summary>
     [Component(SingleInstance = true)]
     public class ApiService : IApiService
     {
@@ -30,6 +33,9 @@ namespace ShipWorks.Api
             }
         }
 
+        /// <summary>
+        /// Configures the service. This is called by convention, hense 0 references
+        /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
             HttpConfiguration configuration = new HttpConfiguration();
@@ -37,8 +43,22 @@ namespace ShipWorks.Api
             appBuilder.UseWebApi(configuration);
 
             ConfigureApiVersioning(configuration);
-           // IoC.RegisterApiControllers(configuration, appBuilder);
+            RegisterApiControllers(configuration, appBuilder);
 
+        }
+
+        /// <summary>
+        /// Registers API controllers with Autofac
+        /// </summary>
+        public void RegisterApiControllers(HttpConfiguration configuration, IAppBuilder appBuilder)
+        {
+            // Definately want to figure out another way to do this
+            var scope = IoC.UnsafeGlobalLifetimeScope;
+            
+            configuration.DependencyResolver = new AutofacWebApiDependencyResolver(scope);
+            appBuilder.UseAutofacMiddleware(scope);
+            
+            appBuilder.UseAutofacWebApi(configuration);
         }
 
         /// <summary>
@@ -66,6 +86,9 @@ namespace ShipWorks.Api
             //    constraints: new { apiVersion = new ApiVersionRouteConstraint() });
         }
 
+        /// <summary>
+        /// Dispose
+        /// </summary>
         public void Dispose()
         {
             if (!isDisposing)
