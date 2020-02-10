@@ -127,6 +127,7 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait skipifsilent; Check: not NeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/command:registerapiport"; Flags: nowait runhidden
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden
