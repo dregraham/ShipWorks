@@ -27,4 +27,8 @@
   <ItemGroup>
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs" Link="Properties\AssemblyInfoCommon.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac.WebApi" Version="3.1.0" />
+  </ItemGroup>
 </Project>
