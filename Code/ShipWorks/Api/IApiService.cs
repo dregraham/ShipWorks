@@ -1,9 +1,11 @@
-﻿namespace ShipWorks.Api
+﻿using System;
+
+namespace ShipWorks.Api
 {
     /// <summary>
     /// Represents the ShipWorks Api
     /// </summary>
-    interface IApiService
+    public interface IApiService: IDisposable
     {
         /// <summary>
         /// Start the Shipworks Api
