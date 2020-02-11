@@ -18,8 +18,7 @@ namespace ShipWorks.Api
     /// An local web server leveraging Owin infrastructure that can be
     /// self-hosted within ShipWorks.
     /// </summary>
-    [Component(SingleInstance = true)]
-    public class ApiService : IApiService, IInitializeForCurrentDatabase
+    public class ApiService : IInitializeForCurrentDatabase
     {
         double timerInterval = 5000;
         private IDisposable server;
