@@ -4,6 +4,7 @@ using Microsoft.Owin.Hosting;
 using System.Net;
 using log4net;
 using ShipWorks.Api.Configuration;
+using Autofac;
 
 namespace ShipWorks.Api
 {
@@ -17,15 +18,16 @@ namespace ShipWorks.Api
         private IDisposable server;
         private bool isDisposing;
         private readonly ILog log;
-        private readonly IApiStartupConfiguration apiStartup;
+        private IApiStartupConfiguration apiStartup;
+        private readonly Func<IApiStartupConfiguration> apiStartupFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiService(IApiStartupConfiguration apiStartup, Func<Type, ILog> loggerFactory)
+        public ApiService(Func<IApiStartupConfiguration> apiStartupFactory, Func<Type, ILog> loggerFactory)
         {
             log = loggerFactory(typeof(ApiService));
-            this.apiStartup = apiStartup;
+            this.apiStartupFactory = apiStartupFactory;
         }
 
         /// <summary>
@@ -33,10 +35,16 @@ namespace ShipWorks.Api
         /// </summary>
         public void Start()
         {
-            if (server == null && !IsRunning())
+            if (!IsRunning())
             {
+                if (server != null)
+                {
+                    server.Dispose();
+                    apiStartup.Dispose();
+                }
                 try
                 {
+                    apiStartup = apiStartupFactory();
                     server = WebApp.Start("http://+:8081/", apiStartup.Configuration);
                 }
                 catch (Exception ex)
