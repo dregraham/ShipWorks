@@ -22,6 +22,15 @@ namespace Interapptive.Shared.Utility
         public double Interval { get; set; }
 
         /// <summary>
+        /// Event to call when timer is ellapsed
+        /// </summary>
+        public event ElapsedEventHandler Elapsed
+        {
+            add { timer.Elapsed += value; }
+            remove { timer.Elapsed -= value; }
+        }
+
+        /// <summary>
         /// Starts the timer
         /// </summary>
         public void Start() => timer.Start();
@@ -30,14 +39,5 @@ namespace Interapptive.Shared.Utility
         /// Stops the timer
         /// </summary>
         public void Stop() => timer.Stop();
-
-        /// <summary>
-        /// Event to call when timer is ellapsed
-        /// </summary>
-        public event ElapsedEventHandler Elapsed
-        {
-            add { timer.Elapsed += value; }
-            remove { timer.Elapsed -= value; }
-        }
     }
 }

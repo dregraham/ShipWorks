@@ -1,12 +1,16 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using Microsoft.Owin.Hosting;
+using System.Net;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using System.Timers;
 using ShipWorks.Api.Configuration;
+using Autofac;
 using ShipWorks.Api.HealthCheck;
 using ShipWorks.Api.Infrastructure;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Api
 {
@@ -14,13 +18,15 @@ namespace ShipWorks.Api
     /// An local web server leveraging Owin infrastructure that can be
     /// self-hosted within ShipWorks.
     /// </summary>
-    public class ApiService : IInitializeForCurrentDatabase
+    [Component(SingleInstance = true)]
+    public class ApiService : IApiService, IInitializeForCurrentDatabase
     {
+        double timerInterval = 5000;
         private IDisposable server;
         private bool isDisposing;
         private readonly ILog log;
         private IApiStartupConfiguration apiStartup;
-		private Timer timer = new Timer(5000);
+		private ITimer timer;
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
         private readonly IWebApp webApp;
@@ -28,11 +34,14 @@ namespace ShipWorks.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiService(Func<IApiStartupConfiguration> apiStartupFactory, 
-            IHealthCheckClient healthCheckClient, 
+        public ApiService(Func<IApiStartupConfiguration> apiStartupFactory,
+            IHealthCheckClient healthCheckClient,
             IWebApp webApp,
+            ITimer timer,
             Func<Type, ILog> loggerFactory)
         {
+            this.timer = timer;
+            timer.Interval = timerInterval;
             log = loggerFactory(typeof(ApiService));
             this.apiStartupFactory = apiStartupFactory;
             this.healthCheckClient = healthCheckClient;
@@ -81,7 +90,7 @@ namespace ShipWorks.Api
                 }
                 catch (Exception ex)
                 {
-                    log.Debug("Unable to start the ShipWorks Api.", ex);
+                    log.Debug("Exception while starting ShipWorks Api", ex);
                 }
             }
         }

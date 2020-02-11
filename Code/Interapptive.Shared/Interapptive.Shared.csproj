@@ -552,6 +552,7 @@
     <Compile Include="Utility\ImageExtensions.cs" />
     <Compile Include="Utility\IResult.cs" />
     <Compile Include="Utility\ITelemetryCollection.cs" />
+    <Compile Include="Utility\ITimer.cs" />
     <Compile Include="Utility\Maybe.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
@@ -573,6 +574,7 @@
     <Compile Include="Utility\TelemetricEventType.cs" />
     <Compile Include="Utility\TelemetricResult.cs" />
     <Compile Include="Utility\TelemetricResultBaseName.cs" />
+    <Compile Include="Utility\TimerWrapper.cs" />
     <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
