@@ -7,7 +7,7 @@ using ShipWorks.ApplicationCore;
 namespace ShipWorks.Api.HealthCheck
 {
     /// <summary>
-    /// Controller for checking the status of the ShipWorks Api
+    /// Controller for checking the status of the ShipWorks API
     /// </summary>
     [ApiVersion("1.0")]
     [RoutePrefix("shipworks/api/v{version:apiVersion}/healthcheck")]
@@ -24,7 +24,7 @@ namespace ShipWorks.Api.HealthCheck
         }
 
         /// <summary>
-        /// Check the status of the ShipWorks Api
+        /// Check the status of the ShipWorks API
         /// </summary>
         /// <response code="200">The API is operational. Returns the ShipWorks instance ID of the API</response>
         /// <response code="500">The API is not able to retrieve the ShipWorks instance ID</response>
