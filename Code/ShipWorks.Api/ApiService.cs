@@ -1,13 +1,10 @@
 ﻿using System;
 using Interapptive.Shared.ComponentRegistration;
-using Microsoft.Owin.Hosting;
-using System.Net;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using System.Timers;
 using ShipWorks.Api.Configuration;
-using Autofac;
 using ShipWorks.Api.HealthCheck;
 using ShipWorks.Api.Infrastructure;
 
@@ -17,8 +14,7 @@ namespace ShipWorks.Api
     /// An local web server leveraging Owin infrastructure that can be
     /// self-hosted within ShipWorks.
     /// </summary>
-    [Component(SingleInstance = true)]
-    public class ApiService : IApiService, IInitializeForCurrentDatabase
+    public class ApiService : IInitializeForCurrentDatabase
     {
         private IDisposable server;
         private bool isDisposing;

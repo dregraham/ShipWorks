@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.ComponentRegistration;
 using Microsoft.Owin.Hosting;
 using Owin;
 
@@ -7,7 +8,8 @@ namespace ShipWorks.Api.Infrastructure
     /// <summary>
     /// Used to load, assemble and start a webapp
     /// </summary>
-    public class WebAppWrapper
+    [Component]
+    public class WebAppWrapper : IWebApp
     {
         /// <summary>
         //  Start a web app using default settings and the given url and entry point. e.g.
