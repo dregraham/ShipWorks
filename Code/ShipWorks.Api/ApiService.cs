@@ -90,7 +90,7 @@ namespace ShipWorks.Api
                 }
                 catch (Exception ex)
                 {
-                    log.Debug("Exception while starting ShipWorks Api", ex);
+                    log.Debug("Unable to start the ShipWorks Api.", ex);
                 }
             }
         }
