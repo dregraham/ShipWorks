@@ -9,6 +9,7 @@ using System.Timers;
 using ShipWorks.Api.Configuration;
 using Autofac;
 using ShipWorks.Api.HealthCheck;
+using ShipWorks.Api.Infrastructure;
 
 namespace ShipWorks.Api
 {
@@ -26,17 +27,20 @@ namespace ShipWorks.Api
 		private Timer timer = new Timer(5000);
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
+        private readonly IWebApp webApp;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ApiService(Func<IApiStartupConfiguration> apiStartupFactory, 
             IHealthCheckClient healthCheckClient, 
+            IWebApp webApp,
             Func<Type, ILog> loggerFactory)
         {
             log = loggerFactory(typeof(ApiService));
             this.apiStartupFactory = apiStartupFactory;
             this.healthCheckClient = healthCheckClient;
+            this.webApp = webApp;
         }
 
         /// <summary>
@@ -63,7 +67,7 @@ namespace ShipWorks.Api
                 try
                 {
                     apiStartup = apiStartupFactory();
-                    server = WebApp.Start("http://+:8081/", apiStartup.Configuration);
+                    server = webApp.Start("http://+:8081/", apiStartup.Configuration);
                 }
                 catch (Exception ex)
                 {
