@@ -41,7 +41,7 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.OwinSelfHost" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="4.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="4.0.30506" />
-    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.1.0" />
     <PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Hosting" Version="3.1.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0" />
