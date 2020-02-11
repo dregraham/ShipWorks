@@ -80,7 +80,6 @@ namespace ShipWorks.Api
         /// <summary>
         /// Configures the service. This is called by convention, hense 0 references
         /// </summary>
-        [Obfuscation(Exclude = true)]
         public void Configuration(IAppBuilder appBuilder)
         {
             HttpConfiguration configuration = new HttpConfiguration();
