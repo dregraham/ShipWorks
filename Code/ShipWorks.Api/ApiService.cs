@@ -1,13 +1,9 @@
 ﻿using System;
-using Interapptive.Shared.ComponentRegistration;
-using Microsoft.Owin.Hosting;
-using System.Net;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using System.Timers;
 using ShipWorks.Api.Configuration;
-using Autofac;
 using ShipWorks.Api.HealthCheck;
 using ShipWorks.Api.Infrastructure;
 using Interapptive.Shared.Utility;
@@ -20,12 +16,12 @@ namespace ShipWorks.Api
     /// </summary>
     public class ApiService : IInitializeForCurrentDatabase
     {
-        double timerInterval = 5000;
+        private const double TimerInterval = 5000;
         private IDisposable server;
         private bool isDisposing;
         private readonly ILog log;
         private IApiStartupConfiguration apiStartup;
-		private ITimer timer;
+		private readonly ITimer timer;
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
         private readonly IWebApp webApp;
@@ -40,7 +36,7 @@ namespace ShipWorks.Api
             Func<Type, ILog> loggerFactory)
         {
             this.timer = timer;
-            timer.Interval = timerInterval;
+            timer.Interval = TimerInterval;
             log = loggerFactory(typeof(ApiService));
             this.apiStartupFactory = apiStartupFactory;
             this.healthCheckClient = healthCheckClient;
@@ -59,8 +55,6 @@ namespace ShipWorks.Api
         /// <summary>
         /// Ensure that the api is running
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
@@ -71,17 +65,14 @@ namespace ShipWorks.Api
         }
 
         /// <summary>
-        /// Start the Shipworks Api
+        /// Start the ShipWorks API
         /// </summary>
         private void StartIfNotRunning()
         {
             if (!healthCheckClient.IsRunning())
             {
-                if (server != null)
-                {
-                    server.Dispose();
-                    apiStartup.Dispose();
-                }
+                Stop();
+
                 try
                 {
                     apiStartup = apiStartupFactory();
@@ -89,8 +80,20 @@ namespace ShipWorks.Api
                 }
                 catch (Exception ex)
                 {
-                    log.Debug("Unable to start the ShipWorks Api.", ex);
+                    log.Debug("Unable to start the ShipWorks API.", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Stop the ShipWorks API
+        /// </summary>
+        private void Stop()
+        {
+            if (server != null)
+            {
+                server.Dispose();
+                apiStartup.Dispose();
             }
         }
 

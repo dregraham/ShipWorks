@@ -14,7 +14,6 @@ namespace ShipWorks.Api.HealthCheck
     public class HealthCheckController : ApiController
     {
         private readonly IShipWorksSession session;
-        private const HttpStatusCode ok = HttpStatusCode.OK;
 
         /// <summary>
         /// Constructor
@@ -34,7 +33,7 @@ namespace ShipWorks.Api.HealthCheck
         public HttpResponseMessage Get()
         {
             return session?.InstanceID != null ?
-                Request.CreateResponse(ok, new HealthCheckResponse(ok, session.InstanceID)) :
+                Request.CreateResponse(HttpStatusCode.OK, new HealthCheckResponse(session.InstanceID)) :
                 Request.CreateResponse(HttpStatusCode.InternalServerError, "Failed to load ShipWorks instance ID");
         }
     }
