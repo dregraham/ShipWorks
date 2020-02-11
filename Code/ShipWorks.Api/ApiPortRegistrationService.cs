@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Win32;
+﻿using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Api
 {
@@ -19,7 +14,7 @@ namespace ShipWorks.Api
         {
             string command = $"http add urlacl url=http://+:{portNumber}/ user='Everyone'";
 
-            return NetshUtility.ExecuteNetsh(command) == 0;
+            return NetshCommand.Execute(command) == 0;
         }
     }
 }

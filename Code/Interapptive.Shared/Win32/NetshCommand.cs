@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using log4net;
 
 namespace Interapptive.Shared.Win32
@@ -12,14 +6,14 @@ namespace Interapptive.Shared.Win32
     /// <summary>
     /// Utility for executing netsh commands
     /// </summary>
-    public static class NetshUtility
+    public static class NetshCommand
     {
         static readonly ILog log = LogManager.GetLogger(typeof(WindowsFirewallUtility));
 
         /// <summary>
         /// Execute 'netsh' with the specified arguments
         /// </summary>
-        public static int ExecuteNetsh(string args)
+        public static int Execute(string args)
         {
             log.Info("Running 'netsh " + args + "'");
 

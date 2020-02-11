@@ -607,7 +607,7 @@
     <Compile Include="Win32\Native\RawInputDeviceListItem.cs" />
     <Compile Include="Win32\Native\RawInputDeviceMouseInfo.cs" />
     <Compile Include="Win32\Native\WindowsMessage.cs" />
-    <Compile Include="Win32\NetshUtility.cs" />
+    <Compile Include="Win32\NetshCommand.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />
     <Compile Include="Win32\SecurityUtility.cs" />
     <Compile Include="Win32\User32Devices.cs" />

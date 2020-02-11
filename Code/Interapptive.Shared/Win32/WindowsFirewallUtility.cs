@@ -13,7 +13,7 @@ namespace Interapptive.Shared.Win32
         /// </summary>
         public static void ExecuteSetServiceEnabled(string service)
         {
-            NetshUtility.ExecuteNetsh(string.Format("firewall set service {0} ENABLE", service));
+            NetshCommand.Execute(string.Format("firewall set service {0} ENABLE", service));
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace Interapptive.Shared.Win32
 
             try
             {
-                int exitCode = NetshUtility.ExecuteNetsh(args);
+                int exitCode = NetshCommand.Execute(args);
 
                 if (exitCode != 0)
                 {
