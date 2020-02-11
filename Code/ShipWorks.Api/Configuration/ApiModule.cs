@@ -3,7 +3,7 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using Module = Autofac.Module;
 
-namespace ShipWorks.Api
+namespace ShipWorks.Api.Configuration
 {
     /// <summary>
     /// Autofac module for registering controllers with Autofac

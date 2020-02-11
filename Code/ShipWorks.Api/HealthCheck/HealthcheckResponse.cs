@@ -6,18 +6,18 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShipWorks.Api.DTOs
+namespace ShipWorks.Api.HealthCheck
 {
     /// <summary>
     /// Response DTO for healtheck
     /// </summary>
     [Obfuscation(Exclude = true)]
-    public class HealthcheckResponse
+    public class HealthCheckResponse
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public HealthcheckResponse(HttpStatusCode status, Guid instanceId)
+        public HealthCheckResponse(HttpStatusCode status, Guid instanceId)
         {
             Status = status;
             InstanceId = instanceId;

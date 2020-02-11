@@ -6,7 +6,7 @@ using Microsoft.Web.Http;
 using ShipWorks.Api.DTOs;
 using ShipWorks.ApplicationCore;
 
-namespace ShipWorks.Api
+namespace ShipWorks.Api.HealthCheck
 {
     /// <summary>
     /// Check the status of the ShipWorks Api

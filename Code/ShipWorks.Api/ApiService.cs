@@ -1,16 +1,9 @@
 ﻿using System;
-using System.Web.Http;
-using System.Web.Http.Routing;
 using Interapptive.Shared.ComponentRegistration;
 using Microsoft.Owin.Hosting;
-using Microsoft.Web.Http;
-using Microsoft.Web.Http.Routing;
-using Owin;
-using Autofac.Integration.WebApi;
-using Autofac;
-using System.Reflection;
 using System.Net;
 using log4net;
+using ShipWorks.Api.Configuration;
 
 namespace ShipWorks.Api
 {
@@ -24,15 +17,15 @@ namespace ShipWorks.Api
         private IDisposable server;
         private bool isDisposing;
         private readonly ILog log;
-        private readonly ILifetimeScope scope;
-        
+        private readonly IApiStartupConfiguration apiStartup;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiService(ILifetimeScope scope, Func<Type, ILog> loggerFactory)
+        public ApiService(IApiStartupConfiguration apiStartup, Func<Type, ILog> loggerFactory)
         {
             log = loggerFactory(typeof(ApiService));
-            this.scope = scope;
+            this.apiStartup = apiStartup;
         }
 
         /// <summary>
@@ -44,7 +37,7 @@ namespace ShipWorks.Api
             {
                 try
                 {
-                    server = WebApp.Start("http://+:8081/", Configuration);
+                    server = WebApp.Start("http://+:8081/", apiStartup.Configuration);
                 }
                 catch (Exception ex)
                 {
@@ -78,49 +71,6 @@ namespace ShipWorks.Api
         }
 
         /// <summary>
-        /// Configures the service. This is called by convention, hense 0 references
-        /// </summary>
-        public void Configuration(IAppBuilder appBuilder)
-        {
-            HttpConfiguration configuration = new HttpConfiguration();
-
-            appBuilder.UseWebApi(configuration);
-
-            ConfigureApiVersioning(configuration);
-            RegisterApiControllers(configuration, appBuilder);
-        }
-
-        /// <summary>
-        /// Registers API controllers with Autofac
-        /// </summary>
-        public void RegisterApiControllers(HttpConfiguration configuration, IAppBuilder appBuilder)
-        {
-            configuration.DependencyResolver = new AutofacWebApiDependencyResolver(scope);
-            appBuilder.UseAutofacMiddleware(scope);
-            
-            appBuilder.UseAutofacWebApi(configuration);
-        }
-
-        /// <summary>
-        /// Attach API versioning to the configuration.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private void ConfigureApiVersioning(HttpConfiguration configuration)
-        {
-            DefaultInlineConstraintResolver constraintResolver = new DefaultInlineConstraintResolver()
-            {
-                ConstraintMap =
-                {
-                    ["apiVersion"] = typeof(ApiVersionRouteConstraint)
-                }
-            };
-
-            configuration.MapHttpAttributeRoutes(constraintResolver);
-            configuration.AddApiVersioning(options => options.DefaultApiVersion = new ApiVersion(1, 0));
-            configuration.AddApiVersioning();
-        }
-
-        /// <summary>
         /// Dispose
         /// </summary>
         public void Dispose()
@@ -129,7 +79,6 @@ namespace ShipWorks.Api
             {
                 isDisposing = true;
                 server?.Dispose();
-                scope?.Dispose();
 
                 server = null;
             }

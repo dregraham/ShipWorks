@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
 
-namespace ShipWorks.Api
+namespace ShipWorks.Api.Configuration
 {
     /// <summary>
     /// service for registering a port for the api
