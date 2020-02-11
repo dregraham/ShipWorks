@@ -10,6 +10,7 @@ using Owin;
 using ShipWorks.ApplicationCore;
 using Autofac.Integration.WebApi;
 using Autofac;
+using System.Reflection;
 
 namespace ShipWorks.Api
 {
@@ -39,13 +40,14 @@ namespace ShipWorks.Api
         {
             if (server == null)
             {
-                server = WebApp.Start<ApiService>("http://+:8080/");
+                server = WebApp.Start<ApiService>("http://+:8081/");
             }
         }
 
         /// <summary>
         /// Configures the service. This is called by convention, hense 0 references
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public void Configuration(IAppBuilder appBuilder)
         {
             HttpConfiguration configuration = new HttpConfiguration();

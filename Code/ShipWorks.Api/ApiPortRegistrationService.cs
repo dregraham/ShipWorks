@@ -17,7 +17,7 @@ namespace ShipWorks.Api
         /// </summary>
         public bool Register(long portNumber)
         {
-            string command = $"http add urlacl url=http://+:{portNumber}/ShipWorks/ user='Everyone'";
+            string command = $"http add urlacl url=http://+:{portNumber}/ user='Everyone'";
 
             return NetshUtility.ExecuteNetsh(command) == 0;
         }
