@@ -9,10 +9,11 @@ using Microsoft.Web.Http.Routing;
 using Owin;
 using ShipWorks.ApplicationCore;
 using Autofac.Integration.WebApi;
+using Autofac;
 
 namespace ShipWorks.Api
 {
-    /// <summary>
+    /// <summary> 
     /// An local web server leveraging Owin infrastructure that can be
     /// self-hosted within ShipWorks.
     /// </summary>
@@ -21,6 +22,15 @@ namespace ShipWorks.Api
     {
         private IDisposable server;
         private bool isDisposing;
+        private ILifetimeScope scope;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApiService()
+        {
+            scope = IoC.BeginLifetimeScope();
+        }
 
         /// <summary>
         /// Start the Shipworks Api
@@ -44,7 +54,6 @@ namespace ShipWorks.Api
 
             ConfigureApiVersioning(configuration);
             RegisterApiControllers(configuration, appBuilder);
-
         }
 
         /// <summary>
@@ -52,9 +61,6 @@ namespace ShipWorks.Api
         /// </summary>
         public void RegisterApiControllers(HttpConfiguration configuration, IAppBuilder appBuilder)
         {
-            // Definately want to figure out another way to do this
-            var scope = IoC.UnsafeGlobalLifetimeScope;
-            
             configuration.DependencyResolver = new AutofacWebApiDependencyResolver(scope);
             appBuilder.UseAutofacMiddleware(scope);
             
@@ -95,6 +101,7 @@ namespace ShipWorks.Api
             {
                 isDisposing = true;
                 server?.Dispose();
+                scope?.Dispose();
 
                 server = null;
             }

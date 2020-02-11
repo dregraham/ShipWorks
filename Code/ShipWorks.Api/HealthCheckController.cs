@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Web.Http;
+using ShipWorks.Api.DTOs;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Api
@@ -15,6 +16,7 @@ namespace ShipWorks.Api
     public class HealthCheckController : ApiController
     {
         private readonly IShipWorksSession session;
+        private const HttpStatusCode ok = HttpStatusCode.OK;
 
         /// <summary>
         /// Constructor
@@ -32,12 +34,7 @@ namespace ShipWorks.Api
         [Route("")]
         public HttpResponseMessage Get()
         {
-            string responseBody = "OK" +
-                                  $"{Environment.NewLine}" +
-                                  $"{Environment.NewLine}" +
-                                  $"ShipWorks Instance ID: {session.InstanceID:D}";
-
-            return Request.CreateResponse(HttpStatusCode.OK, responseBody);
+            return Request.CreateResponse(ok, new HealthcheckResponse(ok, session.InstanceID));
         }
     }
 }
