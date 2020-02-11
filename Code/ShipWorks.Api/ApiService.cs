@@ -42,11 +42,9 @@ namespace ShipWorks.Api
         /// <summary>
         /// Initialize the API for the current database
         /// </summary>
-        /// <param name="executionMode"></param>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode)
         {
             timer.Elapsed += OnTimerElapsed;
-
             timer.Start();
         }
 
