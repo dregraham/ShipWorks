@@ -118,12 +118,6 @@ namespace ShipWorks.Api
             configuration.MapHttpAttributeRoutes(constraintResolver);
             configuration.AddApiVersioning(options => options.DefaultApiVersion = new ApiVersion(1, 0));
             configuration.AddApiVersioning();
-
-            //configuration.Routes.MapHttpRoute(
-            //    "VersionedUrl",
-            //    "api/v{apiVersion}/{controller}/{action}/{id}",
-            //    defaults: new { id = RouteParameter.Optional },
-            //    constraints: new { apiVersion = new ApiVersionRouteConstraint() });
         }
 
         /// <summary>
