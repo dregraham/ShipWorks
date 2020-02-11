@@ -2,10 +2,10 @@
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {

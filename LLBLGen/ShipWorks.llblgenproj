@@ -2419,7 +2419,9 @@
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
           <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
+          <Field Name="EAN_" Type="string" IsOptional="true" MaxLength="30" FieldIndex="20" />
           <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
+          <Field Name="FNSku_" Type="string" IsOptional="true" MaxLength="300" FieldIndex="19" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
@@ -4630,7 +4632,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-13T23:13:57.3583794Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-28T17:34:09.0169021Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8851,6 +8853,8 @@
                     <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
+                    <Field Name="ShipEngineOrderSourceID" Ordinal="35" IsOptional="true" DbType="25" />
+                    <Field Name="ShipEngineAccountID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -13347,7 +13351,9 @@
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
             <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
+            <FieldMapping FieldName="EAN_" TargetFieldName="EAN" />
             <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
+            <FieldMapping FieldName="FNSku_" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />

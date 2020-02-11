@@ -7,6 +7,7 @@ using log4net;
 using System.Web;
 using Interapptive.Shared;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -44,6 +45,10 @@ namespace ShipWorks.Stores.Platforms.Volusion
         // cookie container for session conversation
         private CookieContainer cookieContainer = null;
 
+        private readonly IInterapptiveOnly interapptiveOnly;
+
+        private const string liveRegKey = "VolusionLiveServer";
+        private const string endpointKey = "VolusionEndpoint";
         /// <summary>
         /// Constructor
         /// </summary>
@@ -55,6 +60,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
 
             this.storeUrl = storeUrl;
+            this.interapptiveOnly = new InterapptiveOnlyWrapper();
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 cookieContainer = new CookieContainer();
 
                 // setup the two urls to be hit
-                string loginUrl = $"https://my.volusion.com/TransferLogin.aspx?HostName={GetStoreHostName().Replace(".", "%2E")}&PageName=login.asp";
+                string loginUrl = $"{GetLoginBaseUrl()}/TransferLogin.aspx?HostName={GetStoreHostName().Replace(".", "%2E")}&PageName=login.asp";
                 string adminUrl = GetUrl("admin/");
 
                 HttpWebRequest request = CreateWebRequest(adminUrl, "GET");
@@ -307,6 +313,18 @@ namespace ShipWorks.Stores.Platforms.Volusion
             url += relativePath;
 
             return url;
+        }
+
+        private string GetLoginBaseUrl()
+        {
+            if (interapptiveOnly.UseFakeAPI(liveRegKey))
+            {
+                return interapptiveOnly.Registry.GetValue(endpointKey, "http://localhost:4004/channels/volusion");
+            }
+            else
+            {
+                return "https://my.volusion.com";
+            }
         }
 
         /// <summary>
