@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Web.Http;
 using System.Web.Http.Routing;
 using Interapptive.Shared.ComponentRegistration;
@@ -7,10 +6,11 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Web.Http;
 using Microsoft.Web.Http.Routing;
 using Owin;
-using ShipWorks.ApplicationCore;
 using Autofac.Integration.WebApi;
 using Autofac;
 using System.Reflection;
+using ShipWorks.ApplicationCore;
+using System.Net;
 
 namespace ShipWorks.Api
 {
@@ -24,13 +24,15 @@ namespace ShipWorks.Api
         private IDisposable server;
         private bool isDisposing;
         private ILifetimeScope scope;
+        private readonly IShipWorksSession shipWorksSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiService()
+        public ApiService(ILifetimeScope scope, IShipWorksSession shipWorksSession)
         {
-            scope = IoC.BeginLifetimeScope();
+            this.scope = scope;
+            this.shipWorksSession = shipWorksSession;
         }
 
         /// <summary>
@@ -38,10 +40,29 @@ namespace ShipWorks.Api
         /// </summary>
         public void Start()
         {
-            if (server == null)
+            if (server == null && !IsRunning())
             {
-                server = WebApp.Start<ApiService>("http://+:8081/");
+                server = WebApp.Start("http://+:8081/", Configuration);
             }
+        }
+
+        private bool IsRunning()
+        {
+            WebRequest request = WebRequest.Create($"http://{Environment.MachineName}/shipworks/api/v1/healthcheck");
+            request.Timeout = 2000;
+
+            try
+            {
+                var response = request.GetResponse();
+                var statusCode = ((HttpWebResponse) response).StatusCode;
+
+                return statusCode == HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         /// <summary>
