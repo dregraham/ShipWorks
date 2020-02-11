@@ -5,6 +5,7 @@ using System.Net;
 using log4net;
 using ShipWorks.Api.Configuration;
 using Autofac;
+using ShipWorks.Api.HealthCheck;
 
 namespace ShipWorks.Api
 {
@@ -20,14 +21,18 @@ namespace ShipWorks.Api
         private readonly ILog log;
         private IApiStartupConfiguration apiStartup;
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
+        private readonly IHealthCheckClient healthCheckClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiService(Func<IApiStartupConfiguration> apiStartupFactory, Func<Type, ILog> loggerFactory)
+        public ApiService(Func<IApiStartupConfiguration> apiStartupFactory, 
+            IHealthCheckClient healthCheckClient, 
+            Func<Type, ILog> loggerFactory)
         {
             log = loggerFactory(typeof(ApiService));
             this.apiStartupFactory = apiStartupFactory;
+            this.healthCheckClient = healthCheckClient;
         }
 
         /// <summary>
@@ -35,7 +40,7 @@ namespace ShipWorks.Api
         /// </summary>
         public void Start()
         {
-            if (!IsRunning())
+            if (!healthCheckClient.IsRunning())
             {
                 if (server != null)
                 {
@@ -51,30 +56,6 @@ namespace ShipWorks.Api
                 {
                     log.Debug("Exception while starting ShipWorks Api", ex);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Check to see if there is an ApiSrvice running
-        /// </summary>
-        /// <returns></returns>
-        private bool IsRunning()
-        {
-            WebRequest request = WebRequest.Create($"http://{Environment.MachineName}/shipworks/api/v1/healthcheck");
-            request.Timeout = 2000;
-
-            try
-            {
-                HttpStatusCode statusCode = ((HttpWebResponse) request.GetResponse()).StatusCode;
-
-                log.Debug($"Api healthcheck response status {statusCode}");
-
-                return statusCode == HttpStatusCode.OK;
-            }
-            catch (Exception ex)
-            {
-                log.Debug("Exception while performing ShipWorks api healthcheck", ex);
-                return false;
             }
         }
 
