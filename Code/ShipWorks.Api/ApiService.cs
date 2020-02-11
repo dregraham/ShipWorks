@@ -53,6 +53,20 @@ namespace ShipWorks.Api
         }
 
         /// <summary>
+        /// Ensure that the api is running
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnTimerElapsed(object sender, ElapsedEventArgs e)
+        {
+            timer.Stop();
+
+            StartIfNotRunning();
+
+            timer.Start();
+        }
+
+        /// <summary>
         /// Start the Shipworks Api
         /// </summary>
         private void StartIfNotRunning()
