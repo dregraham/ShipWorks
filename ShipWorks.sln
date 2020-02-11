@@ -112,7 +112,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Escalator.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.SplashScreen", "Code\ShipWorks.SplashScreen\ShipWorks.SplashScreen.csproj", "{380ED862-FD86-4F16-B82A-C00F7CCC6742}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Api", "code\ShipWorks.Api\ShipWorks.Api.csproj", "{5286BA79-A7EA-4BFD-9DC8-EDC00797E664}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Api", "code\ShipWorks.Api\ShipWorks.Api.csproj", "{5286BA79-A7EA-4BFD-9DC8-EDC00797E664}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
