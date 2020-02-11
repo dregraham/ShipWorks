@@ -1,9 +1,7 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Microsoft.Web.Http;
-using ShipWorks.Api.DTOs;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Api.HealthCheck
@@ -30,11 +28,14 @@ namespace ShipWorks.Api.HealthCheck
         /// Check the status of the ShipWorks Api
         /// </summary>
         /// <response code="200">The API is operational</response>
+        /// <response code="500">The API is not able to retrieve the ShipWorks instance ID</response>
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            return Request.CreateResponse(ok, new HealthcheckResponse(ok, session.InstanceID));
+            return session?.InstanceID != null ?
+                Request.CreateResponse(ok, new HealthCheckResponse(ok, session.InstanceID)) :
+                Request.CreateResponse(HttpStatusCode.InternalServerError, "Failed to load ShipWorks instance ID");
         }
     }
 }
