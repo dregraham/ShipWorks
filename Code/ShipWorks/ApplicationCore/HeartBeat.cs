@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
 using log4net;
@@ -159,11 +160,6 @@ namespace ShipWorks.ApplicationCore
             try
             {
                 InternalDoHeartbeat(options);
-
-                // The HttpListener isn't being used directly within this project. This is a dummy line 
-                // to bypass the optimization, so HttpListener gets copied to the output directory.
-                Trace.TraceInformation(typeof(Microsoft.Owin.Host.HttpListener.OwinHttpListener).FullName);
-                IoC.UnsafeGlobalLifetimeScope.Resolve<IApiService>().Start();
             }
             finally
             {
