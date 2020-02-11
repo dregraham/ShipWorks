@@ -1,11 +1,8 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-
-namespace ShipWorks.Api
+﻿namespace ShipWorks.Api
 {
     /// <summary>
     /// Represents the Api Port Registration Service
     /// </summary>
-    [Service]
     public interface IApiPortRegistrationService
     {
         /// <summary>

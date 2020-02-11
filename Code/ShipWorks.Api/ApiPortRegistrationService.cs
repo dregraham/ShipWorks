@@ -1,10 +1,12 @@
-﻿using Interapptive.Shared.Win32;
+﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Api
 {
     /// <summary>
     /// service for registering a port for the api
     /// </summary>
+    [Component]
     public class ApiPortRegistrationService : IApiPortRegistrationService
     {
         /// <summary>
