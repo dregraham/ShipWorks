@@ -18,7 +18,7 @@ namespace ShipWorks.Api.HealthCheck
         private readonly ILog log;
 
         /// <summary>
-        /// Returns true if running, else false
+        /// Constructor
         /// </summary>
         public HealthCheckClient(IRestClientFactory clientFactory, IRestRequestFactory requestFactory,
                                  Func<Type, ILog> loggerFactory)

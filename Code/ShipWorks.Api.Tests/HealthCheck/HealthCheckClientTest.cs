@@ -25,9 +25,8 @@ namespace ShipWorks.Api.Tests.HealthCheck
             var response = mock.Mock<IRestResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
 
-            var client = mock.Mock<IRestClient>();
-            client.Setup(c => c.Execute(It.IsAny<IRestRequest>())).Returns(response);
-            mock.Mock<IRestClientFactory>().Setup(f => f.Create()).Returns(client);
+            mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Returns(response);
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
@@ -40,9 +39,8 @@ namespace ShipWorks.Api.Tests.HealthCheck
             var response = mock.Mock<IRestResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.InternalServerError);
 
-            var client = mock.Mock<IRestClient>();
-            client.Setup(c => c.Execute(It.IsAny<IRestRequest>())).Returns(response);
-            mock.Mock<IRestClientFactory>().Setup(f => f.Create()).Returns(client);
+            mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Returns(response);
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
@@ -55,9 +53,8 @@ namespace ShipWorks.Api.Tests.HealthCheck
             var response = mock.Mock<IRestResponse>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
 
-            var client = mock.Mock<IRestClient>();
-            client.Setup(c => c.Execute(It.IsAny<IRestRequest>())).Throws(new Exception());
-            mock.Mock<IRestClientFactory>().Setup(f => f.Create()).Returns(client);
+            mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
+                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Throws(new Exception());
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
