@@ -77,6 +77,7 @@ namespace ShipWorks.Api
                 {
                     apiStartup = apiStartupFactory();
                     server = webApp.Start("http://+:8081/", apiStartup.Configuration);
+                    log.Info("ShipWorks.API has started");
                 }
                 catch (Exception ex)
                 {
@@ -93,7 +94,9 @@ namespace ShipWorks.Api
             if (server != null)
             {
                 server.Dispose();
-                apiStartup.Dispose();
+                apiStartup?.Dispose();
+                apiStartup = null;
+                server = null;
             }
         }
 
@@ -105,9 +108,7 @@ namespace ShipWorks.Api
             if (!isDisposing)
             {
                 isDisposing = true;
-                server?.Dispose();
-
-                server = null;
+                Stop();
             }
         }
     }

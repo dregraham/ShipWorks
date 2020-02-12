@@ -7,7 +7,10 @@ using System.Timers;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
 using Moq;
+using Owin;
+using ShipWorks.Api.Configuration;
 using ShipWorks.Api.HealthCheck;
+using ShipWorks.Api.Infrastructure;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -53,9 +56,47 @@ namespace ShipWorks.Api.Tests
                 .Returns(false);
 
             var testObject = mock.Create<ApiService>();
+            
+            testObject.InitializeForCurrentDatabase(null);
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+
+            mock.Mock<IWebApp>().Verify(a => a.Start("http://+:8081/", It.IsAny<Action<IAppBuilder>>()), Times.Once);
+        }
+
+        [Fact]
+        public void InitializeForCurrentDatabase_DoesNotStartWebApp_WhenServiceIsRunning()
+        {
+            mock.Mock<IHealthCheckClient>()
+                .Setup(h => h.IsRunning())
+                .Returns(true);
+
+            var testObject = mock.Create<ApiService>();
+            testObject.InitializeForCurrentDatabase(null);
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+
+            mock.Mock<IWebApp>().Verify(a => a.Start("http://+:8081/", It.IsAny<Action<IAppBuilder>>()), Times.Never);
+        }
+
+        [Fact]
+        public void InitializeForCurrentDatabase_DisposesOldService_WhenServiceIsNotRunning()
+        {
+            mock.Mock<IHealthCheckClient>()
+                .Setup(h => h.IsRunning())
+                .Returns(false);
+
+            var startedWebApp = mock.CreateMock<IDisposable>();
+            mock.Mock<IWebApp>().Setup(a => a.Start(It.IsAny<string>(), It.IsAny<Action<IAppBuilder>>()))
+                .Returns(startedWebApp.Object);
+
+            var testObject = mock.Create<ApiService>();
+
             testObject.InitializeForCurrentDatabase(null);
 
             timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+            
+            startedWebApp.Verify(a => a.Dispose(), Times.Never);
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+            startedWebApp.Verify(a => a.Dispose(), Times.Once);
         }
     }
 }
