@@ -35,10 +35,27 @@ namespace ShipWorks.Api.Tests
 
             var testObject = mock.Create<ApiService>();
             testObject.InitializeForCurrentDatabase(null);
+
+            timer.Verify(t => t.Start(), Times.Once);
+            timer.Verify(t => t.Stop(), Times.Never);
+
             timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
 
             timer.Verify(t => t.Stop(), Times.Once);
-            timer.Verify(t => t.Start(), Times.Once);
+            timer.Verify(t => t.Start(), Times.Exactly(2));
+        }
+
+        [Fact]
+        public void InitializeForCurrentDatabase_StartsWebApp_WhenServiceIsNotRunning()
+        {
+            mock.Mock<IHealthCheckClient>()
+                .Setup(h => h.IsRunning())
+                .Returns(false);
+
+            var testObject = mock.Create<ApiService>();
+            testObject.InitializeForCurrentDatabase(null);
+
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
         }
     }
 }
