@@ -1,3 +1,4 @@
+using Interapptive.Shared.ComponentRegistration;
 using RestSharp;
 
 namespace Interapptive.Shared.Net.RestSharp
@@ -5,6 +6,7 @@ namespace Interapptive.Shared.Net.RestSharp
     /// <summary>
     /// Factory for creating IRestClients
     /// </summary>
+    [Component]
     public class RestClientFactory : IRestClientFactory
     {
         /// <summary>

@@ -19,7 +19,11 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Time between calling Elapsed event
         /// </summary>
-        public double Interval { get; set; }
+        public double Interval
+        {
+            get => timer.Interval;
+            set => timer.Interval = value;
+        }
 
         /// <summary>
         /// Event to call when timer is ellapsed
