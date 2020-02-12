@@ -21,12 +21,9 @@ namespace ShipWorks.Api.Tests.HealthCheck
         }
 
         [Fact]
-        public void Get_Returns200_WhenInstanceIDIsNotNull()
+        public void Get_Returns200()
         {
-            var session = mock.Mock<IShipWorksSession>();
-            session.SetupGet(x => x.InstanceID).Returns(Guid.NewGuid());
-
-            var testObject = SetupTestObject(session.Object);
+            var testObject = SetupTestObject(Guid.NewGuid());
 
             var response = testObject.Get();
 
@@ -38,39 +35,19 @@ namespace ShipWorks.Api.Tests.HealthCheck
         {
             Guid instanceID = Guid.NewGuid();
 
-            var session = mock.Mock<IShipWorksSession>();
-            session.SetupGet(x => x.InstanceID).Returns(instanceID);
-
-            var testObject = SetupTestObject(session.Object);
+            var testObject = SetupTestObject(instanceID);
             var response = testObject.Get().Content.ReadAsAsync<HealthCheckResponse>();
 
             Assert.Equal(instanceID, response.Result.InstanceId);
         }
 
-        [Fact]
-        public void Get_Returns500_WhenShipWorksSessionIsNull()
-        {
-            var testObject = SetupTestObject(null);
-            var response = testObject.Get();
-
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        }
-
-        [Fact]
-        public void Get_Returns500_WhenInstanceIDIsNull()
+        private HealthCheckController SetupTestObject(Guid sessionID)
         {
             var session = mock.Mock<IShipWorksSession>();
-            session.SetupGet(x => x.InstanceID).Returns(Guid.Empty);
+            session.SetupGet(x => x.InstanceID).Returns(sessionID);
 
-            var testObject = SetupTestObject(session.Object);
-            var response = testObject.Get();
+            HealthCheckController testObject = new HealthCheckController(session.Object);
 
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
-        }
-
-        private static HealthCheckController SetupTestObject(IShipWorksSession session)
-        {
-            HealthCheckController testObject = new HealthCheckController(session);
             testObject.Request = new HttpRequestMessage();
             testObject.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = new HttpConfiguration();
             return testObject;
