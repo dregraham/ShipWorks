@@ -38,12 +38,18 @@ namespace ShipWorks.Api.HealthCheck
         {
             try
             {
-                return Request.CreateResponse(ok, new HealthCheckResponse(ok, session.InstanceID)
+                return CreateResponse(HttpStatusCode.OK, "OK");
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        /// <summary>
+        /// Generate an HttpResponseMessage using the given status code and message
+        /// </summary>
+        private HttpResponseMessage CreateResponse(HttpStatusCode statusCode, string statusMessage) =>
+            Request.CreateResponse(statusCode, new HealthCheckResponse(session.InstanceID, statusMessage));
     }
 }

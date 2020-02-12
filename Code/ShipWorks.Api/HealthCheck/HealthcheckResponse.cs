@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using System.Reflection;
 
 namespace ShipWorks.Api.HealthCheck
@@ -13,10 +12,16 @@ namespace ShipWorks.Api.HealthCheck
         /// <summary>
         /// Constructor
         /// </summary>
-        public HealthCheckResponse(Guid instanceId)
+        public HealthCheckResponse(Guid instanceId, string status)
         {
             InstanceId = instanceId;
+            Status = status;
         }
+
+        /// <summary>
+        /// The status of the ShipWorks API
+        /// </summary>
+        public string Status { get; }
 
         /// <summary>
         /// The ShipWorks instance ID that is running the API
