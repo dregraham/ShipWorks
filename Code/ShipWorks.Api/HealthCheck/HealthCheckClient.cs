@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net.RestSharp;
 using log4net;
+using RestSharp;
 
 namespace ShipWorks.Api.HealthCheck
 {
@@ -11,13 +13,18 @@ namespace ShipWorks.Api.HealthCheck
     [Component(SingleInstance = true)]
     public class HealthCheckClient : IHealthCheckClient
     {
+        private readonly IRestClientFactory clientFactory;
+        private readonly IRestRequestFactory requestFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Returns true if running, else false
         /// </summary>
-        public HealthCheckClient(Func<Type, ILog> loggerFactory)
+        public HealthCheckClient(IRestClientFactory clientFactory, IRestRequestFactory requestFactory,
+                                 Func<Type, ILog> loggerFactory)
         {
+            this.clientFactory = clientFactory;
+            this.requestFactory = requestFactory;
             log = loggerFactory(typeof(HealthCheckClient));
         }
 
@@ -26,12 +33,14 @@ namespace ShipWorks.Api.HealthCheck
         /// </summary>
         public bool IsRunning()
         {
-            WebRequest request = WebRequest.Create($"http://{Environment.MachineName}/shipworks/api/v1/healthcheck");
+            IRestClient client = clientFactory.Create();
+            IRestRequest request =
+                requestFactory.Create($"http://{Environment.MachineName}/shipworks/api/v1/healthcheck", Method.GET);
             request.Timeout = 2000;
 
             try
             {
-                HttpStatusCode statusCode = ((HttpWebResponse) request.GetResponse()).StatusCode;
+                HttpStatusCode statusCode = client.Execute(request).StatusCode;
 
                 log.Debug($"Api healthcheck response status {statusCode}");
 

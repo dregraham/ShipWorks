@@ -115,8 +115,9 @@
     <Reference Include="Rebex.Mail, Version=2.0.6755.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Rebex.Mail.2.0.6755\lib\net40\Rebex.Mail.dll</HintPath>
     </Reference>
-    <Reference Include="RestSharp, Version=106.6.9.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RestSharp.106.6.9\lib\net452\RestSharp.dll</HintPath>
+    <Reference Include="RestSharp, Version=106.0.0.0, Culture=neutral, PublicKeyToken=598062e77f915f75">
+      <HintPath>..\..\packages\RestSharp.106.10.1\lib\net452\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses, Version=5.1.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SD.LLBLGen.Pro.ORMSupportClasses.5.1.2\lib\net45\SD.LLBLGen.Pro.ORMSupportClasses.dll</HintPath>
@@ -269,6 +270,10 @@
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
     <Compile Include="Net\IWebHelper.cs" />
+    <Compile Include="Net\RestSharp\IRestClientFactory.cs" />
+    <Compile Include="Net\RestSharp\IRestRequestFactory.cs" />
+    <Compile Include="Net\RestSharp\RestClientFactory.cs" />
+    <Compile Include="Net\RestSharp\RestRequestFactory.cs" />
     <Compile Include="Net\WebHelperWrapper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Pdf\IPdfDocumentFactory.cs" />
