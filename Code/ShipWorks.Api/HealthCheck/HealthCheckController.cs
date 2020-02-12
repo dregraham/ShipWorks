@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -24,17 +25,25 @@ namespace ShipWorks.Api.HealthCheck
         }
 
         /// <summary>
-        /// Check the status of the ShipWorks API
+        /// Returns a simple status indicating the health of the API and the ShipWorks instance id. 
+        /// The instanceId is a GUID that represents that instance of ShipWorks. 
+        /// If there are multiple instances of ShipWorks installed, the instanceId can be used to 
+        /// determine which instance of ShipWorks is serving up this API.
         /// </summary>
-        /// <response code="200">The API is operational. Returns the ShipWorks instance ID of the API</response>
-        /// <response code="500">The API is not able to retrieve the ShipWorks instance ID</response>
+        /// <response code="200">The service is functional</response>
+        /// <response code="500">The service is not functional</response>
         [HttpGet]
         [Route("")]
         public HttpResponseMessage Get()
         {
-            return session?.InstanceID != null ?
-                Request.CreateResponse(HttpStatusCode.OK, new HealthCheckResponse(session.InstanceID)) :
-                Request.CreateResponse(HttpStatusCode.InternalServerError, "Failed to load ShipWorks instance ID");
+            try
+            {
+                return Request.CreateResponse(ok, new HealthCheckResponse(ok, session.InstanceID)
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
