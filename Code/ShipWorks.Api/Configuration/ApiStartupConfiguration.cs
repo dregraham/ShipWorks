@@ -27,7 +27,7 @@ namespace ShipWorks.Api.Configuration
         }
 
         /// <summary>
-        /// Configures the service. This is called by convention, hense 0 references
+        /// Configures the service. This is called by convention, hence 0 references
         /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
