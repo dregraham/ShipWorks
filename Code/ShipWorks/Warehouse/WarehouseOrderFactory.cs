@@ -21,6 +21,7 @@ namespace ShipWorks.Warehouse
     public abstract class WarehouseOrderFactory : IWarehouseOrderFactory
     {
         protected readonly IOrderElementFactory orderElementFactory;
+        protected IStoreEntity storeEntity;
 
         /// <summary>
         /// Constructor
@@ -35,6 +36,7 @@ namespace ShipWorks.Warehouse
         /// </summary>
         public async Task<OrderEntity> CreateOrder(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
+            this.storeEntity = store;
             try
             {
                 GenericResult<OrderEntity> result = await CreateStoreOrderEntity(store, storeType, warehouseOrder).ConfigureAwait(false);
@@ -80,7 +82,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load order data
         /// </summary>
-        private static void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
+        protected virtual void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
         {
             // todo: orderid, storeid, warehousecustomerid
             // todo: figure out what should and shouldn't be downloaded when new
@@ -261,7 +263,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load payment details from the warehouse order into the order entity
         /// </summary>
-        private void LoadPaymentDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected  void LoadPaymentDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderPaymentDetail warehouseOrderCharge in warehouseOrder.PaymentDetails)
             {

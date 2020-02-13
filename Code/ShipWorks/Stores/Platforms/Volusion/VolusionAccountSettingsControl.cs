@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Net;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Volusion
@@ -94,29 +95,33 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// Perform the save
         /// </summary>
         /// <returns></returns>
-        private bool PerformSave(IVolusionStoreEntity store, string webPassword)
+        private bool PerformSave(VolusionStoreEntity store, string webPassword)
         {
             Cursor.Current = Cursors.WaitCursor;
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                if (!webClient.ValidateCredentials(store))
+                if (!licenseService.IsHub)
                 {
-                    MessageHelper.ShowError(this, "ShipWorks could not communicate with Volusion using the settings provided.");
-                    return false;
-                }
-
-                if (webPassword.Length > 0)
-                {
-                    // test logging into the store as a web user
-                    VolusionWebSession session = new VolusionWebSession(store.StoreUrl);
-
-                    if (!session.LogOn(store.WebUserName, webPassword))
+                    if (!webClient.ValidateCredentials(store))
                     {
-                        MessageHelper.ShowError(this, "ShipWorks was unable to logon to the Volusion website using the provided settings.");
+                        MessageHelper.ShowError(this, "ShipWorks could not communicate with Volusion using the settings provided.");
                         return false;
+                    }
+
+                    if (webPassword.Length > 0)
+                    {
+                        // test logging into the store as a web user
+                        VolusionWebSession session = new VolusionWebSession(store.StoreUrl);
+
+                        if (!session.LogOn(store.WebUserName, webPassword))
+                        {
+                            MessageHelper.ShowError(this, "ShipWorks was unable to logon to the Volusion website using the provided settings.");
+                            return false;
+                        }
                     }
                 }
             }

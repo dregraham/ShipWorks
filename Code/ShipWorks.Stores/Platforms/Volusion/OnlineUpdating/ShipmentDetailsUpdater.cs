@@ -74,8 +74,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 .Select(x => PerformUpdate(store, shipment, sendEmail, x))
                 .ThrowFailures((msg, ex) => new VolusionException(msg, ex));
 
-            // clear out the Volusion online status locally, so that it can fall out of any local by-status filters
-            order.OnlineStatus = "";
+            // Set the online status to "Shipped" since usually we won't be re-downloading shipped orders to automatically update this
+            order.OnlineStatus = "Shipped";
 
             unitOfWork.AddForSave(order);
         }

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
@@ -15,14 +14,13 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Stores.Platforms.GenericFile.Warehouse;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {
     /// <summary>
-    /// Base class for generic file downloaders
+    /// Base class for Generic File downloading
     /// </summary>
     public abstract class GenericFileDownloaderBase : OrderElementFactoryDownloaderBase
     {
@@ -258,7 +256,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
 
                 foreach (WarehouseUploadOrderResponse orderResponse in result.Value)
                 {
-                    OrderEntity downloadedOrder = downloadedOrders.Single(x => x.OrderNumberComplete == orderResponse.OrderNumber);
+                    OrderEntity downloadedOrder = downloadedOrders.FirstOrDefault(x => x.OrderNumberComplete == orderResponse.OrderNumber);
 
                     downloadedOrder.HubOrderID = Guid.Parse(orderResponse.HubOrderID);
                     downloadedOrder.HubSequence = orderResponse.HubSequence;

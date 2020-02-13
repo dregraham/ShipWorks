@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Security;
-using ShipWorks.Stores.Management;
-using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {
@@ -40,6 +40,14 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             UpdateStatusLabels();
 
+            // Hide status selection for Hub users
+            if (store.WarehouseStoreID != null)
+            {
+                this.Controls.Remove(this.statuses);
+                this.Controls.Remove(this.label1);
+                this.Controls.Remove(this.sectionTitle2);
+                this.Size = new System.Drawing.Size(489, 230);
+            }
         }
 
         /// <summary>
@@ -62,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             // get the collection of currently chosen codes to be downloaded
             List<string> selectedStatuses = store.DownloadOrderStatuses.Split(',').ToList();
 
-            foreach(string status in storeType.GetOnlineStatusChoices())
+            foreach (string status in storeType.GetOnlineStatusChoices())
             {
                 // check the ones that are selected
                 bool chosen = selectedStatuses.Contains(status);

@@ -325,6 +325,9 @@
       <HintPath>..\..\packages\SD.Tools.OrmProfiler.Interceptor.1.5.20150715\lib\net35\SD.Tools.OrmProfiler.Shared.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ShipEngine.ApiClient, Version=1.0.0.0, Culture=neutral, PublicKeyToken=372d6fd19cbc5d92, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Signed.ShipEngine.ApiClient.1.1.3\lib\net46\ShipEngine.ApiClient.dll</HintPath>
+    </Reference>
     <Reference Include="SpreadsheetGear, Version=6.0.3.189, Culture=neutral, PublicKeyToken=39c186f5904944ec, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SpreadsheetGear.dll</HintPath>

@@ -10038,6 +10038,10 @@ namespace ShipWorks.Data.Model
 		FNSku,
 		///<summary>EAN. </summary>
 		EAN,
+		///<summary>FNSku_. </summary>
+		FNSku_,
+		///<summary>EAN_. </summary>
+		EAN_,
 		/// <summary></summary>
 		AmountOfFields
 	}

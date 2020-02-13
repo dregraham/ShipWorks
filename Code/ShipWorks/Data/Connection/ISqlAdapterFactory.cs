@@ -26,6 +26,11 @@ namespace ShipWorks.Data.Connection
         Task<T> WithPhysicalTransactionAsync<T>(Func<ISqlAdapter, Task<T>> withAdapter, [CallerMemberName] string name = "");
 
         /// <summary>
+        /// Execute a block of code using a SqlAdapter that is part of a physical transaction
+        /// </summary>
+        void WithPhysicalTransaction(Action<ISqlAdapter> withAdapter, [CallerMemberName] string name = "");
+
+        /// <summary>
         /// Create a SqlAdatper that uses an existing connection and transaction
         /// </summary>
         ISqlAdapter Create(DbConnection connection, DbTransaction transaction);

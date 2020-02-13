@@ -7,6 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.ShipEngine
 {
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void CreateNewAccount_PartnerKeyIsAddedToTheRequest()
+        public async Task CreateNewAccount_PartnerKeyIsAddedToTheRequest()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
                 .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            testObject.CreateNewAccount("partnerKey");
+            await testObject.CreateNewAccount("partnerKey");
 
             request.Verify(r => r.Headers.Add("api-key", "partnerKey"), Times.Once);
         }
@@ -95,12 +96,11 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount("partnerKey"));
         }
 
-
         [Fact]
         public async Task GetApiKey_ReturnsApiKey_FromResponse()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -117,10 +117,10 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         }
 
         [Fact]
-        public void GetApiKey_PartnerKeyIsAddedToTheRequest()
+        public async Task GetApiKey_PartnerKeyIsAddedToTheRequest()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -131,7 +131,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var testObject = mock.Create<ShipEnginePartnerWebClient>();
 
-            testObject.GetApiKey("partnerKey", "accountId");
+            await testObject.GetApiKey("partnerKey", "accountId");
 
             request.Verify(r => r.Headers.Add("api-key", "partnerKey"), Times.Once);
         }
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKey_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task GetApiKey_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(AnyString, "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -171,7 +171,6 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.GetApiKey("partnerKey", "accountId"));
         }
-
 
         public void Dispose()
         {

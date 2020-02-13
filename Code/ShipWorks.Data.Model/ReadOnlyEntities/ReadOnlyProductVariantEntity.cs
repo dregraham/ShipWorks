@@ -55,6 +55,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CountryOfOrigin = source.CountryOfOrigin;
             FNSku = source.FNSku;
             EAN = source.EAN;
+            FNSku_ = source.FNSku_;
+            EAN_ = source.EAN_;
             
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
@@ -184,6 +186,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String EAN { get; }
+        /// <summary> The FNSku_ property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."FNSku"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String FNSku_ { get; }
+        /// <summary> The EAN_ property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."EAN"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String EAN_ { get; }
         
         
         public IProductEntity Product { get; }

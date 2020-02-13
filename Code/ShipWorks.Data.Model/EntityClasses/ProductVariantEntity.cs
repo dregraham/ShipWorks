@@ -480,6 +480,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FNSku", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EAN", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("FNSku_", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("EAN_", fieldHashtable);
 		}
 		#endregion
 
@@ -787,6 +791,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ProductVariantFieldIndex.EAN, true); }
 			set	{ SetValue((int)ProductVariantFieldIndex.EAN, value); }
+		}
+
+		/// <summary> The FNSku_ property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."FNSku"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String FNSku_
+		{
+			get { return (System.String)GetValue((int)ProductVariantFieldIndex.FNSku_, true); }
+			set	{ SetValue((int)ProductVariantFieldIndex.FNSku_, value); }
+		}
+
+		/// <summary> The EAN_ property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."EAN"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String EAN_
+		{
+			get { return (System.String)GetValue((int)ProductVariantFieldIndex.EAN_, true); }
+			set	{ SetValue((int)ProductVariantFieldIndex.EAN_, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
