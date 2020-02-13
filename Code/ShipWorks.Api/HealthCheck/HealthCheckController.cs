@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Web.Http;
 using Microsoft.Web.Http;
 using ShipWorks.ApplicationCore;
@@ -12,6 +13,7 @@ namespace ShipWorks.Api.HealthCheck
     /// </summary>
     [ApiVersion("1.0")]
     [RoutePrefix("shipworks/api/v{version:apiVersion}/healthcheck")]
+    [Obfuscation(Exclude = true)]
     public class HealthCheckController : ApiController
     {
         private readonly IShipWorksSession session;
