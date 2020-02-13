@@ -1,10 +1,12 @@
-﻿using ShipWorks.Data.Model.EntityInterfaces;
+﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Api.Orders
 {
     /// <summary>
     /// Factory for generating order responses
     /// </summary>
+    [Component]
     public class OrderResponseFactory : IOrderResponseFactory
     {
         /// <summary>

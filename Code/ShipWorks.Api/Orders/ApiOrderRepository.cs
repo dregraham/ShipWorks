@@ -13,7 +13,7 @@ namespace ShipWorks.Api.Orders
     /// Repository for retrieving orders for the API
     /// </summary>
     [Component]
-    class ApiOrderRepository : IApiOrderRepository
+    public class ApiOrderRepository : IApiOrderRepository
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
