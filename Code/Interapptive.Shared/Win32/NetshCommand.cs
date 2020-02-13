@@ -21,8 +21,10 @@ namespace Interapptive.Shared.Win32
             process.StartInfo = new ProcessStartInfo("netsh", args);
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.Start();
+            string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
 
+            log.Info(output);
             log.Info($"netsh command returned {process.ExitCode}");
 
             return process.ExitCode;
