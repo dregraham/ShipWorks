@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Autofac;
 using log4net;
 using ShipWorks.Api;
 using ShipWorks.ApplicationCore.Interaction;
@@ -12,18 +12,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class RegisterApiPortCommandLineOption : ICommandLineCommandHandler
     {
-        private readonly IApiPortRegistrationService portRegistrationService;
-        private readonly ILog log;
+        private readonly ILog log = LogManager.GetLogger(typeof(RegisterApiPortCommandLineOption));
         private const long DefaultPortNumber = 8081;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public RegisterApiPortCommandLineOption(IApiPortRegistrationService portRegistrationService, Func<Type, ILog> logFactory)
-        {
-            this.portRegistrationService = portRegistrationService;
-            log = logFactory(typeof(RegisterApiPortCommandLineOption));
-        }
 
         /// <summary>
         /// Name of this command
@@ -35,14 +25,17 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
-            bool registrationSuccess = portRegistrationService.Register(DefaultPortNumber);
-
-            if (!registrationSuccess)
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                log.Error($"Failed to register port {DefaultPortNumber} for the ShipWorks API");
-            }
+                bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(DefaultPortNumber);
 
-            return Task.CompletedTask;
+                if (!registrationSuccess)
+                {
+                    log.Error($"Failed to register port {DefaultPortNumber} for the ShipWorks API");
+                }
+
+                return Task.CompletedTask;
+            }
         }
     }
 }
