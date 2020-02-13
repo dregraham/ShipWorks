@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -38,6 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public TangoLogShipmentRequest(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
             ITangoWebRequestClient client,
