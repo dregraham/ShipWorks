@@ -681,7 +681,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
                 request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
             }
-            else if (packagingType == PostalPackagingType.Cubic)
+            else if (packagingType == PostalPackagingType.Cubic || packagingType == PostalPackagingType.CubicSoftPack)
             {
                 // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
@@ -837,7 +837,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
                 request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
             }
-            else if (packagingType == PostalPackagingType.Cubic)
+            else if (packagingType == PostalPackagingType.Cubic || packagingType == PostalPackagingType.CubicSoftPack)
             {
                 // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
@@ -1246,7 +1246,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.MailpieceDimensions.Width = Math.Max(1, postal.DimsWidth);
                 request.MailpieceDimensions.Height = Math.Max(1, postal.DimsHeight);
             }
-            else if (packagingType == PostalPackagingType.Cubic)
+            else if (packagingType == PostalPackagingType.Cubic || packagingType == PostalPackagingType.CubicSoftPack)
             {
                 // To be eligible for cubic rates, the package must be 1/2 cubic foot or less, so don't
                 // round up to 1 like is done with the Package type
