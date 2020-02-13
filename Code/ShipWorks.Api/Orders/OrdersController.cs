@@ -16,7 +16,7 @@ namespace ShipWorks.Api.Orders
     [ApiVersion("1.0")]
     [RoutePrefix("shipworks/api/v{version:apiVersion}/orders")]
     [Obfuscation(Exclude = true)]
-    public class OrderController : ApiController
+    public class OrdersController : ApiController
     {
         private readonly IApiOrderRepository orderRepository;
         private readonly IOrderResponseFactory responseFactory;
@@ -24,7 +24,7 @@ namespace ShipWorks.Api.Orders
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrderController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory)
+        public OrdersController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory)
         {
             this.orderRepository = orderRepository;
             this.responseFactory = responseFactory;
