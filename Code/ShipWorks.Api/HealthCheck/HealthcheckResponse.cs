@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Api.HealthCheck
 {
@@ -21,11 +22,13 @@ namespace ShipWorks.Api.HealthCheck
         /// <summary>
         /// The status of the ShipWorks API
         /// </summary>
+        [JsonProperty("status")]
         public string Status { get; }
 
         /// <summary>
         /// The ShipWorks instance ID that is running the API
         /// </summary>
+        [JsonProperty("instanceId")]
         public Guid InstanceId { get; }
     }
 }
