@@ -33,6 +33,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IShipmentTypeDataService shipmentTypeDataService;
 
         /// <summary>
         /// Constructor
@@ -43,9 +44,11 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             IShipmentTypeManager shipmentTypeManager,
             IStoreTypeManager storeTypeManager,
             ISqlAdapterFactory sqlAdapterFactory,
+            IShipmentTypeDataService shipmentTypeDataService,
             Func<Type, ILog> createLog)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.shipmentTypeDataService = shipmentTypeDataService;
             this.storeTypeManager = storeTypeManager;
             this.shipmentTypeManager = shipmentTypeManager;
             this.client = client;
@@ -151,7 +154,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
             // If isretry is true, Tango will check to see if the shipment exists, and if it does
-            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // it will not insert it into the database.  If it doesn't exist, it will do the
             // insert.
             postRequest.Variables.Add("isretry", "1");
         }
@@ -159,7 +162,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Prepare the log shipment request
         /// </summary>
-        private static void PrepareLogShipmentRequest(ShipmentEntity shipment,
+        private void PrepareLogShipmentRequest(ShipmentEntity shipment,
                                                       ShipmentType shipmentType,
                                                       IHttpVariableRequestSubmitter postRequest)
         {
@@ -180,7 +183,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
 
             // If isretry is true, Tango will check to see if the shipment exists, and if it does
-            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // it will not insert it into the database.  If it doesn't exist, it will do the
             // insert.
             postRequest.Variables.Add("isretry", "1");
 
@@ -267,7 +270,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Add insurance details from the given shipment to the log shipment request
         /// </summary>
-        private static void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
+        private void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
                                                                     IHttpVariableRequestSubmitter postRequest,
                                                                     ShipmentType shipmentType)
         {
@@ -300,6 +303,12 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
 
             postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
             postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
+
+
+            if (shipWorksInsured && shipment.InsurancePolicy == null)
+            {
+                shipmentTypeDataService.LoadInsuranceData(shipment);
+            }
 
             if (shipment.InsurancePolicy == null)
             {
