@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
-using System.Diagnostics;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Interapptive.Shared.Win32
 {
@@ -13,14 +7,13 @@ namespace Interapptive.Shared.Win32
     /// </summary>
     public static class WindowsFirewallUtility
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowsFirewallUtility));
 
         /// <summary>
         /// Enable the given pre-defined windows firewall service entry, such as 'FILEANDPRINT'
         /// </summary>
         public static void ExecuteSetServiceEnabled(string service)
         {
-            ExecuteNetsh(string.Format("firewall set service {0} ENABLE", service));
+            NetshCommand.Execute(string.Format("firewall set service {0} ENABLE", service));
         }
 
         /// <summary>
@@ -35,27 +28,13 @@ namespace Interapptive.Shared.Win32
 
             string args = string.Format("firewall add allowedprogram program = {0} name = \"{1}\" profile = ALL", exePath, name);
 
-            ExecuteNetsh(args);
-        }
-
-        /// <summary>
-        /// Execute 'netsh' with the specified arguments
-        /// </summary>
-        private static void ExecuteNetsh(string args)
-        {
-            log.Info("Running 'netsh " + args + "'");
-
             try
             {
-                Process process = new Process();
-                process.StartInfo = new ProcessStartInfo("netsh", args);
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.Start();
-                process.WaitForExit();
+                int exitCode = NetshCommand.Execute(args);
 
-                if (process.ExitCode != 0)
+                if (exitCode != 0)
                 {
-                    throw new WindowsFirewallException(new Win32Exception(process.ExitCode));
+                    throw new WindowsFirewallException(new Win32Exception(exitCode));
                 }
             }
             catch (Win32Exception ex)
