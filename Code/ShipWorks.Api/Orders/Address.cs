@@ -55,6 +55,6 @@ namespace ShipWorks.Api.Orders
         /// The postal code
         /// </summary>
         [JsonProperty("postalCode")]
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
     }
 }

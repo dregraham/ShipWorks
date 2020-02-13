@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using Newtonsoft.Json;
 
@@ -13,7 +14,7 @@ namespace ShipWorks.Api.Orders
         /// The ShipWorks order ID of the order
         /// </summary>
         [JsonProperty("orderId")]
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
 
         /// <summary>
         /// The order number of the order
@@ -25,25 +26,25 @@ namespace ShipWorks.Api.Orders
         /// The date and time that the order was placed
         /// </summary>
         [JsonProperty("orderDate")]
-        public string OrderDate { get; set; }
+        public DateTime OrderDate { get; set; }
 
         /// <summary>
         /// The date and time that the order was last modified
         /// </summary>
         [JsonProperty("lastModifiedDate")]
-        public string LastModifiedDate { get; set; }
+        public DateTime LastModifiedDate { get; set; }
 
         /// <summary>
         /// The total of the order in USD
         /// </summary>
         [JsonProperty("orderTotal")]
-        public double OrderTotal { get; set; }
+        public decimal OrderTotal { get; set; }
 
         /// <summary>
         /// The current status of the order
         /// </summary>
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        [JsonProperty("storeStatus")]
+        public string StoreStatus { get; set; }
 
         /// <summary>
         /// The shipping address of the order
