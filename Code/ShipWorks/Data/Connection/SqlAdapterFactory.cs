@@ -39,6 +39,17 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Execute a block of code using a SqlAdapter that is part of a physical transaction
+        /// </summary>
+        public void WithPhysicalTransaction(Action<ISqlAdapter> withAdapter, [CallerMemberName] string name = "")
+        {
+            using (DbConnection connection = SqlSession.Current.OpenConnection())
+            {
+                connection.WithTransaction(withAdapter, name);
+            }
+        }
+
+        /// <summary>
         /// Create a SqlAdapter that uses the existing connection
         /// </summary>
         public ISqlAdapter Create(DbConnection connection) => new SqlAdapter(connection);
