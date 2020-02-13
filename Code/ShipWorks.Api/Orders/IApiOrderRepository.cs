@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Api
+namespace ShipWorks.Api.Orders
 {
     /// <summary>
     /// Represents the API Order Repository
