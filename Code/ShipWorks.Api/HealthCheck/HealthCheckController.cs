@@ -5,12 +5,14 @@ using System.Reflection;
 using System.Web.Http;
 using Microsoft.Web.Http;
 using ShipWorks.ApplicationCore;
+using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.HealthCheck
 {
     /// <summary>
     /// Controller for checking the status of the ShipWorks API
     /// </summary>
+    
     [ApiVersion("1.0")]
     [RoutePrefix("shipworks/api/v{version:apiVersion}/healthcheck")]
     [Obfuscation(Exclude = true)]
@@ -32,10 +34,12 @@ namespace ShipWorks.Api.HealthCheck
         /// If there are multiple instances of ShipWorks installed, the instanceId can be used to 
         /// determine which instance of ShipWorks is serving up this API.
         /// </summary>
-        /// <response code="200">The service is functional</response>
-        /// <response code="500">The service is not functional</response>
         [HttpGet]
         [Route("")]
+        [SwaggerResponse(HttpStatusCode.OK, 
+            Type=typeof(HealthCheckResponse), 
+            Description = "The service is functional")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Description = "The service is not functional")]
         public HttpResponseMessage Get()
         {
             try
