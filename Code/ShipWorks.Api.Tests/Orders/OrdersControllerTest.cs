@@ -4,12 +4,11 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using Autofac.Extras.Moq;
-using Moq;
 using ShipWorks.Api.Orders;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Api.Tests.Orders
 {
@@ -26,13 +25,13 @@ namespace ShipWorks.Api.Tests.Orders
         public void Get_Returns200_WhenOrderIsFound()
         {
             mock.Mock<IApiOrderRepository>()
-                .Setup(x => x.GetOrders(It.IsAny<string>()))
+                .Setup(x => x.GetOrders(AnyString))
                 .Returns(new []
                 {
                     new OrderEntity(1)
                 });
 
-            mock.Mock<IOrderResponseFactory>().Setup(x => x.Create(It.IsAny<IOrderEntity>()))
+            mock.Mock<IOrderResponseFactory>().Setup(x => x.Create(AnyIOrder))
                 .Returns(new OrderResponse());
 
             var testObject = mock.Create<OrdersController>();
@@ -48,7 +47,7 @@ namespace ShipWorks.Api.Tests.Orders
         public void Get_Returns404_WhenNoOrderIsFound()
         {
             mock.Mock<IApiOrderRepository>()
-                .Setup(x => x.GetOrders(It.IsAny<string>()))
+                .Setup(x => x.GetOrders(AnyString))
                 .Returns(new OrderEntity[0]);
 
             var testObject = mock.Create<OrdersController>();
@@ -64,7 +63,7 @@ namespace ShipWorks.Api.Tests.Orders
         public void Get_Returns409_WhenMultipleOrdersAreFound()
         {
             mock.Mock<IApiOrderRepository>()
-                .Setup(x => x.GetOrders(It.IsAny<string>()))
+                .Setup(x => x.GetOrders(AnyString))
                 .Returns(new []
                 {
                     new OrderEntity(1),
@@ -84,7 +83,7 @@ namespace ShipWorks.Api.Tests.Orders
         public void Get_Returns500_WhenExceptionOccurs()
         {
             mock.Mock<IApiOrderRepository>()
-                .Setup(x => x.GetOrders(It.IsAny<string>()))
+                .Setup(x => x.GetOrders(AnyString))
                 .Throws(new Exception());
 
             var testObject = mock.Create<OrdersController>();
