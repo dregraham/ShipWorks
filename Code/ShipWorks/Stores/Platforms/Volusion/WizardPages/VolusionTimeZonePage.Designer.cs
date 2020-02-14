@@ -42,7 +42,6 @@
             this.timeZoneControl.Name = "timeZoneControl";
             this.timeZoneControl.Size = new System.Drawing.Size(484, 100);
             this.timeZoneControl.TabIndex = 2;
-            this.timeZoneControl.Load += new System.EventHandler(this.timeZoneControl_Load);
             // 
             // label2
             // 
