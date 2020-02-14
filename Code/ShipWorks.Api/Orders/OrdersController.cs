@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Web.Http;
+using Interapptive.Shared.Collections;
 using Microsoft.Web.Http;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -46,11 +47,9 @@ namespace ShipWorks.Api.Orders
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(orderNumber);
 
-                int orderCount = orders.Count();
-
-                if (orderCount > 0)
+                if (orders.Any())
                 {
-                    if (orderCount == 1)
+                    if (orders.IsCountEqualTo(1))
                     {
                         OrderResponse response = responseFactory.Create(orders.SingleOrDefault());
 
