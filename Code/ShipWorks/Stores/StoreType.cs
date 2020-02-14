@@ -290,7 +290,7 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual List<FilterEntity> CreateInitialFilters()
         {
-            ICollection<string> onlineStatusChoices = GetOnlineStatusChoices();
+            ICollection<string> onlineStatusChoices = IsShipEngine() ? GetShipEngineStatusChoices() : GetOnlineStatusChoices();
             List<FilterEntity> filters = new List<FilterEntity>();
 
             foreach (string onlineStatus in onlineStatusChoices)
@@ -677,5 +677,28 @@ namespace ShipWorks.Stores
         /// </summary>
         public void RaiseStoreAdded(StoreEntity store, ILifetimeScope lifetimeScope) =>
             StoreAdded?.Invoke(store, lifetimeScope);
+
+        /// <summary>
+        /// Does this store type use a ShipEngine integration?
+        /// </summary>
+        public virtual bool IsShipEngine() => false;
+
+        /// <summary>
+        /// Returns the possible ShipEngine Online Status values
+        /// </summary>
+        private ICollection<string> GetShipEngineStatusChoices()
+        {
+            return new List<string>
+            {
+                "Paid",
+                "Unpaid",
+                "Partially Paid",
+                "Shipped",
+                "Unshipped",
+                "Partially Shipped",
+                "Cancelled",
+                "Unknown"
+            };
+        }
     }
 }
