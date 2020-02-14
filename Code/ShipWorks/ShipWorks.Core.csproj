@@ -1194,6 +1194,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
+    <Compile Include="Shipping\IShipmentTypeDataService.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShippingRestrictionType.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
@@ -1201,6 +1202,7 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
     <Compile Include="Shipping\Policies\AmazonSFPShippingRestrictionType.cs" />
