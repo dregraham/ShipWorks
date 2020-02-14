@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Web.Http;
 using Interapptive.Shared.Collections;
+using log4net;
 using Microsoft.Web.Http;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -21,14 +22,17 @@ namespace ShipWorks.Api.Orders
     {
         private readonly IApiOrderRepository orderRepository;
         private readonly IOrderResponseFactory responseFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrdersController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory)
+        public OrdersController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory, Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
             this.responseFactory = responseFactory;
+
+            log = logFactory(typeof(OrdersController));
         }
 
         /// <summary>
@@ -47,25 +51,25 @@ namespace ShipWorks.Api.Orders
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(orderNumber);
 
-                if (orders.Any())
+                ComparisonResult comparisonResult = orders.CompareCountTo(1);
+
+                switch (comparisonResult)
                 {
-                    if (orders.IsCountEqualTo(1))
-                    {
+                    case ComparisonResult.Equal:
+                        // For a single order, create the response and return it with a 200
                         OrderResponse response = responseFactory.Create(orders.SingleOrDefault());
-
-                        // return the single order
                         return Request.CreateResponse(HttpStatusCode.OK, response);
-                    }
-
-                    // More than 1 order found, return 409
-                    return Request.CreateResponse(HttpStatusCode.Conflict);
+                    case ComparisonResult.More:
+                        // More than 1 order found, return 409
+                        return Request.CreateResponse(HttpStatusCode.Conflict);
+                    default:
+                        // No orders found, return 404
+                        return Request.CreateResponse(HttpStatusCode.NotFound);
                 }
-
-                // No orders found, return 404
-                return Request.CreateResponse(HttpStatusCode.NotFound);
             }
             catch (Exception ex)
             {
+                log.Error("An error occured getting orders", ex);
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
