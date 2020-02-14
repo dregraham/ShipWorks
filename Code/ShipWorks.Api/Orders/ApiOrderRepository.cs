@@ -35,15 +35,7 @@ namespace ShipWorks.Api.Orders
                 QueryFactory queryFactory = new QueryFactory();
                 EntityQuery<OrderEntity> query = queryFactory.Order;
 
-                if (long.TryParse(orderNumber, out long numericOrderNumber))
-                {
-                    query = query.Where(OrderFields.OrderNumber == numericOrderNumber)
-                        .OrWhere(OrderFields.OrderID == numericOrderNumber);
-                }
-                else
-                {
-                    query = query.Where(OrderFields.OrderNumberComplete == orderNumber.Trim());
-                }
+                query = query.Where(OrderFields.OrderNumberComplete == orderNumber.Trim());
 
                 EntityCollection<OrderEntity> orderCollection = new EntityCollection<OrderEntity>();
                 sqlAdapter.FetchQuery(query, orderCollection);
