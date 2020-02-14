@@ -42,13 +42,27 @@ namespace ShipWorks.Api.Tests.Orders
         {
             OrderEntity order = new OrderEntity()
             {
-                ShipUnparsedName = "First Last"
+                ShipUnparsedName = "First Last",
+                ShipStreet1 = "street1",
+                ShipStreet2 = "street2",
+                ShipStreet3 = "street3",
+                ShipCity = "city",
+                ShipStateProvCode = "ST",
+                ShipCountryCode = "CC",
+                ShipPostalCode = "12345"
             };
 
             var testObject = new OrderResponseFactory();
             var result = testObject.Create(order);
 
             Assert.Equal(order.ShipUnparsedName, result.ShipAddress.RecipientName);
+            Assert.Equal(order.ShipStreet1, result.ShipAddress.Street1);
+            Assert.Equal(order.ShipStreet2, result.ShipAddress.Street2);
+            Assert.Equal(order.ShipStreet3, result.ShipAddress.Street3);
+            Assert.Equal(order.ShipCity, result.ShipAddress.City);
+            Assert.Equal(order.ShipStateProvCode, result.ShipAddress.StateProvince);
+            Assert.Equal(order.ShipCountryCode, result.ShipAddress.CountryCode);
+            Assert.Equal(order.ShipPostalCode, result.ShipAddress.PostalCode);
         }
 
         [Fact]
@@ -56,13 +70,27 @@ namespace ShipWorks.Api.Tests.Orders
         {
             OrderEntity order = new OrderEntity()
             {
-                BillUnparsedName = "First Last"
+                BillUnparsedName = "First Last",
+                BillStreet1 = "street1",
+                BillStreet2 = "street2",
+                BillStreet3 = "street3",
+                BillCity = "city",
+                BillStateProvCode = "ST",
+                BillCountryCode = "CC",
+                BillPostalCode = "12345"
             };
 
             var testObject = new OrderResponseFactory();
             var result = testObject.Create(order);
 
             Assert.Equal(order.BillUnparsedName, result.BillAddress.RecipientName);
+            Assert.Equal(order.BillStreet1, result.BillAddress.Street1);
+            Assert.Equal(order.BillStreet2, result.BillAddress.Street2);
+            Assert.Equal(order.BillStreet3, result.BillAddress.Street3);
+            Assert.Equal(order.BillCity, result.BillAddress.City);
+            Assert.Equal(order.BillStateProvCode, result.BillAddress.StateProvince);
+            Assert.Equal(order.BillCountryCode, result.BillAddress.CountryCode);
+            Assert.Equal(order.BillPostalCode, result.BillAddress.PostalCode);
         }
     }
 }
