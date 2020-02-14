@@ -16,6 +16,7 @@ namespace ShipWorks.Api.HealthCheck
         private readonly IRestClientFactory clientFactory;
         private readonly IRestRequestFactory requestFactory;
         private readonly ILog log;
+        private const int PortNumber = 8081;
 
         /// <summary>
         /// Constructor
@@ -35,7 +36,7 @@ namespace ShipWorks.Api.HealthCheck
         {
             IRestClient client = clientFactory.Create();
             IRestRequest request =
-                requestFactory.Create($"http://{Environment.MachineName}/shipworks/api/v1/healthcheck", Method.GET);
+                requestFactory.Create($"http://{Environment.MachineName}:{PortNumber}/shipworks/api/v1/healthcheck", Method.GET);
             request.Timeout = 2000;
 
             try
