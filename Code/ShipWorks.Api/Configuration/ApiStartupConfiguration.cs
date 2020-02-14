@@ -18,14 +18,16 @@ namespace ShipWorks.Api.Configuration
     {
         private readonly ILifetimeScope scope;
         private readonly HttpConfiguration configuration;
+        private readonly ISwaggerConfiguration swaggerConfiguration;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiStartupConfiguration(ILifetimeScope scope)
+        public ApiStartupConfiguration(ILifetimeScope scope, ISwaggerConfiguration swaggerConfiguration)
         {
             this.scope = scope.BeginLifetimeScope();
             configuration = scope.Resolve<HttpConfiguration>();
+            this.swaggerConfiguration = swaggerConfiguration;
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace ShipWorks.Api.Configuration
 
             ConfigureApiVersioning(configuration);
             RegisterApiControllers(configuration, appBuilder);
+            swaggerConfiguration.Configure(configuration);
         }
 
         /// <summary>
