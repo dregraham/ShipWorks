@@ -32,8 +32,7 @@ namespace ShipWorks.Api.Orders
         {
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                QueryFactory queryFactory = new QueryFactory();
-                EntityQuery<OrderEntity> query = queryFactory.Order;
+                EntityQuery<OrderEntity> query = new QueryFactory().Order;
 
                 query = query.Where(OrderFields.OrderNumberComplete == orderNumber.Trim());
 
