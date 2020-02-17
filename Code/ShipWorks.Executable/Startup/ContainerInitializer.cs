@@ -106,7 +106,7 @@ namespace ShipWorks.Startup
             // ShipWorks.Products
             typeof(ProductsMode).Assembly,
             // ShipWOrks.Products.UI
-            typeof(ProductsViewHost).Assembly
+            typeof(ProductsModule).Assembly
         };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
 using RestSharp.Serialization;
 
@@ -9,6 +10,20 @@ namespace ShipWorks.Common.Net
     /// </summary>
     public class RestSharpJsonNetSerializer : IRestSerializer
     {
+        /// <summary>
+        /// Create a serializer with default settings for Hub communication
+        /// </summary>
+        public static IRestSerializer CreateHubDefault() => new RestSharpJsonNetSerializer(new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy
+                {
+                    OverrideSpecifiedNames = false
+                }
+            },
+        });
+
         private readonly JsonSerializerSettings settings = null;
 
         /// <summary>

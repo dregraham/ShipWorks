@@ -5,10 +5,12 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -23,6 +25,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Products.Import;
+using ShipWorks.Products.Warehouse;
 
 namespace ShipWorks.Products
 {
@@ -35,15 +38,17 @@ namespace ShipWorks.Products
         private readonly ISqlSession sqlSession;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly IWarehouseProductClient warehouseClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper, IWarehouseProductClient warehouseClient)
         {
             this.sqlSession = sqlSession;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
+            this.warehouseClient = warehouseClient;
         }
 
         /// <summary>
@@ -324,7 +329,24 @@ namespace ShipWorks.Products
             if (productVariant.IsNew)
             {
                 productVariant.CreatedDate = now;
+
+                return await warehouseClient.AddProduct(productVariant)
+                    .Bind(x => SaveProductToDatabase(productVariant, sqlAdapterFactory))
+                    .ToResult()
+                    .ConfigureAwait(false);
             }
+
+            return await SaveProductToDatabase(productVariant, sqlAdapterFactory)
+                .ToResult()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Save the product to the database
+        /// </summary>
+        private async Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
+        {
+            ProductEntity product = productVariant.Product;
 
             // Set the product to be uploaded to the warehouse
             product.UploadToWarehouseNeeded = true;
@@ -350,14 +372,14 @@ namespace ShipWorks.Products
 
                     sqlAdapter.Commit();
                 }
-                catch (ORMQueryExecutionException ex)
+                catch (ORMQueryExecutionException)
                 {
                     sqlAdapter.Rollback();
-                    return Result.FromError(ex);
+                    throw;
                 }
             }
 
-            return Result.FromSuccess();
+            return Unit.Default;
         }
 
         /// <summary>
