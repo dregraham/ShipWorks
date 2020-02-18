@@ -45,7 +45,7 @@ namespace ShipWorks.Api.Orders
         [SwaggerResponse(HttpStatusCode.OK,
             Type = typeof(OrderResponse),
             Description = "An Order object")]
-        [SwaggerResponse(HttpStatusCode.NotFound, Description = "No order found.")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "No order found")]
         [SwaggerResponse(HttpStatusCode.Conflict, Description = "Multiple Orders found matching the OrderNumber")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Description = "The server is experiencing errors")]
         public HttpResponseMessage Get(string orderNumber)
