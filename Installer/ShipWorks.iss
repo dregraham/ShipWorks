@@ -85,6 +85,7 @@ Type: files; Name: {app}\ActiproSoftware.SyntaxEditor.dll
 Type: files; Name: {app}\ActiproSoftware.WinUICore.dll
 Type: files; Name: {app}\Microsoft.Web.Services2.dll
 Type: files; Name: {app}\eBay.SDK.dll
+Type: files; Name: {app}\ShipWorks.Api.xml
 
 [Files]
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile

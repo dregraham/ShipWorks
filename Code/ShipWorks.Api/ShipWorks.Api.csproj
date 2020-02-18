@@ -22,6 +22,9 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>bin\Debug\ShipWorks.Api.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>..\..\Artifacts\Application\ShipWorks.Api.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="**/*.cs" Exclude="**/*.Designer.cs" />
     <Compile Remove="obj\**" />
