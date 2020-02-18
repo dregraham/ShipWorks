@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Module = Autofac.Module;
@@ -20,6 +21,8 @@ namespace ShipWorks.Api.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+
+            builder.RegisterType<HttpConfiguration>().AsSelf();
         }
     }
 }

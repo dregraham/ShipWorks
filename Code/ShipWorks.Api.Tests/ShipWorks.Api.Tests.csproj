@@ -43,6 +43,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
   </ItemGroup>
  </Project>

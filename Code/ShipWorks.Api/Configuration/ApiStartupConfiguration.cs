@@ -17,6 +17,7 @@ namespace ShipWorks.Api.Configuration
     public class ApiStartupConfiguration : IApiStartupConfiguration
     {
         private readonly ILifetimeScope scope;
+        private readonly HttpConfiguration configuration;
 
         /// <summary>
         /// Constructor
@@ -24,6 +25,7 @@ namespace ShipWorks.Api.Configuration
         public ApiStartupConfiguration(ILifetimeScope scope)
         {
             this.scope = scope.BeginLifetimeScope();
+            configuration = scope.Resolve<HttpConfiguration>();
         }
 
         /// <summary>
@@ -31,8 +33,6 @@ namespace ShipWorks.Api.Configuration
         /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
-            HttpConfiguration configuration = new HttpConfiguration();
-
             appBuilder.UseWebApi(configuration);
 
             ConfigureApiVersioning(configuration);
