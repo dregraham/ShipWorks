@@ -16,17 +16,17 @@ namespace ShipWorks.Api.Configuration
     [Component]
     public class ApiStartupConfiguration : IApiStartupConfiguration
     {
-        private readonly ILifetimeScope scope;
-        private readonly HttpConfiguration configuration;
+        private ILifetimeScope scope;
+        private HttpConfiguration httpConfiguration;
         private readonly ISwaggerConfiguration swaggerConfiguration;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiStartupConfiguration(ILifetimeScope scope, ISwaggerConfiguration swaggerConfiguration)
+        public ApiStartupConfiguration(ILifetimeScope scope, HttpConfiguration httpConfiguration, ISwaggerConfiguration swaggerConfiguration)
         {
             this.scope = scope.BeginLifetimeScope();
-            configuration = scope.Resolve<HttpConfiguration>();
+            this.httpConfiguration = httpConfiguration;
             this.swaggerConfiguration = swaggerConfiguration;
         }
 
@@ -35,29 +35,29 @@ namespace ShipWorks.Api.Configuration
         /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
-            appBuilder.UseWebApi(configuration);
+            appBuilder.UseWebApi(httpConfiguration);
 
-            ConfigureApiVersioning(configuration);
-            RegisterApiControllers(configuration, appBuilder);
-            swaggerConfiguration.Configure(configuration);
+            ConfigureApiVersioning();
+            RegisterApiControllers(appBuilder);
+
+            swaggerConfiguration.Configure(httpConfiguration);
         }
 
         /// <summary>
         /// Registers API controllers with Autofac
         /// </summary>
-        private void RegisterApiControllers(HttpConfiguration configuration, IAppBuilder appBuilder)
+        private void RegisterApiControllers(IAppBuilder appBuilder)
         {
-            configuration.DependencyResolver = new AutofacWebApiDependencyResolver(scope);
-            appBuilder.UseAutofacMiddleware(scope);
+            httpConfiguration.DependencyResolver = new AutofacWebApiDependencyResolver(scope);
 
-            appBuilder.UseAutofacWebApi(configuration);
+            appBuilder.UseAutofacMiddleware(scope);
+            appBuilder.UseAutofacWebApi(httpConfiguration);
         }
 
         /// <summary>
         /// Attach API versioning to the configuration.
         /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        private void ConfigureApiVersioning(HttpConfiguration configuration)
+        private void ConfigureApiVersioning()
         {
             DefaultInlineConstraintResolver constraintResolver = new DefaultInlineConstraintResolver()
             {
@@ -67,9 +67,9 @@ namespace ShipWorks.Api.Configuration
                 }
             };
 
-            configuration.MapHttpAttributeRoutes(constraintResolver);
-            configuration.AddApiVersioning(options => options.DefaultApiVersion = new ApiVersion(1, 0));
-            configuration.AddApiVersioning();
+            httpConfiguration.MapHttpAttributeRoutes(constraintResolver);
+            httpConfiguration.AddApiVersioning(options => options.DefaultApiVersion = new ApiVersion(1, 0));
+            httpConfiguration.AddApiVersioning();
         }
 
         /// <summary>
@@ -77,7 +77,11 @@ namespace ShipWorks.Api.Configuration
         /// </summary>
         public void Dispose()
         {
-            scope.Dispose();
+            scope?.Dispose();
+            scope = null;
+
+            httpConfiguration?.Dispose();
+            httpConfiguration = null;
         }
     }
 }
