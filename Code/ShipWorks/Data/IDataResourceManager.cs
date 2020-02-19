@@ -39,5 +39,10 @@ namespace ShipWorks.Data
         /// Register the data as a resource in the database.  If already present, the existing reference is returned.
         /// </summary>
         DataResourceReference CreateFromText(string text, long consumerID, bool forceCreateNew = false);
+
+        /// <summary>
+        /// Get all the resource referenced by the consumer, but the local cached data files will not yet be loaded
+        /// </summary>
+        List<DataResourceReference> GetConsumerResourceReferences(long consumerID);
     }
 }

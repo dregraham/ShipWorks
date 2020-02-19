@@ -1,16 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Autofac.Extras.Moq;
 using ShipWorks.Api.Orders;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Tests.Shared;
 using Xunit;
 
 namespace ShipWorks.Api.Tests.Orders
 {
-    public class OrderResponseFactoryTest
+    public class OrdersResponseFactoryTest
     {
+        private readonly AutoMock mock;
+        private readonly OrdersResponseFactory testObject;
+
+        public OrdersResponseFactoryTest()
+        {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            testObject = mock.Create<OrdersResponseFactory>();
+        }
+
         [Fact]
         public void Create_SetsOrderInformation()
         {
@@ -26,7 +33,6 @@ namespace ShipWorks.Api.Tests.Orders
             order.ApplyOrderNumberPostfix("abc");
             order.ApplyOrderNumberPostfix("efg");
 
-            var testObject = new OrdersResponseFactory();
             var result = testObject.CreateOrdersResponse(order);
             
             Assert.Equal(order.OrderID, result.OrderId);
@@ -52,7 +58,6 @@ namespace ShipWorks.Api.Tests.Orders
                 ShipPostalCode = "12345"
             };
 
-            var testObject = new OrdersResponseFactory();
             var result = testObject.CreateOrdersResponse(order);
 
             Assert.Equal(order.ShipUnparsedName, result.ShipAddress.RecipientName);
@@ -80,7 +85,6 @@ namespace ShipWorks.Api.Tests.Orders
                 BillPostalCode = "12345"
             };
 
-            var testObject = new OrdersResponseFactory();
             var result = testObject.CreateOrdersResponse(order);
 
             Assert.Equal(order.BillUnparsedName, result.BillAddress.RecipientName);
