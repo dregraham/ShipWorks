@@ -45,7 +45,7 @@ namespace ShipWorks.Api.Orders.Shipments
                     IEnumerable<ProcessShipmentResult> result = await shipmentProcessor.Process(shipments, refresher, null, null)
                         .ConfigureAwait(false);
                     
-                    return result.First();
+                    return result.FirstOrDefault();
                 }
             }
         }
