@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
@@ -56,6 +57,9 @@ namespace ShipWorks.Api.Orders.Shipments
             builder.RegisterType<BackgroundAsyncMessageHelper>()
                 .AsSelf()
                 .As<IAsyncMessageHelper>();
+
+            builder.RegisterType<NullNudgeManager>()
+                .AsImplementedInterfaces();
         }
     }
 }
