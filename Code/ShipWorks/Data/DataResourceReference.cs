@@ -14,16 +14,16 @@ using System.Drawing.Imaging;
 namespace ShipWorks.Data
 {
     /// <summary>
-    /// Information about a resource saved in the datbase
+    /// Information about a resource saved in the database
     /// </summary>
     public class DataResourceReference
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(DataResourceReference));
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataResourceReference));
 
-        long referenceID;
-        long resourceID;
-        string filename;
-        string label;
+        private readonly long referenceID;
+        private readonly long resourceID;
+        private readonly string filename;
+        private readonly string label;
 
         /// <summary>
         /// Constructor to be used for tests, etc.
@@ -55,45 +55,27 @@ namespace ShipWorks.Data
         /// <summary>
         /// The reference ID of the resource reference in the database. This is not the ResourceID itself
         /// </summary>
-        public long ReferenceID
-        {
-            get { return referenceID; }
-        }
+        public long ReferenceID => referenceID;
 
         /// <summary>
         /// The resourceID of the resource.  Many references can refer to the same resource data.
         /// </summary>
-        public long ResourceID
-        {
-            get { return resourceID; }
-        }
+        public long ResourceID => resourceID;
 
         /// <summary>
         /// The Filename, without path, where the resource should be cached on disk
         /// </summary>
-        public string Filename
-        {
-            get { return filename; }
-        }
+        public string Filename => filename;
 
         /// <summary>
         /// A resource-type specific string indicating where it came form.
         /// </summary>
-        public string Label
-        {
-            get { return label; }
-        }
+        public string Label => label;
 
         /// <summary>
         /// Indicates if this is a placeholder resource for data that has been purged
         /// </summary>
-        public bool IsPurgedPlaceholder
-        {
-            get
-            {
-                return filename.StartsWith("__purged_", StringComparison.InvariantCulture);
-            }
-        }
+        public bool IsPurgedPlaceholder => filename.StartsWith("__purged_", StringComparison.InvariantCulture);
 
         /// <summary>
         /// Read the entire contents of the resource as a text stream.
@@ -165,7 +147,7 @@ namespace ShipWorks.Data
                 else if (IsPurgedPlaceholder)
                 {
                     log.InfoFormat("Resource {0} is being cached to '{1}' [Purged].", referenceID, filename);
-                    WritePurgedPlaceholerContent(fullPath);
+                    WritePurgedPlaceholderContent(fullPath);
                 }
                 else
                 {
@@ -178,7 +160,7 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
-        /// Get the filename, but with the given extension.  Since shipworks writes everything with an "swr" extension, this is
+        /// Get the filename, but with the given extension.  Since ShipWorks writes everything with an "swr" extension, this is
         /// needed to get a version with the correct extension.
         /// </summary>
         public string GetAlternateFilename(string extension)
@@ -232,7 +214,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Write out the placeholder content to use for purges
         /// </summary>
-        private void WritePurgedPlaceholerContent(string fullPath)
+        private void WritePurgedPlaceholderContent(string fullPath)
         {
             switch (Filename)
             {

@@ -38,7 +38,7 @@ namespace ShipWorks.Api.Orders
         /// Create an order response using the given order
         /// </summary>
         public OrderResponse CreateOrdersResponse(IOrderEntity order) =>
-            new OrderResponse()
+            new OrderResponse
             {
                 OrderId = order.OrderID,
                 OrderNumber = order.OrderNumberComplete,
@@ -46,7 +46,7 @@ namespace ShipWorks.Api.Orders
                 LastModifiedDate = order.OnlineLastModified,
                 OrderTotal = order.OrderTotal,
                 StoreStatus = order.OnlineStatus,
-                ShipAddress = new Address()
+                ShipAddress = new Address
                 {
                     RecipientName = order.ShipUnparsedName,
                     Street1 = order.ShipStreet1,
@@ -57,7 +57,7 @@ namespace ShipWorks.Api.Orders
                     CountryCode = order.ShipCountryCode,
                     PostalCode = order.ShipPostalCode
                 },
-                BillAddress = new Address()
+                BillAddress = new Address
                 {
                     RecipientName = order.BillUnparsedName,
                     Street1 = order.BillStreet1,
@@ -76,7 +76,6 @@ namespace ShipWorks.Api.Orders
         public ProcessShipmentResponse CreateProcessShipmentResponse(ProcessShipmentResult processShipmentResult)
         {
             var response = new ProcessShipmentResponse();
-
 
             ShipmentEntity shipment = processShipmentResult.Shipment;
             ICarrierShipmentAdapter adapter = carrierShipmentAdapterFactory.Get(shipment);
@@ -99,7 +98,7 @@ namespace ShipWorks.Api.Orders
             IEnumerable<LabelData> labels;
             if (adapter.SupportsMultiplePackages)
             {
-                labels = adapter.GetPackageAdapters().SelectMany(p => apiLabelFactory.GetLabels(p.PackageId));                
+                labels = adapter.GetPackageAdapters().SelectMany(p => apiLabelFactory.GetLabels(p.PackageId));
             }
             else
             {
