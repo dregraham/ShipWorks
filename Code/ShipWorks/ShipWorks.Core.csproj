@@ -881,6 +881,7 @@
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
     <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
