@@ -881,6 +881,7 @@
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
     <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
@@ -9422,6 +9423,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BasicShipmentUploadTaskEditor.resx">
       <DependentUpon>BasicShipmentUploadTaskEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\GenericModule\CoreExtensions\Actions\GenericStoreOrderUpdateTaskEditor.resx">
       <DependentUpon>GenericStoreOrderUpdateTaskEditor.cs</DependentUpon>
