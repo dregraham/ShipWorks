@@ -58,33 +58,12 @@ namespace ShipWorks.Api.Orders
         /// <response code="500">The server is experiencing errors</response>
         [HttpGet]
         [Route("{orderNumber}")]
-        public HttpResponseMessage Get(string orderNumber)
+        public async Task<HttpResponseMessage> Get(string orderNumber)
         {
-            try
-            {
-                IEnumerable<OrderEntity> orders = orderRepository.GetOrders(orderNumber);
-
-                ComparisonResult comparisonResult = orders.CompareCountTo(1);
-
-                switch (comparisonResult)
-                {
-                    case ComparisonResult.Equal:
-                        // For a single order, create the response and return it with a 200
-                        OrderResponse response = responseFactory.CreateOrdersResponse(orders.SingleOrDefault());
-                        return Request.CreateResponse(HttpStatusCode.OK, response);
-                    case ComparisonResult.More:
-                        // More than 1 order found, return 409
-                        return Request.CreateResponse(HttpStatusCode.Conflict);
-                    default:
-                        // No orders found, return 404
-                        return Request.CreateResponse(HttpStatusCode.NotFound);
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error("An error occured getting orders", ex);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
-            }
+            return await ExecuteOrdersAction((o) => {
+                OrderResponse response = responseFactory.CreateOrdersResponse(o);
+                return Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, response));
+            }, orderNumber);
         }
 
         /// <summary>
@@ -97,7 +76,29 @@ namespace ShipWorks.Api.Orders
         /// <response code="500">The server is experiencing errors</response>
         [HttpPost]
         [Route("{orderNumber}/shipments")]
-        public async Task<HttpResponseMessage> CreateShipment(string orderNumber)
+        public Task<HttpResponseMessage> CreateShipment(string orderNumber) => 
+            ExecuteOrdersAction(ProcessShipment, orderNumber);
+
+        /// <summary>
+        /// Process a shipment for the given order
+        /// </summary>
+        private async Task<HttpResponseMessage> ProcessShipment(OrderEntity order)
+        {
+            ShipmentEntity shipment = shipmentFactory.Create(order);
+            ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment);
+
+            if (!processResult.IsSuccessful)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, processResult.Error.Message);
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, responseFactory.CreateProcessShipmentResponse(processResult));
+        }
+
+        /// <summary>
+        /// Execute the given action on an order found matching the OrderNumber
+        /// </summary>
+        public async Task<HttpResponseMessage> ExecuteOrdersAction(Func<OrderEntity, Task<HttpResponseMessage>> action, string orderNumber)
         {
             try
             {
@@ -108,16 +109,7 @@ namespace ShipWorks.Api.Orders
                 switch (comparisonResult)
                 {
                     case ComparisonResult.Equal:
-
-                        ShipmentEntity shipment = shipmentFactory.Create(orders.First());
-                        ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment);
-
-                        if (!processResult.IsSuccessful)
-                        {
-                            return Request.CreateResponse(HttpStatusCode.InternalServerError, processResult.Error.Message);
-                        }
-
-                        return Request.CreateResponse(HttpStatusCode.OK, responseFactory.CreateProcessShipmentResponse(processResult));
+                        return await action(orders.First());
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
                         return Request.CreateResponse(HttpStatusCode.Conflict);
