@@ -22,15 +22,16 @@ namespace ShipWorks.Api.Orders
     public class OrdersResponseFactory : IOrdersResponseFactory
     {
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
-        private readonly IDataResourceManager dataResourceManager;
+        private readonly IApiLabelFactory apiLabelFactory;
+
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrdersResponseFactory(ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory, IDataResourceManager dataResourceManager)
+        public OrdersResponseFactory(ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory, IApiLabelFactory apiLabelFactory)
         {
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
-            this.dataResourceManager = dataResourceManager;
+            this.apiLabelFactory = apiLabelFactory;
         }
 
         /// <summary>
@@ -95,17 +96,17 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         private void AddLabelData(ProcessShipmentResponse response, ICarrierShipmentAdapter adapter)
         {
-            List<DataResourceReference> labels;
+            IEnumerable<LabelData> labels;
             if (adapter.SupportsMultiplePackages)
             {
-                labels = adapter.GetPackageAdapters().SelectMany(p => dataResourceManager.GetConsumerResourceReferences(p.PackageId)).ToList();                
+                labels = adapter.GetPackageAdapters().SelectMany(p => apiLabelFactory.GetLabels(p.PackageId));                
             }
             else
             {
-                labels = dataResourceManager.GetConsumerResourceReferences(adapter.Shipment.ShipmentID);                    
+                labels = apiLabelFactory.GetLabels(adapter.Shipment.ShipmentID);
             }
 
-            labels.ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
+            response.Labels.AddRange(labels);
         }
     }
 }
