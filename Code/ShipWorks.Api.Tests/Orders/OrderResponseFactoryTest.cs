@@ -26,8 +26,8 @@ namespace ShipWorks.Api.Tests.Orders
             order.ApplyOrderNumberPostfix("abc");
             order.ApplyOrderNumberPostfix("efg");
 
-            var testObject = new OrderResponseFactory();
-            var result = testObject.Create(order);
+            var testObject = new OrdersResponseFactory();
+            var result = testObject.CreateOrdersResponse(order);
             
             Assert.Equal(order.OrderID, result.OrderId);
             Assert.Equal(order.OrderNumberComplete, result.OrderNumber);
@@ -52,8 +52,8 @@ namespace ShipWorks.Api.Tests.Orders
                 ShipPostalCode = "12345"
             };
 
-            var testObject = new OrderResponseFactory();
-            var result = testObject.Create(order);
+            var testObject = new OrdersResponseFactory();
+            var result = testObject.CreateOrdersResponse(order);
 
             Assert.Equal(order.ShipUnparsedName, result.ShipAddress.RecipientName);
             Assert.Equal(order.ShipStreet1, result.ShipAddress.Street1);
@@ -80,8 +80,8 @@ namespace ShipWorks.Api.Tests.Orders
                 BillPostalCode = "12345"
             };
 
-            var testObject = new OrderResponseFactory();
-            var result = testObject.Create(order);
+            var testObject = new OrdersResponseFactory();
+            var result = testObject.CreateOrdersResponse(order);
 
             Assert.Equal(order.BillUnparsedName, result.BillAddress.RecipientName);
             Assert.Equal(order.BillStreet1, result.BillAddress.Street1);

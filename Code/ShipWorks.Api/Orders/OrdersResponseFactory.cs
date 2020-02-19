@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Api.Orders.Shipments;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Api.Orders
 {
@@ -7,12 +9,12 @@ namespace ShipWorks.Api.Orders
     /// Factory for generating order responses
     /// </summary>
     [Component]
-    public class OrderResponseFactory : IOrderResponseFactory
+    public class OrdersResponseFactory : IOrdersResponseFactory
     {
         /// <summary>
         /// Create an order response using the given order
         /// </summary>
-        public OrderResponse Create(IOrderEntity order) =>
+        public OrderResponse CreateOrdersResponse(IOrderEntity order) =>
             new OrderResponse()
             {
                 OrderId = order.OrderID,
@@ -44,5 +46,13 @@ namespace ShipWorks.Api.Orders
                     PostalCode = order.BillPostalCode
                 },
             };
+
+        /// <summary>
+        /// Create a ProcessShipmentResponse from a ProcessShipmentResult
+        /// </summary>
+        public ProcessShipmentResponse CreateProcessShipmentResponse(ProcessShipmentResult processShipmentResult)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

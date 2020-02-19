@@ -21,13 +21,13 @@ namespace ShipWorks.Api.Orders
     public class OrdersController : ApiController
     {
         private readonly IApiOrderRepository orderRepository;
-        private readonly IOrderResponseFactory responseFactory;
+        private readonly IOrdersResponseFactory responseFactory;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrdersController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory, Func<Type, ILog> logFactory)
+        public OrdersController(IApiOrderRepository orderRepository, IOrdersResponseFactory responseFactory, Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
             this.responseFactory = responseFactory;
@@ -57,7 +57,7 @@ namespace ShipWorks.Api.Orders
                 {
                     case ComparisonResult.Equal:
                         // For a single order, create the response and return it with a 200
-                        OrderResponse response = responseFactory.Create(orders.SingleOrDefault());
+                        OrderResponse response = responseFactory.CreateOrdersResponse(orders.SingleOrDefault());
                         return Request.CreateResponse(HttpStatusCode.OK, response);
                     case ComparisonResult.More:
                         // More than 1 order found, return 409

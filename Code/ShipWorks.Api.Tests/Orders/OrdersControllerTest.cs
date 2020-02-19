@@ -31,7 +31,7 @@ namespace ShipWorks.Api.Tests.Orders
                     new OrderEntity(1)
                 });
 
-            mock.Mock<IOrderResponseFactory>().Setup(x => x.Create(AnyIOrder))
+            mock.Mock<IOrdersResponseFactory>().Setup(x => x.CreateOrdersResponse(AnyIOrder))
                 .Returns(new OrderResponse());
 
             var testObject = mock.Create<OrdersController>();
