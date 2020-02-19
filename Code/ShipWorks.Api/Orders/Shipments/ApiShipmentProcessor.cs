@@ -42,7 +42,8 @@ namespace ShipWorks.Api.Orders.Shipments
                     var shipmentProcessor = overriddenScope.Resolve<IShipmentProcessor>();
 
                     refresher.RetrieveShipments = () => shipments;
-                    IEnumerable<ProcessShipmentResult> result = await shipmentProcessor.Process(shipments, refresher, null, null);
+                    IEnumerable<ProcessShipmentResult> result = await shipmentProcessor.Process(shipments, refresher, null, null)
+                        .ConfigureAwait(false);
                     
                     return result.First();
                 }

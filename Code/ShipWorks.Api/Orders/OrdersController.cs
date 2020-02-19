@@ -63,7 +63,7 @@ namespace ShipWorks.Api.Orders
             return await ExecuteOrdersAction((o) => {
                 OrderResponse response = responseFactory.CreateOrdersResponse(o);
                 return Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, response));
-            }, orderNumber);
+            }, orderNumber).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace ShipWorks.Api.Orders
         private async Task<HttpResponseMessage> ProcessShipment(OrderEntity order)
         {
             ShipmentEntity shipment = shipmentFactory.Create(order);
-            ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment);
+            ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
 
             if (!processResult.IsSuccessful)
             {
