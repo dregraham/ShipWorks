@@ -55,12 +55,10 @@ namespace ShipWorks.Api.Orders
         /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
         [HttpGet]
         [Route("{orderNumber}")]
-        [SwaggerResponse(HttpStatusCode.OK,
-            Type = typeof(OrderResponse),
-            Description = "An Order object")]
-        [SwaggerResponse(HttpStatusCode.NotFound, Description = "No order found")]
-        [SwaggerResponse(HttpStatusCode.Conflict, Description = "Multiple Orders found matching the OrderNumber")]
-        [SwaggerResponse(HttpStatusCode.InternalServerError, Description = "The server is experiencing errors")]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(OrderResponse), Description = "An Order object")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(ErrorResponse), Description = "No order found")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse), Description = "Multiple Orders found matching the OrderNumber")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse), Description = "The server is experiencing errors")]
         public async Task<HttpResponseMessage> Get(string orderNumber)
         {
             return await ExecuteOrdersAction((o) => {
@@ -73,10 +71,10 @@ namespace ShipWorks.Api.Orders
         /// Create a shipment for the given order
         /// </summary>
         /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
-        /// <response code="200">An Order object</response>
-        /// <response code="404">No Order found</response>
-        /// <response code="409">Multiple Orders found matching the OrderNumber</response>
-        /// <response code="500">The server is experiencing errors</response>
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(ProcessShipmentResponse), Description = "A ProcessShipment object")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(ErrorResponse), Description = "No order found")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse), Description = "Multiple Orders found matching the OrderNumber")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse), Description = "The server is experiencing errors")]
         [HttpPost]
         [Route("{orderNumber}/shipments")]
         public Task<HttpResponseMessage> CreateShipment(string orderNumber) => 
