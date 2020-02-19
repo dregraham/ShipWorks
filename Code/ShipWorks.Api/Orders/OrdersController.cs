@@ -89,7 +89,7 @@ namespace ShipWorks.Api.Orders
 
             if (!processResult.IsSuccessful)
             {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, processResult.Error.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse(processResult.Error.Message));
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, responseFactory.CreateProcessShipmentResponse(processResult));
@@ -109,19 +109,19 @@ namespace ShipWorks.Api.Orders
                 switch (comparisonResult)
                 {
                     case ComparisonResult.Equal:
-                        return await action(orders.First());
+                        return await action(orders.Single());
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
-                        return Request.CreateResponse(HttpStatusCode.Conflict);
+                        return Request.CreateResponse(HttpStatusCode.Conflict, new ErrorResponse("Multiple Orders found matching the OrderNumber"));
                     default:
                         // No orders found, return 404
-                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new ErrorResponse("No order found"));
                 }
             }
             catch (Exception ex)
             {
                 log.Error("An error occured getting orders", ex);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse(ex.Message));
             }
         }
     }
