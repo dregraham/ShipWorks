@@ -384,7 +384,7 @@ namespace ShipWorks.Data
         /// <summary>
         /// Get all the resource referenced by the consumer, but the local cached data files will not yet be loaded
         /// </summary>
-        public static List<DataResourceReference> GetConsumerResourceReferences(long consumerID)
+        public static List<DataResourceReference> GetConsumerResourceReferences(long con)
         {
             List<DataResourceReference> resources = new List<DataResourceReference>();
 

@@ -22,13 +22,15 @@ namespace ShipWorks.Api.Orders
     public class OrdersResponseFactory : IOrdersResponseFactory
     {
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
+        private readonly IDataResourceManager dataResourceManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrdersResponseFactory(ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory)
+        public OrdersResponseFactory(ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory, IDataResourceManager dataResourceManager)
         {
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
+            this.dataResourceManager = dataResourceManager;
         }
 
         /// <summary>
@@ -98,13 +100,13 @@ namespace ShipWorks.Api.Orders
                 // Add labels for each package
                 foreach (IPackageAdapter package in adapter.GetPackageAdapters())
                 {
-                    DataResourceManager.GetConsumerResourceReferences(package.PackageId)
+                    dataResourceManager.GetConsumerResourceReferences(package.PackageId)
                         .ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
                 }
             }
             else
             {
-                DataResourceManager.GetConsumerResourceReferences(adapter.Shipment.ShipmentID)
+                dataResourceManager.GetConsumerResourceReferences(adapter.Shipment.ShipmentID)
                     .ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
             }
         }
