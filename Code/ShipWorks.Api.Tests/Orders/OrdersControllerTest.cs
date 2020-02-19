@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Hosting;
 using Autofac.Extras.Moq;
@@ -22,7 +23,7 @@ namespace ShipWorks.Api.Tests.Orders
         }
 
         [Fact]
-        public void Get_Returns200_WhenOrderIsFound()
+        public async Task Get_Returns200_WhenOrderIsFound()
         {
             mock.Mock<IApiOrderRepository>()
                 .Setup(x => x.GetOrders(AnyString))
@@ -38,13 +39,13 @@ namespace ShipWorks.Api.Tests.Orders
             testObject.Request = new HttpRequestMessage();
             testObject.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = new HttpConfiguration();
 
-            var response = testObject.Get("1");
+            var response = await testObject.Get("1");
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
-        public void Get_Returns404_WhenNoOrderIsFound()
+        public async Task Get_Returns404_WhenNoOrderIsFound()
         {
             mock.Mock<IApiOrderRepository>()
                 .Setup(x => x.GetOrders(AnyString))
@@ -54,13 +55,13 @@ namespace ShipWorks.Api.Tests.Orders
             testObject.Request = new HttpRequestMessage();
             testObject.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = new HttpConfiguration();
 
-            var response = testObject.Get("1");
+            var response = await testObject.Get("1");
 
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
-        public void Get_Returns409_WhenMultipleOrdersAreFound()
+        public async Task Get_Returns409_WhenMultipleOrdersAreFound()
         {
             mock.Mock<IApiOrderRepository>()
                 .Setup(x => x.GetOrders(AnyString))
@@ -74,13 +75,13 @@ namespace ShipWorks.Api.Tests.Orders
             testObject.Request = new HttpRequestMessage();
             testObject.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = new HttpConfiguration();
 
-            var response = testObject.Get("1");
+            var response = await testObject.Get("1");
 
             Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         }
 
         [Fact]
-        public void Get_Returns500_WhenExceptionOccurs()
+        public async Task Get_Returns500_WhenExceptionOccurs()
         {
             mock.Mock<IApiOrderRepository>()
                 .Setup(x => x.GetOrders(AnyString))
@@ -90,7 +91,7 @@ namespace ShipWorks.Api.Tests.Orders
             testObject.Request = new HttpRequestMessage();
             testObject.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = new HttpConfiguration();
 
-            var response = testObject.Get("1");
+            var response = await testObject.Get("1");
 
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
