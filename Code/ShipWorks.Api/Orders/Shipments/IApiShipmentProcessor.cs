@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 
 namespace ShipWorks.Api.Orders.Shipments
@@ -11,6 +12,6 @@ namespace ShipWorks.Api.Orders.Shipments
         /// <summary>
         /// Process the given Shipment
         /// </summary>
-        ProcessShipmentResult Process(ShipmentEntity shipment);
+        Task<ProcessShipmentResult> Process(ShipmentEntity shipment);
     }
 }

@@ -9,10 +9,18 @@ namespace ShipWorks.Api.Orders.Shipments
     public class ProcessShipmentResponse
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ProcessShipmentResponse()
+        {
+            Labels = new List<LabelData>();
+        }
+
+        /// <summary>
         /// A collection of label names and Base64 encoded labels
         /// </summary>
         [JsonProperty("labels")]
-        public IEnumerable<LabelData> Labels { get; set; }
+        public List<LabelData> Labels { get; set; }
 
         /// <summary>
         /// The cost of the shipment

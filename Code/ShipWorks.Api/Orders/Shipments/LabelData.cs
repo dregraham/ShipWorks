@@ -8,6 +8,15 @@ namespace ShipWorks.Api.Orders.Shipments
     public class LabelData
     {
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LabelData(string name, string image)
+        {
+            Name = name;
+            Image = image;
+        }
+
+        /// <summary>
         /// The Labels name
         /// </summary>
         [JsonProperty("name")]
