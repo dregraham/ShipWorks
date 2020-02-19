@@ -273,6 +273,11 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
+            if (owner == null)
+            {
+                EnforceCapabilities(context);
+            }
+
             Refresh();
 
             // Enforce restrictions when not in the trial period

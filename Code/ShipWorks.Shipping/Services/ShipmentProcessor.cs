@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Services
             }
 
             // Check restriction
-            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, clonedShipments.Count, owner))
+            if (shipmentCount > 1 && !licenseService.HandleRestriction(EditionFeature.SelectionLimit, clonedShipments.Count, owner))
             {
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
