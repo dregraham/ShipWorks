@@ -187,12 +187,6 @@ namespace ShipWorks.ApplicationCore
                 .As<IMainForm>()
                 .ExternallyOwned();
 
-            if (Program.ExecutionMode.IsUISupported)
-            {
-                builder.Register(c => default(Control))
-                    .As<Control>();
-            }
-
             builder.RegisterInstance(SqlDateTimeProvider.Current)
                 .AsImplementedInterfaces()
                 .ExternallyOwned();

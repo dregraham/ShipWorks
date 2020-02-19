@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -61,6 +62,9 @@ namespace ShipWorks.Api.Orders.Shipments
 
             builder.RegisterType<NullNudgeManager>()
                 .AsImplementedInterfaces();
+
+            builder.Register(c => new Control())
+                .As<Control>();
         }
     }
 }

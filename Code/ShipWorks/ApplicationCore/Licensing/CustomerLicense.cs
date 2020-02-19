@@ -273,7 +273,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
-            if (owner == null)
+            if (!Program.ExecutionMode.IsUISupported)
             {
                 EnforceCapabilities(context);
             }
