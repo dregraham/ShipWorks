@@ -95,20 +95,17 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         private void AddLabelData(ProcessShipmentResponse response, ICarrierShipmentAdapter adapter)
         {
+            List<DataResourceReference> labels;
             if (adapter.SupportsMultiplePackages)
             {
-                // Add labels for each package
-                foreach (IPackageAdapter package in adapter.GetPackageAdapters())
-                {
-                    dataResourceManager.GetConsumerResourceReferences(package.PackageId)
-                        .ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
-                }
+                labels = adapter.GetPackageAdapters().SelectMany(p => dataResourceManager.GetConsumerResourceReferences(p.PackageId)).ToList();                
             }
             else
             {
-                dataResourceManager.GetConsumerResourceReferences(adapter.Shipment.ShipmentID)
-                    .ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
+                labels = dataResourceManager.GetConsumerResourceReferences(adapter.Shipment.ShipmentID);                    
             }
+
+            labels.ForEach(r => response.Labels.Add(new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText())))));
         }
     }
 }
