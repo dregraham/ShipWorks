@@ -13,6 +13,7 @@ using ShipWorks.Api.Orders.Shipments;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
+using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.Orders
 {
@@ -52,12 +53,14 @@ namespace ShipWorks.Api.Orders
         /// Returns an order matching the number or order ID
         /// </summary>
         /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
-        /// <response code="200">An Order object</response>
-        /// <response code="404">No Order found</response>
-        /// <response code="409">Multiple Orders found matching the OrderNumber</response>
-        /// <response code="500">The server is experiencing errors</response>
         [HttpGet]
         [Route("{orderNumber}")]
+        [SwaggerResponse(HttpStatusCode.OK,
+            Type = typeof(OrderResponse),
+            Description = "An Order object")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Description = "No order found")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Description = "Multiple Orders found matching the OrderNumber")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Description = "The server is experiencing errors")]
         public async Task<HttpResponseMessage> Get(string orderNumber)
         {
             return await ExecuteOrdersAction((o) => {
