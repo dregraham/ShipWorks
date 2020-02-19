@@ -49,7 +49,7 @@ namespace ShipWorks.Products.Export
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await uploadRequest.Upload(new SkusToUploadDto(skus, databaseId)).ConfigureAwait(false);
+                    var results = await uploadRequest.Upload(new UploadProductsRequest(skus, databaseId)).ConfigureAwait(false);
 
                     if (results.Success)
                     {

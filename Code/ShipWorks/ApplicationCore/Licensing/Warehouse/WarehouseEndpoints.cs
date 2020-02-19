@@ -1,7 +1,4 @@
-﻿using System;
-using RestSharp;
-
-namespace ShipWorks.ApplicationCore.Licensing.Warehouse
+﻿namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Warehouse endpoints
@@ -11,7 +8,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Login = "api/auth/token/login";
         public const string Warehouses = "api/warehouses";
         public const string RefreshToken = "api/auth/token/refresh";
-        public const string UploadSkus = "api/skus/import";
+        public const string UploadProducts = "api/products/import";
         public const string GenerateDataKey = "api/store/generateDataKey";
         public const string Stores = "api/stores";
         public const string OdbcStores = "api/stores/{0}/odbc";
