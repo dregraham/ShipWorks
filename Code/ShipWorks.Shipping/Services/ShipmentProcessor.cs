@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Services
             // See if we are supposed to open WorldShip
             if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)
             {
-                WorldShipUtility.LaunchWorldShip(owner);
+                WorldShipUtility.LaunchWorldShip(messageHelper);
             }
 
             RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, result.OrderHashes);
