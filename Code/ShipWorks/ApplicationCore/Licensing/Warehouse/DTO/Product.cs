@@ -33,6 +33,7 @@ namespace ShipWorks.Products.Warehouse.DTO
             CountryOfOrigin = product.CountryOfOrigin;
             Fnsku = product.FNSku;
             Ean = product.EAN;
+            Enabled = product.IsActive;
 
             Attributes = product.AttributeValues.EmptyIfNull().Select(ProductAttribute.Create);
             Aliases = product.Aliases.EmptyIfNull().Where(x => !x.IsDefault).Select(ProductAlias.Create);
@@ -117,6 +118,11 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// EAN of the product
         /// </summary>
         public string Ean { get; set; }
+
+        /// <summary>
+        /// Whether or not the product is enabled
+        /// </summary>
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// Attributes of the product
