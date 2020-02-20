@@ -417,14 +417,14 @@ string ParseBracketParam(string rightValue)
 /// </summary>
 FilePath SetBuildPath()
 {
-	DirectoryPath vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,17.0]" });
+	DirectoryPath vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
 	FilePath msBuildPathX64 = (vsLatest==null)
 								? null
 								: vsLatest.CombineWithFilePath("./MSBuild/Current/Bin/MSBuild.exe");
 								
 	if (msBuildPathX64 == null || !System.IO.File.Exists(msBuildPathX64.FullPath))
 	{
-		vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,17.0]" });
+		vsLatest  = VSWhereLatest(new VSWhereLatestSettings { Version = "[15.0,16.0]" });
 		msBuildPathX64 = (vsLatest == null) ? null : vsLatest.CombineWithFilePath("./MSBuild/15.0/Bin/MSBuild.exe");
 	}
 	else if (msBuildPathX64==null || !System.IO.File.Exists(msBuildPathX64.FullPath))
