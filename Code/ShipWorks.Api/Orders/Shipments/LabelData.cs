@@ -3,7 +3,7 @@
 namespace ShipWorks.Api.Orders.Shipments
 {
     /// <summary>
-    /// An object that hold a Shipments label image and name
+    /// An object that hold a Shipment's label image and name
     /// </summary>
     public class LabelData
     {
