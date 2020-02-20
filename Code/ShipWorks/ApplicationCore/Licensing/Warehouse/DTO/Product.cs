@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Interapptive.Shared.Collections;
@@ -34,6 +35,7 @@ namespace ShipWorks.Products.Warehouse.DTO
             Fnsku = product.FNSku;
             Ean = product.EAN;
             Enabled = product.IsActive;
+            CreatedDate = product.CreatedDate;
 
             Attributes = product.AttributeValues.EmptyIfNull().Select(ProductAttribute.Create);
             Aliases = product.Aliases.EmptyIfNull().Where(x => !x.IsDefault).Select(ProductAlias.Create);
@@ -123,6 +125,11 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// Whether or not the product is enabled
         /// </summary>
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// When the product was created
+        /// </summary>
+        public DateTime CreatedDate { get; set; }
 
         /// <summary>
         /// Attributes of the product
