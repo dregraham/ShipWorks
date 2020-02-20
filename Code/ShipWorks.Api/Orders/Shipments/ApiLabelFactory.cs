@@ -32,12 +32,7 @@ namespace ShipWorks.Api.Orders.Shipments
         public IEnumerable<LabelData> GetLabels(long consumerID)
         {
             return dataResourceManager.GetConsumerResourceReferences(consumerID)
-                .Select(r => CreateLabel(r));
-        }
-
-        private static LabelData CreateLabel(DataResourceReference r)
-        {
-            return new LabelData(r.Label, Convert.ToBase64String(r.ReadAllBytes()));
+                .Select(r => new LabelData(r.Label, Convert.ToBase64String(r.ReadAllBytes())));
         }
     }
 }
