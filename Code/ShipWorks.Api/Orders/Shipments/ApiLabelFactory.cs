@@ -15,7 +15,7 @@ namespace ShipWorks.Api.Orders.Shipments
     public class ApiLabelFactory : IApiLabelFactory
     {
         private readonly IDataResourceManager dataResourceManager;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -29,8 +29,15 @@ namespace ShipWorks.Api.Orders.Shipments
         /// Gets labels for ID
         /// </summary>
         /// <param name="consumerID">Either a shipment or package ID</param>
-        public IEnumerable<LabelData> GetLabels(long consumerID) =>
-            dataResourceManager.GetConsumerResourceReferences(consumerID)
-                .Select(r => new LabelData(r.Label, Convert.ToBase64String(Encoding.UTF8.GetBytes(r.ReadAllText()))));        
+        public IEnumerable<LabelData> GetLabels(long consumerID)
+        {
+            return dataResourceManager.GetConsumerResourceReferences(consumerID)
+                .Select(r => CreateLabel(r));
+        }
+
+        private static LabelData CreateLabel(DataResourceReference r)
+        {
+            return new LabelData(r.Label, Convert.ToBase64String(r.ReadAllBytes()));
+        }
     }
 }

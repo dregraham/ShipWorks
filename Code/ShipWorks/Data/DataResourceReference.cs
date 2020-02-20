@@ -94,6 +94,11 @@ namespace ShipWorks.Data
         }
 
         /// <summary>
+        /// Read the entire contets of the resource as a byte array
+        /// </summary>
+        public byte[] ReadAllBytes() => File.ReadAllBytes(GetCachedFilename());
+
+        /// <summary>
         /// Ensure that the resource data has been loaded from the database and cached as a local file, and the filename is returned
         /// </summary>
         public string GetCachedFilename()
