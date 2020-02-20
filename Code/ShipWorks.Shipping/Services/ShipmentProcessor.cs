@@ -148,13 +148,13 @@ namespace ShipWorks.Shipping.Services
                     "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
                 {
                     result = await workflow.Process(clonedShipments, chosenRateResult, workProgress,
-                        cancellationSource, counterRateCarrierConfiguredWhileProcessingAction);
+                        cancellationSource, counterRateCarrierConfiguredWhileProcessingAction).ConfigureAwait(false);
                 }
             }
 
             result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
 
-            await HandleProcessingException(result);
+            await HandleProcessingException(result).ConfigureAwait(false);
 
             // See if we are supposed to open WorldShip
             if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)

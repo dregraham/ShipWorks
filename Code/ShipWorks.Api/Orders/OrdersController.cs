@@ -110,7 +110,7 @@ namespace ShipWorks.Api.Orders
                 switch (comparisonResult)
                 {
                     case ComparisonResult.Equal:
-                        return await action(orders.Single());
+                        return await action(orders.Single()).ConfigureAwait(false);
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
                         return Request.CreateResponse(HttpStatusCode.Conflict, new ErrorResponse("Multiple Orders found matching the OrderNumber"));
