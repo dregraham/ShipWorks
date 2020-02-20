@@ -276,6 +276,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             if (!Program.ExecutionMode.IsUISupported)
             {
                 EnforceCapabilities(context);
+                return;
             }
 
             Refresh();
