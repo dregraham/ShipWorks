@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
@@ -10,13 +12,15 @@ namespace ShipWorks.Shipping.Insurance
     public class InsuranceUtilityWrapper : IInsuranceUtility
     {
         private IShippingSettings shippingSettings;
+        private readonly IAsyncMessageHelper messageHelper;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InsuranceUtilityWrapper(IShippingSettings shippingSettings)
+        public InsuranceUtilityWrapper(IShippingSettings shippingSettings, IAsyncMessageHelper messageHelper)
         {
             this.shippingSettings = shippingSettings;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -113,7 +117,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Validate the given shipment
         /// </summary>
-        public void ValidateShipment(ShipmentEntity shipment) => InsuranceUtility.ValidateShipment(shipment);
+        public async Task ValidateShipment(ShipmentEntity shipment) => await InsuranceUtility.ValidateShipment(shipment, messageHelper);
 
         /// <summary>
         /// Get the default insurance value to use based on the shipment contents

@@ -9,13 +9,14 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Net;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Insurance
 {
     /// <summary>
     /// Form for allowing users to agree with Insurance terms and conditions
     /// </summary>
-    public partial class InsuranceAgreementDlg : Form
+    public partial class InsuranceAgreementDlg : Form, IForm
     {
         /// <summary>
         /// Constructor
