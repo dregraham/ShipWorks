@@ -10,6 +10,7 @@ using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
 using ShipWorks.Api.Orders.Shipments;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
@@ -29,6 +30,7 @@ namespace ShipWorks.Api.Orders
         private readonly IOrdersResponseFactory responseFactory;
         private readonly IShipmentFactory shipmentFactory;
         private readonly IApiShipmentProcessor shipmentProcessor;
+        private readonly ISqlSession sqlSession;
         private readonly ILog log;
 
         /// <summary>
@@ -39,13 +41,14 @@ namespace ShipWorks.Api.Orders
             IOrdersResponseFactory responseFactory, 
             IShipmentFactory shipmentFactory,
             IApiShipmentProcessor shipmentProcessor, 
+            ISqlSession sqlSession,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
             this.responseFactory = responseFactory;
             this.shipmentFactory = shipmentFactory;
             this.shipmentProcessor = shipmentProcessor;
-
+            this.sqlSession = sqlSession;
             log = logFactory(typeof(OrdersController));
         }
 
@@ -103,6 +106,11 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         public async Task<HttpResponseMessage> ExecuteOrdersAction(Func<OrderEntity, Task<HttpResponseMessage>> action, string orderNumber)
         {
+            if(!sqlSession.CanConnect())
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse("Unable to connect to ShipWorks database."));
+            }
+
             try
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(orderNumber);
