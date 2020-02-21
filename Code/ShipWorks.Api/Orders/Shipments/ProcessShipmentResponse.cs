@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace ShipWorks.Api.Orders.Shipments
@@ -6,6 +7,7 @@ namespace ShipWorks.Api.Orders.Shipments
     /// <summary>
     /// Response containing the shipment and supporting metadata
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ProcessShipmentResponse
     {
         /// <summary>
