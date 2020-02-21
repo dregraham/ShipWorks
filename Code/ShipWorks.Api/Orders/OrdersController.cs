@@ -73,7 +73,8 @@ namespace ShipWorks.Api.Orders
         /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
         [SwaggerResponse(HttpStatusCode.OK, Type = typeof(ProcessShipmentResponse), Description = "A ProcessShipment object")]
         [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(ErrorResponse), Description = "No order found")]
-        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse), Description = "Multiple Orders found matching the OrderNumber")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse),
+                         Description = "Multiple Orders found matching the OrderNumber or Cannot process a shipment with the shipment type of 'None'")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse), Description = "The server is experiencing errors")]
         [HttpPost]
         [Route("{orderNumber}/shipments")]
@@ -86,6 +87,12 @@ namespace ShipWorks.Api.Orders
         private async Task<HttpResponseMessage> ProcessShipment(OrderEntity order)
         {
             ShipmentEntity shipment = shipmentFactory.Create(order);
+
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.None)
+            {
+                return Request.CreateResponse(HttpStatusCode.Conflict, new ErrorResponse("Cannot process a shipment with the shipment type of 'None'"));
+            }
+
             ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
 
             if (!processResult.IsSuccessful)
