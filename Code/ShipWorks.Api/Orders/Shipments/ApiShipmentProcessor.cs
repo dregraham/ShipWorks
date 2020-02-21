@@ -64,6 +64,7 @@ namespace ShipWorks.Api.Orders.Shipments
                 .AsImplementedInterfaces();
 
             builder.Register(c => new Control())
+                .As<IWin32Window>()
                 .As<Control>();
         }
     }
