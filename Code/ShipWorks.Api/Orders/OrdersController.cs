@@ -88,11 +88,6 @@ namespace ShipWorks.Api.Orders
         {
             ShipmentEntity shipment = shipmentFactory.Create(order);
 
-            if (shipment.ShipmentTypeCode == ShipmentTypeCode.None)
-            {
-                return Request.CreateResponse(HttpStatusCode.Conflict, new ErrorResponse("Cannot process a shipment with the shipment type of 'None'"));
-            }
-
             ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
 
             if (!processResult.IsSuccessful)

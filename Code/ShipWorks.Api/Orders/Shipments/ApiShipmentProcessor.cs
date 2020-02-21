@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -34,6 +35,11 @@ namespace ShipWorks.Api.Orders.Shipments
         /// </summary>
         public async Task<ProcessShipmentResult> Process(ShipmentEntity shipment)
         {
+            if (shipment.ShipmentTypeCode == ShipmentTypeCode.None)
+            {
+                return new ProcessShipmentResult(shipment, new ShippingException($"Cannot process a shipment with the shipment type of '{EnumHelper.GetDescription(ShipmentTypeCode.None)}'"));
+            }
+
             using (var overriddenScope = scope.BeginLifetimeScope(ConfigureShipmentProcessorDependencies))
             {
                 var shipments = new[] { shipment };
