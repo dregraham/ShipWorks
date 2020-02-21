@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace ShipWorks.Api.Orders
 {
     /// <summary>
     /// ErrorResponse to return when there is an error
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ErrorResponse
     {
         /// <summary>
