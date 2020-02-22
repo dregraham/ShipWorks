@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace ShipWorks.Api.Orders
 {
@@ -13,7 +14,7 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         public ErrorResponse(string message)
         {
-            Message = message;
+            Message = message.Replace("\r", string.Empty).Replace("\n", string.Empty);
         }
 
         /// <summary>
