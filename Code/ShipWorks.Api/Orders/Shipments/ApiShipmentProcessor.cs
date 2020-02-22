@@ -10,6 +10,7 @@ using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 using ShipWorks.UI;
 
 namespace ShipWorks.Api.Orders.Shipments
@@ -72,6 +73,9 @@ namespace ShipWorks.Api.Orders.Shipments
             builder.Register(c => new Control())
                 .As<IWin32Window>()
                 .As<Control>();
+
+            builder.RegisterType<ApiProcessShipmentsWorkflowFactory>()
+                .As<IProcessShipmentsWorkflowFactory>();
         }
     }
 }

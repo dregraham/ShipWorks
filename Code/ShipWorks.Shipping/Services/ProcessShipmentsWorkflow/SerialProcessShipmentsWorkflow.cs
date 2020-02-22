@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     /// <summary>
     /// Process shipments one at a time
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IProcessShipmentsWorkflow), ProcessShipmentsWorkflow.Serial)]
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
         private readonly ShipmentPreparationStep prepareShipmentTask;

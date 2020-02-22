@@ -1245,6 +1245,9 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
     <Compile Include="Shipping\Policies\AmazonSFPShippingRestrictionType.cs" />

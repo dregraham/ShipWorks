@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     /// <summary>
     /// Process shipments in parallel
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IProcessShipmentsWorkflow), ProcessShipmentsWorkflow.Serial)]
     public class ParallelProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
         public const string LabelProcessingConcurrencyBasePath = @"Software\Interapptive\ShipWorks\Options\LabelProcessingConcurrency";
