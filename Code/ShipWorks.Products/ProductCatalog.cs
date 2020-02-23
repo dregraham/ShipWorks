@@ -319,6 +319,24 @@ namespace ShipWorks.Products
             }
 
             ProductEntity product = productVariant.Product;
+            SetCreatedDateIfNecessary(productVariant, product);
+
+            var hubOperation = productVariant.IsNew ?
+                (Func<IProductVariantEntity, Task<IProductChangeResult>>) warehouseClient.AddProduct :
+                warehouseClient.ChangeProduct;
+
+            return await hubOperation(productVariant)
+                .Do(x => x.ApplyTo(productVariant))
+                .Bind(_ => SaveProductToDatabase(productVariant, sqlAdapterFactory))
+                .ToResult()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Set the created date, if necessary
+        /// </summary>
+        private static void SetCreatedDateIfNecessary(ProductVariantEntity productVariant, ProductEntity product)
+        {
             DateTime now = DateTime.UtcNow;
 
             if (product.IsNew)
@@ -329,17 +347,7 @@ namespace ShipWorks.Products
             if (productVariant.IsNew)
             {
                 productVariant.CreatedDate = now;
-
-                return await warehouseClient.AddProduct(productVariant)
-                    .Do(x => x.ApplyTo(productVariant))
-                    .Bind(_ => SaveProductToDatabase(productVariant, sqlAdapterFactory))
-                    .ToResult()
-                    .ConfigureAwait(false);
             }
-
-            return await SaveProductToDatabase(productVariant, sqlAdapterFactory)
-                .ToResult()
-                .ConfigureAwait(false);
         }
 
         /// <summary>

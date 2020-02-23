@@ -29,7 +29,7 @@ namespace ShipWorks.Products.Warehouse
         }
 
         /// <summary>
-        /// Update the stores credentials
+        /// Add a product to the Hub
         /// </summary>
         public async Task<IProductChangeResult> AddProduct(IProductVariantEntity product)
         {
@@ -43,8 +43,28 @@ namespace ShipWorks.Products.Warehouse
             request.AddJsonBody(new AddProductRequestData(product, warehouseId));
 
             return await warehouseRequestClient
-                .MakeRequest<AddProductResponseData>(request, "Upload Store")
+                .MakeRequest<AddProductResponseData>(request, "Add Product")
                 .Map(x => new AddProductResult(x))
+                .ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Change a product on the Hub
+        /// </summary>
+        public async Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product)
+        {
+            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
+            IRestRequest request = new RestRequest(WarehouseEndpoints.ChangeProduct(product), Method.POST)
+            {
+                JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault(),
+                RequestFormat = DataFormat.Json
+            };
+
+            request.AddJsonBody(new ChangeProductRequestData(product, warehouseId));
+
+            return await warehouseRequestClient
+                .MakeRequest<ChangeProductResponseData>(request, "Change Product")
+                .Map(x => new ChangeProductResult(x))
                 .ConfigureAwait(true);
         }
     }

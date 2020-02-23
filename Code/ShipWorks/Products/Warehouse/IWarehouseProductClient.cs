@@ -11,8 +11,13 @@ namespace ShipWorks.Products.Warehouse
     public interface IWarehouseProductClient
     {
         /// <summary>
-        /// Adds a product to the Hub
+        /// Add a product to the Hub
         /// </summary>
         Task<IProductChangeResult> AddProduct(IProductVariantEntity product);
+
+        /// <summary>
+        /// Change a product on the Hub
+        /// </summary>
+        Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product);
     }
 }

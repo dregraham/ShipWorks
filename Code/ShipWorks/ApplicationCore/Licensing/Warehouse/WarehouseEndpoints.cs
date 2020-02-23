@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.ApplicationCore.Licensing.Warehouse
+﻿using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products;
+
+namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
     /// <summary>
     /// Warehouse endpoints
@@ -64,5 +67,10 @@
         /// Create a reroute order items endpoint with an warehouseOrderID
         /// </summary>
         public static string RerouteOrderItems(string warehouseOrderID) => string.Format(rerouteOrderItems, warehouseOrderID);
+
+        /// <summary>
+        /// Create a change product route
+        /// </summary>
+        public static string ChangeProduct(IProductVariantEntity product) => $"api/product/{product.HubProductId}";
     }
 }

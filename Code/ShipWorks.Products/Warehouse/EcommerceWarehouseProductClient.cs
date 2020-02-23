@@ -13,8 +13,13 @@ namespace ShipWorks.Products.Warehouse
     public class EcommerceWarehouseProductClient : IWarehouseProductClient
     {
         /// <summary>
-        /// Adds a product to the Hub
+        /// Add a product to the Hub
         /// </summary>
         public Task<IProductChangeResult> AddProduct(IProductVariantEntity product) => Task.FromResult(NullProductResult.Default);
+
+        /// <summary>
+        /// Change a product on the Hub
+        /// </summary>
+        public Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product) => Task.FromResult(NullProductResult.Default);
     }
 }
