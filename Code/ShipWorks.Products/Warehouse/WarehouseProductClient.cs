@@ -1,21 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using Autofac.Features.Indexed;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Utility;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
-using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Editions;
 using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products.Warehouse
@@ -41,7 +31,7 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Update the stores credentials
         /// </summary>
-        public async Task<string> AddProduct(IProductVariantEntity product)
+        public async Task<IProductChangeResult> AddProduct(IProductVariantEntity product)
         {
             string warehouseId = configurationData.FetchReadOnly().WarehouseID;
             IRestRequest request = new RestRequest(WarehouseEndpoints.AddProduct, Method.PUT)
@@ -54,7 +44,7 @@ namespace ShipWorks.Products.Warehouse
 
             return await warehouseRequestClient
                 .MakeRequest<AddProductResponseData>(request, "Upload Store")
-                .Map(x => x.ProductId)
+                .Map(x => new AddProductResult(x))
                 .ConfigureAwait(true);
         }
     }

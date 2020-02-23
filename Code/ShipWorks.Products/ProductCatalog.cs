@@ -331,7 +331,8 @@ namespace ShipWorks.Products
                 productVariant.CreatedDate = now;
 
                 return await warehouseClient.AddProduct(productVariant)
-                    .Bind(x => SaveProductToDatabase(productVariant, sqlAdapterFactory))
+                    .Do(x => x.ApplyTo(productVariant))
+                    .Bind(_ => SaveProductToDatabase(productVariant, sqlAdapterFactory))
                     .ToResult()
                     .ConfigureAwait(false);
             }

@@ -41,5 +41,13 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// Id of the product that was added
         /// </summary>
         public string ProductId { get; set; }
+
+        /// <summary>
+        /// Version of the product on the Hub
+        /// </summary>
+        /// <remarks>
+        /// This is used for optimistic concurrency
+        /// </remarks>
+        public int Version { get; set; }
     }
 }

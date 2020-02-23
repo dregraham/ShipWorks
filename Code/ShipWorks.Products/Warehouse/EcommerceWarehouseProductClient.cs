@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -14,6 +15,6 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Adds a product to the Hub
         /// </summary>
-        public Task<string> AddProduct(IProductVariantEntity product) => Task.FromResult("");
+        public Task<IProductChangeResult> AddProduct(IProductVariantEntity product) => Task.FromResult(NullProductResult.Default);
     }
 }
