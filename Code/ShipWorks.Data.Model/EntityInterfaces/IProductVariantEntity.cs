@@ -135,18 +135,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String EAN { get; }
-        /// <summary> The FNSku_ property of the Entity ProductVariant<br/><br/>
+        /// <summary> The HubProductId property of the Entity ProductVariant<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariant"."FNSku"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubProductId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        System.String FNSku_ { get; }
-        /// <summary> The EAN_ property of the Entity ProductVariant<br/><br/>
+        Nullable<System.Guid> HubProductId { get; }
+        /// <summary> The HubVersion property of the Entity ProductVariant<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariant"."EAN"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        System.String EAN_ { get; }
+        Nullable<System.Int32> HubVersion { get; }
         
         
         IProductEntity Product { get; }

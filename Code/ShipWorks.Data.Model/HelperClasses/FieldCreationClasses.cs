@@ -23517,15 +23517,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.EAN);}
 		}
-		/// <summary>Creates a new ProductVariantEntity.FNSku_ field instance</summary>
-		public static EntityField2 FNSku_
+		/// <summary>Creates a new ProductVariantEntity.HubProductId field instance</summary>
+		public static EntityField2 HubProductId
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.FNSku_);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.HubProductId);}
 		}
-		/// <summary>Creates a new ProductVariantEntity.EAN_ field instance</summary>
-		public static EntityField2 EAN_
+		/// <summary>Creates a new ProductVariantEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.EAN_);}
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.HubVersion);}
 		}
 	}
 
