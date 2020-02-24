@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping
                 {
                     ISqlAdapterFactory adapterFactory = lifetimeScope.Resolve<ISqlAdapterFactory>();
 
-                    using (ISqlAdapter adapter = adapterFactory.CreateTransacted())
+                    adapterFactory.WithPhysicalTransaction(adapter =>
                     {
                         // Try to fetch the existing profile data for the shipment
                         if (parent.Fields.State != EntityState.New)
@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping
                         }
 
                         adapter.Commit();
-                    }
+                    });
                 }
             }
         }
