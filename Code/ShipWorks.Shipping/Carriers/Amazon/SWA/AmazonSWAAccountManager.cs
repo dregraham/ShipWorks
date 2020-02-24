@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
     /// Manage AmazonSWA Accounts
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
-    [Component]
-    public class AmazonSWAAccountManager : IInitializeForCurrentSession
+    [Component(SingleInstance = true)]
+    public class AmazonSWAAccountManager : IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         static TableSynchronizer<AmazonSWAAccountEntity> synchronizer;
         static IEnumerable<IAmazonSWAAccountEntity> readOnlyAccounts;
@@ -100,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             {
                 Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
             }
+        }
+
+        /// <summary>
+        /// Non-static version of CheckForChanges used by ICheckForChangesNeeded in Heartbeat for IoC
+        /// </summary>
+        void ICheckForChangesNeeded.CheckForChangesNeeded()
+        {
+            AmazonSWAAccountManager.CheckForChangesNeeded();
         }
 
         /// <summary>
