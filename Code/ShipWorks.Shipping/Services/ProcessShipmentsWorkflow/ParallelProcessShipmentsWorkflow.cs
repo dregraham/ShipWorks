@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 new ProcessShipmentsWorkflowResult(chosenRateResult),
                 dataflow);
 
-            IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource).ConfigureAwait(false);
+            IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
 
             foreach (var shipment in input)
             {
@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 
             dataflow.Complete();
 
-            ProcessShipmentsWorkflowResult result = await results.ConfigureAwait(false);
+            ProcessShipmentsWorkflowResult result = await results;
             workProgress.Completed();
             return result;
         }
@@ -187,7 +187,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     {
                         return shippingManager.SaveShipmentsToDatabase(shipments, true);
                     }
-                }).ConfigureAwait(false);
+                });
 
             return shipments.Select((shipment, i) =>
             {
