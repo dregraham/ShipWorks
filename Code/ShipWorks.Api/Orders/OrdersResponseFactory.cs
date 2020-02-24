@@ -95,17 +95,27 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         private void AddLabelData(ProcessShipmentResponse response, ICarrierShipmentAdapter adapter)
         {
-            IEnumerable<LabelData> labels;
-            if (adapter.SupportsMultiplePackages)
+            IEnumerable<LabelData> labels = GetLabelConsumerIds(adapter).SelectMany(p => apiLabelFactory.GetLabels(p));
+            response.Labels.AddRange(labels);
+        }
+
+        /// <summary>
+        /// Get the label ConsumerIds for the given adapter
+        /// </summary>
+        private IEnumerable<long> GetLabelConsumerIds(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            // Single package carriers and DHL Express store label data under the shipmentId
+            // DHL Express is a ShipEngine carrier and therefor uses the common ShipEngine logic
+            // for storing labels which is why it uses the shipmentId and not the packageId
+            if (!shipmentAdapter.SupportsMultiplePackages ||
+                shipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.DhlExpress)
             {
-                labels = adapter.GetPackageAdapters().SelectMany(p => apiLabelFactory.GetLabels(p.PackageId));
+                return new[] { shipmentAdapter.Shipment.ShipmentID };
             }
             else
             {
-                labels = apiLabelFactory.GetLabels(adapter.Shipment.ShipmentID);
+                return shipmentAdapter.GetPackageAdapters().Select(p => p.PackageId);
             }
-
-            response.Labels.AddRange(labels);
         }
     }
 }

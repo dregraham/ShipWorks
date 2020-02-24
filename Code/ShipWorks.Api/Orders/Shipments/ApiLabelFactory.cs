@@ -9,7 +9,7 @@ using ShipWorks.Data;
 namespace ShipWorks.Api.Orders.Shipments
 {
     /// <summary>
-    /// Generates a label 
+    /// Generates a label
     /// </summary>
     [Component]
     public class ApiLabelFactory : IApiLabelFactory
