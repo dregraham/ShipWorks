@@ -32,6 +32,7 @@ namespace ShipWorks.Api.Orders
         private readonly IApiShipmentProcessor shipmentProcessor;
         private readonly ISqlSession sqlSession;
         private readonly ILog log;
+        private string customerId;
 
         /// <summary>
         /// Constructor
@@ -89,6 +90,11 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         private async Task<HttpResponseMessage> ProcessShipment(OrderEntity order)
         {
+            if (string.IsNullOrEmpty(customerId))
+            {
+                customerId = ApplicationCore.Licensing.TangoWebClient.GetTangoCustomerId();
+            }
+            
             ShipmentEntity shipment = shipmentFactory.Create(order);
 
             ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
