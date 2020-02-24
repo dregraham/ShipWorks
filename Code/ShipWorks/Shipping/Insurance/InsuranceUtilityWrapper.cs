@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Validate the given shipment
         /// </summary>
-        public async Task ValidateShipment(ShipmentEntity shipment) => await InsuranceUtility.ValidateShipment(shipment, messageHelper);
+        public Task ValidateShipment(ShipmentEntity shipment) => InsuranceUtility.ValidateShipment(shipment, messageHelper);
 
         /// <summary>
         /// Get the default insurance value to use based on the shipment contents

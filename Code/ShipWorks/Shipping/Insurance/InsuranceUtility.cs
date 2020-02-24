@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Insurance
                 // They have to agree to the insurance agreement
                 if (string.IsNullOrWhiteSpace(settings.InsurancePolicy))
                 {
-                    bool result = await messageHelper.ShowDialog(() => new InsuranceAgreementDlg()) == DialogResult.OK;
+                    bool result = await messageHelper.ShowDialog(() => new InsuranceAgreementDlg()).ConfigureAwait(true) == DialogResult.OK;
  
                     if (result)
                     {

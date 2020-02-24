@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
 {
+    /// <summary>
+    /// Method by which shipments are processed
+    /// </summary>
     public enum ProcessShipmentsWorkflow
     {
         Serial,
