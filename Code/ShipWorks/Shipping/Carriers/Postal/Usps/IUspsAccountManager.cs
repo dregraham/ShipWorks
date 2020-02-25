@@ -14,7 +14,5 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         void InitializeForCurrentSession();
 
         List<UspsAccountEntity> GetAccounts(UspsResellerType resellerType);
-
-        string GetResellerName(UspsResellerType resellerType);
     }
 }

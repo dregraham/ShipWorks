@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
         public void Initialize()
         {
-            var account = accountManager.GetAccounts(UspsResellerType.None).FirstOrDefault();
+            var account = accountManager.GetAccounts(UspsResellerType.None).Where(a => a.ShipEngineCarrierId != null).FirstOrDefault();
 
             var webClient = new UspsPostageWebClient(account);
             settingsViewModel = new OneBalanceSettingsControlViewModel(accountManager, webClient);

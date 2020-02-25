@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         public string AccountIdentifier
         {
-            get { return account.Username; }
+            get { return account?.Username; }
         }
 
         /// <summary>

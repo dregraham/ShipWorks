@@ -32,19 +32,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             GetAccountBalance();
         }
-
-        private bool HasAccount() => accountManager.GetAccounts(UspsResellerType.None)
-            .Where(a => a.ShortAccountDescription == webClient.AccountIdentifier)
-            .FirstOrDefault() != null;
         
-
         private void GetAccountBalance()
         {
-            if (HasAccount())
+            if (!string.IsNullOrEmpty(webClient.AccountIdentifier))
             {
                 GetBalance();
             }
-
         }
 
         /// <summary>
