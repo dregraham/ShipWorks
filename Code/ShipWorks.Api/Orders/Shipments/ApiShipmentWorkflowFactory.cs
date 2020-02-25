@@ -8,10 +8,8 @@ using ShipWorks.Shipping.Services.ProcessShipmentsWorkflow;
 namespace ShipWorks.Api.Orders.Shipments
 {
     /// <summary>
-    /// Factory for creating the correct process shipments workflow
+    /// Factory for creating the compatible shipments workflow for the API
     /// </summary>
-    /// <remarks>Right now, this doesn't do much but in a few months, this should be where we add the code to
-    /// return either a serial or a parallel processing workflow</remarks>
     [Component(RegistrationType.Self)]
     public class ApiProcessShipmentsWorkflowFactory : IProcessShipmentsWorkflowFactory
     {

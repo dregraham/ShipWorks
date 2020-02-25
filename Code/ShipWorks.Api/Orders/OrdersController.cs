@@ -10,6 +10,7 @@ using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
 using ShipWorks.Api.Orders.Shipments;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -31,6 +32,7 @@ namespace ShipWorks.Api.Orders
         private readonly IShipmentFactory shipmentFactory;
         private readonly IApiShipmentProcessor shipmentProcessor;
         private readonly ISqlSession sqlSession;
+        private readonly ITangoWebClient tangoWebClient;
         private readonly ILog log;
         private string customerId;
 
@@ -43,6 +45,7 @@ namespace ShipWorks.Api.Orders
             IShipmentFactory shipmentFactory,
             IApiShipmentProcessor shipmentProcessor, 
             ISqlSession sqlSession,
+            ITangoWebClient tangoWebClient,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
@@ -50,6 +53,7 @@ namespace ShipWorks.Api.Orders
             this.shipmentFactory = shipmentFactory;
             this.shipmentProcessor = shipmentProcessor;
             this.sqlSession = sqlSession;
+            this.tangoWebClient = tangoWebClient;
             log = logFactory(typeof(OrdersController));
         }
 
@@ -92,7 +96,7 @@ namespace ShipWorks.Api.Orders
         {
             if (string.IsNullOrEmpty(customerId))
             {
-                customerId = ApplicationCore.Licensing.TangoWebClient.GetTangoCustomerId();
+                customerId = tangoWebClient.GetTangoCustomerId();
             }
             
             ShipmentEntity shipment = shipmentFactory.Create(order);
@@ -112,11 +116,6 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         public async Task<HttpResponseMessage> ExecuteOrdersAction(Func<OrderEntity, Task<HttpResponseMessage>> action, string orderNumber)
         {
-            if(!sqlSession.CanConnect())
-            {
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse("Unable to connect to ShipWorks database."));
-            }
-
             try
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(orderNumber);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using SD.LLBLGen.Pro.QuerySpec;
@@ -16,13 +17,15 @@ namespace ShipWorks.Api.Orders
     public class ApiOrderRepository : IApiOrderRepository
     {
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly ISqlSession sqlSession;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiOrderRepository(ISqlAdapterFactory sqlAdapterFactory)
+        public ApiOrderRepository(ISqlAdapterFactory sqlAdapterFactory, ISqlSession sqlSession)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.sqlSession = sqlSession;
         }
 
         /// <summary>
@@ -30,6 +33,11 @@ namespace ShipWorks.Api.Orders
         /// </summary>
         public IEnumerable<OrderEntity> GetOrders(string orderNumber)
         {
+            if (!sqlSession.CanConnect())
+            {
+                throw new Exception("Unable to connect to ShipWorks database.");
+            }
+
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
                 EntityQuery<OrderEntity> query = new QueryFactory().Order;
