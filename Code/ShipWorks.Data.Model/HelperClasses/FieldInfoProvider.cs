@@ -3519,6 +3519,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "PromoStatus", typeof(System.Byte), false, false, false, false,  (int)UpsAccountFieldIndex.PromoStatus, 0, 0, 3);
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UpsAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
 		}
 		/// <summary>Inits UpsLetterRateEntity's FieldInfo objects</summary>
 		private void InitUpsLetterRateEntityInfos()
@@ -3822,6 +3823,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "GlobalPostAvailability", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.GlobalPostAvailability, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
+			this.AddElementFieldInfo("UspsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UspsAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()
