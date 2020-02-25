@@ -5344,7 +5344,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [CreatedDate] [datetime] NOT NULL,
 [PendingInitialAccount] [int] NOT NULL,
 [GlobalPostAvailability] [int] NOT NULL,
-[AcceptedFCMILetterWarning] [bit] NOT NULL
+[AcceptedFCMILetterWarning] [bit] NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
@@ -5479,7 +5480,8 @@ CREATE TABLE [dbo].[UpsAccount]
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PromoStatus] [tinyint] NOT NULL,
 [LocalRatingEnabled] [bit] NOT NULL,
-[UpsRateTableID] [bigint] NULL
+[UpsRateTableID] [bigint] NULL,
+[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'

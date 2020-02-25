@@ -348,6 +348,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("GlobalPostAvailability", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AcceptedFCMILetterWarning", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -664,6 +666,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, value); }
+		}
+
+		/// <summary> The ShipEngineCarrierId property of the Entity UspsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."ShipEngineCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ShipEngineCarrierId
+		{
+			get { return (System.String)GetValue((int)UspsAccountFieldIndex.ShipEngineCarrierId, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.ShipEngineCarrierId, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

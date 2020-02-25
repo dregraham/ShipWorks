@@ -1169,6 +1169,19 @@
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\IOneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceSelectionPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceSelectionPage.Designer.cs">
+      <DependentUpon>OneBalanceSelectionPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.Designer.cs">
+      <DependentUpon>OneBalanceTermsAndConditionsPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
@@ -1198,6 +1211,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
     <Compile Include="Shipping\IOneBalanceSettingsControlHost.cs" />
+    <Compile Include="Shipping\IShipmentTypeDataService.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShippingRestrictionType.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
@@ -1205,6 +1219,7 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
     <Compile Include="Shipping\Policies\AmazonSFPShippingRestrictionType.cs" />
@@ -8409,6 +8424,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
       <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceSelectionPage.resx">
+      <DependentUpon>OneBalanceSelectionPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.resx">
+      <DependentUpon>OneBalanceTermsAndConditionsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>

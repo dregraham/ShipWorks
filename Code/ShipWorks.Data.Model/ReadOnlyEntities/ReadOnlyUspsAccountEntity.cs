@@ -62,6 +62,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PendingInitialAccount = source.PendingInitialAccount;
             GlobalPostAvailability = source.GlobalPostAvailability;
             AcceptedFCMILetterWarning = source.AcceptedFCMILetterWarning;
+            ShipEngineCarrierId = source.ShipEngineCarrierId;
             
             
             
@@ -226,6 +227,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AcceptedFCMILetterWarning { get; }
+        /// <summary> The ShipEngineCarrierId property of the Entity UspsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UspsAccount"."ShipEngineCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ShipEngineCarrierId { get; }
         
         
         

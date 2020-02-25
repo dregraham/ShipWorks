@@ -3110,6 +3110,7 @@
           <Field Name="PromoStatus" Type="byte" Precision="3" FieldIndex="22" />
           <Field Name="RateType" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="12" FieldIndex="25" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="16" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="12" />
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="13" />
@@ -3396,6 +3397,7 @@
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
+          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="12" FieldIndex="26" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="9" />
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="10" />
@@ -4632,7 +4634,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-01-28T17:34:09.0169021Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-25T19:08:23.2411053Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8853,8 +8855,6 @@
                     <Field Name="InsureShipClientID" Ordinal="32" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="InsureShipApiKey" Ordinal="33" IsOptional="true" DbType="12" Length="255" />
                     <Field Name="WarehouseStoreID" Ordinal="34" IsOptional="true" DbType="25" />
-                    <Field Name="ShipEngineOrderSourceID" Ordinal="35" IsOptional="true" DbType="25" />
-                    <Field Name="ShipEngineAccountID" Ordinal="36" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="SystemData">
@@ -9014,6 +9014,7 @@
                     <Field Name="PromoStatus" Ordinal="23" DbType="22" Precision="3" />
                     <Field Name="LocalRatingEnabled" Ordinal="24" DbType="2" />
                     <Field Name="UpsRateTableID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="26" IsOptional="true" DbType="12" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="UpsLetterRate">
@@ -9430,6 +9431,7 @@
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -14051,6 +14053,7 @@
             <FieldMapping FieldName="PromoStatus" TargetFieldName="PromoStatus" />
             <FieldMapping FieldName="RateType" TargetFieldName="RateType" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
             <FieldMapping FieldName="Street2" TargetFieldName="Street2" />
@@ -14338,6 +14341,7 @@
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
             <FieldMapping FieldName="PostalCode" TargetFieldName="PostalCode" />
             <FieldMapping FieldName="RowVersion" TargetFieldName="RowVersion" />
+            <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
             <FieldMapping FieldName="Street2" TargetFieldName="Street2" />

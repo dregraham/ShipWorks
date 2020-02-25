@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
@@ -473,6 +474,16 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 return GenericResult.FromError<string>(error);
             }
+        }
+
+        public GenericResult<string> ConnectStampsAccount(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public GenericResult<string> RegisterUpsAccount(PersonAdapter personAdapter)
+        {
+            throw new NotImplementedException();
         }
     }
 }
