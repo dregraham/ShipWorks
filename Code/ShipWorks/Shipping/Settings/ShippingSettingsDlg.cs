@@ -71,17 +71,23 @@ namespace ShipWorks.Shipping.Settings
             LoadShipmentTypePages();
         }
 
+        /// <summary>
+        /// Load the One Balance control onto the One Balance page
+        /// </summary>
         private void LoadOneBalancePage()
         {
             this.optionPageOneBalance.Controls.Clear();
-            var controlHost = lifetimeScope.ResolveKeyed<IOneBalanceSettingsControlHost>("OneBalanceSettings");
+
+            var controlHost = lifetimeScope.Resolve<IOneBalanceSettingsControlHost>();
             controlHost.Initialize();
+
             var hostControl = controlHost as UserControl;
             hostControl.Dock = DockStyle.Fill;
             hostControl.Margin = new Padding(0, 0, 0, 0);
             hostControl.Padding = new Padding(0, 0, 0, 0);
             this.optionPageOneBalance.Margin = new Padding(0, 0, 0, 0);
             this.optionPageOneBalance.Padding = new Padding(0, 0, 0, 0);
+
             this.optionPageOneBalance.Controls.Add(hostControl);
         }
 

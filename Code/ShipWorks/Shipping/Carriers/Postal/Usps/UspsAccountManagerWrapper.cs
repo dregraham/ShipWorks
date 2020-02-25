@@ -17,6 +17,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountManager.InitializeForCurrentSession();
         }
 
+        /// <summary>
+        /// Get the USPS accounts in the system.
+        /// </summary>
         public List<UspsAccountEntity> GetAccounts(UspsResellerType resellerType)
         {
             return UspsAccountManager.GetAccounts(resellerType);

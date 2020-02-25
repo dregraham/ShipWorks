@@ -11,28 +11,41 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
+    /// <summary>
+    /// View model for the OneBalanceSettingsControl
+    /// </summary>
     public class OneBalanceSettingsControlViewModel
     {
+        private readonly IPostageWebClient webClient;
+
+        /// <summary>
+        /// The current balance of the one balance account
+        /// </summary>
         public decimal Balance { get; set; }
+
+        /// <summary>
+        /// The message to be displayed in place of the account balance if needed
+        /// </summary>
         public string Message { get; set; }
 
-        public bool ShowBalance { get; set; } = true;
+        /// <summary>
+        /// A flag to indicate if we should show the message
+        /// </summary>
         public bool ShowMessage { get; set; } = false;
-
-        private readonly IUspsAccountManager accountManager;
-        private readonly IPostageWebClient webClient;
 
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager, IPostageWebClient webClient)
+        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient)
         {
-            this.accountManager = accountManager;
             this.webClient = webClient;
 
             GetAccountBalance();
         }
-        
+
+        /// <summary>
+        /// Retrieve the accounts balance if we have a One Balance account
+        /// </summary>
         private void GetAccountBalance()
         {
             if (!string.IsNullOrEmpty(webClient.AccountIdentifier))
@@ -42,7 +55,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// Update the postage balance of the account
+        /// Retrieve the accounts balance
         /// </summary>
         private void GetBalance()
         {
@@ -72,7 +85,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     Message = message;
 
                     ShowMessage = true;
-                    ShowBalance = false;
 
                     if (keepTrying)
                     {
