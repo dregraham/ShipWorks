@@ -22,7 +22,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        Task SetActivation(IEnumerable<long> productIDs, bool activation);
+        Task SetActivation(ISqlAdapterFactory sqlAdapterFactory, IEnumerable<long> productIDs, bool activation);
 
         /// <summary>
         /// Fetch a product variant based on SKU

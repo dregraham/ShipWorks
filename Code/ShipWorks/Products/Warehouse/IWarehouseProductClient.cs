@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -19,5 +20,10 @@ namespace ShipWorks.Products.Warehouse
         /// Change a product on the Hub
         /// </summary>
         Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product);
+
+        /// <summary>
+        /// Enable or disable the given products
+        /// </summary>
+        Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation);
     }
 }

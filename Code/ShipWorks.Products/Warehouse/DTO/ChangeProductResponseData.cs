@@ -16,5 +16,4 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// </remarks>
         public int Version { get; set; }
     }
-
 }

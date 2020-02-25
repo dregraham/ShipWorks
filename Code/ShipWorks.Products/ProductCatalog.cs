@@ -20,6 +20,7 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
@@ -54,45 +55,47 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        public async Task SetActivation(IEnumerable<long> productIDs, bool activation)
+        public async Task SetActivation(ISqlAdapterFactory sqlAdapterFactory, IEnumerable<long> productVariantIds, bool activation)
         {
             int chunkSize = 100;
-            List<IEnumerable<long>> chunks = productIDs.SplitIntoChunksOf(chunkSize).ToList();
+            List<IEnumerable<long>> chunks = productVariantIds.SplitIntoChunksOf(chunkSize).ToList();
 
             using (DbConnection conn = sqlSession.OpenConnection())
             {
                 foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    var transaction = conn.BeginTransaction();
-                    try
+                    var productVariants = Enumerable.Empty<ProductVariantEntity>();
+
+                    using (var sqlAdapter = sqlAdapterFactory.Create(conn))
                     {
-                        using (DbCommand comm = conn.CreateCommand())
-                        {
-                            comm.Transaction = transaction;
-                            comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
-                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
-
-                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        }
-
-                        using (DbCommand comm = conn.CreateCommand())
-                        {
-                            comm.Transaction = transaction;
-                            comm.CommandText = $"UPDATE Product SET UploadToWarehouseNeeded = 1 WHERE ProductId IN (SELECT DISTINCT ProductId FROM ProductVariant WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs))";
-                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
-
-                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        }
-
-                        transaction.Commit();
+                        productVariants = await GetVariants(sqlAdapter, productVariantIds).ConfigureAwait(false);
                     }
-                    catch (Exception)
+
+                    var hubProductIds = productVariants.Select(x => x.HubProductId);
+                    var results = await warehouseClient.SetActivation(hubProductIds, activation).ConfigureAwait(false);
+                    results.ApplyTo(productVariants);
+
+                    productVariants.ForEach(x => x.IsActive = activation);
+
+                    using (var sqlAdapter = sqlAdapterFactory.Create(conn))
                     {
-                        transaction.Rollback();
-                        throw;
+                        await sqlAdapter.SaveEntityCollectionAsync(productVariants.ToEntityCollection());
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Get a list of product variants from the database
+        /// </summary>
+        private async Task<IEnumerable<ProductVariantEntity>> GetVariants(ISqlAdapter sqlAdapter, IEnumerable<long> productVariantIds)
+        {
+            QueryFactory factory = new QueryFactory();
+            var from = factory.ProductVariant
+                .Where(ProductVariantFields.ProductVariantID.In(productVariantIds));
+
+            var results = await sqlAdapter.FetchQueryAsync(from).ConfigureAwait(false);
+            return results.OfType<ProductVariantEntity>();
         }
 
         /// <summary>
@@ -112,25 +115,6 @@ namespace ShipWorks.Products
             {
                 await adapter.DeleteEntityAsync(removedBundle).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Create a table parameter for the product variant ID list
-        /// </summary>
-        private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("item", typeof(long));
-            foreach (long value in productVariantIDs)
-            {
-                table.Rows.Add(value);
-            }
-
-            return new SqlParameter("@ProductVariantIDs", SqlDbType.Structured)
-            {
-                TypeName = "LongList",
-                Value = table
-            };
         }
 
         /// <summary>

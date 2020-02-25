@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using RestSharp;
@@ -65,6 +68,31 @@ namespace ShipWorks.Products.Warehouse
             return await warehouseRequestClient
                 .MakeRequest<ChangeProductResponseData>(request, "Change Product")
                 .Map(x => new ChangeProductResult(x))
+                .ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Enable or disable the given products
+        /// </summary>
+        public async Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation)
+        {
+            if (productIDs.Any(x => !x.HasValue))
+            {
+                throw new WarehouseProductException("Some of the products have not yet been saved to the Hub");
+            }
+
+            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
+            IRestRequest request = new RestRequest(WarehouseEndpoints.SetActivationBulk, Method.POST)
+            {
+                JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault(),
+                RequestFormat = DataFormat.Json
+            };
+
+            request.AddJsonBody(new SetActivationBulkRequestData(productIDs.Select(x => x.Value), warehouseId, activation));
+
+            return await warehouseRequestClient
+                .MakeRequest<SetActivationBulkResponseData>(request, "Change Product")
+                .Map(x => new SetActivationBulkResult(x))
                 .ConfigureAwait(true);
         }
     }
