@@ -36,6 +36,7 @@
             this.radioBlankPhoneUseSpecified = new System.Windows.Forms.RadioButton();
             this.radioBlankPhoneUseShipper = new System.Windows.Forms.RadioButton();
             this.labelBlankPhoneInfo = new System.Windows.Forms.Label();
+            this.optionPageOneBalance = new ShipWorks.UI.Controls.OptionPage();
             this.optionControl.SuspendLayout();
             this.optionPageGeneral.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -62,6 +63,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.optionControl.Controls.Add(this.optionPageGeneral);
+            this.optionControl.Controls.Add(this.optionPageOneBalance);
             this.optionControl.Location = new System.Drawing.Point(12, 12);
             this.optionControl.MenuListWidth = 150;
             this.optionControl.Name = "optionControl";
@@ -275,6 +277,15 @@
             this.labelBlankPhoneInfo.Text = "Some carriers require a recipient phone number for certain services.  When none i" +
     "s provided:";
             // 
+            // optionPageOneBalance
+            // 
+            this.optionPageOneBalance.Location = new System.Drawing.Point(153, 0);
+            this.optionPageOneBalance.Name = "optionPageOneBalance";
+            this.optionPageOneBalance.Padding = new System.Windows.Forms.Padding(3);
+            this.optionPageOneBalance.Size = new System.Drawing.Size(566, 516);
+            this.optionPageOneBalance.TabIndex = 3;
+            this.optionPageOneBalance.Text = "ShipWorks One Balance";
+            // 
             // ShippingSettingsDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -332,5 +343,6 @@
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelActiveProviders;
+        private UI.Controls.OptionPage optionPageOneBalance;
     }
 }
