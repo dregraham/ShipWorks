@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -32,9 +33,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         public Result Execute(UpsAccountEntity account)
         {
-            EnsureOneBalanceAccountProvisioned();
+            var validationResult = ValidateFields(account);
+            if (validationResult.Failure)
+            {
+                return validationResult;
+            }
 
-            var result = shipEngineWebClient.RegisterUpsAccount(new PersonAdapter(account, string.Empty));
+            var oneBalanceResult = EnsureOneBalanceAccountProvisioned();
+            if (oneBalanceResult.Failure)
+            {
+                return oneBalanceResult;
+            }
+
+            var result = shipEngineWebClient.RegisterUpsAccount(account.Address);
 
             if (result.Success)
             {
@@ -43,6 +54,57 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             }
 
             return Result.FromError(result.Message);
+        }
+
+        /// <summary>
+        /// Validate all of the fields required to open a one balance account
+        /// </summary>
+        private Result ValidateFields(UpsAccountEntity account)
+        {
+            if (!$"{account.FirstName} {account.LastName}".IsCountBetween(1, 20));
+            {
+                return Result.FromError("The contact name must to be between 1 and 20 characters.");
+            }
+
+            if (!account.Company.IsCountBetween(0, 30));
+            {
+                return Result.FromError("The company name must to be between 0 and 30 characters.");
+            }
+
+            if (!account.Street1.IsCountBetween(1, 30)) ;
+            {
+                return Result.FromError("The street address line 1 name must to be between 1 and 30 characters.");
+            }
+
+            if (!account.Street2.IsCountGreaterThan(30));
+            {
+                return Result.FromError("The street address line 2 must to be less than 30 characters.");
+            }
+
+            if (!account.Street3.IsCountGreaterThan(30)) ;
+            {
+                return Result.FromError("The street address line 3 must to be less than 30 characters.");
+            }
+
+            if (!account.City.IsCountBetween(1, 30)) ;
+            {
+                return Result.FromError("The city must to be between 1 and 30 characters.");
+            }
+
+            if (!account.StateProvCode.IsCountEqualTo(2)) ;
+            {
+                return Result.FromError("The address state value is invalid.");
+            }
+
+            if (!account.CountryCode.IsCountEqualTo(2)) ;
+            {
+                return Result.FromError("The address country value is invalid.");
+            }
+
+            if (!account.Phone.IsCountEqualTo(0)) ;
+            {
+                return Result.FromError("Please enter a phone number.");
+            }
         }
 
         /// <summary>

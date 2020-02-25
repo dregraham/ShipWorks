@@ -256,6 +256,12 @@ namespace Interapptive.Shared.Collections
             source.CompareCountTo(count) == ComparisonResult.Equal;
 
         /// <summary>
+        /// Is the count of the collection between the lower and upper amount
+        /// </summary>
+        public static bool IsCountBetween<T>(this IEnumerable<T> source, int lower, int upper) =>
+            source.CompareCountTo(lower) == ComparisonResult.More && source.CompareCountTo(upper) == ComparisonResult.Less;
+
+        /// <summary>
         /// Returns whether the collection has more, less, or equal to the specified count
         /// </summary>
         public static ComparisonResult CompareCountTo<T>(this IEnumerable<T> source, int count)
