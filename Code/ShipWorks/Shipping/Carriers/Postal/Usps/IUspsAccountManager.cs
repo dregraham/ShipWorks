@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
+﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Interface for UspsAccountManager
@@ -9,5 +12,9 @@
         /// Initializes for current session.
         /// </summary>
         void InitializeForCurrentSession();
+
+        List<UspsAccountEntity> GetAccounts(UspsResellerType resellerType);
+
+        string GetResellerName(UspsResellerType resellerType);
     }
 }
