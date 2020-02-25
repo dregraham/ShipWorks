@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -9,12 +11,14 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -29,6 +33,8 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
+        private readonly IUpsRegistrationRequestFactory registrationRequestFactory;
+        private const string RegisterUrl = "https://api.shipengine.com/v1/";
 
         /// <summary>
         /// Constructor
@@ -36,12 +42,16 @@ namespace ShipWorks.Shipping.ShipEngine
         public ShipEngineWebClient(IShipEngineApiKey apiKey,
             ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory,
-            IStoreManager storeManager)
+            IStoreManager storeManager, IUpsRegistrationRequestFactory registrationRequestFactory)
         {
             this.apiKey = apiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
+            this.registrationRequestFactory = registrationRequestFactory;
+
+            this.upsCredentials = upsCredentials;
+            this.networkUtility = networkUtility;
         }
 
         /// <summary>
@@ -476,14 +486,80 @@ namespace ShipWorks.Shipping.ShipEngine
             }
         }
 
-        public GenericResult<string> ConnectStampsAccount(string username, string password)
+        /// <summary>
+        /// Connects the given stamps.com account to the users ShipEngine account
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectStampsAccount(string username, string password)
         {
-            throw new NotImplementedException();
+            // Check to see if the account already exists in ShipEngine
+            GenericResult<string> existingAccount = await GetCarrierId(username).ConfigureAwait(false);
+
+            if (existingAccount.Success)
+            {
+                return existingAccount;
+            }
+
+            StampsAccountInformationDTO stampsAccountInfo = new StampsAccountInformationDTO
+            {
+                Nickname = username,
+                Username = username,
+                Password = password
+            };
+
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
+
+            try
+            {
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Usps, "ConnectStampsAccount",
+                apiInstance.StampsAccountCarrierConnectAccountAsync(stampsAccountInfo, await GetApiKey()));
+            }
+            catch (ApiException ex)
+            {
+                string error = GetErrorMessage(ex);
+
+                // Stamps returns a cryptic error when the username or password are wrong, clean it up
+                if (error.Contains("(530) Not logged in"))
+                {
+                    return GenericResult.FromError<string>("Unable to connect to Stamps. Please check your account information and try again.");
+                }
+
+                return GenericResult.FromError<string>(error);
+            }
         }
 
-        public GenericResult<string> RegisterUpsAccount(PersonAdapter personAdapter)
+        /// <summary>
+        /// Register a UPS account with One Balance
+        /// </summary>
+        public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person)
         {
-            throw new NotImplementedException();
+            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
+            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"RegisterUpsAccount", LogActionType.Other);
+
+            var registration = registrationRequestFactory.Create(person);
+
+            try
+            {
+                var restClient = new RestClient(RegisterUrl);
+                var restRequest = new RestRequest("registration/ups", Method.POST, DataFormat.Json);
+
+                restRequest.AddHeader($"Content-Type", "application/json");
+                restRequest.AddHeader($"api-key:", apiKey.GetPartnerApiKey());
+                restRequest.AddHeader("on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                restRequest.AddJsonBody(registration);
+                var response = await restClient.ExecuteTaskAsync<UpsRegistrationResponse>(restRequest).ConfigureAwait(false);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return GenericResult.FromSuccess(response.Data.CarrierId);
+                }
+                else
+                {
+                    return GenericResult.FromError<string>("Unable to register the UPS Account");
+                }
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
+            }
         }
     }
 }

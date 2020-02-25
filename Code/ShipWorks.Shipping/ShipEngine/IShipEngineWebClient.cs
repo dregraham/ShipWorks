@@ -76,11 +76,11 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Connects the given stamps.com account to the users ShipEngine account
         /// </summary>
-        GenericResult<string> ConnectStampsAccount(string username, string password);
+        Task<GenericResult<string>> ConnectStampsAccount(string username, string password);
 
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        GenericResult<string> RegisterUpsAccount(PersonAdapter personAdapter);
+        Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter);
     }
 }
