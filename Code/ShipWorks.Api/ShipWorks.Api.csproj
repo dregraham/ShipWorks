@@ -60,6 +60,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
     <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 </Project>

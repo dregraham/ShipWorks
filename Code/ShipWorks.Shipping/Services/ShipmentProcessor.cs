@@ -116,8 +116,10 @@ namespace ShipWorks.Shipping.Services
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
 
-            // Check restriction
-            if (!licenseService.HandleRestriction(EditionFeature.SelectionLimit, clonedShipments.Count, owner))
+            // Tango can restrict number of shipments processed. An active account will always be able to process at least 1
+            // shipment so there is no reason to check if they can process. HandleRestriction also raises UI dialogs so
+            // if a user processes a shipment via the API, we want to bypass the restriction check.
+            if (shipmentCount > 1 && !licenseService.HandleRestriction(EditionFeature.SelectionLimit, shipmentCount, owner))
             {
                 return Enumerable.Empty<ProcessShipmentResult>();
             }
@@ -148,18 +150,18 @@ namespace ShipWorks.Shipping.Services
                     "ShipWorks is processing the shipments.", progressProvider, TimeSpan.Zero))
                 {
                     result = await workflow.Process(clonedShipments, chosenRateResult, workProgress,
-                        cancellationSource, counterRateCarrierConfiguredWhileProcessingAction);
+                        cancellationSource, counterRateCarrierConfiguredWhileProcessingAction).ConfigureAwait(false);
                 }
             }
 
             result.LocalRateValidationResult = upsLocalRateValidator.ValidateShipments(clonedShipments);
 
-            await HandleProcessingException(result);
+            await HandleProcessingException(result).ConfigureAwait(false);
 
             // See if we are supposed to open WorldShip
             if (result.WorldshipExported && shippingSettings.FetchReadOnly().WorldShipLaunch)
             {
-                WorldShipUtility.LaunchWorldShip(owner);
+                await WorldShipUtility.LaunchWorldShip(messageHelper);
             }
 
             RefreshShipSenseStatusForUnprocessedShipments(shipmentRefresher, shipmentEntities, result.OrderHashes);

@@ -405,6 +405,7 @@
     <Compile Include="Services\AutoReturnShipmentService.cs" />
     <Compile Include="Services\IAutoReturnShipmentService.cs" />
     <Compile Include="Services\IScanPackOrderValidator.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
@@ -532,12 +533,9 @@
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\DataFlow.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Services\LabelPrintingService.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ParallelProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflowFactory.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\RatesRetriever.cs" />
     <Compile Include="Services\RatesRetrieverService.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />

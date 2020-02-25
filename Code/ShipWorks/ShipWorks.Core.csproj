@@ -880,6 +880,9 @@
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
     <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
+    <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
@@ -1242,6 +1245,9 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
     <Compile Include="Shipping\Policies\AmazonSFPShippingRestrictionType.cs" />
@@ -9420,6 +9426,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BasicShipmentUploadTaskEditor.resx">
       <DependentUpon>BasicShipmentUploadTaskEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\GenericModule\CoreExtensions\Actions\GenericStoreOrderUpdateTaskEditor.resx">
       <DependentUpon>GenericStoreOrderUpdateTaskEditor.cs</DependentUpon>

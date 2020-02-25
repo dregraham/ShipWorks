@@ -4,11 +4,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
+using ShipWorks.Api.Orders.Shipments;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Messaging.Messages.Shipping;
+using ShipWorks.Shipping;
 using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.Orders
@@ -22,17 +28,32 @@ namespace ShipWorks.Api.Orders
     public class OrdersController : ApiController
     {
         private readonly IApiOrderRepository orderRepository;
-        private readonly IOrderResponseFactory responseFactory;
+        private readonly IOrdersResponseFactory responseFactory;
+        private readonly IShipmentFactory shipmentFactory;
+        private readonly IApiShipmentProcessor shipmentProcessor;
+        private readonly ISqlSession sqlSession;
+        private readonly ITangoWebClient tangoWebClient;
         private readonly ILog log;
+        private string customerId;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OrdersController(IApiOrderRepository orderRepository, IOrderResponseFactory responseFactory, Func<Type, ILog> logFactory)
+        public OrdersController(
+            IApiOrderRepository orderRepository, 
+            IOrdersResponseFactory responseFactory, 
+            IShipmentFactory shipmentFactory,
+            IApiShipmentProcessor shipmentProcessor, 
+            ISqlSession sqlSession,
+            ITangoWebClient tangoWebClient,
+            Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
             this.responseFactory = responseFactory;
-
+            this.shipmentFactory = shipmentFactory;
+            this.shipmentProcessor = shipmentProcessor;
+            this.sqlSession = sqlSession;
+            this.tangoWebClient = tangoWebClient;
             log = logFactory(typeof(OrdersController));
         }
 
@@ -42,13 +63,58 @@ namespace ShipWorks.Api.Orders
         /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
         [HttpGet]
         [Route("{orderNumber}")]
-        [SwaggerResponse(HttpStatusCode.OK,
-            Type = typeof(OrderResponse),
-            Description = "An Order object")]
-        [SwaggerResponse(HttpStatusCode.NotFound, Description = "No order found")]
-        [SwaggerResponse(HttpStatusCode.Conflict, Description = "Multiple Orders found matching the OrderNumber")]
-        [SwaggerResponse(HttpStatusCode.InternalServerError, Description = "The server is experiencing errors")]
-        public HttpResponseMessage Get(string orderNumber)
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(OrderResponse), Description = "An Order object")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(ErrorResponse), Description = "No order found")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse), Description = "Multiple Orders found matching the OrderNumber")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse), Description = "The server is experiencing errors")]
+        public async Task<HttpResponseMessage> Get(string orderNumber)
+        {
+            return await ExecuteOrdersAction((o) => {
+                OrderResponse response = responseFactory.CreateOrdersResponse(o);
+                return Task.FromResult(Request.CreateResponse(HttpStatusCode.OK, response));
+            }, orderNumber).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Create a shipment for the given order
+        /// </summary>
+        /// <param name="orderNumber">The order number or internal order ID of the order to return</param>
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(ProcessShipmentResponse), Description = "A ProcessShipment object")]
+        [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(ErrorResponse), Description = "No order found")]
+        [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(ErrorResponse),
+                         Description = "Multiple Orders found matching the OrderNumber or Cannot process a shipment with the shipment type of 'None'")]
+        [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(ErrorResponse), Description = "The server is experiencing errors")]
+        [HttpPost]
+        [Route("{orderNumber}/shipments")]
+        public Task<HttpResponseMessage> CreateShipment(string orderNumber) => 
+            ExecuteOrdersAction(ProcessShipment, orderNumber);
+
+        /// <summary>
+        /// Process a shipment for the given order
+        /// </summary>
+        private async Task<HttpResponseMessage> ProcessShipment(OrderEntity order)
+        {
+            if (string.IsNullOrEmpty(customerId))
+            {
+                customerId = tangoWebClient.GetTangoCustomerId();
+            }
+            
+            ShipmentEntity shipment = shipmentFactory.Create(order);
+
+            ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
+
+            if (!processResult.IsSuccessful)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse(processResult.Error.Message));
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, responseFactory.CreateProcessShipmentResponse(processResult));
+        }
+
+        /// <summary>
+        /// Execute the given action on an order found matching the OrderNumber
+        /// </summary>
+        public async Task<HttpResponseMessage> ExecuteOrdersAction(Func<OrderEntity, Task<HttpResponseMessage>> action, string orderNumber)
         {
             try
             {
@@ -59,21 +125,19 @@ namespace ShipWorks.Api.Orders
                 switch (comparisonResult)
                 {
                     case ComparisonResult.Equal:
-                        // For a single order, create the response and return it with a 200
-                        OrderResponse response = responseFactory.Create(orders.SingleOrDefault());
-                        return Request.CreateResponse(HttpStatusCode.OK, response);
+                        return await action(orders.Single()).ConfigureAwait(false);
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
-                        return Request.CreateResponse(HttpStatusCode.Conflict);
+                        return Request.CreateResponse(HttpStatusCode.Conflict, new ErrorResponse("Multiple Orders found matching the OrderNumber"));
                     default:
                         // No orders found, return 404
-                        return Request.CreateResponse(HttpStatusCode.NotFound);
+                        return Request.CreateResponse(HttpStatusCode.NotFound, new ErrorResponse("No order found"));
                 }
             }
             catch (Exception ex)
             {
                 log.Error("An error occured getting orders", ex);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, new ErrorResponse(ex.Message));
             }
         }
     }
