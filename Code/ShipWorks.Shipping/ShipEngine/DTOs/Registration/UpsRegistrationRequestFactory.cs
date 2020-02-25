@@ -29,9 +29,9 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
         /// <summary>
         /// Create a UpsRegistrationRequest object
         /// </summary>
-        public async Task<GenericResult<string>> Create(PersonAdapter person)
+        public UpsRegistrationRequest Create(PersonAdapter person)
         {
-            var registration = new UpsRegistrationRequest()
+            UpsRegistrationRequest registration = new UpsRegistrationRequest()
             {
                 Nickname = person.Email,
                 UpsId = upsCredentials.UserId,

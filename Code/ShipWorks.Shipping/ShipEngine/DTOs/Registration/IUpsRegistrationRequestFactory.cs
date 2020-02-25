@@ -4,8 +4,14 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 {
+    /// <summary>
+    /// Creates a UpsRegistrationRequest
+    /// </summary>
     public interface IUpsRegistrationRequestFactory
     {
-        Task<GenericResult<string>> Create(PersonAdapter person);
+        /// <summary>
+        /// Creates a UpsRegistrationRequest
+        /// </summary>
+        UpsRegistrationRequest Create(PersonAdapter person);
     }
 }

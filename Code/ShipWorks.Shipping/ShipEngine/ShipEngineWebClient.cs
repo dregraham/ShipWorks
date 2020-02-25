@@ -535,7 +535,7 @@ namespace ShipWorks.Shipping.ShipEngine
             ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
             ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"RegisterUpsAccount", LogActionType.Other);
 
-            var registration = registrationRequestFactory.Create(person);
+            UpsRegistrationRequest registration = registrationRequestFactory.Create(person);
 
             try
             {
