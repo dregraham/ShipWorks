@@ -357,9 +357,6 @@ namespace ShipWorks.Products
         {
             ProductEntity product = productVariant.Product;
 
-            // Set the product to be uploaded to the warehouse
-            product.UploadToWarehouseNeeded = true;
-
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
                 try

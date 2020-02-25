@@ -32,6 +32,7 @@ namespace ShipWorks.Products.ProductEditor
         private readonly IProductCatalog productCatalog;
         private ProductVariantEntity productVariant;
 
+        private bool canEdit = true;
         private bool isActive;
         private DateTime createdDate;
         private string sku;
@@ -87,6 +88,13 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand Cancel { get; }
+
+        [Obfuscation(Exclude = true)]
+        public bool CanEdit
+        {
+            get => canEdit;
+            set => Set(ref canEdit, value);
+        }
 
         [Obfuscation(Exclude = true)]
         public bool IsActive
@@ -299,34 +307,42 @@ namespace ShipWorks.Products.ProductEditor
         /// </summary>
         private async Task SaveProduct()
         {
-            var counts = new ProductTelemetryCounts("InlineUI");
-
-            UpdateProductEntityValues();
-
-            Result saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory).ConfigureAwait(true);
-
-            if (saveResult.Success)
+            CanEdit = false;
+            try
             {
-                counts.AddSuccess(IsNew);
+                var counts = new ProductTelemetryCounts("InlineUI");
 
-                dialog.DialogResult = true;
-                dialog.Close();
+                UpdateProductEntityValues();
+
+                Result saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory).ConfigureAwait(true);
+
+                if (saveResult.Success)
+                {
+                    counts.AddSuccess(IsNew);
+
+                    dialog.DialogResult = true;
+                    dialog.Close();
+                }
+                else
+                {
+                    counts.AddFailure(IsNew);
+
+                    if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
+                    {
+                        messageHelper.ShowError("A specified SKU or Alias SKU already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
+                    }
+                    else if (!string.IsNullOrWhiteSpace(saveResult.Message))
+                    {
+                        messageHelper.ShowError(saveResult.Message);
+                    }
+                }
+
+                counts.SendTelemetry();
             }
-            else
+            finally
             {
-                counts.AddFailure(IsNew);
-
-                if ((saveResult.Exception?.GetBaseException() as SqlException)?.Number == 2601)
-                {
-                    messageHelper.ShowError("A specified SKU or Alias SKU already exists. Please enter a unique value for all SKUs.", saveResult.Exception);
-                }
-                else if (!string.IsNullOrWhiteSpace(saveResult.Message))
-                {
-                    messageHelper.ShowError(saveResult.Message);
-                }
+                CanEdit = true;
             }
-
-            counts.SendTelemetry();
         }
 
         /// <summary>
