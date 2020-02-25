@@ -385,6 +385,7 @@
     <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.Designer.cs">
       <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsViewModel.cs" />
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
