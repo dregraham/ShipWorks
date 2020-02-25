@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls.WebBrowser;
@@ -17,7 +19,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
         private readonly Func<IDismissableWebBrowserDlg> browserFactory;
         private readonly IDismissableWebBrowserDlgViewModel browserViewModel;
         private readonly IWin32Window owner;
-
+        private readonly IAsyncMessageHelper messagehelper;
         readonly ICurrentUserSettings userSettings;
 
         /// <summary>
@@ -27,12 +29,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
             Func<IDismissableWebBrowserDlg> browserFactory,
             IDismissableWebBrowserDlgViewModel browserViewModel,
             ICurrentUserSettings userSettings,
-            IWin32Window owner)
+            IWin32Window owner, IAsyncMessageHelper messagehelper)
         {
             this.userSettings = userSettings;
             this.browserFactory = browserFactory;
             this.browserViewModel = browserViewModel;
             this.owner = owner;
+            this.messagehelper = messagehelper;
         }
 
         /// <summary>
@@ -47,15 +50,22 @@ namespace ShipWorks.Shipping.UI.Carriers.Postal.Usps
                 return;
             }
 
+            if (userSettings.UserSession.User.UserID == UserEntity.SuperUserID)
+            {
+                throw new ShippingException("Must be logged in to print GlobalPost");
+            }
+
             browserViewModel.Load(assets.DisplayUrl, assets.Title, assets.MoreInfoLink);
 
-            IDismissableWebBrowserDlg webBrowserDlg = browserFactory();
-            webBrowserDlg.LoadOwner(owner);
-            webBrowserDlg.Height = 680;
-            webBrowserDlg.Width = 1300;
-            webBrowserDlg.DataContext = browserViewModel;
-
-            webBrowserDlg.ShowDialog();
+            messagehelper.ShowDialog(() =>
+            {
+                IDismissableWebBrowserDlg webBrowserDlg = browserFactory();
+                webBrowserDlg.LoadOwner(owner);
+                webBrowserDlg.Height = 680;
+                webBrowserDlg.Width = 1300;
+                webBrowserDlg.DataContext = browserViewModel;
+                return webBrowserDlg;
+            }).Wait();
 
             // As per SDC mockups, if the user does not dismiss the dialog, show them again after a day
             if (browserViewModel.Dismissed)

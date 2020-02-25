@@ -269,6 +269,10 @@
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
     <Compile Include="Net\IWebHelper.cs" />
+    <Compile Include="Net\RestSharp\IRestClientFactory.cs" />
+    <Compile Include="Net\RestSharp\IRestRequestFactory.cs" />
+    <Compile Include="Net\RestSharp\RestClientFactory.cs" />
+    <Compile Include="Net\RestSharp\RestRequestFactory.cs" />
     <Compile Include="Net\WebHelperWrapper.cs" />
     <Compile Include="Pdf\IPdfDocument.cs" />
     <Compile Include="Pdf\IPdfDocumentFactory.cs" />
@@ -552,6 +556,7 @@
     <Compile Include="Utility\ImageExtensions.cs" />
     <Compile Include="Utility\IResult.cs" />
     <Compile Include="Utility\ITelemetryCollection.cs" />
+    <Compile Include="Utility\ITimer.cs" />
     <Compile Include="Utility\Maybe.cs" />
     <Compile Include="Utility\NDesk.Options.cs" />
     <Compile Include="Utility\NDesk.Options.Extensions.cs" />
@@ -573,6 +578,7 @@
     <Compile Include="Utility\TelemetricEventType.cs" />
     <Compile Include="Utility\TelemetricResult.cs" />
     <Compile Include="Utility\TelemetricResultBaseName.cs" />
+    <Compile Include="Utility\TimerWrapper.cs" />
     <Compile Include="Utility\TimeSpanExtensions.cs" />
     <Compile Include="Utility\VersionUtility.cs" />
     <Compile Include="Utility\WeightUtility.cs" />
@@ -607,6 +613,7 @@
     <Compile Include="Win32\Native\RawInputDeviceListItem.cs" />
     <Compile Include="Win32\Native\RawInputDeviceMouseInfo.cs" />
     <Compile Include="Win32\Native\WindowsMessage.cs" />
+    <Compile Include="Win32\NetshCommand.cs" />
     <Compile Include="Win32\RegistryHelper.cs" />
     <Compile Include="Win32\SecurityUtility.cs" />
     <Compile Include="Win32\User32Devices.cs" />
