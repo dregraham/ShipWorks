@@ -39,6 +39,7 @@ namespace ShipWorks.Products.Warehouse.DTO
 
             Attributes = product.AttributeValues.EmptyIfNull().Select(ProductAttribute.Create);
             Aliases = product.Aliases.EmptyIfNull().Where(x => !x.IsDefault).Select(ProductAlias.Create);
+            BundledProducts = product.Product.Bundles.EmptyIfNull().Select(BundledProduct.Create);
         }
 
         /// <summary>
@@ -140,6 +141,11 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// Aliases for this product
         /// </summary>
         public IEnumerable<ProductAlias> Aliases { get; set; }
+
+        /// <summary>
+        /// Products that are bundled in this one
+        /// </summary>
+        public IEnumerable<BundledProduct> BundledProducts { get; private set; }
     }
 
     /// <summary>
