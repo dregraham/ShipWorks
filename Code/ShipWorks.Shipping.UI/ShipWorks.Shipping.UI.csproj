@@ -376,6 +376,12 @@
     </Compile>
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.Designer.cs">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
@@ -702,6 +708,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Settings\BestRateAccountSettingsControlHost.resx">
       <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings\OneBalance\OneBalanceSettingsControlHost.resx">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
