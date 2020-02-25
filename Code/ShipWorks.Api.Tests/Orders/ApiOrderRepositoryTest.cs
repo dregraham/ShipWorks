@@ -1,4 +1,5 @@
-﻿using Autofac.Extras.Moq;
+﻿using System;
+using Autofac.Extras.Moq;
 using Moq;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Api.Orders;
@@ -32,6 +33,7 @@ namespace ShipWorks.Api.Tests.Orders
         [Fact]
         public void GetOrders_DelegatesToSqlAdapterFactory_ForSqlAdapter()
         {
+            mock.Mock<ISqlSession>().Setup(a => a.CanConnect()).Returns(true);
             testObject.GetOrders("11123-sdf");
 
             sqlAdapterFactory.Verify(a => a.Create());
@@ -40,9 +42,18 @@ namespace ShipWorks.Api.Tests.Orders
         [Fact]
         public void GetOrders_DelegatesToSqlAdapter_WithQuery()
         {
+            mock.Mock<ISqlSession>().Setup(a => a.CanConnect()).Returns(true);
             testObject.GetOrders("11123-sdf");
 
             adapter.Verify(a => a.FetchQuery(It.IsAny<EntityQuery<OrderEntity>>(), It.IsAny<EntityCollection<OrderEntity>>()));
+        }
+
+        [Fact]
+        public void GetOrders_ThrowsException_WhenCannotConnectToDatabase()
+        {
+            mock.Mock<ISqlSession>().Setup(a => a.CanConnect()).Returns(false);
+            var ex = Assert.Throws<Exception>(() => testObject.GetOrders("11123-sdf"));
+            Assert.Equal("Unable to connect to ShipWorks database.", ex.Message);
         }
     }
 }
