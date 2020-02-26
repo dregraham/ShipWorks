@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -15,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
     /// <summary>
     /// Wizard page for entering an address to use with One Balance
     /// </summary>
-    [Component]
+    [Component(RegistrationType.Self)]
     public partial class OneBalanceAccountAddressPage : WizardPage
     {
         private readonly IOneBalanceUpsAccountRegistrationActivity accountRegistrationActivity;

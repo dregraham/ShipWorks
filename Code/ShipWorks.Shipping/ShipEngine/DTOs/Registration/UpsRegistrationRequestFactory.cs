@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 {
     /// <summary>
     /// Factory for creating a UpsRegistrationRequest
     /// </summary>
+    [Component]
     public class UpsRegistrationRequestFactory : IUpsRegistrationRequestFactory
     {
         private readonly INetworkUtility networkUtility;

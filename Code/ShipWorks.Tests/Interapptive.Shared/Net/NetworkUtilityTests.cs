@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using Xunit;
 using Moq;
 using log4net;
+using ShipWorks.Tests.Shared;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
@@ -17,10 +18,14 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
          public NetworkUtilityTests()
          {
-             logger = new Mock<ILog>();
-             logger.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
+             var mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-             testObject = new NetworkUtility(logger.Object);
+             logger = mock.Mock<ILog>();
+             Mock<Func<Type, ILog>> repo = mock.MockRepository.Create<Func<Type, ILog>>();
+             repo.Setup(x => x(It.IsAny<Type>()))
+                 .Returns(logger.Object);
+
+             testObject = new NetworkUtility(repo.Object);
          }
 
          [Fact]
