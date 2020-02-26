@@ -13,5 +13,4 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// </summary>
         IUpsRateClient GetClient(UpsAccountEntity account);
     }
-
 }
