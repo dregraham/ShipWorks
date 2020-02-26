@@ -1170,6 +1170,12 @@
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\OneBalance\IOneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.Designer.cs">
+      <DependentUpon>OneBalanceAccountAddressPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceSelectionPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8423,6 +8429,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
       <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.resx">
+      <DependentUpon>OneBalanceAccountAddressPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceSelectionPage.resx">
       <DependentUpon>OneBalanceSelectionPage.cs</DependentUpon>
