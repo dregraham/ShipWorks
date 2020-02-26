@@ -89,6 +89,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             if (!oneBalanceSelectionPage.SetupOneBalance)
             {
+                e.NextPage = wizardPageLicense;
                 RemoveOneBalancePages();
             }
         }
