@@ -319,6 +319,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If this is for an existing account, remove the open account and one balance wizard pages.
             if (existingAccount.Checked)
             {
+                e.NextPage = wizardPageLicense;
+
                 RemoveOneBalancePages();
                 RemoveOpenAccountPages();
             }
