@@ -1047,10 +1047,13 @@ namespace ShipWorks.UI.Wizard
         /// </summary>
         private void SetInteropHooks()
         {
-            var elementHost = CurrentPage.Controls[0] as ElementHost;
-            if (elementHost != null)
+            if (CurrentPage?.Controls?.Count > 0)
             {
-                buttonInterop.HookEvents(this, elementHost);
+                var elementHost = CurrentPage.Controls[0] as ElementHost;
+                if (elementHost != null)
+                {
+                    buttonInterop.HookEvents(this, elementHost);
+                }
             }
             var button = this.AcceptButton as Button;
             buttonInterop.AcceptButton = button;

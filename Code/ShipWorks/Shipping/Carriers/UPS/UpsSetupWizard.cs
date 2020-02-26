@@ -96,7 +96,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private void RemoveOneBalancePages()
         {
-            Pages.Remove(oneBalanceSelectionPage);
             Pages.Remove(oneBalanceTandCPage);
             Pages.Remove(oneBalanceAddressPage);
         }
@@ -322,6 +321,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 e.NextPage = wizardPageLicense;
 
+                Pages.Remove(oneBalanceSelectionPage);
                 RemoveOneBalancePages();
                 RemoveOpenAccountPages();
             }
