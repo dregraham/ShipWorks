@@ -400,6 +400,7 @@
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Ups\IUpsRateClientFactory.cs" />
     <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Carriers\Ups\UpsRateClientFactory.cs" />
     <Compile Include="Carriers\Ups\UpsShipEngineRateClient.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
