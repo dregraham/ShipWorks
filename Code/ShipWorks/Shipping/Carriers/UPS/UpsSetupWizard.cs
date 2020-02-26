@@ -40,7 +40,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private readonly Func<OneBalanceAccountAddressPage> oneBalanceAddressPageFactory;
         private DateTime? smartPickupNotifyTime;
         private IUpsPromo promo;
 

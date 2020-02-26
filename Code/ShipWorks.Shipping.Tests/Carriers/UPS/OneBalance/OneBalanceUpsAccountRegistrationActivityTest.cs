@@ -337,7 +337,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
             seWebClient.Setup(c => c.ConnectStampsAccount("foo", "bar")).ReturnsAsync(GenericResult.FromSuccess("abcd"));
 
-            testObject.Execute(upsAccount);
+            await testObject.Execute(upsAccount);
 
             seWebClient.Verify(s => s.ConnectStampsAccount("foo", "bar"));
 
@@ -346,7 +346,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 
 
         [Fact]
-        public void Execute_CreatesUpsAccount_WhenOneBalanceAccountExists()
+        public async Task Execute_CreatesUpsAccount_WhenOneBalanceAccountExists()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = "abcd" };
             uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
 
-            testObject.Execute(upsAccount);
+            await testObject.Execute(upsAccount);
 
             seWebClient.Verify(s => s.RegisterUpsAccount(upsAccount.Address));
         }
