@@ -1,37 +1,82 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
+using GalaSoft.MvvmLight.Command;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
     /// <summary>
     /// View model for the OneBalanceSettingsControl
     /// </summary>
-    public class OneBalanceSettingsControlViewModel
+    public class OneBalanceSettingsControlViewModel : INotifyPropertyChanged
     {
         private readonly IPostageWebClient webClient;
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// The current balance of the one balance account
         /// </summary>
-        public decimal Balance { get; set; }
+        /// 
+        private decimal balance;
+        public decimal Balance 
+        { 
+            get { return balance; }
+            set 
+            {
+                balance = value;
+                RaisePropertyChanged(nameof(Balance));
+            }
+        }
 
         /// <summary>
         /// The message to be displayed in place of the account balance if needed
         /// </summary>
-        public string Message { get; set; }
-
+        private string message;
+        public string Message
+        {
+            get { return message; }
+            set
+            {
+                message = value;
+                RaisePropertyChanged(nameof(Message));
+            }
+        }
         /// <summary>
         /// A flag to indicate if we should show the message
         /// </summary>
-        public bool ShowMessage { get; set; } = false;
+        private bool showMessage = false;
+        public bool ShowMessage
+        {
+            get { return showMessage; }
+            set
+            {
+                showMessage = value;
+                RaisePropertyChanged(nameof(ShowMessage));
+            }
+        }
+
+        /// <summary>
+        /// A flag to indicate if we are still trying to load the balance
+        /// </summary>
+        private bool loading = true;
+        public bool Loading
+        {
+            get { return loading; }
+            set
+            {
+                loading = false;
+                RaisePropertyChanged(nameof(Loading));
+            }
+        }
+
+        public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
 
         /// <summary>
         /// Initialize the control to display information for the given account
@@ -39,8 +84,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public OneBalanceSettingsControlViewModel(IPostageWebClient webClient)
         {
             this.webClient = webClient;
-
-            GetAccountBalance();
         }
 
         /// <summary>
@@ -48,10 +91,17 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAccountBalance()
         {
-            if (!string.IsNullOrEmpty(webClient.AccountIdentifier))
+            Dispatcher.CurrentDispatcher.BeginInvoke(
+            DispatcherPriority.ApplicationIdle,
+            new Action(() =>
             {
-                GetBalance();
-            }
+                if (!string.IsNullOrEmpty(webClient.AccountIdentifier))
+                {
+                    GetBalance();
+                    Loading = false;
+                }
+
+            }));
         }
 
         /// <summary>
@@ -93,6 +143,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Raise the INotifyPropertyChanged event
+        /// </summary>
+        /// <param name="propertyName"></param>
+        private void RaisePropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
