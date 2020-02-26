@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
@@ -16,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     /// <summary>
     /// Activity for registering a Ups ShipWorks OneBalance account
     /// </summary>
+    [Component]
     public class OneBalanceUpsAccountRegistrationActivity : IOneBalanceUpsAccountRegistrationActivity
     {
         private readonly IShipEngineWebClient shipEngineWebClient;
