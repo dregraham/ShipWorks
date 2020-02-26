@@ -41,13 +41,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 
             seWebClient = mock.Mock<IShipEngineWebClient>();
             seWebClient.Setup(s => s.RegisterUpsAccount(It.IsAny<PersonAdapter>()))
-                .Returns(GenericResult.FromSuccess("123"));
+                .ReturnsAsync(GenericResult.FromSuccess("123"));
 
             testObject = mock.Create<OneBalanceUpsAccountRegistrationActivity>();
         }
 
         [Fact]
-        public void Execute_ValidatesNameFieldLength()
+        public async Task Execute_ValidatesNameFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -64,20 +64,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.FirstName = "123456789012345678901";
             // over 20 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.FirstName = "Joe";
             upsAccount.LastName = "blow";
             // between 1 and 20 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesCompanyFieldLength()
+        public async Task Execute_ValidatesCompanyFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -94,23 +94,23 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
 
             upsAccount.Company = "1234567890123456789012345678901";
 
             // over 30 should fail also succeed because LLBLGen is limiting the filed
             // length to 30
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
             Assert.Equal(upsAccount.Company, "123456789012345678901234567890");
 
 
             upsAccount.Company = "foo bar";
             // between 1 and 30 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesStreet1FieldLength()
+        public async Task Execute_ValidatesStreet1FieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -127,20 +127,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.Street1 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.Street1 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesStreet2FieldLength()
+        public async Task Execute_ValidatesStreet2FieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -157,20 +157,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
 
             upsAccount.Street2 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.Street2 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesStreet3FieldLength()
+        public async Task Execute_ValidatesStreet3FieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -187,20 +187,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
 
             upsAccount.Street3 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.Street3 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesCityFieldLength()
+        public async Task Execute_ValidatesCityFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -217,20 +217,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.City = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.City = "St Louis";
             // between 1 and 30 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesStateProvCodeFieldLength()
+        public async Task Execute_ValidatesStateProvCodeFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -247,20 +247,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.StateProvCode = "MOO";
 
             // over 2 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.StateProvCode = "MO";
             // 2 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesCountryCodeFieldLength()
+        public async Task Execute_ValidatesCountryCodeFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -277,20 +277,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.CountryCode = "USSR";
 
             // over 2 should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.CountryCode = "US";
             // 2 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_ValidatesPhoneFieldLength()
+        public async Task Execute_ValidatesPhoneFieldLength()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -307,16 +307,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True(testObject.Execute(upsAccount).Failure);
+            Assert.True((await testObject.Execute(upsAccount)).Failure);
 
             upsAccount.Phone = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123";
 
             // over 200 should succeed
-            Assert.True(testObject.Execute(upsAccount).Success);
+            Assert.True((await testObject.Execute(upsAccount)).Success);
         }
 
         [Fact]
-        public void Execute_CreatesOneBalanceAccount_WhenOneDoesNotExist()
+        public async Task Execute_CreatesOneBalanceAccount_WhenOneDoesNotExist()
         {
             UpsAccountEntity upsAccount = new UpsAccountEntity()
             {
@@ -335,7 +335,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = null };
 
             uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
-            seWebClient.Setup(c => c.ConnectStampsAccount("foo", "bar")).Returns(GenericResult.FromSuccess("abcd"));
+            seWebClient.Setup(c => c.ConnectStampsAccount("foo", "bar")).ReturnsAsync(GenericResult.FromSuccess("abcd"));
 
             testObject.Execute(upsAccount);
 

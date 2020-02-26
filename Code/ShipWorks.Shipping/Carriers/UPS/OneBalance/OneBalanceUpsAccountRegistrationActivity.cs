@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Extensions;
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Execute the activity on the given account
         /// </summary>
-        public Result Execute(UpsAccountEntity account)
+        public async Task<Result> Execute(UpsAccountEntity account)
         {
             var validationResult = ValidateFields(account);
             if (validationResult.Failure)
@@ -44,13 +45,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 return validationResult;
             }
 
-            var oneBalanceResult = EnsureOneBalanceAccountProvisioned();
+            var oneBalanceResult = await EnsureOneBalanceAccountProvisioned();
             if (oneBalanceResult.Failure)
             {
                 return oneBalanceResult;
             }
 
-            var result = shipEngineWebClient.RegisterUpsAccount(account.Address);
+            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address);
 
             if (result.Success)
             {
@@ -89,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Ensure that a OneBalance account has been provisioned
         /// </summary>
-        private Result EnsureOneBalanceAccountProvisioned()
+        private async Task<Result> EnsureOneBalanceAccountProvisioned()
         {
             if(uspsAccountRepository.Accounts.IsCountEqualTo(1))
             {
@@ -97,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
                 if (uspsAccount.ShipEngineCarrierId == null)
                 {
-                    return CreateOneBalanceAccount(uspsAccount);
+                    return await CreateOneBalanceAccount(uspsAccount);
                 }
                 else
                 {
@@ -112,9 +113,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Create a one balance account by adding Stamps.com to ShipEngine
         /// </summary>
-        private Result CreateOneBalanceAccount(UspsAccountEntity uspsAccount)
+        private async Task<Result> CreateOneBalanceAccount(UspsAccountEntity uspsAccount)
         {
-            var carrierId = shipEngineWebClient.ConnectStampsAccount(uspsAccount.Username, 
+            var carrierId = await shipEngineWebClient.ConnectStampsAccount(uspsAccount.Username, 
                 encryptionProviderFactory.CreateSecureTextEncryptionProvider(uspsAccount.Username).Decrypt(uspsAccount.Password));
 
             if (carrierId.Success)

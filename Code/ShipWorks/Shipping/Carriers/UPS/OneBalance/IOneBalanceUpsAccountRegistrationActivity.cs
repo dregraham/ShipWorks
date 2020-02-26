@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        Result Execute(UpsAccountEntity account);
+        Task<Result> Execute(UpsAccountEntity account);
     }
 }
