@@ -49,9 +49,6 @@ namespace ShipWorks.Shipping.ShipEngine
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
             this.registrationRequestFactory = registrationRequestFactory;
-
-            this.upsCredentials = upsCredentials;
-            this.networkUtility = networkUtility;
         }
 
         /// <summary>

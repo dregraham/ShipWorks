@@ -25,10 +25,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 
         [JsonProperty("developer_key")]
         public string DeveloperKey { get; set; }
-
-        //[JsonProperty("promo_code")]
-        //public string PromoCode { get; set; }
-
+        
         [JsonProperty("email")]
         public string Email { get; set; }
 
@@ -40,10 +37,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 
         [JsonProperty("end_user_ip_address")]
         public string EndUserIpAddress { get; set; }
-
-        //[JsonProperty("device_identity")]
-        //public string DeviceIdentity { get; set; }
-
+        
         [JsonProperty("software_provider")]
         public string SoftwareProvider { get; set; }
 

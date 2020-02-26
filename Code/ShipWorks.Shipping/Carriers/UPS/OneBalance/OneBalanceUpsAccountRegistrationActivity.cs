@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -13,25 +17,29 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     /// <summary>
     /// Activity for registering a Ups ShipWorks OneBalance account
     /// </summary>
+    [Component]
     public class OneBalanceUpsAccountRegistrationActivity : IOneBalanceUpsAccountRegistrationActivity
     {
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
+        private readonly IEncryptionProviderFactory encryptionProviderFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceUpsAccountRegistrationActivity(IShipEngineWebClient shipEngineWebClient, 
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
+        public OneBalanceUpsAccountRegistrationActivity(IShipEngineWebClient shipEngineWebClient,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            IEncryptionProviderFactory encryptionProviderFactory)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.uspsAccountRepository = uspsAccountRepository;
+            this.encryptionProviderFactory = encryptionProviderFactory;
         }
 
         /// <summary>
         /// Execute the activity on the given account
         /// </summary>
-        public Result Execute(UpsAccountEntity account)
+        public async Task<Result> Execute(UpsAccountEntity account)
         {
             var validationResult = ValidateFields(account);
             if (validationResult.Failure)
@@ -39,13 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 return validationResult;
             }
 
-            var oneBalanceResult = EnsureOneBalanceAccountProvisioned();
+            var oneBalanceResult = await EnsureOneBalanceAccountProvisioned();
             if (oneBalanceResult.Failure)
             {
                 return oneBalanceResult;
             }
 
-            var result = shipEngineWebClient.RegisterUpsAccount(account.Address);
+            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address);
 
             if (result.Success)
             {
@@ -61,56 +69,30 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private Result ValidateFields(UpsAccountEntity account)
         {
-            if (!$"{account.FirstName} {account.LastName}".IsCountBetween(1, 20));
+            try
             {
-                return Result.FromError("The contact name must to be between 1 and 20 characters.");
+                $"{account.FirstName}{account.LastName}".ValidateLength(20, 1, "The contact name must be between 1 and 20 characters.");
+                account.Company.ValidateLength(30, 0, "The company name must be less than 30 characters.");
+                account.Street1.ValidateLength(30, 1, "The street address line 1 must be between 1 and 30 characters.");
+                account.Street2.ValidateLength(30, 0, "The street address line 2 must be less than 30 characters.");
+                account.Street3.ValidateLength(30, 0, "The street address line 3 must be less than 30 characters.");
+                account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters.");
+                account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters.");
+                account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters.");
+                account.Phone.ValidateLength(null, 10, "Please enter a valid phone number.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Result.FromError(ex);
             }
 
-            if (!account.Company.IsCountBetween(0, 30));
-            {
-                return Result.FromError("The company name must to be between 0 and 30 characters.");
-            }
-
-            if (!account.Street1.IsCountBetween(1, 30)) ;
-            {
-                return Result.FromError("The street address line 1 name must to be between 1 and 30 characters.");
-            }
-
-            if (!account.Street2.IsCountGreaterThan(30));
-            {
-                return Result.FromError("The street address line 2 must to be less than 30 characters.");
-            }
-
-            if (!account.Street3.IsCountGreaterThan(30)) ;
-            {
-                return Result.FromError("The street address line 3 must to be less than 30 characters.");
-            }
-
-            if (!account.City.IsCountBetween(1, 30)) ;
-            {
-                return Result.FromError("The city must to be between 1 and 30 characters.");
-            }
-
-            if (!account.StateProvCode.IsCountEqualTo(2)) ;
-            {
-                return Result.FromError("The address state value is invalid.");
-            }
-
-            if (!account.CountryCode.IsCountEqualTo(2)) ;
-            {
-                return Result.FromError("The address country value is invalid.");
-            }
-
-            if (!account.Phone.IsCountEqualTo(0)) ;
-            {
-                return Result.FromError("Please enter a phone number.");
-            }
+            return Result.FromSuccess();
         }
 
         /// <summary>
         /// Ensure that a OneBalance account has been provisioned
         /// </summary>
-        private Result EnsureOneBalanceAccountProvisioned()
+        private async Task<Result> EnsureOneBalanceAccountProvisioned()
         {
             if(uspsAccountRepository.Accounts.IsCountEqualTo(1))
             {
@@ -118,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
                 if (uspsAccount.ShipEngineCarrierId == null)
                 {
-                    return CreateOneBalanceAccount(uspsAccount);
+                    return await CreateOneBalanceAccount(uspsAccount);
                 }
                 else
                 {
@@ -133,18 +115,18 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Create a one balance account by adding Stamps.com to ShipEngine
         /// </summary>
-        private Result CreateOneBalanceAccount(UspsAccountEntity uspsAccount)
+        private async Task<Result> CreateOneBalanceAccount(UspsAccountEntity uspsAccount)
         {
-            var carrierId = shipEngineWebClient.ConnectStampsAccount(uspsAccount.Username, uspsAccount.Password);
+            var carrierId = await shipEngineWebClient.ConnectStampsAccount(uspsAccount.Username, 
+                encryptionProviderFactory.CreateSecureTextEncryptionProvider(uspsAccount.Username).Decrypt(uspsAccount.Password));
 
             if (carrierId.Success)
             {
-
                 uspsAccount.ShipEngineCarrierId = carrierId.Value;
                 uspsAccountRepository.Save(uspsAccount);
                 return Result.FromSuccess();
             }
-            
+
             return Result.FromError(carrierId.Message);
         }
     }
