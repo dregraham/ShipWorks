@@ -71,6 +71,8 @@
             this.optionControl.Size = new System.Drawing.Size(719, 516);
             this.optionControl.TabIndex = 1;
             this.optionControl.Text = "optionControl1";
+            this.optionPageOneBalance.Margin = new System.Windows.Forms.Padding(0);
+            this.optionPageOneBalance.Padding = new System.Windows.Forms.Padding(0);
             this.optionControl.Deselecting += new ShipWorks.UI.Controls.OptionControlCancelEventHandler(this.OnOptionPageDeselecting);
             this.optionControl.Selecting += new ShipWorks.UI.Controls.OptionControlCancelEventHandler(this.OnOptionPageSelecting);
             // 

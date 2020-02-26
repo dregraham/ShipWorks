@@ -83,10 +83,6 @@ namespace ShipWorks.Shipping.Settings
 
             var hostControl = controlHost as UserControl;
             hostControl.Dock = DockStyle.Fill;
-            hostControl.Margin = new Padding(0, 0, 0, 0);
-            hostControl.Padding = new Padding(0, 0, 0, 0);
-            this.optionPageOneBalance.Margin = new Padding(0, 0, 0, 0);
-            this.optionPageOneBalance.Padding = new Padding(0, 0, 0, 0);
 
             this.optionPageOneBalance.Controls.Add(hostControl);
         }

@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
-
-namespace ShipWorks.Shipping
+﻿namespace ShipWorks.Shipping
 {
+    /// <summary>
+    /// Interface for the One Balance Settings Control Host
+    /// </summary>
     public interface IOneBalanceSettingsControlHost
     {
+        /// <summary>
+        /// Initializes the hosted control
+        /// </summary>
         void Initialize();
     }
 }

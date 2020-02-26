@@ -95,12 +95,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             DispatcherPriority.ApplicationIdle,
             new Action(() =>
             {
-                if (!string.IsNullOrEmpty(webClient.AccountIdentifier))
+                if (webClient != null)
                 {
                     GetBalance();
                     Loading = false;
                 }
-
             }));
         }
 

@@ -43,6 +43,8 @@
             this.elementHost.TabIndex = 0;
             this.elementHost.Text = "elementHost1";
             this.elementHost.Child = this.settingsControl;
+            this.elementHost.Margin = new System.Windows.Forms.Padding(0);
+            this.elementHost.Padding = new System.Windows.Forms.Padding(0);
             // 
             // OneBalanceSettingsControlHost
             // 

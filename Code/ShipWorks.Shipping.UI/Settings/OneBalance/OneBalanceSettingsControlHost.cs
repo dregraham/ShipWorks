@@ -1,7 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -32,9 +30,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public void Initialize()
         {
-            var account = accountManager.GetAccounts(UspsResellerType.None).Where(a => a.ShipEngineCarrierId != null).FirstOrDefault();
+            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
 
-            var webClient = new UspsPostageWebClient(account);
+            var webClient = account == null ? null : new UspsPostageWebClient(account);
             settingsViewModel = new OneBalanceSettingsControlViewModel(webClient);
 
             settingsControl.DataContext = settingsViewModel;
