@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
+using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
@@ -39,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
+        private readonly Func<OneBalanceAccountAddressPage> oneBalanceAddressPageFactory;
         private DateTime? smartPickupNotifyTime;
         private IUpsPromo promo;
 
@@ -48,13 +50,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
-
+        private OneBalanceSelectionPage oneBalanceSelectionPage = new OneBalanceSelectionPage();
+        private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
+        private OneBalanceAccountAddressPage oneBalanceAddressPage;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(IShipmentTypeManager shipmentTypeManager) :
-            this(ShipmentTypeCode.UpsOnLineTools, false, shipmentTypeManager)
+        public UpsSetupWizard(IShipmentTypeManager shipmentTypeManager, Func<UpsAccountEntity, OneBalanceAccountAddressPage> oneBalanceAddressPageFactory) :
+            this(ShipmentTypeCode.UpsOnLineTools, false, shipmentTypeManager, oneBalanceAddressPageFactory)
         {
 
         }
@@ -62,7 +66,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly, IShipmentTypeManager shipmentTypeManager)
+        public UpsSetupWizard(ShipmentTypeCode shipmentTypeCode, bool forceAccountOnly, IShipmentTypeManager shipmentTypeManager,
+                              Func<UpsAccountEntity, OneBalanceAccountAddressPage> oneBalanceAddressPageFactory)
         {
             InitializeComponent();
 
@@ -74,7 +79,34 @@ namespace ShipWorks.Shipping.Carriers.UPS
             shipmentType = shipmentTypeManager.Get(shipmentTypeCode);
             this.forceAccountOnly = forceAccountOnly;
 
+
             upsBusinessInfoControl.IndustryChanged = IndustryChanged;
+
+            oneBalanceSelectionPage.StepNext += OnStepNextOneBalanceSelection;
+            oneBalanceAddressPage = oneBalanceAddressPageFactory(upsAccount);
+        }
+
+        private void OnStepNextOneBalanceSelection(object sender, WizardStepEventArgs e)
+        {
+            if (!oneBalanceSelectionPage.SetupOneBalance)
+            {
+                RemoveOneBalancePages();
+            }
+        }
+
+        private void RemoveOneBalancePages()
+        {
+            Pages.Remove(oneBalanceSelectionPage);
+            Pages.Remove(oneBalanceTandCPage);
+            Pages.Remove(oneBalanceAddressPage);
+        }
+
+        private void RemoveOpenAccountPages()
+        {
+            Pages.Remove(wizardPageOpenAccountCharacteristics);
+            Pages.Remove(wizardPageOpenAccountPickupSchedule);
+            Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
+            Pages.Remove(wizardPageOpenAccountPickupLocation);
         }
 
         /// <summary>
@@ -116,6 +148,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             Pages.AddRange(new[] {
                 wizardPageWelcomeOlt,
                 wizardPageWelcomeWorldShip,
+                oneBalanceSelectionPage,
+                oneBalanceTandCPage,
+                oneBalanceAddressPage,
                 wizardPageAccountList,
                 wizardPageLicense,
                 wizardPageOpenAccountCharacteristics,
@@ -141,10 +176,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 Pages.Remove(wizardPageWelcomeOlt);
-                Pages.Remove(wizardPageOpenAccountCharacteristics);
-                Pages.Remove(wizardPageOpenAccountPickupSchedule);
-                Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
-                Pages.Remove(wizardPageOpenAccountPickupLocation);
+                RemoveOpenAccountPages();
             }
 
             // Sets initial values and resets existing values depending on when this is called.
@@ -285,13 +317,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Start with a fresh page collection
             ResetWizardPagesCollection();
 
-            // If this is for an existing account, remove the open account wizards.
+            // If this is for an existing account, remove the open account and one balance wizard pages.
             if (existingAccount.Checked)
             {
-                Pages.Remove(wizardPageOpenAccountCharacteristics);
-                Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
-                Pages.Remove(wizardPageOpenAccountPickupLocation);
-                Pages.Remove(wizardPageOpenAccountPickupSchedule);
+                RemoveOneBalancePages();
+                RemoveOpenAccountPages();
             }
             else
             {

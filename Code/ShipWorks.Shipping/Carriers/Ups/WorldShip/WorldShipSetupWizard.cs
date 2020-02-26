@@ -1,4 +1,7 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
@@ -12,8 +15,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Constructor
         /// </summary>
-        public WorldShipSetupWizard(IShipmentTypeManager shipmentTypeManager) :
-            base(ShipmentTypeCode.UpsWorldShip, false, shipmentTypeManager)
+        public WorldShipSetupWizard(IShipmentTypeManager shipmentTypeManager, Func<UpsAccountEntity, OneBalanceAccountAddressPage> oneBalanceAddressPageFactory) :
+            base(ShipmentTypeCode.UpsWorldShip, false, shipmentTypeManager, oneBalanceAddressPageFactory)
         {
         }
     }
