@@ -301,6 +301,7 @@
     <Compile Include="Carriers\Postal\PostalShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsTermsAndConditionsTest.cs" />
+    <Compile Include="Carriers\UPS\OneBalance\OneBalanceUpsAccountRegistrationActivityTest.cs" />
     <Compile Include="Carriers\UPS\UpsOltShipmentTypeTest.cs" />
     <Compile Include="Carriers\UPS\UpsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\UPS\UpsServicePackageTypeSettingTest.cs" />
