@@ -15,6 +15,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Autofac.Features.Indexed;
+using ShipWorks.Shipping.Carriers.Ups;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -25,25 +26,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        protected readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
-
+        private readonly IUpsRateClientFactory rateClientFactory;
+​
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
         public UpsRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
-            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
-            IUpsPromoFactory promoFactory)
+            IUpsPromoFactory promoFactory,
+            IUpsRateClientFactory rateClientFactory)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
-            this.upsRateClientFactory = upsRateClientFactory;
             this.shipmentType = shipmentType;
             this.promoFactory = promoFactory;
+            this.rateClientFactory = rateClientFactory;
         }
 
         /// <summary>
@@ -124,30 +125,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         protected virtual GenericResult<List<UpsServiceRate>> GetRateResult(ShipmentEntity shipment, UpsAccountEntity account)
         {
-            IUpsRateClient upsRateClient = GetRatingClient(account);
-
+            IUpsRateClient upsRateClient = rateClientFactory.GetClient(account);
+​
             GenericResult<List<UpsServiceRate>> serviceRateResult = upsRateClient.GetRates(shipment);
             return serviceRateResult;
-        }
-
-        /// <summary>
-        /// Gets the ups rate client.
-        /// </summary>
-        protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
-        {
-            UpsRatingMethod ratingMethod;
-            if (account==null)
-            {
-                ratingMethod = UpsRatingMethod.ApiOnly;
-            }
-            else
-            {
-                ratingMethod = account.LocalRatingEnabled ?
-                    UpsRatingMethod.LocalWithApiFailover :
-                    UpsRatingMethod.ApiOnly;
-            }
-
-            return upsRateClientFactory[ratingMethod];
         }
 
         /// <summary>
