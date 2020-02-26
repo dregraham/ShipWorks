@@ -44,8 +44,11 @@ namespace Interapptive.Shared.Utility
         public static GenericResult<T> FromError<T>(Exception ex, T value) =>
             new GenericResult<T>(false, value, ex);
 
+        /// <summary>
+        /// Get an error result
+        /// </summary>
         public static GenericResult<T> FromError<T>(string message, Exception ex) =>
-            new GenericResult<T>(false, default, message, ex);
+            new GenericResult<T>(false, default(T), message, ex);
     }
 
     /// <summary>
