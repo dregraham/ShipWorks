@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -24,6 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBestRateRatingService"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public UpsBestRateRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,

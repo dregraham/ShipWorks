@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public UpsRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
