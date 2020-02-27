@@ -191,8 +191,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Insure finish is last
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
-                Pages.Remove(wizardPageFinishOlt);
-                Pages.Add(wizardPageFinishOlt);
+                if (existingAccount.Checked)
+                {
+                    Pages.Remove(wizardPageFinishOlt);
+                    Pages.Add(wizardPageFinishOlt);
+                }
+                else
+                {
+                    Pages.Remove(oneBalanceFinishPage);
+                    Pages.Add(oneBalanceFinishPage);
+                }
             }
             else
             {

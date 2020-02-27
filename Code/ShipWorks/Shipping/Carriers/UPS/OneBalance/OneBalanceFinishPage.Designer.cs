@@ -98,6 +98,7 @@
             this.Description = "You are now ready to use UPS with ShipWorks.";
             this.Name = "OneBalanceFinishPage";
             this.Size = new System.Drawing.Size(579, 474);
+            this.Title = "Account Registration";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
