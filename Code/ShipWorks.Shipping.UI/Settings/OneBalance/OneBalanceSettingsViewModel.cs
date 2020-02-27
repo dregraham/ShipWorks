@@ -76,6 +76,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
         }
 
+        /// <summary>
+        /// RelayCommand for getting the account balance
+        /// </summary>
         public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
 
         /// <summary>
