@@ -104,6 +104,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageFinishOlt,
                 wizardPageFinishAddAccount});
 
+
+
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
             // Prepare the correct Welcome page
@@ -114,6 +116,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 Pages.Remove(wizardPageWelcomeOlt);
+            }
+
+            if (existingAccount.Checked)
+            {
+                Pages.Remove(oneBalanceTandCPage);
+                Pages.Remove(oneBalanceAddressPage);                
+            }
+            else
+            {
+                Pages.Remove(wizardPageLicense);
+                Pages.Remove(wizardPageRates);
             }
 
             // Sets initial values and resets existing values depending on when this is called.
@@ -259,9 +272,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (existingAccount.Checked)
             {
                 e.NextPage = wizardPageLicense;
-
-                Pages.Remove(oneBalanceTandCPage);
-                Pages.Remove(oneBalanceAddressPage);
             }
             else
             {
@@ -271,8 +281,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     // We are creating a new account, so remove the existing account entry wizard page
                     Pages.Remove(wizardPageAccount);
                 }
-
-                Pages.Remove(wizardPageRates);
             }
 
             // If the account list page is present, that means we arent creating accounts from this wizard flow directly
