@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             var account = accountRepository.GetAccount(shipment);
 
-            if (account.ShipEngineCarrierId != null)
+            if (account?.ShipEngineCarrierId != null)
             {
                 return shipEngineRatingService.GetRates(shipment);
             }
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = account.RateType == (int) UpsRateType.Negotiated;
+                    wantedNegotiated = account?.RateType == (int) UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
