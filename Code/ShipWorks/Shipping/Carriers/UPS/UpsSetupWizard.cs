@@ -249,6 +249,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // a new UPS account from ShipWorks
                 MessageHelper.ShowMessage(this, "Please enter your account number.");
                 e.NextPage = CurrentPage;
+                return;
             }
 
             // Start with a fresh page collection
