@@ -40,7 +40,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private DateTime? smartPickupNotifyTime;
         private IUpsPromo promo;
 
         private string upsLicense;
@@ -626,10 +625,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     labelSetupComplete1.Text = "Congratulations, you successfully created a UPS account within ShipWorks!";
                     labelSetupComplete2.Text = $"Your new UPS account number: {upsAccount.AccountNumber}";
                     labelSetupComplete3.Text = "Please watch your email for a confirmation from UPS and more information on how to use your account.";
-                    if (smartPickupNotifyTime.HasValue)
-                    {
-                        labelSetupCompleteNotifyTime.Text = $"UPS Smart Pickup Notify Time: {smartPickupNotifyTime.Value.ToString("t")}";
-                    }
                 }
             }
         }
