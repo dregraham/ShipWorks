@@ -82,7 +82,6 @@ namespace ShipWorks.Shipping.Settings
             controlHost.Initialize();
 
             var hostControl = controlHost as UserControl;
-            hostControl.Dock = DockStyle.Fill;
 
             this.optionPageOneBalance.Controls.Add(hostControl);
         }

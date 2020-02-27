@@ -50,6 +50,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Margin = new System.Windows.Forms.Padding(0);
+            this.Padding = new System.Windows.Forms.Padding(0);
             this.Controls.Add(this.elementHost);
             this.Name = "OneBalanceSettingsControlHost";
             this.ResumeLayout(false);
