@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -23,8 +24,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [NamedComponent("OneBalanceAddMoneyDialog", typeof(IDialog))]
     public partial class OneBalanceAddMoneyDialog : InteropWindow
     {
-        public OneBalanceAddMoneyDialog(IWin32Window owner) : base(owner, new OneBalanceAddMoneyViewModel(), false)
+        public OneBalanceAddMoneyDialog(IWin32Window owner, IPostageWebClient webClient) : base(owner, false)
         {
+            this.DataContext = new OneBalanceAddMoneyViewModel(webClient, this);
             InitializeComponent();
         }
     }

@@ -75,13 +75,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             get { return loading; }
             set
             {
-                loading = false;
+                loading = value;
                 RaisePropertyChanged(nameof(Loading));
             }
         }
 
         public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
 
+        /// <summary>
+        /// Relay command for showing the add money dialog
+        /// </summary>
         public RelayCommand ShowAddMoneyDialogCommand => new RelayCommand(ShowAddMoneyDialog);
 
         /// <summary>
@@ -98,6 +101,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAccountBalance()
         {
+            this.Loading = true;
             Dispatcher.CurrentDispatcher.BeginInvoke(
             DispatcherPriority.ApplicationIdle,
             new Action(() =>
@@ -156,8 +160,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowAddMoneyDialog()
         {
-            var addMoneyDialog = lifetimeScope.ResolveNamed<IDialog>("OneBalanceAddMoneyDialog");
-            addMoneyDialog.ShowDialog();
+            var addMoneyDialog = lifetimeScope.ResolveNamed<IDialog>("OneBalanceAddMoneyDialog", new TypedParameter(typeof(IPostageWebClient), webClient));
+
+            var dlgResult = addMoneyDialog.ShowDialog();
+            if(dlgResult == true)
+            {
+                GetAccountBalance();
+            }
         }
 
         /// <summary>
