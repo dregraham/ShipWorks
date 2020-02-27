@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -15,12 +16,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class WorldShipLabelService : UpsLabelService
     {
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public WorldShipLabelService(Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData) 
+        public WorldShipLabelService(Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData, 
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository) 
             : base(createDownloadedLabelData)
         {
+            this.upsAccountRepository = upsAccountRepository;
         }
 
         /// <summary>
@@ -30,6 +35,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
+                if (upsAccountRepository.GetAccountReadOnly(shipment).ShipEngineCarrierId != null)
+                {
+                    throw new ShippingException("This account cannot be used to process shipments using WorldShip.");
+                }
+
                 base.Create(shipment);
 
                 TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
