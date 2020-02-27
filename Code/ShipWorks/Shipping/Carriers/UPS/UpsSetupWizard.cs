@@ -236,6 +236,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         [NDependIgnoreLongMethod]
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
+            NextEnabled = false;
+            Cursor.Current = Cursors.WaitCursor;
+
             string accountNumber = EnteredAccountNumber();
 
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
@@ -319,6 +322,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     MessageBoxIcon.Error);
 
                 e.NextPage = CurrentPage;
+            }
+            finally
+            {
+                NextEnabled = true;
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -701,120 +709,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void ShowAccountNumberPanel()
         {
             accountNumberPanel.Visible = existingAccount.Checked;
-        }
-
-        /// <summary>
-        /// Show Open Account help when help clicked.
-        /// </summary>
-        private void OnHelpClick(object sender, EventArgs e)
-        {
-            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022654951", this);
-        }
-
-        /// <summary>
-        /// Registers the account.
-        /// </summary>
-        private void RegisterNewAccount()
-        {
-            try
-            {
-                UpsRegistrationStatus registrationStatus;
-
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    registrationStatus = clerk.RegisterAccount(upsAccount);
-                }
-
-                if (registrationStatus != UpsRegistrationStatus.Success)
-                {
-                    throw new UpsException("Could not register your new account in ShipWorks.");
-                }
-
-                GetUpsAccessKey();
-
-                NextEnabled = true;
-
-                // Set invoice auth to false because the new account has no invoice
-                upsAccount.InvoiceAuth = false;
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                    UpsAccountManager.SaveAccount(upsAccount);
-
-                    adapter.Commit();
-                }
-            }
-            catch (UpsWebServiceException ex)
-            {
-                throw new UpsOpenAccountException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Validates the address.
-        /// </summary>
-        /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="originalAddress">The original address</param>
-        /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
-        private static bool CorrectAddress(AddressKeyCandidateType addressCandidate, IAddressType originalAddress)
-        {
-            bool isAddressCorrected = false;
-
-            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
-            {
-                string type = originalAddress.GetType() == typeof(BillingAddressType) ? "Billing" : "Pickup";
-
-                invalidAddressDlg.SetAddress(addressCandidate, type);
-                DialogResult result = invalidAddressDlg.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    // Only use the suggestion if its not blank
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.StreetAddress ?? originalAddress.StreetAddress))
-                    {
-                        originalAddress.StreetAddress = addressCandidate.StreetAddress ?? originalAddress.StreetAddress;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.City))
-                    {
-                        originalAddress.City = addressCandidate.City;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.State))
-                    {
-                        originalAddress.StateProvinceCode = addressCandidate.State;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.PostalCode))
-                    {
-                        originalAddress.PostalCode = addressCandidate.PostalCode;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.CountryCode))
-                    {
-                        originalAddress.CountryCode = addressCandidate.CountryCode;
-                    }
-
-                    isAddressCorrected = true;
-                }
-            }
-
-            return isAddressCorrected;
-        }
-
-        /// <summary>
-        /// Copies the pickup address to the billing address
-        /// </summary>
-        private static void CopyAddress(IAddressType copyFrom, IAddressType copyTo)
-        {
-            copyTo.StreetAddress = copyFrom.StreetAddress;
-            copyTo.City = copyFrom.City;
-            copyTo.StateProvinceCode = copyFrom.StateProvinceCode;
-            copyTo.PostalCode = copyFrom.PostalCode;
-            copyTo.CountryCode = copyFrom.CountryCode;
         }
 
         /// <summary>
