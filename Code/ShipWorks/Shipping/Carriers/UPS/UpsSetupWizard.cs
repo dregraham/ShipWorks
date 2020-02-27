@@ -49,7 +49,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly UpsAccountEntity upsAccount = new UpsAccountEntity();
 
         private OpenAccountRequest openAccountRequest;
-        private OneBalanceSelectionPage oneBalanceSelectionPage = new OneBalanceSelectionPage();
         private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
         private OneBalanceAccountAddressPage oneBalanceAddressPage;
 
@@ -81,17 +80,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             upsBusinessInfoControl.IndustryChanged = IndustryChanged;
 
-            oneBalanceSelectionPage.StepNext += OnStepNextOneBalanceSelection;
             oneBalanceAddressPage = oneBalanceAddressPageFactory(upsAccount);
-        }
-
-        private void OnStepNextOneBalanceSelection(object sender, WizardStepEventArgs e)
-        {
-            if (!oneBalanceSelectionPage.SetupOneBalance)
-            {
-                e.NextPage = wizardPageLicense;
-                RemoveOneBalancePages();
-            }
         }
 
         private void RemoveOneBalancePages()
@@ -147,7 +136,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             Pages.AddRange(new[] {
                 wizardPageWelcomeOlt,
                 wizardPageWelcomeWorldShip,
-                oneBalanceSelectionPage,
                 oneBalanceTandCPage,
                 oneBalanceAddressPage,
                 wizardPageAccountList,
@@ -321,7 +309,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 e.NextPage = wizardPageLicense;
 
-                Pages.Remove(oneBalanceSelectionPage);
                 RemoveOneBalancePages();
                 RemoveOpenAccountPages();
             }
