@@ -6,6 +6,9 @@ namespace ShipWorks.ApplicationCore.Interaction
     /// <summary>
     /// Can be implemented by classes to signal that they handle command line commands
     /// </summary>
+    /// <remarks>
+    /// Any implementing classes must have an empty constructor
+    /// </remarks>
     public interface ICommandLineCommandHandler
     {
         /// <summary>

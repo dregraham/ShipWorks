@@ -356,6 +356,10 @@
       <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
       <Name>Interapptive.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Api\ShipWorks.Api.csproj">
+      <Project>{5286BA79-A7EA-4BFD-9DC8-EDC00797E664}</Project>
+      <Name>ShipWorks.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.OrderLookup\ShipWorks.OrderLookup.csproj">
       <Project>{d5b2cf61-e6c6-4a91-a4e5-9aa2515e70c4}</Project>
       <Name>ShipWorks.OrderLookup</Name>

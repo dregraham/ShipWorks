@@ -8,6 +8,7 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using Moq;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
@@ -20,13 +21,21 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
+using ShipWorks.Tests.Shared;
 using Xunit;
 using ShipmentType = ShipWorks.Stores.Platforms.Ebay.WebServices.ShipmentType;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
-    public class CustomerLicenseTest
+    public class CustomerLicenseTest : IDisposable
     {
+        private readonly ExecutionModeScope executionMode;
+
+        public CustomerLicenseTest()
+        {
+            executionMode = new ExecutionModeScope(new TestExecutionMode(true, true));
+        }
+
         [Fact]
         public void Constructor_NoErrorThrown_WhenFeatureRestrictionsHaveUniqueEditionFeatures()
         {
@@ -1130,6 +1139,11 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
 
                 Assert.Equal(2, result.RestrictedRateCount);
             }
+        }
+
+        public void Dispose()
+        {
+            executionMode?.Dispose();
         }
     }
 }
