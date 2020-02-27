@@ -22,11 +22,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// This describes the method of calculating rates in ShipWorks using the rating tables
         /// </summary>
-        LocalOnly,
-
-        /// <summary>
-        /// This describes the method of getting rates via ShipEngine
-        /// </summary>
-        ShipEngine
+        LocalOnly
     }
 }

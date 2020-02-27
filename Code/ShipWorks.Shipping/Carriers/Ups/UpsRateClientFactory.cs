@@ -33,17 +33,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             else
             {
-                if (account.ShipEngineCarrierId != null)
-                {
-                    ratingMethod = UpsRatingMethod.ShipEngine;
-                }
-                else
-                {
-                    ratingMethod = account.LocalRatingEnabled ? 
-                        UpsRatingMethod.LocalWithApiFailover : 
-                        UpsRatingMethod.ApiOnly;
-                }
+                ratingMethod = account.LocalRatingEnabled ?
+                    UpsRatingMethod.LocalWithApiFailover :
+                    UpsRatingMethod.ApiOnly;
             }
+            return upsRateClientFactory[ratingMethod];
+        }
+
+        /// <summary>
+        /// Get a UPS rate client by rating method
+        /// </summary>
+        public IUpsRateClient GetClient(UpsRatingMethod ratingMethod)
+        {
             return upsRateClientFactory[ratingMethod];
         }
     }

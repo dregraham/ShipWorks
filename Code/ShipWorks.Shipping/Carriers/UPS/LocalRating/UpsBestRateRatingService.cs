@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,7 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
     public class UpsBestRateRatingService : UpsRatingService, IUpsBestRateRatingService
     {
         private readonly ILicenseService licenseService;
-        private UpsRatingMethod methodToUse;
+        private readonly IUpsRateClientFactory rateClientFactory;
+        private UpsRatingMethod ratingMethod;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBestRateRatingService"/> class.
@@ -27,12 +27,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         public UpsBestRateRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
-            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
-            ILicenseService licenseService)
-            : base(accountRepository, transitTimeClient, upsRateClientFactory, shipmentType, new NullPromoFactory())
+            ILicenseService licenseService,
+            IUpsRateClientFactory rateClientFactory,
+            IUpsShipEngineRatingService shipEngineRatingService)
+            : base(accountRepository, transitTimeClient, shipmentType, new NullPromoFactory(), rateClientFactory, shipEngineRatingService)
         {
             this.licenseService = licenseService;
+            this.rateClientFactory = rateClientFactory;
         }
 
         /// <summary>
@@ -49,15 +51,15 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
 
             if (account.LocalRatingEnabled)
             {
-                methodToUse = availableRatingMethods.Any(m => m == UpsRatingMethod.LocalWithApiFailover) ?
-                    UpsRatingMethod.LocalWithApiFailover : 
+                ratingMethod = availableRatingMethods.Any(m => m == UpsRatingMethod.LocalWithApiFailover) ?
+                    UpsRatingMethod.LocalWithApiFailover :
                     UpsRatingMethod.LocalOnly;
             }
             else
             {
                 if (availableRatingMethods.Any(m => m == UpsRatingMethod.ApiOnly))
                 {
-                    methodToUse = UpsRatingMethod.ApiOnly;
+                    ratingMethod = UpsRatingMethod.ApiOnly;
                 }
                 else
                 {
@@ -65,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
                 }
             }
 
-            return upsRateClientFactory[methodToUse];
+            return rateClientFactory.GetClient(ratingMethod);
         }
 
         /// <summary>
@@ -75,8 +77,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsAccountEntity account)
         {
             GenericResult<List<UpsServiceRate>> rateResult = base.GetRateResult(shipment, account);
-            
-            if (methodToUse == UpsRatingMethod.LocalOnly && rateResult.Failure)
+
+            if (ratingMethod == UpsRatingMethod.LocalOnly && rateResult.Failure)
             {
                 throw new UpsLocalRatingException(rateResult.Message);
             }
