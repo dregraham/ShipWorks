@@ -28,82 +28,100 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.labelHeader = new System.Windows.Forms.Label();
+            this.labelAgreementInfo = new System.Windows.Forms.Label();
+            this.labelList1 = new System.Windows.Forms.Label();
+            this.labelList2 = new System.Windows.Forms.Label();
+            this.linkPromoRatesAgreement = new System.Windows.Forms.LinkLabel();
+            this.linkTechnologyAgreement = new System.Windows.Forms.LinkLabel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // labelHeader
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 24);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(240, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "UPS Promotional Rates && Technology Agreement";
+            this.labelHeader.AutoSize = true;
+            this.labelHeader.Font = new System.Drawing.Font("Tahoma", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHeader.Location = new System.Drawing.Point(70, 29);
+            this.labelHeader.Name = "labelHeader";
+            this.labelHeader.Size = new System.Drawing.Size(328, 18);
+            this.labelHeader.TabIndex = 0;
+            this.labelHeader.Text = "UPS Promotional Rates && Technology Agreement";
             // 
-            // label2
+            // labelAgreementInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(25, 64);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(317, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "To start shipping with UPS, you must first agree to the following:";
+            this.labelAgreementInfo.AutoSize = true;
+            this.labelAgreementInfo.Location = new System.Drawing.Point(19, 75);
+            this.labelAgreementInfo.Name = "labelAgreementInfo";
+            this.labelAgreementInfo.Size = new System.Drawing.Size(317, 13);
+            this.labelAgreementInfo.TabIndex = 1;
+            this.labelAgreementInfo.Text = "To start shipping with UPS, you must first agree to the following:";
             // 
-            // label3
+            // labelList1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(47, 87);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(17, 13);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "1.";
+            this.labelList1.AutoSize = true;
+            this.labelList1.Location = new System.Drawing.Point(34, 98);
+            this.labelList1.Name = "labelList1";
+            this.labelList1.Size = new System.Drawing.Size(17, 13);
+            this.labelList1.TabIndex = 2;
+            this.labelList1.Text = "1.";
             // 
-            // label4
+            // labelList2
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(47, 110);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(17, 13);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "2.";
+            this.labelList2.AutoSize = true;
+            this.labelList2.Location = new System.Drawing.Point(34, 121);
+            this.labelList2.Name = "labelList2";
+            this.labelList2.Size = new System.Drawing.Size(17, 13);
+            this.labelList2.TabIndex = 3;
+            this.labelList2.Text = "2.";
             // 
-            // linkLabel1
+            // linkPromoRatesAgreement
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(70, 87);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(172, 13);
-            this.linkLabel1.TabIndex = 4;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "UPS Promotional Rates Agreement";
+            this.linkPromoRatesAgreement.AutoSize = true;
+            this.linkPromoRatesAgreement.Location = new System.Drawing.Point(52, 98);
+            this.linkPromoRatesAgreement.Name = "linkPromoRatesAgreement";
+            this.linkPromoRatesAgreement.Size = new System.Drawing.Size(172, 13);
+            this.linkPromoRatesAgreement.TabIndex = 4;
+            this.linkPromoRatesAgreement.TabStop = true;
+            this.linkPromoRatesAgreement.Text = "UPS Promotional Rates Agreement";
+            this.linkPromoRatesAgreement.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickRateAgreement);
             // 
-            // linkLabel2
+            // linkTechnologyAgreement
             // 
-            this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(70, 110);
-            this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(140, 13);
-            this.linkLabel2.TabIndex = 5;
-            this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "UPS Technology Agreement";
+            this.linkTechnologyAgreement.AutoSize = true;
+            this.linkTechnologyAgreement.Location = new System.Drawing.Point(52, 121);
+            this.linkTechnologyAgreement.Name = "linkTechnologyAgreement";
+            this.linkTechnologyAgreement.Size = new System.Drawing.Size(140, 13);
+            this.linkTechnologyAgreement.TabIndex = 5;
+            this.linkTechnologyAgreement.TabStop = true;
+            this.linkTechnologyAgreement.Text = "UPS Technology Agreement";
+            this.linkTechnologyAgreement.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickTechnologyAgreement);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::ShipWorks.Properties.Resources.glo_ups_brandmark_pfv;
+            this.pictureBox1.Location = new System.Drawing.Point(21, 8);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(42, 55);
+            this.pictureBox1.TabIndex = 6;
+            this.pictureBox1.TabStop = false;
             // 
             // OneBalanceTermsAndConditionsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.linkLabel2);
-            this.Controls.Add(this.linkLabel1);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.linkTechnologyAgreement);
+            this.Controls.Add(this.linkPromoRatesAgreement);
+            this.Controls.Add(this.labelList2);
+            this.Controls.Add(this.labelList1);
+            this.Controls.Add(this.labelAgreementInfo);
+            this.Controls.Add(this.labelHeader);
+            this.Description = "Setup ShipWorks to work with your UPS account.";
             this.Name = "OneBalanceTermsAndConditionsPage";
             this.Size = new System.Drawing.Size(579, 474);
+            this.Title = "Account Registration";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -111,11 +129,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.Label labelHeader;
+        private System.Windows.Forms.Label labelAgreementInfo;
+        private System.Windows.Forms.Label labelList1;
+        private System.Windows.Forms.Label labelList2;
+        private System.Windows.Forms.LinkLabel linkPromoRatesAgreement;
+        private System.Windows.Forms.LinkLabel linkTechnologyAgreement;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
