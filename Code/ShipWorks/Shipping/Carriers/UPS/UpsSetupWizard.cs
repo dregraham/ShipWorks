@@ -244,9 +244,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         [NDependIgnoreLongMethod]
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
-            NextEnabled = false;
-            Cursor.Current = Cursors.WaitCursor;
-
             string accountNumber = EnteredAccountNumber();
 
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
@@ -330,11 +327,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     MessageBoxIcon.Error);
 
                 e.NextPage = CurrentPage;
-            }
-            finally
-            {
-                NextEnabled = true;
-                Cursor.Current = Cursors.Default;
             }
         }
 
