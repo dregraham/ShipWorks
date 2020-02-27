@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
         private OneBalanceAccountAddressPage oneBalanceAddressPage;
+        private OneBalanceFinishPage oneBalanceFinishPage = new OneBalanceFinishPage();
 
         /// <summary>
         /// Constructor
@@ -102,7 +103,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageOptionsWorldShip,
                 wizardPagePromo,
                 wizardPageFinishOlt,
-                wizardPageFinishAddAccount});
+                wizardPageFinishAddAccount,
+                oneBalanceFinishPage
+            });
 
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
@@ -119,7 +122,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (existingAccount.Checked)
             {
                 Pages.Remove(oneBalanceTandCPage);
-                Pages.Remove(oneBalanceAddressPage);                
+                Pages.Remove(oneBalanceAddressPage);
+                Pages.Remove(oneBalanceFinishPage);
             }
             else
             {
@@ -127,6 +131,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageRates);
                 Pages.Remove(wizardPageInvoiceAuthentication);
                 Pages.Remove(wizardPagePromo);
+                // Only way to create new account is through One Balance, so remove the other finish pages so that
+                // the One Balance finish pages shows.
+                Pages.Remove(wizardPageFinishOlt);
+                Pages.Remove(wizardPageFinishAddAccount);
             }
 
             // Sets initial values and resets existing values depending on when this is called.
@@ -206,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // Listen for finish
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            Pages[Pages.Count - 1].SteppingInto += OnSteppingIntoFinish;
 
             // Add in the first page
             SetCurrent(0);
