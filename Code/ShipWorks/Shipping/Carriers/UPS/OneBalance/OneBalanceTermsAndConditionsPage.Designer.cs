@@ -35,7 +35,6 @@
             this.linkPromoRatesAgreement = new System.Windows.Forms.LinkLabel();
             this.linkTechnologyAgreement = new System.Windows.Forms.LinkLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -105,24 +104,10 @@
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label5.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label5.Location = new System.Drawing.Point(22, 442);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(533, 22);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and" +
-    " the Color Brown are trademarks of United Parcel Service of America, Inc. All Ri" +
-    "ghts Reserved.";
-            // 
             // OneBalanceTermsAndConditionsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.linkTechnologyAgreement);
             this.Controls.Add(this.linkPromoRatesAgreement);
@@ -149,6 +134,5 @@
         private System.Windows.Forms.LinkLabel linkPromoRatesAgreement;
         private System.Windows.Forms.LinkLabel linkTechnologyAgreement;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label label5;
     }
 }

@@ -51,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private OpenAccountRequest openAccountRequest;
         private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
         private OneBalanceAccountAddressPage oneBalanceAddressPage;
+        private OneBalanceFinishPage oneBalanceFinishPage = new OneBalanceFinishPage();
 
         /// <summary>
         /// Constructor
@@ -87,6 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             Pages.Remove(oneBalanceTandCPage);
             Pages.Remove(oneBalanceAddressPage);
+            Pages.Remove(oneBalanceFinishPage);
         }
 
         private void RemoveOpenAccountPages()
@@ -151,7 +153,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageOptionsWorldShip,
                 wizardPagePromo,
                 wizardPageFinishOlt,
-                wizardPageFinishAddAccount});
+                wizardPageFinishAddAccount,
+                oneBalanceFinishPage
+            });
 
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
@@ -324,6 +328,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
 
                 Pages.Remove(wizardPageRates);
+
+                // Only way to create new account is through One Balance, so remove the other finish pages so that
+                // the One Balance finish pages shows.
+                Pages.Remove(wizardPageFinishOlt);
+                Pages.Remove(wizardPageFinishAddAccount);
             }
 
             // If the account list page is present, that means we arent creating accounts from this wizard flow directly

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
-            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // personControl
@@ -53,24 +52,10 @@
             this.personControl.Size = new System.Drawing.Size(346, 339);
             this.personControl.TabIndex = 0;
             // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label5.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label5.Location = new System.Drawing.Point(22, 442);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(533, 22);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and" +
-    " the Color Brown are trademarks of United Parcel Service of America, Inc. All Ri" +
-    "ghts Reserved.";
-            // 
             // OneBalanceAccountAddressPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.personControl);
             this.Description = "Please confirm your pickup address information for this account.";
             this.Name = "OneBalanceAccountAddressPage";
@@ -83,6 +68,5 @@
         #endregion
 
         private Data.Controls.AutofillPersonControl personControl;
-        private System.Windows.Forms.Label label5;
     }
 }
