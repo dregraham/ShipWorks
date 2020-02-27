@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -14,71 +16,74 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// View model for the OneBalanceSettingsControl
     /// </summary>
-    public class OneBalanceSettingsControlViewModel : INotifyPropertyChanged
+    public class OneBalanceSettingsControlViewModel : ViewModelBase
     {
         private readonly IPostageWebClient webClient;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private decimal balance;
+        private string message;
+        private bool showMessage = false;
+        private bool loading = true;
+
         /// <summary>
         /// The current balance of the one balance account
         /// </summary>
         /// 
-        private decimal balance;
+        [Obfuscation(Exclude = true)]
         public decimal Balance 
         { 
             get { return balance; }
             set 
             {
-                balance = value;
-                RaisePropertyChanged(nameof(Balance));
+                Set(ref balance, value);
             }
         }
 
         /// <summary>
         /// The message to be displayed in place of the account balance if needed
         /// </summary>
-        private string message;
+        [Obfuscation(Exclude = true)]
         public string Message
         {
             get { return message; }
             set
             {
-                message = value;
-                RaisePropertyChanged(nameof(Message));
+                Set(ref message, value);
             }
         }
+
         /// <summary>
         /// A flag to indicate if we should show the message
         /// </summary>
-        private bool showMessage = false;
+        [Obfuscation(Exclude = true)]
         public bool ShowMessage
         {
             get { return showMessage; }
             set
             {
-                showMessage = value;
-                RaisePropertyChanged(nameof(ShowMessage));
+                Set(ref showMessage, value);
             }
         }
 
         /// <summary>
         /// A flag to indicate if we are still trying to load the balance
         /// </summary>
-        private bool loading = true;
+        [Obfuscation(Exclude = true)]
         public bool Loading
         {
             get { return loading; }
             set
             {
-                loading = false;
-                RaisePropertyChanged(nameof(Loading));
+                Set(ref loading, value);
             }
         }
 
         /// <summary>
         /// RelayCommand for getting the account balance
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
 
         /// <summary>
@@ -95,15 +100,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             Dispatcher.CurrentDispatcher.BeginInvoke(
-            DispatcherPriority.ApplicationIdle,
-            new Action(() =>
-            {
-                if (webClient != null)
+                DispatcherPriority.ApplicationIdle,
+                new Action(() =>
                 {
-                    GetBalance();
-                    Loading = false;
-                }
-            }));
+                    if (webClient != null)
+                    {
+                        GetBalance();
+                        Loading = false;
+                    }
+                }));
         }
 
         /// <summary>
