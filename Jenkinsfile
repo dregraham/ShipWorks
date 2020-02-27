@@ -32,17 +32,13 @@ pipeline {
 			}
 		}
 		stage('Integration tests') {
-			parallel {
-				stage('Integration tests') {
-					steps {
-						bat 'cake test:integration[ContinuousIntegration]'
-					}
-				}
-				stage('Specs') {
-					steps {
-						bat 'cake test:specs'
-					}
-				}
+			steps {
+				bat 'cake test:integration[ContinuousIntegration]'
+			}
+		}
+		stage('Specs') {
+			steps {
+				bat 'cake test:specs'
 			}
 		}
 	}
