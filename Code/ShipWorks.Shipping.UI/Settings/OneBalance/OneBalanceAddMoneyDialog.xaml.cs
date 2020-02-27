@@ -21,12 +21,12 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// Interaction logic for OneBalanceAddMoneyDialog.xaml
     /// </summary>
-    [NamedComponent("OneBalanceAddMoneyDialog", typeof(IDialog))]
-    public partial class OneBalanceAddMoneyDialog : InteropWindow
+    [Component(RegistrationType.SpecificService, Service = typeof(IOneBalanceAddMoneyDialog))]
+    public partial class OneBalanceAddMoneyDialog : InteropWindow, IOneBalanceAddMoneyDialog
     {
-        public OneBalanceAddMoneyDialog(IWin32Window owner, IPostageWebClient webClient) : base(owner, false)
+        public OneBalanceAddMoneyDialog(IWin32Window owner, IPostageWebClient webClient, IMessageHelper messageHelper) : base(owner, false)
         {
-            this.DataContext = new OneBalanceAddMoneyViewModel(webClient, this);
+            this.DataContext = new OneBalanceAddMoneyViewModel(webClient, this, messageHelper);
             InitializeComponent();
         }
     }

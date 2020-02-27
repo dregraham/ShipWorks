@@ -169,8 +169,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowAddMoneyDialog()
         {
-            var addMoneyDialog = lifetimeScope.ResolveNamed<IDialog>("OneBalanceAddMoneyDialog", new TypedParameter(typeof(IPostageWebClient), webClient));
-
+            var addMoneyDialog = lifetimeScope.Resolve<IOneBalanceAddMoneyDialog>(new TypedParameter(typeof(IPostageWebClient), webClient)) as Window;
+           
             var dlgResult = addMoneyDialog.ShowDialog();
             if(dlgResult == true)
             {

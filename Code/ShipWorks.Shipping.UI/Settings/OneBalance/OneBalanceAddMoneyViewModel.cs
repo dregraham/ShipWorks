@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -15,16 +17,19 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// View model for the OneBalanceAddMoneyDialog
     /// </summary>
-    public class OneBalanceAddMoneyViewModel : INotifyPropertyChanged
+    public class OneBalanceAddMoneyViewModel : ViewModelBase
     {
         private readonly IPostageWebClient webClient;
         private readonly Window window;
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly IMessageHelper messageHelper;
+
+        private decimal amount;
 
         /// <summary>
         /// The amount of money to add to the stamps account
         /// </summary>
-        private decimal amount;
+        [Obfuscation(Exclude = true)]
         public decimal Amount { 
             get 
             {
@@ -32,23 +37,24 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
             set
             {
-                amount = value;
-                RaisePropertyChanged(nameof(Amount));
+                Set(ref amount,value);
             }
         }
 
         /// <summary>
         /// Relay command to for buying postage
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand BuyPostageCommand => new RelayCommand(BuyPostage);
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceAddMoneyViewModel(IPostageWebClient webClient, Window window)
+        public OneBalanceAddMoneyViewModel(IPostageWebClient webClient, Window window, IMessageHelper messageHelper)
         {
             this.webClient = webClient;
             this.window = window;
+            this.messageHelper = messageHelper;
         }
 
         /// <summary>
@@ -64,18 +70,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             catch(UspsException ex)
             {
                 var message = $"There was an error purchasing postage:\n{ex.Message}";
-                var errorDlg = new OneBalanceErrorDialog(message);
-                errorDlg.ShowDialog();
+                messageHelper.ShowError(message);
             }
-        }
-
-        /// <summary>
-        /// Raise the INotifyPropertyChanged event
-        /// </summary>
-        /// <param name="propertyName"></param>
-        private void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
