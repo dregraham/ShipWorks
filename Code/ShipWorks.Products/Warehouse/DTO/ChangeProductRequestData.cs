@@ -68,6 +68,7 @@ namespace ShipWorks.Products.Warehouse.DTO
             Fnsku = product.FNSku;
             Ean = product.EAN;
             Enabled = product.IsActive;
+            IsBundle = product.Product.IsBundle;
 
             Attributes = product.AttributeValues.EmptyIfNull().Select(ProductAttribute.Create);
             Aliases = product.Aliases.EmptyIfNull().Where(x => !x.IsDefault).Select(ProductAlias.Create);
@@ -153,6 +154,11 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// Whether or not the product is enabled
         /// </summary>
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Whether or not the product is a bundle
+        /// </summary>
+        public bool IsBundle { get; set; }
 
         /// <summary>
         /// Attributes of the product
