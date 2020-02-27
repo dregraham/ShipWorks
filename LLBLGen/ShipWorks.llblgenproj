@@ -3316,6 +3316,7 @@
           <Field Name="ReturnUndeliverableEmail" Type="string" MaxLength="100" FieldIndex="34" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="3" />
           <Field Name="Service" Type="int" FieldIndex="2" />
+          <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="12" FieldIndex="51" />
           <Field Name="ShipmentChargeAccount" Type="string" MaxLength="10" FieldIndex="46" />
           <Field Name="ShipmentChargeCountryCode" Type="string" MaxLength="50" FieldIndex="48" />
           <Field Name="ShipmentChargePostalCode" Type="string" MaxLength="20" FieldIndex="47" />
@@ -4634,7 +4635,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-25T19:08:23.2411053Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-27T18:07:11.0526372Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9349,6 +9350,7 @@
                     <Field Name="ShipmentChargeCountryCode" Ordinal="49" DbType="12" Length="50" />
                     <Field Name="UspsPackageID" Ordinal="50" DbType="12" Length="100" />
                     <Field Name="RequestedLabelFormat" Ordinal="51" DbType="8" Precision="10" />
+                    <Field Name="ShipEngineLabelID" Ordinal="52" IsOptional="true" DbType="12" Length="12" />
                   </Fields>
                 </Table>
                 <Table Name="User">
@@ -14260,6 +14262,7 @@
             <FieldMapping FieldName="ReturnUndeliverableEmail" TargetFieldName="ReturnUndeliverableEmail" />
             <FieldMapping FieldName="SaturdayDelivery" TargetFieldName="SaturdayDelivery" />
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
+            <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentChargeAccount" TargetFieldName="ShipmentChargeAccount" />
             <FieldMapping FieldName="ShipmentChargeCountryCode" TargetFieldName="ShipmentChargeCountryCode" />
             <FieldMapping FieldName="ShipmentChargePostalCode" TargetFieldName="ShipmentChargePostalCode" />

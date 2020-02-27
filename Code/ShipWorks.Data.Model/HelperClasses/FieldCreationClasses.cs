@@ -31202,6 +31202,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.RequestedLabelFormat);}
 		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipEngineLabelID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UserEntity</summary>
