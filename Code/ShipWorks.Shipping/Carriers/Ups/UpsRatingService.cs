@@ -142,6 +142,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         /// <summary>
         /// Gets the UPS rate client
+        /// </summary>
         protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
         {
             return rateClientFactory.GetClient(account);
