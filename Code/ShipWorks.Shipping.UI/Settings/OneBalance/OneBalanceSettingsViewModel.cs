@@ -3,8 +3,11 @@ using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Threading;
+using Autofac;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -17,6 +20,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     public class OneBalanceSettingsControlViewModel : INotifyPropertyChanged
     {
         private readonly IPostageWebClient webClient;
+        private readonly ILifetimeScope lifetimeScope;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -78,12 +82,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
         public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
 
+        public RelayCommand ShowAddMoneyDialogCommand => new RelayCommand(ShowAddMoneyDialog);
+
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient)
+        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, ILifetimeScope lifetimeScope)
         {
             this.webClient = webClient;
+            this.lifetimeScope = lifetimeScope;
         }
 
         /// <summary>
@@ -142,6 +149,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Show the add money dialog
+        /// </summary>
+        private void ShowAddMoneyDialog()
+        {
+            var addMoneyDialog = lifetimeScope.ResolveNamed<IDialog>("OneBalanceAddMoneyDialog");
+            addMoneyDialog.ShowDialog();
         }
 
         /// <summary>

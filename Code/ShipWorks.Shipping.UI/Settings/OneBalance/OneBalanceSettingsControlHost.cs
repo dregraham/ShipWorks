@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using System.Linq;
+using Autofac;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -14,15 +15,17 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     public partial class OneBalanceSettingsControlHost : UserControl, IOneBalanceSettingsControlHost
     {
         private OneBalanceSettingsControlViewModel settingsViewModel;
-        private IUspsAccountManager accountManager;
+        private readonly IUspsAccountManager accountManager;
+        private readonly ILifetimeScope lifetimeScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager)
+        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
             this.accountManager = accountManager;
+            this.lifetimeScope = lifetimeScope;
         }
 
         /// <summary>
@@ -33,7 +36,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
 
             var webClient = account == null ? null : new UspsPostageWebClient(account);
-            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient);
+
+            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient, lifetimeScope);
 
             settingsControl.DataContext = settingsViewModel;
         }
