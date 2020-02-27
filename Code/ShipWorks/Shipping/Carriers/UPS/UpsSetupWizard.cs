@@ -602,6 +602,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Stepping into the options page
+        /// </summary>
+        private void OnStepIntoOptionsOlt(object sender, WizardSteppingIntoEventArgs e)
+        {
+            // Disable the back button if we created a One Balance account
+            BackEnabled = existingAccount.Checked;            
+        }
+
+        /// <summary>
         /// Stepping next from the WorldShip options page
         /// </summary>
         private void OnStepNextOptionsWorldShip(object sender, WizardStepEventArgs e)

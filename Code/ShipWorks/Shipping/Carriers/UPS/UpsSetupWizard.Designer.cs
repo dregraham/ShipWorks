@@ -434,6 +434,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageOptionsOlt.TabIndex = 0;
             this.wizardPageOptionsOlt.Title = "Account Registration";
             this.wizardPageOptionsOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOptionsOlt);
+            this.wizardPageOptionsOlt.SteppingInto += OnStepIntoOptionsOlt;
             // 
             // optionsControlOlt
             // 
