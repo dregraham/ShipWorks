@@ -1,0 +1,16 @@
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Editing.Rating;
+
+namespace ShipWorks.Shipping.Carriers.Ups
+{
+    /// <summary>
+    /// Rating service for UPS via ShipEngine
+    /// </summary>
+    public interface IUpsShipEngineRatingService
+    {
+        /// <summary>
+        /// Retrieve rates from ShipEngine for the given shipment
+        /// </summary>
+        RateGroup GetRates(ShipmentEntity shipment);
+    }
+}

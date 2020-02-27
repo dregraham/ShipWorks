@@ -398,9 +398,13 @@
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Ups\IUpsRateClientFactory.cs" />
+    <Compile Include="Carriers\Ups\IUpsShipEngineRatingService.cs" />
     <Compile Include="Carriers\Ups\IUpsLabelClient.cs" />
     <Compile Include="Carriers\Ups\IUpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Carriers\Ups\UpsRateClientFactory.cs" />
+    <Compile Include="Carriers\Ups\UpsShipEngineRatingService.cs" />
     <Compile Include="Carriers\Ups\OneBalance\UpsShipEngineLabelClient.cs" />
     <Compile Include="Carriers\Ups\OneBalance\UpsShipEngineTranslation.cs" />
     <Compile Include="Carriers\Ups\OneBalance\UpsShipmentRequestFactory.cs" />

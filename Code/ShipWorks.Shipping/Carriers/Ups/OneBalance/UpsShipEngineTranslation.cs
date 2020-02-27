@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
         private static Dictionary<UpsPackagingType, string> packageCodeMap = new Dictionary<UpsPackagingType, string>()
             {
+                { UpsPackagingType.Custom, "" },
                 { UpsPackagingType.Letter, "ups_letter" },
                 { UpsPackagingType.Box10Kg, "ups_10_kg_box" },
                 { UpsPackagingType.Box25Kg, "ups_25_kg_box	" },
