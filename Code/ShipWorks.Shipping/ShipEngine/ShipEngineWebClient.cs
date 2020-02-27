@@ -532,7 +532,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 HttpJsonVariableRequestSubmitter registerUpsRequest = new HttpJsonVariableRequestSubmitter();
                 registerUpsRequest.Headers.Add($"Content-Type", "application/json");
-                registerUpsRequest.Headers.Add($"api-key", await GetApiKey().ConfigureAwait(false));
+                registerUpsRequest.Headers.Add($"api-key", apiKey.GetPartnerApiKey());
                 registerUpsRequest.Headers.Add("on-behalf-of", await GetApiKey().ConfigureAwait(false));
                 registerUpsRequest.Verb = HttpVerb.Post;
                 registerUpsRequest.Uri = new Uri("https://api.shipengine.com/v1/registration/ups");
@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 EnumResult<HttpStatusCode> result =
                     registerUpsRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "RegisterUpsAccount"), typeof(ShipEngineException));
-                return JObject.Parse(result.Message)["data"]["CarrierId"].ToString();
+                return JObject.Parse(result.Message)["carrier_id"].ToString();
             }
             catch (Exception ex)
             {
