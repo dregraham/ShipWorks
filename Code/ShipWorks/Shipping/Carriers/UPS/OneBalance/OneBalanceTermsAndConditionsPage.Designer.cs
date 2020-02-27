@@ -84,6 +84,7 @@
             this.linkPromoRatesAgreement.TabIndex = 4;
             this.linkPromoRatesAgreement.TabStop = true;
             this.linkPromoRatesAgreement.Text = "UPS Promotional Rates Agreement";
+            this.linkPromoRatesAgreement.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickRateAgreement);
             // 
             // linkTechnologyAgreement
             // 
@@ -94,6 +95,7 @@
             this.linkTechnologyAgreement.TabIndex = 5;
             this.linkTechnologyAgreement.TabStop = true;
             this.linkTechnologyAgreement.Text = "UPS Technology Agreement";
+            this.linkTechnologyAgreement.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickTechnologyAgreement);
             // 
             // pictureBox1
             // 

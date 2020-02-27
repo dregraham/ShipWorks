@@ -851,7 +851,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.helpLink1.Size = new System.Drawing.Size(65, 13);
             this.helpLink1.TabIndex = 13;
             this.helpLink1.Text = "Learn More.";
-            this.helpLink1.Url = "http://www.interapptive.com/shipworks/help";
+            this.helpLink1.Url = "https://support.shipworks.com/hc/en-us/articles/360040291011";
             // 
             // UpsSetupWizard
             // 

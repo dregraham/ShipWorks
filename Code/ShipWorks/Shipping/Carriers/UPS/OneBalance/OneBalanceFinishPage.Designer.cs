@@ -84,7 +84,7 @@
             this.helpLink.Size = new System.Drawing.Size(65, 13);
             this.helpLink.TabIndex = 6;
             this.helpLink.Text = "Learn More.";
-            this.helpLink.Url = "http://www.interapptive.com/shipworks/help";
+            this.helpLink.Url = "https://support.shipworks.com/hc/en-us/articles/360039872952";
             // 
             // OneBalanceFinishPage
             // 
