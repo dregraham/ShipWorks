@@ -1,4 +1,5 @@
 ﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -8,6 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// The factory for creating UPS rate clients
     /// </summary>
+    [Component]
     public class UpsRateClientFactory : IUpsRateClientFactory
     {
         private readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
