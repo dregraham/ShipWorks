@@ -71,8 +71,6 @@
             this.optionControl.Size = new System.Drawing.Size(719, 516);
             this.optionControl.TabIndex = 1;
             this.optionControl.Text = "optionControl1";
-            this.optionPageOneBalance.Margin = new System.Windows.Forms.Padding(0);
-            this.optionPageOneBalance.Padding = new System.Windows.Forms.Padding(0);
             this.optionControl.Deselecting += new ShipWorks.UI.Controls.OptionControlCancelEventHandler(this.OnOptionPageDeselecting);
             this.optionControl.Selecting += new ShipWorks.UI.Controls.OptionControlCancelEventHandler(this.OnOptionPageSelecting);
             // 
@@ -283,7 +281,8 @@
             // 
             this.optionPageOneBalance.Location = new System.Drawing.Point(153, 0);
             this.optionPageOneBalance.Name = "optionPageOneBalance";
-            this.optionPageOneBalance.Padding = new System.Windows.Forms.Padding(3);
+            this.optionPageOneBalance.Margin = new System.Windows.Forms.Padding(0);
+            this.optionPageOneBalance.Padding = new System.Windows.Forms.Padding(0);
             this.optionPageOneBalance.Size = new System.Drawing.Size(566, 516);
             this.optionPageOneBalance.TabIndex = 3;
             this.optionPageOneBalance.Text = "ShipWorks One Balance";
