@@ -16,15 +16,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class WorldShipLabelService : UpsLabelService
     {
+        private readonly Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WorldShipLabelService(Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData, 
-            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository) 
-            : base(createDownloadedLabelData)
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository)
         {
+            this.createDownloadedLabelData = createDownloadedLabelData;
             this.upsAccountRepository = upsAccountRepository;
         }
 

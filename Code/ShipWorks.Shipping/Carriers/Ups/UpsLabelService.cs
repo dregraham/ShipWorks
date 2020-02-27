@@ -16,16 +16,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsLabelService : ILabelService
     {
-        protected readonly Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UpsLabelService(Func<UpsLabelResponse, IDownloadedLabelData> createDownloadedLabelData)
-        {
-            this.createDownloadedLabelData = createDownloadedLabelData;
-        }
-
         /// <summary>
         /// Creates the label
         /// </summary>

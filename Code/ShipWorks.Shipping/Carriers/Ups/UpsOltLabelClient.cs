@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,6 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
     /// <summary>
     /// Ups Label client for Ups Online Tools
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class UpsOltLabelClient : IUpsLabelClient
     {
         private readonly Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData;
