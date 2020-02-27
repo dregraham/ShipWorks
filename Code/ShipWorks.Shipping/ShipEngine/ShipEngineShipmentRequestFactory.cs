@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.ShipEngine
             string serviceApiValue = GetServiceApiValue(shipment);
             List<IPackageAdapter> packages = GetPackages(shipment);
 
-            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue);
+            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue, GetPackagingCode);
             request.Shipment.CarrierId = GetShipEngineCarrierID(shipment);
             request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
             request.ValidateAddress = PurchaseLabelRequest.ValidateAddressEnum.NoValidation;
@@ -78,13 +78,18 @@ namespace ShipWorks.Shipping.ShipEngine
                     request.Shipment.Customs = CreateCustoms(shipment);
                 }
                 List<IPackageAdapter> packages = GetPackages(shipment);
-                request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages);
+                request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages, GetPackagingCode);
 
                 return request;
             }
 
             return new RateShipmentRequest();
         }
+
+        /// <summary>
+        /// Get the given package adapters package code
+        /// </summary>
+        protected virtual string GetPackagingCode(IPackageAdapter package) => string.Empty;
 
         /// <summary>
         /// Ensures the carrier specific shipment (ex. shipment.Dhl) is not null
@@ -110,7 +115,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine customs node
         /// </summary>
         protected abstract InternationalOptions CreateCustoms(ShipmentEntity shipment);
-
+        
         /// <summary>
         /// Gets the carrier specific packages
         /// </summary>

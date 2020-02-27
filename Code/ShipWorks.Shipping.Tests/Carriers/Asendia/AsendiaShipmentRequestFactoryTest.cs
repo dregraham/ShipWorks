@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             purchaseLabelRequest = new PurchaseLabelRequest() { Shipment = new Shipment() };
             shipmentElementFactory
-                .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString))
+                .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString, It.IsAny<Func<IPackageAdapter, string>>()))
                 .Returns(purchaseLabelRequest);
 
             packageAdapters = new List<IPackageAdapter>();
@@ -225,7 +225,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Asendia
 
             testObject.CreatePurchaseLabelRequest(shipment);
 
-            shipmentElementFactory.Verify(f => f.CreatePurchaseLabelRequest(shipment, It.IsAny<List<IPackageAdapter>>(), EnumHelper.GetApiValue(serviceType)), Times.Once());
+            shipmentElementFactory.Verify(f => f.CreatePurchaseLabelRequest(shipment, It.IsAny<List<IPackageAdapter>>(), EnumHelper.GetApiValue(serviceType), It.IsAny<Func<IPackageAdapter, string>>()), Times.Once());
         }
 
         public void Dispose()

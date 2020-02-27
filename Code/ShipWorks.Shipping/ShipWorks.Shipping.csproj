@@ -402,6 +402,8 @@
     <Compile Include="Carriers\Ups\IUpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
     <Compile Include="Carriers\Ups\OneBalance\UpsShipEngineLabelClient.cs" />
+    <Compile Include="Carriers\Ups\OneBalance\UpsShipEngineTranslation.cs" />
+    <Compile Include="Carriers\Ups\OneBalance\UpsShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Ups\UpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelClient.cs" />
     <Compile Include="Carriers\Ups\UpsShipEngineDownloadedLabelData.cs" />
