@@ -104,8 +104,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageFinishOlt,
                 wizardPageFinishAddAccount});
 
-
-
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
             // Prepare the correct Welcome page
@@ -127,6 +125,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 Pages.Remove(wizardPageLicense);
                 Pages.Remove(wizardPageRates);
+                Pages.Remove(wizardPageInvoiceAuthentication);
+                Pages.Remove(wizardPagePromo);
             }
 
             // Sets initial values and resets existing values depending on when this is called.
