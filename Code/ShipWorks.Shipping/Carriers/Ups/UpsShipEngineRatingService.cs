@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Ups.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -62,7 +63,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<UpsServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t));
+                    .Where(s => UpsShipEngineTranslation.IsServiceSupported(s))
+                    .Select(t => UpsShipEngineTranslation.GetServiceCode(t));
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
             }

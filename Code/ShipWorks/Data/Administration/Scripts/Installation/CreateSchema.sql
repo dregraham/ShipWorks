@@ -4150,7 +4150,8 @@ CREATE TABLE [dbo].[UpsShipment]
 [ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[ShipEngineLabelID] [nvarchar] (12) NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'

@@ -1,12 +1,14 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 {
     /// <summary>
     /// Factory for creating UPS ShipmentRequests
@@ -55,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Gets the api value for the UPS service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
-            EnumHelper.GetApiValue((UpsServiceType) shipment.Ups.Service);
+            UpsShipEngineTranslation.GetServiceCode((UpsServiceType) shipment.Ups.Service);
 
         /// <summary>
         /// Creates the UPS advanced options node
@@ -81,6 +83,12 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 deliveredDutyPaid: (UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale == UpsTermsOfSale.DeliveryDutyPaid,
                 nonMachinable: (UpsPostalSubclassificationType) shipment.Ups.Subclassification != UpsPostalSubclassificationType.Machineable);
         }
+
+        /// <summary>
+        /// Get the packaging code for the given adapter
+        /// </summary>
+        protected override string GetPackagingCode(IPackageAdapter package) =>
+            UpsShipEngineTranslation.GetPackageCode((UpsPackagingType) package.PackagingType);
 
         /// <summary>
         /// Creates the UPS customs node

@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode)
+        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, Func<IPackageAdapter, string> getPackageCode)
         {
             PurchaseLabelRequest request = new PurchaseLabelRequest()
             {
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     ShipFrom = CreateAddress(shipment.OriginPerson),
                     ShipDate = shipment.ShipDate,
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
-                    Packages = CreatePackages(packages),
+                    Packages = CreatePackages(packages, getPackageCode),
                     ServiceCode = serviceCode
                 }
             };
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates ShipEngine api package DTOs from a list of package adapters.
         /// </summary>
-        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages)
+        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, Func<IPackageAdapter, string> getPackageCode)
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
             foreach (IPackageAdapter package in packages)
@@ -108,7 +108,9 @@ namespace ShipWorks.Shipping.ShipEngine
                         Height = package.DimsHeight,
                         Unit = Dimensions.UnitEnum.Inch
                     },
-                    Weight = new Weight(package.Weight, Weight.UnitEnum.Pound)
+                    Weight = new Weight(package.Weight, Weight.UnitEnum.Pound),
+                    PackageCode = getPackageCode(package)
+                    
                 };
                 apiPackages.Add(apiPackage);
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -80,6 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters.");
                 account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters.");
                 account.Phone.ValidateLength(null, 10, "Please enter a valid phone number.");
+                account.Email.ValidateLength(50, 1, "Please enter a valid email address.");
             }
             catch (InvalidOperationException ex)
             {

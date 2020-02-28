@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.ShipEngine
         private const string userId = "shipworks-wallet";
         private const string encryptedPassword = "Z3//h9ue7+o=";
         private const string encryptedAccessKey = "AraoUD2/jFFGbmsCWXCkqw77Q7wUFUis";
-        private const string encryptedDeveloperKey = "4D765A26C05A54B2";
+        private const string encryptedDeveloperKey = "lWAMqTPkoqPCuPiU9oGZO5mYKaTxu7WA";
 
         private readonly IEncryptionProvider encryptionProvider;
 

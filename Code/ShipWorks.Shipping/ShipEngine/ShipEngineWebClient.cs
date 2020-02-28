@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
         private readonly IUpsRegistrationRequestFactory registrationRequestFactory;
-        private const string RegisterUrl = "https://api.shipengine.com/v1/";
 
         /// <summary>
         /// Constructor
@@ -529,28 +528,31 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person)
         {
-            ICarriersApi carrierApi = shipEngineApiFactory.CreateCarrierApi();
-            ConfigureLogging(carrierApi, ApiLogSource.ShipEngine, $"RegisterUpsAccount", LogActionType.Other);
-
-            UpsRegistrationRequest registration = registrationRequestFactory.Create(person);
-
             try
             {
-                var restClient = new RestClient(RegisterUrl);
-                var restRequest = new RestRequest("registration/ups", Method.POST, DataFormat.Json);
+                HttpJsonVariableRequestSubmitter registerUpsRequest = new HttpJsonVariableRequestSubmitter();
+                registerUpsRequest.Headers.Add($"Content-Type", "application/json");
+                registerUpsRequest.Headers.Add($"api-key", apiKey.GetPartnerApiKey());
+                registerUpsRequest.Headers.Add("on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                registerUpsRequest.Verb = HttpVerb.Post;
+                registerUpsRequest.Uri = new Uri("https://api.shipengine.com/v1/registration/ups");
 
-                restRequest.AddHeader($"Content-Type", "application/json");
-                restRequest.AddHeader($"api-key:", apiKey.GetPartnerApiKey());
-                restRequest.AddHeader("on-behalf-of", await GetApiKey().ConfigureAwait(false));
-                restRequest.AddJsonBody(registration);
-                var response = await restClient.ExecuteTaskAsync<UpsRegistrationResponse>(restRequest).ConfigureAwait(false);
-                if (response.StatusCode == HttpStatusCode.OK)
+                registerUpsRequest.AllowHttpStatusCodes(HttpStatusCode.BadRequest);
+
+                UpsRegistrationRequest registration = registrationRequestFactory.Create(person);
+
+                registerUpsRequest.RequestBody = JsonConvert.SerializeObject(registration);
+
+                EnumResult<HttpStatusCode> result =
+                    registerUpsRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "RegisterUpsAccount"), typeof(ShipEngineException));
+
+                if (result.Value == HttpStatusCode.OK)
                 {
-                    return GenericResult.FromSuccess(response.Data.CarrierId);
+                    return JObject.Parse(result.Message)["carrier_id"].ToString();
                 }
                 else
                 {
-                    return GenericResult.FromError<string>("Unable to register the UPS Account");
+                    return GenericResult.FromError<string>(JObject.Parse(result.Message)["errors"].FirstOrDefault()?["message"].ToString());
                 }
             }
             catch (Exception ex)

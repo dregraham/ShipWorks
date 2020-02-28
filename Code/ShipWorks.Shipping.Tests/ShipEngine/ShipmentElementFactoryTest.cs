@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) ThermalLanguage.ZPL
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty);
 
             Assert.Equal(shipment.ShipUnparsedName, request.Shipment.ShipTo.Name);
             Assert.Equal(shipment.ShipPhone, request.Shipment.ShipTo.Phone);
@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) ThermalLanguage.ZPL
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty);
 
             Assert.Equal(shipment.OriginUnparsedName, request.Shipment.ShipFrom.Name);
             Assert.Equal(shipment.OriginPhone, request.Shipment.ShipFrom.Phone);
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) thermalLanguage
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty);
 
             Assert.Equal(apiLabelFormat, request.LabelFormat);
         }
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) ThermalLanguage.EPL
             };
 
-            Assert.Throws<ShipEngineException>(()=>testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty));
+            Assert.Throws<ShipEngineException>(()=>testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty));
         }
 
         [Fact]
@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) ThermalLanguage.ZPL
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty);
 
             Assert.Equal("4x6", request.LabelLayout);
         }
@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 RequestedLabelFormat = (int) ThermalLanguage.ZPL
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), "Foo");
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), "Foo", (a) => string.Empty);
 
             Assert.Equal("Foo", request.Shipment.ServiceCode);
         }
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             var packages = new List<IPackageAdapter> { package1.Object };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, packages, string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, packages, string.Empty, (a) => string.Empty);
 
             var package = request.Shipment.Packages.Single();
             Assert.Equal(10, package.Dimensions.Length);
@@ -304,7 +304,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                 ShipDate = new DateTime(2017, 2, 3)
             };
 
-            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty);
+            var request = testObject.CreatePurchaseLabelRequest(shipment, new List<IPackageAdapter>(), string.Empty, (a) => string.Empty);
 
             Assert.Equal(shipment.ShipDate, request.Shipment.ShipDate);
         }

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Enums
 {
@@ -11,46 +10,36 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     public enum UpsServiceType
     {
         [Description("UPS Ground")]
-        [ApiValue("ups_ground")]
         UpsGround = 0,
 
         [Description("UPS 3 Day Select®")]
-        [ApiValue("ups_3_day_select")]
         Ups3DaySelect = 1,
 
         [Description("UPS 2nd Day Air®")]
-        [ApiValue("ups_2nd_day_air")]
         Ups2DayAir = 2,
 
         [Description("UPS 2nd Day Air A.M.®")]
-        [ApiValue("ups_2nd_day_air_am")]
         Ups2DayAirAM = 3,
 
         [Description("UPS Next Day Air®")]
-        [ApiValue("ups_next_day_air")]
         UpsNextDayAir = 4,
 
         [Description("UPS Next Day Air Saver®")]
-        [ApiValue("ups_next_day_air_saver")]
         UpsNextDayAirSaver = 5,
 
         [Description("UPS Next Day Air® Early")]
-        [ApiValue("ups_next_day_air_early_am")]
         UpsNextDayAirAM = 6,
 
         [Description("UPS Worldwide Express®")]
-        [ApiValue("ups_worldwide_express")]
         WorldwideExpress = 7,
 
         [Description("UPS Worldwide Express Plus®")]
         WorldwideExpressPlus = 8,
 
         [Description("UPS Worldwide Expedited®")]
-        [ApiValue("ups_worldwide_expedited")]
         WorldwideExpedited = 9,
 
         [Description("UPS Worldwide Saver®")]
-        [ApiValue("ups_worldwide_saver")]
         WorldwideSaver = 10,
 
         [Description("UPS Standard")]
@@ -109,6 +98,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
 
         [Description("UPS Second Day Air Intra")]
         Ups2ndDayAirIntra = 29
-
     }
 }
