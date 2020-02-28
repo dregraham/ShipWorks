@@ -376,6 +376,21 @@
     </Compile>
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAddMoneyDialog.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml.cs">
+      <DependentUpon>OneBalanceAddMoneyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceAddMoneyViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControl.xaml.cs">
+      <DependentUpon>OneBalanceSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.Designer.cs">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsViewModel.cs" />
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
@@ -703,6 +718,9 @@
     <EmbeddedResource Include="Settings\BestRateAccountSettingsControlHost.resx">
       <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings\OneBalance\OneBalanceSettingsControlHost.resx">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -809,6 +827,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\RatingPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

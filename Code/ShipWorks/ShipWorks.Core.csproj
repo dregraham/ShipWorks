@@ -1257,6 +1257,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
+    <Compile Include="Shipping\IOneBalanceSettingsControlHost.cs" />
     <Compile Include="Shipping\IShipmentTypeDataService.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShippingRestrictionType.cs" />
