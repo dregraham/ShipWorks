@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private readonly IPostageWebClient webClient;
         private readonly Window window;
-        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMessageHelper messageHelper;
 
         private decimal amount;
