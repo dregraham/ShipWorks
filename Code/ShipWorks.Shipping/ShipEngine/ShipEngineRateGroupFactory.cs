@@ -26,14 +26,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             foreach (Rate apiRate in rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
             {
-                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (apiRate.ShippingAmount?.Amount ?? 0), apiRate.ServiceCode)
-                {
-                    CarrierDescription = apiRate.CarrierNickname,
-                    ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
-                    ShipmentType = shipmentType,
-                    ProviderLogo = EnumHelper.GetImage(shipmentType)
-                };
-                results.Add(rate);
+                results.Add(GetRateResult(apiRate, shipmentType));
             }
 
             RateGroup rateGroup = new RateGroup(results);
@@ -41,6 +34,22 @@ namespace ShipWorks.Shipping.ShipEngine
             AddInvalidRateErrors(rateGroup, rateResponse, shipmentType);
 
             return rateGroup;
+        }
+
+        /// <summary>
+        /// Build the rate result with the given rate
+        /// </summary>
+        private RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
+        {
+            double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
+
+            return new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (amount), apiRate.ServiceCode)
+            {
+                CarrierDescription = apiRate.CarrierNickname,
+                ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
+                ShipmentType = shipmentType,
+                ProviderLogo = EnumHelper.GetImage(shipmentType)
+            };
         }
 
         /// <summary>

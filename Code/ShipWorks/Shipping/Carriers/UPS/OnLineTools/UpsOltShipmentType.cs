@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(loaded));
 
             // Add the labels content
             container.AddElement("Labels",
@@ -93,6 +93,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
+        
+            if (shipment().Ups.ShipEngineLabelID != null)
+            {
+                return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+                    .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                    .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                        TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                    .ToList();
+            }
 
             // Add labels for each package
             foreach (long packageID in DataProvider.GetRelatedKeys(shipment().ShipmentID, EntityType.UpsPackageEntity))

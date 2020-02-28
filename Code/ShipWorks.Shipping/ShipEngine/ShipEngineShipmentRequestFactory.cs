@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.ShipEngine
             string serviceApiValue = GetServiceApiValue(shipment);
             List<IPackageAdapter> packages = GetPackages(shipment);
 
-            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue, GetPackagingCode);
+            PurchaseLabelRequest request = shipmentElementFactory.CreatePurchaseLabelRequest(shipment, packages, serviceApiValue, GetPackagingCode, SetPackageInsurance);
             request.Shipment.CarrierId = GetShipEngineCarrierID(shipment);
             request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
             request.ValidateAddress = PurchaseLabelRequest.ValidateAddressEnum.NoValidation;
@@ -78,8 +78,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     request.Shipment.Customs = CreateCustoms(shipment);
                 }
                 List<IPackageAdapter> packages = GetPackages(shipment);
-                request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages, GetPackagingCode);
-
+                request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages, GetPackagingCode, SetPackageInsurance);
+                
                 return request;
             }
 
@@ -90,6 +90,14 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Get the given package adapters package code
         /// </summary>
         protected virtual string GetPackagingCode(IPackageAdapter package) => string.Empty;
+
+        /// <summary>
+        /// Set insurance info for the given ShipmentPackage based onthe package adapter
+        /// </summary>
+        protected virtual void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+
+        }
 
         /// <summary>
         /// Ensures the carrier specific shipment (ex. shipment.Dhl) is not null
