@@ -6,8 +6,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.Common.Net;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -20,15 +18,17 @@ namespace ShipWorks.Products.Warehouse
     public class WarehouseProductClient : IWarehouseProductClient
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
-        private readonly IConfigurationData configurationData;
+        private readonly IWarehouseProductRequestFactory requestFactory;
+        private readonly IWarehouseProductDataFactory dataFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseProductClient(IWarehouseRequestClient warehouseRequestClient, IConfigurationData configurationData)
+        public WarehouseProductClient(IWarehouseRequestClient warehouseRequestClient, IWarehouseProductRequestFactory requestFactory, IWarehouseProductDataFactory dataFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
-            this.configurationData = configurationData;
+            this.requestFactory = requestFactory;
+            this.dataFactory = dataFactory;
         }
 
         /// <summary>
@@ -36,18 +36,12 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public async Task<IProductChangeResult> AddProduct(IProductVariantEntity product)
         {
-            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
-            IRestRequest request = new RestRequest(WarehouseEndpoints.AddProduct, Method.PUT)
-            {
-                JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault(),
-                RequestFormat = DataFormat.Json
-            };
-
-            request.AddJsonBody(new AddProductRequestData(product, warehouseId));
+            var payload = dataFactory.CreateAddProductRequest(product);
+            var request = requestFactory.Create(WarehouseEndpoints.AddProduct, Method.PUT, payload);
 
             return await warehouseRequestClient
                 .MakeRequest<AddProductResponseData>(request, "Add Product")
-                .Map(x => new AddProductResult(x))
+                .Map(dataFactory.CreateAddProductResult)
                 .ConfigureAwait(true);
         }
 
@@ -56,18 +50,12 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public async Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product)
         {
-            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
-            IRestRequest request = new RestRequest(WarehouseEndpoints.ChangeProduct(product), Method.POST)
-            {
-                JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault(),
-                RequestFormat = DataFormat.Json
-            };
-
-            request.AddJsonBody(new ChangeProductRequestData(product, warehouseId));
+            var payload = dataFactory.CreateChangeProductRequest(product);
+            var request = requestFactory.Create(WarehouseEndpoints.ChangeProduct(product), Method.POST, payload);
 
             return await warehouseRequestClient
                 .MakeRequest<ChangeProductResponseData>(request, "Change Product")
-                .Map(x => new ChangeProductResult(x))
+                .Map(dataFactory.CreateChangeProductResult)
                 .ConfigureAwait(true);
         }
 
@@ -81,18 +69,12 @@ namespace ShipWorks.Products.Warehouse
                 throw new WarehouseProductException("Some of the products have not yet been saved to the Hub");
             }
 
-            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
-            IRestRequest request = new RestRequest(WarehouseEndpoints.SetActivationBulk, Method.POST)
-            {
-                JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault(),
-                RequestFormat = DataFormat.Json
-            };
-
-            request.AddJsonBody(new SetActivationBulkRequestData(productIDs.Select(x => x.Value), warehouseId, activation));
+            var payload = dataFactory.CreateSetActivationRequest(productIDs.Select(x => x.Value), activation);
+            var request = requestFactory.Create(WarehouseEndpoints.SetActivationBulk, Method.POST, payload);
 
             return await warehouseRequestClient
-                .MakeRequest<SetActivationBulkResponseData>(request, "Change Product")
-                .Map(x => new SetActivationBulkResult(x))
+                .MakeRequest<SetActivationBulkResponseData>(request, "Set Activation")
+                .Map(dataFactory.CreateSetActivationResult)
                 .ConfigureAwait(true);
         }
     }

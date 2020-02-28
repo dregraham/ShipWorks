@@ -24,8 +24,6 @@ namespace ShipWorks.Common.Net
             },
         });
 
-        private readonly JsonSerializerSettings settings = null;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -39,26 +37,28 @@ namespace ShipWorks.Common.Net
         /// </summary>
         public RestSharpJsonNetSerializer(JsonSerializerSettings settings)
         {
-            this.settings = settings;
+            this.Settings = settings;
         }
+
+        public JsonSerializerSettings Settings { get; }
 
         /// <summary>
         /// Serialize the object
         /// </summary>
         public string Serialize(object obj) =>
-            JsonConvert.SerializeObject(obj, settings);
+            JsonConvert.SerializeObject(obj, Settings);
 
         /// <summary>
         /// Serialize the parameter
         /// </summary>
         public string Serialize(Parameter parameter) =>
-            JsonConvert.SerializeObject(parameter.Value, settings);
+            JsonConvert.SerializeObject(parameter.Value, Settings);
 
         /// <summary>
         /// Deserialize the response
         /// </summary>
         public T Deserialize<T>(IRestResponse response) =>
-            JsonConvert.DeserializeObject<T>(response.Content, settings);
+            JsonConvert.DeserializeObject<T>(response.Content, Settings);
 
         /// <summary>
         /// Supported content types

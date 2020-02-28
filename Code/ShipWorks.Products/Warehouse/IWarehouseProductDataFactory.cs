@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products.Warehouse.DTO;
+
+namespace ShipWorks.Products.Warehouse
+{
+    /// <summary>
+    /// Data factory for making Warehouse product requests
+    /// </summary>
+    public interface IWarehouseProductDataFactory
+    {
+        /// <summary>
+        /// Create an AddProductRequestData object
+        /// </summary>
+        IWarehouseProductRequestData CreateAddProductRequest(IProductVariantEntity product);
+
+        /// <summary>
+        /// Create a change result from an AddProductDataResponse
+        /// </summary>
+        IProductChangeResult CreateAddProductResult(AddProductResponseData response);
+
+        /// <summary>
+        /// Create a ChangeProductRequestData object
+        /// </summary>
+        IWarehouseProductRequestData CreateChangeProductRequest(IProductVariantEntity product);
+
+        /// <summary>
+        /// Create a change result from a ChangeProductDataResponse
+        /// </summary>
+        IProductChangeResult CreateChangeProductResult(ChangeProductResponseData response);
+
+        /// <summary>
+        /// Create a SetActivationBulkRequestData object
+        /// </summary>
+        IWarehouseProductRequestData CreateSetActivationRequest(IEnumerable<Guid> productIdList, bool activated);
+
+        /// <summary>
+        /// Create a change result from a SetActivationBulkResponse
+        /// </summary>
+        IProductsChangeResult CreateSetActivationResult(SetActivationBulkResponseData response);
+    }
+}

@@ -7,7 +7,7 @@ namespace ShipWorks.Products.Warehouse
     /// A warehouse specific product exception
     /// </summary>
     [Serializable]
-    internal class WarehouseProductException : Exception
+    public class WarehouseProductException : Exception
     {
         /// <summary>
         /// Constructor

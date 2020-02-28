@@ -9,8 +9,17 @@ namespace ShipWorks.Products.Warehouse.DTO
     /// Request data for setting the activation status in bulk for a product on the Hub
     /// </summary>
     [Obfuscation]
-    public class SetActivationBulkRequestData
+    public class SetActivationBulkRequestData : IWarehouseProductRequestData
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public SetActivationBulkRequestData(IEnumerable<Guid> productIDs, bool activation)
+        {
+            ProductIds = productIDs.Select(x => x.ToString("D"));
+            Activation = activation;
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>

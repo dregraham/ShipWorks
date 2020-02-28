@@ -12,7 +12,7 @@ namespace ShipWorks.Products.Warehouse.DTO
     /// Request data for changing a product on the Hub
     /// </summary>
     [Obfuscation]
-    public class ChangeProductRequestData
+    public class ChangeProductRequestData : IWarehouseProductRequestData
     {
         /// <summary>
         /// Constructor
@@ -22,6 +22,15 @@ namespace ShipWorks.Products.Warehouse.DTO
             Product = new ProductChange(product);
             Version = product.HubVersion.GetValueOrDefault(0);
             WarehouseId = warehouseId;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ChangeProductRequestData(IProductVariantEntity product)
+        {
+            Product = new ProductChange(product);
+            Version = product.HubVersion.GetValueOrDefault(0);
         }
 
         /// <summary>

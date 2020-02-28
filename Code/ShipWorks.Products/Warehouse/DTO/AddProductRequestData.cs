@@ -8,8 +8,16 @@ namespace ShipWorks.Products.Warehouse.DTO
     /// Request data for adding a product to the Hub
     /// </summary>
     [Obfuscation]
-    public class AddProductRequestData
+    public class AddProductRequestData : IWarehouseProductRequestData
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AddProductRequestData(IProductVariantEntity product)
+        {
+            Product = new Product(product);
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
