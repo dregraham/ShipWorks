@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
@@ -68,22 +69,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private Result ValidateFields(UpsAccountEntity account)
         {
-            try
+            var results = new List<Result>()
             {
-                $"{account.FirstName}{account.LastName}".ValidateLength(20, 1, "The contact name must be between 1 and 20 characters.");
-                account.Company.ValidateLength(30, 0, "The company name must be less than 30 characters.");
-                account.Street1.ValidateLength(30, 1, "The street address line 1 must be between 1 and 30 characters.");
-                account.Street2.ValidateLength(30, 0, "The street address line 2 must be less than 30 characters.");
-                account.Street3.ValidateLength(30, 0, "The street address line 3 must be less than 30 characters.");
-                account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters.");
-                account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters.");
-                account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters.");
-                account.Phone.ValidateLength(null, 10, "Please enter a valid phone number.");
-                account.Email.ValidateLength(50, 1, "Please enter a valid email address.");
-            }
-            catch (InvalidOperationException ex)
+                $"{account.FirstName}{account.LastName}".ValidateLength(20, 1, "The contact name must be between 1 and 20 characters."),
+                account.Company.ValidateLength(30, 0, "The company name must be less than 30 characters."),
+                account.Street1.ValidateLength(30, 1, "The street address line 1 must be between 1 and 30 characters."),
+                account.Street2.ValidateLength(30, 0, "The street address line 2 must be less than 30 characters."),
+                account.Street3.ValidateLength(30, 0, "The street address line 3 must be less than 30 characters."),
+                account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters."),
+                account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters."),
+                account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters."),
+                account.Phone.ValidateLength(null, 10, "Please enter a valid phone number."),
+                account.Email.ValidateLength(50, 1, "Please enter a valid email address."),
+            };
+
+            if (results.Any(r => r.Failure))
             {
-                return Result.FromError(ex);
+                return Result.FromError(string.Join(Environment.NewLine, results.Where(r => r.Failure).Select(r => r.Message)));
             }
 
             return Result.FromSuccess();
