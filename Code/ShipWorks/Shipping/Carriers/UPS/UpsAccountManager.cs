@@ -157,7 +157,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static string GetDefaultDescription(UpsAccountEntity account)
         {
-            StringBuilder description = new StringBuilder(account.AccountNumber);
+            StringBuilder description;
+
+            if (account.ShipEngineCarrierId != null)
+            {
+                description = new StringBuilder("UPS from ShipWorks");
+            }
+            else
+            {
+                description = new StringBuilder(account.AccountNumber);
+            }
 
             if (account.Street1.Length > 0)
             {
