@@ -41,6 +41,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             accountNumber.Text = account.AccountNumber;
             personControl.LoadEntity(new PersonAdapter(account, ""));
 
+            if (account.ShipEngineCarrierId != null)
+            {
+                description.ReadOnly = true;
+                labelOptional.Visible = false;
+            }
+            
             if (account.Description != UpsAccountManager.GetDefaultDescription(account))
             {
                 description.Text = account.Description;
