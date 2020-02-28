@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -14,18 +15,14 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class ProcessShipmentsWorkflowFactory : IProcessShipmentsWorkflowFactory
     {
-        private readonly Func<SerialProcessShipmentsWorkflow> createSerialWorkflow;
-        private readonly Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow;
+        private readonly IIndex<ProcessShipmentsWorkflow, IProcessShipmentsWorkflow> workflows;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentsWorkflowFactory(
-            Func<SerialProcessShipmentsWorkflow> createSerialWorkflow,
-            Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow)
+        public ProcessShipmentsWorkflowFactory(IIndex<ProcessShipmentsWorkflow, IProcessShipmentsWorkflow> workflows)
         {
-            this.createParallelWorkflow = createParallelWorkflow;
-            this.createSerialWorkflow = createSerialWorkflow;
+            this.workflows = workflows;
         }
 
         /// <summary>
@@ -33,14 +30,14 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         public IProcessShipmentsWorkflow Create(IEnumerable<ShipmentEntity> shipments)
         {
+            var workflow = ProcessShipmentsWorkflow.Serial;
+
             if (shipments.Count() > 1 || shipments.First().IncludeReturn)
             {
-                return createParallelWorkflow();
+                workflow = ProcessShipmentsWorkflow.Parallel;
             }
-            else
-            {
-                return (IProcessShipmentsWorkflow) createSerialWorkflow();
-            }
+
+            return workflows[workflow];
         }
     }
 }

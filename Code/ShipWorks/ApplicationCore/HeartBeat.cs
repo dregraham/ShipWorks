@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared;
 using log4net;
 using ShipWorks.Actions;
+using ShipWorks.Api;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.ApplicationCore.Enums;

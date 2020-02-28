@@ -79,7 +79,14 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 }
                 catch (Exception ex) when (CanHandleException(ex))
                 {
-                    lastShipmentException = ex as ShippingException ?? new ShippingException(ex.Message, ex);
+                    Exception handeledException = ex;
+
+                    if (ex is AggregateException)
+                    {
+                        handeledException = ex.GetBaseException();
+                    }
+
+                    lastShipmentException = handeledException as ShippingException ?? new ShippingException(handeledException.Message, ex);
                 }
 
                 if (shipmentResult != null && shipmentResult.Success)
@@ -129,14 +136,21 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         /// </summary>
         private bool CanHandleException(Exception ex)
         {
-            return ex is InsureShipException ||
+            bool canHandle = ex is InsureShipException ||
                 ex is ShipWorksLicenseException ||
                 ex is TangoException ||
                 ex is TemplateTokenException ||
                 ex is ShippingException ||
                 ex is CarrierException;
-        }
 
+            if (!canHandle)
+            {
+                return CanHandleException(ex.GetBaseException());
+            }
+
+            return canHandle;
+        }
+        
         /// <summary>
         /// Try to get a label for the specific shipment entity
         /// </summary>

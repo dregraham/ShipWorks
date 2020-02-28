@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Manage Dhl Express Accounts
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
-    [Component]
-    public class DhlExpressAccountManager : IInitializeForCurrentSession
+    [Component(SingleInstance = true)]
+    public class DhlExpressAccountManager : IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         static TableSynchronizer<DhlExpressAccountEntity> synchronizer;
         static IEnumerable<IDhlExpressAccountEntity> readOnlyAccounts;
@@ -100,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             {
                 Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
             }
+        }
+
+        /// <summary>
+        /// Non-static version of CheckForChanges used by ICheckForChangesNeeded in Heartbeat for IoC
+        /// </summary>
+        void ICheckForChangesNeeded.CheckForChangesNeeded()
+        {
+            DhlExpressAccountManager.CheckForChangesNeeded();
         }
 
         /// <summary>

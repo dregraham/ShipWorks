@@ -59,5 +59,11 @@ namespace ShipWorks.Data
         /// </summary>
         public DataResourceReference CreateFromText(string text, long consumerID, bool forceCreateNew = false) =>
             DataResourceManager.CreateFromText(text, consumerID, forceCreateNew);
+
+        /// <summary>
+        /// Get all the resource referenced by the consumer, but the local cached data files will not yet be loaded
+        /// </summary>
+        public List<DataResourceReference> GetConsumerResourceReferences(long consumerID) =>
+            DataResourceManager.GetConsumerResourceReferences(consumerID);
     }
 }
