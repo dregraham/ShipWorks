@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -19,18 +20,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.UpsOnLineTools)]
     public class UpsShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
-        private readonly UpsAccountRepository accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
-            IShipmentTypeManager shipmentTypeManager)
+            IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;
-            this.accountRepository = new UpsAccountRepository();
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
-            UpsAccountEntity account = accountRepository.GetAccount(shipment);
+            IUpsAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
             if (account == null)
             {
@@ -78,7 +80,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         {
             RateShipmentRequest result = base.CreateRateShipmentRequest(shipment);
 
-            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            if (shipment.Insurance && 
+                shipment.InsuranceProvider == (int) InsuranceProvider.Carrier && 
+                result?.Shipment != null)
             {
                 result.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
             }

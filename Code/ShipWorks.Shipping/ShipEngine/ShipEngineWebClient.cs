@@ -555,7 +555,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 if(response.StatusCode == HttpStatusCode.OK)
                 {
-                    var responseObject = JObject.Parse(response.Content);
+                    JObject responseObject = JObject.Parse(response.Content);
 
                     return (carrierId: responseObject["carrier_id"].ToString(), 
                         accountNumber: responseObject["account_number"].ToString());
