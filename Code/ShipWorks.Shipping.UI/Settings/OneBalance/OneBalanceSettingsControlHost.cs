@@ -1,10 +1,8 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using System.Linq;
-using Autofac;
 using ShipWorks.Shipping.Carriers.Postal;
 using System;
 

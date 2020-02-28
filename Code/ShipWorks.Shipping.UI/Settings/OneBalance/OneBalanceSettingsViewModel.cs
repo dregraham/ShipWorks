@@ -1,17 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Windows.Threading;
-using Autofac;
-using Interapptive.Shared.UI;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
@@ -24,8 +16,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private readonly IPostageWebClient webClient;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private decimal balance;
         private string message;
@@ -94,6 +84,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Relay command for showing the add money dialog
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public RelayCommand ShowAddMoneyDialogCommand => new RelayCommand(ShowAddMoneyDialog);
 
         /// <summary>
@@ -141,17 +132,17 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 catch (UspsException ex)
                 {
                     bool keepTrying = false;
-                    string message = ex.Message;
+                    string exceptionMessage = ex.Message;
 
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = $"Your One Balance account is not ready yet.";
+                        exceptionMessage = $"Your One Balance account is not ready yet.";
 
                         keepTrying = true;
                     }
 
-                    Message = message;
+                    Message = exceptionMessage;
 
                     ShowMessage = true;
 
@@ -176,15 +167,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             {
                 GetAccountBalance();
             }
-        }
-
-        /// <summary>
-        /// Raise the INotifyPropertyChanged event
-        /// </summary>
-        /// <param name="propertyName"></param>
-        private void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
