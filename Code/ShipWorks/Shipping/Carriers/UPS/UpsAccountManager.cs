@@ -157,38 +157,34 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static string GetDefaultDescription(UpsAccountEntity account)
         {
-            StringBuilder description;
-
             if (account.ShipEngineCarrierId != null)
             {
-                description = new StringBuilder("UPS from ShipWorks");
+                return "UPS from ShipWorks";
             }
-            else
+            var description = new StringBuilder(account.AccountNumber);
+​
+            if (account.Street1.Length > 0)
             {
-                description = new StringBuilder(account.AccountNumber);
-
-                if (account.Street1.Length > 0)
+                if (description.Length > 0)
                 {
-                    if (description.Length > 0)
-                    {
-                        description.Append(", ");
-                    }
-
-                    description.Append(account.Street1);
+                    description.Append(", ");
                 }
-
-                if (account.PostalCode.Length > 0)
-                {
-                    if (description.Length > 0)
-                    {
-                        description.Append(", ");
-                    }
-
-                    description.Append(account.PostalCode);
-                }
+​
+                description.Append(account.Street1);
             }
-
+​
+            if (account.PostalCode.Length > 0)
+            {
+                if (description.Length > 0)
+                {
+                    description.Append(", ");
+                }
+​
+                description.Append(account.PostalCode);
+            }
+​
             return description.ToString();
+
         }
     }
 }
