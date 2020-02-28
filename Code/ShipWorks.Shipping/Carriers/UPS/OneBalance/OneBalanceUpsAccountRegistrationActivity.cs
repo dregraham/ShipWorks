@@ -47,14 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 return validationResult;
             }
 
-            var oneBalanceResult = await EnsureOneBalanceAccountProvisioned();
+            var oneBalanceResult = await EnsureOneBalanceAccountProvisioned().ConfigureAwait(false);
             if (oneBalanceResult.Failure)
             {
                 return oneBalanceResult;
             }
 
-            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address);
-
+            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address).ConfigureAwait(false);
             if (result.Success)
             {
                 account.ShipEngineCarrierId = result.Value;
@@ -79,8 +78,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters."),
                 account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters."),
                 account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters."),
-                account.Phone.ValidateLength(null, 10, "Please enter a valid phone number."),
-                account.Email.ValidateLength(50, 1, "Please enter a valid email address."),
+                account.Phone.ValidateLength(null, 10, "Please enter a phone number that is at least 10 digits"),
+                account.Email.ValidateLength(50, 1, "Please enter an email address that is less than 50 characters.")
             };
 
             if (results.Any(r => r.Failure))
@@ -96,13 +95,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private async Task<Result> EnsureOneBalanceAccountProvisioned()
         {
-            if(uspsAccountRepository.Accounts.IsCountEqualTo(1))
+            if (uspsAccountRepository.Accounts.IsCountEqualTo(1))
             {
                 UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.Single();
 
                 if (uspsAccount.ShipEngineCarrierId == null)
                 {
-                    return await CreateOneBalanceAccount(uspsAccount);
+                    return await CreateOneBalanceAccount(uspsAccount).ConfigureAwait(false);
                 }
                 else
                 {
@@ -111,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             }
 
             // future stories will handle multiple or no usps accounts
-            return Result.FromError("The number of USPS accounts is not One!");
+            return Result.FromError("The number of USPS accounts is not one");
         }
 
         /// <summary>
@@ -119,8 +118,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private async Task<Result> CreateOneBalanceAccount(UspsAccountEntity uspsAccount)
         {
-            var carrierId = await shipEngineWebClient.ConnectStampsAccount(uspsAccount.Username, 
-                encryptionProviderFactory.CreateSecureTextEncryptionProvider(uspsAccount.Username).Decrypt(uspsAccount.Password));
+            var encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider(uspsAccount.Username);
+
+            var carrierId = await shipEngineWebClient.ConnectStampsAccount(
+                    uspsAccount.Username, encryptionProvider.Decrypt(uspsAccount.Password)).ConfigureAwait(false);
 
             if (carrierId.Success)
             {

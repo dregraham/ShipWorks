@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Security;
@@ -20,8 +16,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 {
     public  class OneBalanceUpsAccountRegistrationActivityTest
     {
-        private AutoMock mock;
-        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> uspsAccontRepo;
+        private readonly AutoMock mock;
+        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> uspsAccountRepo;
         private readonly Mock<IShipEngineWebClient> seWebClient;
 
         private readonly OneBalanceUpsAccountRegistrationActivity testObject;
@@ -36,8 +32,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             var encryptionProviderFactory = mock.Mock<IEncryptionProviderFactory>();
             encryptionProviderFactory.Setup(f => f.CreateSecureTextEncryptionProvider(It.IsAny<string>())).Returns(secureTextEncryptionProvider);
 
-            uspsAccontRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
-            uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { new UspsAccountEntity() { ShipEngineCarrierId = "1" } });
+            uspsAccountRepo = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
+            uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { new UspsAccountEntity() { ShipEngineCarrierId = "1" } });
 
             seWebClient = mock.Mock<IShipEngineWebClient>();
             seWebClient.Setup(s => s.RegisterUpsAccount(It.IsAny<PersonAdapter>()))
@@ -334,7 +330,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = null };
 
-            uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
+            uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
             seWebClient.Setup(c => c.ConnectStampsAccount("foo", "bar")).ReturnsAsync(GenericResult.FromSuccess("abcd"));
 
             await testObject.Execute(upsAccount);
@@ -363,7 +359,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = "abcd" };
-            uspsAccontRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
+            uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
 
             await testObject.Execute(upsAccount);
 
