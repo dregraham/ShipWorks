@@ -20,8 +20,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     /// Manage Dhl Express Accounts
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
-    [Component]
-    public class AsendiaAccountManager : IInitializeForCurrentSession
+    [Component(SingleInstance = true)]
+    public class AsendiaAccountManager : IInitializeForCurrentSession, ICheckForChangesNeeded
     {
         static TableSynchronizer<AsendiaAccountEntity> synchronizer;
         static IEnumerable<IAsendiaAccountEntity> readOnlyAccounts;
@@ -100,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             {
                 Messenger.Current.Send(new ShippingAccountsChangedMessage(null, account.ShipmentType));
             }
+        }
+
+        /// <summary>
+        /// Non-static version of CheckForChanges used by ICheckForChangesNeeded in Heartbeat for IoC
+        /// </summary>
+        void ICheckForChangesNeeded.CheckForChangesNeeded()
+        {
+            AsendiaAccountManager.CheckForChangesNeeded();
         }
 
         /// <summary>

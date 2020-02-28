@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
 
@@ -10,14 +11,14 @@ namespace ShipWorks.Common.IO.KeyboardShortcuts
     public class ShortcutSession : IInitializeForCurrentUISession
     {
         private readonly IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar;
-        private readonly IMainForm mainForm;
+        private readonly Control mainForm;
         private readonly KeyboardShortcutKeyFilter keyboardShortcutFilter;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShortcutSession(IWindowsMessageFilterRegistrar windowsMessageFilterRegistrar, 
-            IMainForm mainForm, 
+            Control mainForm, 
             Func<KeyboardShortcutKeyFilter> filterFactory)
         {
             keyboardShortcutFilter = filterFactory();
