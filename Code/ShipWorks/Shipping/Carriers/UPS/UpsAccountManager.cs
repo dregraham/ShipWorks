@@ -162,27 +162,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 return "UPS from ShipWorks";
             }
             var description = new StringBuilder(account.AccountNumber);
-​
+
             if (account.Street1.Length > 0)
             {
                 if (description.Length > 0)
                 {
                     description.Append(", ");
                 }
-​
+
                 description.Append(account.Street1);
             }
-​
+
             if (account.PostalCode.Length > 0)
             {
                 if (description.Length > 0)
                 {
                     description.Append(", ");
                 }
-​
+                
                 description.Append(account.PostalCode);
             }
-​
+
             return description.ToString();
 
         }
