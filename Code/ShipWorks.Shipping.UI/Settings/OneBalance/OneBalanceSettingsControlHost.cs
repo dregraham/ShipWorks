@@ -5,6 +5,8 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using System.Linq;
 using Autofac;
+using ShipWorks.Shipping.Carriers.Postal;
+using System;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -16,16 +18,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private OneBalanceSettingsControlViewModel settingsViewModel;
         private readonly IUspsAccountManager accountManager;
-        private readonly ILifetimeScope lifetimeScope;
+        private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager, ILifetimeScope lifetimeScope)
+        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
         {
             InitializeComponent();
             this.accountManager = accountManager;
-            this.lifetimeScope = lifetimeScope;
+            this.addMoneyDialogFactory = addMoneyDialogFactory;
         }
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             var webClient = account == null ? null : new UspsPostageWebClient(account);
 
-            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient, lifetimeScope);
+            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient, addMoneyDialogFactory);
 
             settingsControl.DataContext = settingsViewModel;
         }

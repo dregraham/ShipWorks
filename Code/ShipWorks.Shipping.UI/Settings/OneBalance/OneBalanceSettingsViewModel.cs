@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     public class OneBalanceSettingsControlViewModel : ViewModelBase
     {
         private readonly IPostageWebClient webClient;
-        private readonly ILifetimeScope lifetimeScope;
+        private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -99,10 +99,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, ILifetimeScope lifetimeScope)
+        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
         {
             this.webClient = webClient;
-            this.lifetimeScope = lifetimeScope;
+            this.addMoneyDialogFactory = addMoneyDialogFactory;
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowAddMoneyDialog()
         {
-            var addMoneyDialog = lifetimeScope.Resolve<IOneBalanceAddMoneyDialog>(new TypedParameter(typeof(IPostageWebClient), webClient)) as Window;
+            var addMoneyDialog = addMoneyDialogFactory(webClient) as Window;
            
             var dlgResult = addMoneyDialog.ShowDialog();
             if(dlgResult == true)
