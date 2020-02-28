@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         {
             ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Download(null));
 
-            Assert.Equal($"An error occured while attempting to download reasource.", ex.Message);
+            Assert.Equal($"An error occured while attempting to download resource.", ex.Message);
         }
 
         [Fact]
