@@ -13,8 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Ups
     public interface IUpsLabelClientFactory
     {
         /// <summary>
-        /// Get a label client for the given account
+        /// Get a label client for the given shipment
         /// </summary>
-        IUpsLabelClient GetClient(IUpsAccountEntity account);
+        IUpsLabelClient GetClient(IShipmentEntity shipment);
     }
 }

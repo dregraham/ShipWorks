@@ -748,7 +748,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ShipEngineCarrierId property of the Entity UpsAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "UpsAccount"."ShipEngineCarrierId"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ShipEngineCarrierId
 		{

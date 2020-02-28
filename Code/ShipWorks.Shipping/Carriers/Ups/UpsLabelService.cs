@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Insurance;
@@ -16,6 +17,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsLabelService : ILabelService
     {
+        private readonly IUpsLabelClientFactory labelClientFactory;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public UpsLabelService(IUpsLabelClientFactory labelClientFactory)
+        {
+            this.labelClientFactory = labelClientFactory;
+        }
+
         /// <summary>
         /// Creates the label
         /// </summary>
@@ -97,17 +108,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public virtual void Void(ShipmentEntity shipment)
         {
-            try
-            {
-                if (!UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
-                {
-                    UpsApiVoidClient.VoidShipment(shipment);
-                }
-            }
-            catch (UpsException ex)
-            {
-                throw new ShippingException(ex.Message, ex);
-            }
+            labelClientFactory.GetClient(shipment).VoidLabel(shipment);
         }
 
         /// <summary>

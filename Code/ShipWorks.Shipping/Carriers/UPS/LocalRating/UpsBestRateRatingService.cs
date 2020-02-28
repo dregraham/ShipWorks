@@ -6,6 +6,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.Promo;
+using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.LocalRating;
