@@ -72,6 +72,21 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Load the One Balance control onto the One Balance page
+        /// </summary>
+        private void LoadOneBalancePage()
+        {
+            this.optionPageOneBalance.Controls.Clear();
+
+            var controlHost = lifetimeScope.Resolve<IOneBalanceSettingsControlHost>();
+            controlHost.Initialize();
+
+            var hostControl = controlHost as UserControl;
+
+            this.optionPageOneBalance.Controls.Add(hostControl);
+        }
+
+        /// <summary>
         /// Load the providers panel with the checkboxes for selection
         /// </summary>
         private void LoadProvidersPanel()
@@ -103,9 +118,9 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadShipmentTypePages()
         {
-            while (optionControl.OptionPages.Count > 1)
+            while (optionControl.OptionPages.Count > 2)
             {
-                optionControl.OptionPages.RemoveAt(1);
+                optionControl.OptionPages.RemoveAt(2);
             }
 
             foreach (ShipmentType shipmentType in GetEnabledShipmentTypes().Where(t => t.ShipmentTypeCode != ShipmentTypeCode.None))
@@ -230,25 +245,32 @@ namespace ShipWorks.Shipping.Settings
         {
             SaveSettings();
 
-            ShipmentTypeSettingsControl settingsControl = null;
-
-            if (e.OptionPage != null)
+            if (e.OptionPage == optionPageOneBalance)
             {
-                settingsControl = e.OptionPage.Controls.Count == 1 ?
-                    e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
-                    settingsControl = BuildPageControl(e.OptionPage);
+                LoadOneBalancePage();
             }
-
-            if (settingsControl != null)
+            else
             {
-                settingsControl.RefreshContent();
-                settingsControl.CurrentPage = settingsTabPage;
-            }
+                ShipmentTypeSettingsControl settingsControl = null;
 
-            if (e.OptionPage == optionPageGeneral)
-            {
-                originControl.Initialize();
-                usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
+                if (e.OptionPage != null)
+                {
+                    settingsControl = e.OptionPage.Controls.Count == 1 ?
+                        e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
+                        settingsControl = BuildPageControl(e.OptionPage);
+                }
+
+                if (settingsControl != null)
+                {
+                    settingsControl.RefreshContent();
+                    settingsControl.CurrentPage = settingsTabPage;
+                }
+
+                if (e.OptionPage == optionPageGeneral)
+                {
+                    originControl.Initialize();
+                    usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
+                }
             }
         }
 
