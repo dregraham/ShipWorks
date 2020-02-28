@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.UI;
@@ -22,27 +23,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private decimal amount;
 
         /// <summary>
-        /// The amount of money to add to the stamps account
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public decimal Amount { 
-            get 
-            {
-                return amount;
-            }
-            set
-            {
-                Set(ref amount,value);
-            }
-        }
-
-        /// <summary>
-        /// Relay command to for buying postage
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public RelayCommand BuyPostageCommand => new RelayCommand(BuyPostage);
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public OneBalanceAddMoneyViewModel(IPostageWebClient webClient, Window window, IMessageHelper messageHelper)
@@ -50,7 +30,24 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             this.webClient = webClient;
             this.window = window;
             this.messageHelper = messageHelper;
+            BuyPostageCommand = new RelayCommand(BuyPostage);
         }
+
+        /// <summary>
+        /// The amount of money to add to the stamps account
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal Amount
+        {
+            get => amount;
+            set => Set(ref amount, value);
+        }
+
+        /// <summary>
+        /// Relay command to for buying postage
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand BuyPostageCommand { get; }
 
         /// <summary>
         /// Purchases postage from Stamps

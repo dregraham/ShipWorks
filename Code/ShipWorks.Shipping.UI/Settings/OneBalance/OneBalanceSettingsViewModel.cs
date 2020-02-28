@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -23,17 +24,25 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool loading = true;
 
         /// <summary>
+        /// Initialize the control to display information for the given account
+        /// </summary>
+        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
+        {
+            this.webClient = webClient;
+            this.addMoneyDialogFactory = addMoneyDialogFactory;
+            GetBalanceCommand = new RelayCommand(GetAccountBalance);
+            ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
+        }
+
+        /// <summary>
         /// The current balance of the one balance account
         /// </summary>
         /// 
         [Obfuscation(Exclude = true)]
         public decimal Balance 
         { 
-            get { return balance; }
-            set 
-            {
-                Set(ref balance, value);
-            }
+            get => balance;
+            set => Set(ref balance, value);
         }
 
         /// <summary>
@@ -42,11 +51,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public string Message
         {
-            get { return message; }
-            set
-            {
-                Set(ref message, value);
-            }
+            get => message;
+            set => Set(ref message, value);
         }
 
         /// <summary>
@@ -55,11 +61,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public bool ShowMessage
         {
-            get { return showMessage; }
-            set
-            {
-                Set(ref showMessage, value);
-            }
+            get => showMessage;
+            set => Set(ref showMessage, value);
         }
 
         /// <summary>
@@ -68,33 +71,21 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public bool Loading
         {
-            get { return loading; }
-            set
-            {
-                Set(ref loading, value);
-            }
+            get => loading;
+            set => Set(ref loading, value);
         }
 
         /// <summary>
         /// RelayCommand for getting the account balance
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand GetBalanceCommand => new RelayCommand(GetAccountBalance);
+        public ICommand GetBalanceCommand { get; }
 
         /// <summary>
         /// Relay command for showing the add money dialog
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public RelayCommand ShowAddMoneyDialogCommand => new RelayCommand(ShowAddMoneyDialog);
-
-        /// <summary>
-        /// Initialize the control to display information for the given account
-        /// </summary>
-        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
-        {
-            this.webClient = webClient;
-            this.addMoneyDialogFactory = addMoneyDialogFactory;
-        }
+        public ICommand ShowAddMoneyDialogCommand { get; }
 
         /// <summary>
         /// Retrieve the accounts balance if we have a One Balance account
