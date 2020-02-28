@@ -532,6 +532,8 @@ namespace ShipWorks.Shipping
 
                 ApplyShippingRules(shipment, shippingProfile, shippingProfileManager, shippingProfileService);
 
+                UpdateTotalWeight(shipment);
+
                 // This was brought in from LoadShipmentData.  Since we are no longer using that method for creating a new shipment,
                 // we still needed to do this logic.
                 if (accountRetriever.GetAccountReadOnly(shipment) == null)

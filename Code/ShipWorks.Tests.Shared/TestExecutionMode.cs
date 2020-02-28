@@ -9,15 +9,21 @@ namespace ShipWorks.Tests.Shared
     /// </summary>
     public class TestExecutionMode : ExecutionMode
     {
+        public TestExecutionMode(bool isUIDisplayed = false, bool isUISupported = false)
+        {
+            IsUIDisplayed = isUIDisplayed;
+            IsUISupported = isUISupported;
+        }
+
         /// <summary>
         /// Is the UI displayed
         /// </summary>
-        public override bool IsUIDisplayed => false;
+        public override bool IsUIDisplayed { get; }
 
         /// <summary>
         /// Is the UI supported
         /// </summary>
-        public override bool IsUISupported => false;
+        public override bool IsUISupported { get; }
 
         /// <summary>
         /// Name of the execution mode

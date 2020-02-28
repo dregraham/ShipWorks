@@ -85,6 +85,7 @@ Type: files; Name: {app}\ActiproSoftware.SyntaxEditor.dll
 Type: files; Name: {app}\ActiproSoftware.WinUICore.dll
 Type: files; Name: {app}\Microsoft.Web.Services2.dll
 Type: files; Name: {app}\eBay.SDK.dll
+Type: files; Name: {app}\ShipWorks.Api.xml
 
 [Files]
 Source: License.rtf; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
@@ -99,6 +100,7 @@ Source: {#AppArtifacts}\fre3of9x.ttf; DestDir: {fonts}; FontInstall: Free 3 of 9
 Source: {#AppArtifacts}\FontLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\MaterialDesignIconLicense.txt; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 Source: {#AppArtifacts}\SingleScanPanels.swe; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
+Source: {#AppArtifacts}\ShipWorks.Api.xml; DestDir: {app}; Flags: overwritereadonly ignoreversion; BeforeInstall: BackupInstallingFile
 
 #ifdef IncludeSymbols
     Source: {#AppArtifacts}\ShipWorks.pdb; DestDir: {app}; Flags: overwritereadonly ignoreversion
@@ -127,6 +129,7 @@ Root: HKLM; Subkey: Software\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 [Run]
 Filename: {app}\ShipWorks.exe; Description: Launch ShipWorks; Flags: nowait postinstall skipifsilent
 Filename: {app}\ShipWorks.exe; Parameters: "/s=scheduler"; Flags: nowait skipifsilent; Check: not NeedRestart
+Filename: {app}\ShipWorks.exe; Parameters: "/command:registerapiport"; Flags: nowait runhidden
 
 [UninstallRun]
 Filename: {app}\ShipWorks.exe; Parameters: "/command:uninstall"; Flags: runhidden

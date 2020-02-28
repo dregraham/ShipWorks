@@ -2,6 +2,8 @@
 using System.Reflection;
 using Autofac;
 using Interapptive.Shared.Net;
+using ShipWorks.Api;
+using ShipWorks.Api.Configuration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.OrderLookup.Controls.OrderLookup;
@@ -105,8 +107,10 @@ namespace ShipWorks.Startup
             typeof(ScanToShipControlHost).Assembly,
             // ShipWorks.Products
             typeof(ProductsMode).Assembly,
-            // ShipWOrks.Products.UI
-            typeof(ProductsViewHost).Assembly
+            // ShipWorks.Products.UI
+            typeof(ProductsViewHost).Assembly,
+            // ShipWorks.Api
+            typeof(ApiModule).Assembly
         };
     }
 }

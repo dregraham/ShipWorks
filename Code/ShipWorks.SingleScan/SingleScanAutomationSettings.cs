@@ -3,6 +3,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
+using System;
 
 namespace ShipWorks.SingleScan
 {
@@ -12,16 +13,16 @@ namespace ShipWorks.SingleScan
     [Component]
     public class SingleScanAutomationSettings : ISingleScanAutomationSettings
     {
-        private readonly IMainForm mainForm;
+        private readonly Func<IMainForm> createMainForm;
         private readonly IUserSession userSession;
         private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanAutomationSettings"/> class.
         /// </summary>
-        public SingleScanAutomationSettings(IMainForm mainForm, IUserSession userSession, IShippingSettings shippingSettings)
+        public SingleScanAutomationSettings(Func<IMainForm> createMainForm, IUserSession userSession, IShippingSettings shippingSettings)
         {
-            this.mainForm = mainForm;
+            this.createMainForm = createMainForm;
             this.userSession = userSession;
             this.shippingSettings = shippingSettings;
         }
@@ -47,7 +48,7 @@ namespace ShipWorks.SingleScan
         public bool IsAutoPrintEnabled()
         {
             return userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
-                   !mainForm.AdditionalFormsOpen();
+                   !createMainForm().AdditionalFormsOpen();
         }
     }
 }
