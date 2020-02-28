@@ -14,7 +14,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
     /// Service for retreiving UPS rates via ShipEngine

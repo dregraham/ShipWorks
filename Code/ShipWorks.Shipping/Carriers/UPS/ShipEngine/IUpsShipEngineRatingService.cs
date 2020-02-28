@@ -1,7 +1,7 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
     /// Rating service for UPS via ShipEngine

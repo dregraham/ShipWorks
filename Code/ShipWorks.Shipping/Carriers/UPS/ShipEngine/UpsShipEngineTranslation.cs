@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
+namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
     /// Translate from Ups services to ShipEngine codes

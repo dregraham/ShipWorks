@@ -354,7 +354,7 @@
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="14" />
           <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="11" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="2" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="10" />
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="8" />
         </Fields>
@@ -379,7 +379,7 @@
           <Field Name="InsuranceValue" Type="decimal" Precision="19" Scale="4" FieldIndex="11" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="4" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -407,7 +407,7 @@
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
           <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
         </Fields>
@@ -438,7 +438,7 @@
           <Field Name="NonMachinable" Type="bool" FieldIndex="14" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="3" />
           <Field Name="Service" Type="AsendiaServiceType" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="6" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="50" FieldIndex="6" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -714,7 +714,7 @@
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
           <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="12" FieldIndex="3" />
+          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="50" FieldIndex="3" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
         </Fields>
@@ -757,7 +757,7 @@
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" MaxLength="12" FieldIndex="9" />
+          <Field Name="ShipEngineLabelID" Type="string" MaxLength="50" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -3110,7 +3110,7 @@
           <Field Name="PromoStatus" Type="byte" Precision="3" FieldIndex="22" />
           <Field Name="RateType" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="12" FieldIndex="25" />
+          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="25" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="16" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="12" />
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="13" />
@@ -3316,7 +3316,7 @@
           <Field Name="ReturnUndeliverableEmail" Type="string" MaxLength="100" FieldIndex="34" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="3" />
           <Field Name="Service" Type="int" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="12" FieldIndex="51" />
+          <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="51" />
           <Field Name="ShipmentChargeAccount" Type="string" MaxLength="10" FieldIndex="46" />
           <Field Name="ShipmentChargeCountryCode" Type="string" MaxLength="50" FieldIndex="48" />
           <Field Name="ShipmentChargePostalCode" Type="string" MaxLength="20" FieldIndex="47" />
@@ -3398,7 +3398,7 @@
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="16" />
           <Field Name="PostalCode" Type="string" MaxLength="20" FieldIndex="14" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="12" FieldIndex="26" />
+          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="26" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="13" />
           <Field Name="Street1" Type="string" MaxLength="60" FieldIndex="9" />
           <Field Name="Street2" Type="string" MaxLength="60" FieldIndex="10" />
@@ -4635,7 +4635,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-27T18:07:11.0526372Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-28T18:45:10.0140223Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -4871,7 +4871,7 @@
                   <Fields>
                     <Field Name="AmazonSWAAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="3" DbType="12" Length="12" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="3" DbType="12" Length="50" />
                     <Field Name="Description" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="5" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="6" DbType="12" Length="30" />
@@ -4909,7 +4909,7 @@
                       </CustomProperties>
                     </Field>
                     <Field Name="RequestedLabelFormat" Ordinal="4" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="5" DbType="12" Length="12" />
+                    <Field Name="ShipEngineLabelID" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="DimsProfileID" Ordinal="6" DbType="0" Precision="19" />
                     <Field Name="DimsLength" Ordinal="7" DbType="6" Precision="38" />
                     <Field Name="DimsWidth" Ordinal="8" DbType="6" Precision="38" />
@@ -4937,7 +4937,7 @@
                     <Field Name="AsendiaAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
@@ -4981,7 +4981,7 @@
                     <Field Name="RequestedLabelFormat" Ordinal="5" DbType="8" Precision="10" />
                     <Field Name="Contents" Ordinal="6" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="7" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="8" DbType="12" Length="12" />
+                    <Field Name="ShipEngineLabelID" Ordinal="8" DbType="12" Length="50" />
                     <Field Name="DimsProfileID" Ordinal="9" DbType="0" Precision="19" />
                     <Field Name="DimsLength" Ordinal="10" DbType="6" Precision="38" />
                     <Field Name="DimsWidth" Ordinal="11" DbType="6" Precision="38" />
@@ -5335,7 +5335,7 @@
                     <Field Name="DhlExpressAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="12" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="50" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
@@ -5412,7 +5412,7 @@
                     <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
                     <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="12" />
+                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -9015,7 +9015,7 @@
                     <Field Name="PromoStatus" Ordinal="23" DbType="22" Precision="3" />
                     <Field Name="LocalRatingEnabled" Ordinal="24" DbType="2" />
                     <Field Name="UpsRateTableID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="26" IsOptional="true" DbType="12" Length="12" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="26" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="UpsLetterRate">
@@ -9350,7 +9350,7 @@
                     <Field Name="ShipmentChargeCountryCode" Ordinal="49" DbType="12" Length="50" />
                     <Field Name="UspsPackageID" Ordinal="50" DbType="12" Length="100" />
                     <Field Name="RequestedLabelFormat" Ordinal="51" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="52" IsOptional="true" DbType="12" Length="12" />
+                    <Field Name="ShipEngineLabelID" Ordinal="52" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="User">
@@ -9433,7 +9433,7 @@
                     <Field Name="PendingInitialAccount" Ordinal="24" DbType="8" Precision="10" />
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="12" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">

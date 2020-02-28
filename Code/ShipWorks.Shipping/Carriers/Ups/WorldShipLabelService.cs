@@ -5,6 +5,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Templates.Tokens;
@@ -23,7 +24,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Constructor
         /// </summary>
         public WorldShipLabelService(Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData, 
-            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository)
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository, IUpsLabelClientFactory upsLabelClientFactory)
+            : base(upsLabelClientFactory)
         {
             this.createDownloadedLabelData = createDownloadedLabelData;
             this.upsAccountRepository = upsAccountRepository;

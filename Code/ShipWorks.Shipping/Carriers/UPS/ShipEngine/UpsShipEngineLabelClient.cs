@@ -12,7 +12,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
 
-namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
+namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
     /// Label client for getting Ups Labels from ShipEngine
@@ -50,6 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         public Task<TelemetricResult<IDownloadedLabelData>> GetLabel(ShipmentEntity shipment) =>
             base.Create(shipment);
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        public void VoidLabel(ShipmentEntity shipment) =>
+            base.Void(shipment);
 
         /// <summary>
         /// Get the ShipEngine carrier id
