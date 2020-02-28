@@ -169,7 +169,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowAddMoneyDialog()
         {
-            var addMoneyDialog = addMoneyDialogFactory(webClient) as Window;
+            var addMoneyDialog = addMoneyDialogFactory(webClient);
            
             var dlgResult = addMoneyDialog.ShowDialog();
             if(dlgResult == true)

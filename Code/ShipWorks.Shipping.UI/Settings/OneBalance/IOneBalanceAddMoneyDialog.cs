@@ -3,5 +3,7 @@
     public interface IOneBalanceAddMoneyDialog
     {
         void InitializeComponent();
+
+        bool? ShowDialog();
     }
 }
