@@ -92,6 +92,14 @@ namespace ShipWorks.Shipping.ShipEngine
         protected virtual string GetPackagingCode(IPackageAdapter package) => string.Empty;
 
         /// <summary>
+        /// Set insurance info for the given ShipmentPackage based onthe package adapter
+        /// </summary>
+        protected virtual void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+
+        }
+
+        /// <summary>
         /// Ensures the carrier specific shipment (ex. shipment.Dhl) is not null
         /// </summary>
         protected abstract void EnsureCarrierShipmentIsNotNull(ShipmentEntity shipment);

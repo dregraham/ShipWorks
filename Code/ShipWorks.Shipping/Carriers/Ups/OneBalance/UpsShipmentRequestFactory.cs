@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 
@@ -54,10 +56,52 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         }
 
         /// <summary>
+        /// Create a PurchaseLabelRequest for UPS that includes UPS Insurance
+        /// </summary>
+        public override PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment)
+        {
+            PurchaseLabelRequest result = base.CreatePurchaseLabelRequest(shipment);
+
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                result.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Create a RateShipmentRequest for UPS that includes UPS Insurance
+        /// </summary>
+        public override RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
+        {
+            RateShipmentRequest result = base.CreateRateShipmentRequest(shipment);
+
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                result.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Gets the api value for the UPS service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
             UpsShipEngineTranslation.GetServiceCode((UpsServiceType) shipment.Ups.Service);
+
+        /// <summary>
+        /// Insurce the ups packages when the user has picked ups insurance
+        /// </summary>
+        protected override void SetPackageInsurance(ShipmentPackage shipmentPackage, IPackageAdapter packageAdapter)
+        {
+            if (packageAdapter.InsuranceChoice.Insured && 
+                packageAdapter.InsuranceChoice.InsuranceProvider == Insurance.InsuranceProvider.Carrier)
+            {
+                shipmentPackage.InsuredValue = new MoneyDTO(MoneyDTO.CurrencyEnum.USD, decimal.ToDouble(packageAdapter.InsuranceChoice.InsuranceValue));
+            }
+        }
 
         /// <summary>
         /// Creates the UPS advanced options node
