@@ -3902,7 +3902,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UpsShipmentEntity's mappings</summary>
 		private void InitUpsShipmentEntityMappings()
 		{
-			this.AddElementMapping("UpsShipmentEntity", @"ShipWorksLocal", @"dbo", "UpsShipment", 51, 0);
+			this.AddElementMapping("UpsShipmentEntity", @"ShipWorksLocal", @"dbo", "UpsShipment", 52, 0);
 			this.AddElementFieldMapping("UpsShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsShipmentEntity", "UpsAccountID", "UpsAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("UpsShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -3954,6 +3954,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsShipmentEntity", "ShipmentChargeCountryCode", "ShipmentChargeCountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 48);
 			this.AddElementFieldMapping("UpsShipmentEntity", "UspsPackageID", "UspsPackageID", false, "NVarChar", 100, 0, 0, false, "", null, typeof(System.String), 49);
 			this.AddElementFieldMapping("UpsShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 50);
+			this.AddElementFieldMapping("UpsShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", true, "NVarChar", 12, 0, 0, false, "", null, typeof(System.String), 51);
 		}
 
 		/// <summary>Inits UserEntity's mappings</summary>

@@ -483,6 +483,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UspsPackageID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
 		}
 		#endregion
 
@@ -1096,6 +1098,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)UpsShipmentFieldIndex.RequestedLabelFormat, true); }
 			set	{ SetValue((int)UpsShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The ShipEngineLabelID property of the Entity UpsShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsShipment"."ShipEngineLabelID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ShipEngineLabelID
+		{
+			get { return (System.String)GetValue((int)UpsShipmentFieldIndex.ShipEngineLabelID, true); }
+			set	{ SetValue((int)UpsShipmentFieldIndex.ShipEngineLabelID, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
