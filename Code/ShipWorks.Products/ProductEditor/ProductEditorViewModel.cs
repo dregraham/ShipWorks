@@ -314,7 +314,7 @@ namespace ShipWorks.Products.ProductEditor
 
                 UpdateProductEntityValues();
 
-                Result saveResult = await productCatalog.Save(productVariant, sqlAdapterFactory).ConfigureAwait(true);
+                Result saveResult = await productCatalog.Save(productVariant).ConfigureAwait(true);
 
                 if (saveResult.Success)
                 {

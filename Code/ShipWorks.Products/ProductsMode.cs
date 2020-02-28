@@ -373,7 +373,7 @@ namespace ShipWorks.Products
             try
             {
                 await productCatalog
-                    .SetActivation(sqlAdapterFactory, new[] { entityId }, makeItActive)
+                    .SetActivation(new[] { entityId }, makeItActive)
                     .ConfigureAwait(true);
             }
             catch (Exception ex)

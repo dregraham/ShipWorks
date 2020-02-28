@@ -22,7 +22,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        Task SetActivation(ISqlAdapterFactory sqlAdapterFactory, IEnumerable<long> productIDs, bool activation);
+        Task SetActivation(IEnumerable<long> productIDs, bool activation);
 
         /// <summary>
         /// Fetch a product variant based on SKU
@@ -47,7 +47,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Save the given product
         /// </summary>
-        Task<Result> Save(ProductVariantEntity product, ISqlAdapterFactory sqlAdapterFactory);
+        Task<Result> Save(ProductVariantEntity product);
 
         /// Get a DataTable of products from the database
         /// </summary>
