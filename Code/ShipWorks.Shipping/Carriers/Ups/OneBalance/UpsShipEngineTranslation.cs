@@ -64,5 +64,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         public static string GetPackageCode(UpsPackagingType serviceType) =>
             packageCodeMap[serviceType];
 
+        /// <summary>
+        /// Check to see if the service is supported
+        /// </summary>
+        public static bool IsServiceSupported(UpsServiceType serviceType) =>
+            serviceCodeMap.ContainsKey(serviceType);
     }
 }

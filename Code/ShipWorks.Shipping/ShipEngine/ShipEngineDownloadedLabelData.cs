@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Save the ZPL label
         /// </summary>
-        private void SaveZplLabel(byte[] labelResource)
+        protected virtual void SaveZplLabel(byte[] labelResource)
         {
             resourceManager.CreateFromBytes(labelResource, shipment.ShipmentID, "LabelPrimary", true);
         }
@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Save the PDF label
         /// </summary>
-        private void SavePdfLabel(byte[] labelResource)
+        protected virtual void SavePdfLabel(byte[] labelResource)
         {
             using (MemoryStream pdfData = new MemoryStream(labelResource))
             {
