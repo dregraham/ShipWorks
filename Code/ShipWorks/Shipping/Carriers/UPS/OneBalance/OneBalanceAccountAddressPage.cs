@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Threading;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
@@ -37,6 +40,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
+            Wizard.Cursor = Cursors.WaitCursor;
+
+            // for some reason, simply disabling the button doesn't work
+            Wizard.NextVisible = false;
+            
             // create PersonAdapter from control
             PersonAdapter personAdapter = new PersonAdapter();
             personControl.SaveToEntity(personAdapter);
@@ -44,13 +52,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
             // populate the account with the given address info
             PersonAdapter.Copy(personAdapter, new PersonAdapter(upsAccount, ""));
 
-            // execute account registration activity
             Result result = await accountRegistrationActivity.Execute(upsAccount).ConfigureAwait(true);
+
             if (result.Failure)
             {
                 messageHelper.ShowError(this, result.Message);
                 e.NextPage = this;
             }
+            else
+            {
+                Wizard.BackEnabled = false;
+            }
+
+            Wizard.Cursor = Cursors.Default;
+            Wizard.NextVisible = true;
         }
     }
 }

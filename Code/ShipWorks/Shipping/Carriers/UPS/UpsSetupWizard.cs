@@ -49,6 +49,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
         private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
         private OneBalanceAccountAddressPage oneBalanceAddressPage;
+        private OneBalanceFinishPage oneBalanceFinishPage = new OneBalanceFinishPage();
 
         /// <summary>
         /// Constructor
@@ -102,7 +103,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageOptionsWorldShip,
                 wizardPagePromo,
                 wizardPageFinishOlt,
-                wizardPageFinishAddAccount});
+                wizardPageFinishAddAccount,
+                oneBalanceFinishPage
+            });
 
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
@@ -119,7 +122,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (existingAccount.Checked)
             {
                 Pages.Remove(oneBalanceTandCPage);
-                Pages.Remove(oneBalanceAddressPage);                
+                Pages.Remove(oneBalanceAddressPage);
+                Pages.Remove(oneBalanceFinishPage);
             }
             else
             {
@@ -127,6 +131,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageRates);
                 Pages.Remove(wizardPageInvoiceAuthentication);
                 Pages.Remove(wizardPagePromo);
+                // Only way to create new account is through One Balance, so remove the other finish pages so that
+                // the One Balance finish pages shows.
+                Pages.Remove(wizardPageFinishOlt);
+                Pages.Remove(wizardPageFinishAddAccount);
             }
 
             // Sets initial values and resets existing values depending on when this is called.
@@ -183,8 +191,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Insure finish is last
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
-                Pages.Remove(wizardPageFinishOlt);
-                Pages.Add(wizardPageFinishOlt);
+                if (existingAccount.Checked)
+                {
+                    Pages.Remove(wizardPageFinishOlt);
+                    Pages.Add(wizardPageFinishOlt);
+                }
+                else
+                {
+                    Pages.Remove(oneBalanceFinishPage);
+                    Pages.Add(oneBalanceFinishPage);
+                }
             }
             else
             {
@@ -206,7 +222,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             // Listen for finish
-            Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
+            Pages[Pages.Count - 1].SteppingInto += OnSteppingIntoFinish;
 
             // Add in the first page
             SetCurrent(0);
@@ -586,6 +602,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Stepping into the options page
+        /// </summary>
+        private void OnStepIntoOptionsOlt(object sender, WizardSteppingIntoEventArgs e)
+        {
+            // Disable the back button if we created a One Balance account
+            BackEnabled = existingAccount.Checked;            
+        }
+
+        /// <summary>
         /// Stepping next from the WorldShip options page
         /// </summary>
         private void OnStepNextOptionsWorldShip(object sender, WizardStepEventArgs e)
@@ -693,120 +718,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void ShowAccountNumberPanel()
         {
             accountNumberPanel.Visible = existingAccount.Checked;
-        }
-
-        /// <summary>
-        /// Show Open Account help when help clicked.
-        /// </summary>
-        private void OnHelpClick(object sender, EventArgs e)
-        {
-            WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022654951", this);
-        }
-
-        /// <summary>
-        /// Registers the account.
-        /// </summary>
-        private void RegisterNewAccount()
-        {
-            try
-            {
-                UpsRegistrationStatus registrationStatus;
-
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    IUpsClerk clerk = lifetimeScope.Resolve<IUpsClerk>(new TypedParameter(typeof(UpsAccountEntity), upsAccount));
-                    registrationStatus = clerk.RegisterAccount(upsAccount);
-                }
-
-                if (registrationStatus != UpsRegistrationStatus.Success)
-                {
-                    throw new UpsException("Could not register your new account in ShipWorks.");
-                }
-
-                GetUpsAccessKey();
-
-                NextEnabled = true;
-
-                // Set invoice auth to false because the new account has no invoice
-                upsAccount.InvoiceAuth = false;
-
-                using (SqlAdapter adapter = new SqlAdapter(true))
-                {
-                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                    UpsAccountManager.SaveAccount(upsAccount);
-
-                    adapter.Commit();
-                }
-            }
-            catch (UpsWebServiceException ex)
-            {
-                throw new UpsOpenAccountException(ex.Message, ex);
-            }
-        }
-
-        /// <summary>
-        /// Validates the address.
-        /// </summary>
-        /// <param name="addressCandidate">The address candidate.</param>
-        /// <param name="originalAddress">The original address</param>
-        /// <returns></returns>
-        /// <exception cref="ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountInvalidAddressException"></exception>
-        private static bool CorrectAddress(AddressKeyCandidateType addressCandidate, IAddressType originalAddress)
-        {
-            bool isAddressCorrected = false;
-
-            using (UpsOpenAccountInvalidAddressDlg invalidAddressDlg = new UpsOpenAccountInvalidAddressDlg())
-            {
-                string type = originalAddress.GetType() == typeof(BillingAddressType) ? "Billing" : "Pickup";
-
-                invalidAddressDlg.SetAddress(addressCandidate, type);
-                DialogResult result = invalidAddressDlg.ShowDialog();
-
-                if (result == DialogResult.OK)
-                {
-                    // Only use the suggestion if its not blank
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.StreetAddress ?? originalAddress.StreetAddress))
-                    {
-                        originalAddress.StreetAddress = addressCandidate.StreetAddress ?? originalAddress.StreetAddress;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.City))
-                    {
-                        originalAddress.City = addressCandidate.City;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.State))
-                    {
-                        originalAddress.StateProvinceCode = addressCandidate.State;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.PostalCode))
-                    {
-                        originalAddress.PostalCode = addressCandidate.PostalCode;
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(addressCandidate.CountryCode))
-                    {
-                        originalAddress.CountryCode = addressCandidate.CountryCode;
-                    }
-
-                    isAddressCorrected = true;
-                }
-            }
-
-            return isAddressCorrected;
-        }
-
-        /// <summary>
-        /// Copies the pickup address to the billing address
-        /// </summary>
-        private static void CopyAddress(IAddressType copyFrom, IAddressType copyTo)
-        {
-            copyTo.StreetAddress = copyFrom.StreetAddress;
-            copyTo.City = copyFrom.City;
-            copyTo.StateProvinceCode = copyFrom.StateProvinceCode;
-            copyTo.PostalCode = copyFrom.PostalCode;
-            copyTo.CountryCode = copyFrom.CountryCode;
         }
 
         /// <summary>

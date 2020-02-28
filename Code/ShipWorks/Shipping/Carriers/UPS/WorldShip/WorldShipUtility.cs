@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
@@ -1104,13 +1105,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// <summary>
         /// Launch worldship.  If an error occurs the message will be parented to the given owner window
         /// </summary>
-        public static void LaunchWorldShip(IWin32Window errorOwner)
+        public static async Task LaunchWorldShip(IAsyncMessageHelper messageHelper)
         {
             string exe = GetWorldShipExe();
 
             if (string.IsNullOrEmpty(exe))
             {
-                MessageHelper.ShowWarning(errorOwner, "ShipWorks could not launch WorldShip since it could not be found on this computer.");
+                await messageHelper.ShowWarning("ShipWorks could not launch WorldShip since it could not be found on this computer.");
                 return;
             }
 
@@ -1121,12 +1122,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             catch (Win32Exception ex)
             {
                 log.Warn("ShipWorks was unable to launch WorldShip:\n\n", ex);
-                MessageHelper.ShowWarning(errorOwner, "ShipWorks was unable to launch WorldShip:\n\n" + ex.Message);
+                await messageHelper.ShowWarning("ShipWorks was unable to launch WorldShip:\n\n" + ex.Message);
             }
             catch (FileNotFoundException ex)
             {
                 log.Warn("ShipWorks was unable to launch WorldShip:\n\n", ex);
-                MessageHelper.ShowWarning(errorOwner, "ShipWorks was unable to launch WorldShip:\n\n" + ex.Message);
+                await messageHelper.ShowWarning("ShipWorks was unable to launch WorldShip:\n\n" + ex.Message);
             }
         }
 

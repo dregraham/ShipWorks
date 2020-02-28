@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System.Threading.Tasks;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -35,6 +36,6 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Validate the given shipment
         /// </summary>
-        void ValidateShipment(ShipmentEntity shipment);
+        Task ValidateShipment(ShipmentEntity shipment);
     }
 }
