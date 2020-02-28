@@ -89,7 +89,7 @@ namespace ShipWorks.Products
 
                     using (var sqlAdapter = sqlAdapterFactory.Create(conn))
                     {
-                        await sqlAdapter.SaveEntityCollectionAsync(productVariants.ToEntityCollection());
+                        await sqlAdapter.SaveEntityCollectionAsync(productVariants.ToEntityCollection()).ConfigureAwait(false);
                     }
                 }
             }
