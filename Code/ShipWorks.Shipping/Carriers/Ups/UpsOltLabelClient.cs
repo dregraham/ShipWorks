@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Shipping.Carriers.Ups
@@ -16,13 +17,15 @@ namespace ShipWorks.Shipping.Carriers.Ups
     public class UpsOltLabelClient : IUpsLabelClient
     {
         private readonly Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData;
+        private readonly UpsOltLabelService upsOltLabelService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOltLabelClient(Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData)
+        public UpsOltLabelClient(Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData, UpsOltLabelService upsOltLabelService)
         {
             this.createDownloadedLabelData = createDownloadedLabelData;
+            this.upsOltLabelService = upsOltLabelService;
         }
 
         /// <summary>
@@ -57,6 +60,24 @@ namespace ShipWorks.Shipping.Carriers.Ups
                 throw new ShippingException(message, ex);
             }
             catch (CarrierException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        public void VoidLabel(ShipmentEntity shipment)
+        {
+            try
+            {
+                if (!UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+                {
+                    UpsApiVoidClient.VoidShipment(shipment);
+                }
+            }
+            catch (UpsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }

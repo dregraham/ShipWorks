@@ -17,5 +17,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// Get a label for the given shipment
         /// </summary>
         Task<TelemetricResult<IDownloadedLabelData>> GetLabel(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        void VoidLabel(ShipmentEntity shipment);
     }
 }

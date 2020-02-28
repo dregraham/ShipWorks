@@ -21,7 +21,7 @@ using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI;
 
-namespace ShipWorks.Shipping.Carriers.Ups
+namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
     /// Save UPS ShipEngine label data
@@ -43,8 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Save Ups specific label data to the shipment
         /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="label"></param>
         protected override void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
             base.SaveLabelInfoToEntity(shipment, label);
