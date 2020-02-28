@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 {
+    [Obfuscation(Exclude = true)]
     public partial class Address
     {
         [JsonProperty("name")]

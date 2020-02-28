@@ -13356,6 +13356,8 @@ namespace ShipWorks.Data.Model
 		UspsPackageID,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
 		/// <summary></summary>
 		AmountOfFields
 	}

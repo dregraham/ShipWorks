@@ -1,20 +1,21 @@
-﻿using Interapptive.Shared.Collections;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
+using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Editing.Rating;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Linq;
-using Autofac.Features.Indexed;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -25,25 +26,29 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
-        protected readonly IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory;
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsPromoFactory promoFactory;
+        private readonly IUpsRateClientFactory rateClientFactory;
+        private readonly IUpsShipEngineRatingService shipEngineRatingService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public UpsRatingService(
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
-            IIndex<UpsRatingMethod, IUpsRateClient> upsRateClientFactory,
             UpsShipmentType shipmentType,
-            IUpsPromoFactory promoFactory)
+            IUpsPromoFactory promoFactory,
+            IUpsRateClientFactory rateClientFactory,
+            IUpsShipEngineRatingService shipEngineRatingService)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
-            this.upsRateClientFactory = upsRateClientFactory;
             this.shipmentType = shipmentType;
             this.promoFactory = promoFactory;
+            this.rateClientFactory = rateClientFactory;
+            this.shipEngineRatingService = shipEngineRatingService;
         }
 
         /// <summary>
@@ -51,6 +56,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
+            var account = accountRepository.GetAccount(shipment);
+
+            if (account?.ShipEngineCarrierId != null)
+            {
+                return shipEngineRatingService.GetRates(shipment);
+            }
+
             // Determine if the user is hoping to get negotiated rates back
             bool wantedNegotiated = false;
 
@@ -61,8 +73,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             try
             {
                 IEnumerable<UpsTransitTime> transitTimes;
-
-                UpsAccountEntity account = accountRepository.GetAccount(shipment);
 
                 GenericResult<List<UpsServiceRate>> serviceRateResult = GetRateResult(shipment, account);
                 List<UpsServiceRate> serviceRates = serviceRateResult.Value;
@@ -81,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     transitTimes = transitTimeClient.GetTransitTimes(shipment, false);
 
                     // Determine if the user is hoping to get negotiated rates back
-                    wantedNegotiated = account.RateType == (int) UpsRateType.Negotiated;
+                    wantedNegotiated = account?.RateType == (int) UpsRateType.Negotiated;
 
                     // Indicates if any of the rates returned were negotiated.
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
@@ -131,23 +141,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Gets the ups rate client.
+        /// Gets the UPS rate client
         /// </summary>
         protected virtual IUpsRateClient GetRatingClient(UpsAccountEntity account)
         {
-            UpsRatingMethod ratingMethod;
-            if (account==null)
-            {
-                ratingMethod = UpsRatingMethod.ApiOnly;
-            }
-            else
-            {
-                ratingMethod = account.LocalRatingEnabled ?
-                    UpsRatingMethod.LocalWithApiFailover :
-                    UpsRatingMethod.ApiOnly;
-            }
-
-            return upsRateClientFactory[ratingMethod];
+            return rateClientFactory.GetClient(account);
         }
 
         /// <summary>

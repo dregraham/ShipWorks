@@ -71,13 +71,14 @@ namespace Interapptive.Shared.Extensions
         /// <param name="maxLength">the max length</param>
         /// <param name="minLength">the min length</param>
         /// <param name="errorMessage">the error to display</param>
-        /// <exception cref="InvalidOperationException">Throws when the string is not between the min and max</exception>
-        public static void ValidateLength(this string input, int? maxLength, int? minLength, string errorMessage = "")
+        public static Result ValidateLength(this string input, int? maxLength, int? minLength, string errorMessage = "")
         {
             if (input?.Length > maxLength || input?.Length < minLength)
             {
-                throw new InvalidOperationException(errorMessage);
+                return Result.FromError(errorMessage);
             }
+
+            return Result.FromSuccess();
         }
     }
 }

@@ -98,6 +98,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
 
         [Description("UPS Second Day Air Intra")]
         Ups2ndDayAirIntra = 29
-
     }
 }
