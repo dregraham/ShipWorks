@@ -48,7 +48,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
-        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, Func<IPackageAdapter, string> getPackageCode)
+        public PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, 
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
             PurchaseLabelRequest request = new PurchaseLabelRequest()
             {
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     ShipFrom = CreateAddress(shipment.OriginPerson),
                     ShipDate = shipment.ShipDate,
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
-                    Packages = CreatePackages(packages, getPackageCode),
+                    Packages = CreatePackages(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
             };
@@ -94,7 +95,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates ShipEngine api package DTOs from a list of package adapters.
         /// </summary>
-        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, Func<IPackageAdapter, string> getPackageCode)
+        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, 
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
             foreach (IPackageAdapter package in packages)
@@ -112,6 +114,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     PackageCode = getPackageCode(package)
                     
                 };
+
+                addPackageInsurance(apiPackage, package);
                 apiPackages.Add(apiPackage);
             }
 

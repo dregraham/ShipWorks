@@ -24,7 +24,8 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Create a PurchaseLabelRequest from a shipment, packages and service code
         /// </summary>
-        PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, Func<IPackageAdapter, string> getPackageCode);
+        PurchaseLabelRequest CreatePurchaseLabelRequest(ShipmentEntity shipment, List<IPackageAdapter> packages, string serviceCode, 
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance);
 
         /// <summary>
         /// Creates customs items for a ShipEngine request
@@ -34,6 +35,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates pacakges for a shipEngine
         /// </summary>
-        List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, Func<IPackageAdapter, string> getPackageCode);
+        List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, 
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance);
     }
 }
