@@ -9,8 +9,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
     /// </summary>
     public partial class OneBalanceTermsAndConditionsPage : WizardPage
     {
-        private const string PromotionalRateAgreementUrl = "https://www.ups.com/assets/resources/media/en_US/CQF_US.pdf";
-        private const string TechnologyAgreementUrl = "https://www.ups.com/assets/resources/media/en_US/UTA.pdf";
+        private const string PromotionalRateAgreementUrl = "https://shipworks-static-resources.s3.amazonaws.com/CQF_US.pdf";
+        private const string TechnologyAgreementUrl = "https://shipworks-static-resources.s3.amazonaws.com/UTA.pdf";
 
         /// <summary>
         /// Constructor
