@@ -54,7 +54,7 @@
                 </TextBlock.Visibility>
             </TextBlock>
         </Grid>
-        <Button Name ="addButton" HorizontalAlignment="Right" Margin="0,50,0,0" Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}">
+        <Button HorizontalAlignment="Right" Margin="0,50,0,0" Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}">
             <TextBlock Text="Add Money" Margin="5,2,5,2"/>
         </Button>
     </StackPanel>

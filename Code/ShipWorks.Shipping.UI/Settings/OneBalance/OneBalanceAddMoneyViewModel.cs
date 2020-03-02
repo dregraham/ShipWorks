@@ -20,6 +20,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private readonly IMessageHelper messageHelper;
 
         private decimal amount;
+        private Cursor cursor;
 
         /// <summary>
         /// Constructor
@@ -43,6 +44,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
+        /// The amount of money to add to the stamps account
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public Cursor Cursor
+        {
+            get => cursor;
+            set => Set(ref cursor, value);
+        }
+
+        /// <summary>
         /// Relay command to for buying postage
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -55,6 +66,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             try
             {
+                Cursor = Cursors.Wait;
                 webClient.Purchase(Amount);
                 window.DialogResult = true;
             }
@@ -63,6 +75,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 var message = $"There was an error purchasing postage:\n{ex.Message}";
                 messageHelper.ShowError(message);
             }
+            Cursor = Cursors.Arrow;
         }
     }
 }

@@ -10,7 +10,8 @@
         Title="Add Money To One Balance" 
         Height="250" 
         Width="300" 
-        Background="#FFF0F0F0">
+        Background="#FFF0F0F0"
+        Cursor="{Binding Cursor}">
     <ui:InteropWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
