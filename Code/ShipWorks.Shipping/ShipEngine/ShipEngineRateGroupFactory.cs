@@ -59,18 +59,12 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (rateResponse.InvalidRates.Any())
             {
-                foreach (Rate invalidRate in rateResponse.InvalidRates)
-                {
-                    invalidRate.ErrorMessages.Distinct().ForEach(m => errorBuilder.AppendLine(m));
-                }
+                rateResponse.InvalidRates.SelectMany(x => x.ErrorMessages).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (rateResponse.Errors.Any())
             {
-                foreach (string error in rateResponse.Errors.Select(x => x.Message).Distinct())
-                {
-                    errorBuilder.AppendLine(error);
-                }
+                rateResponse.Errors.Select(x => x.Message).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (errorBuilder.Length > 0)
