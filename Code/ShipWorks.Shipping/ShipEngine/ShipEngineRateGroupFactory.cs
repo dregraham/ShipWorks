@@ -1,14 +1,12 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.Shipping.Editing.Rating;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -75,18 +73,12 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (rateResponse.InvalidRates.Any())
             {
-                foreach (Rate invalidRate in rateResponse.InvalidRates)
-                {
-                    invalidRate.ErrorMessages.ForEach(m => errorBuilder.AppendLine(m));
-                }
+                rateResponse.InvalidRates.SelectMany(x => x.ErrorMessages).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (rateResponse.Errors.Any())
             {
-                foreach (ProviderError error in rateResponse.Errors)
-                {
-                    errorBuilder.AppendLine(error.Message);
-                }
+                rateResponse.Errors.Select(x => x.Message).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (errorBuilder.Length > 0)
