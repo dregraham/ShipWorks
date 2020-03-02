@@ -68,6 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private Result ValidateFields(UpsAccountEntity account)
         {
+
             var results = new List<Result>()
             {
                 $"{account.FirstName}{account.LastName}".ValidateLength(20, 1, "The contact name must be between 1 and 20 characters."),
@@ -78,10 +79,14 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters."),
                 account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters."),
                 account.PostalCode.ValidateLength(5, 5, "The postal code must be 5 characters."),
-                account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters."),
                 account.Phone.ValidateLength(null, 10, "Please enter a phone number that is at least 10 digits."),
                 account.Email.ValidateLength(50, 1, "Please enter an email address that is less than 50 characters.")
             };
+
+            if (!account.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase))
+            {
+                results.Add(Result.FromError("ShipWorks can only create US accounts. To create an account for another country, please register your new account on the UPS website."));
+            }
 
             if (results.Any(r => r.Failure))
             {
