@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, AsendiaDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> logFactory) 
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
             log = logFactory(typeof(AsendiaLabelService));
             this.accountRepository = accountRepository;

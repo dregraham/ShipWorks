@@ -11,6 +11,7 @@ using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
+using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
@@ -29,8 +30,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, UpsShipEngineDownloadedLabelData> createDownloadedLabelData,
-            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            Func<Type, ILog> logFactory)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
             this.accountRepository = accountRepository;
         }

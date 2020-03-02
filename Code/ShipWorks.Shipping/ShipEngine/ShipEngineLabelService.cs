@@ -25,11 +25,13 @@ namespace ShipWorks.Shipping.ShipEngine
         protected ShipEngineLabelService(
             IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
-            Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData)
+            Func<ShipmentEntity, Label, IDownloadedLabelData> createDownloadedLabelData,
+            Func<Type, ILog> createLog)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.shipmentRequestFactory = shipmentRequestFactory[ShipmentTypeCode];
             this.createDownloadedLabelData = createDownloadedLabelData;
+            log = createLog(typeof(ShipEngineLabelService));
         }
 
         /// <summary>
