@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// The amount of money to add to the stamps account
+        /// The cursor to show the user
         /// </summary>
         [Obfuscation(Exclude = true)]
         public Cursor Cursor
