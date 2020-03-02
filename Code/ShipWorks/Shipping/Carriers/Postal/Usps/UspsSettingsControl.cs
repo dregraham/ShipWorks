@@ -239,6 +239,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 accountControl.Initialize();
                 loadedAccounts = true;
             }
+            else
+            {
+                //Refresh the accounts incase they changed on a different page
+                accountControl.LoadAccounts();
+            }
         }
     }
 }

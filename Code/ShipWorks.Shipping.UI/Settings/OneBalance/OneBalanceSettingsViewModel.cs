@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private string message;
         private bool showMessage = false;
         private bool loading = true;
+        private bool addMoneyEnabled = true;
 
         /// <summary>
         /// Initialize the control to display information for the given account
@@ -76,6 +77,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
+        /// A flag to indicate if we are in a state that the user should be allowed to add money
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool AddMoneyEnabled
+        {
+            get => addMoneyEnabled;
+            set => Set(ref addMoneyEnabled, value);
+        }
+
+        /// <summary>
         /// RelayCommand for getting the account balance
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -100,8 +111,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     if (webClient != null)
                     {
                         GetBalance();
-                        Loading = false;
                     }
+
+                    AddMoneyEnabled = webClient != null && !showMessage;
+                    Loading = false;
                 }));
         }
 
@@ -123,18 +136,19 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 catch (UspsException ex)
                 {
                     bool keepTrying = false;
-                    string exceptionMessage = ex.Message;
 
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        exceptionMessage = $"Your One Balance account is not ready yet.";
+                        Message = $"Your One Balance account is not ready yet.";
 
                         keepTrying = true;
                     }
-
-                    Message = exceptionMessage;
-
+                    else
+                    {
+                        Message = "There was an error retrieving your account balance";
+                    }
+                   
                     ShowMessage = true;
 
                     if (keepTrying)

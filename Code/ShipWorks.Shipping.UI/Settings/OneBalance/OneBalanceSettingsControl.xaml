@@ -9,14 +9,19 @@
              mc:Ignorable="d" 
              FontFamily="Tahoma"
              d:DesignHeight="450" 
-             d:DesignWidth="800"
-             BorderBrush="#FF8D9199"
-             BorderThickness="1">
+             d:DesignWidth="800">
     <UserControl.Resources>
-        <ui:EmptyMoneyConverter x:Key="EmptyMoney"/>
-        <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <ui:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
-        <ui:VisibilityMultiConverter x:Key="VisibilityMultiConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+            <ui:EmptyMoneyConverter x:Key="EmptyMoney"/>
+            <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <ui:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
+            <ui:VisibilityMultiConverter x:Key="VisibilityMultiConverter"/>
+        </ResourceDictionary>
     </UserControl.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -24,19 +29,19 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <StackPanel HorizontalAlignment="Left">
-        <TextBlock Text="Manage ShipWorks One Balance" FontSize="15" Margin="5,10,0,0" FontWeight="Bold"/>
+        <TextBlock Text="Manage ShipWorks One Balance" FontSize="13" Margin="20,10,0,0" FontWeight="Bold"/>
         <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray" MinWidth="500">
-            <TextBlock Margin="0,0,0,10" Text="Account Overview" FontSize="12" FontWeight="SemiBold"/>
+            <TextBlock Margin="0,0,0,10" Text="Account Overview" Style="{StaticResource TextBlock.SectionHeader}"/>
         </Border>
         <Grid HorizontalAlignment="Right" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Message}" Grid.ColumnSpan="2" FontSize="12" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="500"/>
-            <TextBlock Text="Balance" FontSize="12" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowMessage, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
-            <TextBlock Text="Getting Balance...." FontSize="12" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0" Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" FontSize="12" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0">
+            <TextBlock Text="{Binding Message}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="500"/>
+            <TextBlock Text="Balance" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowMessage, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
+            <TextBlock Text="Getting Balance...." HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0" Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0">
                 <TextBlock.Visibility>
                     <MultiBinding Converter="{StaticResource VisibilityMultiConverter}">
                         <Binding
@@ -49,8 +54,8 @@
                 </TextBlock.Visibility>
             </TextBlock>
         </Grid>
-        <Button HorizontalAlignment="Right" Margin="0,50,0,0" Command="{Binding ShowAddMoneyDialogCommand}">
-            <TextBlock Text="Add Money" FontSize="12" Margin="5,2,5,2"/>
+        <Button Name ="addButton" HorizontalAlignment="Right" Margin="0,50,0,0" Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}">
+            <TextBlock Text="Add Money" Margin="5,2,5,2"/>
         </Button>
     </StackPanel>
 </UserControl>
