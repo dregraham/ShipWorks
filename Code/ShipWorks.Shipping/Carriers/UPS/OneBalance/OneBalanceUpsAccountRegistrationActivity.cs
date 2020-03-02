@@ -68,10 +68,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         private Result ValidateFields(UpsAccountEntity account)
         {
-
             var results = new List<Result>()
             {
-                $"{account.FirstName}{account.LastName}".ValidateLength(20, 1, "The contact name must be between 1 and 20 characters."),
+                account.Address.UnparsedName.ValidateLength(20, 1, "The contact name must be between 1 and 20 characters."),
                 account.Company.ValidateLength(30, 0, "The company name must be less than 30 characters."),
                 account.Street1.ValidateLength(30, 1, "The street address line 1 must be between 1 and 30 characters."),
                 account.Street2.ValidateLength(30, 0, "The street address line 2 must be less than 30 characters."),
