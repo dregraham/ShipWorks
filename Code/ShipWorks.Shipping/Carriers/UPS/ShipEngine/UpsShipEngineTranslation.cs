@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
@@ -64,13 +62,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
             return serviceCodeMap[serviceType];
         }
-            
+
 
         /// <summary>
         /// Get a service type for the given service code
         /// </summary>
-        public static UpsServiceType GetServiceType(string serviceCode) =>
-            serviceCodeMap.FirstOrDefault(x => x.Value == serviceCode).Key;
+        public static UpsServiceType GetServiceType(string serviceCode)
+        {
+            if (!serviceCodeMap.ContainsValue(serviceCode))
+            {
+                throw new Exception($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
+            }
+
+            return serviceCodeMap.First(x => x.Value == serviceCode).Key;
+        }
 
         /// <summary>
         /// Get a package code for the given PackagingType
