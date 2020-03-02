@@ -55,8 +55,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// <summary>
         /// Get a service code for the given service type
         /// </summary>
-        public static string GetServiceCode(UpsServiceType serviceType) => 
-            serviceCodeMap[serviceType];
+        public static string GetServiceCode(UpsServiceType serviceType)
+        {
+            if (!serviceCodeMap.ContainsKey(serviceType))
+            {
+                throw new Exception($"{EnumHelper.GetDescription(serviceType)} is not supported from UPS from ShipWorks. Select a different service and try again.");
+            }
+
+            return serviceCodeMap[serviceType];
+        }
+            
 
         /// <summary>
         /// Get a service type for the given service code
@@ -65,10 +73,17 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             serviceCodeMap.FirstOrDefault(x => x.Value == serviceCode).Key;
 
         /// <summary>
-        /// Get a package code for the given service type
+        /// Get a package code for the given PackagingType
         /// </summary>
-        public static string GetPackageCode(UpsPackagingType serviceType) =>
-            packageCodeMap[serviceType];
+        public static string GetPackageCode(UpsPackagingType packageCode)
+        {
+            if (!packageCodeMap.ContainsKey(packageCode))
+            {
+                throw new Exception($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
+            }
+
+            return packageCodeMap[packageCode];
+        }
 
         /// <summary>
         /// Check to see if the service is supported

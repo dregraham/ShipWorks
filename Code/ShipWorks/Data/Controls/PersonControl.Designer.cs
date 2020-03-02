@@ -380,7 +380,7 @@ namespace ShipWorks.Data.Controls
             this.company.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.company.Location = new System.Drawing.Point(76, 52);
-            this.fieldLengthProvider.SetMaxLengthSource(this.company, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonCompany);
+            this.fieldLengthProvider.SetMaxLengthSource(this.company, ShipWorks.Data.Utility.EntityFieldLengthSource.PersonStreet1);
             this.company.Name = "company";
             this.company.Size = new System.Drawing.Size(266, 21);
             this.company.TabIndex = 1;
