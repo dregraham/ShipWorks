@@ -8,6 +8,7 @@ using ShipEngine.ApiClient.Model;
 using ShipWorks.Shipping.Editing.Rating;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
+using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -37,13 +38,26 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Build the rate tag from the given shipment and service code
+        /// </summary>
+        private object GetRateTag(ShipmentTypeCode shipmentType, string serviceCode)
+        {
+            if (shipmentType == ShipmentTypeCode.UpsOnLineTools)
+            {
+                return UpsShipEngineTranslation.GetServiceType(serviceCode);
+            }
+
+            return serviceCode;
+        }
+
+        /// <summary>
         /// Build the rate result with the given rate
         /// </summary>
         private RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
         {
             double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
 
-            return new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (amount), apiRate.ServiceCode)
+            return new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (amount), GetRateTag(shipmentType, apiRate.ServiceCode))
             {
                 CarrierDescription = apiRate.CarrierNickname,
                 ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,

@@ -53,13 +53,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             };
 
         /// <summary>
-        /// Get a service code for the given servicetype
+        /// Get a service code for the given service type
         /// </summary>
         public static string GetServiceCode(UpsServiceType serviceType) => 
             serviceCodeMap[serviceType];
 
         /// <summary>
-        /// Get a package cod efor the given service type
+        /// Get a service type for the given service code
+        /// </summary>
+        public static UpsServiceType GetServiceType(string serviceCode) =>
+            serviceCodeMap.FirstOrDefault(x => x.Value == serviceCode).Key;
+
+        /// <summary>
+        /// Get a package code for the given service type
         /// </summary>
         public static string GetPackageCode(UpsPackagingType serviceType) =>
             packageCodeMap[serviceType];
