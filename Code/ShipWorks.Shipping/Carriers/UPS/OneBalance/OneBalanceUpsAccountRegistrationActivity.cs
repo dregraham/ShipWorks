@@ -77,8 +77,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 account.Street3.ValidateLength(30, 0, "The street address line 3 must be less than 30 characters."),
                 account.City.ValidateLength(30, 1, "The city must to be between 1 and 30 characters."),
                 account.StateProvCode.ValidateLength(2, 2, "The address state code must be 2 characters."),
+                account.PostalCode.ValidateLength(5, 5, "The postal code must be 5 characters."),
                 account.CountryCode.ValidateLength(2, 2, "The address country code must be 2 characters."),
-                account.Phone.ValidateLength(null, 10, "Please enter a phone number that is at least 10 digits"),
+                account.Phone.ValidateLength(null, 10, "Please enter a phone number that is at least 10 digits."),
                 account.Email.ValidateLength(50, 1, "Please enter an email address that is less than 50 characters.")
             };
 
