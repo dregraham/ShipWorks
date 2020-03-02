@@ -57,22 +57,25 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
-            var account = accountRepository.GetAccount(shipment);
-
-            if (account?.ShipEngineCarrierId != null)
-            {
-                return shipEngineRatingService.GetRates(shipment);
-            }
-
-            // Determine if the user is hoping to get negotiated rates back
-            bool wantedNegotiated = false;
-
-            // Indicates if any of the rates returned were negotiated.
-            bool anyNegotiated = false;
-            bool allNegotiated = false;
-
             try
             {
+                // Validate each of the packages dimensions.
+                ValidatePackageDimensions(shipment);
+
+                var account = accountRepository.GetAccount(shipment);
+
+                if (account?.ShipEngineCarrierId != null)
+                {
+                    return shipEngineRatingService.GetRates(shipment);
+                }
+
+                // Determine if the user is hoping to get negotiated rates back
+                bool wantedNegotiated = false;
+
+                // Indicates if any of the rates returned were negotiated.
+                bool anyNegotiated = false;
+                bool allNegotiated = false;
+
                 IEnumerable<UpsTransitTime> transitTimes;
 
                 GenericResult<List<UpsServiceRate>> serviceRateResult = GetRateResult(shipment, account);
@@ -98,9 +101,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     anyNegotiated = serviceRates.Any(s => s.Negotiated);
                     allNegotiated = serviceRates.All(s => s.Negotiated);
                 }
-
-                // Validate each of the packages dimensions.
-                ValidatePackageDimensions(shipment);
 
                 List<RateResult> rates = AddRateForEachService(allNegotiated, serviceRates, transitTimes);
                 AddMessageResult(wantedNegotiated, anyNegotiated, allNegotiated, rates, serviceRateResult.Message);
