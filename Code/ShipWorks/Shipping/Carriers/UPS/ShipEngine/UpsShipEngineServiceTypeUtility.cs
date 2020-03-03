@@ -4,7 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
+namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
 {
     /// <summary>
     /// Translate from Ups services to ShipEngine codes
@@ -91,5 +91,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// </summary>
         public static bool IsServiceSupported(UpsServiceType serviceType) =>
             serviceCodeMap.ContainsKey(serviceType);
+
+        /// <summary>
+        /// Get all of the UPS services supported by ShipEngine
+        /// </summary>
+        public static IEnumerable<UpsServiceType> GetSupportedServices() => serviceCodeMap.Keys;
     }
 }

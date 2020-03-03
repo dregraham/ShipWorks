@@ -10,13 +10,14 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
-    /// Service for retreiving UPS rates via ShipEngine
+    /// Service for retrieving UPS rates via ShipEngine
     /// </summary>
     [Component]
     class UpsShipEngineRatingService : IUpsShipEngineRatingService
@@ -67,8 +68,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<UpsServiceType>()
-                    .Where(s => UpsShipEngineServiceTypeUtility.IsServiceSupported(s))
-                    .Select(t => UpsShipEngineServiceTypeUtility.GetServiceCode(t));
+                    .Where(UpsShipEngineServiceTypeUtility.IsServiceSupported)
+                    .Select(UpsShipEngineServiceTypeUtility.GetServiceCode);
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
             }

@@ -1232,6 +1232,7 @@
     <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidatorFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />

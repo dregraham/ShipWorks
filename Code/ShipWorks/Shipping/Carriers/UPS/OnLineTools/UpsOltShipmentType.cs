@@ -9,6 +9,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing;
@@ -55,7 +56,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             IEnumerable<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
+
+            IEnumerable<int> availableServiceTypes = allServiceTypes.Except(GetExcludedServiceTypes(repository));
+
+            if (AccountRepository.AccountsReadOnly.All(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId)))
+            {
+                // All UPS accounts are using ShipEngine, so only show the services supported by it
+                IEnumerable<int> seSupportedServices = UpsShipEngineServiceTypeUtility.GetSupportedServices().Cast<int>();
+
+                availableServiceTypes = availableServiceTypes.Intersect(seSupportedServices);
+            }
+
+            return availableServiceTypes;
         }
 
         /// <summary>
