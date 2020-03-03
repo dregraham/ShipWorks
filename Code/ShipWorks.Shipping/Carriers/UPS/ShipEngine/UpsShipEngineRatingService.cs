@@ -9,6 +9,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
@@ -22,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
     {
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly IUpsShipmentValidatorFactory upsShipmentValidatorFactory;
         private readonly UpsAccountRepository accountRepository;
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly ShipmentType shipmentType;
@@ -32,10 +34,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         public UpsShipEngineRatingService(IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipEngineRateGroupFactory rateGroupFactory)
+            IShipEngineRateGroupFactory rateGroupFactory,
+            IUpsShipmentValidatorFactory upsShipmentValidatorFactory)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
+            this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.UpsOnLineTools];
 
             accountRepository = new UpsAccountRepository();
@@ -52,6 +56,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             {
                 throw new ShippingException("A UPS from ShipWorks account is required to view UPS rates.");
             }
+
+            upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
 
             try
             {
