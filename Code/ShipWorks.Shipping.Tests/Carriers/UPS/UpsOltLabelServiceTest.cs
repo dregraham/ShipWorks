@@ -1,4 +1,6 @@
 ﻿using Autofac.Extras.Moq;
+using Interapptive.Shared.Utility;
+using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS;
@@ -13,18 +15,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         private readonly AutoMock mock;
         private UpsOltLabelService testObject;
         private readonly ShipmentEntity shipment;
+        private readonly Mock<IUpsShipmentValidatorFactory> validatorFactory;
+        private readonly Mock<IUpsLabelClientFactory> clientFactory;
 
         public UpsOltLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-
-            testObject = mock.Create<UpsOltLabelService>();
 
             shipment = new ShipmentEntity()
             {
                 ShipmentTypeCode = ShipmentTypeCode.UpsOnLineTools,
                 Ups = new UpsShipmentEntity()
             };
+
+            Mock<IUpsShipmentValidator> validator = mock.Mock<IUpsShipmentValidator>();
+            validator.Setup(v => v.ValidateShipment(shipment)).Returns(Result.FromSuccess());
+
+            validatorFactory = mock.Mock<IUpsShipmentValidatorFactory>();
+            validatorFactory.Setup(v => v.Create(It.IsAny<ShipmentEntity>())).Returns(validator);
+            clientFactory = mock.Mock<IUpsLabelClientFactory>();
+
+            testObject = mock.Create<UpsOltLabelService>();
         }
 
         [Fact]
@@ -32,15 +43,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         {
             testObject.Create(shipment);
 
-            mock.Mock<IUpsShipmentValidatorFactory>().Verify(v => v.Create(shipment));
+            validatorFactory.Verify(v => v.Create(shipment));
         }
 
         [Fact]
-        public void Create_DelegatesToLabelClientFactoryForValidator()
+        public void Create_DelegatesToLabelClientFactoryForLabelClient()
         {
             testObject.Create(shipment);
-            
-            mock.Mock<IUpsLabelClientFactory>().Verify(f => f.GetClient(shipment));
+
+            clientFactory.Verify(f => f.GetClient(shipment));
         }
     }
 }
