@@ -58,6 +58,16 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("Paperless Invoicing is not supported with this account.");
             }
 
+            if (shipment.Ups.Packages.Any(p => p.AdditionalHandlingEnabled))
+            {
+                return Result.FromError("Additional Handling is not supported with this account.");
+            }
+
+            if (shipment.Ups.Packages.Any(p => p.VerbalConfirmationEnabled))
+            {
+                return Result.FromError("Verbal Confirmation Handling is not supported with this account.");
+            }
+
             return Result.FromSuccess();
         }
     }
