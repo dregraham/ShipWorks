@@ -111,27 +111,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Creates the UPS advanced options node
         /// </summary>
-        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
-        {
-            AdvancedOptions.BillToPartyEnum? billToParty = null;
-
-            if ((UpsPayorType) shipment.Ups.PayorType == UpsPayorType.ThirdParty)
-            {
-                billToParty = AdvancedOptions.BillToPartyEnum.Thirdparty;
-            }
-            else if ((UpsPayorType) shipment.Ups.PayorType == UpsPayorType.Receiver)
-            {
-                billToParty = AdvancedOptions.BillToPartyEnum.Recipient;
-            }
-
-            return new AdvancedOptions(billToAccount: shipment.Ups.PayorAccount,
-                billToCountryCode: shipment.Ups.PayorCountryCode,
-                billToParty: billToParty,
-                billToPostalCode: shipment.Ups.PayorPostalCode,
-                saturdayDelivery: shipment.Ups.SaturdayDelivery,
-                deliveredDutyPaid: (UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale == UpsTermsOfSale.DeliveryDutyPaid,
-                nonMachinable: (UpsPostalSubclassificationType) shipment.Ups.Subclassification != UpsPostalSubclassificationType.Machineable);
-        }
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment) =>
+            new AdvancedOptions();
 
         /// <summary>
         /// Get the packaging code for the given adapter
