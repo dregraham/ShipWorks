@@ -56,7 +56,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             var result = await shipEngineWebClient.RegisterUpsAccount(account.Address).ConfigureAwait(false);
             if (result.Success)
             {
-                account.ShipEngineCarrierId = result.Value;
+                account.ShipEngineCarrierId = result.Value.carrierId;
+                account.AccountNumber = result.Value.accountNumber;
                 return Result.FromSuccess();
             }
 

@@ -304,6 +304,7 @@
     <Compile Include="Carriers\UPS\OneBalance\OneBalanceUpsAccountRegistrationActivityTest.cs" />
     <Compile Include="Carriers\UPS\ShipEngine\UpsShipEngineShipmentValidatorTest.cs" />
     <Compile Include="Carriers\UPS\UpsOltLabelServiceTest.cs" />
+    <Compile Include="Carriers\UPS\OneBalance\UpsShipmentRequestFactoryTest.cs" />
     <Compile Include="Carriers\UPS\UpsOltShipmentTypeTest.cs" />
     <Compile Include="Carriers\UPS\UpsShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\UPS\UpsServicePackageTypeSettingTest.cs" />

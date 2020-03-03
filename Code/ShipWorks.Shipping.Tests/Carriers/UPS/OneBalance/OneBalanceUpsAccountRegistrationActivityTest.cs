@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 
             seWebClient = mock.Mock<IShipEngineWebClient>();
             seWebClient.Setup(s => s.RegisterUpsAccount(It.IsAny<PersonAdapter>()))
-                .ReturnsAsync(GenericResult.FromSuccess("123"));
+                .ReturnsAsync(GenericResult.FromSuccess(("123", "abcd")));
 
             testObject = mock.Create<OneBalanceUpsAccountRegistrationActivity>();
         }

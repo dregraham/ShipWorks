@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.ReadOnlyEntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -82,6 +83,13 @@ namespace ShipWorks.Shipping.UI.Settings
             ObservableCollection<BestRateAccount> accounts = new ObservableCollection<BestRateAccount>();
 
             IEnumerable<ICarrierAccount> carrierAccounts = accountRetrieverFactory.Create(shipmentType).AccountsReadOnly;
+
+            if (shipmentType == ShipmentTypeCode.UpsOnLineTools || shipmentType == ShipmentTypeCode.UpsWorldShip)
+            {
+                // We don't want to show ShipEngine UPS accounts in best rate
+                carrierAccounts = carrierAccounts.Cast<IUpsAccountEntity>()
+                    .Where(x => string.IsNullOrWhiteSpace(x.ShipEngineCarrierId));
+            }
 
             if (carrierAccounts.Any())
             {

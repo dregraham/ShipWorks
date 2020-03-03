@@ -529,7 +529,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person)
+        public async Task<GenericResult<(string carrierId, string accountNumber)>> RegisterUpsAccount(PersonAdapter person)
         {
             try
             {
@@ -553,13 +553,19 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 logEntry.LogResponse(response, "txt");
 
-                return response.StatusCode == HttpStatusCode.OK ?
-                    JObject.Parse(response.Content)["carrier_id"].ToString() :
-                    GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    JObject responseObject = JObject.Parse(response.Content);
+
+                    return (carrierId: responseObject["carrier_id"].ToString(), 
+                        accountNumber: responseObject["account_number"].ToString());
+                }
+
+                return GenericResult.FromError<(string carrierId, string accountNumber)>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
             }
             catch (Exception ex)
             {
-                return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
+                return GenericResult.FromError<(string carrierId, string accountNumber)>("Unable to register the UPS Account", ex);
             }
         }
     }

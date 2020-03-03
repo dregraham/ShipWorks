@@ -2,6 +2,8 @@
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
@@ -17,18 +19,19 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     [KeyedComponent(typeof(ICarrierShipmentRequestFactory), ShipmentTypeCode.UpsOnLineTools)]
     public class UpsShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
-        private readonly UpsAccountRepository accountRepository;
+        private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
-            IShipmentTypeManager shipmentTypeManager)
+            IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;
-            this.accountRepository = new UpsAccountRepository();
+            this.accountRepository = accountRepository;
         }
 
         /// <summary>
@@ -44,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         protected override string GetShipEngineCarrierID(ShipmentEntity shipment)
         {
-            UpsAccountEntity account = accountRepository.GetAccount(shipment);
+            IUpsAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
             if (account == null)
             {
@@ -76,7 +79,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         {
             RateShipmentRequest result = base.CreateRateShipmentRequest(shipment);
 
-            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            if (shipment.Insurance && 
+                shipment.InsuranceProvider == (int) InsuranceProvider.Carrier && 
+                result?.Shipment != null)
             {
                 result.Shipment.InsuranceProvider = AddressValidatingShipment.InsuranceProviderEnum.Carrier;
             }
@@ -105,27 +110,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Creates the UPS advanced options node
         /// </summary>
-        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
-        {
-            AdvancedOptions.BillToPartyEnum? billToParty = null;
-
-            if ((UpsPayorType) shipment.Ups.PayorType == UpsPayorType.ThirdParty)
-            {
-                billToParty = AdvancedOptions.BillToPartyEnum.Thirdparty;
-            }
-            else if ((UpsPayorType) shipment.Ups.PayorType == UpsPayorType.Receiver)
-            {
-                billToParty = AdvancedOptions.BillToPartyEnum.Recipient;
-            }
-
-            return new AdvancedOptions(billToAccount: shipment.Ups.PayorAccount,
-                billToCountryCode: shipment.Ups.PayorCountryCode,
-                billToParty: billToParty,
-                billToPostalCode: shipment.Ups.PayorPostalCode,
-                saturdayDelivery: shipment.Ups.SaturdayDelivery,
-                deliveredDutyPaid: (UpsTermsOfSale) shipment.Ups.CommercialInvoiceTermsOfSale == UpsTermsOfSale.DeliveryDutyPaid,
-                nonMachinable: (UpsPostalSubclassificationType) shipment.Ups.Subclassification != UpsPostalSubclassificationType.Machineable);
-        }
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment) =>
+            new AdvancedOptions();
 
         /// <summary>
         /// Get the packaging code for the given adapter

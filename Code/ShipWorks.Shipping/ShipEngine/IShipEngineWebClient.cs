@@ -81,6 +81,6 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter);
+        Task<GenericResult<(string carrierId, string accountNumber)>> RegisterUpsAccount(PersonAdapter personAdapter);
     }
 }
