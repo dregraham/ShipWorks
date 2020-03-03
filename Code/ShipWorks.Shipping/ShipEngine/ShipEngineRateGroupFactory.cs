@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             if (shipmentType == ShipmentTypeCode.UpsOnLineTools)
             {
-                return UpsShipEngineTranslation.GetServiceType(serviceCode);
+                return UpsShipEngineServiceTypeUtility.GetServiceType(serviceCode);
             }
 
             return serviceCode;

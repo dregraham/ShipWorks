@@ -61,8 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<UpsServiceType>()
-                    .Where(s => UpsShipEngineTranslation.IsServiceSupported(s))
-                    .Select(t => UpsShipEngineTranslation.GetServiceCode(t));
+                    .Where(s => UpsShipEngineServiceTypeUtility.IsServiceSupported(s))
+                    .Select(t => UpsShipEngineServiceTypeUtility.GetServiceCode(t));
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
             }

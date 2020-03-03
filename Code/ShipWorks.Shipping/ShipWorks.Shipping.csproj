@@ -403,6 +403,7 @@
     <Compile Include="Carriers\Ups\IUpsLabelClient.cs" />
     <Compile Include="Carriers\Ups\IUpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineShipmentValidator.cs" />
     <Compile Include="Carriers\Ups\UpsRateClientFactory.cs" />
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineRatingService.cs" />
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineLabelClient.cs" />

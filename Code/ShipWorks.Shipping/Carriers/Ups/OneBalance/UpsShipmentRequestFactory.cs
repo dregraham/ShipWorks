@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// Gets the api value for the UPS service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
-            UpsShipEngineTranslation.GetServiceCode((UpsServiceType) shipment.Ups.Service);
+            UpsShipEngineServiceTypeUtility.GetServiceCode((UpsServiceType) shipment.Ups.Service);
 
         /// <summary>
         /// Insurce the ups packages when the user has picked ups insurance
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// Get the packaging code for the given adapter
         /// </summary>
         protected override string GetPackagingCode(IPackageAdapter package) =>
-            UpsShipEngineTranslation.GetPackageCode((UpsPackagingType) package.PackagingType);
+            UpsShipEngineServiceTypeUtility.GetPackageCode((UpsPackagingType) package.PackagingType);
 
         /// <summary>
         /// Creates the UPS customs node
