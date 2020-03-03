@@ -17,15 +17,13 @@ namespace ShipWorks.Shipping.Carriers.Ups
     public class UpsOltLabelClient : IUpsLabelClient
     {
         private readonly Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData;
-        private readonly UpsOltLabelService upsOltLabelService;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOltLabelClient(Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData, UpsOltLabelService upsOltLabelService)
+        public UpsOltLabelClient(Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData)
         {
             this.createDownloadedLabelData = createDownloadedLabelData;
-            this.upsOltLabelService = upsOltLabelService;
         }
 
         /// <summary>
