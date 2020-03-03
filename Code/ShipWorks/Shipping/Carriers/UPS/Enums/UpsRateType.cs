@@ -20,6 +20,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         Retail = 2,
 
         [Description("Negotiated (Account Based Rates)")]
-        Negotiated = 3
+        Negotiated = 3,
+
+        [Description("Rates Associated with Shipper Number")]
+        AssociatedWithShipperNumber = 4
     }
 }
