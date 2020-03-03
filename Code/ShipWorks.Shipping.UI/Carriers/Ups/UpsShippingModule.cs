@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<UpsOltLabelService>()
                 .Keyed<ILabelService>(ShipmentTypeCode.UpsOnLineTools);
 
-            builder.RegisterType<UpsOltShipmentValidator>()
+            builder.RegisterType<UpsShipmentValidator>()
                 .AsImplementedInterfaces();
         }
 

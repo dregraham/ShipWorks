@@ -3,9 +3,9 @@
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
     /// <summary>
-    /// Interface for UpsOltShipmentValidator
+    /// Validates UPS shipments
     /// </summary>
-    public interface IUpsOltShipmentValidator
+    public interface IUpsShipmentValidator
     {
         /// <summary>
         /// Validates the shipment.

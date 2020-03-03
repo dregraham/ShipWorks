@@ -15,17 +15,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsOltLabelService : UpsLabelService
     {
-        private readonly IUpsOltShipmentValidator upsOltShipmentValidator;
+        private readonly IUpsShipmentValidator upsShipmentValidator;
         private readonly IUpsLabelClientFactory labelClientFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOltLabelService(IUpsOltShipmentValidator upsOltShipmentValidator,
+        public UpsOltLabelService(IUpsShipmentValidator upsShipmentValidator,
             IUpsLabelClientFactory labelClientFactory)
             : base(labelClientFactory)
         {
-            this.upsOltShipmentValidator = upsOltShipmentValidator;
+            this.upsShipmentValidator = upsShipmentValidator;
             this.labelClientFactory = labelClientFactory;
         }
 
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.Create(shipment);
 
-                upsOltShipmentValidator.ValidateShipment(shipment);
+                upsShipmentValidator.ValidateShipment(shipment);
 
                 UpsServicePackageTypeSetting.Validate(shipment);
                 

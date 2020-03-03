@@ -1787,7 +1787,7 @@
     <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
@@ -3513,7 +3513,7 @@
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostPackageServiceOptionsElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostRateServiceElementWriter.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsOltShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformation.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManager.cs" />
