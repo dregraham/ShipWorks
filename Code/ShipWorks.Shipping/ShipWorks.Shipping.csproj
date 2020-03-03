@@ -412,6 +412,7 @@
     <Compile Include="Carriers\Ups\UpsLabelClientFactory.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelClient.cs" />
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Ups\UpsShipmentValidatorFactory.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />

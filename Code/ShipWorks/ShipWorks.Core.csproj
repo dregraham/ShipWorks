@@ -3514,7 +3514,7 @@
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostPackageServiceOptionsElementWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsSurePostRateServiceElementWriter.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsShipmentValidator.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsOltShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformation.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManager.cs" />
