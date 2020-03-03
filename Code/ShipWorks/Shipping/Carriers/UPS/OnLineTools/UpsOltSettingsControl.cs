@@ -80,18 +80,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
                 List<UpsServiceType> excludedServices =
                     shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType) exclusion).ToList();
 
-                var upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>()
-                    .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable));
-
-                // Filter out non-supported shipengine services when they have ups accounts and
-                // all of the accounts are shipengine accounts.
                 var upsAccounts = UpsAccountManager.AccountsReadOnly.ToList();
-                if (upsAccounts.Any() && upsAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId)))
-                {
-                    upsServices = upsServices.Where(s => !UpsShipEngineServiceTypeUtility.IsServiceSupported(s));
-                }
+                bool onlyShipEngineAccounts = upsAccounts.Any() && upsAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
 
-                List<UpsServiceType> upsServicesList = upsServices.ToList();
+                var upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>()
+                    .Where(t => ShowService(t, onlyShipEngineAccounts, isMIAvailable, isSurePostAvailable));
 
                 servicePicker.Initialize(upsServices, excludedServices);
             }
@@ -102,11 +95,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         private void InitializePackagingTypePicker(UpsShipmentType shipmentType)
         {
-            IEnumerable<UpsPackagingType> excluededPackagingTypes = shipmentType.GetExcludedPackageTypes().Cast<UpsPackagingType>();
+            IEnumerable<UpsPackagingType> excludedPackagingTypes = shipmentType.GetExcludedPackageTypes().Cast<UpsPackagingType>();
 
             IEnumerable<UpsPackagingType> allPackagingTypes = EnumHelper.GetEnumList<UpsPackagingType>().Select(x => x.Value).OrderBy(x => EnumHelper.GetDescription(x));
 
-            upsPackagingTypeServicePickerControl.Initialize(allPackagingTypes, excluededPackagingTypes);
+            upsPackagingTypeServicePickerControl.Initialize(allPackagingTypes, excludedPackagingTypes);
         }
 
         /// <summary>
@@ -164,8 +157,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Returns true if we should show the service. Else false.
         /// </summary>
-        private static bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
+        private static bool ShowService(UpsServiceType upsServiceType, bool onlyShipEngineAccounts, bool isMiAvailable, bool isSurePostAvailable)
         {
+            // Filter out non-supported shipengine services when they have ups accounts and
+            // all of the accounts are shipengine accounts. This takes priority over surepost and MI.
+            if (onlyShipEngineAccounts)
+            {
+                return UpsShipEngineServiceTypeUtility.IsServiceSupported(upsServiceType);
+            }
+
             if (UpsUtility.IsUpsSurePostService(upsServiceType))
             {
                 return isSurePostAvailable;
