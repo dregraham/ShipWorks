@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -19,7 +18,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
@@ -138,9 +136,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     throw new AmazonException("Error communicating with Amazon.");
                 }
 
-                // if we received the expected InvalidParameterValue, we authenticated just fine
-                if (String.Compare(ex.Code, "InvalidParameterValue", StringComparison.OrdinalIgnoreCase) == 0 &&
-                                  !ex.Message.Contains(dummyNumber))
+                // if we didn't receive the expected InvalidParameterValue, we weren't able to authenticae
+                if (!ex.Code.Equals("InvalidParameterValue", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
