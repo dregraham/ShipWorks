@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
     /// <summary>
     /// Translate from Ups services to ShipEngine codes
     /// </summary>
-    public static class UpsShipEngineTranslation
+    public static class UpsShipEngineServiceTypeUtility
     {
         private static Dictionary<UpsServiceType, string> serviceCodeMap = new Dictionary<UpsServiceType, string>()
             {
@@ -19,11 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 { UpsServiceType.Ups2DayAirAM, "ups_2nd_day_air_am" },
                 { UpsServiceType.UpsNextDayAirSaver, "ups_next_day_air_saver" },
                 { UpsServiceType.UpsNextDayAir, "ups_next_day_air" },
-                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" },
-                { UpsServiceType.UpsStandard, "ups_standard_international" },
-                { UpsServiceType.WorldwideExpedited, "ups_worldwide_expedited" },
-                { UpsServiceType.WorldwideSaver, "ups_worldwide_saver" },
-                { UpsServiceType.WorldwideExpress, "ups_worldwide_express" }
+                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" }
             }
         ;
 
