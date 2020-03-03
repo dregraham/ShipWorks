@@ -137,7 +137,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
 
                 // if we didn't receive the expected InvalidParameterValue, we weren't able to authenticae
-                if (String.Compare(ex.Code, "InvalidParameterValue", StringComparison.OrdinalIgnoreCase) != 0)
+                if (!ex.Code.Equals("InvalidParameterValue", StringComparison.OrdinalIgnoreCase))
                 {
                     throw new AmazonException("Unable to access your Amazon MWS account.  Please grant ShipWorks access.", ex);
                 }
