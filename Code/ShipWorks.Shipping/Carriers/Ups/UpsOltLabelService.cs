@@ -39,7 +39,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.Create(shipment);
 
-                upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+                Result validationResult = upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+                if (validationResult.Failure)
+                {
+                    throw new ShippingException(validationResult.Message);
+                }
 
                 UpsServicePackageTypeSetting.Validate(shipment);
                 

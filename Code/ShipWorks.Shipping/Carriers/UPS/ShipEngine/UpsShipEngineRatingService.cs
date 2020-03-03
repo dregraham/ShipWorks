@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -58,7 +59,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 throw new ShippingException("A UPS from ShipWorks account is required to view UPS rates.");
             }
 
-            upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+            Result validationResult = upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+            if (validationResult.Failure)
+            {
+                throw new ShippingException(validationResult.Message);
+            }
 
             try
             {

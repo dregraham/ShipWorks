@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -13,49 +14,51 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// <summary>
         /// Validate the given UPS ShipEngine shipment
         /// </summary>
-        public void ValidateShipment(ShipmentEntity shipment)
+        public Result ValidateShipment(ShipmentEntity shipment)
         {
             if (shipment.ReturnShipment)
             {
-                throw new ShippingException("Return shipments are not supported with this account.");
+                return Result.FromError("Return shipments are not supported with this account.");
             }
 
-            if (shipment.Ups.EmailNotifySender > 0||
-                shipment.Ups.EmailNotifyRecipient > 0||
+            if (shipment.Ups.EmailNotifySender > 0 ||
+                shipment.Ups.EmailNotifyRecipient > 0 ||
                 shipment.Ups.EmailNotifyOther > 0)
             {
-                throw new ShippingException("Quantum View Notify is not supported with this account.");
+                return Result.FromError("Quantum View Notify is not supported with this account.");
             }
 
             if (shipment.Ups.Packages.Any(p => p.DryIceEnabled))
             {
-                throw new ShippingException("Dry ice is not supported with this account.");
+                return Result.FromError("Dry ice is not supported with this account.");
             }
 
             if (shipment.Ups.CodEnabled)
             {
-                throw new ShippingException("Collect on Delivery is not supported with this account.");
+                return Result.FromError("Collect on Delivery is not supported with this account.");
             }
 
             if (shipment.Ups.ShipperRelease)
             {
-                throw new ShippingException("Shipper Release is not supported with this account.");
+                return Result.FromError("Shipper Release is not supported with this account.");
             }
 
             if (shipment.Ups.SaturdayDelivery)
             {
-                throw new ShippingException("Saturday Delivery is not supported with this account.");
+                return Result.FromError("Saturday Delivery is not supported with this account.");
             }
 
             if (shipment.Ups.CarbonNeutral)
             {
-                throw new ShippingException("Carbon Neutral is not supported with this account.");
+                return Result.FromError("Carbon Neutral is not supported with this account.");
             }
 
             if (shipment.Ups.CommercialPaperlessInvoice)
             {
-                throw new ShippingException("Paperless Invoicing is not supported with this account.");
+                return Result.FromError("Paperless Invoicing is not supported with this account.");
             }
+
+            return Result.FromSuccess();
         }
     }
 }

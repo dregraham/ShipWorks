@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// Validates the shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        void ValidateShipment(ShipmentEntity shipment);
+        Result ValidateShipment(ShipmentEntity shipment);
     }
 }

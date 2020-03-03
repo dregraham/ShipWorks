@@ -9,14 +9,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
 {
     public class UpsShipEngineShipmentValidatorTest
     {
-        private readonly AutoMock mock;
         private readonly UpsShipEngineShipmentValidator testObject;
         private readonly ShipmentEntity shipment;
 
         public UpsShipEngineShipmentValidatorTest()
         {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
-
             testObject = new UpsShipEngineShipmentValidator();
 
             shipment = new ShipmentEntity()
@@ -33,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
         {
             shipment.ReturnShipment = true;
 
-            Assert.Throws<ShippingException>(() => testObject.ValidateShipment(shipment));
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
         }
 
         [Fact]
@@ -41,7 +38,55 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
         {
             shipment.Ups.EmailNotifySender = (int) UpsEmailNotificationType.Ship;
 
-            Assert.Throws<ShippingException>(() => testObject.ValidateShipment(shipment));
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasDryIce()
+        {
+            shipment.Ups.Packages[0].DryIceEnabled = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasCod()
+        {
+            shipment.Ups.CodEnabled = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasShipperRelease()
+        {
+            shipment.Ups.ShipperRelease = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasSaturdayDelivery()
+        {
+            shipment.Ups.SaturdayDelivery = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+        
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasCarbonNeutral()
+        {
+            shipment.Ups.CarbonNeutral = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasPaperless()
+        {
+            shipment.Ups.CommercialPaperlessInvoice = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Failure);
         }
     }
 }
