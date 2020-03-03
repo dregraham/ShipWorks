@@ -20,9 +20,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 throw new ShippingException("Return shipments are not supported with this account.");
             }
 
-            if ((shipment.Ups.EmailNotifySender & (int) UpsEmailNotificationType.None) != 0 ||
-                (shipment.Ups.EmailNotifyRecipient & (int) UpsEmailNotificationType.None) != 0 ||
-                (shipment.Ups.EmailNotifyOther & (int) UpsEmailNotificationType.None) != 0)
+            if (shipment.Ups.EmailNotifySender > 0||
+                shipment.Ups.EmailNotifyRecipient > 0||
+                shipment.Ups.EmailNotifyOther > 0)
             {
                 throw new ShippingException("Quantum View Notify is not supported with this account.");
             }

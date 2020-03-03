@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
 {
@@ -20,8 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 { UpsServiceType.UpsNextDayAirSaver, "ups_next_day_air_saver" },
                 { UpsServiceType.UpsNextDayAir, "ups_next_day_air" },
                 { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" }
-            }
-        ;
+            };
 
         private static Dictionary<UpsPackagingType, string> packageCodeMap = new Dictionary<UpsPackagingType, string>()
             {
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         {
             if (!serviceCodeMap.ContainsKey(serviceType))
             {
-                throw new Exception($"{EnumHelper.GetDescription(serviceType)} is not supported from UPS from ShipWorks. Select a different service and try again.");
+                throw new ShipEngineException($"{EnumHelper.GetDescription(serviceType)} is not supported from UPS from ShipWorks. Select a different service and try again.");
             }
 
             return serviceCodeMap[serviceType];
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         {
             if (!serviceCodeMap.ContainsValue(serviceCode))
             {
-                throw new Exception($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
+                throw new ShipEngineException($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
             }
 
             return serviceCodeMap.First(x => x.Value == serviceCode).Key;
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         {
             if (!packageCodeMap.ContainsKey(packageCode))
             {
-                throw new Exception($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
+                throw new ShipEngineException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
             }
 
             return packageCodeMap[packageCode];
