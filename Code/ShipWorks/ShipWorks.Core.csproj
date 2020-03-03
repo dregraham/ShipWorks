@@ -1229,6 +1229,7 @@
     <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.Designer.cs">
       <DependentUpon>OneBalanceTermsAndConditionsPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidatorFactory.cs" />
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
