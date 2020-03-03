@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Autofac;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -85,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
                 // Filter out non-supported shipengine services when they have ups accounts and
                 // all of the accounts are shipengine accounts.
                 var upsAccounts = UpsAccountManager.AccountsReadOnly.ToList();
-                if (upsAccounts.All(a => !string.IsNullOrEmpty(a.ShipEngineCarrierId)))
+                if (upsAccounts.Any() && upsAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId)))
                 {
                     upsServices = upsServices.Where(s => !UpsShipEngineServiceTypeUtility.IsServiceSupported(s));
                 }

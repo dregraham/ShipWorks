@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
@@ -59,7 +60,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 
             IEnumerable<int> availableServiceTypes = allServiceTypes.Except(GetExcludedServiceTypes(repository));
 
-            if (AccountRepository.AccountsReadOnly.All(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId)))
+            // Filter out non-supported shipengine services when they have ups accounts and
+            // all of the accounts are shipengine accounts.
+            var upsAccounts = AccountRepository.AccountsReadOnly;
+            if (upsAccounts.Any() && upsAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId)))
             {
                 // All UPS accounts are using ShipEngine, so only show the services supported by it
                 IEnumerable<int> seSupportedServices = UpsShipEngineServiceTypeUtility.GetSupportedServices().Cast<int>();
