@@ -25,9 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Ups
         /// <summary>
         /// Create a shipment validator for the given shipment
         /// </summary>
-        public IUpsShipmentValidator Create(IShipmentEntity shipment) => 
-            accountRepository.GetAccountReadOnly(shipment)?.ShipEngineCarrierId != null
-                ? new UpsShipEngineShipmentValidator()
-                : (IUpsShipmentValidator) new UpsOltShipmentValidator();
+        public IUpsShipmentValidator Create(IShipmentEntity shipment) =>
+            accountRepository.GetAccountReadOnly(shipment)?.ShipEngineCarrierId == null ?
+            (IUpsShipmentValidator) new UpsOltShipmentValidator() :
+            new UpsShipEngineShipmentValidator();
     }
 }
