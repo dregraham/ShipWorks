@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Autofac;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
