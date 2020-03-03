@@ -18,8 +18,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// </summary>
         public UploadProductsRequest(IEnumerable<IProductVariantEntity> productVariants, string databaseId)
         {
-            this.DatabaseId = databaseId;
-            Products = productVariants.Select(x => new Product(x)).ToList();
+            DatabaseId = databaseId;
+            Products = productVariants.Select(Product.Create).ToList();
         }
 
         /// <summary>

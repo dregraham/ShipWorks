@@ -14,6 +14,12 @@ namespace ShipWorks.Products.Warehouse.DTO
     public class Product
     {
         /// <summary>
+        /// Create a product DTO from a product variant
+        /// </summary>
+        public static Product Create(IProductVariantEntity product) =>
+            new Product(product);
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public Product(IProductVariantEntity product)
