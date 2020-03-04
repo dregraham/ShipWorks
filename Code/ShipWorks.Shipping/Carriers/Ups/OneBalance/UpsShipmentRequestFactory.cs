@@ -64,6 +64,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         {
             PurchaseLabelRequest result = base.CreatePurchaseLabelRequest(shipment);
 
+            switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
+            {
+                case UpsDeliveryConfirmationType.NoSignature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.Signature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Signature;
+                    break;
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.None:
+                default:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.None;
+                    break;
+            }
+
+            foreach (var package in result.Shipment.Packages)
+            {
+                package.LabelMessages.Reference1 = shipment.Ups.ReferenceNumber;
+                package.LabelMessages.Reference2 = shipment.Ups.ReferenceNumber2;
+            }
+
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 result.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
@@ -71,13 +97,39 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-
+        
         /// <summary>
         /// Create a RateShipmentRequest for UPS that includes UPS Insurance
         /// </summary>
         public override RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
             RateShipmentRequest result = base.CreateRateShipmentRequest(shipment);
+
+            switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
+            {
+                case UpsDeliveryConfirmationType.NoSignature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.Signature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Signature;
+                    break;
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.None:
+                default:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.None;
+                    break;
+            }
+
+            foreach (var package in result.Shipment.Packages)
+            {
+                package.LabelMessages.Reference1 = shipment.Ups.ReferenceNumber;
+                package.LabelMessages.Reference2 = shipment.Ups.ReferenceNumber2;
+            }
 
             if (shipment.Insurance && 
                 shipment.InsuranceProvider == (int) InsuranceProvider.Carrier && 
@@ -88,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-
+        
         /// <summary>
         /// Gets the api value for the UPS service
         /// </summary>

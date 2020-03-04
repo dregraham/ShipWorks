@@ -65,7 +65,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
             if (shipment.Ups.Packages.Any(p => p.VerbalConfirmationEnabled))
             {
-                return Result.FromError("Verbal Confirmation Handling is not supported with this account.");
+                return Result.FromError("Verbal Confirmation is not supported with this account.");
+            }
+
+            if (shipment.Ups.PayorType != (int) UpsPayorType.Sender)
+            {
+                return Result.FromError("Third Party Billing is not supported with this account.");
             }
 
             return Result.FromSuccess();
