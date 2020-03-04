@@ -377,10 +377,15 @@
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
     <Compile Include="Settings\OneBalance\IOneBalanceAddMoneyDialog.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceEnableUpsBannerWpfViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml.cs">
       <DependentUpon>OneBalanceAddMoneyDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\OneBalance\OneBalanceAddMoneyViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml.cs">
+      <DependentUpon>OneBalanceEnableUpsBannerWpfControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceSettingsControl.xaml.cs">
       <DependentUpon>OneBalanceSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -833,6 +838,10 @@
     <Page Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Settings\OneBalance\OneBalanceSettingsControl.xaml">
       <SubType>Designer</SubType>

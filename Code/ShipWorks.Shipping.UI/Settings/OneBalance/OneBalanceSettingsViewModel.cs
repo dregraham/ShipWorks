@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -23,14 +24,17 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool showMessage = false;
         private bool loading = true;
         private bool addMoneyEnabled = true;
+        private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerContext;
 
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
+        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
         {
             this.webClient = webClient;
             this.addMoneyDialogFactory = addMoneyDialogFactory;
+            ShowBanner = webClient == null;
+            bannerContext = bannerViewModel;
             GetBalanceCommand = new RelayCommand(GetAccountBalance);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
         }
@@ -87,6 +91,21 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
+        /// A flag to indicate if we are in a state where we should show the banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowBanner { get; }
+
+        /// <summary>
+        /// The data context for the enable ups banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOneBalanceEnableUpsBannerWpfViewModel BannerContext
+        {
+            get => bannerContext;
+        }
+
+        /// <summary>
         /// RelayCommand for getting the account balance
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -103,7 +122,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAccountBalance()
         {
-			this.Loading = true;
+            Loading = true;
+
             Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.ApplicationIdle,
                 new Action(() =>
