@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Interapptive.Shared.ComponentRegistration;
+﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,9 +6,11 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 {
@@ -21,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     public class UpsShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
+        private readonly ITemplateTokenProcessor templateTokenProcessor;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
 
         /// <summary>
@@ -28,11 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         public UpsShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
             IShipmentTypeManager shipmentTypeManager,
-            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ITemplateTokenProcessor templateTokenProcessor)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;
             this.accountRepository = accountRepository;
+            this.templateTokenProcessor = templateTokenProcessor;
         }
 
         /// <summary>
@@ -65,6 +68,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         {
             PurchaseLabelRequest result = base.CreatePurchaseLabelRequest(shipment);
 
+            switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
+            {
+                case UpsDeliveryConfirmationType.NoSignature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.Signature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Signature;
+                    break;
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.None:
+                default:
+                    result.Shipment.Confirmation = Shipment.ConfirmationEnum.None;
+                    break;
+            }
+
+            foreach (var package in result.Shipment.Packages)
+            {
+                package.LabelMessages.Reference1 = templateTokenProcessor.ProcessTokens(shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+                package.LabelMessages.Reference2 = templateTokenProcessor.ProcessTokens(shipment.Ups.ReferenceNumber2, shipment.ShipmentID);
+            }
+
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
             {
                 result.Shipment.InsuranceProvider = Shipment.InsuranceProviderEnum.Carrier;
@@ -72,13 +101,33 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-
+        
         /// <summary>
         /// Create a RateShipmentRequest for UPS that includes UPS Insurance
         /// </summary>
         public override RateShipmentRequest CreateRateShipmentRequest(ShipmentEntity shipment)
         {
             RateShipmentRequest result = base.CreateRateShipmentRequest(shipment);
+
+            switch ((UpsDeliveryConfirmationType) shipment.Ups.DeliveryConfirmation)
+            {
+                case UpsDeliveryConfirmationType.NoSignature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.Signature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Signature;
+                    break;
+                case UpsDeliveryConfirmationType.AdultSignature:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Adultsignature;
+                    break;
+                case UpsDeliveryConfirmationType.UspsDeliveryConfirmation:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.Delivery;
+                    break;
+                case UpsDeliveryConfirmationType.None:
+                default:
+                    result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.None;
+                    break;
+            }
 
             if (shipment.Insurance && 
                 shipment.InsuranceProvider == (int) InsuranceProvider.Carrier && 
@@ -89,12 +138,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             return result;
         }
-
+        
         /// <summary>
         /// Gets the api value for the UPS service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
-            UpsShipEngineTranslation.GetServiceCode((UpsServiceType) shipment.Ups.Service);
+            UpsShipEngineServiceTypeUtility.GetServiceCode((UpsServiceType) shipment.Ups.Service);
 
         /// <summary>
         /// Insurce the ups packages when the user has picked ups insurance
@@ -118,7 +167,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// Get the packaging code for the given adapter
         /// </summary>
         protected override string GetPackagingCode(IPackageAdapter package) =>
-            UpsShipEngineTranslation.GetPackageCode((UpsPackagingType) package.PackagingType);
+            UpsShipEngineServiceTypeUtility.GetPackageCode((UpsPackagingType) package.PackagingType);
 
         /// <summary>
         /// Creates the UPS customs node

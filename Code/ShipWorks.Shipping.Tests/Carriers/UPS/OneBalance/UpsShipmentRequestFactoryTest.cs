@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
         private readonly AutoMock mock;
         private readonly UpsShipmentRequestFactory testObject;
         private ShipmentEntity shipment;
-        private readonly PurchaseLabelRequest purchaseLabelRequest;
         private readonly Mock<IShipEngineRequestFactory> shipmentElementFactory;
 
         public UpsShipmentRequestFactoryTest()
@@ -42,12 +41,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             shipmentTypeManager.Setup(m => m.Get(ShipmentTypeCode.UpsOnLineTools))
                 .Returns(shipmentType.Object);
 
+            var rateShipmentRequest = new RateShipmentRequest() { Shipment = new AddressValidatingShipment() };
+            rateShipmentRequest.Shipment.Packages = new List<ShipmentPackage>() { new ShipmentPackage() { LabelMessages = new LabelMessages() } };
+
             shipmentElementFactory = mock.Mock<IShipEngineRequestFactory>();
             shipmentElementFactory
                 .Setup(f => f.CreateRateRequest(AnyShipment))
-                .Returns(new RateShipmentRequest() { Shipment = new AddressValidatingShipment() });
+                .Returns(rateShipmentRequest);
 
-            purchaseLabelRequest = new PurchaseLabelRequest() { Shipment = new Shipment() };
+            var purchaseLabelRequest = new PurchaseLabelRequest() { Shipment = new Shipment() };
+            purchaseLabelRequest.Shipment.Packages = new List<ShipmentPackage>() { new ShipmentPackage() { LabelMessages = new LabelMessages() } };
+            
             shipmentElementFactory
                 .Setup(f => f.CreatePurchaseLabelRequest(AnyShipment, It.IsAny<List<IPackageAdapter>>(), AnyString, It.IsAny<Func<IPackageAdapter, string>>(), It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()))
                 .Returns(purchaseLabelRequest);

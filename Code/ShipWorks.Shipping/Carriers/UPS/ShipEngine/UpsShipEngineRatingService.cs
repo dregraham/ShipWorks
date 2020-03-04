@@ -4,24 +4,28 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 {
     /// <summary>
-    /// Service for retreiving UPS rates via ShipEngine
+    /// Service for retrieving UPS rates via ShipEngine
     /// </summary>
     [Component]
     class UpsShipEngineRatingService : IUpsShipEngineRatingService
     {
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly IUpsShipmentValidatorFactory upsShipmentValidatorFactory;
         private readonly UpsAccountRepository accountRepository;
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly ShipmentType shipmentType;
@@ -32,10 +36,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         public UpsShipEngineRatingService(IShipEngineWebClient shipEngineWebClient,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory,
             IShipmentTypeManager shipmentTypeManager,
-            IShipEngineRateGroupFactory rateGroupFactory)
+            IShipEngineRateGroupFactory rateGroupFactory,
+            IUpsShipmentValidatorFactory upsShipmentValidatorFactory)
         {
             this.shipEngineWebClient = shipEngineWebClient;
             this.rateGroupFactory = rateGroupFactory;
+            this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
             this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.UpsOnLineTools];
 
             accountRepository = new UpsAccountRepository();
@@ -53,6 +59,12 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 throw new ShippingException("A UPS from ShipWorks account is required to view UPS rates.");
             }
 
+            Result validationResult = upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+            if (validationResult.Failure)
+            {
+                throw new ShippingException(validationResult.Message);
+            }
+
             try
             {
                 RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
@@ -61,8 +73,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
 
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<UpsServiceType>()
-                    .Where(s => UpsShipEngineTranslation.IsServiceSupported(s))
-                    .Select(t => UpsShipEngineTranslation.GetServiceCode(t));
+                    .Where(UpsShipEngineServiceTypeUtility.IsServiceSupported)
+                    .Select(UpsShipEngineServiceTypeUtility.GetServiceCode);
 
                 return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
             }
