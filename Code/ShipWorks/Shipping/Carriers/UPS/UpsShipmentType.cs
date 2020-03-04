@@ -663,6 +663,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 shipment.Ups.UspsTrackingNumber = String.Empty;
                 shipment.Ups.Cn22Number = String.Empty;
+                shipment.Ups.ShipEngineLabelID = null;
+
                 foreach (UpsPackageEntity package in shipment.Ups.Packages)
                 {
                     package.TrackingNumber = String.Empty;
