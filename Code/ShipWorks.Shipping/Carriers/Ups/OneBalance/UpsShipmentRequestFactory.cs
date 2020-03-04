@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 {
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
     public class UpsShipmentRequestFactory : ShipEngineShipmentRequestFactory
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
+        private readonly ITemplateTokenProcessor templateTokenProcessor;
         private readonly IShipEngineRequestFactory shipmentElementFactory;
 
         /// <summary>
@@ -27,11 +29,13 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         public UpsShipmentRequestFactory(IShipEngineRequestFactory shipmentElementFactory,
             IShipmentTypeManager shipmentTypeManager,
-            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository)
+            ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
+            ITemplateTokenProcessor templateTokenProcessor)
             : base(shipmentElementFactory, shipmentTypeManager)
         {
             this.shipmentElementFactory = shipmentElementFactory;
             this.accountRepository = accountRepository;
+            this.templateTokenProcessor = templateTokenProcessor;
         }
 
         /// <summary>
@@ -86,8 +90,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
 
             foreach (var package in result.Shipment.Packages)
             {
-                package.LabelMessages.Reference1 = shipment.Ups.ReferenceNumber;
-                package.LabelMessages.Reference2 = shipment.Ups.ReferenceNumber2;
+                package.LabelMessages.Reference1 = templateTokenProcessor.ProcessTokens(shipment.Ups.ReferenceNumber, shipment.ShipmentID);
+                package.LabelMessages.Reference2 = templateTokenProcessor.ProcessTokens(shipment.Ups.ReferenceNumber2, shipment.ShipmentID);
             }
 
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
@@ -123,12 +127,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 default:
                     result.Shipment.Confirmation = AddressValidatingShipment.ConfirmationEnum.None;
                     break;
-            }
-
-            foreach (var package in result.Shipment.Packages)
-            {
-                package.LabelMessages.Reference1 = shipment.Ups.ReferenceNumber;
-                package.LabelMessages.Reference2 = shipment.Ups.ReferenceNumber2;
             }
 
             if (shipment.Insurance && 
