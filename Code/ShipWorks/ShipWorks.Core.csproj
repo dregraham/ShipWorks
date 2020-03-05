@@ -1210,6 +1210,7 @@
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsLogoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -11349,6 +11350,7 @@
     <Content Include="Resources\Stores\Icons\zentail.png" />
     <None Include="Resources\table_sql32.png" />
     <None Include="Resources\windows.png" />
+    <None Include="Resources\ups_from_shipworks_2x.png" />
     <Content Include="Resources\view_linked_arrow.png" />
     <Content Include="Resources\view_linked_infinity.png" />
     <None Include="Resources\view_next.png" />
