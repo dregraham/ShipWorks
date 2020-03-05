@@ -37,7 +37,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
     public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private readonly ShipmentType shipmentType;
@@ -85,13 +84,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Setup UPS Account. 
         /// </summary>
-        public DialogResult SetupOneBalanceAccount()
+        public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
             var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
 
             // Sets up a new account only if they already have an account and don't have a Shipengine account.
             newAccountOnly = existingAccounts.Any() && existingAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
-            return ShowDialog(this);
+            return ShowDialog(owner);
         }
 
         /// <summary>
