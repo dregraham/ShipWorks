@@ -2,10 +2,10 @@
 
 
 
-using System.Xml;
 using System.Web.Services.Protocols;
-using ShipWorks.ApplicationCore;
+using System.Xml;
 using Interapptive.Shared.Net;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
 {
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV84
+    partial class SwsimV90
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -158,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        public SwsimV84(IApiLogEntry logEntry)
+        public SwsimV90(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

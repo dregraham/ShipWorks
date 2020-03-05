@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             get
             {
-                return PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)account.UspsReseller).ShipmentTypeCode;
+                return PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode;
             }
         }
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             IUspsWebClient client = CreateWebClient();
             if ((UspsResellerType) account.UspsReseller != UspsResellerType.Express1)
             {
-                AccountInfoV37 accountInfo = (AccountInfoV37) client.GetAccountInfo(account);
+                AccountInfoV41 accountInfo = (AccountInfoV41) client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;
@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             else
             {
-                Usps.WebServices.v36.AccountInfo accountInfo = (Usps.WebServices.v36.AccountInfo)client.GetAccountInfo(account);
+                Usps.WebServices.v36.AccountInfo accountInfo = (Usps.WebServices.v36.AccountInfo) client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;

@@ -32,9 +32,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service
         /// </summary>
-        public ISwsimV84 Create(string logName, LogActionType logActionType)
+        public ISwsimV90 Create(string logName, LogActionType logActionType)
         {
-            return new SwsimV84(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
+            return new SwsimV90(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
             {
                 Url = ServiceUrl
             };

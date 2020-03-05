@@ -10,6 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service
         /// </summary>
-        ISwsimV84 Create(string logName, LogActionType logActionType);
+        ISwsimV90 Create(string logName, LogActionType logActionType);
     }
 }
