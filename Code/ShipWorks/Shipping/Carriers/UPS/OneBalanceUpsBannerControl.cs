@@ -32,7 +32,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             InitializeComponent();
             this.scope = scope;
         }
-        
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            detailLabel.Width = Width - 100;
+
+        }
+
         /// <summary>
         /// Click Enable Ups
         /// </summary>
