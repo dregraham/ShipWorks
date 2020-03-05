@@ -59,7 +59,7 @@
             this.detailLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.detailLabel.Location = new System.Drawing.Point(7, 38);
             this.detailLabel.Name = "detailLabel";
-            this.detailLabel.Size = new System.Drawing.Size(450, 32);
+            this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
             this.detailLabel.Text = "Enable your free UPS from ShipWorks account today and start saving money on label" +
     "s. Setting up your account is easy and only takes about a minute.\r\n";
@@ -73,7 +73,7 @@
             this.Controls.Add(this.button1);
             this.Margin = new System.Windows.Forms.Padding(10);
             this.Name = "OneBalanceUpsBannerControl";
-            this.Size = new System.Drawing.Size(610, 68);
+            this.Size = new System.Drawing.Size(610, 97);
             this.ResumeLayout(false);
             this.PerformLayout();
 

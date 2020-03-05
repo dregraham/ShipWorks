@@ -305,7 +305,7 @@ namespace ShipWorks.Shipping.Settings
         {
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
-                OneBalanceUpsBannerControl upsControl = new OneBalanceUpsBannerControl(lifetimeScope);
+                OneBalanceUpsBannerControl upsControl = new OneBalanceUpsBannerControl();
                 upsControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
                 upsControl.Dock = DockStyle.Fill;

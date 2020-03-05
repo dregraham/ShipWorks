@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -9,8 +10,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public partial class OneBalanceUpsBannerControl : UserControl
     {
-        private readonly ILifetimeScope scope;
-
         /// <summary>
         /// Raised when setup has completed
         /// </summary>
@@ -24,31 +23,21 @@ namespace ShipWorks.Shipping.Carriers.UPS
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OneBalanceUpsBannerControl(ILifetimeScope scope)
-        {
-            InitializeComponent();
-            this.scope = scope;
-        }
-
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-
-            detailLabel.Width = Width - 100;
-
+            detailLabel.Width = Width - 110;
         }
 
         /// <summary>
         /// Click Enable Ups
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void OnEnableUps(object sender, EventArgs e)
         {
-            scope.Resolve<UpsSetupWizard>().SetupOneBalanceAccount(this);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<UpsSetupWizard>().SetupOneBalanceAccount(this);
+            }
             
             RaiseSetupComplete();
         }
