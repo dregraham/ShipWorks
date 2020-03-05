@@ -23,6 +23,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Resize the label when the control changes size
+        /// </summary>
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
