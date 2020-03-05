@@ -5,7 +5,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
-using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             if (shipmentType == ShipmentTypeCode.UpsOnLineTools)
             {
-                return UpsShipEngineTranslation.GetServiceType(serviceCode);
+                return UpsShipEngineServiceTypeUtility.GetServiceType(serviceCode);
             }
 
             return serviceCode;

@@ -111,8 +111,8 @@ namespace ShipWorks.Shipping.ShipEngine
                         Unit = Dimensions.UnitEnum.Inch
                     },
                     Weight = new Weight(package.Weight, Weight.UnitEnum.Pound),
-                    PackageCode = getPackageCode(package)
-                    
+                    PackageCode = getPackageCode(package),
+                    LabelMessages = new LabelMessages()
                 };
 
                 addPackageInsurance(apiPackage, package);

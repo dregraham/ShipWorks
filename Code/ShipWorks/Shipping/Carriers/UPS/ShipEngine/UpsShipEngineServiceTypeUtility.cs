@@ -4,12 +4,12 @@ using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
+namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
 {
     /// <summary>
     /// Translate from Ups services to ShipEngine codes
     /// </summary>
-    public static class UpsShipEngineTranslation
+    public static class UpsShipEngineServiceTypeUtility
     {
         private static Dictionary<UpsServiceType, string> serviceCodeMap = new Dictionary<UpsServiceType, string>()
             {
@@ -19,13 +19,8 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 { UpsServiceType.Ups2DayAirAM, "ups_2nd_day_air_am" },
                 { UpsServiceType.UpsNextDayAirSaver, "ups_next_day_air_saver" },
                 { UpsServiceType.UpsNextDayAir, "ups_next_day_air" },
-                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" },
-                { UpsServiceType.UpsStandard, "ups_standard_international" },
-                { UpsServiceType.WorldwideExpedited, "ups_worldwide_expedited" },
-                { UpsServiceType.WorldwideSaver, "ups_worldwide_saver" },
-                { UpsServiceType.WorldwideExpress, "ups_worldwide_express" }
-            }
-        ;
+                { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" }
+            };
 
         private static Dictionary<UpsPackagingType, string> packageCodeMap = new Dictionary<UpsPackagingType, string>()
             {
@@ -57,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         {
             if (!serviceCodeMap.ContainsKey(serviceType))
             {
-                throw new Exception($"{EnumHelper.GetDescription(serviceType)} is not supported from UPS from ShipWorks. Select a different service and try again.");
+                throw new ShippingException($"{EnumHelper.GetDescription(serviceType)} is not supported from UPS from ShipWorks. Select a different service and try again.");
             }
 
             return serviceCodeMap[serviceType];
@@ -71,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         {
             if (!serviceCodeMap.ContainsValue(serviceCode))
             {
-                throw new Exception($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
+                throw new ShippingException($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
             }
 
             return serviceCodeMap.First(x => x.Value == serviceCode).Key;
@@ -84,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         {
             if (!packageCodeMap.ContainsKey(packageCode))
             {
-                throw new Exception($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
+                throw new ShippingException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
             }
 
             return packageCodeMap[packageCode];
@@ -95,5 +90,10 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// </summary>
         public static bool IsServiceSupported(UpsServiceType serviceType) =>
             serviceCodeMap.ContainsKey(serviceType);
+
+        /// <summary>
+        /// Get all of the UPS services supported by ShipEngine
+        /// </summary>
+        public static IEnumerable<UpsServiceType> GetSupportedServices() => serviceCodeMap.Keys;
     }
 }
