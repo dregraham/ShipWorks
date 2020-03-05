@@ -7,6 +7,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// </summary>
     public partial class OneBalanceEnableUpsBannerWpfControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OneBalanceEnableUpsBannerWpfControl()
         {
             InitializeComponent();

@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
-        <TextBlock Text="Save up tp 62% off standard UPS label prices" Style="{StaticResource TextBlock.SectionHeader}"/>
+        <TextBlock Text="Save up to 62% off standard UPS label prices" Style="{StaticResource TextBlock.SectionHeader}"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350"/>
