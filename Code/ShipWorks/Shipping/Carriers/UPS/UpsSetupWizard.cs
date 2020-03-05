@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
 
             // Sets up a new account only if they already have an account and don't have a Shipengine account.
-            newAccountOnly = existingAccounts.Any() && existingAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
             return ShowDialog(owner);
         }
 
