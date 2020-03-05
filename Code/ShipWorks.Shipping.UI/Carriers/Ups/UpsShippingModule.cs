@@ -36,7 +36,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         {
             base.Load(builder);
 
-
             builder.RegisterType<UpsSetupWizard>()
                 .Keyed<IShipmentTypeSetupWizard>(ShipmentTypeCode.UpsOnLineTools)
                 .AsSelf();

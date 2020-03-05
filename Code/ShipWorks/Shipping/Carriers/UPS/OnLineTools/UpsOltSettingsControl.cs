@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using Autofac;
 using Interapptive.Shared.Collections;
@@ -27,8 +28,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltSettingsControl()
         {
             InitializeComponent();
-
             oneBalanceUpsBannerControl.SetupComplete += OnOneBalanceSetupComplete;
+            UpdateOneBalanceBannerVisibility();
         }
 
         /// <summary>
@@ -36,7 +37,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         private void OnOneBalanceSetupComplete(object sender, EventArgs e)
         {
+            UpdateOneBalanceBannerVisibility();
             accountControl.LoadShippers();
+        }
+
+        /// <summary>
+        /// update the one balance banner visibility
+        /// </summary>
+        private void UpdateOneBalanceBannerVisibility()
+        {
+            if (UpsAccountManager.AccountsReadOnly.None() || 
+                UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
+            {
+                oneBalanceUpsBannerControl.Visible = true;
+                panel.Location = new Point(4, 89);
+            }
+            else
+            {
+                oneBalanceUpsBannerControl.Visible = false;
+                panel.Location = new Point(0, 0);
+            }
         }
 
         /// <summary>
@@ -187,6 +207,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Remove event handler
+        /// </summary>
+        public void Dispose()
+        {
+            base.Dispose();
+            oneBalanceUpsBannerControl.SetupComplete -= OnOneBalanceSetupComplete;
         }
     }
 }

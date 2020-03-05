@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="ShipWorks.Shipping.UI.Settings.OneBalance.OneBalanceEnableUpsBannerWpfControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Settings.OneBalance"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <StackPanel>
+        <TextBlock Text="Save up to 62% off standard UPS label prices" Style="{StaticResource TextBlock.SectionHeader}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Enable your free UPS from ShipWorks account today and start saving money on labels. Setting up your account is easy and only takes about a minute." TextWrapping="Wrap"/>
+            <Button HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Command="{Binding ShowSetupDialogCommand}">
+                <TextBlock Text="Enable UPS" Margin="5,2,5,2"/>
+            </Button>
+        </Grid>
+    </StackPanel>
+</UserControl>

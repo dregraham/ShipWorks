@@ -16,6 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// </summary>
         public Result ValidateShipment(ShipmentEntity shipment)
         {
+            if (!shipment.ShipCountryCode.Equals("US", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return Result.FromError("International shipments are not supported with this account.");
+            }
+
             if (shipment.ReturnShipment)
             {
                 return Result.FromError("Return shipments are not supported with this account.");
