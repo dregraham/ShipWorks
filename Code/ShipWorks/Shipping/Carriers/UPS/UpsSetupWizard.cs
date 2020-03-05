@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 Pages.Remove(wizardPageWelcomeWorldShip);
 
-                if (addAccountOnly)
+                if (newAccountOnly)
                 {
                     Pages.Remove(wizardPageWelcomeOlt);
                 }
