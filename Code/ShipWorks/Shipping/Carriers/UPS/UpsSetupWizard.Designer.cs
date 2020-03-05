@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeOlt.TabIndex = 0;
             this.wizardPageWelcomeOlt.Title = "Account Registration";
             this.wizardPageWelcomeOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
-            this.wizardPageWelcomeOlt.SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
+            this.wizardPageWelcomeOlt.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
             // 
             // helpLink1
             // 
@@ -485,7 +485,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeWorldShip.TabIndex = 0;
             this.wizardPageWelcomeWorldShip.Title = "Account Registration";
             this.wizardPageWelcomeWorldShip.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
-            this.wizardPageWelcomeWorldShip.SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
+            this.wizardPageWelcomeWorldShip.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
             // 
             // labelWsUpsAccountNumberLink
             // 
@@ -865,7 +865,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.upsFromShipWorksLogo.Location = new System.Drawing.Point(387, 6);
             this.upsFromShipWorksLogo.Name = "upsFromShipWorksLogo";
             this.upsFromShipWorksLogo.Size = new System.Drawing.Size(181, 44);
-            this.upsFromShipWorksLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.upsFromShipWorksLogo.TabIndex = 9;
             this.upsFromShipWorksLogo.TabStop = false;
             // 
