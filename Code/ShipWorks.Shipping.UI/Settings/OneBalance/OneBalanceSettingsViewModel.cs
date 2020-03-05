@@ -141,6 +141,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             Loading = true;
+            ShowBanner = upsAccount == null;
 
             Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.ApplicationIdle,
@@ -152,7 +153,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     }
 
                     AddMoneyEnabled = webClient != null && !showMessage;
-                    ShowBanner = upsAccount == null;
                     Loading = false;
                 }));
         }
