@@ -29,13 +29,14 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
+using System.Collections.Generic;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
     public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard
     {
         private readonly ShipmentType shipmentType;
@@ -50,6 +51,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private OneBalanceTermsAndConditionsPage oneBalanceTandCPage = new OneBalanceTermsAndConditionsPage();
         private OneBalanceAccountAddressPage oneBalanceAddressPage;
         private OneBalanceFinishPage oneBalanceFinishPage = new OneBalanceFinishPage();
+        private bool newAccountOnly;
 
         /// <summary>
         /// Constructor
@@ -77,6 +79,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.forceAccountOnly = forceAccountOnly;
 
             oneBalanceAddressPage = oneBalanceAddressPageFactory(upsAccount);
+        }
+
+        /// <summary>
+        /// Setup UPS Account. 
+        /// </summary>
+        public DialogResult SetupOneBalanceAccount(IWin32Window owner)
+        {
+            var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
+
+            // Sets up a new account only if they already have an account and don't have a Shipengine account.
+            newAccountOnly = existingAccounts.Any() && existingAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            return ShowDialog(owner);
         }
 
         /// <summary>
@@ -113,6 +127,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
                 Pages.Remove(wizardPageWelcomeWorldShip);
+
+                if (newAccountOnly)
+                {
+                    Pages.Remove(wizardPageWelcomeOlt);
+                }
             }
             else
             {

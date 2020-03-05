@@ -14,6 +14,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
@@ -302,6 +303,17 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private Control BuildSetupControl(ShipmentType shipmentType)
         {
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
+            {
+                OneBalanceUpsBannerControl upsControl = new OneBalanceUpsBannerControl();
+                upsControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+
+                upsControl.Dock = DockStyle.Fill;
+                upsControl.BackColor = Color.Transparent;
+
+                return upsControl;
+            }
+
             ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);
             setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
