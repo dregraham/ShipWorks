@@ -46,7 +46,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         private void UpdateOneBalanceBannerVisibility()
         {
-            if (UpsAccountManager.AccountsReadOnly.Any(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
+            if (UpsAccountManager.AccountsReadOnly.None() || 
+                UpsAccountManager.AccountsReadOnly.All(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
             {
                 oneBalanceUpsBannerControl.Visible = true;
                 panel.Location = new Point(4, 89);
@@ -206,6 +207,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Remove event handler
+        /// </summary>
+        public void Dispose()
+        {
+            base.Dispose();
+            oneBalanceUpsBannerControl.SetupComplete -= OnOneBalanceSetupComplete;
         }
     }
 }
