@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
@@ -7,6 +8,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
@@ -16,12 +18,14 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// </summary>
     public class OneBalanceSettingsControlViewModel : ViewModelBase
     {
-        private readonly IPostageWebClient webClient;
+        private IPostageWebClient webClient;
+        private readonly IUspsAccountManager accountManager;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         private decimal balance;
         private string message;
         private bool showMessage = false;
+        private bool showBanner;
         private bool loading = true;
         private bool addMoneyEnabled = true;
         private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerContext;
@@ -29,12 +33,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IPostageWebClient webClient, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
+        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
         {
+            this.accountManager = accountManager;
+            SetupWebClient();
+
             this.webClient = webClient;
             this.addMoneyDialogFactory = addMoneyDialogFactory;
             ShowBanner = webClient == null;
             bannerContext = bannerViewModel;
+            bannerContext.SetupComplete += OnOneBalanceSetupComplete;
             GetBalanceCommand = new RelayCommand(GetAccountBalance);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
         }
@@ -94,7 +102,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// A flag to indicate if we are in a state where we should show the banner
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ShowBanner { get; }
+        public bool ShowBanner
+        {
+            get => showBanner;
+            set => Set(ref showBanner, value);
+        }
 
         /// <summary>
         /// The data context for the enable ups banner
@@ -134,6 +146,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     }
 
                     AddMoneyEnabled = webClient != null && !showMessage;
+                    ShowBanner = webClient != null;
                     Loading = false;
                 }));
         }
@@ -192,6 +205,18 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             {
                 GetAccountBalance();
             }
+        }
+
+        private void SetupWebClient()
+        {
+            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+            webClient = account == null ? null : new UspsPostageWebClient(account);
+        }
+
+        private void OnOneBalanceSetupComplete(object sender, EventArgs e)
+        {
+            SetupWebClient();
+            GetAccountBalance();
         }
     }
 }

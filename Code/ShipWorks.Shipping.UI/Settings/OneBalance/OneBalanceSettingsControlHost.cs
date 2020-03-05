@@ -38,11 +38,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public void Initialize()
         {
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-
-            var webClient = account == null ? null : new UspsPostageWebClient(account);
-
-            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient, addMoneyDialogFactory, bannerViewModel);
+            settingsViewModel = new OneBalanceSettingsControlViewModel(accountManager, addMoneyDialogFactory, bannerViewModel);
 
             settingsControl.DataContext = settingsViewModel;
         }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Autofac.Features.Indexed;
@@ -17,6 +18,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private readonly IIndex<ShipmentTypeCode, IShipmentTypeSetupWizard> setupWizardFactory;
         private readonly IWin32Window window;
+
+        public event EventHandler SetupComplete;
 
         /// <summary>
         /// Constructor
@@ -41,6 +44,12 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             var upsSetupWizard = setupWizardFactory[ShipmentTypeCode.UpsOnLineTools];
             upsSetupWizard.ShowDialog(window);
+            RaiseSetupComplete();
+        }
+
+        private void RaiseSetupComplete()
+        {
+            SetupComplete?.Invoke(this, EventArgs.Empty);
         }
     }
 }

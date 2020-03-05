@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -11,5 +12,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// RelayCommand for Showing the setup dialog
         /// </summary>
         ICommand ShowSetupDialogCommand { get; }
+
+        /// <summary>
+        /// Raised when setup is complete
+        /// </summary>
+        event EventHandler SetupComplete;
     }
 }
