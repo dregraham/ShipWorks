@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Postal;
 using System;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -17,15 +18,19 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private OneBalanceSettingsControlViewModel settingsViewModel;
         private readonly IUspsAccountManager accountManager;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
+        private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory)
+        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager,
+            Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, 
+            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
         {
             InitializeComponent();
             this.accountManager = accountManager;
             this.addMoneyDialogFactory = addMoneyDialogFactory;
+            this.bannerViewModel = bannerViewModel;
         }
 
         /// <summary>
@@ -33,11 +38,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public void Initialize()
         {
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-
-            var webClient = account == null ? null : new UspsPostageWebClient(account);
-
-            settingsViewModel = new OneBalanceSettingsControlViewModel(webClient, addMoneyDialogFactory);
+            settingsViewModel = new OneBalanceSettingsControlViewModel(accountManager, addMoneyDialogFactory, bannerViewModel);
 
             settingsControl.DataContext = settingsViewModel;
         }
