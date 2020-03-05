@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private IPostageWebClient webClient;
         private readonly IUspsAccountManager accountManager;
+        private UpsAccountEntity upsAccount;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         private decimal balance;
@@ -37,12 +39,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             this.accountManager = accountManager;
             SetupWebClient();
+            upsAccount = GetUpsAccount();
 
             this.webClient = webClient;
             this.addMoneyDialogFactory = addMoneyDialogFactory;
-            ShowBanner = webClient == null;
+            ShowBanner = upsAccount == null;
+
             bannerContext = bannerViewModel;
+
             bannerContext.SetupComplete += OnOneBalanceSetupComplete;
+
             GetBalanceCommand = new RelayCommand(GetAccountBalance);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
         }
@@ -146,7 +152,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     }
 
                     AddMoneyEnabled = webClient != null && !showMessage;
-                    ShowBanner = webClient != null;
+                    ShowBanner = upsAccount == null;
                     Loading = false;
                 }));
         }
@@ -207,15 +213,27 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
         }
 
+        /// <summary>
+        /// Sets up the web client
+        /// </summary>
         private void SetupWebClient()
         {
             var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
             webClient = account == null ? null : new UspsPostageWebClient(account);
         }
 
+        /// <summary>
+        /// Get the Ups account
+        /// </summary>
+        private UpsAccountEntity GetUpsAccount() => UpsAccountManager.Accounts.FirstOrDefault(e => e.ShipEngineCarrierId != null);
+
+        /// <summary>
+        /// Event handler for the banners SetupComplete event
+        /// </summary>
         private void OnOneBalanceSetupComplete(object sender, EventArgs e)
         {
             SetupWebClient();
+            upsAccount = GetUpsAccount();
             GetAccountBalance();
         }
     }

@@ -6,6 +6,7 @@ using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [Component]
     public class OneBalanceEnableUpsBannerWpfViewModel : ViewModelBase, IOneBalanceEnableUpsBannerWpfViewModel
     {
-        private readonly IIndex<ShipmentTypeCode, IShipmentTypeSetupWizard> setupWizardFactory;
+        private readonly UpsSetupWizard setupWizard;
         private readonly IWin32Window window;
 
         public event EventHandler SetupComplete;
@@ -24,9 +25,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceEnableUpsBannerWpfViewModel(IIndex<ShipmentTypeCode, IShipmentTypeSetupWizard> setupWizardFactory, IWin32Window window)
+        public OneBalanceEnableUpsBannerWpfViewModel(UpsSetupWizard setupWizard, IWin32Window window)
         {
-            this.setupWizardFactory = setupWizardFactory;
+            this.setupWizard = setupWizard;
             this.window = window;
             ShowSetupDialogCommand = new RelayCommand(ShowSetupDialog);
         }
@@ -42,11 +43,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowSetupDialog()
         {
-            var upsSetupWizard = setupWizardFactory[ShipmentTypeCode.UpsOnLineTools];
-            upsSetupWizard.ShowDialog(window);
+            setupWizard.SetupOneBalanceAccount(window);
             RaiseSetupComplete();
         }
 
+        /// <summary>
+        /// Raises the SetupComplete event
+        /// </summary>
         private void RaiseSetupComplete()
         {
             SetupComplete?.Invoke(this, EventArgs.Empty);
