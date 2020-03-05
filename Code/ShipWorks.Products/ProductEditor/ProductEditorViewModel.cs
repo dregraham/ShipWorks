@@ -320,6 +320,8 @@ namespace ShipWorks.Products.ProductEditor
                 {
                     counts.AddSuccess(IsNew);
 
+                    CanEdit = true;
+
                     dialog.DialogResult = true;
                     dialog.Close();
                 }
