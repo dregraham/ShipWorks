@@ -24,6 +24,8 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// </summary>
         public Product(IProductVariantEntity product)
         {
+            HubProductId = product.HubProductId?.ToString("D");
+            HubVersion = product.HubVersion;
             Sku = product.DefaultSku;
             Name = product.Name;
             Upc = product.UPC;
@@ -48,6 +50,16 @@ namespace ShipWorks.Products.Warehouse.DTO
             Aliases = product.Aliases.EmptyIfNull().Where(x => !x.IsDefault).Select(ProductAlias.Create);
             BundledProducts = product.Product.Bundles.EmptyIfNull().Select(BundledProduct.Create);
         }
+
+        /// <summary>
+        /// Id of the product in the hub, if available
+        /// </summary>
+        public string HubProductId { get; set; }
+
+        /// <summary>
+        /// Version of the product in the hub, if available
+        /// </summary>
+        public int? HubVersion { get; set; }
 
         /// <summary>
         /// SKU of the product

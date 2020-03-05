@@ -16,17 +16,17 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// <summary>
         /// Constructor
         /// </summary>
-        public UploadProductsRequest(IEnumerable<IProductVariantEntity> productVariants, string databaseId)
+        public UploadProductsRequest(IEnumerable<IProductVariantEntity> productVariants, string warehouseId)
         {
-            DatabaseId = databaseId;
+            WarehouseId = warehouseId;
             Products = productVariants.Select(Product.Create).ToList();
         }
 
         /// <summary>
-        /// Id of the ShipWorks database
+        /// Id of the warehouse on the Hub
         /// </summary>
-        [JsonProperty("databaseId")]
-        public string DatabaseId { get; set; }
+        [JsonProperty("warehouseId")]
+        public string WarehouseId { get; set; }
 
         /// <summary>
         /// Collection of SKUs to upload

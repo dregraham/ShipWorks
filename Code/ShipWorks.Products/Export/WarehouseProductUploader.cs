@@ -20,17 +20,17 @@ namespace ShipWorks.Products.Export
 
         private readonly IProductCatalog productCatalog;
         private readonly IUploadSkusToWarehouse uploadRequest;
-        private readonly IDatabaseIdentifier databaseIdentifier;
+        private readonly IConfigurationData configuration;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         public WarehouseProductUploader(
             IProductCatalog productCatalog,
             IUploadSkusToWarehouse uploadRequest,
             ISqlAdapterFactory sqlAdapterFactory,
-            IDatabaseIdentifier databaseIdentifier)
+            IConfigurationData configuration)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.databaseIdentifier = databaseIdentifier;
+            this.configuration = configuration;
             this.uploadRequest = uploadRequest;
             this.productCatalog = productCatalog;
         }
@@ -40,7 +40,7 @@ namespace ShipWorks.Products.Export
         /// </summary>
         public async Task Upload(ISingleItemProgressDialog progressItem)
         {
-            string databaseId = databaseIdentifier.Get().ToString();
+            string warehouseId = configuration.FetchReadOnly().WarehouseID;
             var progressUpdater = await CreateProgressUpdater(progressItem).ConfigureAwait(false);
 
             GenericResult<bool> shouldContinue;
@@ -49,7 +49,7 @@ namespace ShipWorks.Products.Export
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await uploadRequest.Upload(new UploadProductsRequest(skus, databaseId)).ConfigureAwait(false);
+                    var results = await uploadRequest.Upload(new UploadProductsRequest(skus, warehouseId)).ConfigureAwait(false);
 
                     if (results.Success)
                     {
