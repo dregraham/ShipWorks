@@ -20,7 +20,7 @@ using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
-
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -35,6 +35,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         protected override void Load(ContainerBuilder builder)
         {
             base.Load(builder);
+
+
+            builder.RegisterType<UpsSetupWizard>()
+                .Keyed<IShipmentTypeSetupWizard>(ShipmentTypeCode.UpsOnLineTools)
+                .AsSelf();
 
            builder.RegisterType<UpsShipmentServicesBuilder>()
                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
