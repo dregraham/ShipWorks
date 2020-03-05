@@ -41,7 +41,7 @@
             this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
             this.upsPackagingTypeServicePickerControl = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypePickerControl();
             this.shippingCutoff = new ShipWorks.Shipping.Editing.ShippingDateCutoffControl();
-            this.oneBalanceUpsBannerControl1 = new ShipWorks.Shipping.Carriers.UPS.OneBalanceUpsBannerControl();
+            this.oneBalanceUpsBannerControl = new ShipWorks.Shipping.Carriers.UPS.OneBalanceUpsBannerControl();
             this.SuspendLayout();
             // 
             // accountControl
@@ -165,20 +165,20 @@
             this.shippingCutoff.Size = new System.Drawing.Size(467, 22);
             this.shippingCutoff.TabIndex = 14;
             // 
-            // oneBalanceUpsBannerControl1
+            // oneBalanceUpsBannerControl
             // 
-            this.oneBalanceUpsBannerControl1.Location = new System.Drawing.Point(0, 0);
-            this.oneBalanceUpsBannerControl1.Margin = new System.Windows.Forms.Padding(10);
-            this.oneBalanceUpsBannerControl1.Name = "oneBalanceUpsBannerControl1";
-            this.oneBalanceUpsBannerControl1.Size = new System.Drawing.Size(503, 90);
-            this.oneBalanceUpsBannerControl1.TabIndex = 15;
+            this.oneBalanceUpsBannerControl.Location = new System.Drawing.Point(0, 0);
+            this.oneBalanceUpsBannerControl.Margin = new System.Windows.Forms.Padding(10);
+            this.oneBalanceUpsBannerControl.Name = "oneBalanceUpsBannerControl";
+            this.oneBalanceUpsBannerControl.Size = new System.Drawing.Size(503, 90);
+            this.oneBalanceUpsBannerControl.TabIndex = 15;
             // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.oneBalanceUpsBannerControl1);
+            this.Controls.Add(this.oneBalanceUpsBannerControl);
             this.Controls.Add(this.shippingCutoff);
             this.Controls.Add(this.upsPackagingTypeServicePickerControl);
             this.Controls.Add(this.servicePicker);
@@ -193,7 +193,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(476, 780);
+            this.Size = new System.Drawing.Size(459, 763);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,6 +214,6 @@
         private UpsServiceTypeServicePickerControl servicePicker;
         private UpsPackagingTypePickerControl upsPackagingTypeServicePickerControl;
         private Editing.ShippingDateCutoffControl shippingCutoff;
-        private OneBalanceUpsBannerControl oneBalanceUpsBannerControl1;
+        private OneBalanceUpsBannerControl oneBalanceUpsBannerControl;
     }
 }

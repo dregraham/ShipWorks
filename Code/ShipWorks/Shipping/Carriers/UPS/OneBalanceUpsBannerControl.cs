@@ -38,7 +38,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 lifetimeScope.Resolve<UpsSetupWizard>().SetupOneBalanceAccount(this);
             }
-            
+
+            UpsAccountManager.CheckForChangesNeeded();
             RaiseSetupComplete();
         }
 

@@ -27,6 +27,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltSettingsControl()
         {
             InitializeComponent();
+
+            oneBalanceUpsBannerControl.SetupComplete += OnOneBalanceSetupComplete;
+        }
+
+        /// <summary>
+        /// Reload the accounts after setup is complete
+        /// </summary>
+        private void OnOneBalanceSetupComplete(object sender, EventArgs e)
+        {
+            accountControl.LoadShippers();
         }
 
         /// <summary>

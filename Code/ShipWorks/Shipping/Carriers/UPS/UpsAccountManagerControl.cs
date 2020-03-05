@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Load all the shippers into the grid
         /// </summary>
-        private void LoadShippers()
+        public void LoadShippers()
         {
             sandGrid.Rows.Clear();
 
