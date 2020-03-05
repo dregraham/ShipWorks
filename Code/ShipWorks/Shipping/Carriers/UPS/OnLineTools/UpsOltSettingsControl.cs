@@ -41,13 +41,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             accountControl.LoadShippers();
         }
 
+        /// <summary>
+        /// update the one balance banner visibility
+        /// </summary>
         private void UpdateOneBalanceBannerVisibility()
         {
-            if (UpsAccountManager.AccountsReadOnly.None(a => string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
+            if (UpsAccountManager.AccountsReadOnly.Any(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId)))
             {
                 oneBalanceUpsBannerControl.Visible = true;
                 panel.Location = new Point(4, 89);
-            } else
+            }
+            else
             {
                 oneBalanceUpsBannerControl.Visible = false;
                 panel.Location = new Point(0, 0);
