@@ -57,7 +57,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             if (result.Success)
             {
                 account.ShipEngineCarrierId = result.Value;
-                account.AccountNumber = "UPS from ShipWorks";
                 return Result.FromSuccess();
             }
 
