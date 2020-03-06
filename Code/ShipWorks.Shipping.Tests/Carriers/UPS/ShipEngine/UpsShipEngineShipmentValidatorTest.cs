@@ -18,7 +18,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
 
             shipment = new ShipmentEntity()
             {
-                Ups = new UpsShipmentEntity()
+                Ups = new UpsShipmentEntity(),
+                ShipCountryCode = "US"
             };
 
             shipment.Ups.Packages.Add(new UpsPackageEntity());
