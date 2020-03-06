@@ -220,7 +220,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             {
                 components.Dispose();
             }
-            oneBalanceUpsBannerControl?.SetupComplete -= OnOneBalanceSetupComplete;
+
+            oneBalanceUpsBannerControl.SetupComplete -= OnOneBalanceSetupComplete;
             base.Dispose(disposing);
         }
     }
