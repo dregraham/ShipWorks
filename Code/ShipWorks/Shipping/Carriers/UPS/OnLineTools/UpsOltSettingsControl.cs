@@ -209,13 +209,19 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             return true;
         }
 
-        /// <summary>
-        /// Remove event handler
+
+        /// <summary> 
+        /// Clean up any resources being used.
         /// </summary>
-        public void Dispose()
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
         {
-            base.Dispose();
-            oneBalanceUpsBannerControl.SetupComplete -= OnOneBalanceSetupComplete;
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            oneBalanceUpsBannerControl?.SetupComplete -= OnOneBalanceSetupComplete;
+            base.Dispose(disposing);
         }
     }
 }
