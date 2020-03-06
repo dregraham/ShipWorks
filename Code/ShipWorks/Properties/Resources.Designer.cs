@@ -4693,6 +4693,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ups_from_shipworks {
+            get {
+                object obj = ResourceManager.GetObject("ups_from_shipworks", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap user_16 {
             get {
                 object obj = ResourceManager.GetObject("user_16", resourceCulture);

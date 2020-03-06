@@ -81,9 +81,9 @@
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="25"/>
                     </Grid.RowDefinitions>
-                    <Image Source="/ShipWorks.UI;component/Resources/usps.png" Style="{StaticResource Image.Icon}"/>
+                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/usps.png" Style="{StaticResource Image.Icon}"/>
                     <TextBlock Text="USPS from Stamps.com" Grid.Column="1" Margin="5,0,0,0"/>
-                    <Image Source="/ShipWorks.UI;component/Resources/ups.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
+                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/ups.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
                     <TextBlock Text="UPS from ShipWorks" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0"/>
                 </Grid>
                 <!--#endregion-->

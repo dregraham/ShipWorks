@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
-using System.Xml;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
@@ -20,16 +16,13 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -79,6 +72,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.forceAccountOnly = forceAccountOnly;
 
             oneBalanceAddressPage = oneBalanceAddressPageFactory(upsAccount);
+            oneBalanceTandCPage.SteppingInto += OnSteppingIntoOneBalanceTermsAndConditions;
         }
 
         /// <summary>
@@ -89,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
 
             // Sets up a new account only if they already have an account and don't have a Shipengine account.
-            newAccountOnly = existingAccounts.Any() && existingAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
             return ShowDialog(owner);
         }
 
@@ -130,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 if (newAccountOnly)
                 {
+                    UpdateLogo(UpsLogoType.UpsFromShipWorks);
                     Pages.Remove(wizardPageWelcomeOlt);
                 }
             }
@@ -246,7 +241,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Add in the first page
             SetCurrent(0);
         }
-
 
         /// <summary>
         /// Initialization
@@ -516,7 +510,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Validates the enterred account information.
+        /// Validates the entered account information.
         /// </summary>
         private bool ValidateEnteredAccountInformation()
         {
@@ -799,6 +793,39 @@ namespace ShipWorks.Shipping.Carriers.UPS
             catch (UpsPromoException)
             {
                 upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
+            }
+        }
+
+        /// <summary>
+        /// When stepping into the welcome page, show the UPS logo
+        /// </summary>
+        private void OnSteppingIntoWelcome(object sender, WizardSteppingIntoEventArgs e)
+        {
+            UpdateLogo(UpsLogoType.Ups);
+        }
+
+        /// <summary>
+        /// When stepping into the One Balance terms and conditions page, show the UPS from ShipWorks logo
+        /// </summary>
+        private void OnSteppingIntoOneBalanceTermsAndConditions(object sender, WizardSteppingIntoEventArgs e)
+        {
+            UpdateLogo(UpsLogoType.UpsFromShipWorks);
+        }
+
+        /// <summary>
+        /// Update which logo is shown in the wizard
+        /// </summary>
+        private void UpdateLogo(UpsLogoType logo)
+        {
+            if (logo == UpsLogoType.Ups)
+            {
+                upsFromShipWorksLogo.Visible = false;
+                pictureBox.Visible = true;
+            }
+            else
+            {
+                pictureBox.Visible = false;
+                upsFromShipWorksLogo.Visible = true;
             }
         }
 

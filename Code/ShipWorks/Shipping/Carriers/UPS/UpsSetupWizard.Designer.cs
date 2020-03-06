@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpsSetupWizard));
             this.wizardPageWelcomeOlt = new ShipWorks.UI.Wizard.WizardPage();
+            this.helpLink1 = new ShipWorks.ApplicationCore.Interaction.HelpLink();
             this.labelWelcome2 = new System.Windows.Forms.Label();
             this.accountNumberPanel = new System.Windows.Forms.Panel();
             this.account = new System.Windows.Forms.TextBox();
@@ -97,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.upsInvoiceAuthorizationControl = new ShipWorks.Shipping.Carriers.UPS.UpsInvoiceAuthorizationControl();
             this.invoiceAuthenticationInstructions = new System.Windows.Forms.Label();
             this.upsTrademarkInfo = new System.Windows.Forms.Label();
-            this.helpLink1 = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.upsFromShipWorksLogo = new System.Windows.Forms.PictureBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -119,6 +120,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPagePromo.SuspendLayout();
             this.promoControls.SuspendLayout();
             this.wizardPageInvoiceAuthentication.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.upsFromShipWorksLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // next
@@ -152,7 +154,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // topPanel
             // 
+            this.topPanel.Controls.Add(this.upsFromShipWorksLogo);
             this.topPanel.Size = new System.Drawing.Size(579, 56);
+            this.topPanel.Controls.SetChildIndex(this.pictureBox, 0);
+            this.topPanel.Controls.SetChildIndex(this.upsFromShipWorksLogo, 0);
             // 
             // wizardPageWelcomeOlt
             // 
@@ -170,6 +175,20 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeOlt.TabIndex = 0;
             this.wizardPageWelcomeOlt.Title = "Account Registration";
             this.wizardPageWelcomeOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
+            this.wizardPageWelcomeOlt.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
+            // 
+            // helpLink1
+            // 
+            this.helpLink1.AutoSize = true;
+            this.helpLink1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink1.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink1.Location = new System.Drawing.Point(184, 21);
+            this.helpLink1.Name = "helpLink1";
+            this.helpLink1.Size = new System.Drawing.Size(65, 13);
+            this.helpLink1.TabIndex = 13;
+            this.helpLink1.Text = "Learn More.";
+            this.helpLink1.Url = "https://support.shipworks.com/hc/en-us/articles/360040291011";
             // 
             // labelWelcome2
             // 
@@ -434,7 +453,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageOptionsOlt.TabIndex = 0;
             this.wizardPageOptionsOlt.Title = "Account Registration";
             this.wizardPageOptionsOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOptionsOlt);
-            this.wizardPageOptionsOlt.SteppingInto += OnStepIntoOptionsOlt;
             // 
             // optionsControlOlt
             // 
@@ -467,6 +485,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeWorldShip.TabIndex = 0;
             this.wizardPageWelcomeWorldShip.Title = "Account Registration";
             this.wizardPageWelcomeWorldShip.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
+            this.wizardPageWelcomeWorldShip.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
             // 
             // labelWsUpsAccountNumberLink
             // 
@@ -840,18 +859,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
     " the Color Brown are trademarks of United Parcel Service of America, Inc. All Ri" +
     "ghts Reserved.";
             // 
-            // helpLink1
+            // upsFromShipWorksLogo
             // 
-            this.helpLink1.AutoSize = true;
-            this.helpLink1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.helpLink1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.helpLink1.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink1.Location = new System.Drawing.Point(184, 21);
-            this.helpLink1.Name = "helpLink1";
-            this.helpLink1.Size = new System.Drawing.Size(65, 13);
-            this.helpLink1.TabIndex = 13;
-            this.helpLink1.Text = "Learn More.";
-            this.helpLink1.Url = "https://support.shipworks.com/hc/en-us/articles/360040291011";
+            this.upsFromShipWorksLogo.Image = global::ShipWorks.Properties.Resources.ups_from_shipworks;
+            this.upsFromShipWorksLogo.Location = new System.Drawing.Point(387, 6);
+            this.upsFromShipWorksLogo.Name = "upsFromShipWorksLogo";
+            this.upsFromShipWorksLogo.Size = new System.Drawing.Size(181, 44);
+            this.upsFromShipWorksLogo.TabIndex = 9;
+            this.upsFromShipWorksLogo.TabStop = false;
             // 
             // UpsSetupWizard
             // 
@@ -918,6 +933,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.promoControls.ResumeLayout(false);
             this.promoControls.PerformLayout();
             this.wizardPageInvoiceAuthentication.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.upsFromShipWorksLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -989,5 +1005,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private System.Windows.Forms.Label labelWelcome2;
         private System.Windows.Forms.Label upsTrademarkInfo;
         private ApplicationCore.Interaction.HelpLink helpLink1;
+        private System.Windows.Forms.PictureBox upsFromShipWorksLogo;
     }
 }
