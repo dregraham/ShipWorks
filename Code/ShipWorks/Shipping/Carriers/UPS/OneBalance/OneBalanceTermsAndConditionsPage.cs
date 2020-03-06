@@ -35,5 +35,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         {
             WebHelper.OpenUrl(TechnologyAgreementUrl, this);
         }
+
+        /// <summary>
+        /// Opens the prohibited goods page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickLinkProhibitedGoods(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("https://www.ups.com/us/en/help-center/shipping-support/prohibited-items.page", this);
+        }
     }
 }

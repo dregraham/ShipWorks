@@ -35,6 +35,9 @@
             this.linkPromoRatesAgreement = new System.Windows.Forms.LinkLabel();
             this.linkTechnologyAgreement = new System.Windows.Forms.LinkLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.linkProhibitedGoods = new System.Windows.Forms.LinkLabel();
+            this.labelList3ProhibitedGoods = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,10 +109,42 @@
             this.pictureBox1.TabIndex = 6;
             this.pictureBox1.TabStop = false;
             // 
+            // linkProhibitedGoods
+            // 
+            this.linkProhibitedGoods.AutoSize = true;
+            this.linkProhibitedGoods.Location = new System.Drawing.Point(150, 145);
+            this.linkProhibitedGoods.Name = "linkProhibitedGoods";
+            this.linkProhibitedGoods.Size = new System.Drawing.Size(87, 13);
+            this.linkProhibitedGoods.TabIndex = 8;
+            this.linkProhibitedGoods.TabStop = true;
+            this.linkProhibitedGoods.Text = "prohibited goods";
+            this.linkProhibitedGoods.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickLinkProhibitedGoods);
+            // 
+            // labelList3ProhibitedGoods
+            // 
+            this.labelList3ProhibitedGoods.AutoSize = true;
+            this.labelList3ProhibitedGoods.Location = new System.Drawing.Point(34, 145);
+            this.labelList3ProhibitedGoods.Name = "labelList3ProhibitedGoods";
+            this.labelList3ProhibitedGoods.Size = new System.Drawing.Size(20, 13);
+            this.labelList3ProhibitedGoods.TabIndex = 7;
+            this.labelList3ProhibitedGoods.Text = "3. ";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(52, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(103, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "You will not transfer";
+            // 
             // OneBalanceTermsAndConditionsPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.linkProhibitedGoods);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.labelList3ProhibitedGoods);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.linkTechnologyAgreement);
             this.Controls.Add(this.linkPromoRatesAgreement);
@@ -136,5 +171,8 @@
         private System.Windows.Forms.LinkLabel linkPromoRatesAgreement;
         private System.Windows.Forms.LinkLabel linkTechnologyAgreement;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.LinkLabel linkProhibitedGoods;
+        private System.Windows.Forms.Label labelList3ProhibitedGoods;
+        private System.Windows.Forms.Label label1;
     }
 }
