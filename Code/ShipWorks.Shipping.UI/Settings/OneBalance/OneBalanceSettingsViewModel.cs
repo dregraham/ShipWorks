@@ -41,7 +41,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             SetupWebClient();
             upsAccount = GetUpsAccount();
 
-            this.webClient = webClient;
             this.addMoneyDialogFactory = addMoneyDialogFactory;
             ShowBanner = upsAccount == null;
 
