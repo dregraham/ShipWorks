@@ -11218,8 +11218,8 @@
     <None Include="Resources\Shipping\Icons\ontrac.png" />
     <None Include="Resources\Shipping\Icons\other.png" />
     <None Include="Resources\Shipping\Icons\stamps.png" />
-    <None Include="Resources\Shipping\Icons\ups.png" />
-    <None Include="Resources\Shipping\Icons\usps.png" />
+    <Resource Include="Resources\Shipping\Icons\ups.png" />
+    <Resource Include="Resources\Shipping\Icons\usps.png" />
     <None Include="Resources\Shipping\Icons\dhl.png" />
     <None Include="Resources\Shipping\Icons\bestrate.png" />
     <Content Include="Resources\Shipping\Icons\truck_blue.png" />
