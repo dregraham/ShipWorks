@@ -2,10 +2,10 @@
 
 
 
-using System.Web.Services.Protocols;
 using System.Xml;
-using Interapptive.Shared.Net;
+using System.Web.Services.Protocols;
 using ShipWorks.ApplicationCore;
+using Interapptive.Shared.Net;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation.WebServices
 {

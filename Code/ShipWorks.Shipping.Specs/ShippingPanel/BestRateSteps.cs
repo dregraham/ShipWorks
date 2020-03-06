@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             }, 5, TimeSpan.FromSeconds(250), ex => true);
 
         /// <summary>
-        /// Create a mocked version of ISwsimV84
+        /// Create a mocked version of ISwsimV90
         /// </summary>
         private Mock<ISwsimV90> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
