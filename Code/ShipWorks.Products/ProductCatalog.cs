@@ -350,6 +350,7 @@ namespace ShipWorks.Products
         private async Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant)
         {
             ProductEntity product = productVariant.Product;
+            product.UploadToWarehouseNeeded = false;
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
