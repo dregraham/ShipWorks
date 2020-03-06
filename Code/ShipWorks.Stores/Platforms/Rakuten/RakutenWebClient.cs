@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly LruCache<string, RakutenProductsResponse> productCache;
         private readonly IRakutenRestClientFactory clientFactory;
-        private readonly IRakutenRestRequestFactory requestFactory;
+        private readonly IRestRequestFactory requestFactory;
         private readonly IInterapptiveOnly interapptiveOnly;
         private readonly ILogEntryFactory logFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
@@ -48,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Constructor
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
-            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory,
+            IRakutenRestClientFactory clientFactory, IRestRequestFactory requestFactory,
             IInterapptiveOnly interapptiveOnly,
             ILogEntryFactory logFactory)
         {

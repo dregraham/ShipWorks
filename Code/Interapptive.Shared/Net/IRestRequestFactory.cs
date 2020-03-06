@@ -1,12 +1,11 @@
 ﻿using RestSharp;
-using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Stores.Platforms.Rakuten
+namespace Interapptive.Shared.Net
 {
     /// <summary>
-    /// Interface for creating Rakuten IRestClients
+    /// Interface for creating IRestRequests
     /// </summary>
-    public interface IRakutenRestRequestFactory
+    public interface IRestRequestFactory
     {
         /// <summary>
         /// Create an IRestClient for the given endpoint

@@ -373,5 +373,20 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             var result = ((IEnumerable<string>) null).DefaultIfEmptyOrNull("foo").First();
             Assert.Equal("foo", result);
         }
+
+        [Fact]
+        public void EmptyIfNull_ReturnsSource_WhenNotNull()
+        {
+            var input = new[] { "foo" };
+            var result = input.EmptyIfNull();
+            Assert.Same(input, result);
+        }
+
+        [Fact]
+        public void EmptyIfNull_ReturnsEmptyEnumerable_WhenNull()
+        {
+            var result = ((IEnumerable<string>) null).EmptyIfNull();
+            Assert.Empty(result);
+        }
     }
 }

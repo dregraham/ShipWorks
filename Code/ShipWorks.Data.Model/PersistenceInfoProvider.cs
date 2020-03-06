@@ -2927,8 +2927,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("ProductVariantEntity", "CountryOfOrigin", "CountryOfOrigin", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 16);
 			this.AddElementFieldMapping("ProductVariantEntity", "FNSku", "FNSku", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 17);
 			this.AddElementFieldMapping("ProductVariantEntity", "EAN", "EAN", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 18);
-			this.AddElementFieldMapping("ProductVariantEntity", "FNSku_", "FNSku", true, "NVarChar", 300, 0, 0, false, "", null, typeof(System.String), 19);
-			this.AddElementFieldMapping("ProductVariantEntity", "EAN_", "EAN", true, "NVarChar", 30, 0, 0, false, "", null, typeof(System.String), 20);
+			this.AddElementFieldMapping("ProductVariantEntity", "HubProductId", "HubProductId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 19);
+			this.AddElementFieldMapping("ProductVariantEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 20);
 		}
 
 		/// <summary>Inits ProductVariantAliasEntity's mappings</summary>

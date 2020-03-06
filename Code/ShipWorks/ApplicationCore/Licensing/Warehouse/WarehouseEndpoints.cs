@@ -1,5 +1,5 @@
-﻿using System;
-using RestSharp;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -11,12 +11,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public const string Login = "api/auth/token/login";
         public const string Warehouses = "api/warehouses";
         public const string RefreshToken = "api/auth/token/refresh";
-        public const string UploadSkus = "api/skus/import";
+        public const string UploadProducts = "api/products/import";
         public const string GenerateDataKey = "api/store/generateDataKey";
         public const string Stores = "api/stores";
         public const string OdbcStores = "api/stores/{0}/odbc";
         public const string GenericFile = "api/stores/{0}/genericFile";
         public const string UploadOrders = "api/orders";
+        public const string AddProduct = "api/products";
+        public const string SetActivationBulk = "api/products/activation";
 
         private const string linkWarehouse = "api/warehouses/{0}/link";
         private const string orders = "api/warehouses/{0}/orders";
@@ -66,5 +68,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Create a reroute order items endpoint with an warehouseOrderID
         /// </summary>
         public static string RerouteOrderItems(string warehouseOrderID) => string.Format(rerouteOrderItems, warehouseOrderID);
+
+        /// <summary>
+        /// Create a change product route
+        /// </summary>
+        public static string ChangeProduct(IProductVariantEntity product) => $"api/product/{product.HubProductId}";
     }
 }

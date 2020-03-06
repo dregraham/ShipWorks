@@ -8102,11 +8102,17 @@ CREATE TABLE [dbo].[ProductVariant]
 [CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FNSku] [nvarchar](300) NULL,
 [EAN] [nvarchar](30) NULL,
+[HubProductId] [uniqueidentifier] NULL,
+[HubVersion] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
 GO
 ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [PK_ProductVariant] PRIMARY KEY CLUSTERED  ([ProductVariantID])
+GO
+PRINT N'Creating index IX_ProductVariant_HubProductId'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ProductVariant_HubProductId] ON [dbo].[ProductVariant] ([HubProductId]) WHERE HubProductId IS NOT NULL
 GO
 PRINT N'Creating [dbo].[ProductVariantAlias]'
 GO

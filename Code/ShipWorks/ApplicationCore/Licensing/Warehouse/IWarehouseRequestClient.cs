@@ -13,5 +13,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Make the given request
         /// </summary>
         Task<GenericResult<IRestResponse>> MakeRequest(IRestRequest restRequest, string logName);
+
+        /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        Task<T> MakeRequest<T>(IRestRequest restRequest, string logName);
     }
 }

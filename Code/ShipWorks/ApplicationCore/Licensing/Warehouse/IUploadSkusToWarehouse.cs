@@ -12,6 +12,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Upload skus to a warehouse
         /// </summary>
-        Task<Result> Upload(SkusToUploadDto skusToUploadDto);
+        Task<Result> Upload(UploadProductsRequest uploadProductsRequest);
     }
 }

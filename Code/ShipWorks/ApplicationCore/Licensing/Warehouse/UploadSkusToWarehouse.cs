@@ -30,14 +30,14 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Upload skus to a warehouse
         /// </summary>
-        public async Task<Result> Upload(SkusToUploadDto skusToUploadDto)
+        public async Task<Result> Upload(UploadProductsRequest uploadProductsRequest)
         {
             try
             {
-                RestRequest restRequest = new RestRequest(WarehouseEndpoints.UploadSkus, Method.POST);
+                RestRequest restRequest = new RestRequest(WarehouseEndpoints.UploadProducts, Method.POST);
                 restRequest.JsonSerializer = new RestSharpJsonNetSerializer();
                 restRequest.RequestFormat = DataFormat.Json;
-                restRequest.AddJsonBody(skusToUploadDto);
+                restRequest.AddJsonBody(uploadProductsRequest);
 
                 GenericResult<IRestResponse> restResponse = await warehouseRequestClient.MakeRequest(restRequest, "UploadSkusToWarehouse")
                     .ConfigureAwait(false);

@@ -5,10 +5,12 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -18,11 +20,13 @@ using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Products.Import;
+using ShipWorks.Products.Warehouse;
 
 namespace ShipWorks.Products
 {
@@ -35,59 +39,73 @@ namespace ShipWorks.Products
         private readonly ISqlSession sqlSession;
         private readonly Func<Type, ILog> logFactory;
         private readonly IMessageHelper messageHelper;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IWarehouseProductClient warehouseClient;
+        private readonly IProductValidator productValidator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProductCatalog(ISqlSession sqlSession, Func<Type, ILog> logFactory, IMessageHelper messageHelper)
+        public ProductCatalog(
+            ISqlSession sqlSession, 
+            Func<Type, ILog> logFactory, 
+            IMessageHelper messageHelper, 
+            ISqlAdapterFactory sqlAdapterFactory, 
+            IWarehouseProductClient warehouseClient,
+            IProductValidator productValidator)
         {
             this.sqlSession = sqlSession;
             this.logFactory = logFactory;
             this.messageHelper = messageHelper;
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.warehouseClient = warehouseClient;
+            this.productValidator = productValidator;
         }
 
         /// <summary>
         /// Set given products activation to specified value
         /// </summary>
-        public async Task SetActivation(IEnumerable<long> productIDs, bool activation)
+        public async Task SetActivation(IEnumerable<long> productVariantIds, bool activation)
         {
             int chunkSize = 100;
-            List<IEnumerable<long>> chunks = productIDs.SplitIntoChunksOf(chunkSize).ToList();
+            List<IEnumerable<long>> chunks = productVariantIds.SplitIntoChunksOf(chunkSize).ToList();
 
             using (DbConnection conn = sqlSession.OpenConnection())
             {
                 foreach ((IEnumerable<long> productsChunk, int index) in chunks.Select((x, i) => (x, i)))
                 {
-                    var transaction = conn.BeginTransaction();
-                    try
+                    var productVariants = Enumerable.Empty<ProductVariantEntity>();
+
+                    using (var sqlAdapter = sqlAdapterFactory.Create(conn))
                     {
-                        using (DbCommand comm = conn.CreateCommand())
-                        {
-                            comm.Transaction = transaction;
-                            comm.CommandText = $"UPDATE ProductVariant SET IsActive = {(activation ? "1" : "0")} WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs)";
-                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
-
-                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        }
-
-                        using (DbCommand comm = conn.CreateCommand())
-                        {
-                            comm.Transaction = transaction;
-                            comm.CommandText = $"UPDATE Product SET UploadToWarehouseNeeded = 1 WHERE ProductId IN (SELECT DISTINCT ProductId FROM ProductVariant WHERE ProductVariantID in (SELECT item FROM @ProductVariantIDs))";
-                            comm.Parameters.Add(CreateProductVariantIDParameter(productsChunk));
-
-                            await comm.ExecuteNonQueryAsync().ConfigureAwait(false);
-                        }
-
-                        transaction.Commit();
+                        productVariants = await GetVariants(sqlAdapter, productVariantIds).ConfigureAwait(false);
                     }
-                    catch (Exception)
+
+                    var hubProductIds = productVariants.Select(x => x.HubProductId);
+                    var results = await warehouseClient.SetActivation(hubProductIds, activation).ConfigureAwait(false);
+                    results.ApplyTo(productVariants);
+
+                    productVariants.ForEach(x => x.IsActive = activation);
+
+                    using (var sqlAdapter = sqlAdapterFactory.Create(conn))
                     {
-                        transaction.Rollback();
-                        throw;
+                        await sqlAdapter.SaveEntityCollectionAsync(productVariants.ToEntityCollection()).ConfigureAwait(false);
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Get a list of product variants from the database
+        /// </summary>
+        private async Task<IEnumerable<ProductVariantEntity>> GetVariants(ISqlAdapter sqlAdapter, IEnumerable<long> productVariantIds)
+        {
+            QueryFactory factory = new QueryFactory();
+            var from = factory.ProductVariant
+                .Where(ProductVariantFields.ProductVariantID.In(productVariantIds));
+
+            var results = await sqlAdapter.FetchQueryAsync(from).ConfigureAwait(false);
+            return results.OfType<ProductVariantEntity>();
         }
 
         /// <summary>
@@ -107,25 +125,6 @@ namespace ShipWorks.Products
             {
                 await adapter.DeleteEntityAsync(removedBundle).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// Create a table parameter for the product variant ID list
-        /// </summary>
-        private SqlParameter CreateProductVariantIDParameter(IEnumerable<long> productVariantIDs)
-        {
-            DataTable table = new DataTable();
-            table.Columns.Add("item", typeof(long));
-            foreach (long value in productVariantIDs)
-            {
-                table.Rows.Add(value);
-            }
-
-            return new SqlParameter("@ProductVariantIDs", SqlDbType.Structured)
-            {
-                TypeName = "LongList",
-                Value = table
-            };
         }
 
         /// <summary>
@@ -305,15 +304,33 @@ namespace ShipWorks.Products
         /// <summary>
         /// Save the product
         /// </summary>
-        public async Task<Result> Save(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
+        public async Task<Result> Save(ProductVariantEntity productVariant)
         {
-            Result validationResult = await Validate(productVariant, sqlAdapterFactory).ConfigureAwait(false);
+            Result validationResult = await productValidator.Validate(productVariant, this).ConfigureAwait(false);
             if (validationResult.Failure)
             {
                 return validationResult;
             }
 
             ProductEntity product = productVariant.Product;
+            SetCreatedDateIfNecessary(productVariant, product);
+
+            var hubOperation = productVariant.IsNew || !productVariant.HubProductId.HasValue ?
+                (Func<IProductVariantEntity, Task<IProductChangeResult>>) warehouseClient.AddProduct :
+                warehouseClient.ChangeProduct;
+
+            return await hubOperation(productVariant)
+                .Do(x => x.ApplyTo(productVariant))
+                .Bind(_ => SaveProductToDatabase(productVariant))
+                .ToResult()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Set the created date, if necessary
+        /// </summary>
+        private static void SetCreatedDateIfNecessary(ProductVariantEntity productVariant, ProductEntity product)
+        {
             DateTime now = DateTime.UtcNow;
 
             if (product.IsNew)
@@ -325,9 +342,15 @@ namespace ShipWorks.Products
             {
                 productVariant.CreatedDate = now;
             }
+        }
 
-            // Set the product to be uploaded to the warehouse
-            product.UploadToWarehouseNeeded = true;
+        /// <summary>
+        /// Save the product to the database
+        /// </summary>
+        private async Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant)
+        {
+            ProductEntity product = productVariant.Product;
+            product.UploadToWarehouseNeeded = false;
 
             using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
             {
@@ -350,14 +373,14 @@ namespace ShipWorks.Products
 
                     sqlAdapter.Commit();
                 }
-                catch (ORMQueryExecutionException ex)
+                catch (ORMQueryExecutionException)
                 {
                     sqlAdapter.Rollback();
-                    return Result.FromError(ex);
+                    throw;
                 }
             }
 
-            return Result.FromSuccess();
+            return Unit.Default;
         }
 
         /// <summary>
@@ -381,48 +404,6 @@ namespace ShipWorks.Products
             bucket.PredicateExpression.Add(ProductVariantAttributeValueFields.ProductVariantAttributeValueID.IsNull());
 
             await sqlAdapter.DeleteEntitiesDirectlyAsync(typeof(ProductAttributeEntity), bucket).ConfigureAwait(false);
-        }
-
-        /// <summary>
-        /// Checks if product is valid
-        /// </summary>
-        private async Task<Result> Validate(ProductVariantEntity productVariant, ISqlAdapterFactory sqlAdapterFactory)
-        {
-            if (productVariant.Aliases.Any(a => string.IsNullOrWhiteSpace(a.Sku)))
-            {
-                string message = $"The following field is required: {Environment.NewLine}SKU";
-                return Result.FromError(message);
-            }
-
-            if (productVariant.Product.IsBundle)
-            {
-                // A Bundle can't have siblings
-                IEnumerable<IProductVariantEntity> siblingVariants;
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-                {
-                    siblingVariants = await FetchSiblingVariants(productVariant, sqlAdapter);
-                }
-                if (siblingVariants.Any())
-                {
-                    return Result.FromError("A product with variants cannot be turned into a bundle");
-                }
-
-                // A Bundle can't be in another bundle
-                int inHowManyBundles = productVariant.IncludedInBundles.Count();
-                if (inHowManyBundles > 0)
-                {
-                    string plural = inHowManyBundles > 1 ? "s" : "";
-                    string question = $"A bundle cannot contain another bundle.\r\n\r{productVariant.DefaultSku ?? "This Product"} is already a part of {inHowManyBundles} existing bundle{plural}.\r\n\r\nDo you want to remove {productVariant.DefaultSku ?? "this product"} from the existing bundle{plural}? ";
-
-                    DialogResult answer = messageHelper.ShowQuestion(question);
-                    if (answer != DialogResult.OK)
-                    {
-                        return Result.FromError("A Bundle cannot contain another bundle");
-                    }
-                }
-            }
-
-            return Result.FromSuccess();
         }
 
         /// <summary>

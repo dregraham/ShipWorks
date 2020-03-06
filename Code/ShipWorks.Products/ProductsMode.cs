@@ -373,8 +373,8 @@ namespace ShipWorks.Products
             try
             {
                 await productCatalog
-                .SetActivation(new[] { entityId }, makeItActive)
-                .ConfigureAwait(false);
+                    .SetActivation(new[] { entityId }, makeItActive)
+                    .ConfigureAwait(true);
             }
             catch (Exception ex)
             {

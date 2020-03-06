@@ -47,7 +47,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Save the given product
         /// </summary>
-        Task<Result> Save(ProductVariantEntity product, ISqlAdapterFactory sqlAdapterFactory);
+        Task<Result> Save(ProductVariantEntity product);
 
         /// Get a DataTable of products from the database
         /// </summary>
