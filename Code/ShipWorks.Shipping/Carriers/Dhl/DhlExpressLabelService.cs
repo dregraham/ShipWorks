@@ -6,6 +6,8 @@ using ShipWorks.ApplicationCore.Logging;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -13,43 +15,28 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Dhl Express Implementation
     /// </summary>
     [KeyedComponent(typeof(ILabelService), ShipmentTypeCode.DhlExpress)]
-    public class DhlExpressLabelService : ShipEngineLabelService
+    public class DhlExpressLabelService : ILabelService
     {
-        private readonly IDhlExpressAccountRepository accountRepository;
+        private readonly IDhlExpressLabelClientFactory labelClientFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressLabelService(
-            IShipEngineWebClient shipEngineWebClient,
-            IDhlExpressAccountRepository accountRepository,
-            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
-            Func<ShipmentEntity, Label, DhlExpressShipEngineDownloadedLabelData> createDownloadedLabelData,
-            Func<Type, ILog> logFactory) 
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
+        public DhlExpressLabelService(IDhlExpressLabelClientFactory labelClientFactory)
         {
-            log = logFactory(typeof(DhlExpressLabelService));
-            this.accountRepository = accountRepository;
+            this.labelClientFactory = labelClientFactory;
         }
 
         /// <summary>
-        /// The api log source for this label service
+        /// Create a label
         /// </summary>
-        public override ApiLogSource ApiLogSource => ApiLogSource.DHLExpress;
+        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment) => 
+            labelClientFactory.Create(shipment).CreateLabel(shipment);
+        
 
-        /// <summary>
-        /// The shipment type code for this label service
-        /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.DhlExpress;
-
-        /// <summary>
-        /// Get the ShipEngine carrier ID from the shipment
-        /// </summary>
-        protected override string GetShipEngineCarrierID(ShipmentEntity shipment) => accountRepository.GetAccount(shipment)?.ShipEngineCarrierId ?? string.Empty;
-
-        /// <summary>
-        /// Get the ShipEngine label ID from the shipment
-        /// </summary>
-        protected override string GetShipEngineLabelID(ShipmentEntity shipment) => shipment.DhlExpress.ShipEngineLabelID;        
+        public void Void(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
