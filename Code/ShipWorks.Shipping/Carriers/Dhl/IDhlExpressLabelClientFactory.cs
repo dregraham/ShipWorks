@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -15,6 +10,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create an IDhlExpressLabelClient
         /// </summary>
-        IDhlExpressLabelClient Create(ShipmentEntity shipment);
+        IDhlExpressLabelClient Create(IShipmentEntity shipment);
     }
 }

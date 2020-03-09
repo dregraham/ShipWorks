@@ -225,6 +225,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipEngineLabelClient.cs" />
@@ -232,6 +233,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressStampsLabelClient.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
