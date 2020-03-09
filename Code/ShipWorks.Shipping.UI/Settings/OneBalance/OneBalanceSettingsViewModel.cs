@@ -58,7 +58,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The current balance of the one balance account
         /// </summary>
-        /// 
         [Obfuscation(Exclude = true)]
         public decimal Balance
         {
