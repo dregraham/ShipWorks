@@ -225,7 +225,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />

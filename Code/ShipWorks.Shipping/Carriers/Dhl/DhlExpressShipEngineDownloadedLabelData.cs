@@ -10,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// Save Dhl label data
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class DhlExpressDownloadedLabelData : ShipEngineDownloadedLabelData
+    public class DhlExpressShipEngineDownloadedLabelData : ShipEngineDownloadedLabelData
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressDownloadedLabelData(ShipmentEntity shipment, 
+        public DhlExpressShipEngineDownloadedLabelData(ShipmentEntity shipment, 
             Label label, 
             IDataResourceManager resourceManager, 
             IShipEngineResourceDownloader resourceDownloader) 
