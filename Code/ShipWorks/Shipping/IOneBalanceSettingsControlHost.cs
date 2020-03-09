@@ -5,9 +5,5 @@
     /// </summary>
     public interface IOneBalanceSettingsControlHost
     {
-        /// <summary>
-        /// Initializes the hosted control
-        /// </summary>
-        void Initialize();
     }
 }
