@@ -145,6 +145,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageRates);
                 Pages.Remove(wizardPageInvoiceAuthentication);
                 Pages.Remove(wizardPagePromo);
+                Pages.Remove(wizardPageAccount);
                 // Only way to create new account is through One Balance, so remove the other finish pages so that
                 // the One Balance finish pages shows.
                 Pages.Remove(wizardPageFinishOlt);
@@ -305,11 +306,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 e.NextPage = oneBalanceTandCPage;
-                if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
-                {
-                    // We are creating a new account, so remove the existing account entry wizard page
-                    Pages.Remove(wizardPageAccount);
-                }
             }
 
             // If the account list page is present, that means we arent creating accounts from this wizard flow directly
