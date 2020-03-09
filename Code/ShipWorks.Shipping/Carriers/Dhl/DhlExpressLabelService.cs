@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IShipEngineWebClient shipEngineWebClient,
             IDhlExpressAccountRepository accountRepository,
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
-            Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData,
+            Func<ShipmentEntity, Label, DhlExpressShipEngineDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> logFactory) 
             : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
