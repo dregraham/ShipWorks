@@ -2420,6 +2420,8 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Phone. </summary>
 		Phone,
+		///<summary>UspsAccountId. </summary>
+		UspsAccountId,
 		/// <summary></summary>
 		AmountOfFields
 	}

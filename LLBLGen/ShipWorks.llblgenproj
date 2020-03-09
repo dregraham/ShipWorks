@@ -714,9 +714,10 @@
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
           <Field Name="PostalCode" Type="string" MaxLength="10" FieldIndex="12" />
           <Field Name="RowVersion" Type="byte[]" IsReadOnly="true" FieldIndex="1" />
-          <Field Name="ShipEngineCarrierId" Type="string" MaxLength="50" FieldIndex="3" />
+          <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="3" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
+          <Field Name="UspsAccountId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressPackage" ObjectID="9babcfbe-334c-4763-99fb-5a5bf36e78c3">
@@ -757,7 +758,7 @@
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
           <Field Name="SaturdayDelivery" Type="bool" FieldIndex="5" />
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
-          <Field Name="ShipEngineLabelID" Type="string" MaxLength="50" FieldIndex="9" />
+          <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
         </Fields>
       </EntityDefinition>
@@ -4635,7 +4636,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-28T18:45:10.0140223Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-09T19:34:22.7779168Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5335,7 +5336,7 @@
                     <Field Name="DhlExpressAccountID" Ordinal="1" IsIdentity="true" IsPrimaryKey="true" DbType="0" Precision="19" />
                     <Field Name="RowVersion" Ordinal="2" IsTimestamp="true" DbType="21" />
                     <Field Name="AccountNumber" Ordinal="3" DbType="0" Precision="19" />
-                    <Field Name="ShipEngineCarrierId" Ordinal="4" DbType="12" Length="50" />
+                    <Field Name="ShipEngineCarrierId" Ordinal="4" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="Description" Ordinal="5" DbType="12" Length="50" />
                     <Field Name="FirstName" Ordinal="6" DbType="12" Length="30" />
                     <Field Name="MiddleName" Ordinal="7" DbType="12" Length="30" />
@@ -5348,6 +5349,7 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                    <Field Name="UspsAccountId" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressPackage">
@@ -5412,7 +5414,7 @@
                     <Field Name="RequestedLabelFormat" Ordinal="7" DbType="8" Precision="10" />
                     <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
-                    <Field Name="ShipEngineLabelID" Ordinal="10" DbType="12" Length="50" />
+                    <Field Name="ShipEngineLabelID" Ordinal="10" IsOptional="true" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -11612,6 +11614,7 @@
             <FieldMapping FieldName="ShipEngineCarrierId" TargetFieldName="ShipEngineCarrierId" />
             <FieldMapping FieldName="StateProvCode" TargetFieldName="StateProvCode" />
             <FieldMapping FieldName="Street1" TargetFieldName="Street1" />
+            <FieldMapping FieldName="UspsAccountId" TargetFieldName="UspsAccountId" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DhlExpressPackage" TargetName="ShipWorksLocal:dbo:DhlExpressPackage">

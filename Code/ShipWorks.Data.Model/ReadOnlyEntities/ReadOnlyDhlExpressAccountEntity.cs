@@ -52,6 +52,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CountryCode = source.CountryCode;
             Email = source.Email;
             Phone = source.Phone;
+            UspsAccountId = source.UspsAccountId;
             
             
             
@@ -82,7 +83,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressAccount"."ShipEngineCarrierId"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ShipEngineCarrierId { get; }
         /// <summary> The Description property of the Entity DhlExpressAccount<br/><br/>
         /// </summary>
@@ -156,6 +157,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Phone { get; }
+        /// <summary> The UspsAccountId property of the Entity DhlExpressAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressAccount"."UspsAccountId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String UspsAccountId { get; }
         
         
         

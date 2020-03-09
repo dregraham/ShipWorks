@@ -5612,6 +5612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Phone);}
 		}
+		/// <summary>Creates a new DhlExpressAccountEntity.UspsAccountId field instance</summary>
+		public static EntityField2 UspsAccountId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.UspsAccountId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>
