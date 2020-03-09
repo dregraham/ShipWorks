@@ -2500,6 +2500,10 @@ namespace ShipWorks.Data.Model
 		NonDelivery,
 		///<summary>ShipEngineLabelID. </summary>
 		ShipEngineLabelID,
+		///<summary>IntegratorTransactionID. </summary>
+		IntegratorTransactionID,
+		///<summary>StampsTransactionID. </summary>
+		StampsTransactionID,
 		/// <summary></summary>
 		AmountOfFields
 	}

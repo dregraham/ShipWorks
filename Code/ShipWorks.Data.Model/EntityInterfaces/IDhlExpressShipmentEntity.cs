@@ -81,6 +81,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         System.String ShipEngineLabelID { get; }
+        /// <summary> The IntegratorTransactionID property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."IntegratorTransactionID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Guid> IntegratorTransactionID { get; }
+        /// <summary> The StampsTransactionID property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."StampsTransactionID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Guid> StampsTransactionID { get; }
         
         IShipmentEntity Shipment { get; }
         

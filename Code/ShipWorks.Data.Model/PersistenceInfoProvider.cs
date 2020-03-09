@@ -981,7 +981,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits DhlExpressShipmentEntity's mappings</summary>
 		private void InitDhlExpressShipmentEntityMappings()
 		{
-			this.AddElementMapping("DhlExpressShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlExpressShipment", 10, 0);
+			this.AddElementMapping("DhlExpressShipmentEntity", @"ShipWorksLocal", @"dbo", "DhlExpressShipment", 12, 0);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipmentID", "ShipmentID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "DhlExpressAccountID", "DhlExpressAccountID", false, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 1);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "Service", "Service", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -992,6 +992,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "Contents", "Contents", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "NonDelivery", "NonDelivery", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
 			this.AddElementFieldMapping("DhlExpressShipmentEntity", "ShipEngineLabelID", "ShipEngineLabelID", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 9);
+			this.AddElementFieldMapping("DhlExpressShipmentEntity", "IntegratorTransactionID", "IntegratorTransactionID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 10);
+			this.AddElementFieldMapping("DhlExpressShipmentEntity", "StampsTransactionID", "StampsTransactionID", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 11);
 		}
 
 		/// <summary>Inits DimensionsProfileEntity's mappings</summary>

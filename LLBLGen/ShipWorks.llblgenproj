@@ -753,6 +753,7 @@
           <Field Name="Contents" Type="int" Precision="10" FieldIndex="7" />
           <Field Name="DeliveredDutyPaid" Type="bool" FieldIndex="3" />
           <Field Name="DhlExpressAccountID" Type="long" Precision="19" FieldIndex="1" />
+          <Field Name="IntegratorTransactionID" Type="guid" IsOptional="true" FieldIndex="10" />
           <Field Name="NonDelivery" Type="int" Precision="10" FieldIndex="8" />
           <Field Name="NonMachinable" Type="bool" FieldIndex="4" />
           <Field Name="RequestedLabelFormat" Type="int" Precision="10" FieldIndex="6" />
@@ -760,6 +761,7 @@
           <Field Name="Service" Type="int" Precision="10" FieldIndex="2" />
           <Field Name="ShipEngineLabelID" Type="string" IsOptional="true" MaxLength="50" FieldIndex="9" />
           <Field Name="ShipmentID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
+          <Field Name="StampsTransactionID" Type="guid" IsOptional="true" FieldIndex="11" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="DimensionsProfile" ObjectID="049d2daa-2d00-456e-b841-05c6e40adfab">
@@ -4636,7 +4638,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-09T19:34:22.7779168Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-09T20:45:01.6967614Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5415,6 +5417,8 @@
                     <Field Name="Contents" Ordinal="8" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="9" DbType="8" Precision="10" />
                     <Field Name="ShipEngineLabelID" Ordinal="10" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="IntegratorTransactionID" Ordinal="11" IsOptional="true" DbType="25" />
+                    <Field Name="StampsTransactionID" Ordinal="12" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="DimensionsProfile">
@@ -11650,6 +11654,7 @@
             <FieldMapping FieldName="Contents" TargetFieldName="Contents" />
             <FieldMapping FieldName="DeliveredDutyPaid" TargetFieldName="DeliveredDutyPaid" />
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" />
+            <FieldMapping FieldName="IntegratorTransactionID" TargetFieldName="IntegratorTransactionID" />
             <FieldMapping FieldName="NonDelivery" TargetFieldName="NonDelivery" />
             <FieldMapping FieldName="NonMachinable" TargetFieldName="NonMachinable" />
             <FieldMapping FieldName="RequestedLabelFormat" TargetFieldName="RequestedLabelFormat" />
@@ -11657,6 +11662,7 @@
             <FieldMapping FieldName="Service" TargetFieldName="Service" />
             <FieldMapping FieldName="ShipEngineLabelID" TargetFieldName="ShipEngineLabelID" />
             <FieldMapping FieldName="ShipmentID" TargetFieldName="ShipmentID" />
+            <FieldMapping FieldName="StampsTransactionID" TargetFieldName="StampsTransactionID" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":DimensionsProfile" TargetName="ShipWorksLocal:dbo:DimensionsProfile">

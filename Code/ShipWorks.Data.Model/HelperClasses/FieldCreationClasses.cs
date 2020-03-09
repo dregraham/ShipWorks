@@ -5782,6 +5782,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipEngineLabelID);}
 		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.IntegratorTransactionID field instance</summary>
+		public static EntityField2 IntegratorTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.IntegratorTransactionID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.StampsTransactionID field instance</summary>
+		public static EntityField2 StampsTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.StampsTransactionID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DimensionsProfileEntity</summary>

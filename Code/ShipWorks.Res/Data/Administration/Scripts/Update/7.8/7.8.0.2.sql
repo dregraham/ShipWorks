@@ -15,3 +15,17 @@ GO
 ALTER TABLE [dbo].[DhlExpressShipment]
     ALTER COLUMN [ShipEngineLabelID] [nvarchar] (50) NULL
 GO
+
+IF COL_LENGTH(N'[dbo].[DhlExpressShipment]', N'IntegratorTransactionID') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[DhlExpressShipment]
+        ADD [IntegratorTransactionID] [uniqueidentifier] NULL
+END
+GO
+
+IF COL_LENGTH(N'[dbo].[DhlExpressShipment]', N'StampsTransactionID') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[DhlExpressShipment]
+        ADD [StampsTransactionID] [uniqueidentifier] NULL
+END
+GO
