@@ -1,5 +1,6 @@
+using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
@@ -12,6 +13,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create a label for the given shipment
         /// </summary>
-        TelemetricResult<StampsLabelResponse> CreateLabel(IShipmentEntity shipment);
+        Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment);
     }
 }

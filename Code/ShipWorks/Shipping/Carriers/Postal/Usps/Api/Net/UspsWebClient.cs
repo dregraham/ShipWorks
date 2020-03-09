@@ -908,7 +908,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                return await ExceptionWrapperAsync(() => ProcessShipmentInternal(shipment, account), account).ConfigureAwait(false);
+                // Each request needs to get a new requestID.  If USPS sees a duplicate, it thinks its the same request.
+                // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still
+                // be in error if you used the same ID again.
+                shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
+
+                bool envelope = shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope &&
+                    shipment.Postal.Service != (int) PostalServiceType.InternationalFirst;
+
+                return await ExceptionWrapperAsync(() => ProcessShipmentInternal(shipment, account, shipment.Postal.Usps.RequireFullAddressValidation, shipment.Postal.Usps.IntegratorTransactionID, envelope), account).ConfigureAwait(false);
 
             }
             catch (UspsApiException ex)
@@ -955,11 +963,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private async Task<TelemetricResult<StampsLabelResponse>> ProcessShipmentInternal(ShipmentEntity shipment,
-            UspsAccountEntity account)
+        protected async Task<TelemetricResult<StampsLabelResponse>> ProcessShipmentInternal(
+            ShipmentEntity shipment,
+            UspsAccountEntity account, 
+            bool requireFullAddressValidation, 
+            Guid integratorTransactionID, 
+            bool createEnvelopeRequest = false)
         {
             TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
-            (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
+            (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult, requireFullAddressValidation).ConfigureAwait(false);
 
             RateV33 rate = CreateRateForProcessing(shipment, account);
             CustomsV5 customs = CreateCustoms(shipment);
@@ -979,17 +991,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 rate.PrintLayout = "Normal4X6CN22";
             }
 
-            // Each request needs to get a new requestID.  If USPS sees a duplicate, it thinks its the same request.
-            // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still
-            // be in error if you used the same ID again.
-            shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
-
             CreateIndiciumResult result = null;
 
             using (ISwsimV90 webService = CreateWebService("Process"))
             {
-                if (shipment.Postal.PackagingType == (int) PostalPackagingType.Envelope &&
-                    shipment.Postal.Service != (int) PostalServiceType.InternationalFirst)
+                if (createEnvelopeRequest)
                 {
                     // Envelopes don't support thermal
                     thermalType = null;
@@ -1003,7 +1009,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             new CreateEnvelopeIndiciumParameters
                             {
                                 Item = GetCredentials(account),
-                                IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                                IntegratorTxID = integratorTransactionID.ToString(),
                                 Rate = rate,
                                 From = fromAddress,
                                 To = toAddress,
@@ -1024,7 +1030,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             new CreateIndiciumParameters
                             {
                                 Item = GetCredentials(account),
-                                IntegratorTxID = shipment.Postal.Usps.IntegratorTransactionID.ToString(),
+                                IntegratorTxID = integratorTransactionID.ToString(),
                                 TrackingNumber = string.Empty,
                                 Rate = rate,
                                 From = fromAddress,
@@ -1032,12 +1038,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                                 CustomerID = null,
                                 Customs = customs,
                                 SampleOnly = false, // Sample only,
-                                PostageMode = shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal,
+                                PostageMode = GetPostageMode(shipment),
                                 ImageType = thermalType == null
                                     ? ImageType.Png
                                     : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                                 EltronPrinterDPIType = EltronPrinterDPIType.Default,
-                                Memo = UspsUtility.BuildMemoField(shipment.Postal), // Memo
+                                Memo = GetMemoText(shipment), // Memo
                                 CostCodeId = 0, // Cost Code
                                 DeliveryNotification = false, // delivery notify
                                 ShipmentNotification = null, // shipment notification
@@ -1071,13 +1077,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
             }
 
-            shipment.TrackingNumber = result.TrackingNumber;
-            shipment.ShipmentCost = result.ShipmentCost;
-            shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
-            shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
-
-            // Set the thermal type for the shipment
-            shipment.ActualLabelFormat = (int?) thermalType;
+            SaveLabelInformation(shipment, result, thermalType);
 
             StampsLabelResponse stampsLabelResponse = new StampsLabelResponse
             {
@@ -1090,11 +1090,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
+        /// Get memo text for the given shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        /// <returns></returns>
+        protected virtual string GetMemoText(ShipmentEntity shipment) => 
+            UspsUtility.BuildMemoField(shipment.Postal);
+
+        /// <summary>
+        /// Get the postage mode for the given shipment
+        /// </summary>
+        protected virtual PostageMode GetPostageMode(ShipmentEntity shipment) =>
+            shipment.Postal.NoPostage ? PostageMode.NoPostage : PostageMode.Normal;
+
+        /// <summary>
+        /// Save the label information to the shipment
+        /// </summary>
+        protected virtual void SaveLabelInformation(ShipmentEntity shipment, CreateIndiciumResult result, ThermalLanguage? thermalType)
+        {
+            shipment.TrackingNumber = result.TrackingNumber;
+            shipment.ShipmentCost = result.ShipmentCost;
+            shipment.Postal.Usps.UspsTransactionID = result.StampsTxID;
+            shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
+
+            // Set the thermal type for the shipment
+            shipment.ActualLabelFormat = (int?) thermalType;
+        }
+
+        /// <summary>
         /// Updates addresses based on shipment properties like ReturnShipment, etc
         /// </summary>
         private async Task<(Address to, Address from)> FixWebserviceAddresses(UspsAccountEntity account,
             ShipmentEntity shipment,
-            TelemetricResult<StampsLabelResponse> telemetricResult)
+            TelemetricResult<StampsLabelResponse> telemetricResult,
+            bool requireFullAddressValidation)
         {
             Address toAddress = null;
             Address fromAddress;
@@ -1113,7 +1142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 fromAddress = CreateAddress(shipment.OriginPerson);
                 toAddress = await telemetricResult.RunTimedEventAsync(
                         TelemetricEventType.CleanseAddress,
-                        () => CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation))
+                        () => CleanseAddress(account, shipment.ShipPerson, requireFullAddressValidation))
                     .ConfigureAwait(false);
             }
 
@@ -1240,7 +1269,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV33 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
+        protected virtual RateV33 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV33 rate = new RateV33();
 
@@ -1291,7 +1320,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV33 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        protected virtual RateV33 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
@@ -1421,7 +1450,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the customs information for the given shipment
         /// </summary>
-        private static CustomsV5 CreateCustoms(ShipmentEntity shipment)
+        protected virtual CustomsV5 CreateCustoms(ShipmentEntity shipment)
         {
             if (!CustomsManager.IsCustomsRequired(shipment))
             {
