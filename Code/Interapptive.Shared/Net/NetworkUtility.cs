@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
 
 namespace Interapptive.Shared.Net
@@ -12,6 +13,7 @@ namespace Interapptive.Shared.Net
     /// <summary>
     /// Utility class to get
     /// </summary>
+    [Component]
     public class NetworkUtility : INetworkUtility
     {
         private readonly ILog log;
@@ -20,16 +22,16 @@ namespace Interapptive.Shared.Net
         /// Initializes a new instance of the <see cref="NetworkUtility"/> class.
         /// </summary>
         public NetworkUtility()
-            : this(LogManager.GetLogger(typeof(NetworkUtility)))
-        { }
+        {
+            log = LogManager.GetLogger(typeof(NetworkUtility));
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkUtility"/> class.
         /// </summary>
-        /// <param name="log">The log.</param>
-        public NetworkUtility(ILog log)
+        public NetworkUtility(Func<Type, ILog> logFactory)
         {
-            this.log = log;
+            log = logFactory(typeof(NetworkUtility));
         }
 
         /// <summary>

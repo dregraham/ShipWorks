@@ -396,6 +396,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("LocalRatingEnabled", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UpsRateTableID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -742,6 +744,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)UpsAccountFieldIndex.UpsRateTableID, false); }
 			set	{ SetValue((int)UpsAccountFieldIndex.UpsRateTableID, value); }
+		}
+
+		/// <summary> The ShipEngineCarrierId property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."ShipEngineCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String ShipEngineCarrierId
+		{
+			get { return (System.String)GetValue((int)UpsAccountFieldIndex.ShipEngineCarrierId, true); }
+			set	{ SetValue((int)UpsAccountFieldIndex.ShipEngineCarrierId, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

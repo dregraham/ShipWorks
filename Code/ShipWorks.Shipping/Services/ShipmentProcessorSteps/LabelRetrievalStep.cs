@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                 ex is ShippingException ||
                 ex is CarrierException;
 
-            if (!canHandle)
+            if (!canHandle && ex.InnerException != null)
             {
                 return CanHandleException(ex.GetBaseException());
             }

@@ -2,8 +2,15 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Shared;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Moq;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
+using ShipWorks.Shipping.Settings;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Ups
@@ -151,6 +158,105 @@ namespace ShipWorks.Shipping.Tests.Carriers.Ups
 
             Assert.Equal(expectedTotalWeight, parcelDetail.TotalWeight);
         }
+
+        [Fact]
+        public void GetAvailableServiceTypes_ReturnsAllServices_WhenUserHasNonShipEngineAccountAndNoExcludedServices()
+        {
+            IEnumerable<IUpsAccountEntity> accounts = new[]
+            {
+                new UpsAccountEntity(),
+                new UpsAccountEntity {ShipEngineCarrierId = "foo"}
+            };
+
+            var availableServices = ExecuteGetAvailableServiceTypes(accounts, new List<ExcludedServiceTypeEntity>())
+                .ToArray();
+
+            var expectedServices = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToArray();
+
+            Assert.Equal(expectedServices, availableServices);
+        }
+
+        [Fact]
+        public void GetAvailableServiceTypes_ReturnsServicesThatAreNotExcluded_WhenUserHasNonShipEngineAccountAndThereAreExcludedServiceTypes()
+        {
+            IEnumerable<IUpsAccountEntity> accounts = new[]
+            {
+                new UpsAccountEntity(),
+                new UpsAccountEntity {ShipEngineCarrierId = "foo"}
+            };
+
+            var excludedServiceTypes = new List<ExcludedServiceTypeEntity>()
+            {
+                new ExcludedServiceTypeEntity((int) ShipmentTypeCode.UpsOnLineTools, (int) UpsServiceType.UpsGround)
+            };
+
+            var availableServices = ExecuteGetAvailableServiceTypes(accounts, excludedServiceTypes).ToArray();
+
+            var expectedServices = Enum.GetValues(typeof(UpsServiceType)).Cast<int>()
+                .Except(new[] {excludedServiceTypes[0].ServiceType}).ToArray();
+
+            Assert.Equal(expectedServices, availableServices);
+        }
+
+        [Fact]
+        public void GetAvailableServiceTypes_ReturnsServicesThatAreSupportedByShipEngine_WhenUserOnlyHasShipEngineUpsAccounts()
+        {
+            IEnumerable<IUpsAccountEntity> accounts = new[]
+            {
+                new UpsAccountEntity {ShipEngineCarrierId = "foo"}
+            };
+
+            var availableServices = ExecuteGetAvailableServiceTypes(accounts, new List<ExcludedServiceTypeEntity>())
+                .OrderBy(x => x)
+                .ToArray();
+
+            var expectedServices = UpsShipEngineServiceTypeUtility.GetSupportedServices().Cast<int>()
+                .OrderBy(x => x)
+                .ToArray();
+
+            Assert.Equal(expectedServices, availableServices);
+        }
+
+        [Fact]
+        public void GetAvailableServiceTypes_ReturnsNonExcludedServicesSupportedByShipEngine_WhenAllShipEngineAccountsAndThereAreExcludedServiceTypes()
+        {
+            IEnumerable<IUpsAccountEntity> accounts = new[]
+            {
+                new UpsAccountEntity {ShipEngineCarrierId = "foo"}
+            };
+
+            var excludedServiceTypes = new List<ExcludedServiceTypeEntity>
+            {
+                new ExcludedServiceTypeEntity((int) ShipmentTypeCode.UpsOnLineTools, (int) UpsServiceType.UpsGround)
+            };
+
+            var availableServices = ExecuteGetAvailableServiceTypes(accounts, excludedServiceTypes)
+                .OrderBy(x => x)
+                .ToArray();
+
+            var expectedServices = UpsShipEngineServiceTypeUtility.GetSupportedServices().Cast<int>()
+                .Except(new[] {excludedServiceTypes[0].ServiceType})
+                .OrderBy(x => x)
+                .ToArray();
+
+            Assert.Equal(expectedServices, availableServices);
+        }
+
+        private IEnumerable<int> ExecuteGetAvailableServiceTypes(IEnumerable<IUpsAccountEntity> accounts,
+                                                                 List<ExcludedServiceTypeEntity> excludedServices)
+        {
+            var accountRepo = mock.Mock<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>();
+            accountRepo.Setup(r => r.AccountsReadOnly).Returns(accounts);
+
+            testObject.AccountRepository = accountRepo.Object;
+
+            var excludedServiceTypeRepo = mock.Mock<IExcludedServiceTypeRepository>();
+            excludedServiceTypeRepo.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
+                .Returns(excludedServices);
+
+            return testObject.GetAvailableServiceTypes(excludedServiceTypeRepo.Object);
+        }
+
         public void Dispose()
         {
             mock.Dispose();

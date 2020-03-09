@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using RestSharp;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.ShipEngine.DTOs.Registration;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.ShipEngine
@@ -24,23 +30,25 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineWebClient : IShipEngineWebClient, IShipEngineResourceDownloader
     {
-        private readonly IShipEngineApiKey apiKey;
+        private readonly IShipEngineApiKey shipEngineApiKey;
         private readonly ILogEntryFactory apiLogEntryFactory;
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
+        private readonly IUpsRegistrationRequestFactory registrationRequestFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipEngineWebClient(IShipEngineApiKey apiKey,
+        public ShipEngineWebClient(IShipEngineApiKey shipEngineApiKey,
             ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory,
-            IStoreManager storeManager)
+            IStoreManager storeManager, IUpsRegistrationRequestFactory registrationRequestFactory)
         {
-            this.apiKey = apiKey;
+            this.shipEngineApiKey = shipEngineApiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
+            this.registrationRequestFactory = registrationRequestFactory;
         }
 
         /// <summary>
@@ -125,7 +133,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     merchantSellerId: store.MerchantID,
                     mwsAuthToken: store.AuthToken);
 
-                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, apiKey.GetPartnerApiKey(), $"se-{accountId}");
+                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, shipEngineApiKey.GetPartnerApiKey(), $"se-{accountId}");
                 return Result.FromSuccess();
             }
             catch (ApiException ex)
@@ -165,7 +173,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
 
                 return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
-                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, apiKey.GetPartnerApiKey(), $"se-{accountId}"));
+                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, shipEngineApiKey.GetPartnerApiKey(), $"se-{accountId}"));
             }
             catch (ApiException ex)
             {
@@ -379,12 +387,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         private async Task<string> GetApiKey()
         {
-            if (string.IsNullOrWhiteSpace(apiKey.Value))
+            if (string.IsNullOrWhiteSpace(shipEngineApiKey.Value))
             {
-                await apiKey.Configure().ConfigureAwait(false);
+                await shipEngineApiKey.Configure().ConfigureAwait(false);
             }
 
-            return apiKey.Value;
+            return shipEngineApiKey.Value;
         }
 
         /// <summary>
@@ -433,7 +441,7 @@ namespace ShipWorks.Shipping.ShipEngine
             }
             catch (Exception ex)
             {
-                throw new ShipEngineException($"An error occured while attempting to download reasource.", ex);
+                throw new ShipEngineException($"An error occured while attempting to download resource.", ex);
             }
         }
 
@@ -472,6 +480,91 @@ namespace ShipWorks.Shipping.ShipEngine
                 string error = GetErrorMessage(ex);
 
                 return GenericResult.FromError<string>(error);
+            }
+        }
+
+        /// <summary>
+        /// Connects the given stamps.com account to the users ShipEngine account
+        /// </summary>
+        public async Task<GenericResult<string>> ConnectStampsAccount(string username, string password)
+        {
+            // Check to see if the account already exists in ShipEngine
+            GenericResult<string> existingAccount = await GetCarrierId(username).ConfigureAwait(false);
+
+            if (existingAccount.Success)
+            {
+                return existingAccount;
+            }
+
+            StampsAccountInformationDTO stampsAccountInfo = new StampsAccountInformationDTO
+            {
+                Nickname = username,
+                Username = username,
+                Password = password
+            };
+
+            ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
+
+            try
+            {
+                string apiKey = await GetApiKey().ConfigureAwait(false);
+
+                return await ConnectCarrierAccount(apiInstance, ApiLogSource.Usps, "ConnectStampsAccount",
+                                                   apiInstance.StampsAccountCarrierConnectAccountAsync(stampsAccountInfo, apiKey)).ConfigureAwait(false);
+            }
+            catch (ApiException ex)
+            {
+                string error = GetErrorMessage(ex);
+
+                // Stamps returns a cryptic error when the username or password are wrong, clean it up
+                if (error.Contains("(530) Not logged in"))
+                {
+                    return GenericResult.FromError<string>("Unable to connect to Stamps. Please check your account information and try again.");
+                }
+
+                return GenericResult.FromError<string>(error);
+            }
+        }
+
+        /// <summary>
+        /// Register a UPS account with One Balance
+        /// </summary>
+        public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person)
+        {
+            try
+            {
+                IRestClient restClient = new RestClient("https://api.shipengine.com/v1/registration/ups");
+
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("api-key", shipEngineApiKey.GetPartnerApiKey());
+                request.AddHeader("on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+                UpsRegistrationRequest registration = registrationRequestFactory.Create(person);
+                request.AddJsonBody(registration);
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "RegisterUpsAccount");
+                logEntry.LogRequest(request, restClient, "txt");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "txt");
+
+                if(response.StatusCode == HttpStatusCode.OK)
+                {
+                    JObject responseObject = JObject.Parse(response.Content);
+
+                    return responseObject["carrier_id"].ToString();
+                }
+
+                return GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
+            }
+            catch (Exception ex)
+            {
+                return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
             }
         }
     }

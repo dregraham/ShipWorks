@@ -171,6 +171,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int64> UpsRateTableID { get; }
+        /// <summary> The ShipEngineCarrierId property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."ShipEngineCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String ShipEngineCarrierId { get; }
         
         
         IUpsRateTableEntity UpsRateTable { get; }

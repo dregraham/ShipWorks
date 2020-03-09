@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> logFactory) 
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
             log = logFactory(typeof(DhlExpressLabelService));
             this.accountRepository = accountRepository;

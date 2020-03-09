@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System.Threading.Tasks;
@@ -10,7 +12,8 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Api key for communicating with ShipEngine
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ShipEngineApiKey : IShipEngineApiKey
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    public class ShipEngineApiKey : IShipEngineApiKey, IInitializeForCurrentSession
     {
         private const string EncryptedPartnerApiKey = "Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA";
 
@@ -80,5 +83,12 @@ namespace ShipWorks.Shipping.ShipEngine
             IEncryptionProvider decrypter = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ShipEngine");
             return decrypter.Decrypt(EncryptedPartnerApiKey);
         }
+
+        /// <summary>
+        /// Reset the api key value when logging in
+        /// this ensures that we get a fresh value when connecting to a new database
+        /// </summary>
+        public void InitializeForCurrentSession() =>
+            Value = null;
     }
 }

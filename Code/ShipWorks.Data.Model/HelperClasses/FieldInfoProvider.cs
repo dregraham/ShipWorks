@@ -499,7 +499,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddFieldIndexEnumForElementName(typeof(AmazonSWAAccountFieldIndex), "AmazonSWAAccountEntity");
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "AmazonSWAAccountID", typeof(System.Int64), true, false, true, false,  (int)AmazonSWAAccountFieldIndex.AmazonSWAAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonSWAAccountFieldIndex.RowVersion, 2147483647, 0, 0);
-			this.AddElementFieldInfo("AmazonSWAAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AmazonSWAAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -529,7 +529,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "AmazonSWAAccountID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.AmazonSWAAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "Service", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.Service, 0, 0, 10);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
-			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
+			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsLength, 0, 0, 38);
 			this.AddElementFieldInfo("AmazonSWAShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AmazonSWAShipmentFieldIndex.DimsWidth, 0, 0, 38);
@@ -557,7 +557,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaAccountEntity", "AsendiaAccountID", typeof(System.Int64), true, false, true, false,  (int)AsendiaAccountFieldIndex.AsendiaAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AsendiaAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)AsendiaAccountFieldIndex.AccountNumber, 0, 0, 19);
-			this.AddElementFieldInfo("AsendiaAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("AsendiaAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("AsendiaAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AsendiaAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -592,7 +592,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "Contents", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)AsendiaShipmentFieldIndex.NonDelivery, 0, 0, 10);
-			this.AddElementFieldInfo("AsendiaShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
+			this.AddElementFieldInfo("AsendiaShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)AsendiaShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsProfileID", typeof(System.Int64), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsProfileID, 0, 0, 19);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsLength", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsLength, 0, 0, 38);
 			this.AddElementFieldInfo("AsendiaShipmentEntity", "DimsWidth", typeof(System.Double), false, false, false, false,  (int)AsendiaShipmentFieldIndex.DimsWidth, 0, 0, 38);
@@ -892,7 +892,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "DhlExpressAccountID", typeof(System.Int64), true, false, true, false,  (int)DhlExpressAccountFieldIndex.DhlExpressAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)DhlExpressAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)DhlExpressAccountFieldIndex.AccountNumber, 0, 0, 19);
-			this.AddElementFieldInfo("DhlExpressAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, 12, 0, 0);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -949,7 +949,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "Contents", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.NonDelivery, 0, 0, 10);
-			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, 12, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 		}
 		/// <summary>Inits DimensionsProfileEntity's FieldInfo objects</summary>
 		private void InitDimensionsProfileEntityInfos()
@@ -3519,6 +3519,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "PromoStatus", typeof(System.Byte), false, false, false, false,  (int)UpsAccountFieldIndex.PromoStatus, 0, 0, 3);
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
+			this.AddElementFieldInfo("UpsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UpsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 		}
 		/// <summary>Inits UpsLetterRateEntity's FieldInfo objects</summary>
 		private void InitUpsLetterRateEntityInfos()
@@ -3740,6 +3741,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("UpsShipmentEntity", "UspsPackageID", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsPackageID, 100, 0, 0);
 			this.AddElementFieldInfo("UpsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			this.AddElementFieldInfo("UpsShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)UpsShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>
 		private void InitUserEntityInfos()
@@ -3822,6 +3824,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "PendingInitialAccount", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.PendingInitialAccount, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "GlobalPostAvailability", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.GlobalPostAvailability, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
+			this.AddElementFieldInfo("UspsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UspsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

@@ -222,20 +222,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         {
             RateGroup rates = new RateGroup(new List<RateResult>());
 
-            // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            UpsAccountEntity account = AccountRepository.GetAccount(shipment);
+
+            // Dont want to show rates for ShipEngine UPS accounts in Best Rate
+            if (string.IsNullOrWhiteSpace(account.ShipEngineCarrierId))
             {
-                UpdateShipmentForCurrentBrokerType(shipment);
-
-                IUpsBestRateRatingService ratingService = lifetimeScope.ResolveKeyed<IUpsBestRateRatingService>(ShipmentType.ShipmentTypeCode);
-
-                try
+                // Get rates from ISupportExpress1Rates if it is registered for the shipmenttypecode
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    rates = ratingService.GetRates(shipment);
-                }
-                catch (UpsBestRateRatingException)
-                {
-                    rates.AddFootnoteFactory(new UpsLocalRatingDisabledFootnoteFactory(AccountRepository.GetAccount(shipment)));
+                    UpdateShipmentForCurrentBrokerType(shipment);
+
+                    IUpsBestRateRatingService ratingService =
+                        lifetimeScope.ResolveKeyed<IUpsBestRateRatingService>(ShipmentType.ShipmentTypeCode);
+
+                    try
+                    {
+                        rates = ratingService.GetRates(shipment);
+                    }
+                    catch (UpsBestRateRatingException)
+                    {
+                        rates.AddFootnoteFactory(new UpsLocalRatingDisabledFootnoteFactory(account));
+                    }
                 }
             }
 

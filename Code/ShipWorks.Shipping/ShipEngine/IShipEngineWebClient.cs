@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
@@ -71,5 +72,15 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Track a shipment using the label ID
         /// </summary>
         Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
+
+        /// <summary>
+        /// Connects the given stamps.com account to the users ShipEngine account
+        /// </summary>
+        Task<GenericResult<string>> ConnectStampsAccount(string username, string password);
+
+        /// <summary>
+        /// Register a UPS account with One Balance
+        /// </summary>
+        Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter);
     }
 }

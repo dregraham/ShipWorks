@@ -12942,6 +12942,8 @@ namespace ShipWorks.Data.Model
 		LocalRatingEnabled,
 		///<summary>UpsRateTableID. </summary>
 		UpsRateTableID,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13354,6 +13356,8 @@ namespace ShipWorks.Data.Model
 		UspsPackageID,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13502,6 +13506,8 @@ namespace ShipWorks.Data.Model
 		GlobalPostAvailability,
 		///<summary>AcceptedFCMILetterWarning. </summary>
 		AcceptedFCMILetterWarning,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -2932,7 +2932,7 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[RequestedLabelFormat] [int] NOT NULL,
 	[Contents][int] NOT NULL,
 	[NonDelivery] [int] NOT NULL,
-	[ShipEngineLabelID] [nvarchar] (12) NOT NULL
+	[ShipEngineLabelID] [nvarchar] (50) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
@@ -3023,7 +3023,7 @@ CREATE TABLE [dbo].[AsendiaShipment](
 	[RequestedLabelFormat] [int] NOT NULL,
 	[Contents][int] NOT NULL,
 	[NonDelivery] [int] NOT NULL,
-	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (50) NOT NULL,
 	[DimsProfileID] [bigint] NOT NULL,
 	[DimsLength] [float] NOT NULL,
 	[DimsWidth] [float] NOT NULL,
@@ -3069,7 +3069,7 @@ CREATE TABLE [dbo].[AmazonSWAShipment](
 	[AmazonSWAAccountID] [bigint] NOT NULL,
 	[Service] [int] NOT NULL,
 	[RequestedLabelFormat] [int] NOT NULL,
-	[ShipEngineLabelID] [nvarchar] (12) NOT NULL,
+	[ShipEngineLabelID] [nvarchar] (50) NOT NULL,
 	[DimsProfileID] [bigint] NOT NULL,
 	[DimsLength] [float] NOT NULL,
 	[DimsWidth] [float] NOT NULL,
@@ -4150,7 +4150,8 @@ CREATE TABLE [dbo].[UpsShipment]
 [ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[ShipEngineLabelID] [nvarchar] (50) NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsShipment] on [dbo].[UpsShipment]'
@@ -5344,7 +5345,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [CreatedDate] [datetime] NOT NULL,
 [PendingInitialAccount] [int] NOT NULL,
 [GlobalPostAvailability] [int] NOT NULL,
-[AcceptedFCMILetterWarning] [bit] NOT NULL
+[AcceptedFCMILetterWarning] [bit] NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
@@ -5360,7 +5362,7 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [DhlExpressAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [AccountNumber] [bigint] NOT NULL,
-[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5388,7 +5390,7 @@ CREATE TABLE [dbo].[AsendiaAccount]
 [AsendiaAccountID] [bigint] NOT NULL IDENTITY(1103, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [AccountNumber] [bigint] NOT NULL,
-[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5415,7 +5417,7 @@ CREATE TABLE [dbo].[AmazonSWAAccount]
 (
 [AmazonSWAAccountID] [bigint] NOT NULL IDENTITY(1106, 1000),
 [RowVersion] [timestamp] NOT NULL,
-[ShipEngineCarrierId] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5479,7 +5481,8 @@ CREATE TABLE [dbo].[UpsAccount]
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PromoStatus] [tinyint] NOT NULL,
 [LocalRatingEnabled] [bit] NOT NULL,
-[UpsRateTableID] [bigint] NULL
+[UpsRateTableID] [bigint] NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'

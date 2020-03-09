@@ -128,6 +128,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 case UpsRateType.Occasional:
                     return "03";
 
+                case UpsRateType.AssociatedWithShipperNumber:
+                    return "01";
+
                 case UpsRateType.Retail:
                 default:
                     return "11";
@@ -139,6 +142,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// </summary>
         public static string GetCustomerClassificationCode(UpsRateType rateType)
         {
+            if (rateType == UpsRateType.AssociatedWithShipperNumber)
+            {
+                return "00";
+            }
             string pickupCode = GetPickupTypeCode(rateType);
 
             if (pickupCode == "11")
