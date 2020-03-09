@@ -229,6 +229,8 @@
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
