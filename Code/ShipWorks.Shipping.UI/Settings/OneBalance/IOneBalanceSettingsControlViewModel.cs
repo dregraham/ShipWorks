@@ -2,6 +2,9 @@
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
+    /// <summary>
+    /// Interface for the OneBalanceSettingsControlViewModel
+    /// </summary>
     public interface IOneBalanceSettingsControlViewModel
     {
         bool AddMoneyEnabled { get; set; }

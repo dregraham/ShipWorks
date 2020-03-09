@@ -20,6 +20,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// </summary>
     public partial class OneBalanceAddDhlExpressBanner : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public OneBalanceAddDhlExpressBanner()
         {
             InitializeComponent();
