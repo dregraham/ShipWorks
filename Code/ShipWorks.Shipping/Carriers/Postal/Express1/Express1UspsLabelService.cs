@@ -14,13 +14,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
     public class Express1UspsLabelService : ILabelService
     {
         private readonly Express1UspsShipmentType express1UspsShipmentType;
-        private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<StampsLabelResponse, StampsDownloadedLabelData> createDownloadedLabelData;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public Express1UspsLabelService(Express1UspsShipmentType express1UspsShipmentType,
-            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData)
+            Func<StampsLabelResponse, StampsDownloadedLabelData> createDownloadedLabelData)
         {
             this.express1UspsShipmentType = express1UspsShipmentType;
             this.createDownloadedLabelData = createDownloadedLabelData;
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
                 shipment.Postal.Usps.HidePostage = true;
 
 
-                TelemetricResult<UspsLabelResponse> uspsLabelResponse =
+                TelemetricResult<StampsLabelResponse> uspsLabelResponse =
                     await new Express1UspsWebClient().ProcessShipment(shipment).ConfigureAwait(false);
                 
                 uspsLabelResponse.CopyTo(telemetricResult);

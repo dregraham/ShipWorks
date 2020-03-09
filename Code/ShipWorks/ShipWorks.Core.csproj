@@ -1765,7 +1765,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\StampsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\PrefetchPathContainer.cs" />

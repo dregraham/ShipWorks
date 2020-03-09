@@ -898,7 +898,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public async Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
+        public async Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
@@ -955,10 +955,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private async Task<TelemetricResult<UspsLabelResponse>> ProcessShipmentInternal(ShipmentEntity shipment,
+        private async Task<TelemetricResult<StampsLabelResponse>> ProcessShipmentInternal(ShipmentEntity shipment,
             UspsAccountEntity account)
         {
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+            TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
             (Address toAddress, Address fromAddress) = await FixWebserviceAddresses(account, shipment, telemetricResult).ConfigureAwait(false);
 
             RateV33 rate = CreateRateForProcessing(shipment, account);
@@ -1079,13 +1079,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            UspsLabelResponse uspsLabelResponse = new UspsLabelResponse
+            StampsLabelResponse stampsLabelResponse = new StampsLabelResponse
             {
                 Shipment = shipment,
                 ImageData = result.ImageData,
                 LabelUrl = result.URL
             };
-            telemetricResult.SetValue(uspsLabelResponse);
+            telemetricResult.SetValue(stampsLabelResponse);
             return telemetricResult;
         }
 
@@ -1094,7 +1094,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private async Task<(Address to, Address from)> FixWebserviceAddresses(UspsAccountEntity account,
             ShipmentEntity shipment,
-            TelemetricResult<UspsLabelResponse> telemetricResult)
+            TelemetricResult<StampsLabelResponse> telemetricResult)
         {
             Address toAddress = null;
             Address fromAddress;

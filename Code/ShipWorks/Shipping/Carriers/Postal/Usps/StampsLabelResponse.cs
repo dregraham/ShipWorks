@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// DTO for passing USPS label data around
     /// </summary>
-    public class UspsLabelResponse
+    public class StampsLabelResponse
     {
         /// <summary>
         /// The shipment
