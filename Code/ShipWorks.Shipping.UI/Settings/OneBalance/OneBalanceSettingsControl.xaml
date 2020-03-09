@@ -80,12 +80,18 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="25"/>
+                        <RowDefinition Height="25"/>
                     </Grid.RowDefinitions>
                     <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/usps.png" Style="{StaticResource Image.Icon}"/>
                     <TextBlock Text="USPS from Stamps.com" Grid.Column="1" Margin="5,0,0,0"/>
-                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/ups.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
+                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/ups.png" Style="{StaticResource Image.Icon}" Grid.Row="1"/>
                     <TextBlock Text="UPS from ShipWorks" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0"/>
+                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/dhl.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
+                    <TextBlock Text="DHL Express from ShipWorks" Grid.Column="1" Grid.Row="2" Margin="5,0,0,0" Foreground="DarkGray"/>
                 </Grid>
+                <ContentControl Margin="50,0,0,0" Visibility="{Binding ShowDhlBanner, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <local:OneBalanceAddDhlExpressBanner DataContext="{Binding DhlBannerContext}" Margin="0,10,0,0" />
+                </ContentControl>
                 <!--#endregion-->
             </StackPanel>
             <TextBlock Text="UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and the Color Brown are trademarks of United Service of America, Inc. All Rights Reserved"

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -17,7 +18,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// View model for the OneBalanceSettingsControl
     /// </summary>
-    public class OneBalanceSettingsControlViewModel : ViewModelBase
+    [Component]
+    public class OneBalanceSettingsControlViewModel : ViewModelBase, IOneBalanceSettingsControlViewModel
     {
         private IPostageWebClient webClient;
         private readonly IUspsAccountManager accountManager;
@@ -30,12 +32,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool showBanner;
         private bool loading = true;
         private bool addMoneyEnabled = true;
-        private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerContext;
 
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
+        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager,
+            Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
+            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
         {
             this.accountManager = accountManager;
             SetupWebClient();
@@ -44,9 +47,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             this.addMoneyDialogFactory = addMoneyDialogFactory;
             ShowBanner = upsAccount == null;
 
-            bannerContext = bannerViewModel;
+            BannerContext = bannerViewModel;
 
-            bannerContext.SetupComplete += OnOneBalanceSetupComplete;
+            BannerContext.SetupComplete += OnOneBalanceSetupComplete;
 
             GetBalanceCommand = new RelayCommand(GetAccountBalance);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
@@ -55,10 +58,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The current balance of the one balance account
         /// </summary>
-        /// 
         [Obfuscation(Exclude = true)]
-        public decimal Balance 
-        { 
+        public decimal Balance
+        {
             get => balance;
             set => Set(ref balance, value);
         }
@@ -114,13 +116,19 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
+        /// A flag to indcate if we should show the dhl setup banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowDhlBanner
+        {
+            get => webClient != null;
+        }
+
+        /// <summary>
         /// The data context for the enable ups banner
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOneBalanceEnableUpsBannerWpfViewModel BannerContext
-        {
-            get => bannerContext;
-        }
+        public IOneBalanceEnableUpsBannerWpfViewModel BannerContext { get; }
 
         /// <summary>
         /// RelayCommand for getting the account balance
@@ -186,7 +194,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     {
                         Message = "There was an error retrieving your account balance";
                     }
-                   
+
                     ShowMessage = true;
 
                     if (keepTrying)
@@ -204,9 +212,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void ShowAddMoneyDialog()
         {
             var addMoneyDialog = addMoneyDialogFactory(webClient);
-           
+
             var dlgResult = addMoneyDialog.ShowDialog();
-            if(dlgResult == true)
+            if (dlgResult == true)
             {
                 GetAccountBalance();
             }

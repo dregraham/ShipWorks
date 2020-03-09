@@ -11220,7 +11220,7 @@
     <None Include="Resources\Shipping\Icons\stamps.png" />
     <Resource Include="Resources\Shipping\Icons\ups.png" />
     <Resource Include="Resources\Shipping\Icons\usps.png" />
-    <None Include="Resources\Shipping\Icons\dhl.png" />
+    <Resource Include="Resources\Shipping\Icons\dhl.png" />
     <None Include="Resources\Shipping\Icons\bestrate.png" />
     <Content Include="Resources\Shipping\Icons\truck_blue.png" />
     <None Include="Resources\Shipping\Icons\truck_brown.png" />
