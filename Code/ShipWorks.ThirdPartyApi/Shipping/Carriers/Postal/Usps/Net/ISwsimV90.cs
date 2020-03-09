@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Interface around the Stamps WebService
     /// </summary>
-    public interface ISwsimV84 : IDisposable
+    public interface ISwsimV90 : IDisposable
     {
         /// <summary>
         /// Url of the web service
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get account info
         /// </summary>
-        string GetAccountInfo(object Item, out AccountInfoV37 AccountInfo, out Address Address, out string CustomerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
+        string GetAccountInfo(object Item, out AccountInfoV41 AccountInfo, out Address Address, out string CustomerEmail, out string accountStatus, out DateAdvance dateAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
         /// <summary>
         /// Get account info
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get rates
         /// </summary>
-        RateV31[] GetRates(Credentials account, RateV31 rate);
+        RateV33[] GetRates(Credentials account, RateV33 rate);
 
         /// <summary>
         /// Cleanse the address
@@ -89,16 +89,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Create a scan form
         /// </summary>
         string CreateManifest(
-            object Item, 
-            ref string IntegratorTxID, 
-            Guid[] StampsTxIDs, 
-            string[] TrackingNumbers, 
-            DateTime? ShipDate, 
-            bool ShipDateSpecified, 
-            string PrintLayout, 
-            Address FromAddress, 
+            object Item,
+            ref string IntegratorTxID,
+            Guid[] StampsTxIDs,
+            string[] TrackingNumbers,
+            DateTime? ShipDate,
+            bool ShipDateSpecified,
+            string PrintLayout,
+            Address FromAddress,
             ImageType ImageType,
-            bool PrintInstructions, 
+            bool PrintInstructions,
             ManifestType ManifestType,
             int NumberOfLabels,
             out EndOfDayManifest[] EndOfDayManifests);
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="Carrier">Specifies carrier of the package.</param>
         /// <param name="DestinationInfo">Specifies the destination the package is headed to, if available.</param>
         /// <returns></returns>
-        string TrackShipment(object Item, object Item1, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate, 
+        string TrackShipment(object Item, object Item1, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate,
             out DateTime? ExpectedDeliveryDate, out string ServiceDescription, out string Carrier, out DestinationInfo DestinationInfo);
     }
 }
