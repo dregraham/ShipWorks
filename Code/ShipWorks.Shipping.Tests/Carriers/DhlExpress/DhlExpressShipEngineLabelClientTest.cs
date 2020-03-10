@@ -11,6 +11,7 @@ using ShipWorks.Tests.Shared;
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -43,14 +44,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => testObject.Create(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => testObject.Create(null)).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task Create_DelegatesToCarrierShipmentRequestFactory()
         {
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
-            await testObject.Create(shipment);
+            await testObject.Create(shipment).ConfigureAwait(false);
 
             shipmentRequestFactory.Verify(f => f.CreatePurchaseLabelRequest(shipment), Times.Once);
         }
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            await testObject.Create(shipment);
+            await testObject.Create(shipment).ConfigureAwait(false);
 
             mock.Mock<IShipEngineWebClient>().Verify(r => r.PurchaseLabel(request, ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>()));
         }
@@ -73,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment)).ConfigureAwait(false);
             Assert.Equal("Something broke", ex.Message);
         }
 
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment)).ConfigureAwait(false);
             Assert.Equal("There was a problem creating the label while communicating with the DHL Express API", ex.Message);
         }
 
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment)).ConfigureAwait(false);
             Assert.Equal("SOMETHING WENT WRONG OMG", ex.Message);
         }
 
@@ -115,7 +116,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment));
+            var ex = await Assert.ThrowsAsync<ShippingException>(() => testObject.Create(shipment)).ConfigureAwait(false);
             Assert.Equal("\"K1A 0G9\" is an invalid postal code for the country \"US\".", ex.Message);
         }
 
@@ -132,7 +133,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             var testObject = mock.Create<DhlExpressShipEngineLabelClient>();
 
-            await testObject.Create(shipment);
+            await testObject.Create(shipment).ConfigureAwait(false);
 
             labelDataFactory.Verify(f => f(shipment, label));
         }
