@@ -27,6 +27,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         private decimal balance;
+        private decimal minimumBalance;
+        private decimal autoFundAmount;
         private string message;
         private bool showMessage = false;
         private bool showBanner;
@@ -113,6 +115,26 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             get => showBanner;
             set => Set(ref showBanner, value);
+        }
+
+        /// <summary>
+        /// The account balance that triggers the auto fund
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal MinimumBalance
+        {
+            get => minimumBalance;
+            set => Set(ref minimumBalance, value);
+        }
+
+        /// <summary>
+        /// The amount to add to the account balance when auto funding
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public decimal AutoFundAmount
+        {
+            get => autoFundAmount;
+            set => Set(ref autoFundAmount, value);
         }
 
         /// <summary>
