@@ -36,6 +36,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         }
 
         /// <summary>
+        /// Create the label
+        /// </summary>
+        public override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        {
+            if (shipment?.DhlExpress?.Service == (int) DhlExpressServiceType.ExpressWorldWideDocuments)
+            {
+                throw new ShippingException($"{EnumHelper.GetDescription(DhlExpressServiceType.ExpressWorldWideDocuments)} is not supported by this account.");
+            }
+
+            return base.Create(shipment);
+        }
+
+        /// <summary>
         /// The api log source for this label service
         /// </summary>
         public override ApiLogSource ApiLogSource => ApiLogSource.DHLExpress;
