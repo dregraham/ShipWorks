@@ -52,21 +52,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Get the ShipEngine label ID from the shipment
         /// </summary>
         protected override string GetShipEngineLabelID(ShipmentEntity shipment) => shipment.DhlExpress.ShipEngineLabelID;
-
-        /// <summary>
-        /// Create a DhlExpress label using ShipEngine
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        Task<TelemetricResult<IDownloadedLabelData>> IDhlExpressLabelClient.CreateLabel(ShipmentEntity shipment) =>
-            base.Create(shipment);
-
-        /// <summary>
-        /// Void the shipment through ShipEngine
-        /// </summary>
-        void IDhlExpressLabelClient.Void(ShipmentEntity shipment)
-        {
-            base.Void(shipment);
-        }
     }
 }

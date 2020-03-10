@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Create a label
         /// </summary>
         public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment) => 
-            labelClientFactory.Create(shipment).CreateLabel(shipment);
+            labelClientFactory.Create(shipment).Create(shipment);
 
         /// <summary>
         /// Void the given shipment

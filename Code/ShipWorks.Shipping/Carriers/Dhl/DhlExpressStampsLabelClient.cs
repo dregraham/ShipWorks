@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create a Stamps Dhl express label 
         /// </summary>
-        public async Task<TelemetricResult<IDownloadedLabelData>> CreateLabel(ShipmentEntity shipment)
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
