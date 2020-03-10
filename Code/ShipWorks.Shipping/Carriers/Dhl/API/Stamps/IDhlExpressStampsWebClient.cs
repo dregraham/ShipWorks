@@ -14,12 +14,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a label for the given shipment
         /// </summary>
-        Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment);
+        Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        void Void(ShipmentEntity shipment);
+        void VoidShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Get the tracking result for the given shipment

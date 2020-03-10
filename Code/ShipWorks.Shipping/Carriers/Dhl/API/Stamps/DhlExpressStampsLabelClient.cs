@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
-            var telemetricLabelResponse = await webClient.CreateLabel(shipment).ConfigureAwait(false);
+            var telemetricLabelResponse = await webClient.ProcessShipment(shipment).ConfigureAwait(false);
 
             telemetricLabelResponse.CopyTo(telemetricResult);
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment) => webClient.Void(shipment);
+        public void Void(ShipmentEntity shipment) => webClient.VoidShipment(shipment);
 
         /// <summary>
         /// Get the tracking result for the given shipment
