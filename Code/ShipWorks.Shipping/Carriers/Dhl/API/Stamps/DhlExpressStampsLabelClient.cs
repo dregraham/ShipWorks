@@ -5,7 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
     /// <summary>
     /// LabelClient for getting DhlExpress labels via stamps

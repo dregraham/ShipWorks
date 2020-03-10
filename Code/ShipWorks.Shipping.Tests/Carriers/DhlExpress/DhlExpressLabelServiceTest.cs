@@ -1,18 +1,11 @@
-﻿using Autofac;
-using Autofac.Extras.Moq;
-using log4net;
+﻿using Autofac.Extras.Moq;
 using Moq;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
-using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
-using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Dhl.API;
 using Xunit;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 {

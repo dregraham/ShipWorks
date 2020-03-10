@@ -1,16 +1,15 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
+using System.Threading.Tasks;
+using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
-using Autofac.Features.Indexed;
-using log4net;
-using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityInterfaces;
-using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
 {
     /// <summary>
     /// Dhl Express ShipEngine Label Client

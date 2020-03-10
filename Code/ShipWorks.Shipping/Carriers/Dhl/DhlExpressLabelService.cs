@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Dhl.API;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {

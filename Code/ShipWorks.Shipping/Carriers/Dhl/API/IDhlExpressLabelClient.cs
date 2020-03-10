@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API
 {
     /// <summary>
     /// Client used to get DHL Express labels
