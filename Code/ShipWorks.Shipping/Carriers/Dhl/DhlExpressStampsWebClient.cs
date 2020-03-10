@@ -72,7 +72,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 throw new DhlExpressException("The Stamps.com account associated with this DHL Express account no longer exists.");
             }
 
-                        return await ExceptionWrapperAsync(() => base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value), uspsAccount);
+            return await ExceptionWrapperAsync(() => 
+                base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value), uspsAccount).ConfigureAwait(false);
         }
 
         /// <summary>

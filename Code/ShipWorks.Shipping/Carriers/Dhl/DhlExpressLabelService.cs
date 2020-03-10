@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             try
             {
-                return await labelClientFactory.Create(shipment).CreateLabel(shipment);
+                return await labelClientFactory.Create(shipment).Create(shipment).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
