@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.ComponentRegistration;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Dhl.API;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -25,12 +26,20 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create a label
         /// </summary>
-        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment) => 
-            labelClientFactory.Create(shipment).CreateLabel(shipment);
-
-        public void Void(ShipmentEntity shipment)
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await labelClientFactory.Create(shipment).Create(shipment).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new ShippingException(ex.Message);
+            }
         }
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        public void Void(ShipmentEntity shipment) => labelClientFactory.Create(shipment).Void(shipment);
     }
 }

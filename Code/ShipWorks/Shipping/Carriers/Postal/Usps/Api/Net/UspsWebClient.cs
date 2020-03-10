@@ -877,19 +877,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 throw new UspsException("No USPS account is selected for the shipment.");
             }
 
-            ExceptionWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
+            ExceptionWrapper(() => { VoidShipmentInternal(account, shipment.Postal.Usps.UspsTransactionID); return true; }, account);
         }
 
         /// <summary>
         /// The internal VoidShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        protected void VoidShipmentInternal(UspsAccountEntity account, Guid uspsTransactionID)
         {
             using (ISwsimV90 webService = CreateWebService("Void"))
             {
                 webService.CancelIndicium(
                     GetCredentials(account),
-                    shipment.Postal.Usps.UspsTransactionID,
+                    uspsTransactionID,
                     null, // SendEmail
                     false); // SendsEmailSpecified
             }
@@ -1170,28 +1170,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>The ThermalLanguage value.</returns>
-        /// <exception cref="System.InvalidOperationException">Unknown USPS shipment type.</exception>
-        private static ThermalLanguage? GetThermalLanguage(ShipmentEntity shipment)
-        {
-            ThermalLanguage? thermalType;
-
-            // Determine what thermal type, if any to use.  If USPS, use it's setting. Otherwise, use the USPS
-            // settings if it is a USPS shipment being auto-switched to an Express1 shipment
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
-            }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
-            }
-            else
-            {
-                throw new InvalidOperationException("Unknown USPS shipment type.");
-            }
-
-            return thermalType;
-        }
+        private static ThermalLanguage? GetThermalLanguage(ShipmentEntity shipment) =>
+            shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
 
         /// <summary>
         /// Creates a scan form address (which is entirely different that the address object the rest of the API uses).
@@ -1612,7 +1592,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Handles exceptions when making calls to the USPS API
         /// </summary>
-        private async Task<T> ExceptionWrapperAsync<T>(Func<Task<T>> executor, UspsAccountEntity account)
+        protected async Task<T> ExceptionWrapperAsync<T>(Func<Task<T>> executor, UspsAccountEntity account)
         {
             try
             {

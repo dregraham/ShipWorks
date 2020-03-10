@@ -1,49 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Web.Services.Protocols;
-using System.Xml.Linq;
 using Autofac;
-using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
-using Interapptive.Shared.Collections;
-using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Net;
-using Interapptive.Shared.Security;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using log4net;
-using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Shipping.Tracking;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
     /// <summary>
     /// Webclient for DhlExpress from Stamps.com
     /// </summary>
+    [Component]
     public class DhlExpressStampsWebClient : UspsWebClient, IDhlExpressStampsWebClient
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
@@ -70,16 +48,25 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             shipment.DhlExpress.IntegratorTransactionID = Guid.NewGuid();
 
-            IDhlExpressAccountEntity dhlExpressAccount = dhlExpressAccountRepository.GetAccountReadOnly(shipment);
-
-            UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.FirstOrDefault(a => a.AccountId == dhlExpressAccount.UspsAccountId);
+            var uspsAccount = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
             if (uspsAccount == null)
             {
                 throw new DhlExpressException("The Stamps.com account associated with this DHL Express account no longer exists.");
             }
 
-            return await base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value);
+            return await ExceptionWrapperAsync(() => 
+                base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value), uspsAccount).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        public void Void(ShipmentEntity shipment)
+        {
+            UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
+
+            VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
         }
 
         /// <summary>
@@ -124,6 +111,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             customs.CustomsLines = lines.ToArray();
 
             return customs;
+        }
+
+        /// <summary>
+        /// Get the stamps account that is associated with the DHL account being used
+        /// </summary>
+        private UspsAccountEntity GetStampsAccountAssociatedWithDhlAccount(ShipmentEntity shipment)
+        {
+            IDhlExpressAccountEntity dhlExpressAccount = dhlExpressAccountRepository.GetAccountReadOnly(shipment);
+
+            UspsAccountEntity uspsAccount =
+                uspsAccountRepository.Accounts.FirstOrDefault(a => a.AccountId == dhlExpressAccount.UspsAccountId);
+            return uspsAccount;
         }
 
         /// <summary>

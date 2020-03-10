@@ -1,10 +1,10 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipEngine.ApiClient.Model;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
 {
     /// <summary>
     /// Save Dhl label data

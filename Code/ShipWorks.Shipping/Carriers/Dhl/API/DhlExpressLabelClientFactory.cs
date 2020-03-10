@@ -1,23 +1,27 @@
 using System;
-using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine;
+using ShipWorks.Shipping.Carriers.Dhl.API.Stamps;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API
 {
     /// <summary>
     /// Factory for creating DHL Express label clients
     /// </summary>
+    [Component]
     public class DhlExpressLabelClientFactory : IDhlExpressLabelClientFactory
     {
         private readonly Func<DhlExpressShipEngineLabelClient> createShipEngineLabelClient;
         private readonly Func<DhlExpressStampsLabelClient> createStampsLabelClient;
-        private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
+        private readonly IDhlExpressAccountRepository accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressLabelClientFactory(Func<DhlExpressShipEngineLabelClient> createShipEngineLabelClient, Func<DhlExpressStampsLabelClient> createStampsLabelClient,
-                                            ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository)
+        public DhlExpressLabelClientFactory(Func<DhlExpressShipEngineLabelClient> createShipEngineLabelClient,
+                                            Func<DhlExpressStampsLabelClient> createStampsLabelClient,
+                                            IDhlExpressAccountRepository accountRepository)
         {
             this.createShipEngineLabelClient = createShipEngineLabelClient;
             this.createStampsLabelClient = createStampsLabelClient;

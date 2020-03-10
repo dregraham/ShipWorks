@@ -1,18 +1,20 @@
 ﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
+using System.Threading.Tasks;
+using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.ApplicationCore.Logging;
-using Autofac.Features.Indexed;
-using log4net;
-using System.Threading.Tasks;
-using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
 {
     /// <summary>
     /// Dhl Express ShipEngine Label Client
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class DhlExpressShipEngineLabelClient : ShipEngineLabelService, IDhlExpressLabelClient
     {
         private readonly IDhlExpressAccountRepository accountRepository;
@@ -30,6 +32,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             log = logFactory(typeof(DhlExpressLabelService));
             this.accountRepository = accountRepository;
+        }
+
+        /// <summary>
+        /// Create the label
+        /// </summary>
+        public override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        {
+            if (shipment?.DhlExpress?.Service == (int) DhlExpressServiceType.ExpressWorldWideDocuments)
+            {
+                throw new ShippingException($"{EnumHelper.GetDescription(DhlExpressServiceType.ExpressWorldWideDocuments)} is not supported by this account.");
+            }
+
+            return base.Create(shipment);
         }
 
         /// <summary>
@@ -51,13 +66,5 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Get the ShipEngine label ID from the shipment
         /// </summary>
         protected override string GetShipEngineLabelID(ShipmentEntity shipment) => shipment.DhlExpress.ShipEngineLabelID;
-
-        /// <summary>
-        /// Create a DhlExpress label using ShipEngine
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <returns></returns>
-        Task<TelemetricResult<IDownloadedLabelData>> IDhlExpressLabelClient.CreateLabel(ShipmentEntity shipment) =>
-            base.Create(shipment);
     }
 }
