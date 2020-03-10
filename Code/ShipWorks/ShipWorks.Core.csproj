@@ -820,7 +820,6 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Shipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Store.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\RerouteOrderItems.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\UploadProductsRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\VoidShipment.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\WarehouseListDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubApiError.cs" />
@@ -829,7 +828,6 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\HubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IHubShipmentLogger.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseLink.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\IUploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\IWarehouseRemoteLoginWithToken.cs" />
@@ -837,7 +835,6 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRequestClient.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseEndpoints.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseLink.cs" />
-    <Compile Include="ApplicationCore\Licensing\Warehouse\UploadSkusToWarehouse.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseList.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRefreshToken.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />

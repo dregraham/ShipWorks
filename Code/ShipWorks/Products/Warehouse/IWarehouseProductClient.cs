@@ -25,5 +25,10 @@ namespace ShipWorks.Products.Warehouse
         /// Enable or disable the given products
         /// </summary>
         Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation);
+
+        /// <summary>
+        /// Upload products to the Hub
+        /// </summary>
+        Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products);
     }
 }

@@ -77,5 +77,25 @@ namespace ShipWorks.Products.Warehouse
                 .Map(dataFactory.CreateSetActivationResult)
                 .ConfigureAwait(true);
         }
+
+        /// <summary>
+        /// Upload products to the Hub
+        /// </summary>
+        public async Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products)
+        {
+            if (products?.Any() != true)
+            {
+                return NullProductsResult.Default;
+            }
+
+            var payload = dataFactory.CreateUploadProductsRequest(products);
+            var request = requestFactory.Create(WarehouseEndpoints.UploadProducts, Method.POST, payload);
+            request.AddHeader("version", "2");
+
+            return await warehouseRequestClient
+                .MakeRequest<UploadResponseData>(request, "UploadSkusToWarehouse")
+                .Map(dataFactory.CreateUploadResult)
+                .ConfigureAwait(true);
+        }
     }
 }
