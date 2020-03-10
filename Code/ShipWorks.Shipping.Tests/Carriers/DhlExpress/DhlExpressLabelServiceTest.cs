@@ -124,8 +124,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             var telemetricLabel = new TelemetricResult<Label>("API.Milliseconds");
             telemetricLabel.SetValue(label);
-            var labelData = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment));
-            var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, Label, DhlExpressDownloadedLabelData>>();
+            var labelData = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment));
+            var labelDataFactory = mock.MockRepository.Create<Func<ShipmentEntity, Label, DhlExpressShipEngineDownloadedLabelData>>();
             labelDataFactory.Setup(f => f(AnyShipment, It.IsAny<Label>())).Returns(labelData);
             mock.Provide(labelDataFactory.Object);
             mock.Mock<IShipEngineWebClient>().Setup(c => c.PurchaseLabel(request, ApiLogSource.DHLExpress, It.IsAny<TelemetricResult<IDownloadedLabelData>>())).Returns(Task.FromResult(telemetricLabel.Value));

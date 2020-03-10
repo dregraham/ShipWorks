@@ -2932,7 +2932,9 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[RequestedLabelFormat] [int] NOT NULL,
 	[Contents][int] NOT NULL,
 	[NonDelivery] [int] NOT NULL,
-	[ShipEngineLabelID] [nvarchar] (50) NOT NULL
+	[ShipEngineLabelID] [nvarchar] (50) NULL,
+	[IntegratorTransactionID] [uniqueidentifier] NULL,
+	[StampsTransactionID] [uniqueidentifier] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
@@ -5362,7 +5364,7 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [DhlExpressAccountID] [bigint] NOT NULL IDENTITY(1102, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [AccountNumber] [bigint] NOT NULL,
-[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -5374,7 +5376,8 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UspsAccountId] [bigint] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'

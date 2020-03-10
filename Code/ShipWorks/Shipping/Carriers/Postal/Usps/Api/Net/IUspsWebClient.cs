@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment);
+        Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Populates a usps account entity.

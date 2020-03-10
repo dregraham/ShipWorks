@@ -225,10 +225,17 @@
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipEngineLabelClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressStampsLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressStampsWebClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
@@ -432,7 +439,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Postal\Usps\StampsDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
