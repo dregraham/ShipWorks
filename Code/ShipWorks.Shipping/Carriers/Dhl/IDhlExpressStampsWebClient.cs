@@ -14,5 +14,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// Create a label for the given shipment
         /// </summary>
         Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        void Void(ShipmentEntity shipment);
     }
 }

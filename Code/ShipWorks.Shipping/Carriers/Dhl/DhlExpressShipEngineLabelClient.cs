@@ -7,6 +7,7 @@ using Autofac.Features.Indexed;
 using log4net;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -59,5 +60,13 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <returns></returns>
         Task<TelemetricResult<IDownloadedLabelData>> IDhlExpressLabelClient.CreateLabel(ShipmentEntity shipment) =>
             base.Create(shipment);
+
+        /// <summary>
+        /// Void the shipment through ShipEngine
+        /// </summary>
+        void IDhlExpressLabelClient.Void(ShipmentEntity shipment)
+        {
+            base.Void(shipment);
+        }
     }
 }

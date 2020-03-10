@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
-            var telemetricLabelResponse = await webClient.CreateLabel(shipment);
+            var telemetricLabelResponse = await webClient.CreateLabel(shipment).ConfigureAwait(false);
 
             telemetricLabelResponse.CopyTo(telemetricResult);
 
@@ -38,5 +38,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             return telemetricResult;
         }
+
+        /// <summary>
+        /// Void the given shipment
+        /// </summary>
+        public void Void(ShipmentEntity shipment) => webClient.Void(shipment);
     }
 }

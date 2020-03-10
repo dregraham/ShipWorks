@@ -877,19 +877,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 throw new UspsException("No USPS account is selected for the shipment.");
             }
 
-            ExceptionWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
+            ExceptionWrapper(() => { VoidShipmentInternal(account, shipment.Postal.Usps.UspsTransactionID); return true; }, account);
         }
 
         /// <summary>
         /// The internal VoidShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        protected void VoidShipmentInternal(UspsAccountEntity account, Guid uspsTransactionID)
         {
             using (ISwsimV90 webService = CreateWebService("Void"))
             {
                 webService.CancelIndicium(
                     GetCredentials(account),
-                    shipment.Postal.Usps.UspsTransactionID,
+                    uspsTransactionID,
                     null, // SendEmail
                     false); // SendsEmailSpecified
             }
