@@ -8,12 +8,14 @@ using log4net;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityInterfaces;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
     /// <summary>
     /// Dhl Express ShipEngine Label Client
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class DhlExpressShipEngineLabelClient : ShipEngineLabelService, IDhlExpressLabelClient
     {
         private readonly IDhlExpressAccountRepository accountRepository;

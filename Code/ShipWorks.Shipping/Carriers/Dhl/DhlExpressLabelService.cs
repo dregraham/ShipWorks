@@ -25,9 +25,17 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <summary>
         /// Create a label
         /// </summary>
-        public Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment) => 
-            labelClientFactory.Create(shipment).Create(shipment);
-
+        public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
+        {
+            try
+            {
+                return await labelClientFactory.Create(shipment).CreateLabel(shipment);
+            }
+            catch (Exception ex)
+            {
+                throw new ShippingException(ex.Message);
+            }
+        }
         /// <summary>
         /// Void the given shipment
         /// </summary>

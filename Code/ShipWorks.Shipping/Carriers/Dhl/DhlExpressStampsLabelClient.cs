@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// LabelClient for getting DhlExpress labels via stamps
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class DhlExpressStampsLabelClient : IDhlExpressLabelClient
     {
         private readonly IDhlExpressStampsWebClient webClient;

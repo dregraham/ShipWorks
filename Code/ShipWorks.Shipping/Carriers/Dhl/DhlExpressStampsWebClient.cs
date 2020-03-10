@@ -1,11 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -20,6 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Webclient for DhlExpress from Stamps.com
     /// </summary>
+    [Component]
     public class DhlExpressStampsWebClient : UspsWebClient, IDhlExpressStampsWebClient
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
@@ -53,8 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
                 throw new DhlExpressException("The Stamps.com account associated with this DHL Express account no longer exists.");
             }
 
-            return await ProcessShipmentInternal(shipment, uspsAccount, false,
-                                                 shipment.DhlExpress.IntegratorTransactionID.Value).ConfigureAwait(false);
+                        return await ExceptionWrapperAsync(() => base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value), uspsAccount);
         }
 
         /// <summary>
