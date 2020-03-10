@@ -64,6 +64,18 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
             webClient.Verify(x => x.Void(shipment));
         }
 
+        [Fact]
+        public void Track_CallsWebClient()
+        {
+            var webClient = mock.Mock<IDhlExpressStampsWebClient>();
+
+            var shipment = new ShipmentEntity();
+
+            testObject.Track(shipment);
+
+            webClient.Verify(x => x.Track(shipment));
+        }
+
         public void Dispose()
         {
             mock?.Dispose();

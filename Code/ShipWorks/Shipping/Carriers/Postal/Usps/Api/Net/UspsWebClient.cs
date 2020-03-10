@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        private TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        protected TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             TrackingResult result = new TrackingResult();
             TrackingEvent[] trackingEvents;

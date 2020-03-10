@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.ShipEngine;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
@@ -67,6 +68,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
             VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
+        }
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        public TrackingResult Track(ShipmentEntity shipment)
+        {
+            UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
+
+            return TrackShipmentInternal(shipment, account);
         }
 
         /// <summary>

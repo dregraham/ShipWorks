@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
@@ -45,5 +46,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// Void the given shipment
         /// </summary>
         public void Void(ShipmentEntity shipment) => webClient.Void(shipment);
+
+        /// <summary>
+        /// Get the tracking result for the given shipment
+        /// </summary>
+        public TrackingResult Track(ShipmentEntity shipment) => webClient.Track(shipment);
     }
 }

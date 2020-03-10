@@ -19,6 +19,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Dhl.API;
+using ShipWorks.Shipping.Carriers.Dhl.API.Stamps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -39,18 +41,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     public class DhlExpressShipmentType : ShipmentType
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
-        private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineTrackingResultFactory trackingResultFactory;
+        private readonly IDhlExpressLabelClientFactory labelClientFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="accountRepository"></param>
-        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository, IShipEngineWebClient shipEngineWebClient, IShipEngineTrackingResultFactory trackingResultFactory)
+        public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
+                                      IDhlExpressLabelClientFactory labelClientFactory)
         {
             this.accountRepository = accountRepository;
-            this.shipEngineWebClient = shipEngineWebClient;
-            this.trackingResultFactory = trackingResultFactory;
+            this.labelClientFactory = labelClientFactory;
         }
 
         /// <summary>
@@ -421,12 +421,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             try
             {
-                TrackingInformation trackingInfo = Task.Run(() =>
-                {
-                    return shipEngineWebClient.Track(shipment.DhlExpress.ShipEngineLabelID, ApiLogSource.DHLExpress);
-                }).Result;
-
-                return trackingResultFactory.Create(trackingInfo);
+                return labelClientFactory.Create(shipment).Track(shipment);
             }
             catch (Exception)
             {
