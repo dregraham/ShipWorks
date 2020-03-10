@@ -46,13 +46,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// </summary>
     public class DhlExpressStampsWebClient : UspsWebClient, IDhlExpressStampsWebClient
     {
+        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
+        private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="lifetimeScope"></param>
-        public DhlExpressStampsWebClient(ILifetimeScope lifetimeScope)
+        public DhlExpressStampsWebClient(ILifetimeScope lifetimeScope,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository)
             :base(lifetimeScope, UspsResellerType.None)
         {
+            this.uspsAccountRepository = uspsAccountRepository;
+            this.dhlExpressAccountRepository = dhlExpressAccountRepository;
         }
 
         /// <summary>
@@ -62,7 +68,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// <returns></returns>
         public async Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment)
         {
-            return await base.ProcessShipmentInternal(shipment, new UspsAccountEntity(), false, Guid.NewGuid(), false);
+            shipment.DhlExpress.IntegratorTransactionID = Guid.NewGuid();
+
+            IDhlExpressAccountEntity dhlExpressAccount = dhlExpressAccountRepository.GetAccountReadOnly(shipment);
+
+            UspsAccountEntity uspsAccount = uspsAccountRepository.Accounts.FirstOrDefault(a => a.AccountId == dhlExpressAccount.UspsAccountId);
+
+            if (uspsAccount == null)
+            {
+                throw new DhlExpressException("The Stamps.com account associated with this DHL Express account no longer exists.");
+            }
+
+            return await base.ProcessShipmentInternal(shipment, uspsAccount, false, shipment.DhlExpress.IntegratorTransactionID.Value);
         }
 
         /// <summary>
@@ -136,12 +153,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override RateV33 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            DhlExpressServiceType serviceType = (DhlExpressServiceType) shipment.DhlExpress.Service;
-            PostalPackagingType packagingType = PostalPackagingType.Package;
-
             RateV33 rate = CreateRateForRating(shipment, account);
-            rate.ServiceType = UspsUtility.GetApiServiceType(GetServiceType(serviceType));
+
+            // for Stamps.com the service type is always DHLEWW, the packaging type denotes the actual service
+            rate.ServiceType = ServiceType.DHLEWW;
             rate.PrintLayout = "Normal4X6";
+
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                rate.AddOns = new[] { new AddOnV16 { AddOnType = AddOnTypeV16.CARASAT } };
+            }
 
             // For APO/FPO, we have to specifically ask for customs docs
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
@@ -156,26 +177,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             return rate;
-        }
-
-        /// <summary>
-        /// Translate from the DhlExpressServiceType enum to PostalServiceType
-        /// </summary>
-        /// <param name="serviceType"></param>
-        /// <returns></returns>
-        private PostalServiceType GetServiceType(DhlExpressServiceType serviceType)
-        {
-            switch (serviceType)
-            {
-                case DhlExpressServiceType.ExpressWorldWide:
-                    break;
-                case DhlExpressServiceType.ExpressEnvelope:
-                    break;
-                default:
-                    break;
-            }
-
-            return PostalServiceType.FirstClass;
         }
 
         /// <summary>
@@ -210,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            rate.PackageType = UspsUtility.GetApiPackageType(PostalPackagingType.Package, new DimensionsAdapter(shipment.DhlExpress.Packages[0]));
+            rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
             rate.NonMachinable = shipment.DhlExpress.NonMachinable;
 
             rate.Length = shipment.DhlExpress.Packages[0].DimsLength;
@@ -227,6 +228,24 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
 
             return rate;
+        }
+
+        /// <summary>
+        /// Get package type for the given service
+        /// </summary>
+        private static PackageTypeV10 GetPackageType(DhlExpressServiceType service)
+        {
+            switch (service)
+            {
+                case DhlExpressServiceType.ExpressEnvelope:
+                    return PackageTypeV10.Envelope;
+                case DhlExpressServiceType.ExpressWorldWideDocuments:
+                    return PackageTypeV10.Documents;
+                case DhlExpressServiceType.ExpressWorldWide:
+                    return PackageTypeV10.Package;
+                default:
+                    throw new DhlExpressException($"Unknown service type {service}.");
+            }
         }
 
         /// <summary>
@@ -248,7 +267,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             shipment.TrackingNumber = result.TrackingNumber;
             shipment.ShipmentCost = result.ShipmentCost;
-            // shipment.DhlExpress.StampsTransactionId = result.StampsTxID;
+            shipment.DhlExpress.StampsTransactionID = result.StampsTxID;
             shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
 
             // Set the thermal type for the shipment

@@ -5377,7 +5377,7 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UspsAccountId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[UspsAccountId] [bigint] NULL,
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'

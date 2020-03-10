@@ -3,7 +3,7 @@ GO
 IF COL_LENGTH(N'[dbo].[DhlExpressAccount]', N'UspsAccountId') IS NULL
 BEGIN
     ALTER TABLE [dbo].[DhlExpressAccount]
-        ADD [UspsAccountId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+        ADD [UspsAccountId] [bigint] NULL
 END
 GO
 ALTER TABLE [dbo].[DhlExpressAccount]

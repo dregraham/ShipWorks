@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
-            var telemetricLabelResponse = webClient.CreateLabel(shipment);
+            var telemetricLabelResponse = await webClient.CreateLabel(shipment);
 
             telemetricLabelResponse.CopyTo(telemetricResult);
 

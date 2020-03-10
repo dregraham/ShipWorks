@@ -717,7 +717,7 @@
           <Field Name="ShipEngineCarrierId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="3" />
           <Field Name="StateProvCode" Type="string" MaxLength="50" FieldIndex="11" />
           <Field Name="Street1" Type="string" MaxLength="43" FieldIndex="9" />
-          <Field Name="UspsAccountId" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
+          <Field Name="UspsAccountId" Type="long" IsOptional="true" FieldIndex="16" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="DhlExpressPackage" ObjectID="9babcfbe-334c-4763-99fb-5a5bf36e78c3">
@@ -4638,7 +4638,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-09T20:45:01.6967614Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-10T12:38:44.9772804Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5351,7 +5351,7 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
-                    <Field Name="UspsAccountId" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="UspsAccountId" Ordinal="17" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressPackage">

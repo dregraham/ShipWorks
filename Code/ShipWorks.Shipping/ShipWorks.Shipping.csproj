@@ -232,6 +232,7 @@
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressStampsLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressLabelClient.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressLabelClientFactory.cs" />
     <Compile Include="Carriers\Dhl\IDhlExpressStampsWebClient.cs" />

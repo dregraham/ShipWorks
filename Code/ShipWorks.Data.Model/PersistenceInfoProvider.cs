@@ -943,7 +943,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("DhlExpressAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("DhlExpressAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
-			this.AddElementFieldMapping("DhlExpressAccountEntity", "UspsAccountId", "UspsAccountId", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 16);
+			this.AddElementFieldMapping("DhlExpressAccountEntity", "UspsAccountId", "UspsAccountId", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 16);
 		}
 
 		/// <summary>Inits DhlExpressPackageEntity's mappings</summary>

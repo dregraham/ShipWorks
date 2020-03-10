@@ -905,7 +905,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Phone, 15, 0, 0);
-			this.AddElementFieldInfo("DhlExpressAccountEntity", "UspsAccountId", typeof(System.String), false, false, false, true,  (int)DhlExpressAccountFieldIndex.UspsAccountId, 50, 0, 0);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "UspsAccountId", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressAccountFieldIndex.UspsAccountId, 0, 0, 19);
 		}
 		/// <summary>Inits DhlExpressPackageEntity's FieldInfo objects</summary>
 		private void InitDhlExpressPackageEntityInfos()
