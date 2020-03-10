@@ -19,6 +19,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -1313,6 +1314,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// This is only here due to interface.
         /// </summary>
         public TrackingResult TrackShipment(ShipmentEntity shipment)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The Express1 webclient should never need to add a DHL account
+        /// This is only here for the interface
+        /// </summary>
+        public string AddDhlExpress(IUspsAccountEntity account)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// This is only here for the interface
+        /// </summary>
+        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
         {
             throw new NotImplementedException();
         }

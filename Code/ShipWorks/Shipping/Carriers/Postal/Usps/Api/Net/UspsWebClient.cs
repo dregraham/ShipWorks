@@ -1714,5 +1714,43 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 Candidates = new List<Address>()
             };
         }
+
+        /// <summary>
+        /// Add DHL Express to the given Stamps.com account
+        /// </summary>
+        public string AddDhlExpress(IUspsAccountEntity account)
+        {
+            return ExceptionWrapper(() => { return AddDhlExpressInternal(account); }, account);
+        }
+
+        /// <summary>
+        /// The internal AddDhlExpress implemenation that is intended to be wrapped by the exception wrapper
+        /// </summary>
+        private string AddDhlExpressInternal(IUspsAccountEntity account)
+        {
+            using (ISwsimV90 webService = CreateWebService("AddCarrier"))
+            {
+                return webService.AddCarrier(GetCredentials(account), false, Carrier.DHLExpress, "", "", "", null, false, null, false);
+            }
+        }
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// </summary>
+        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        {
+            return ExceptionWrapper(() => { return SetAutoBuyInternal(account, autoBuySettings); }, account);
+        }
+
+        /// <summary>
+        /// The internal SetAutoBuy implementation that is intended to be wrapped by the exception wrapper
+        /// </summary>
+        private string SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        {
+            using (ISwsimV90 webService = CreateWebService("SetAutoBuy"))
+            {
+                return webService.SetAutoBuy(GetCredentials(account), autoBuySettings);
+            }
+        }
     }
 }

@@ -138,5 +138,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <returns></returns>
         string TrackShipment(object Item, object Item1, out TrackingEvent[] TrackingEvents, out DateTime? GuaranteedDeliveryDate,
             out DateTime? ExpectedDeliveryDate, out string ServiceDescription, out string Carrier, out DestinationInfo DestinationInfo);
+
+        /// <summary>
+        /// Add a carrier
+        /// </summary>
+        string AddCarrier(object Item, bool UserOwnedAccount, Carrier Carrier, string AccountNumber, string AccountZIPCode, string AccountCountry, Address Address, bool AgreeToEula, Invoice Invoice, bool NegotiatedRates);
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// </summary>
+        string SetAutoBuy(object Item, AutoBuySettings AutoBuySettings);
     }
 }

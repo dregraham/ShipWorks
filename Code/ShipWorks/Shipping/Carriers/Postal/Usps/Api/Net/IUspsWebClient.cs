@@ -84,5 +84,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Get the tracking result for the given shipment
         /// </summary>
         TrackingResult TrackShipment(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Add DHL Express to the given Stamps.com account
+        /// </summary>
+        string AddDhlExpress(IUspsAccountEntity account);
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// </summary>
+        string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings);
     }
 }
