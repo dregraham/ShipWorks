@@ -23,17 +23,18 @@
             <ui:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <ui:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
             <ui:VisibilityMultiConverter x:Key="VisibilityMultiConverter"/>
+            <ui:NullVisibilityConverter x:Key="NullVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding GetBalanceCommand}"/>
+            <i:InvokeCommandAction Command="{Binding GetInitialValuesCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <ScrollViewer MaxHeight="{Binding ActualHeight, ElementName=settingsControl}">
         <DockPanel>
             <StackPanel HorizontalAlignment="Left" Margin="0,0,20,0" DockPanel.Dock="Top" Width="500">
-                <TextBlock Text="Manage ShipWorks One Balance" FontSize="13" Margin="20,10,0,0" FontWeight="Bold"/>
+                <TextBlock Text="ShipWorks One Balance" FontSize="13" Margin="20,10,0,0" FontWeight="Bold"/>
                 <ContentControl Visibility="{Binding ShowBanner, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <local:OneBalanceEnableUpsBannerWpfControl DataContext="{Binding BannerContext}" Margin="50,15,0,0" />
                 </ContentControl>
@@ -47,8 +48,8 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Message}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowMessage, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="500"/>
-                    <TextBlock Text="Balance" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowMessage, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
+                    <TextBlock Text="{Binding GetBalanceError}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource BooleanToVisibilityConverter}}" MaxWidth="500"/>
+                    <TextBlock Text="Balance" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
                     <TextBlock Text="Getting Balance...." HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0" Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0">
                         <TextBlock.Visibility>
@@ -58,7 +59,7 @@
                                 Path="Loading"/>
                                 <Binding
                                 Converter="{StaticResource InvertedBooleanToVisibilityConverter}"
-                                Path="ShowMessage"/>
+                                Path="ShowGetBalanceError"/>
                             </MultiBinding>
                         </TextBlock.Visibility>
                     </TextBlock>
@@ -97,6 +98,7 @@
                 <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
                     <TextBlock Margin="0,0,0,10" Text="Fund Automatically" Style="{StaticResource TextBlock.SectionHeader}"/>
                 </Border>
+                <TextBlock Text="{Binding AutoFundError}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding AutoFundError, Converter={StaticResource NullVisibilityConverter}}" MaxWidth="500"/>
                 <Grid HorizontalAlignment="Left" Margin="90,20,0,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>

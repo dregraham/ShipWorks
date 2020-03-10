@@ -16,7 +16,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -193,6 +192,15 @@ namespace ShipWorks.Shipping.Settings
                 return;
             }
 
+            if (e.OptionPage == optionPageOneBalance)
+            {
+                var controlHost = e.OptionPage.Controls[0] as IOneBalanceSettingsControlHost;
+
+                controlHost?.SaveSettings();
+
+                return;
+            }
+
             ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
 
             if (settingsControl != null)
@@ -360,6 +368,9 @@ namespace ShipWorks.Shipping.Settings
             InformUserThatMyFiltersCantBeUsedFilters();
 
             SaveSettings();
+
+            var oneBalanceControlHost = optionPageOneBalance.Controls[0] as IOneBalanceSettingsControlHost;
+            oneBalanceControlHost?.SaveSettings();
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
