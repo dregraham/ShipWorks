@@ -113,13 +113,13 @@
                     <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" Visibility="{Binding Loading, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" Grid.Column="1"/>
 
                     <TextBlock Text="Use automatic funding" Grid.Row="1" Margin="0,20,10,0"/>
-                    <CheckBox Margin="0,20,0,0" Grid.Row="1" Grid.Column="2"/>
+                    <CheckBox Margin="0,20,0,0" Grid.Row="1" Grid.Column="2" IsChecked="{Binding IsAutoFund}"/>
 
                     <TextBlock Text="When balance drops below" Grid.Row="2" Margin="0,20,10,0"/>
-                    <TextBox Text="{Binding Amount, Converter={StaticResource EmptyMoney}}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding MinimumBalance, Converter={StaticResource EmptyMoney}}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
 
                     <TextBlock Text="Automatically fund by this amount" Grid.Row="3" Margin="0,20,10,0"/>
-                    <TextBox Text="{Binding Amount, Converter={StaticResource EmptyMoney}}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+                    <TextBox Text="{Binding AutoFundAmount, Converter={StaticResource EmptyMoney}}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
                 </Grid>
                 <!--#endregion-->
             </StackPanel>

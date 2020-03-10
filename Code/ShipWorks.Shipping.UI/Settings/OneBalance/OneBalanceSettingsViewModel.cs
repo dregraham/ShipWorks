@@ -34,6 +34,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool showBanner;
         private bool loading = true;
         private bool addMoneyEnabled = true;
+        private bool isAutoFund;
 
         /// <summary>
         /// Initialize the control to display information for the given account
@@ -135,6 +136,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             get => autoFundAmount;
             set => Set(ref autoFundAmount, value);
+        }
+
+        /// <summary>
+        /// A value indicating if auto funding is turned on
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsAutoFund
+        {
+            get => IsAutoFund;
+            set => Set(ref isAutoFund, value);
         }
 
         /// <summary>
