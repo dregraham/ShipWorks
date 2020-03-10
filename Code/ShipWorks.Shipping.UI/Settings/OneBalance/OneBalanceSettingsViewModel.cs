@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public bool IsAutoFund
         {
-            get => IsAutoFund;
+            get => isAutoFund;
             set => Set(ref isAutoFund, value);
         }
 
