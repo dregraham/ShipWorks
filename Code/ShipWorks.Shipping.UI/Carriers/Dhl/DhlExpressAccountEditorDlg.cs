@@ -48,14 +48,24 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountNumber.Text = account.AccountNumber.ToString();
-
-            if (account.Description != GetDescription(account))
+            if (account.UspsAccountId == null)
             {
-                description.Text = account.Description;
-            }
+                accountNumber.Text = account.AccountNumber.ToString();
 
-            description.PromptText = GetDescription(account);
+                if (account.Description != GetDescription(account))
+                {
+                    description.Text = account.Description;
+                }
+
+                description.PromptText = GetDescription(account);
+            }
+            else
+            {
+                accountNumber.Text = "DHL Express from ShipWorks";
+                description.ReadOnly = true;
+                labelOptional.Visible = false;
+            }
+            
             contactInformation.LoadEntity(account.Address);
         }
 
@@ -73,7 +83,14 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// </summary>
         private string GetDescription(DhlExpressAccountEntity dhlAccount)
         {
-            return accountDescription.GetDefaultAccountDescription(account);
+            if (dhlAccount.UspsAccountId != null)
+            {
+                return "DHL Express from ShipWorks";
+            }
+            else
+            {
+                return accountDescription.GetDefaultAccountDescription(account);
+            }
         }
 
         /// <summary>

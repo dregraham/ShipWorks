@@ -544,9 +544,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
+        public Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
-            TelemetricResult<UspsLabelResponse> telemetricLabelResponse = null;
+            TelemetricResult<StampsLabelResponse> telemetricLabelResponse = null;
 
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
@@ -610,9 +610,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
         [NDependIgnoreLongMethod]
-        private TelemetricResult<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private TelemetricResult<StampsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+            TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             Guid uspsGuid = Guid.Empty;
             string tracking = string.Empty;
@@ -760,14 +760,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            UspsLabelResponse uspsLabelResponse = new UspsLabelResponse
+            StampsLabelResponse stampsLabelResponse = new StampsLabelResponse
             {
                 Shipment = shipment,
                 ImageData = imageData,
                 LabelUrl = labelUrl
             };
 
-            telemetricResult.SetValue(uspsLabelResponse);
+            telemetricResult.SetValue(stampsLabelResponse);
             return telemetricResult;
         }
 

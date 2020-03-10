@@ -221,11 +221,18 @@
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\API\ShipEngine\DhlExpressShipEngineDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\API\ShipEngine\DhlExpressShipEngineLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\DhlExpressStampsLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\DhlExpressStampsWebClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\IDhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountManager.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
@@ -432,7 +439,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Postal\Usps\StampsDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
@@ -747,7 +754,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

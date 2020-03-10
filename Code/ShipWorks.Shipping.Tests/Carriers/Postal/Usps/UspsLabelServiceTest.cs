@@ -40,8 +40,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
                 .Setup(t => t.CreateWebClient())
                 .Returns(webClientMock);
 
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
-            telemetricResult.SetValue(new UspsLabelResponse());
+            TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+            telemetricResult.SetValue(new StampsLabelResponse());
             webClientMock.Setup(w => w.ProcessShipment(AnyShipment))
                          .ReturnsAsync(telemetricResult);
 
