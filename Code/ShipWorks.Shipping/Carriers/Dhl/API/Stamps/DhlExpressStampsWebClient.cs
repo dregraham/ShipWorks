@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        public async Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment)
+        public override async Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             shipment.DhlExpress.IntegratorTransactionID = Guid.NewGuid();
 
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment)
+        public override void VoidShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
