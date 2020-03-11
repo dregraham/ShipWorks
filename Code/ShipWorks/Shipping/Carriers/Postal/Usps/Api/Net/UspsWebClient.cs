@@ -1718,10 +1718,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Add DHL Express to the given Stamps.com account
         /// </summary>
-        public string AddDhlExpress(IUspsAccountEntity account)
-        {
-            return ExceptionWrapper(() => { return AddDhlExpressInternal(account); }, account);
-        }
+        public string AddDhlExpress(IUspsAccountEntity account) =>
+            ExceptionWrapper(() => { return AddDhlExpressInternal(account); }, account);
 
         /// <summary>
         /// The internal AddDhlExpress implemenation that is intended to be wrapped by the exception wrapper
@@ -1730,26 +1728,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             using (ISwsimV90 webService = CreateWebService("AddCarrier"))
             {
-                return webService.AddCarrier(GetCredentials(account), false, Carrier.DHLExpress, "", "", "", null, false, null, false);
+                return webService.AddCarrier(GetCredentials(account), false, Carrier.DHLExpress, string.Empty, string.Empty, string.Empty, null, false, null, false);
             }
         }
 
         /// <summary>
         /// Set automatic funding settings
         /// </summary>
-        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
-        {
-            return ExceptionWrapper(() => { return SetAutoBuyInternal(account, autoBuySettings); }, account);
-        }
+        public Task SetAutoBuyAsync(IUspsAccountEntity account, AutoBuySettings autoBuySettings) =>
+            ExceptionWrapper(() => { return SetAutoBuyInternal(account, autoBuySettings); }, account);
+
 
         /// <summary>
         /// The internal SetAutoBuy implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private string SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        private Task SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
         {
             using (ISwsimV90 webService = CreateWebService("SetAutoBuy"))
             {
-                return webService.SetAutoBuy(GetCredentials(account), autoBuySettings);
+                TaskCompletionSource<SetAutoBuyCompletedEventArgs> taskCompletion = new TaskCompletionSource<SetAutoBuyCompletedEventArgs>();
+
+                webService.SetAutoBuyCompleted += (s, e) =>
+                {
+                    if (e.Error != null)
+                    {
+                        taskCompletion.SetException(e.Error);
+                    }
+                    else
+                    {
+                        taskCompletion.SetResult(e);
+                    }
+                };
+
+                webService.SetAutoBuyAsync(GetCredentials(account), autoBuySettings);
+                return taskCompletion.Task;
             }
         }
     }

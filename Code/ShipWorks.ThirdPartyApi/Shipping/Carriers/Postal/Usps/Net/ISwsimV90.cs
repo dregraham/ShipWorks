@@ -147,6 +147,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Set automatic funding settings
         /// </summary>
-        string SetAutoBuy(object Item, AutoBuySettings AutoBuySettings);
+        void SetAutoBuyAsync(object Item, AutoBuySettings AutoBuySettings);
+
+        /// <summary>
+        /// Set auto buy call has completed
+        /// </summary>
+        event SetAutoBuyCompletedEventHandler SetAutoBuyCompleted;
     }
 }

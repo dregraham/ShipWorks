@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
                 autoBuySettings = accountInfo.AutoBuySettings;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // We don't need to log the exception because the webclient takes care of that
                 AutoFundError = "There was a problem retrieving your automatic funding settings.";
@@ -351,18 +351,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     TriggerAmount = MinimumBalance
                 };
 
-                Task.Run(() =>
+                try
                 {
-                    try
-                    {
-                        webClient.SetAutoBuy(account, newAutoBuySettings);
-                    }
-                    catch (Exception ex)
-                    {
-                        // If there's an exception it's already been logged, so we don't need to do anything here
-                        // because the user has already left the One Balance settings screen
-                    }
-                });
+                    webClient.SetAutoBuyAsync(account, newAutoBuySettings);
+                }
+                catch (Exception)
+                {
+                    // If there's an exception it's already been logged, so we don't need to do anything here
+                    // because the user has already left the One Balance settings screen
+                }
             }
         }
     }
