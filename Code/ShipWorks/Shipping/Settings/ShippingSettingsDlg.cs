@@ -14,6 +14,7 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Printing;
@@ -196,7 +197,14 @@ namespace ShipWorks.Shipping.Settings
             {
                 var controlHost = e.OptionPage.Controls[0] as IOneBalanceSettingsControlHost;
 
-                controlHost?.SaveSettings();
+                try
+                {
+                    controlHost?.SaveSettings();
+                }
+                catch (UspsException)
+                {
+                    e.Cancel = true;
+                }
 
                 return;
             }
@@ -370,7 +378,16 @@ namespace ShipWorks.Shipping.Settings
             SaveSettings();
 
             var oneBalanceControlHost = optionPageOneBalance.Controls[0] as IOneBalanceSettingsControlHost;
-            oneBalanceControlHost?.SaveSettings();
+
+            try
+            {
+                oneBalanceControlHost?.SaveSettings();
+            }
+            catch (UspsException)
+            {
+                e.Cancel = true;
+                return;
+            }
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
