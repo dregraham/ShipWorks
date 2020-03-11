@@ -20,12 +20,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private IUspsWebClient webClient;
         private AutoBuySettings autoBuySettings;
 
-        private decimal balance;
         private decimal minimumBalance;
         private decimal autoFundAmount;
         private bool isAutoFund;
         private string autoFundError;
-        private bool loading = true;
 
         /// <summary>
         /// Constuctor
@@ -35,20 +33,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             this.accountManager = accountManager;
             SetupWebClient();
             InitiateGetAutoFundSettings();
-        }
-
-        /// <summary>
-        /// The current balance of the one balance account
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public decimal Balance
-        {
-            get => balance;
-            set
-            {
-                Set(ref balance, value);
-                Loading = false;
-            }
         }
 
         /// <summary>
@@ -97,16 +81,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             get => autoFundError;
             set => Set(ref autoFundError, value);
-        }
-
-        /// <summary>
-        /// A flag to indicate if we are still trying to load the balance
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool Loading
-        {
-            get => loading;
-            set => Set(ref loading, value);
         }
 
         /// <summary>
