@@ -30,15 +30,12 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private AutoBuySettings autoBuySettings;
 
         private decimal balance;
-        private decimal minimumBalance;
-        private decimal autoFundAmount;
         private string getBalanceError;
         private string autoFundError;
         private bool showGetBalanceError = false;
         private bool showBanner;
         private bool loading = true;
         private bool addMoneyEnabled = true;
-        private bool isAutoFund;
 
         /// <summary>
         /// Initialize the control to display information for the given account
@@ -130,36 +127,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             get => showBanner;
             set => Set(ref showBanner, value);
-        }
-
-        /// <summary>
-        /// The account balance that triggers the auto fund
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public decimal MinimumBalance
-        {
-            get => minimumBalance;
-            set => Set(ref minimumBalance, value);
-        }
-
-        /// <summary>
-        /// The amount to add to the account balance when auto funding
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public decimal AutoFundAmount
-        {
-            get => autoFundAmount;
-            set => Set(ref autoFundAmount, value);
-        }
-
-        /// <summary>
-        /// A value indicating if auto funding is turned on
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool IsAutoFund
-        {
-            get => isAutoFund;
-            set => Set(ref isAutoFund, value);
         }
 
         /// <summary>
