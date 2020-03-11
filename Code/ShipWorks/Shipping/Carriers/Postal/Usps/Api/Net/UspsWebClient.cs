@@ -1728,7 +1728,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Add DHL Express to the given Stamps.com account
         /// </summary>
         public string AddDhlExpress(IUspsAccountEntity account) =>
-            ExceptionWrapper(() => { return AddDhlExpressInternal(account); }, account);
+            ExceptionWrapper(() => AddDhlExpressInternal(account), account);
 
         /// <summary>
         /// The internal AddDhlExpress implemenation that is intended to be wrapped by the exception wrapper
@@ -1745,7 +1745,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Set automatic funding settings
         /// </summary>
         public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings) =>
-            ExceptionWrapper(() => { return SetAutoBuyInternal(account, autoBuySettings); }, account);
+            ExceptionWrapper(() => SetAutoBuyInternal(account, autoBuySettings), account);
 
 
         /// <summary>

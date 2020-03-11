@@ -562,7 +562,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void SaveOneBalanceSettings()
         {
-            var controlHost = optionPageOneBalance.Controls[0] as IOneBalanceSettingsControlHost;
+            var controlHost = optionPageOneBalance.Controls.OfType<IOneBalanceSettingsControlHost>().FirstOrDefault();
 
             try
             {

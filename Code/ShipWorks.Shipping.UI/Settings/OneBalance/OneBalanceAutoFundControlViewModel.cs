@@ -126,18 +126,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     TriggerAmount = MinimumBalance
                 };
 
-                Task.Run(() =>
-                {
-                    try
-                    {
-                        webClient.SetAutoBuy(account, newAutoBuySettings);
-                    }
-                    catch (Exception ex)
-                    {
-                        // If there's an exception it's already been logged, so we don't need to do anything here
-                        // because the user has already left the One Balance settings screen
-                    }
-                });
+                webClient.SetAutoBuy(account, newAutoBuySettings);
             }
         }
 
