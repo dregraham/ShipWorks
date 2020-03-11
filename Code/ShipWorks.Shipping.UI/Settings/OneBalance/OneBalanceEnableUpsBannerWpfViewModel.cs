@@ -2,12 +2,10 @@
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {

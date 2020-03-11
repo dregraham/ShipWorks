@@ -58,11 +58,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         bool ShowGetBalanceError { get; set; }
 
         /// <summary>
-        /// The message to be displayed if we couldn't get auto fund settings
-        /// </summary>
-        string AutoFundError { get; set; }
-
-        /// <summary>
         /// Send the auto fund settings to Stamps
         /// </summary>
         void SaveAutoFundSettings();

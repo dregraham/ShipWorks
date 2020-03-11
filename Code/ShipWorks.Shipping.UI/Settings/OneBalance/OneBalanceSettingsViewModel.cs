@@ -11,7 +11,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
@@ -23,15 +22,12 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     public class OneBalanceSettingsControlViewModel : ViewModelBase, IOneBalanceSettingsControlViewModel
     {
         private IPostageWebClient postageWebClient;
-        private IUspsWebClient webClient;
         private readonly IUspsAccountManager accountManager;
         private UpsAccountEntity upsAccount;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
-        private AutoBuySettings autoBuySettings;
 
         private decimal balance;
         private string getBalanceError;
-        private string autoFundError;
         private bool showGetBalanceError = false;
         private bool showBanner;
         private bool loading = true;
@@ -42,7 +38,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager,
             Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
-            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
+            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel,
+            IOneBalanceAutoFundControlViewModel autoFundViewModel)
         {
             this.accountManager = accountManager;
             SetupWebClients();
@@ -52,6 +49,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             ShowBanner = upsAccount == null;
 
             BannerContext = bannerViewModel;
+            AutoFundContext = autoFundViewModel;
 
             BannerContext.SetupComplete += OnOneBalanceSetupComplete;
 
@@ -90,16 +88,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// The message to be displayed if we couldn't get auto fund settings
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public string AutoFundError
-        {
-            get => autoFundError;
-            set => Set(ref autoFundError, value);
-        }
-
-        /// <summary>
         /// A flag to indicate if we are still trying to load the balance
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -135,7 +123,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public bool ShowDhlBanner
         {
-            get => webClient != null;
+            get => postageWebClient != null;
         }
 
         /// <summary>
@@ -143,6 +131,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         [Obfuscation(Exclude = true)]
         public IOneBalanceEnableUpsBannerWpfViewModel BannerContext { get; }
+
+
+        /// <summary>
+        /// The data context for the enable ups banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOneBalanceAutoFundControlViewModel AutoFundContext { get; }
 
         /// <summary>
         /// RelayCommand for getting initial values to populate fields with
@@ -164,12 +159,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             Loading = true;
             ShowBanner = upsAccount == null;
 
-            if (webClient != null)
+            if (postageWebClient != null)
             {
                 Task.Run(() =>
                 {
                     GetBalance();
-                    AddMoneyEnabled = webClient != null && !showGetBalanceError;
+                    AutoFundContext.Balance = Balance;
+                    AddMoneyEnabled = postageWebClient != null && !showGetBalanceError;
                     Loading = false;
                 });
             }
@@ -236,9 +232,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void SetupWebClients()
         {
-            UspsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Usps) as UspsShipmentType;
-            webClient = shipmentType.CreateWebClient();
-
             var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
             postageWebClient = account == null ? null : new UspsPostageWebClient(account);
         }
@@ -264,62 +257,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetInitialValues()
         {
             GetAccountBalance();
-            InitiateGetAutoFundSettings();
-        }
-
-        /// <summary>
-        /// Fire and forget the retrieval of auto fund settings
-        /// </summary>
-        private void InitiateGetAutoFundSettings()
-        {
-            Task.Run(() => GetAutoFundSettings());
-        }
-
-        /// <summary>
-        /// Retrieve the accounts balance if we have a One Balance account
-        /// </summary>
-        private void GetAutoFundSettings()
-        {
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-
-            try
-            {
-                var accountInfo = (AccountInfoV41) webClient.GetAccountInfo(account);
-
-                IsAutoFund = accountInfo.AutoBuySettings.AutoBuyEnabled;
-                MinimumBalance = accountInfo.AutoBuySettings.TriggerAmount;
-                AutoFundAmount = accountInfo.AutoBuySettings.PurchaseAmount;
-
-                autoBuySettings = accountInfo.AutoBuySettings;
-            }
-            catch (Exception)
-            {
-                // We don't need to log the exception because the webclient takes care of that
-                AutoFundError = "There was a problem retrieving your automatic funding settings.";
-            }
         }
 
         /// <summary>
         /// Send the auto fund settings to Stamps
         /// </summary>
-        public void SaveAutoFundSettings()
-        {
-            // Only set if something changed
-            if (autoBuySettings.AutoBuyEnabled != IsAutoFund ||
-                autoBuySettings.PurchaseAmount != AutoFundAmount ||
-                autoBuySettings.TriggerAmount != MinimumBalance)
-            {
-                var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-
-                var newAutoBuySettings = new AutoBuySettings()
-                {
-                    AutoBuyEnabled = IsAutoFund,
-                    PurchaseAmount = AutoFundAmount,
-                    TriggerAmount = MinimumBalance
-                };
-
-                webClient.SetAutoBuy(account, newAutoBuySettings);
-            }
-        }
+        public void SaveAutoFundSettings() => AutoFundContext.SaveSettings();
     }
 }

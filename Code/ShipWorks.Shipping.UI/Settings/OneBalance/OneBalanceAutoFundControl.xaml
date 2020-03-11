@@ -22,11 +22,11 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
-        <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
+        <Border BorderThickness="0,0,0,2" BorderBrush="DarkGray">
             <TextBlock Margin="0,0,0,10" Text="Fund Automatically" Style="{StaticResource TextBlock.SectionHeader}"/>
         </Border>
-        <TextBlock Text="{Binding AutoFundError}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding AutoFundError, Converter={StaticResource NullVisibilityConverter}}" MaxWidth="500"/>
-        <Grid HorizontalAlignment="Left" Margin="90,20,0,0">
+        <TextBlock Text="{Binding AutoFundError}" Margin="40,10,0,0" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding AutoFundError, Converter={StaticResource NullVisibilityConverter}}" MaxWidth="500"/>
+        <Grid HorizontalAlignment="Left" Margin="40,20,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -45,10 +45,10 @@
             <CheckBox Margin="0,20,0,0" Grid.Row="1" Grid.Column="2" IsChecked="{Binding IsAutoFund}" HorizontalAlignment="Left"/>
 
             <TextBlock Text="When balance drops below" Grid.Row="2" Margin="0,20,10,0"/>
-            <TextBox Text="{Binding MinimumBalance, Converter={StaticResource EmptyMoney}}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+            <TextBox Text="{Binding MinimumBalance, Converter={StaticResource EmptyMoney}}" IsEnabled="{Binding IsAutoFund}" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
 
             <TextBlock Text="Automatically fund by this amount" Grid.Row="3" Margin="0,20,10,0"/>
-            <TextBox Text="{Binding AutoFundAmount, Converter={StaticResource EmptyMoney}}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
+            <TextBox Text="{Binding AutoFundAmount, Converter={StaticResource EmptyMoney}}" IsEnabled="{Binding IsAutoFund}" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Margin="0,20,0,0"/>
         </Grid>
     </StackPanel>
 </UserControl>
