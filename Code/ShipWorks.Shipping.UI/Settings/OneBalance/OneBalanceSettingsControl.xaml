@@ -94,7 +94,7 @@
                     <local:OneBalanceAddDhlExpressBanner DataContext="{Binding DhlBannerContext}" Margin="0,10,0,0" />
                 </ContentControl>
                 <!--#endregion-->
-                <local:OneBalanceAutoFundControl/>
+                <local:OneBalanceAutoFundControl DataContext="{Binding AutoFundContext}" Margin="50,15,0,0"/>
             </StackPanel>
             <TextBlock Text="UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and the Color Brown are trademarks of United Service of America, Inc. All Rights Reserved"
                            Margin="0,80,0,0" DockPanel.Dock="Bottom" FontSize="8" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center"/>
