@@ -9,6 +9,7 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Central point where API stuff goes through for USPS
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class UspsWebClient : IUspsWebClient
     {
         // We don't include delivery confirmation because we want to treat that like None, because it is
