@@ -237,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             switch (service)
             {
                 case DhlExpressServiceType.ExpressEnvelope:
-                    return PackageTypeV10.Envelope;
+                    return PackageTypeV10.ExpressEnvelope;
                 case DhlExpressServiceType.ExpressWorldWideDocuments:
                     return PackageTypeV10.Documents;
                 case DhlExpressServiceType.ExpressWorldWide:
