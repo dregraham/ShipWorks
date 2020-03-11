@@ -6,11 +6,6 @@
     public interface IOneBalanceAutoFundControlViewModel
     {
         /// <summary>
-        /// The current balance of the one balance account
-        /// </summary>
-        decimal Balance { get; set; }
-
-        /// <summary>
         /// The amount to add to the account balance when auto funding
         /// </summary>
         decimal AutoFundAmount { get; set; }

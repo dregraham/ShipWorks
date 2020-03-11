@@ -164,7 +164,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 Task.Run(() =>
                 {
                     GetBalance();
-                    AutoFundContext.Balance = Balance;
                     AddMoneyEnabled = postageWebClient != null && !showGetBalanceError;
                     Loading = false;
                 });
