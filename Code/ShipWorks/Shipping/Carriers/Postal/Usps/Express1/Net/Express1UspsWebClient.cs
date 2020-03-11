@@ -1324,7 +1324,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         public string AddDhlExpress(IUspsAccountEntity account)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("The Express1 webclient shouldn't try to add a DHL Express account.");
         }
 
         /// <summary>
@@ -1333,7 +1333,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("The Express1 webclient shouldn't try to set auto buy settings.");
         }
     }
 }
