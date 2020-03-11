@@ -50,6 +50,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        public TrackingResult Track(ShipmentEntity shipment) => webClient.Track(shipment);
+        public TrackingResult Track(ShipmentEntity shipment) => webClient.TrackShipment(shipment);
     }
 }

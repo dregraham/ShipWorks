@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        public TrackingResult TrackShipment(ShipmentEntity shipment)
+        public virtual TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 

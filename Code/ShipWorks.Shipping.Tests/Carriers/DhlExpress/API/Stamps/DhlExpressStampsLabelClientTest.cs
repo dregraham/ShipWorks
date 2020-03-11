@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
 
             testObject.Track(shipment);
 
-            webClient.Verify(x => x.Track(shipment));
+            webClient.Verify(x => x.TrackShipment(shipment));
         }
 
         public void Dispose()

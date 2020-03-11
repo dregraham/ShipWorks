@@ -24,6 +24,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        TrackingResult Track(ShipmentEntity shipment);
+        TrackingResult TrackShipment(ShipmentEntity shipment);
     }
 }

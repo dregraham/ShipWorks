@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        public TrackingResult Track(ShipmentEntity shipment)
+        public override TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
