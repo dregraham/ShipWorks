@@ -93,6 +93,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Set automatic funding settings
         /// </summary>
-        Task SetAutoBuyAsync(IUspsAccountEntity account, AutoBuySettings autoBuySettings);
+        string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings);
     }
 }

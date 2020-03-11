@@ -1744,33 +1744,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Set automatic funding settings
         /// </summary>
-        public Task SetAutoBuyAsync(IUspsAccountEntity account, AutoBuySettings autoBuySettings) =>
+        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings) =>
             ExceptionWrapper(() => { return SetAutoBuyInternal(account, autoBuySettings); }, account);
 
 
         /// <summary>
         /// The internal SetAutoBuy implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
-        private Task SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        private string SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
         {
             using (ISwsimV90 webService = CreateWebService("SetAutoBuy"))
             {
-                TaskCompletionSource<SetAutoBuyCompletedEventArgs> taskCompletion = new TaskCompletionSource<SetAutoBuyCompletedEventArgs>();
-
-                webService.SetAutoBuyCompleted += (s, e) =>
-                {
-                    if (e.Error != null)
-                    {
-                        taskCompletion.SetException(e.Error);
-                    }
-                    else
-                    {
-                        taskCompletion.SetResult(e);
-                    }
-                };
-
-                webService.SetAutoBuyAsync(GetCredentials(account), autoBuySettings);
-                return taskCompletion.Task;
+                return webService.SetAutoBuy(GetCredentials(account), autoBuySettings);
             }
         }
     }
