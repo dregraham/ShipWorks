@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
@@ -16,7 +15,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -24,7 +22,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
     /// Setup wizard for Dhl Express shipment type
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.DhlExpress)]
-    public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard
+    [KeyedComponent(typeof(IOneBalanceSetupWizard), ShipmentTypeCode.DhlExpress)]
+    public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard, IOneBalanceSetupWizard
     {
         private readonly DhlExpressShipmentType shipmentType;
         private readonly IDhlExpressAccountRepository accountRepository;
@@ -34,6 +33,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
+        private bool newAccountOnly;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -77,6 +77,11 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private void OnLoad(object sender, EventArgs e)
         {
             wizardPageWelcome.StepNextAsync = OnStepNextWelcome;
+
+            if (newAccountOnly)
+            {
+                Pages.Remove(wizardPageWelcome);
+            }
 
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
@@ -197,6 +202,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
+        }
+
+        /// <summary>
+        /// Setup DHL Express One Balance account. 
+        /// </summary>
+        public DialogResult SetupOneBalanceAccount(IWin32Window owner)
+        {
+            var existingAccounts = DhlExpressAccountManager.AccountsReadOnly.ToList();
+
+            // Sets up a new account only if they already have an account and don't have a Shipengine account.
+            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            return ShowDialog(owner);
         }
     }
 }

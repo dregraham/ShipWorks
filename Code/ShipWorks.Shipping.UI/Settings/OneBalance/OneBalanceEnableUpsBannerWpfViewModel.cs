@@ -5,7 +5,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [Component]
     public class OneBalanceEnableUpsBannerWpfViewModel : ViewModelBase, IOneBalanceEnableUpsBannerWpfViewModel
     {
-        private readonly UpsSetupWizard setupWizard;
+        private readonly IOneBalanceSetupWizard setupWizard;
         private readonly IWin32Window window;
 
         public event EventHandler SetupComplete;
@@ -23,9 +23,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceEnableUpsBannerWpfViewModel(UpsSetupWizard setupWizard, IWin32Window window)
+        public OneBalanceEnableUpsBannerWpfViewModel(Func<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory, IWin32Window window)
         {
-            this.setupWizard = setupWizard;
+            this.setupWizard = setupWizardFactory(ShipmentTypeCode.UpsOnLineTools);
             this.window = window;
             ShowSetupDialogCommand = new RelayCommand(ShowSetupDialog);
         }

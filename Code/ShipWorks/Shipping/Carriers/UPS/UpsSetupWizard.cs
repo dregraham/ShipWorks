@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
@@ -23,14 +24,14 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.UI.Wizard;
-using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
-    public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard
+    [KeyedComponent(typeof(IOneBalanceSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
+    public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard, IOneBalanceSetupWizard
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
@@ -319,7 +320,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 return;
             }
-            
+
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
@@ -616,7 +617,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnStepIntoOptionsOlt(object sender, WizardSteppingIntoEventArgs e)
         {
             // Disable the back button if we created a One Balance account
-            BackEnabled = existingAccount.Checked;            
+            BackEnabled = existingAccount.Checked;
         }
 
         /// <summary>
