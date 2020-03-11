@@ -1,11 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal;
-using System;
-using ShipWorks.Shipping.Carriers.UPS;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -15,13 +9,24 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [Component(RegistrationType.SpecificService, Service = typeof(IOneBalanceSettingsControlHost))]
     public partial class OneBalanceSettingsControlHost : UserControl, IOneBalanceSettingsControlHost
     {
+        IOneBalanceSettingsControlViewModel settingsViewModel;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceSettingsControlHost(IOneBalanceSettingsControlViewModel settingsModel)
+        public OneBalanceSettingsControlHost(IOneBalanceSettingsControlViewModel settingsViewModel)
         {
             InitializeComponent();
-            this.settingsControl.DataContext = settingsModel;
+            this.settingsViewModel = settingsViewModel;
+            this.settingsControl.DataContext = this.settingsViewModel;
+        }
+
+        /// <summary>
+        /// Save the settings view model
+        /// </summary>
+        public void SaveSettings()
+        {
+            settingsViewModel.SaveAutoFundSettings();
         }
     }
 }

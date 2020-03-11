@@ -376,6 +376,7 @@
     </Compile>
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAutoFundControlViewModel.cs" />
     <Compile Include="Settings\OneBalance\IOneBalanceSettingsControlViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceAddDhlExpressBanner.xaml.cs">
       <DependentUpon>OneBalanceAddDhlExpressBanner.xaml</DependentUpon>
@@ -386,6 +387,10 @@
       <DependentUpon>OneBalanceAddMoneyDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\OneBalance\OneBalanceAddMoneyViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml.cs">
+      <DependentUpon>OneBalanceAutoFundControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceAutoFundControlViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml.cs">
       <DependentUpon>OneBalanceEnableUpsBannerWpfControl.xaml</DependentUpon>
     </Compile>
@@ -585,6 +590,10 @@
     <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.csproj">
       <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
       <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
@@ -844,6 +853,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -9,6 +9,7 @@ using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     /// <summary>
     /// Central point where API stuff goes through for USPS
     /// </summary>
+    [NDependIgnoreLongTypes]
     public class UspsWebClient : IUspsWebClient
     {
         // We don't include delivery confirmation because we want to treat that like None, because it is
@@ -1722,6 +1724,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 BadAddressMessage = badAddressMessage,
                 Candidates = new List<Address>()
             };
+        }
+
+        /// <summary>
+        /// Add DHL Express to the given Stamps.com account
+        /// </summary>
+        public string AddDhlExpress(IUspsAccountEntity account) =>
+            ExceptionWrapper(() => AddDhlExpressInternal(account), account);
+
+        /// <summary>
+        /// The internal AddDhlExpress implemenation that is intended to be wrapped by the exception wrapper
+        /// </summary>
+        private string AddDhlExpressInternal(IUspsAccountEntity account)
+        {
+            using (ISwsimV90 webService = CreateWebService("AddCarrier"))
+            {
+                return webService.AddCarrier(GetCredentials(account), false, Carrier.DHLExpress, string.Empty, string.Empty, string.Empty, null, false, null, false);
+            }
+        }
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// </summary>
+        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings) =>
+            ExceptionWrapper(() => SetAutoBuyInternal(account, autoBuySettings), account);
+
+
+        /// <summary>
+        /// The internal SetAutoBuy implementation that is intended to be wrapped by the exception wrapper
+        /// </summary>
+        private string SetAutoBuyInternal(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        {
+            using (ISwsimV90 webService = CreateWebService("SetAutoBuy"))
+            {
+                return webService.SetAutoBuy(GetCredentials(account), autoBuySettings);
+            }
         }
     }
 }

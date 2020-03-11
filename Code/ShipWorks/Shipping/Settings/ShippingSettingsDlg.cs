@@ -14,9 +14,9 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -193,6 +193,11 @@ namespace ShipWorks.Shipping.Settings
                 return;
             }
 
+            if (e.OptionPage == optionPageOneBalance)
+            {
+                SaveOneBalanceSettings();
+            }
+
             ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
 
             if (settingsControl != null)
@@ -360,6 +365,8 @@ namespace ShipWorks.Shipping.Settings
             InformUserThatMyFiltersCantBeUsedFilters();
 
             SaveSettings();
+
+            SaveOneBalanceSettings();
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
@@ -548,6 +555,23 @@ namespace ShipWorks.Shipping.Settings
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Save the One Balance settings
+        /// </summary>
+        private void SaveOneBalanceSettings()
+        {
+            var controlHost = optionPageOneBalance.Controls.OfType<IOneBalanceSettingsControlHost>().FirstOrDefault();
+
+            try
+            {
+                controlHost?.SaveSettings();
+            }
+            catch (UspsException ex)
+            {
+                MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{ex.Message}");
+            }
         }
     }
 }

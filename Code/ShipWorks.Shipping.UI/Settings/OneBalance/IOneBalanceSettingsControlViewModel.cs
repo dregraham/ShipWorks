@@ -23,9 +23,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         IOneBalanceEnableUpsBannerWpfViewModel BannerContext { get; }
 
         /// <summary>
-        /// RelayCommand for getting the account balance
+        /// RelayCommand for getting initial values to populate fields with
         /// </summary>
-        ICommand GetBalanceCommand { get; }
+        ICommand GetInitialValuesCommand { get; }
 
         /// <summary>
         /// A flag to indicate if we are still trying to load the balance
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The message to be displayed in place of the account balance if needed
         /// </summary>
-        string Message { get; set; }
+        string GetBalanceError { get; set; }
 
         /// <summary>
         /// Relay command for showing the add money dialog
@@ -55,6 +55,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// A flag to indicate if we should show the message
         /// </summary>
-        bool ShowMessage { get; set; }
+        bool ShowGetBalanceError { get; set; }
+
+        /// <summary>
+        /// Send the auto fund settings to Stamps
+        /// </summary>
+        void SaveAutoFundSettings();
     }
 }
