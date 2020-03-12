@@ -19,8 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Dhl.API;
-using ShipWorks.Shipping.Carriers.Dhl.API.Stamps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Services;
@@ -41,16 +39,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     public class DhlExpressShipmentType : ShipmentType
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
-        private readonly IDhlExpressLabelClientFactory labelClientFactory;
+        private readonly IShipEngineWebClient shipEngineWebClient;
+        private readonly IShipEngineTrackingResultFactory trackingResultFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlExpressShipmentType(ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
-                                      IDhlExpressLabelClientFactory labelClientFactory)
+                                      IShipEngineWebClient shipEngineWebClient,
+                                      IShipEngineTrackingResultFactory trackingResultFactory)
         {
             this.accountRepository = accountRepository;
-            this.labelClientFactory = labelClientFactory;
+            this.shipEngineWebClient = shipEngineWebClient;
+            this.trackingResultFactory = trackingResultFactory;
         }
 
         /// <summary>
@@ -422,7 +423,20 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         {
             try
             {
-                return labelClientFactory.Create(shipment).Track(shipment);
+                string labelID = shipment.DhlExpress?.ShipEngineLabelID;
+                TrackingInformation trackingInfo;
+                if (string.IsNullOrWhiteSpace(labelID))
+                {
+                    trackingInfo = Task.Run(() =>
+                        shipEngineWebClient.Track("dhl_express", shipment.TrackingNumber, ApiLogSource.DHLExpress)).Result;
+                }
+                else
+                {
+                    trackingInfo = Task.Run(() =>
+                        shipEngineWebClient.Track(labelID, ApiLogSource.DHLExpress)).Result;
+                }
+
+                return trackingResultFactory.Create(trackingInfo);
             }
             catch (Exception)
             {

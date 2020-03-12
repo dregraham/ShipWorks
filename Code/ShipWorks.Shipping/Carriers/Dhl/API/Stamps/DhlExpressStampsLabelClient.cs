@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             try
             {
                 webClient.VoidShipment(shipment);
+			}
             catch (Exception ex)
             {
                 throw new ShippingException(ex);
