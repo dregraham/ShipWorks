@@ -169,9 +169,21 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             rate.ServiceType = ServiceType.DHLEWW;
             rate.PrintLayout = "Normal4X6";
 
+            List<AddOnV16> addOns = new List<AddOnV16>();
+
             if (shipment.DhlExpress.SaturdayDelivery)
             {
-                rate.AddOns = new[] { new AddOnV16 { AddOnType = AddOnTypeV16.CARASAT } };
+                addOns.Add(new AddOnV16 { AddOnType = AddOnTypeV16.CARASAT });
+            }
+
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                addOns.Add(new AddOnV16 { AddOnType = AddOnTypeV16.CARARES });
+            }
+
+            if (addOns.Count > 0)
+            {
+                rate.AddOns = addOns.ToArray();
             }
 
             // For APO/FPO, we have to specifically ask for customs docs
@@ -248,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             switch (service)
             {
                 case DhlExpressServiceType.ExpressEnvelope:
-                    return PackageTypeV10.Envelope;
+                    return PackageTypeV10.ExpressEnvelope;
                 case DhlExpressServiceType.ExpressWorldWideDocuments:
                     return PackageTypeV10.Documents;
                 case DhlExpressServiceType.ExpressWorldWide:

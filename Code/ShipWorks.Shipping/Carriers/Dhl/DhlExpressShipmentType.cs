@@ -96,6 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             dhlExpressShipmentEntity.NonDelivery = (int) ShipEngineNonDeliveryType.ReturnToSender;
             dhlExpressShipmentEntity.DhlExpressAccountID = 0;
             dhlExpressShipmentEntity.ShipEngineLabelID = string.Empty;
+            dhlExpressShipmentEntity.ResidentialDelivery = false;
 
             DhlExpressPackageEntity package = CreateDefaultPackage();
 

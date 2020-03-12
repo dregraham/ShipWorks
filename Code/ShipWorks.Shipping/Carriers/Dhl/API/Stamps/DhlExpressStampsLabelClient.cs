@@ -45,11 +45,15 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment) => webClient.VoidShipment(shipment);
-
-        /// <summary>
-        /// Get the tracking result for the given shipment
-        /// </summary>
-        public TrackingResult Track(ShipmentEntity shipment) => webClient.TrackShipment(shipment);
+        public void Void(ShipmentEntity shipment)
+        {
+            try
+            {
+                webClient.VoidShipment(shipment);
+            catch (Exception ex)
+            {
+                throw new ShippingException(ex);
+            }
+        }
     }
 }

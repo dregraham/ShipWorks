@@ -2935,6 +2935,7 @@ CREATE TABLE [dbo].[DhlExpressShipment](
 	[ShipEngineLabelID] [nvarchar] (50) NULL,
 	[IntegratorTransactionID] [uniqueidentifier] NULL,
 	[StampsTransactionID] [uniqueidentifier] NULL,
+	[ResidentialDelivery] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressShipment] on [dbo].[DhlExpressShipment]'
@@ -2985,7 +2986,8 @@ CREATE TABLE [dbo].[DhlExpressProfile](
 	[NonMachinable] [bit] NULL,
 	[SaturdayDelivery] [bit] NULL,
 	[Contents][int] Null,
-	[NonDelivery] [int] Null
+	[NonDelivery] [int] Null,
+	[ResidentialDelivery] [int] Null
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressProfile] on [dbo].[DhlExpressProfile]'

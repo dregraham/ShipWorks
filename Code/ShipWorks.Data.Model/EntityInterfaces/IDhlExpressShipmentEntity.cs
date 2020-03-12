@@ -93,6 +93,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Guid> StampsTransactionID { get; }
+        /// <summary> The ResidentialDelivery property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."ResidentialDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        System.Boolean ResidentialDelivery { get; }
         
         IShipmentEntity Shipment { get; }
         
