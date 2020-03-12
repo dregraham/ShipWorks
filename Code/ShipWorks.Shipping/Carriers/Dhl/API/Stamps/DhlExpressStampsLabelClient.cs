@@ -30,6 +30,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
+            if (shipment.DhlExpress.Packages.Count > 1)
+            {
+                throw new ShippingException("Multiple packages are not supported by this account.");
+            }
+
             TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             var telemetricLabelResponse = await webClient.ProcessShipment(shipment).ConfigureAwait(false);
