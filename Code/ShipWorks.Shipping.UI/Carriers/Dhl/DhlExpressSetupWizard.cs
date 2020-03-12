@@ -82,7 +82,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             if (skipAccountSetup)
             {
                 Pages.Remove(wizardPageWelcome);
-                Pages.Remove(wizardPageContactInfo);
             }
 
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
