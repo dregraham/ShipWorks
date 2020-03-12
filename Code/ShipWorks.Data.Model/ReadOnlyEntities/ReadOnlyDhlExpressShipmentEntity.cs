@@ -48,6 +48,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipEngineLabelID = source.ShipEngineLabelID;
             IntegratorTransactionID = source.IntegratorTransactionID;
             StampsTransactionID = source.StampsTransactionID;
+            ResidentialDelivery = source.ResidentialDelivery;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -131,6 +132,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Guid> StampsTransactionID { get; }
+        /// <summary> The ResidentialDelivery property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."ResidentialDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ResidentialDelivery { get; }
         
         public IShipmentEntity Shipment { get; }
         

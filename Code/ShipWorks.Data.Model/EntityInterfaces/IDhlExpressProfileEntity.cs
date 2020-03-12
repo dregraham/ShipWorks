@@ -69,6 +69,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int32> NonDelivery { get; }
+        /// <summary> The ResidentialDelivery property of the Entity DhlExpressProfile<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressProfile"."ResidentialDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> ResidentialDelivery { get; }
         
         IShippingProfileEntity ShippingProfile { get; }
         
