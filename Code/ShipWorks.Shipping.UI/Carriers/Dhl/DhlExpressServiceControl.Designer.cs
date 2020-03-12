@@ -46,6 +46,8 @@
             this.labelDutyPaid = new System.Windows.Forms.Label();
             this.labelNonMachinable = new System.Windows.Forms.Label();
             this.nonMachinable = new System.Windows.Forms.CheckBox();
+            this.labelResDelivery = new System.Windows.Forms.Label();
+            this.resDelivery = new System.Windows.Forms.CheckBox();
             this.packageControl = new ShipWorks.Shipping.Carriers.Dhl.DhlExpressPackageControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
@@ -260,12 +262,14 @@
             this.sectionOptions.ContentPanel.Controls.Add(this.labelDutyPaid);
             this.sectionOptions.ContentPanel.Controls.Add(this.labelNonMachinable);
             this.sectionOptions.ContentPanel.Controls.Add(this.nonMachinable);
+            this.sectionOptions.ContentPanel.Controls.Add(this.labelResDelivery);
+            this.sectionOptions.ContentPanel.Controls.Add(this.resDelivery);
             this.sectionOptions.ExtraText = "";
             this.sectionOptions.Location = new System.Drawing.Point(3, 398);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
-            this.sectionOptions.Size = new System.Drawing.Size(389, 113);
+            this.sectionOptions.Size = new System.Drawing.Size(389, 143);
             this.sectionOptions.TabIndex = 7;
             // 
             // saturdayDelivery
@@ -309,6 +313,27 @@
             this.labelDutyPaid.Size = new System.Drawing.Size(34, 13);
             this.labelDutyPaid.TabIndex = 1;
             this.labelDutyPaid.Text = "Duty:";
+            // 
+            // labelResDelivery
+            // 
+            this.labelResDelivery.AutoSize = true;
+            this.labelResDelivery.BackColor = System.Drawing.Color.Transparent;
+            this.labelResDelivery.Location = new System.Drawing.Point(-3, 84);
+            this.labelResDelivery.Name = "labelResDelivery";
+            this.labelResDelivery.Size = new System.Drawing.Size(87, 13);
+            this.labelResDelivery.TabIndex = 9;
+            this.labelResDelivery.Text = "Residential Delivery:";
+            // 
+            // resDelivery
+            // 
+            this.resDelivery.AutoSize = true;
+            this.resDelivery.BackColor = System.Drawing.Color.White;
+            this.resDelivery.Location = new System.Drawing.Point(108, 83);
+            this.resDelivery.Name = "resDelivery";
+            this.resDelivery.Size = new System.Drawing.Size(102, 17);
+            this.resDelivery.TabIndex = 9;
+            this.resDelivery.Text = "Residential Delivery";
+            this.resDelivery.UseVisualStyleBackColor = false;
             // 
             // labelNonMachinable
             // 
@@ -399,6 +424,8 @@
         private System.Windows.Forms.Label labelSaturdayDelivery;
         private System.Windows.Forms.CheckBox nonMachinable;
         private System.Windows.Forms.Label labelNonMachinable;
+        private System.Windows.Forms.CheckBox resDelivery;
+        private System.Windows.Forms.Label labelResDelivery;
         private System.Windows.Forms.Label labelShipDate;
         private ShipWorks.UI.Controls.MultiValueDateTimePicker shipDate;
         private Editing.ShippingDateCutoffDisplayControl cutoffDateDisplay;
