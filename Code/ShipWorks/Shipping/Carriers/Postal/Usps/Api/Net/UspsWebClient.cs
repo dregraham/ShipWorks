@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        public virtual TrackingResult TrackShipment(ShipmentEntity shipment)
+        public TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
@@ -242,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the tracking result for the given shipment
         /// </summary>
-        protected TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             TrackingResult result = new TrackingResult();
             TrackingEvent[] trackingEvents;
