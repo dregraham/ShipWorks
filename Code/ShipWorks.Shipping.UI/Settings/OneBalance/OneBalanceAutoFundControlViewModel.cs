@@ -62,15 +62,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public bool IsAutoFund
         {
             get => isAutoFund;
-            set
-            {
-                Set(ref isAutoFund, value);
-                if (!value)
-                {
-                    MinimumBalance = 0;
-                    AutoFundAmount = 0;
-                }
-            }
+            set => Set(ref isAutoFund, value);
         }
 
         /// <summary>
