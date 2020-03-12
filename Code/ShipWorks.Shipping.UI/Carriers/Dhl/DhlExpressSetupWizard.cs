@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
-        private bool newAccountOnly = false;
+        private bool skipAccountSetup = false;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -79,9 +79,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             wizardPageWelcome.StepNextAsync = OnStepNextWelcome;
 
-            if (newAccountOnly)
+            if (skipAccountSetup)
             {
                 Pages.Remove(wizardPageWelcome);
+                Pages.Remove(wizardPageContactInfo);
             }
 
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
@@ -212,8 +213,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             var existingAccount = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
 
-            // Sets up a new account only if they already have a One Balance USPS account.
-            newAccountOnly = existingAccount != null;
+            // Only skip the account screen if they already have a One Balance USPS account.
+            skipAccountSetup = existingAccount != null;
             return ShowDialog(owner);
         }
     }
