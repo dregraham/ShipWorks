@@ -6,12 +6,12 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// Interface for the OneBalanceEnableUpsBannerWpfViewModel
     /// </summary>
-    public interface IOneBalanceEnableUpsBannerWpfViewModel
+    public interface IOneBalanceShowSetupDialogViewModel
     {
         /// <summary>
         /// RelayCommand for Showing the setup dialog
         /// </summary>
-        ICommand ShowSetupDialogCommand { get; }
+        ICommand ShowSetupWizardCommand { get; }
 
         /// <summary>
         /// Raised when setup is complete

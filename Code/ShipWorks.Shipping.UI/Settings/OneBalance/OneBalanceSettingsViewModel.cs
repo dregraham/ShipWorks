@@ -4,10 +4,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -22,7 +24,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     public class OneBalanceSettingsControlViewModel : ViewModelBase, IOneBalanceSettingsControlViewModel
     {
         private IPostageWebClient postageWebClient;
-        private readonly IUspsAccountManager accountManager;
+        private readonly IUspsAccountManager uspsAccountManager;
         private UpsAccountEntity upsAccount;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
@@ -36,22 +38,24 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager,
+        public OneBalanceSettingsControlViewModel(IUspsAccountManager uspsAccountManager,
             Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
-            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel,
+            IIndex<ShipmentTypeCode, IOneBalanceShowSetupDialogViewModel> setupDialogLookup,
             IOneBalanceAutoFundControlViewModel autoFundViewModel)
         {
-            this.accountManager = accountManager;
+            this.uspsAccountManager = uspsAccountManager;
             SetupWebClients();
             upsAccount = GetUpsAccount();
 
             this.addMoneyDialogFactory = addMoneyDialogFactory;
             ShowBanner = upsAccount == null;
 
-            BannerContext = bannerViewModel;
+            BannerContext = setupDialogLookup[ShipmentTypeCode.UpsOnLineTools];
+            CarrierAccountsContext = setupDialogLookup[ShipmentTypeCode.DhlExpress];
             AutoFundContext = autoFundViewModel;
 
             BannerContext.SetupComplete += OnOneBalanceSetupComplete;
+            CarrierAccountsContext.SetupComplete += OnOneBalanceSetupComplete;
 
             GetInitialValuesCommand = new RelayCommand(GetInitialValues);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
@@ -118,20 +122,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// A flag to indcate if we should show the dhl setup banner
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool ShowDhlBanner
-        {
-            get => postageWebClient != null;
-        }
-
-        /// <summary>
         /// The data context for the enable ups banner
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOneBalanceEnableUpsBannerWpfViewModel BannerContext { get; }
+        public IOneBalanceShowSetupDialogViewModel BannerContext { get; }
 
+        /// <summary>
+        /// The data context for the carrier accounts control
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOneBalanceShowSetupDialogViewModel CarrierAccountsContext { get; }
 
         /// <summary>
         /// The data context for the enable ups banner
@@ -231,7 +231,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void SetupWebClients()
         {
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+            var account = uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
             postageWebClient = account == null ? null : new UspsPostageWebClient(account);
         }
 

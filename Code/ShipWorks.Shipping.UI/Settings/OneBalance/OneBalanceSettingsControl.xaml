@@ -38,7 +38,6 @@
                 <ContentControl Visibility="{Binding ShowBanner, Converter={StaticResource BooleanToVisibilityConverter}}" IsTabStop="False">
                     <local:OneBalanceEnableUpsBannerWpfControl DataContext="{Binding BannerContext}" Margin="50,15,0,0" />
                 </ContentControl>
-                <!--#region Overview-->
                 <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
                     <TextBlock Margin="0,0,0,10" Text="Account Overview" Style="{StaticResource TextBlock.SectionHeader}"/>
                 </Border>
@@ -67,33 +66,7 @@
                         <TextBlock Text="Add Money" Margin="5,2,5,2"/>
                     </Button>
                 </Grid>
-                
-                <!--#endregion-->
-                <!--#region Carrier Accounts-->
-                <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
-                    <TextBlock Margin="0,0,0,10" Text="One Balance Carrier Accounts" Style="{StaticResource TextBlock.SectionHeader}"/>
-                </Border>
-                <Grid Margin="90,15,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="15"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/usps.png" Style="{StaticResource Image.Icon}"/>
-                    <TextBlock Text="USPS from Stamps.com" Grid.Column="1" Margin="5,0,0,0"/>
-                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/ups.png" Style="{StaticResource Image.Icon}" Grid.Row="1"/>
-                    <TextBlock Text="UPS from ShipWorks" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0"/>
-                    <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/dhl.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
-                    <TextBlock Text="DHL Express from ShipWorks" Grid.Column="1" Grid.Row="2" Margin="5,0,0,0" Foreground="DarkGray"/>
-                </Grid>
-                <ContentControl Margin="50,0,0,0" Visibility="{Binding ShowDhlBanner, Converter={StaticResource BooleanToVisibilityConverter}}" IsTabStop="False">
-                    <local:OneBalanceAddDhlExpressBanner DataContext="{Binding DhlBannerContext}" Margin="0,10,0,0" />
-                </ContentControl>
-                <!--#endregion-->
+                <local:OneBalanceCarrierAccountControl  Margin="50,30,0,0" DataContext="{Binding CarrierAccountsContext}"/>
                 <local:OneBalanceAutoFundControl DataContext="{Binding AutoFundContext}" Margin="50,15,0,0"/>
             </StackPanel>
             <TextBlock Text="UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and the Color Brown are trademarks of United Service of America, Inc. All Rights Reserved"
