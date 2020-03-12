@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.Ups
             TrackingResult trackingResult;
             if (string.IsNullOrEmpty(shipment.Ups.ShipEngineLabelID))
             {
-
                trackingResult = UpsApiTrackClient.TrackShipment(shipment);
             }
             else
