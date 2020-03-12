@@ -44,6 +44,11 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
                 throw new ShippingException($"{EnumHelper.GetDescription(DhlExpressServiceType.ExpressWorldWideDocuments)} is not supported by this account.");
             }
 
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                throw new ShippingException($"The Residential Delivery option is not supported by this account.");
+            }
+
             return base.Create(shipment);
         }
 
