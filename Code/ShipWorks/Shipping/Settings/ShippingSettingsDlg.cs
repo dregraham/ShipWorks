@@ -193,9 +193,10 @@ namespace ShipWorks.Shipping.Settings
                 return;
             }
 
-            if (e.OptionPage == optionPageOneBalance)
+            if (e.OptionPage == optionPageOneBalance && !SaveOneBalanceSettings())
             {
-                SaveOneBalanceSettings();
+                e.Cancel = true;
+                return;
             }
 
             ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
@@ -366,7 +367,11 @@ namespace ShipWorks.Shipping.Settings
 
             SaveSettings();
 
-            SaveOneBalanceSettings();
+            if (!SaveOneBalanceSettings())
+            {
+                e.Cancel = true;
+                return;
+            }
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
@@ -560,18 +565,21 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Save the One Balance settings
         /// </summary>
-        private void SaveOneBalanceSettings()
+        private bool SaveOneBalanceSettings()
         {
             var controlHost = optionPageOneBalance.Controls.OfType<IOneBalanceSettingsControlHost>().FirstOrDefault();
 
             try
             {
                 controlHost?.SaveSettings();
+                return true;
             }
             catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{ex.Message}");
             }
+
+            return false;
         }
     }
 }
