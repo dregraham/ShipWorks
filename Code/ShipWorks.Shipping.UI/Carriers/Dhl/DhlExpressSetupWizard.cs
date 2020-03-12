@@ -10,6 +10,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
-        private bool newAccountOnly;
+        private bool newAccountOnly = false;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -209,10 +210,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var existingAccounts = DhlExpressAccountManager.AccountsReadOnly.ToList();
+            var existingAccount = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
 
-            // Sets up a new account only if they already have an account and don't have a Shipengine account.
-            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            // Sets up a new account only if they already have a One Balance USPS account.
+            newAccountOnly = existingAccount != null;
             return ShowDialog(owner);
         }
     }
