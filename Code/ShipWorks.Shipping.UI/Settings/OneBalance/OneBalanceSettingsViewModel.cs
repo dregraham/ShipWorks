@@ -9,7 +9,6 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Dhl;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -233,7 +232,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void SetupWebClients()
         {
-            var account = uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+            var account = GetOneBalanceAccount();
             postageWebClient = account == null ? null : new UspsPostageWebClient(account);
         }
 
@@ -264,5 +263,20 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// Send the auto fund settings to Stamps
         /// </summary>
         public void SaveAutoFundSettings() => AutoFundContext.SaveSettings();
+
+        /// <summary>
+        /// Determines which USPS account is One Balance, and if one exists returns it
+        /// </summary>
+        private UspsAccountEntity GetOneBalanceAccount()
+        {
+            /// If there's only one account it's a One Balance account
+            if (uspsAccountManager.UspsAccounts.Count == 1)
+            {
+                return uspsAccountManager.UspsAccounts.First();
+            }
+
+            // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
+            return uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+        }
     }
 }

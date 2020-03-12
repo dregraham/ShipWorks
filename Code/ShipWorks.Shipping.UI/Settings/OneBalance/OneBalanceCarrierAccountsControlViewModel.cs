@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
 using Autofac.Features.Indexed;
@@ -37,7 +34,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public OneBalanceCarrierAccountsControlViewModel(IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory,
             IWin32Window window,
             IUspsAccountManager accountManager,
-            IMessageHelper messageHelper) 
+            IMessageHelper messageHelper)
             : base(setupWizardFactory, window)
         {
             this.accountManager = accountManager;
@@ -70,7 +67,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public void Refresh()
         {
             remoteDhlEnabled = RemoteDhlAccountEnabled();
-            DhlTextColor =  remoteDhlEnabled ? Brushes.Black : Brushes.DarkGray;
+            DhlTextColor = remoteDhlEnabled ? Brushes.Black : Brushes.DarkGray;
             LocalDhlAccountEnabled = LocalDhlAccountExists();
         }
 
@@ -89,7 +86,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool RemoteDhlAccountEnabled()
         {
             var uspsAccount = GetUspsAccount();
-            if(uspsAccount != null)
+            if (uspsAccount != null)
             {
                 var response = (AccountInfoV41) webClient.GetAccountInfo(uspsAccount);
                 return response.Capabilities.CanPrintDX;
@@ -101,39 +98,73 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Get the account from stamps
         /// </summary>
-        private UspsAccountEntity GetUspsAccount() => accountManager.GetAccounts(UspsResellerType.None).FirstOrDefault(e => e.ShipEngineCarrierId != null);
+        private UspsAccountEntity GetUspsAccount()
+        {
+            var accounts = accountManager.GetAccounts(UspsResellerType.None);
 
+            if (!accounts.Any())
+            {
+                messageHelper.ShowError("You must have a USPS account to enable DHL Express from ShipWorks.");
+                return null;
+            }
+
+            /// If there's only one account it's a One Balance account
+            if (accounts.Count == 1)
+            {
+                return accounts.First();
+            }
+
+            // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
+            var account = accounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+
+            if (account == null)
+            {
+                messageHelper.ShowError("Unable to determine which USPS account to use. Please call ShipWorks support at 1-800-952-7784");
+            }
+
+            return account;
+        }
+
+        /// <summary>
+        /// Show the DHL Express setup wizard
+        /// </summary>
         protected override void ShowSetupWizard(ShipmentTypeCode shipmentTypeCode)
         {
-            try
+            if ((!remoteDhlEnabled && AddCarrierAccount()) || remoteDhlEnabled)
             {
-                if (!remoteDhlEnabled)
-                {
-                    AddCarrierAccount();
-                }
                 base.ShowSetupWizard(shipmentTypeCode);
                 Refresh();
-            }
-            catch (Exception ex)
-            {
-                if (ex is UspsException)
-                {
-                    messageHelper.ShowError(ex.Message);
-                }
-                else
-                {
-                    messageHelper.ShowError("There was an error adding DHL Express to your One Balance account.");
-                }
             }
         }
 
         /// <summary>
         /// Make an Api call to stamps to add the account
         /// </summary>
-        private void AddCarrierAccount()
+        private bool AddCarrierAccount()
         {
             var account = GetUspsAccount();
-            webClient.AddDhlExpress(account);   
+
+            if (account != null)
+            {
+                try
+                {
+                    webClient.AddDhlExpress(account);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    if (ex is UspsException)
+                    {
+                        messageHelper.ShowError(ex.Message);
+                    }
+                    else
+                    {
+                        messageHelper.ShowError("There was an error adding DHL Express to your One Balance account.");
+                    }
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
