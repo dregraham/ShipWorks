@@ -158,6 +158,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             Loading = true;
             ShowBanner = upsAccount == null;
+            AutoFundContext.AutoFundError = null;
 
             if (postageWebClient != null)
             {
