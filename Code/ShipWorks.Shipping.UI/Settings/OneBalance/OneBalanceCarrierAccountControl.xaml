@@ -6,6 +6,7 @@
              xmlns:ms="clr-namespace:System;assembly=mscorlib"
              xmlns:s="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shared"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Settings.OneBalance"
+             xmlns:ui="http://schemas.shipworks.com/ui"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -15,6 +16,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+            <ui:BooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" Invert="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -37,7 +39,7 @@
             <TextBlock Text="UPS from ShipWorks" Grid.Column="1" Grid.Row="1" Margin="5,0,0,0"/>
             <Image Source="/ShipWorks.Core;component/Resources/Shipping/Icons/dhl.png" Style="{StaticResource Image.Icon}" Grid.Row="2"/>
             <TextBlock Text="DHL Express from ShipWorks" Grid.Column="1" Grid.Row="2" Margin="5,0,0,0" Foreground="{Binding DhlTextColor}"/>
-            <Button HorizontalAlignment="Right"  Command="{Binding ShowSetupWizardCommand}" Grid.Column="2" Grid.Row="2">
+            <Button HorizontalAlignment="Right"  Command="{Binding ShowSetupWizardCommand}" Grid.Column="2" Grid.Row="2" Visibility="{Binding LocalDhlAccountEnabled, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
                 <Button.CommandParameter>
                     <s:ShipmentTypeCode>DhlExpress</s:ShipmentTypeCode>
                 </Button.CommandParameter>

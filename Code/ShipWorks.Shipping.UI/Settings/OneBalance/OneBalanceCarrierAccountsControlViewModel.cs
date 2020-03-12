@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
     public class OneBalanceCarrierAccountsControlViewModel : OneBalanceShowSetupDialogViewModel
     {
-        private Color dhlTextColor;
+        private SolidColorBrush dhlTextColor;
         private bool dhlAccountEnabled;
         private readonly IUspsAccountManager accountManager;
         private readonly IMessageHelper messageHelper;
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The color of the Dhl Express Text
         /// </summary>
-        public Color DhlTextColor
+        public SolidColorBrush DhlTextColor
         {
             get => dhlTextColor;
             set => Set(ref dhlTextColor, value);
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public void Refresh()
         {
             remoteDhlEnabled = RemoteDhlAccountEnabled();
-            DhlTextColor =  remoteDhlEnabled ? Colors.DarkGray : Colors.Black;
+            DhlTextColor =  remoteDhlEnabled ? Brushes.Black : Brushes.DarkGray;
             LocalDhlAccountEnabled = LocalDhlAccountExists();
         }
 
@@ -88,8 +88,14 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private bool RemoteDhlAccountEnabled()
         {
-            var response = (AccountInfoResult) webClient.GetAccountInfo(GetUspsAccount());
-            return response.AccountInfo.Capabilities.CanPrintDX;
+            var uspsAccount = GetUspsAccount();
+            if(uspsAccount != null)
+            {
+                var response = (AccountInfoV41) webClient.GetAccountInfo(uspsAccount);
+                return response.Capabilities.CanPrintDX;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -99,24 +105,14 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
         protected override void ShowSetupWizard(ShipmentTypeCode shipmentTypeCode)
         {
-            if (!remoteDhlEnabled)
-            {
-                AddCarrierAccount();
-            }
-            base.ShowSetupWizard(shipmentTypeCode);
-            Refresh();
-        }
-
-        /// <summary>
-        /// Make an Api call to stamps to add the account
-        /// </summary>
-        private void AddCarrierAccount()
-        {
-            var account = GetUspsAccount();
-
             try
             {
-                webClient.AddDhlExpress(account);
+                if (!remoteDhlEnabled)
+                {
+                    AddCarrierAccount();
+                }
+                base.ShowSetupWizard(shipmentTypeCode);
+                Refresh();
             }
             catch (Exception ex)
             {
@@ -129,6 +125,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     messageHelper.ShowError("There was an error adding DHL Express to your One Balance account.");
                 }
             }
+        }
+
+        /// <summary>
+        /// Make an Api call to stamps to add the account
+        /// </summary>
+        private void AddCarrierAccount()
+        {
+            var account = GetUspsAccount();
+            webClient.AddDhlExpress(account);   
         }
 
         /// <summary>
