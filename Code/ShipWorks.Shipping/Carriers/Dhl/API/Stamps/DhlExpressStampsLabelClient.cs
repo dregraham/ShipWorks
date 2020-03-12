@@ -44,6 +44,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment) => webClient.VoidShipment(shipment);
+        public void Void(ShipmentEntity shipment)
+        {
+            try
+            {
+                webClient.VoidShipment(shipment);
+            }
+            catch (Exception ex)
+            {
+                throw new ShippingException(ex);
+            }
+        }
     }
 }
