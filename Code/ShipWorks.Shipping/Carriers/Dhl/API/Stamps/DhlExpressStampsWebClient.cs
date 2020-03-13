@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -73,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             {
                 VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
             }
-            catch (ShippingException ex) when (ex.Message == "The DHL Express mail class print was already voided.")
+            catch (SoapException ex) when (ex.Message == "The DHL Express mail class print was already voided.")
             {
                 log.Info("Stamps says we already voided the label. Swallowing error.", ex);
             }           
