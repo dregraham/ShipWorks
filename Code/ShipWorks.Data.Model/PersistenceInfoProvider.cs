@@ -976,7 +976,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "SaturdayDelivery", "SaturdayDelivery", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 5);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "Contents", "Contents", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 6);
 			this.AddElementFieldMapping("DhlExpressProfileEntity", "NonDelivery", "NonDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 7);
-			this.AddElementFieldMapping("DhlExpressProfileEntity", "ResidentialDelivery", "ResidentialDelivery", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 8);
+			this.AddElementFieldMapping("DhlExpressProfileEntity", "ResidentialDelivery", "ResidentialDelivery", true, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 8);
 		}
 
 		/// <summary>Inits DhlExpressShipmentEntity's mappings</summary>
