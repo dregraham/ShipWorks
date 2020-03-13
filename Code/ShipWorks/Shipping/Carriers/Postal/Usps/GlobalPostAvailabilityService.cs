@@ -90,6 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AddToServices(PostalServiceType.GlobalPostSmartSaverEconomyIntl);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverStandardIntl);
+                AddToServices(PostalServiceType.GlobalPostPlusSmartSaver);
             }
 
             if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.GlobalPostPlus))
