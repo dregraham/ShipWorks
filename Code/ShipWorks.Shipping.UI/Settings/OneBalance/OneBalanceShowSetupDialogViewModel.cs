@@ -19,7 +19,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private readonly IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory;
         private readonly IWin32Window window;
-        private readonly IUspsAccountManager accountManager;
 
         public event EventHandler SetupComplete;
 
@@ -30,8 +29,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             this.setupWizardFactory = setupWizardFactory;
             this.window = window;
-            this.accountManager = accountManager;
-            ShowSetupWizardCommand = new RelayCommand<ShipmentTypeCode>((shipmentTypeCode) => ShowSetupWizard(shipmentTypeCode));
+            ShowSetupWizardCommand = new RelayCommand<ShipmentTypeCode>((shipmentTypeCode) => InternalShowSetupWizard(shipmentTypeCode));
         }
 
         /// <summary>
@@ -39,6 +37,15 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ShowSetupWizardCommand { get; }
+
+        /// <summary>
+        /// This is to avoid CA2214: Do not call overridable methods in constructors
+        /// </summary>
+        /// <param name="shipmentTypeCode"></param>
+        private void InternalShowSetupWizard(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShowSetupWizard(shipmentTypeCode);
+        }
 
         /// <summary>
         /// Shows the setup wizard to the user
