@@ -153,7 +153,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             ShowBanner = upsAccount == null;
-            AutoFundContext.AutoFundError = null;
 
             if (postageWebClient != null)
             {

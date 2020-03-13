@@ -128,6 +128,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAutoFundSettings()
         {
+            AutoFundError = null;
             var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
 
             try
