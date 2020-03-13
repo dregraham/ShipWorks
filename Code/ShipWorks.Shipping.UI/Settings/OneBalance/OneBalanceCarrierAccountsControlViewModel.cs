@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// A flag to indicate if the DhlAccount is still enabled
+        /// A flag to indicate if the Dhl Account is still enabled
         /// </summary>
         public bool LocalDhlAccountEnabled
         {
@@ -190,7 +190,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private bool LocalDhlAccountExists() => DhlExpressAccountManager.Accounts.FirstOrDefault(e => e.UspsAccountId != null) != null;
 
         /// <summary>
-        /// Checks to see if the UPS account exists locally
+        /// Get the ups account from the local database
         /// </summary>
         private bool LocalUpsAccountExists() => UpsAccountManager.Accounts.FirstOrDefault(e => e.ShipEngineCarrierId != null) != null;
     }
