@@ -59,6 +59,7 @@
             this.sectionShipment.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
+            this.sectionLabelOptions.ContentPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
@@ -114,7 +115,11 @@
             // sectionLabelOptions
             // 
             this.sectionLabelOptions.Collapsed = false;
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 516);
+            // 
+            // sectionLabelOptions.ContentPanel
+            // 
+            this.sectionLabelOptions.ContentPanel.Controls.Add(this.labelFormat);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 545);
             this.sectionLabelOptions.Size = new System.Drawing.Size(389, 62);
             this.sectionLabelOptions.TabIndex = 8;
             // 
@@ -122,9 +127,7 @@
             // 
             this.cutoffDateDisplay.AutoSize = true;
             this.cutoffDateDisplay.BackColor = System.Drawing.Color.White;
-            this.cutoffDateDisplay.Caption = "Shipments processed after 5:00 PM today will have a ship date of the next valid s" +
-    "hipping day.\r\nTo update this setting, go to Manage > Shipping Settings > DHL Exp" +
-    "ress > Settings.";
+            this.cutoffDateDisplay.Caption = "Cutoff time is 3:00 PM";
             this.cutoffDateDisplay.Location = new System.Drawing.Point(257, 45);
             this.cutoffDateDisplay.Name = "cutoffDateDisplay";
             this.cutoffDateDisplay.ShipmentType = ShipWorks.Shipping.ShipmentTypeCode.DhlExpress;
@@ -269,14 +272,14 @@
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Options";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
-            this.sectionOptions.Size = new System.Drawing.Size(389, 143);
+            this.sectionOptions.Size = new System.Drawing.Size(389, 142);
             this.sectionOptions.TabIndex = 7;
             // 
             // saturdayDelivery
             // 
             this.saturdayDelivery.AutoSize = true;
             this.saturdayDelivery.BackColor = System.Drawing.Color.White;
-            this.saturdayDelivery.Location = new System.Drawing.Point(108, 14);
+            this.saturdayDelivery.Location = new System.Drawing.Point(113, 14);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 5;
@@ -287,7 +290,7 @@
             // 
             this.labelSaturdayDelivery.AutoSize = true;
             this.labelSaturdayDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturdayDelivery.Location = new System.Drawing.Point(47, 15);
+            this.labelSaturdayDelivery.Location = new System.Drawing.Point(52, 15);
             this.labelSaturdayDelivery.Name = "labelSaturdayDelivery";
             this.labelSaturdayDelivery.Size = new System.Drawing.Size(55, 13);
             this.labelSaturdayDelivery.TabIndex = 7;
@@ -297,7 +300,7 @@
             // 
             this.dutyPaid.AutoSize = true;
             this.dutyPaid.BackColor = System.Drawing.Color.White;
-            this.dutyPaid.Location = new System.Drawing.Point(108, 37);
+            this.dutyPaid.Location = new System.Drawing.Point(113, 37);
             this.dutyPaid.Name = "dutyPaid";
             this.dutyPaid.Size = new System.Drawing.Size(114, 17);
             this.dutyPaid.TabIndex = 7;
@@ -308,38 +311,17 @@
             // 
             this.labelDutyPaid.AutoSize = true;
             this.labelDutyPaid.BackColor = System.Drawing.Color.Transparent;
-            this.labelDutyPaid.Location = new System.Drawing.Point(68, 38);
+            this.labelDutyPaid.Location = new System.Drawing.Point(73, 38);
             this.labelDutyPaid.Name = "labelDutyPaid";
             this.labelDutyPaid.Size = new System.Drawing.Size(34, 13);
             this.labelDutyPaid.TabIndex = 1;
             this.labelDutyPaid.Text = "Duty:";
             // 
-            // labelResDelivery
-            // 
-            this.labelResDelivery.AutoSize = true;
-            this.labelResDelivery.BackColor = System.Drawing.Color.Transparent;
-            this.labelResDelivery.Location = new System.Drawing.Point(-3, 84);
-            this.labelResDelivery.Name = "labelResDelivery";
-            this.labelResDelivery.Size = new System.Drawing.Size(87, 13);
-            this.labelResDelivery.TabIndex = 9;
-            this.labelResDelivery.Text = "Residential Delivery:";
-            // 
-            // resDelivery
-            // 
-            this.resDelivery.AutoSize = true;
-            this.resDelivery.BackColor = System.Drawing.Color.White;
-            this.resDelivery.Location = new System.Drawing.Point(108, 83);
-            this.resDelivery.Name = "resDelivery";
-            this.resDelivery.Size = new System.Drawing.Size(102, 17);
-            this.resDelivery.TabIndex = 9;
-            this.resDelivery.Text = "Residential Delivery";
-            this.resDelivery.UseVisualStyleBackColor = false;
-            // 
             // labelNonMachinable
             // 
             this.labelNonMachinable.AutoSize = true;
             this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachinable.Location = new System.Drawing.Point(15, 61);
+            this.labelNonMachinable.Location = new System.Drawing.Point(20, 61);
             this.labelNonMachinable.Name = "labelNonMachinable";
             this.labelNonMachinable.Size = new System.Drawing.Size(87, 13);
             this.labelNonMachinable.TabIndex = 8;
@@ -349,12 +331,33 @@
             // 
             this.nonMachinable.AutoSize = true;
             this.nonMachinable.BackColor = System.Drawing.Color.White;
-            this.nonMachinable.Location = new System.Drawing.Point(108, 60);
+            this.nonMachinable.Location = new System.Drawing.Point(113, 60);
             this.nonMachinable.Name = "nonMachinable";
             this.nonMachinable.Size = new System.Drawing.Size(102, 17);
             this.nonMachinable.TabIndex = 8;
             this.nonMachinable.Text = "Non-Machinable";
             this.nonMachinable.UseVisualStyleBackColor = false;
+            // 
+            // labelResDelivery
+            // 
+            this.labelResDelivery.AutoSize = true;
+            this.labelResDelivery.BackColor = System.Drawing.Color.Transparent;
+            this.labelResDelivery.Location = new System.Drawing.Point(2, 84);
+            this.labelResDelivery.Name = "labelResDelivery";
+            this.labelResDelivery.Size = new System.Drawing.Size(105, 13);
+            this.labelResDelivery.TabIndex = 9;
+            this.labelResDelivery.Text = "Residential Delivery:";
+            // 
+            // resDelivery
+            // 
+            this.resDelivery.AutoSize = true;
+            this.resDelivery.BackColor = System.Drawing.Color.White;
+            this.resDelivery.Location = new System.Drawing.Point(113, 83);
+            this.resDelivery.Name = "resDelivery";
+            this.resDelivery.Size = new System.Drawing.Size(120, 17);
+            this.resDelivery.TabIndex = 9;
+            this.resDelivery.Text = "Residential Delivery";
+            this.resDelivery.UseVisualStyleBackColor = false;
             // 
             // packageControl
             // 
@@ -392,6 +395,8 @@
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            this.sectionLabelOptions.ContentPanel.ResumeLayout(false);
+            this.sectionLabelOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);

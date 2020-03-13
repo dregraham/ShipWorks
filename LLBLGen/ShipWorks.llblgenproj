@@ -743,7 +743,7 @@
           <Field Name="DhlExpressAccountID" Type="long" IsOptional="true" Precision="19" FieldIndex="1" />
           <Field Name="NonDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="7" />
           <Field Name="NonMachinable" Type="bool" IsOptional="true" FieldIndex="4" />
-          <Field Name="ResidentialDelivery" Type="int" IsOptional="true" Precision="10" FieldIndex="8" />
+          <Field Name="ResidentialDelivery" Type="bool" IsOptional="true" FieldIndex="8" />
           <Field Name="SaturdayDelivery" Type="bool" IsOptional="true" FieldIndex="5" />
           <Field Name="Service" Type="int" IsOptional="true" Precision="10" FieldIndex="2" />
           <Field Name="ShippingProfileID" Type="long" IsPrimaryKey="true" FieldIndex="0" />
@@ -4640,7 +4640,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-12T13:27:27.6994122Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-12T18:41:30.5886271Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5384,7 +5384,7 @@
                     <Field Name="SaturdayDelivery" Ordinal="6" IsOptional="true" DbType="2" />
                     <Field Name="Contents" Ordinal="7" IsOptional="true" DbType="8" Precision="10" />
                     <Field Name="NonDelivery" Ordinal="8" IsOptional="true" DbType="8" Precision="10" />
-                    <Field Name="ResidentialDelivery" Ordinal="9" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="ResidentialDelivery" Ordinal="9" IsOptional="true" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressShipment">

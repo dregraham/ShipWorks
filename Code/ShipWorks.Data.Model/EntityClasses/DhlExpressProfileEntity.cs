@@ -547,11 +547,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ResidentialDelivery property of the Entity DhlExpressProfile<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlExpressProfile"."ResidentialDelivery"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ResidentialDelivery
+		public virtual Nullable<System.Boolean> ResidentialDelivery
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressProfileFieldIndex.ResidentialDelivery, false); }
+			get { return (Nullable<System.Boolean>)GetValue((int)DhlExpressProfileFieldIndex.ResidentialDelivery, false); }
 			set	{ SetValue((int)DhlExpressProfileFieldIndex.ResidentialDelivery, value); }
 		}
 
