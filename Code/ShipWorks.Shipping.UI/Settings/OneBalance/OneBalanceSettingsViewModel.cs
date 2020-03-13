@@ -31,12 +31,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private string getBalanceError;
         private bool showGetBalanceError = false;
         private bool showBanner;
-        private bool loading = true;
+        private bool loading = false;
         private bool addMoneyEnabled = true;
 
-        /// <summary>
-        /// Initialize the control to display information for the given account
-        /// </summary>
         public OneBalanceSettingsControlViewModel(IUspsAccountManager uspsAccountManager,
             Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
             IIndex<ShipmentTypeCode, IOneBalanceShowSetupDialogViewModel> setupDialogLookup,
@@ -155,7 +152,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAccountBalance()
         {
-            Loading = false;
             ShowBanner = upsAccount == null;
             AutoFundContext.AutoFundError = null;
 
@@ -166,7 +162,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 {
                     GetBalance();
                     AddMoneyEnabled = postageWebClient != null && !showGetBalanceError;
-                    Loading = false;
                 });
             }
         }
@@ -183,13 +178,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 try
                 {
                     Balance = new ShipWorks.Shipping.Carriers.Postal.PostageBalance(postageWebClient).Value;
-
+                    Loading = false;
                     break;
                 }
                 catch (Exception ex)
                 {
                     bool keepTrying = false;
-
+                    
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
@@ -202,6 +197,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                         GetBalanceError = "There was an error retrieving your account balance";
                     }
 
+                    Loading = false;
                     ShowGetBalanceError = true;
 
                     if (keepTrying)

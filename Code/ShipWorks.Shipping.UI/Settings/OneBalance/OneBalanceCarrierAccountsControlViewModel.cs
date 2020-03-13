@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// Checks to see if the Dhl account exists locally
+        /// Get the dhl account from the local database
         /// </summary>
         private bool LocalDhlAccountExists() => DhlExpressAccountManager.Accounts.FirstOrDefault(e => e.UspsAccountId != null) != null;
 

@@ -12,7 +12,7 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
     /// <summary>
-    /// View model for the OneBalanceEnableUpsBannerWpfControl
+    /// View model for the controls that need to show a setup wizard
     /// </summary>
     [KeyedComponent(typeof(IOneBalanceShowSetupDialogViewModel), ShipmentTypeCode.UpsOnLineTools)]
     public class OneBalanceShowSetupDialogViewModel : ViewModelBase, IOneBalanceShowSetupDialogViewModel
@@ -35,13 +35,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// RelayCommand for Showing the setup dialog
+        /// RelayCommand for Showing the setup wizard
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand ShowSetupWizardCommand { get; }
 
         /// <summary>
-        /// Shows the setup dialog to the user
+        /// Shows the setup wizard to the user
         /// </summary>
         protected virtual void ShowSetupWizard(ShipmentTypeCode shipmentTypeCode)
         {

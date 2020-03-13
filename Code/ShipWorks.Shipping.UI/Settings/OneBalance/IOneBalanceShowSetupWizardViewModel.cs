@@ -4,7 +4,7 @@ using System.Windows.Input;
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
     /// <summary>
-    /// Interface for the OneBalanceEnableUpsBannerWpfViewModel
+    /// Interface for view models that need to show a setup wizard
     /// </summary>
     public interface IOneBalanceShowSetupDialogViewModel
     {
