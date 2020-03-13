@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
                     break;
                 }
-                catch (UspsException ex)
+                catch (Exception ex)
                 {
                     bool keepTrying = false;
 
@@ -249,6 +249,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             SetupWebClients();
             upsAccount = GetUpsAccount();
             GetAccountBalance();
+            CarrierAccountsContext.Refresh();
         }
 
         /// <summary>

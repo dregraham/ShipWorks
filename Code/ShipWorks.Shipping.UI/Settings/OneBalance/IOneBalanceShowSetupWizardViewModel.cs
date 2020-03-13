@@ -17,5 +17,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// Raised when setup is complete
         /// </summary>
         event EventHandler SetupComplete;
+
+        /// <summary>
+        /// Refreshes the account dependent attributes of the controls 
+        /// </summary>
+        void Refresh();
     }
 }
