@@ -1,12 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Products.Warehouse;
 
 namespace ShipWorks.Products.Export
 {
@@ -19,19 +21,16 @@ namespace ShipWorks.Products.Export
         private const int batchSize = 100;
 
         private readonly IProductCatalog productCatalog;
-        private readonly IUploadSkusToWarehouse uploadRequest;
-        private readonly IConfigurationData configuration;
+        private readonly IWarehouseProductClient warehouseProductClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         public WarehouseProductUploader(
             IProductCatalog productCatalog,
-            IUploadSkusToWarehouse uploadRequest,
-            ISqlAdapterFactory sqlAdapterFactory,
-            IConfigurationData configuration)
+            IWarehouseProductClient warehouseProductClient,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.configuration = configuration;
-            this.uploadRequest = uploadRequest;
+            this.warehouseProductClient = warehouseProductClient;
             this.productCatalog = productCatalog;
         }
 
@@ -40,7 +39,6 @@ namespace ShipWorks.Products.Export
         /// </summary>
         public async Task Upload(ISingleItemProgressDialog progressItem)
         {
-            string warehouseId = configuration.FetchReadOnly().WarehouseID;
             var progressUpdater = await CreateProgressUpdater(progressItem).ConfigureAwait(false);
 
             GenericResult<bool> shouldContinue;
@@ -49,7 +47,7 @@ namespace ShipWorks.Products.Export
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await uploadRequest.Upload(new UploadProductsRequest(skus, warehouseId)).ConfigureAwait(false);
+                    var results = await warehouseProductClient.Upload(skus).ToResult().ConfigureAwait(false);
 
                     if (results.Success)
                     {

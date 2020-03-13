@@ -27,12 +27,20 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create a ChangeProductRequestData object
         /// </summary>
-        public IWarehouseProductRequestData CreateChangeProductRequest(IProductVariantEntity product) => new ChangeProductRequestData(product);
+        public IWarehouseProductRequestData CreateChangeProductRequest(IProductVariantEntity product) => 
+            new ChangeProductRequestData(product);
+
+        /// <summary>
+        /// Create an UploadProductRequestData object
+        /// </summary>
+        public IWarehouseProductRequestData CreateUploadProductsRequest(IEnumerable<IProductVariantEntity> products) => 
+            new UploadProductsRequestData(products);
 
         /// <summary>
         /// Create a change result from a ChangeProductDataResponse
         /// </summary>
-        public IProductChangeResult CreateChangeProductResult(ChangeProductResponseData response) => new ChangeProductResult(response);
+        public IProductChangeResult CreateChangeProductResult(ChangeProductResponseData response) => 
+            new ChangeProductResult(response);
 
         /// <summary>
         /// Create a SetActivationBulkRequestData object
@@ -45,5 +53,11 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public IProductsChangeResult CreateSetActivationResult(SetActivationBulkResponseData response) =>
             new SetActivationBulkResult(response);
+
+        /// <summary>
+        /// Create a change result from an UploadResponse
+        /// </summary>
+        public IProductsChangeResult CreateUploadResult(UploadResponseData response) =>
+            new UploadProductsResult(response);
     }
 }

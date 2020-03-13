@@ -30,5 +30,11 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation) =>
             Task.FromResult(NullProductsResult.Default);
+
+        /// <summary>
+        /// Upload products to the Hub
+        /// </summary>
+        public Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products) =>
+            Task.FromResult(NullProductsResult.Default);
     }
 }
