@@ -23,8 +23,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
     public class OneBalanceCarrierAccountsControlViewModel : OneBalanceShowSetupDialogViewModel
     {
-        private SolidColorBrush dhlTextColor;
-        private SolidColorBrush upsTextColor;
+        private bool upsEnabled;
         private bool dhlAccountEnabled;
         private readonly IUspsAccountManager accountManager;
         private readonly IMessageHelper messageHelper;
@@ -47,21 +46,21 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// The color of the Dhl Express Text
+        /// A flag to indicate if the Dhl Account is still enabled
         /// </summary>
-        public SolidColorBrush DhlTextColor
+        public bool RemoteDhlEnabled
         {
-            get => dhlTextColor;
-            set => Set(ref dhlTextColor, value);
+            get => remoteDhlEnabled;
+            set => Set(ref remoteDhlEnabled, value);
         }
 
         /// <summary>
-        /// The color of the UPS Text
+        /// A flag that indicated if Ups has been enabled on the one balance account
         /// </summary>
-        public SolidColorBrush UpsTextColor
+        public bool UpsEnabled
         {
-            get => upsTextColor;
-            set => Set(ref upsTextColor, value);
+            get => upsEnabled;
+            set => Set(ref upsEnabled, value);
         }
 
         /// <summary>
@@ -78,10 +77,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public override void Refresh()
         {
-            remoteDhlEnabled = RemoteDhlAccountEnabled();
-            DhlTextColor = remoteDhlEnabled ? Brushes.Black : Brushes.DarkGray;
+            RemoteDhlEnabled = RemoteDhlAccountEnabled();
             LocalDhlAccountEnabled = LocalDhlAccountExists();
-            UpsTextColor = LocalUpsAccountExists() ? Brushes.Black : Brushes.DarkGray;
+            UpsEnabled = LocalUpsAccountExists();
         }
 
         /// <summary>
@@ -187,11 +185,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Get the dhl account from the local database
         /// </summary>
-        private bool LocalDhlAccountExists() => DhlExpressAccountManager.Accounts.FirstOrDefault(e => e.UspsAccountId != null) != null;
+        private bool LocalDhlAccountExists() => DhlExpressAccountManager.Accounts.Any(e => e.UspsAccountId != null);
 
         /// <summary>
         /// Get the ups account from the local database
         /// </summary>
-        private bool LocalUpsAccountExists() => UpsAccountManager.Accounts.FirstOrDefault(e => e.ShipEngineCarrierId != null) != null;
+        private bool LocalUpsAccountExists() => UpsAccountManager.Accounts.Any(e => e.ShipEngineCarrierId != null);
     }
 }

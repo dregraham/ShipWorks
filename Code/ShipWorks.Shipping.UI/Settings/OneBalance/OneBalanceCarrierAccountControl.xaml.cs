@@ -25,10 +25,4 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             InitializeComponent();
         }
     }
-
-    public enum ShipmentTestCode
-    {
-        DhlExpress,
-        UpsOnLineTools
-    }
 }

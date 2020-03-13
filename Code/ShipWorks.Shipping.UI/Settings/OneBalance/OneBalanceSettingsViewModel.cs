@@ -156,7 +156,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             if (postageWebClient != null)
             {
-                Loading = true;
                 Task.Run(() =>
                 {
                     GetBalance();
@@ -171,7 +170,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetBalance()
         {
             int tries = 5;
-
+            Loading = true;
             while (tries-- > 0)
             {
                 try

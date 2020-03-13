@@ -210,10 +210,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var existingAccount = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
-
             // Only skip the account screen if they already have a One Balance USPS account.
-            skipAccountSetup = existingAccount != null;
+            skipAccountSetup = UspsAccountManager.UspsAccountsReadOnly.Any(x => x.ShipEngineCarrierId != null);
+
             return ShowDialog(owner);
         }
     }
