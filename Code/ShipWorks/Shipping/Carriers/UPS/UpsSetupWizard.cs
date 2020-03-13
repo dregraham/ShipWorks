@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// Wizard for setting up UPS OLT for the first time
     /// </summary>
     [KeyedComponent(typeof(IOneBalanceSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
+    [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.UpsOnLineTools)]
     public partial class UpsSetupWizard : WizardForm, IShipmentTypeSetupWizard, IOneBalanceSetupWizard
     {
         private readonly ShipmentType shipmentType;
