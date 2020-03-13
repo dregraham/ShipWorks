@@ -6,6 +6,7 @@ using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -26,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -37,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.dhlExpressAccountRepository = dhlExpressAccountRepository;
+            log = LogManager.GetLogger(typeof(DhlExpressStampsWebClient));
         }
 
         /// <summary>
@@ -66,7 +69,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
-            VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
+            try
+            {
+                VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
+            }
+            catch (ShippingException ex) when (ex.Message == "The DHL Express mail class print was already voided.")
+            {
+                log.Info("Stamps says we already voided the label. Swallowing error.", ex);
+            }           
         }
 
         /// <summary>
