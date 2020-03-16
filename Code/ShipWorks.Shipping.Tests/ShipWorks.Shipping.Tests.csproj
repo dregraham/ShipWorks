@@ -182,6 +182,7 @@
     <Compile Include="Carriers\BestRate\BestRateShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Carriers\DhlExpress\API\DhlExpressLabelClientFactoryTest.cs" />
+    <Compile Include="Carriers\DhlExpress\API\ShipEngine\DhlExpressShipEngineRatingClientTest.cs" />
     <Compile Include="Carriers\DhlExpress\API\Stamps\DhlExpressStampsLabelClientTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressDownloadedLabelDataTest.cs" />
     <Compile Include="Carriers\DhlExpress\DhlExpressLabelServiceTest.cs" />

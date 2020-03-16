@@ -14,8 +14,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Dhl Express Stamps rating client
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class DhlExpressStampsRatingClient
+    [Component]
+    public class DhlExpressStampsRatingClient : IDhlExpressStampsRatingClient
     {
         private readonly IDhlExpressStampsWebClient dhlExpressStampsWebClient;
         private readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeManager;

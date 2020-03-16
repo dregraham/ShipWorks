@@ -20,16 +20,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly DhlExpressShipEngineRatingClient shipEngineRatingClient;
-        private readonly DhlExpressStampsRatingClient stampsRatingClient;
+        private readonly IDhlExpressShipEngineRatingClient shipEngineRatingClient;
+        private readonly IDhlExpressStampsRatingClient stampsRatingClient;
         private readonly IDhlExpressAccountRepository accountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            DhlExpressShipEngineRatingClient shipEngineRatingClient,
-            DhlExpressStampsRatingClient stampsRatingClient,
+            IDhlExpressShipEngineRatingClient shipEngineRatingClient,
+            IDhlExpressStampsRatingClient stampsRatingClient,
             IDhlExpressAccountRepository accountRepository)
         {
 
@@ -44,14 +44,14 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             // We don't have any DHL Express accounts, so let the user know they need an account.
-            if (!accountRepository.Accounts.Any())
+            if (!accountRepository.AccountsReadOnly.Any())
             {
                 throw new ShippingException("An account is required to view DHL Express rates.");
             }
 
             try
             {
-                IDhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
+                IDhlExpressAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
                 return account?.ShipEngineCarrierId == null ?
                     stampsRatingClient.GetRates(shipment) :

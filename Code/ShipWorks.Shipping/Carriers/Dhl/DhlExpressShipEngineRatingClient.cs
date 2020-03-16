@@ -16,8 +16,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Dhl Express ShipEngine rating client
     /// </summary>
-    [Component(RegistrationType.Self)]
-    public class DhlExpressShipEngineRatingClient
+    [Component]
+    public class DhlExpressShipEngineRatingClient : IDhlExpressShipEngineRatingClient
     {
         private readonly ICarrierShipmentRequestFactory rateRequestFactory;
         private readonly IShipEngineWebClient shipEngineWebClient;

@@ -238,6 +238,8 @@
     <Compile Include="Carriers\Dhl\DhlExpressShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressShipEngineRatingClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressStampsRatingClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
