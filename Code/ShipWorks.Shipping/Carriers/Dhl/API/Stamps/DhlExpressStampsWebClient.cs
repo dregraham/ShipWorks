@@ -102,13 +102,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 
             try
             {
-                return ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account)
-                    .Select(uspsRate => GetSerivceType(uspsRate)
+
+                var rates = ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account).Where(r => r.ServiceType == ServiceType.DHLEWW);
+
+                return  rates
+                        .Select(uspsRate => GetSerivceType(uspsRate)
                         .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
-                    .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
-                        (accumulator, x) => x.Match(
-                                rate => (accumulator.rates.Append(rate), accumulator.errors),
-                                ex => (accumulator.rates, accumulator.errors.Append(ex))));
+                        .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
+                            (accumulator, x) => x.Match(
+                                    rate => (accumulator.rates.Append(rate), accumulator.errors),
+                                    ex => (accumulator.rates, accumulator.errors.Append(ex))));
             }
             catch (UspsApiException ex)
             {
@@ -135,12 +138,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         private RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, DhlExpressServiceType serviceType)
         {
-            var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
+            decimal addons = uspsRate.Surcharges.Sum(s => s.Amount);
+
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                addons += uspsRate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARASAT).Sum(a => a.Amount);
+            }
+
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                addons += uspsRate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARARES).Sum(a => a.Amount);
+            }
 
             var baseRate = new RateResult(
-                EnumHelper.GetDescription(serviceType) + description,
+                EnumHelper.GetDescription(serviceType),
                 PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-                uspsRate.Amount + amount,
+                uspsRate.Amount + addons,
                 EnumHelper.GetApiValue(serviceType))
             {
                 ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
@@ -148,15 +161,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 
             return baseRate;
         }
-
-        /// <summary>
-        /// Get details for required rate addons
-        /// </summary>
-        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV16> addOns) =>
-            addOns
-                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV16 type) && type == x.AddOnType)
-                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", amount: x.Amount))
-                .FirstOrDefault();
 
         /// <summary>
         /// Create customs information for the given shipment
@@ -254,6 +258,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             RateV33 rate = CreateRateForRating(shipment, account);
 
+            rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
+
             // for Stamps.com the service type is always DHLEWW, the packaging type denotes the actual service
             rate.ServiceType = ServiceType.DHLEWW;
             rate.PrintLayout = "Normal4X6";
@@ -322,7 +328,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
             rate.NonMachinable = shipment.DhlExpress.NonMachinable;
 
             rate.Length = shipment.DhlExpress.Packages[0].DimsLength;
