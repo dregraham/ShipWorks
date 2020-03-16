@@ -462,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        public (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
+        public virtual (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
@@ -508,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Build a RateResult from a USPS rate
         /// </summary>
-        private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, PostalServiceType serviceType)
+        private RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, PostalServiceType serviceType)
         {
             var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
 
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account, Carrier carrier)
+        protected IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account, Carrier carrier)
         {
             RateV33 rate = CreateRateForRating(shipment, account);
 
@@ -1637,7 +1637,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Handles exceptions when making calls to the USPS API
         /// </summary>
-        private T ExceptionWrapper<T>(Func<T> executor, IUspsAccountEntity account)
+        protected T ExceptionWrapper<T>(Func<T> executor, IUspsAccountEntity account)
         {
             try
             {

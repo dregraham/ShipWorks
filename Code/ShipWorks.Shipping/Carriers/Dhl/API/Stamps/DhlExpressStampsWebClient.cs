@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Autofac;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -16,6 +17,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
@@ -26,6 +28,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
     [Component]
     public class DhlExpressStampsWebClient : UspsWebClient, IDhlExpressStampsWebClient
     {
+        // We don't include delivery confirmation because we want to treat that like None, because it is
+        // included at no charge for services to which it applies.
+        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV16> confirmationLookup =
+            new Dictionary<PostalConfirmationType, AddOnTypeV16>
+            {
+                { PostalConfirmationType.Signature, AddOnTypeV16.USASC },
+                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV16.USAASR },
+                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV16.USAASRD }
+            };
+
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
         private readonly ILog log;
@@ -80,6 +92,72 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             }           
         }
 
+
+        /// <summary>
+        /// Get the rates for the given shipment based on its settings
+        /// </summary>
+        public override (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
+        {
+            UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
+
+            try
+            {
+                return ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account)
+                    .Select(uspsRate => GetSerivceType(uspsRate)
+                        .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
+                    .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
+                        (accumulator, x) => x.Match(
+                                rate => (accumulator.rates.Append(rate), accumulator.errors),
+                                ex => (accumulator.rates, accumulator.errors.Append(ex))));
+            }
+            catch (UspsApiException ex)
+            {
+                if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                {
+                    // Provide a little more context as to which user name/password was incorrect in the case
+                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
+                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                                    UspsAccountManager.GetResellerName((UspsResellerType) account.UspsReseller),
+                                    account.Username,
+                                    Environment.NewLine);
+
+                    throw new UspsException(message, ex);
+                }
+
+                // This isn't an authentication exception, so just throw the original exception
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// Build a RateResult from a USPS rate
+        /// </summary>
+        private RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, DhlExpressServiceType serviceType)
+        {
+            var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
+
+            var baseRate = new RateResult(
+                EnumHelper.GetDescription(serviceType) + description,
+                PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
+                uspsRate.Amount + amount,
+                null)
+            {
+                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
+            };
+
+            return baseRate;
+        }
+
+        /// <summary>
+        /// Get details for required rate addons
+        /// </summary>
+        private static (string description, decimal amount) GetRateAddOnDetails(PostalConfirmationType confirmation, IEnumerable<AddOnV16> addOns) =>
+            addOns
+                .Where(x => confirmationLookup.TryGetValue(confirmation, out AddOnTypeV16 type) && type == x.AddOnType)
+                .Select(x => (description: " (" + EnumHelper.GetDescription(confirmation) + ")", amount: x.Amount))
+                .FirstOrDefault();
+
         /// <summary>
         /// Create customs information for the given shipment
         /// </summary>
@@ -131,8 +209,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             IDhlExpressAccountEntity dhlExpressAccount = dhlExpressAccountRepository.GetAccountReadOnly(shipment);
 
+            if (dhlExpressAccount == null)
+            {
+                throw new ShippingException("There is no DHL Express account associated with this shipment.");
+            }
+
             UspsAccountEntity uspsAccount =
                 uspsAccountRepository.Accounts.FirstOrDefault(a => a.AccountId == dhlExpressAccount.UspsAccountId);
+
+            if (uspsAccount == null)
+            {
+                throw new ShippingException("There is no Stamps.com account associated with this DHL Express account.");
+            }
+
             return uspsAccount;
         }
 
@@ -250,6 +339,29 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             }
 
             return rate;
+        }
+
+        /// <summary>
+        /// Get package type for the given service
+        /// </summary>
+        private static GenericResult<DhlExpressServiceType> GetSerivceType(RateV33 rate)
+        {
+            if (rate.ServiceType != ServiceType.DHLEWW)
+            {
+                throw new ShippingException("Not a DhlExpress ServiceType");
+            }
+
+            switch (rate.PackageType)
+            {
+                case PackageTypeV10.ExpressEnvelope:
+                    return DhlExpressServiceType.ExpressEnvelope;
+                case PackageTypeV10.Package:
+                    return DhlExpressServiceType.ExpressWorldWide;
+                case PackageTypeV10.Documents:
+                    return DhlExpressServiceType.ExpressWorldWideDocuments;
+                default:
+                    throw new ShippingException("Not a DhlExpress ServiceType");
+            }
         }
 
         /// <summary>
