@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public GenericResult<IUspsAccountEntity> GetUspsAccount()
         {
-            var accounts = uspsRepository.Accounts;
+            var accounts = uspsRepository.AccountsReadOnly;
 
             if (!accounts.Any())
             {
@@ -44,9 +45,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
 
             // If there's only one account it's a One Balance account
-            if (accounts.Count() == 1)
+            if (accounts.IsCountEqualTo(1))
             {
-                return accounts.First();
+                return GenericResult.FromSuccess(accounts.First());
             }
 
             // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
@@ -57,7 +58,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 return new UspsException("Unable to determine which USPS account to use. Please call ShipWorks support at 1-800-952-7784");
             }
 
-            return account;
+            return GenericResult.FromSuccess(account);
         }
 
         /// <summary>
