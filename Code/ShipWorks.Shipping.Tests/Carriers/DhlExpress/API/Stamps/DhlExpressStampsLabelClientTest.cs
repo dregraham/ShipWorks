@@ -52,18 +52,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
             Assert.IsAssignableFrom<StampsDownloadedLabelData>(result.Value);
         }
 
-        [Fact]
-        public void Void_CallsWebClient()
-        {
-            var webClient = mock.Mock<IDhlExpressStampsWebClient>();
-
-            var shipment = new ShipmentEntity();
-
-            testObject.Void(shipment);
-
-            webClient.Verify(x => x.VoidShipment(shipment));
-        }
-
         public void Dispose()
         {
             mock?.Dispose();

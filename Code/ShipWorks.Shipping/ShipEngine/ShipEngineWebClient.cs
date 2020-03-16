@@ -371,10 +371,29 @@ namespace ShipWorks.Shipping.ShipEngine
         public async Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource)
         {
             ILabelsApi labelsApi = shipEngineApiFactory.CreateLabelsApi();
+
             ConfigureLogging(labelsApi, apiLogSource, "Track", LogActionType.GetRates);
             try
             {
                 return await labelsApi.LabelsTrackAsync(labelId, await GetApiKey());
+            }
+            catch (ApiException ex)
+            {
+                throw new ShipEngineException(GetErrorMessage(ex));
+            }
+        }
+
+        /// <summary>
+        /// Track a shipment using the carrier code and tracking number
+        /// </summary>
+        public async Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource)
+        {
+            ITrackingApi trackingApi = shipEngineApiFactory.CreateTrackingApi();
+
+            ConfigureLogging(trackingApi, apiLogSource, "Track", LogActionType.GetRates);
+            try
+            {
+                return await trackingApi.TrackingTrackAsync(await GetApiKey(), carrier, trackingNumber);
             }
             catch (ApiException ex)
             {

@@ -12,6 +12,7 @@ using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine;
+using ShipWorks.Shipping.Tracking;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 

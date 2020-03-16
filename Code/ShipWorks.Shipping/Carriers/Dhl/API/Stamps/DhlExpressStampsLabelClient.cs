@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             try
             {
                 webClient.VoidShipment(shipment);
-            }
+			}
             catch (Exception ex)
             {
                 throw new ShippingException(ex);
