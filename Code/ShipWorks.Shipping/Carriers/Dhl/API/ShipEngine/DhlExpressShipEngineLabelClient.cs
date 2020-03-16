@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
         /// </summary>
         public override Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            if (shipment.DhlExpress.Service == (int) DhlExpressServiceType.ExpressWorldWideDocuments)
+            if (shipment?.DhlExpress?.Service == (int) DhlExpressServiceType.ExpressWorldWideDocuments)
             {
                 throw new ShippingException($"{EnumHelper.GetDescription(DhlExpressServiceType.ExpressWorldWideDocuments)} is not supported by this account.");
             }
