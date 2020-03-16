@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Services.Protocols;
 using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -26,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -37,6 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.dhlExpressAccountRepository = dhlExpressAccountRepository;
+            log = LogManager.GetLogger(typeof(DhlExpressStampsWebClient));
         }
 
         /// <summary>
@@ -44,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        public async Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment)
+        public override async Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             shipment.DhlExpress.IntegratorTransactionID = Guid.NewGuid();
 
@@ -62,11 +66,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        public void Void(ShipmentEntity shipment)
+        public override void VoidShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
 
-            VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
+            try
+            {
+                VoidShipmentInternal(account, shipment.DhlExpress.StampsTransactionID.Value);
+            }
+            catch (SoapException ex) when (ex.Message == "The DHL Express mail class print was already voided.")
+            {
+                log.Info("Stamps says we already voided the label. Swallowing error.", ex);
+            }           
         }
 
         /// <summary>
@@ -158,9 +169,21 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             rate.ServiceType = ServiceType.DHLEWW;
             rate.PrintLayout = "Normal4X6";
 
+            List<AddOnV16> addOns = new List<AddOnV16>();
+
             if (shipment.DhlExpress.SaturdayDelivery)
             {
-                rate.AddOns = new[] { new AddOnV16 { AddOnType = AddOnTypeV16.CARASAT } };
+                addOns.Add(new AddOnV16 { AddOnType = AddOnTypeV16.CARASAT });
+            }
+
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                addOns.Add(new AddOnV16 { AddOnType = AddOnTypeV16.CARARES });
+            }
+
+            if (addOns.Count > 0)
+            {
+                rate.AddOns = addOns.ToArray();
             }
 
             // For APO/FPO, we have to specifically ask for customs docs
@@ -237,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             switch (service)
             {
                 case DhlExpressServiceType.ExpressEnvelope:
-                    return PackageTypeV10.Envelope;
+                    return PackageTypeV10.ExpressEnvelope;
                 case DhlExpressServiceType.ExpressWorldWideDocuments:
                     return PackageTypeV10.Documents;
                 case DhlExpressServiceType.ExpressWorldWide:

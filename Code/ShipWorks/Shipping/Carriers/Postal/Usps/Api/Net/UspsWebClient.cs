@@ -871,7 +871,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Void the given already processed shipment
         /// </summary>
-        public void VoidShipment(ShipmentEntity shipment)
+        public virtual void VoidShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
@@ -900,7 +900,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public async Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
+        public virtual async Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)

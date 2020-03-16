@@ -30,11 +30,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
             response.SetValue(new StampsLabelResponse());
 
             var webClient = mock.Mock<IDhlExpressStampsWebClient>();
-            webClient.Setup(x => x.CreateLabel(shipment)).ReturnsAsync(response);
+            webClient.Setup(x => x.ProcessShipment(shipment)).ReturnsAsync(response);
 
             await testObject.Create(shipment).ConfigureAwait(false);
 
-            webClient.Verify(x => x.CreateLabel(shipment));
+            webClient.Verify(x => x.ProcessShipment(shipment));
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
             response.SetValue(new StampsLabelResponse());
 
             var webClient = mock.Mock<IDhlExpressStampsWebClient>();
-            webClient.Setup(x => x.CreateLabel(shipment)).ReturnsAsync(response);
+            webClient.Setup(x => x.ProcessShipment(shipment)).ReturnsAsync(response);
 
             var result = await testObject.Create(shipment).ConfigureAwait(false);
 
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.Stamps
 
             testObject.Void(shipment);
 
-            webClient.Verify(x => x.Void(shipment));
+            webClient.Verify(x => x.VoidShipment(shipment));
         }
 
         public void Dispose()
