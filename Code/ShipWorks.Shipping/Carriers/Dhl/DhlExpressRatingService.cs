@@ -10,6 +10,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -19,27 +20,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly ICarrierShipmentRequestFactory rateRequestFactory;
-        private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly DhlExpressShipEngineRatingClient shipEngineRatingClient;
+        private readonly DhlExpressStampsRatingClient stampsRatingClient;
         private readonly IDhlExpressAccountRepository accountRepository;
-        private readonly ShipmentType shipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory, 
-            IShipEngineWebClient shipEngineWebClient, 
-            IShipEngineRateGroupFactory rateGroupFactory,
-            IDhlExpressAccountRepository accountRepository, 
-            IShipmentTypeManager shipmentTypeManager)
+            DhlExpressShipEngineRatingClient shipEngineRatingClient,
+            DhlExpressStampsRatingClient stampsRatingClient,
+            IDhlExpressAccountRepository accountRepository)
         {
-            this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.DhlExpress];
-            this.shipEngineWebClient = shipEngineWebClient;
-            this.rateGroupFactory = rateGroupFactory;
+
+            this.shipEngineRatingClient = shipEngineRatingClient;
+            this.stampsRatingClient = stampsRatingClient;
             this.accountRepository = accountRepository;
-            shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress);
         }
 
         /// <summary>
@@ -55,19 +51,15 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
             try
             {
-                RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
-                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
-                        await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false)).Result;
+                IDhlExpressAccountEntity account = accountRepository.GetAccount(shipment);
 
-                IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
-                    .Cast<DhlExpressServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t));
-
-                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress, availableServiceTypeApiCodes);
+                return account?.ShipEngineCarrierId == null ?
+                    stampsRatingClient.GetRates(shipment) :
+                    shipEngineRatingClient.GetRates(shipment);
             }
-            catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
+            catch (Exception ex)
             {
-                throw new ShippingException(ex.GetBaseException().Message);
+                throw new ShippingException(ex);
             }
         }
     }
