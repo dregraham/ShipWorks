@@ -478,7 +478,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                return ExceptionWrapper(() => GetRatesInternal(shipment, account), account)
+                return ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.USPS), account)
                     .Select(uspsRate => UspsUtility.GetPostalServiceType(uspsRate.ServiceType)
                         .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
                     .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account, Carrier carrier)
         {
             RateV33 rate = CreateRateForRating(shipment, account);
 
@@ -545,7 +545,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             using (ISwsimV90 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
-                rateResults = webService.GetRates(GetCredentials(account), rate);
+                rateResults = webService.GetRates(GetCredentials(account), rate, carrier);
             }
 
             List<RateV33> noConfirmationServiceRates = new List<RateV33>();

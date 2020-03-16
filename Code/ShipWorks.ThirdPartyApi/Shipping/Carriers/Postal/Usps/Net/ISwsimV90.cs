@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get rates
         /// </summary>
-        RateV33[] GetRates(Credentials account, RateV33 rate);
+        RateV33[] GetRates(Credentials account, RateV33 rate, Carrier carrier);
 
         /// <summary>
         /// Cleanse the address

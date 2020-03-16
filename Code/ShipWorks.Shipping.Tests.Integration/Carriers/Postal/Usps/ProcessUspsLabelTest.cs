@@ -142,11 +142,11 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                     new RateV33 { ServiceType = ServiceType.USFC, Amount = amount,
                         AddOns = new [] { new AddOnV16 { AddOnType = AddOnTypeV16.USADC } }, DeliverDays = "2" } };
 
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV33>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "first"), It.IsAny<RateV33>(), Carrier.USPS))
                     .Returns(createRate(first));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV33>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "second"), It.IsAny<RateV33>(), Carrier.USPS))
                     .Returns(createRate(second));
-                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV33>()))
+                w.Setup(x => x.GetRates(It.Is<Credentials>(c => c.Username == "third"), It.IsAny<RateV33>(), Carrier.USPS))
                     .Returns(createRate(third));
 
                 AccountInfoV41 accountInfo = new AccountInfoV41()
