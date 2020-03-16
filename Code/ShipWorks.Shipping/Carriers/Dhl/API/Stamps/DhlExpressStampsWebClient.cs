@@ -28,16 +28,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
     [Component]
     public class DhlExpressStampsWebClient : UspsWebClient, IDhlExpressStampsWebClient
     {
-        // We don't include delivery confirmation because we want to treat that like None, because it is
-        // included at no charge for services to which it applies.
-        private readonly static IDictionary<PostalConfirmationType, AddOnTypeV16> confirmationLookup =
-            new Dictionary<PostalConfirmationType, AddOnTypeV16>
-            {
-                { PostalConfirmationType.Signature, AddOnTypeV16.USASC },
-                { PostalConfirmationType.AdultSignatureRequired, AddOnTypeV16.USAASR },
-                { PostalConfirmationType.AdultSignatureRestricted, AddOnTypeV16.USAASRD }
-            };
-
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
         private readonly ILog log;
@@ -156,7 +146,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 uspsRate.Amount + addons,
                 EnumHelper.GetApiValue(serviceType))
             {
-                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
+                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType),
+                ShipmentType = ShipmentTypeCode.DhlExpress
             };
 
             return baseRate;
