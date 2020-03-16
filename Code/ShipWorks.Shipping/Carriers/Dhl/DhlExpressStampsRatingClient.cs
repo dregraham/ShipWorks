@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Dhl.API.Stamps;
 using Autofac.Features.Indexed;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Postal;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -57,12 +58,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected virtual IEnumerable<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, IEnumerable<RateResult> rates)
         {
-            IEnumerable<DhlExpressServiceType> availableServiceTypes = shipmentTypeManager[shipment.ShipmentTypeCode]
+            IEnumerable<string> availableServiceTypesApiValues = shipmentTypeManager[shipment.ShipmentTypeCode]
                     .GetAvailableServiceTypes()
-                    .Cast<DhlExpressServiceType>();
-           // List<RateResult> results = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
+                    .Cast<DhlExpressServiceType>()
+                    .Select(x => EnumHelper.GetApiValue(x));
 
-            return rates;
+            return rates.Where(r => availableServiceTypesApiValues.Contains((string) r.Tag)); 
         }
     }
 }

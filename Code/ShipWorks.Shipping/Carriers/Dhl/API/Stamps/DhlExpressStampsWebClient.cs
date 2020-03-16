@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 EnumHelper.GetDescription(serviceType) + description,
                 PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
                 uspsRate.Amount + amount,
-                null)
+                EnumHelper.GetApiValue(serviceType))
             {
                 ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType)
             };
