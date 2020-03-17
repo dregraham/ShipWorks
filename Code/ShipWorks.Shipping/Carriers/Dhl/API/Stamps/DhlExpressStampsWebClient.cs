@@ -92,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 
             try
             {
-
                 var rates = ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account).Where(r => r.ServiceType == ServiceType.DHLEWW);
 
                 return  rates
@@ -121,7 +120,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 throw;
             }
         }
-
 
         /// <summary>
         /// Build a RateResult from a USPS rate

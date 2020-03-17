@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             // We don't have any DHL Express accounts, so let the user know they need an account.
-            if (!accountRepository.Accounts.Any())
+            if (!accountRepository.AccountsReadOnly.Any())
             {
                 throw new ShippingException("An account is required to view DHL Express rates.");
             }

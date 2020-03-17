@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress.API.ShipEngine
                 .Returns(new RateShipmentRequest());
 
             mock.Mock<IDhlExpressAccountRepository>()
-                .SetupGet(r => r.Accounts)
+                .SetupGet(r => r.AccountsReadOnly)
                 .Returns(new[] { new DhlExpressAccountEntity() });
         }
 
