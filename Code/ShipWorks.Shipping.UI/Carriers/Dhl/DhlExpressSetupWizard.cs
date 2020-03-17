@@ -213,13 +213,13 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var account = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
+            var uspsAccount = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
             // Only skip the account screen if they already have a One Balance USPS account.
-            skipAccountSetup = account != null;
+            skipAccountSetup = uspsAccount != null;
 
             if (skipAccountSetup)
             {
-                CreateAccountFromUsps(account);
+                CreateAccountFromUsps(uspsAccount);
             }
             return ShowDialog(owner);
         }
