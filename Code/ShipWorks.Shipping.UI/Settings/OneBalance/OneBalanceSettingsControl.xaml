@@ -88,7 +88,7 @@
                 </Grid>
                 <!--#endregion-->
             </StackPanel>
-            <TextBlock Text="UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and the Color Brown are trademarks of United Service of America, Inc. All Rights Reserved"
+            <TextBlock Text="UPS, the UPS brandmark, UPS Ready®, and the color brown are trademarks of United Parcel Service of America, Inc. All Rights Reserved."
                            Margin="0,20,0,0" DockPanel.Dock="Bottom" FontSize="8" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center"/>
         </DockPanel>
     </ScrollViewer>
