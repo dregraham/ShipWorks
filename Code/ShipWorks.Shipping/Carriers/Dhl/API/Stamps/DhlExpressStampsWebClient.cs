@@ -82,7 +82,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             }           
         }
 
-
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
@@ -95,8 +94,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 var rates = ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account).Where(r => r.ServiceType == ServiceType.DHLEWW);
 
                 return  rates
-                        .Select(uspsRate => GetSerivceType(uspsRate)
-                        .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
+                        .Select(uspsRate => GetServiceType(uspsRate)
+                        .Map(x => BuildRateResult(shipment, uspsRate, x)))
                         .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
                             (accumulator, x) => x.Match(
                                     rate => (accumulator.rates.Append(rate), accumulator.errors),
@@ -124,24 +123,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Build a RateResult from a USPS rate
         /// </summary>
-        private RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, DhlExpressServiceType serviceType)
+        private RateResult BuildRateResult(ShipmentEntity shipment, RateV33 uspsRate, DhlExpressServiceType serviceType)
         {
-            decimal addons = uspsRate.Surcharges.Sum(s => s.Amount);
-
-            if (shipment.DhlExpress.SaturdayDelivery)
-            {
-                addons += uspsRate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARASAT).Sum(a => a.Amount);
-            }
-
-            if (shipment.DhlExpress.ResidentialDelivery)
-            {
-                addons += uspsRate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARARES).Sum(a => a.Amount);
-            }
-
             var baseRate = new RateResult(
                 EnumHelper.GetDescription(serviceType),
                 PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
-                uspsRate.Amount + addons,
+                GetRateTotalWithSurchargesAndAddOns(shipment, uspsRate),
                 EnumHelper.GetApiValue(serviceType))
             {
                 ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType),
@@ -338,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Get package type for the given service
         /// </summary>
-        private static GenericResult<DhlExpressServiceType> GetSerivceType(RateV33 rate)
+        private static GenericResult<DhlExpressServiceType> GetServiceType(RateV33 rate)
         {
             if (rate.ServiceType != ServiceType.DHLEWW)
             {
@@ -394,12 +381,32 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         protected override void SaveLabelInformation(ShipmentEntity shipment, CreateIndiciumResult result, ThermalLanguage? thermalType)
         {
             shipment.TrackingNumber = result.TrackingNumber;
-            shipment.ShipmentCost = result.ShipmentCost;
+            shipment.ShipmentCost = GetRateTotalWithSurchargesAndAddOns(shipment, result.Rate);
             shipment.DhlExpress.StampsTransactionID = result.StampsTxID;
             shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
+        }
+
+        /// <summary>
+        /// Get the rate total including surcharges and add ons
+        /// </summary>
+        private decimal GetRateTotalWithSurchargesAndAddOns(ShipmentEntity shipment, RateV33 rate)
+        {
+            decimal addOns = rate.Surcharges.Sum(s => s.Amount);
+
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARASAT).Sum(a => a.Amount);
+            }
+
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARARES).Sum(a => a.Amount);
+            }
+
+            return rate.Amount + addOns;
         }
     } 
 }

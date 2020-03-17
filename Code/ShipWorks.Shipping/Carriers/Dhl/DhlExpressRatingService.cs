@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
-using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
