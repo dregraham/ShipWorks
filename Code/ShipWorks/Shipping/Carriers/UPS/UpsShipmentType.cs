@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -599,11 +601,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     InterapptiveOnly.Registry.SetValue("UpsTrackingAgreement", true);
                 }
 
-                return UpsApiTrackClient.TrackShipment(shipment);
+                using (var scope = IoC.BeginLifetimeScope())
+                {
+                    var trackClient = scope.Resolve<IUpsTrackClient>();
+                    return Task.Run(() =>
+                    {
+                        return trackClient.TrackShipment(shipment);
+                    }).Result;
+                }
             }
-            catch (UpsException ex)
+            catch (AggregateException ex)
             {
-                throw new ShippingException(ex.Message, ex);
+                throw new ShippingException(ex.GetBaseException());
             }
         }
 
