@@ -550,13 +550,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             List<RateV33> noConfirmationServiceRates = new List<RateV33>();
 
-            // If its a "Flat" then FirstClass and Priority can't have a confirmation
-            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
-            if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+            if (carrier == Carrier.USPS)
             {
-                noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
+                // If its a "Flat" then FirstClass and Priority can't have a confirmation
+                PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+                {
+                    noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
+                }
             }
-
+            
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
             foreach (RateV33 noConfirmationServiceRate in noConfirmationServiceRates)
             {
