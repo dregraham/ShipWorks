@@ -43,7 +43,7 @@
                 <Button.CommandParameter>
                     <s:ShipmentTypeCode>DhlExpress</s:ShipmentTypeCode>
                 </Button.CommandParameter>
-                <TextBlock Text="Add DHL" Margin="5,2,5,2"/>
+                <TextBlock Text="Add DHL Express" Margin="5,2,5,2"/>
             </Button>
         </Grid>
     </StackPanel>
