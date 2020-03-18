@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -213,7 +214,18 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var uspsAccount = UspsAccountManager.UspsAccountsReadOnly.FirstOrDefault(x => x.ShipEngineCarrierId != null);
+            var uspsAccounts = UspsAccountManager.UspsAccountsReadOnly;
+            IUspsAccountEntity uspsAccount = null;
+
+            if (uspsAccounts.IsCountEqualTo(1))
+            {
+                uspsAccount = uspsAccounts.First();
+            }
+            else
+            {
+                uspsAccount = uspsAccounts.FirstOrDefault(x => x.ShipEngineCarrierId != null);
+            }
+            
             // Only skip the account screen if they already have a One Balance USPS account.
             skipAccountSetup = uspsAccount != null;
 
