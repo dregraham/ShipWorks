@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
@@ -44,6 +45,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// A flag to indicate if the Dhl Account is still enabled
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool RemoteDhlEnabled
         {
             get => remoteDhlEnabled;
@@ -53,6 +55,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// A flag that indicated if Ups has been enabled on the one balance account
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool UpsEnabled
         {
             get => upsEnabled;
@@ -62,6 +65,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// A flag to indicate if the Dhl Account is still enabled
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool LocalDhlAccountEnabled
         {
             get => dhlAccountEnabled;
