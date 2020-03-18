@@ -319,6 +319,18 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 rate.ContentType = GetContentType((ShipEngineContentsType) shipment.DhlExpress.Contents);
             }
 
+            // Need to include this in the request, because it changes the fuel surcharge
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                rate.AddOns = new[]
+                {
+                    new AddOnV16
+                    {
+                        AddOnType = AddOnTypeV16.CARASAT
+                    }
+                };
+            }
+
             return rate;
         }
 
