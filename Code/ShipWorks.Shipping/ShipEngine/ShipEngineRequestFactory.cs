@@ -24,9 +24,9 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 Shipment = new AddressValidatingShipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson),
-                    ShipFrom = CreateAddress(shipment.OriginPerson),
-                    ShipDate = shipment.ShipDate,
+                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
+                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
+                    ShipDate = shipment.ShipDate
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
@@ -57,8 +57,8 @@ namespace ShipWorks.Shipping.ShipEngine
                 LabelLayout = "4x6",
                 Shipment = new Shipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson),
-                    ShipFrom = CreateAddress(shipment.OriginPerson),
+                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
+                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
                     ShipDate = shipment.ShipDate,
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
                     Packages = CreatePackages(packages, getPackageCode, addPackageInsurance),
@@ -69,14 +69,31 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Get AddressResidentialIndicatorEnum for the given shipment
+        /// </summary>
+        private static Address.AddressResidentialIndicatorEnum GetShipToResidentialEnum(ShipmentEntity shipment)
+        {
+            try
+            {
+                return ResidentialDeterminationService.DetermineResidentialAddress(shipment) ?
+                    Address.AddressResidentialIndicatorEnum.Yes :
+                    Address.AddressResidentialIndicatorEnum.No;
+            }
+            catch (Exception)
+            {
+                return Address.AddressResidentialIndicatorEnum.Unknown;
+            }
+        }
+
+        /// <summary>
         /// Gets an AddressDTO from a shipment
         /// </summary>
-        private Address CreateAddress(PersonAdapter personAdapter)
+        private Address CreateAddress(PersonAdapter personAdapter, Address.AddressResidentialIndicatorEnum residentialIndicator)
         {
             string countryCode = personAdapter.CountryCode == "UK" ? "GB" : personAdapter.CountryCode;
             Address address = new Address
             {
-                AddressResidentialIndicator = Address.AddressResidentialIndicatorEnum.Unknown,
+                AddressResidentialIndicator = residentialIndicator,
                 Name = personAdapter.UnparsedName,
                 Phone = personAdapter.Phone,
                 CompanyName = personAdapter.Company,
