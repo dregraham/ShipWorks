@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using RestSharp;
@@ -105,12 +106,12 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public async Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products)
         {
-            if (products?.Any() != true)
+            if (products?.WhereNotNull().Any() != true)
             {
                 return NullProductsResult.Default;
             }
 
-            var payload = dataFactory.CreateUploadProductsRequest(products);
+            var payload = dataFactory.CreateUploadRequest(products);
             var request = requestFactory.Create(WarehouseEndpoints.UploadProducts, Method.POST, payload);
             request.AddHeader("version", "2");
 

@@ -28,7 +28,7 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create an UploadProductRequestData object
         /// </summary>
-        IWarehouseProductRequestData CreateUploadProductsRequest(IEnumerable<IProductVariantEntity> products);
+        IWarehouseProductRequestData CreateUploadRequest(IEnumerable<IProductVariantEntity> products);
 
         /// <summary>
         /// Create a change result from a ChangeProductDataResponse
