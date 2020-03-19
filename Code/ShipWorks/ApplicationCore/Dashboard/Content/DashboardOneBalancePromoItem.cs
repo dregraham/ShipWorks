@@ -33,7 +33,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
 
 
         /// <summary>
-        /// Open the outbox
+        /// Open the default web browser to the help article
         /// </summary>
         private void OnViewHelpArticle(Control owner, object userState)
         {

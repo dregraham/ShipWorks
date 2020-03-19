@@ -749,6 +749,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
             }
         }
 
+        /// <summary>
+        /// Check for any changes in the state of the One Balance account
+        /// </summary>
         private static void CheckForOneBalanceChanges()
         {
             var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
