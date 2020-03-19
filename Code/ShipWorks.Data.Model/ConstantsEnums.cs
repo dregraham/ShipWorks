@@ -10042,6 +10042,8 @@ namespace ShipWorks.Data.Model
 		HubProductId,
 		///<summary>HubVersion. </summary>
 		HubVersion,
+		///<summary>HubSequence. </summary>
+		HubSequence,
 		/// <summary></summary>
 		AmountOfFields
 	}

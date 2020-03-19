@@ -33,7 +33,7 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create an UploadProductRequestData object
         /// </summary>
-        public IWarehouseProductRequestData CreateUploadProductsRequest(IEnumerable<IProductVariantEntity> products) => 
+        public IWarehouseProductRequestData CreateUploadRequest(IEnumerable<IProductVariantEntity> products) => 
             new UploadProductsRequestData(products);
 
         /// <summary>
