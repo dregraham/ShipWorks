@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
             }
             catch (Exception ex)
             {
-                throw new ShippingException(ex.Message);
+                throw new ShippingException(ex);
             }
         }
         /// <summary>

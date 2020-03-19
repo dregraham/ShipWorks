@@ -75,6 +75,9 @@
             this.packagesCount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelPackages = new System.Windows.Forms.Label();
             this.packagesState = new System.Windows.Forms.CheckBox();
+            this.resDelivery = new System.Windows.Forms.CheckBox();
+            this.labelResDelivery = new System.Windows.Forms.Label();
+            this.resDeliveryState = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabPageSettings.SuspendLayout();
             this.groupInsurance.SuspendLayout();
@@ -168,7 +171,7 @@
             this.groupBox1.Controls.Add(this.labelContents);
             this.groupBox1.Controls.Add(this.kryptonBorderEdge4);
             this.groupBox1.Controls.Add(this.contents);
-            this.groupBox1.Location = new System.Drawing.Point(6, 392);
+            this.groupBox1.Location = new System.Drawing.Point(6, 413);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(405, 81);
             this.groupBox1.TabIndex = 5;
@@ -309,6 +312,9 @@
             // 
             this.groupOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupOptions.Controls.Add(this.resDeliveryState);
+            this.groupOptions.Controls.Add(this.resDelivery);
+            this.groupOptions.Controls.Add(this.labelResDelivery);
             this.groupOptions.Controls.Add(this.nonMachinable);
             this.groupOptions.Controls.Add(this.nonMachinableState);
             this.groupOptions.Controls.Add(this.labelDuty);
@@ -321,7 +327,7 @@
             this.groupOptions.Controls.Add(this.kryptonBorderEdge2);
             this.groupOptions.Location = new System.Drawing.Point(6, 290);
             this.groupOptions.Name = "groupOptions";
-            this.groupOptions.Size = new System.Drawing.Size(405, 96);
+            this.groupOptions.Size = new System.Drawing.Size(405, 117);
             this.groupOptions.TabIndex = 4;
             this.groupOptions.TabStop = false;
             this.groupOptions.Text = "Options";
@@ -329,7 +335,7 @@
             // nonMachinable
             // 
             this.nonMachinable.AutoSize = true;
-            this.nonMachinable.Location = new System.Drawing.Point(128, 65);
+            this.nonMachinable.Location = new System.Drawing.Point(144, 65);
             this.nonMachinable.Name = "nonMachinable";
             this.nonMachinable.Size = new System.Drawing.Size(102, 17);
             this.nonMachinable.TabIndex = 5;
@@ -352,7 +358,7 @@
             // 
             this.labelDuty.AutoSize = true;
             this.labelDuty.BackColor = System.Drawing.Color.Transparent;
-            this.labelDuty.Location = new System.Drawing.Point(88, 43);
+            this.labelDuty.Location = new System.Drawing.Point(105, 43);
             this.labelDuty.Name = "labelDuty";
             this.labelDuty.Size = new System.Drawing.Size(34, 13);
             this.labelDuty.TabIndex = 84;
@@ -362,7 +368,7 @@
             // 
             this.labelNonMachinable.AutoSize = true;
             this.labelNonMachinable.BackColor = System.Drawing.Color.Transparent;
-            this.labelNonMachinable.Location = new System.Drawing.Point(35, 66);
+            this.labelNonMachinable.Location = new System.Drawing.Point(52, 66);
             this.labelNonMachinable.Name = "labelNonMachinable";
             this.labelNonMachinable.Size = new System.Drawing.Size(87, 13);
             this.labelNonMachinable.TabIndex = 77;
@@ -372,7 +378,7 @@
             // 
             this.labelSaturday.AutoSize = true;
             this.labelSaturday.BackColor = System.Drawing.Color.Transparent;
-            this.labelSaturday.Location = new System.Drawing.Point(67, 20);
+            this.labelSaturday.Location = new System.Drawing.Point(84, 20);
             this.labelSaturday.Name = "labelSaturday";
             this.labelSaturday.Size = new System.Drawing.Size(55, 13);
             this.labelSaturday.TabIndex = 79;
@@ -381,7 +387,7 @@
             // dutyDeliveryPaid
             // 
             this.dutyDeliveryPaid.AutoSize = true;
-            this.dutyDeliveryPaid.Location = new System.Drawing.Point(128, 42);
+            this.dutyDeliveryPaid.Location = new System.Drawing.Point(144, 42);
             this.dutyDeliveryPaid.Name = "dutyDeliveryPaid";
             this.dutyDeliveryPaid.Size = new System.Drawing.Size(114, 17);
             this.dutyDeliveryPaid.TabIndex = 3;
@@ -403,7 +409,7 @@
             // saturdayDelivery
             // 
             this.saturdayDelivery.AutoSize = true;
-            this.saturdayDelivery.Location = new System.Drawing.Point(128, 19);
+            this.saturdayDelivery.Location = new System.Drawing.Point(144, 19);
             this.saturdayDelivery.Name = "saturdayDelivery";
             this.saturdayDelivery.Size = new System.Drawing.Size(112, 17);
             this.saturdayDelivery.TabIndex = 1;
@@ -430,7 +436,7 @@
             this.kryptonBorderEdge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge2.Location = new System.Drawing.Point(29, 17);
             this.kryptonBorderEdge2.Name = "kryptonBorderEdge2";
-            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 67);
+            this.kryptonBorderEdge2.Size = new System.Drawing.Size(1, 88);
             this.kryptonBorderEdge2.Text = "kryptonBorderEdge1";
             // 
             // groupShipment
@@ -639,6 +645,38 @@
             this.packagesState.Tag = "";
             this.packagesState.UseVisualStyleBackColor = true;
             // 
+            // resDelivery
+            // 
+            this.resDelivery.AutoSize = true;
+            this.resDelivery.Location = new System.Drawing.Point(144, 88);
+            this.resDelivery.Name = "resDelivery";
+            this.resDelivery.Size = new System.Drawing.Size(120, 17);
+            this.resDelivery.TabIndex = 86;
+            this.resDelivery.Text = "Residential Delivery";
+            this.resDelivery.UseVisualStyleBackColor = true;
+            // 
+            // labelResDelivery
+            // 
+            this.labelResDelivery.AutoSize = true;
+            this.labelResDelivery.BackColor = System.Drawing.Color.Transparent;
+            this.labelResDelivery.Location = new System.Drawing.Point(35, 88);
+            this.labelResDelivery.Name = "labelResDelivery";
+            this.labelResDelivery.Size = new System.Drawing.Size(105, 13);
+            this.labelResDelivery.TabIndex = 87;
+            this.labelResDelivery.Text = "Residential Delivery:";
+            // 
+            // resDeliveryState
+            // 
+            this.resDeliveryState.AutoSize = true;
+            this.resDeliveryState.Checked = true;
+            this.resDeliveryState.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.resDeliveryState.Location = new System.Drawing.Point(9, 87);
+            this.resDeliveryState.Name = "resDeliveryState";
+            this.resDeliveryState.Size = new System.Drawing.Size(15, 14);
+            this.resDeliveryState.TabIndex = 88;
+            this.resDeliveryState.Tag = "";
+            this.resDeliveryState.UseVisualStyleBackColor = true;
+            // 
             // DhlExpressProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -716,5 +754,8 @@
         private ShipWorks.Shipping.Insurance.InsuranceProfileControl insuranceControl;
         private System.Windows.Forms.CheckBox insuranceState;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge10;
+        private System.Windows.Forms.CheckBox resDeliveryState;
+        private System.Windows.Forms.CheckBox resDelivery;
+        private System.Windows.Forms.Label labelResDelivery;
     }
 }

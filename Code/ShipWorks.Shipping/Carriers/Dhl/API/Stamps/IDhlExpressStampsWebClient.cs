@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
 {
@@ -13,11 +16,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// <summary>
         /// Create a label for the given shipment
         /// </summary>
-        Task<TelemetricResult<StampsLabelResponse>> CreateLabel(ShipmentEntity shipment);
+        Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment);
 
         /// <summary>
         /// Void the given shipment
         /// </summary>
-        void Void(ShipmentEntity shipment);
+        void VoidShipment(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Get rates for the given shipment
+        /// </summary>
+        (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment);
     }
 }

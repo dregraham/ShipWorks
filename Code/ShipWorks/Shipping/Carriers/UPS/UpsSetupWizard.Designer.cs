@@ -855,9 +855,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.upsTrademarkInfo.Name = "upsTrademarkInfo";
             this.upsTrademarkInfo.Size = new System.Drawing.Size(533, 22);
             this.upsTrademarkInfo.TabIndex = 7;
-            this.upsTrademarkInfo.Text = "UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and" +
-    " the Color Brown are trademarks of United Parcel Service of America, Inc. All Ri" +
-    "ghts Reserved.";
+            this.upsTrademarkInfo.Text = "UPS, the UPS brandmark, UPS Ready®, and the color brown are trademarks of United Parcel Service of America, Inc. All Rights Reserved.";
             // 
             // upsFromShipWorksLogo
             // 

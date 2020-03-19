@@ -69,7 +69,9 @@ namespace ShipWorks.Shipping.ShipEngine
             if (shipmentType.SupportsGetRates)
             {
                 RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
-                request.RateOptions = new RateRequest() { CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) } };
+                List<IPackageAdapter> packages = GetPackages(shipment);
+
+                request.RateOptions = new RateRequest() { CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) }, PackageTypes = new List<string> { GetPackagingCode(packages.FirstOrDefault()) } };
 
                 request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
 
@@ -77,9 +79,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     request.Shipment.Customs = CreateCustoms(shipment);
                 }
-                List<IPackageAdapter> packages = GetPackages(shipment);
-                request.Shipment.Packages = shipmentElementFactory.CreatePackages(packages, GetPackagingCode, SetPackageInsurance);
                 
+                request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
+                                
                 return request;
             }
 

@@ -135,6 +135,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         [Obfuscation(Exclude = true)]
         public IOneBalanceAutoFundControlViewModel AutoFundContext { get; }
 
+
+        /// <summary>
+        /// The data context for the enable ups banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOneBalanceAutoFundControlViewModel AutoFundContext { get; }
+
         /// <summary>
         /// RelayCommand for getting initial values to populate fields with
         /// </summary>
@@ -153,6 +160,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             ShowBanner = upsAccount == null;
+            AutoFundContext.AutoFundError = null;
 
             if (postageWebClient != null)
             {
@@ -273,5 +281,18 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
             return uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
         }
+
+        /// <summary>
+        /// Get initial values for fields that need to be populated
+        /// </summary>
+        private void GetInitialValues()
+        {
+            GetAccountBalance();
+        }
+
+        /// <summary>
+        /// Send the auto fund settings to Stamps
+        /// </summary>
+        public void SaveAutoFundSettings() => AutoFundContext.SaveSettings();
     }
 }

@@ -1211,6 +1211,7 @@
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsLogoType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsTrackClient.cs" />
     <Compile Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

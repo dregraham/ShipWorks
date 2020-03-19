@@ -2474,6 +2474,8 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2504,6 +2506,8 @@ namespace ShipWorks.Data.Model
 		IntegratorTransactionID,
 		///<summary>StampsTransactionID. </summary>
 		StampsTransactionID,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}

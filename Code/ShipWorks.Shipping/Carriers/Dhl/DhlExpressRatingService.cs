@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.ShipEngine;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.ComponentRegistration;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
-using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -19,27 +13,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     [KeyedComponent(typeof(IRatingService), ShipmentTypeCode.DhlExpress)]
     public class DhlExpressRatingService : IRatingService
     {
-        private readonly ICarrierShipmentRequestFactory rateRequestFactory;
-        private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IShipEngineRateGroupFactory rateGroupFactory;
+        private readonly IDhlExpressShipEngineRatingClient shipEngineRatingClient;
+        private readonly IDhlExpressStampsRatingClient stampsRatingClient;
         private readonly IDhlExpressAccountRepository accountRepository;
-        private readonly ShipmentType shipmentType;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public DhlExpressRatingService(
-            IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> rateRequestFactory, 
-            IShipEngineWebClient shipEngineWebClient, 
-            IShipEngineRateGroupFactory rateGroupFactory,
-            IDhlExpressAccountRepository accountRepository, 
-            IShipmentTypeManager shipmentTypeManager)
+            IDhlExpressShipEngineRatingClient shipEngineRatingClient,
+            IDhlExpressStampsRatingClient stampsRatingClient,
+            IDhlExpressAccountRepository accountRepository)
         {
-            this.rateRequestFactory = rateRequestFactory[ShipmentTypeCode.DhlExpress];
-            this.shipEngineWebClient = shipEngineWebClient;
-            this.rateGroupFactory = rateGroupFactory;
+
+            this.shipEngineRatingClient = shipEngineRatingClient;
+            this.stampsRatingClient = stampsRatingClient;
             this.accountRepository = accountRepository;
-            shipmentType = shipmentTypeManager.Get(ShipmentTypeCode.DhlExpress);
         }
 
         /// <summary>
@@ -48,26 +37,22 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public RateGroup GetRates(ShipmentEntity shipment)
         {
             // We don't have any DHL Express accounts, so let the user know they need an account.
-            if (!accountRepository.Accounts.Any())
+            if (!accountRepository.AccountsReadOnly.Any())
             {
                 throw new ShippingException("An account is required to view DHL Express rates.");
             }
 
             try
             {
-                RateShipmentRequest request = rateRequestFactory.CreateRateShipmentRequest(shipment);
-                RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
-                        await shipEngineWebClient.RateShipment(request, ApiLogSource.DHLExpress).ConfigureAwait(false)).Result;
+                IDhlExpressAccountEntity account = accountRepository.GetAccountReadOnly(shipment);
 
-                IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
-                    .Cast<DhlExpressServiceType>()
-                    .Select(t => EnumHelper.GetApiValue(t));
-
-                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.DhlExpress, availableServiceTypeApiCodes);
+                return account?.ShipEngineCarrierId == null ?
+                    stampsRatingClient.GetRates(shipment) :
+                    shipEngineRatingClient.GetRates(shipment);
             }
-            catch (Exception ex) when(ex.GetType() != typeof(ShippingException))
+            catch (Exception ex)
             {
-                throw new ShippingException(ex.GetBaseException().Message);
+                throw new ShippingException(ex);
             }
         }
     }

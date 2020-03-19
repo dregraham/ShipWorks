@@ -5727,6 +5727,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.NonDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressProfileEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.ResidentialDelivery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressShipmentEntity</summary>
@@ -5791,6 +5796,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 StampsTransactionID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.StampsTransactionID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ResidentialDelivery);}
 		}
 	}
 

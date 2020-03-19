@@ -485,6 +485,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 case (int) PostalServiceType.GlobalPostStandardIntl:
                 case (int) PostalServiceType.GlobalPostSmartSaverStandardIntl:
+                case (int) PostalServiceType.GlobalPostPlus:
+                case (int) PostalServiceType.GlobalPostPlusSmartSaver:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
 
                 default:
