@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// The view model for the OneBalanceCarrierAccountsControl
     /// </summary>
-    [KeyedComponent(typeof(IOneBalanceShowSetupDialogViewModel), ShipmentTypeCode.DhlExpress)]
+    [KeyedComponent(typeof(IOneBalanceShowSetupWizardViewModel), ShipmentTypeCode.DhlExpress)]
     public class OneBalanceCarrierAccountsControlViewModel : OneBalanceShowSetupDialogViewModel
     {
         private bool upsEnabled;

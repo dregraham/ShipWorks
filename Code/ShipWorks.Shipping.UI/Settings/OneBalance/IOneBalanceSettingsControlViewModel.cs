@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The data context for the enable ups banner
         /// </summary>
-        IOneBalanceShowSetupDialogViewModel BannerContext { get; }
+        IOneBalanceShowSetupWizardViewModel BannerContext { get; }
 
         /// <summary>
         /// RelayCommand for getting initial values to populate fields with

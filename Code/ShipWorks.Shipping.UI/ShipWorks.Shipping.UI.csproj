@@ -863,10 +863,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

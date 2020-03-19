@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// Interface for view models that need to show a setup wizard
     /// </summary>
-    public interface IOneBalanceShowSetupDialogViewModel
+    public interface IOneBalanceShowSetupWizardViewModel
     {
         /// <summary>
         /// RelayCommand for Showing the setup dialog

@@ -14,8 +14,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// View model for the controls that need to show a setup wizard
     /// </summary>
-    [KeyedComponent(typeof(IOneBalanceShowSetupDialogViewModel), ShipmentTypeCode.UpsOnLineTools)]
-    public class OneBalanceShowSetupDialogViewModel : ViewModelBase, IOneBalanceShowSetupDialogViewModel
+    [KeyedComponent(typeof(IOneBalanceShowSetupWizardViewModel), ShipmentTypeCode.UpsOnLineTools)]
+    public class OneBalanceShowSetupDialogViewModel : ViewModelBase, IOneBalanceShowSetupWizardViewModel
     {
         private readonly IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory;
         private readonly IWin32Window window;

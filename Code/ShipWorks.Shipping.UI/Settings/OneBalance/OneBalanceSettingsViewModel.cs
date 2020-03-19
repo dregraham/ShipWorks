@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
         public OneBalanceSettingsControlViewModel(IUspsAccountManager uspsAccountManager,
             Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
-            IIndex<ShipmentTypeCode, IOneBalanceShowSetupDialogViewModel> setupDialogLookup,
+            IIndex<ShipmentTypeCode, IOneBalanceShowSetupWizardViewModel> setupDialogLookup,
             IOneBalanceAutoFundControlViewModel autoFundViewModel)
         {
             this.uspsAccountManager = uspsAccountManager;
@@ -121,20 +121,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// The data context for the enable ups banner
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOneBalanceShowSetupDialogViewModel BannerContext { get; }
+        public IOneBalanceShowSetupWizardViewModel BannerContext { get; }
 
         /// <summary>
         /// The data context for the carrier accounts control
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOneBalanceShowSetupDialogViewModel CarrierAccountsContext { get; }
-
-        /// <summary>
-        /// The data context for the enable ups banner
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public IOneBalanceAutoFundControlViewModel AutoFundContext { get; }
-
+        public IOneBalanceShowSetupWizardViewModel CarrierAccountsContext { get; }
 
         /// <summary>
         /// The data context for the enable ups banner
@@ -160,7 +153,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             ShowBanner = upsAccount == null;
-            AutoFundContext.AutoFundError = null;
 
             if (postageWebClient != null)
             {
@@ -281,18 +273,5 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
             return uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
         }
-
-        /// <summary>
-        /// Get initial values for fields that need to be populated
-        /// </summary>
-        private void GetInitialValues()
-        {
-            GetAccountBalance();
-        }
-
-        /// <summary>
-        /// Send the auto fund settings to Stamps
-        /// </summary>
-        public void SaveAutoFundSettings() => AutoFundContext.SaveSettings();
     }
 }
