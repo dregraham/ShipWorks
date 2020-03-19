@@ -31,46 +31,42 @@
             <i:InvokeCommandAction Command="{Binding GetInitialValuesCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <ScrollViewer MaxHeight="{Binding ActualHeight, ElementName=settingsControl}">
-        <DockPanel>
-            <StackPanel HorizontalAlignment="Left" Margin="0,0,20,0" DockPanel.Dock="Top" Width="500">
-                <TextBlock Text="ShipWorks One Balance" FontSize="13" Margin="20,10,0,0" FontWeight="Bold"/>
-                <ContentControl Visibility="{Binding ShowBanner, Converter={StaticResource ShowWhenTrue}}" IsTabStop="False">
-                    <local:OneBalanceEnableUpsBannerWpfControl DataContext="{Binding BannerContext}" Margin="50,15,0,0" />
-                </ContentControl>
-                <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
-                    <TextBlock Margin="0,0,0,10" Text="Account Overview" Style="{StaticResource TextBlock.SectionHeader}"/>
-                </Border>
-                <Grid Margin="90,15,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding GetBalanceError}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource ShowWhenTrue}}" MaxWidth="500"/>
-                    <TextBlock Text="Balance" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource HideWhenTrue}}"/>
-                    <TextBlock Text="Getting Balance...." HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0" Visibility="{Binding Loading, Converter={StaticResource ShowWhenTrue}}"/>
-                    <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0">
-                        <TextBlock.Visibility>
-                            <MultiBinding Converter="{StaticResource VisibilityMultiConverter}">
-                                <Binding
+    <DockPanel>
+        <StackPanel HorizontalAlignment="Left" Margin="0,0,20,0" DockPanel.Dock="Top" Width="500">
+            <TextBlock Text="ShipWorks One Balance" FontSize="13" Margin="20,10,0,0" FontWeight="Bold"/>
+            <ContentControl Visibility="{Binding ShowBanner, Converter={StaticResource ShowWhenTrue}}" IsTabStop="False">
+                <local:OneBalanceEnableUpsBannerWpfControl DataContext="{Binding BannerContext}" Margin="50,15,0,0" />
+            </ContentControl>
+            <Border Margin="50,30,0,0" BorderThickness="0,0,0,2" BorderBrush="DarkGray">
+                <TextBlock Margin="0,0,0,10" Text="Account Overview" Style="{StaticResource TextBlock.SectionHeader}"/>
+            </Border>
+            <Grid Margin="90,15,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding GetBalanceError}" Grid.ColumnSpan="2" Foreground="#FFD32323" TextWrapping="Wrap" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource ShowWhenTrue}}" MaxWidth="500"/>
+                <TextBlock Text="Balance" HorizontalAlignment="Left" Grid.Column="0" Visibility="{Binding ShowGetBalanceError, Converter={StaticResource HideWhenTrue}}"/>
+                <TextBlock Text="Getting Balance...." HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0" Visibility="{Binding Loading, Converter={StaticResource ShowWhenTrue}}"/>
+                <TextBlock Text="{Binding Balance, Converter={StaticResource EmptyMoney}}" HorizontalAlignment="Right" Grid.Column="1" Margin="0,0,20,0">
+                    <TextBlock.Visibility>
+                        <MultiBinding Converter="{StaticResource VisibilityMultiConverter}">
+                            <Binding
                                 Converter="{StaticResource HideWhenTrue}"
                                 Path="Loading"/>
-                                <Binding
+                            <Binding
                                 Converter="{StaticResource HideWhenTrue}"
                                 Path="ShowGetBalanceError"/>
-                            </MultiBinding>
-                        </TextBlock.Visibility>
-                    </TextBlock>
-                    <Button HorizontalAlignment="Right"  Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}" Grid.Column="2">
-                        <TextBlock Text="Add Money" Margin="5,2,5,2"/>
-                    </Button>
-                </Grid>
-                <local:OneBalanceCarrierAccountControl  Margin="50,30,0,0" DataContext="{Binding CarrierAccountsContext}"/>
-                <local:OneBalanceAutoFundControl DataContext="{Binding AutoFundContext}" Margin="50,15,0,0"/>
-            </StackPanel>
-            <TextBlock Text="UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and the Color Brown are trademarks of United Service of America, Inc. All Rights Reserved"
-                           Margin="0,60,0,0" DockPanel.Dock="Bottom" FontSize="8" TextWrapping="Wrap" VerticalAlignment="Bottom" TextAlignment="Center"/>
-        </DockPanel>
-    </ScrollViewer>
+                        </MultiBinding>
+                    </TextBlock.Visibility>
+                </TextBlock>
+                <Button HorizontalAlignment="Right"  Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}" Grid.Column="2">
+                    <TextBlock Text="Add Money" Margin="5,2,5,2"/>
+                </Button>
+            </Grid>
+            <local:OneBalanceCarrierAccountControl  Margin="50,30,0,0" DataContext="{Binding CarrierAccountsContext}"/>
+            <local:OneBalanceAutoFundControl DataContext="{Binding AutoFundContext}" Margin="50,15,0,0"/>
+        </StackPanel>
+    </DockPanel>
 </UserControl>
