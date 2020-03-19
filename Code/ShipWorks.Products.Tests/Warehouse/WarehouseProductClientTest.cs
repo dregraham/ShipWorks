@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
@@ -210,6 +211,24 @@ namespace ShipWorks.Products.Tests.Warehouse
             var response = await testObject.SetActivation(new Guid?[] { new Guid() }, true);
 
             Assert.Equal(result, response);
+        }
+
+        [Fact]
+        public async Task GetProduct_ReturnsResult()
+        {
+            var payload = mock.Build<IWarehouseProductRequestData>();
+            mock.Mock<IWarehouseProductDataFactory>()
+                .Setup(x => x.CreateGetProductRequest(It.IsAny<string>()))
+                .Returns(payload);
+
+            mock.Mock<IWarehouseRequestClient>()
+                .Setup(x => x.MakeRequest<WarehouseProduct>(It.IsAny<IRestRequest>(), AnyString))
+                .ReturnsAsync(new WarehouseProduct() { ProductId = "3"});
+
+            var response = await testObject.GetProduct(It.IsAny<string>(), It.IsAny<CancellationToken>());
+
+            Assert.NotNull(response);
+            Assert.Equal("3", response.ProductId);
         }
     }
 }
