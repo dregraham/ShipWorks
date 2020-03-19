@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products.Warehouse
 {
@@ -36,5 +38,19 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products) =>
             Task.FromResult(NullProductsResult.Default);
+
+        /// <summary>
+        /// Get a product from the Hub
+        /// </summary>
+        public Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken) =>
+            Task.FromResult(new WarehouseProduct());
+
+        /// <summary>
+        /// Get products from the Hub for this warehouse after the given sequence
+        /// </summary>
+        public Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

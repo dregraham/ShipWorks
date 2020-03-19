@@ -63,10 +63,8 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create a get product request for the given product id
         /// </summary>
-        public IWarehouseProductRequestData CreateGetProductRequest(string productId)
-        {
-            throw new NotImplementedException();
-        }
+        public IWarehouseProductRequestData CreateGetProductRequest(string hubProductId) =>
+             new GetProductRequestData(hubProductId);
 
         /// <summary>
         /// Create request to get products after the given sequence

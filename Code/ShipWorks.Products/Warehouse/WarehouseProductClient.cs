@@ -63,9 +63,14 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Get a product from the Hub
         /// </summary>
-        public Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken)
+        public async Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var payload = dataFactory.CreateGetProductRequest(hubProductId);
+            var request = requestFactory.Create(WarehouseEndpoints.GetProduct(hubProductId), Method.GET, payload);
+
+            return await warehouseRequestClient
+                .MakeRequest<WarehouseProduct>(request, "Get Product")
+                .ConfigureAwait(true);
         }
 
         /// <summary>

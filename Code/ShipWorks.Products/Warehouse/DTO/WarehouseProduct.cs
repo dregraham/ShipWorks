@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Products.Warehouse.DTO
 {
@@ -123,7 +124,7 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// <summary>
         /// Aliases for this product
         /// </summary>
-        public IEnumerable<ProductAlias> Aliases { get; set; }
+        public Dictionary<string, ProductAlias> Aliases { get; set; }
 
         /// <summary>
         /// Products that are bundled in this one
@@ -133,6 +134,6 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// <summary>
         /// Warehouse associations
         /// </summary>
-        public IDictionary<string, WarehouseProductWarehouse> Warehouses { get; set; }
+        public Dictionary<string, WarehouseProductWarehouse> Warehouses { get; set; }
     }
 }
