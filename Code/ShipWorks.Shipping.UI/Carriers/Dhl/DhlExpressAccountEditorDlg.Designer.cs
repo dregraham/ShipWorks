@@ -1,6 +1,6 @@
 ﻿using ShipWorks.UI.Controls;
 
-namespace ShipWorks.Shipping.Carriers.DhlExpress
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     partial class DhlExpressAccountEditorDlg
     {

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Dhl;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.Custom;
-using Interapptive.Shared.Utility;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 
-namespace ShipWorks.Shipping.Carriers.DhlExpress
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     /// <summary>
     /// DHLExpress Account Editor Dialog
@@ -83,14 +81,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// </summary>
         private string GetDescription(DhlExpressAccountEntity dhlAccount)
         {
-            if (dhlAccount.UspsAccountId != null)
-            {
-                return "DHL Express from ShipWorks";
-            }
-            else
-            {
-                return accountDescription.GetDefaultAccountDescription(account);
-            }
+            return accountDescription.GetDefaultAccountDescription(account);
         }
 
         /// <summary>
