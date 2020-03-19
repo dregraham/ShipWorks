@@ -32,11 +32,7 @@ namespace ShipWorks.Shipping.Settings.WizardPages
         /// </summary>
         private void OnSteppingInto(object sender, WizardSteppingIntoEventArgs e)
         {
-            if (shipmentType != null)
-            {
-                defaultsControl.LoadSettings(shipmentType);
-                shipmentType = null;
-            }
+            LoadSettings();
         }
 
         /// <summary>
@@ -45,6 +41,18 @@ namespace ShipWorks.Shipping.Settings.WizardPages
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
             defaultsControl.SaveSettings();
+        }
+
+        /// <summary>
+        /// Loads the settings for the defaults control
+        /// </summary>
+        public void LoadSettings()
+        {
+            if (shipmentType != null)
+            {
+                defaultsControl.LoadSettings(shipmentType);
+                shipmentType = null;
+            }
         }
     }
 }

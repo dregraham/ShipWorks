@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// The data context for the enable ups banner
         /// </summary>
-        IOneBalanceEnableUpsBannerWpfViewModel BannerContext { get; }
+        IOneBalanceShowSetupWizardViewModel BannerContext { get; }
 
         /// <summary>
         /// RelayCommand for getting initial values to populate fields with
@@ -46,11 +46,6 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// A flag to indicate if we are in a state where we should show the banner
         /// </summary>
         bool ShowBanner { get; set; }
-
-        /// <summary>
-        /// A flag to indcate if we should show the dhl setup banner
-        /// </summary>
-        bool ShowDhlBanner { get; }
 
         /// <summary>
         /// A flag to indicate if we should show the message

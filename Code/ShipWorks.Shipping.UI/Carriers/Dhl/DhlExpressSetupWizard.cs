@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.UI.Wizard;
-using System.Windows.Forms;
 
 namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
@@ -24,7 +25,8 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
     /// Setup wizard for Dhl Express shipment type
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypeSetupWizard), ShipmentTypeCode.DhlExpress)]
-    public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard
+    [KeyedComponent(typeof(IOneBalanceSetupWizard), ShipmentTypeCode.DhlExpress)]
+    public partial class DhlExpressSetupWizard : WizardForm, IShipmentTypeSetupWizard, IOneBalanceSetupWizard
     {
         private readonly DhlExpressShipmentType shipmentType;
         private readonly IDhlExpressAccountRepository accountRepository;
@@ -34,6 +36,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
         private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
+        private bool skipAccountSetup = false;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -77,8 +80,15 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private void OnLoad(object sender, EventArgs e)
         {
             wizardPageWelcome.StepNextAsync = OnStepNextWelcome;
+            var defaultPage = new ShippingWizardPageDefaults(shipmentType);
+            if (skipAccountSetup)
+            {
+                Pages.Remove(wizardPageWelcome);
+                Pages.Remove(wizardPageContactInfo);
+                defaultPage.LoadSettings();
+            }
 
-            Pages.Add(new ShippingWizardPageDefaults(shipmentType));
+            Pages.Add(defaultPage);
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(CreateFinishPage());
@@ -197,6 +207,53 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         {
             messageHelper.ShowError(errorMessage);
             e.NextPage = CurrentPage;
+        }
+
+        /// <summary>
+        /// Setup DHL Express One Balance account. 
+        /// </summary>
+        public DialogResult SetupOneBalanceAccount(IWin32Window owner)
+        {
+            var uspsAccounts = UspsAccountManager.UspsAccountsReadOnly;
+            IUspsAccountEntity uspsAccount = null;
+
+            if (uspsAccounts.IsCountEqualTo(1))
+            {
+                uspsAccount = uspsAccounts.First();
+            }
+            else
+            {
+                uspsAccount = uspsAccounts.FirstOrDefault(x => x.ShipEngineCarrierId != null);
+            }
+            
+            // Only skip the account screen if they already have a One Balance USPS account.
+            skipAccountSetup = uspsAccount != null;
+
+            if (skipAccountSetup)
+            {
+                CreateAccountFromUsps(uspsAccount);
+            }
+            return ShowDialog(owner);
+        }
+
+        /// <summary>
+        /// Copies the account info from a usps account
+        /// </summary>
+        private void CreateAccountFromUsps(IUspsAccountEntity uspsAccount)
+        {
+            account.AccountNumber = uspsAccount.UspsAccountID;
+            account.FirstName = uspsAccount.FirstName;
+            account.MiddleName = uspsAccount.MiddleName;
+            account.LastName = uspsAccount.LastName;
+            account.Company = uspsAccount.Company;
+            account.Street1 = uspsAccount.Street1;
+            account.City = uspsAccount.City;
+            account.StateProvCode = Geography.GetStateProvCode(uspsAccount.StateProvCode);
+            account.PostalCode = uspsAccount.PostalCode;
+            account.CountryCode = Geography.GetCountryCode(uspsAccount.CountryCode);
+            account.Email = uspsAccount.Email;
+            account.Phone = uspsAccount.Phone;
+            account.UspsAccountId = uspsAccount.UspsAccountID;
         }
     }
 }

@@ -16,14 +16,11 @@ using System.Windows.Shapes;
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
     /// <summary>
-    /// Interaction logic for AddDhlExpressBanner.xaml
+    /// Interaction logic for OneBalanceCarrierAccountControl.xaml
     /// </summary>
-    public partial class OneBalanceAddDhlExpressBanner : UserControl
+    public partial class OneBalanceCarrierAccountControl : UserControl
     {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public OneBalanceAddDhlExpressBanner()
+        public OneBalanceCarrierAccountControl()
         {
             InitializeComponent();
         }

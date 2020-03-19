@@ -76,15 +76,17 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         }
 
         /// <summary>
-        /// Make an API call to stamps tp save the auto fund settings
+        /// Make an API call to stamps to save the auto fund settings
         /// </summary>
         public void SaveSettings()
         {
             // Only set if something changed
-            if (autoBuySettings == null ||
-                autoBuySettings.AutoBuyEnabled != IsAutoFund ||
+            // If we couldn't get the account settings initially don't try to save because
+            // chances are we won't be able to and the user could get stuck on this page.
+            if (autoBuySettings != null &&
+                (autoBuySettings.AutoBuyEnabled != IsAutoFund ||
                 autoBuySettings.PurchaseAmount != AutoFundAmount ||
-                autoBuySettings.TriggerAmount != MinimumBalance)
+                autoBuySettings.TriggerAmount != MinimumBalance))
             {
                 var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
 
@@ -126,6 +128,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAutoFundSettings()
         {
+            AutoFundError = null;
             var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
 
             try
@@ -141,7 +144,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             catch (Exception)
             {
                 // We don't need to log the exception because the webclient takes care of that
-                AutoFundError = "There was a problem retrieving your automatic funding settings.";
+                AutoFundError = "There was a problem retrieving your automatic funding settings. Your changes will not be saved.";
             }
         }
     }

@@ -376,13 +376,12 @@
     </Compile>
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAccountHelper.cs" />
     <Compile Include="Settings\OneBalance\IOneBalanceAutoFundControlViewModel.cs" />
     <Compile Include="Settings\OneBalance\IOneBalanceSettingsControlViewModel.cs" />
-    <Compile Include="Settings\OneBalance\OneBalanceAddDhlExpressBanner.xaml.cs">
-      <DependentUpon>OneBalanceAddDhlExpressBanner.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Settings\OneBalance\IOneBalanceAddMoneyDialog.cs" />
-    <Compile Include="Settings\OneBalance\IOneBalanceEnableUpsBannerWpfViewModel.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceShowSetupWizardViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAccountHelper.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml.cs">
       <DependentUpon>OneBalanceAddMoneyDialog.xaml</DependentUpon>
     </Compile>
@@ -391,10 +390,14 @@
       <DependentUpon>OneBalanceAutoFundControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings\OneBalance\OneBalanceAutoFundControlViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceCarrierAccountControl.xaml.cs">
+      <DependentUpon>OneBalanceCarrierAccountControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceCarrierAccountsControlViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml.cs">
       <DependentUpon>OneBalanceEnableUpsBannerWpfControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceShowSetupDialogViewModel.cs" />
     <Compile Include="Settings\OneBalance\OneBalanceSettingsControl.xaml.cs">
       <DependentUpon>OneBalanceSettingsControl.xaml</DependentUpon>
     </Compile>
@@ -848,15 +851,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings\OneBalance\OneBalanceAddDhlExpressBanner.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceCarrierAccountControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
