@@ -8,7 +8,7 @@ namespace ShipWorks.Products.Warehouse.DTO
     /// Product DTO 
     /// </summary>
     [Obfuscation]
-    class WarehouseProduct
+    public class WarehouseProduct
     {
         /// <summary>
         /// Id of the product in the hub
