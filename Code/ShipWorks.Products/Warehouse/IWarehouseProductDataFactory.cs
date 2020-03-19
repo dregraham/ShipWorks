@@ -49,5 +49,23 @@ namespace ShipWorks.Products.Warehouse
         /// Create a change result from an UploadResponse
         /// </summary>
         IProductsChangeResult CreateUploadResult(UploadResponseData response);
+
+        /// <summary>
+        /// Create a get product request for the given product id
+        /// </summary>
+        IWarehouseProductRequestData CreateGetProductRequest(string productId);
+
+        /// <summary>
+        /// Create request to get products after the given sequence
+        /// </summary>
+        /// <param name="sequence">Newest sequence in the db</param>
+        /// <returns></returns>
+        IWarehouseProductRequestData CreateGetProductsAfterSequenceRequest(long sequence);
+
+        /// <summary>
+        /// Create result for given response data
+        /// </summary>
+        /// <param name="data"></param>
+        IGetProductsAfterSequenceResult CreateGetProductsAfterSquenceResult(GetProductsAfterSequenceResponseData data);
     }
 }
