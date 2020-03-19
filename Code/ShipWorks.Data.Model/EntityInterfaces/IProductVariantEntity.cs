@@ -147,6 +147,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubSequence property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubSequence"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int64> HubSequence { get; }
         
         
         IProductEntity Product { get; }

@@ -8103,7 +8103,8 @@ CREATE TABLE [dbo].[ProductVariant]
 [FNSku] [nvarchar](300) NULL,
 [EAN] [nvarchar](30) NULL,
 [HubProductId] [uniqueidentifier] NULL,
-[HubVersion] [int] NULL
+[HubVersion] [int] NULL,
+[HubSequence] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
@@ -8113,6 +8114,10 @@ GO
 PRINT N'Creating index IX_ProductVariant_HubProductId'
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [IX_ProductVariant_HubProductId] ON [dbo].[ProductVariant] ([HubProductId]) WHERE HubProductId IS NOT NULL
+GO
+PRINT N'Creating index IX_ProductVariant_HubSequence'
+GO
+CREATE UNIQUE INDEX [IX_ProductVariant_HubSequence] ON [dbo].[ProductVariant] ([HubSequence]) WHERE HubSequence IS NOT NULL
 GO
 PRINT N'Creating [dbo].[ProductVariantAlias]'
 GO

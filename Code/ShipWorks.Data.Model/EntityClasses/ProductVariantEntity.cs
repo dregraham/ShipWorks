@@ -484,6 +484,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HubProductId", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubSequence", fieldHashtable);
 		}
 		#endregion
 
@@ -811,6 +813,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ProductVariantFieldIndex.HubVersion, false); }
 			set	{ SetValue((int)ProductVariantFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubSequence property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."HubSequence"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> HubSequence
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ProductVariantFieldIndex.HubSequence, false); }
+			set	{ SetValue((int)ProductVariantFieldIndex.HubSequence, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
