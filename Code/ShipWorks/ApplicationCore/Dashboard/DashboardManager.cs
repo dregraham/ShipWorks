@@ -763,13 +763,18 @@ namespace ShipWorks.ApplicationCore.Dashboard
                     RemoveDashboardItem(oneBalanceItem);
                 }
             }
-            else
+        }
+
+        /// <summary>
+        /// Show the One Balance promo in the dashboard
+        /// </summary>
+        public static void ShowOneBalancePromo()
+        {
+            var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
+            if(oneBalanceItem == null)
             {
-                if (oneBalanceItem == null)
-                {
-                    oneBalanceItem = new DashboardOneBalancePromoItem();
-                    AddDashboardItem(oneBalanceItem);
-                }
+                oneBalanceItem = new DashboardOneBalancePromoItem();
+                AddDashboardItem(oneBalanceItem);
             }
         }
 

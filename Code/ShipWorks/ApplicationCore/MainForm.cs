@@ -569,6 +569,7 @@ namespace ShipWorks
                 sqlChangeTracking.Enable();
 
                 LogonToShipWorks(user);
+                DashboardManager.ShowOneBalancePromo();
 
                 // If we successfully logged on, the last update must have succeeded.
                 AutoUpdateSettings.LastAutoUpdateSucceeded = true;

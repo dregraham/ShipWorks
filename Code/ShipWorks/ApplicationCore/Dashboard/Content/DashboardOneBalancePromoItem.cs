@@ -28,7 +28,7 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.SecondaryText = string.Empty;
             DashboardBar.ApplyActions(new List<DashboardAction> { new DashboardActionMethod("Click here to [link]learn more.[/link]", OnViewHelpArticle) });
 
-            DashboardBar.CanUserDismiss = false;
+            DashboardBar.CanUserDismiss = true;
         }
 
 
