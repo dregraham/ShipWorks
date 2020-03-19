@@ -462,7 +462,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the rates for the given shipment based on its settings
         /// </summary>
-        public (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
+        public virtual (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
         {
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
@@ -478,7 +478,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                return ExceptionWrapper(() => GetRatesInternal(shipment, account), account)
+                return ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.USPS), account)
                     .Select(uspsRate => UspsUtility.GetPostalServiceType(uspsRate.ServiceType)
                         .Map(x => BuildRateResult(shipment, account, uspsRate, x)))
                     .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
@@ -508,7 +508,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Build a RateResult from a USPS rate
         /// </summary>
-        private static RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, PostalServiceType serviceType)
+        private RateResult BuildRateResult(ShipmentEntity shipment, UspsAccountEntity account, RateV33 uspsRate, PostalServiceType serviceType)
         {
             var (description, amount) = GetRateAddOnDetails((PostalConfirmationType) shipment.Postal.Confirmation, uspsRate.AddOns);
 
@@ -536,7 +536,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
-        private IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        protected IEnumerable<RateV33> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account, Carrier carrier)
         {
             RateV33 rate = CreateRateForRating(shipment, account);
 
@@ -545,18 +545,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             using (ISwsimV90 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
-                rateResults = webService.GetRates(GetCredentials(account), rate);
+                rateResults = webService.GetRates(GetCredentials(account), rate, carrier);
             }
 
             List<RateV33> noConfirmationServiceRates = new List<RateV33>();
 
-            // If its a "Flat" then FirstClass and Priority can't have a confirmation
-            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
-            if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+            if (carrier == Carrier.USPS)
             {
-                noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
+                // If its a "Flat" then FirstClass and Priority can't have a confirmation
+                PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
+                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
+                {
+                    noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
+                }
             }
-
+            
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
             foreach (RateV33 noConfirmationServiceRate in noConfirmationServiceRates)
             {
@@ -1637,7 +1640,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Handles exceptions when making calls to the USPS API
         /// </summary>
-        private T ExceptionWrapper<T>(Func<T> executor, IUspsAccountEntity account)
+        protected T ExceptionWrapper<T>(Func<T> executor, IUspsAccountEntity account)
         {
             try
             {

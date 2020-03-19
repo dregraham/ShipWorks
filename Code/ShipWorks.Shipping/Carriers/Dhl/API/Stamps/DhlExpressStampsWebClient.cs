@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using Autofac;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -16,6 +17,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
@@ -81,6 +83,62 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         }
 
         /// <summary>
+        /// Get the rates for the given shipment based on its settings
+        /// </summary>
+        public override (IEnumerable<RateResult> rates, IEnumerable<Exception> errors) GetRates(ShipmentEntity shipment)
+        {
+            UspsAccountEntity account = GetStampsAccountAssociatedWithDhlAccount(shipment);
+
+            try
+            {
+                var rates = ExceptionWrapper(() => GetRatesInternal(shipment, account, Carrier.DHLExpress), account).Where(r => r.ServiceType == ServiceType.DHLEWW);
+
+                return  rates
+                        .Select(uspsRate => GetServiceType(uspsRate)
+                        .Map(x => BuildRateResult(shipment, uspsRate, x)))
+                        .Aggregate((rates: Enumerable.Empty<RateResult>(), errors: Enumerable.Empty<Exception>()),
+                            (accumulator, x) => x.Match(
+                                    rate => (accumulator.rates.Append(rate), accumulator.errors),
+                                    ex => (accumulator.rates, accumulator.errors.Append(ex))));
+            }
+            catch (UspsApiException ex)
+            {
+                if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                {
+                    // Provide a little more context as to which user name/password was incorrect in the case
+                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
+                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                                    UspsAccountManager.GetResellerName((UspsResellerType) account.UspsReseller),
+                                    account.Username,
+                                    Environment.NewLine);
+
+                    throw new UspsException(message, ex);
+                }
+
+                // This isn't an authentication exception, so just throw the original exception
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Build a RateResult from a USPS rate
+        /// </summary>
+        private RateResult BuildRateResult(ShipmentEntity shipment, RateV33 uspsRate, DhlExpressServiceType serviceType)
+        {
+            var baseRate = new RateResult(
+                EnumHelper.GetDescription(serviceType),
+                PostalUtility.GetDaysForRate(uspsRate.DeliverDays, uspsRate.DeliveryDate),
+                GetRateTotalWithSurchargesAndAddOns(shipment, uspsRate),
+                EnumHelper.GetApiValue(serviceType))
+            {
+                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode) shipment.ShipmentType),
+                ShipmentType = ShipmentTypeCode.DhlExpress
+            };
+
+            return baseRate;
+        }
+
+        /// <summary>
         /// Create customs information for the given shipment
         /// </summary>
         protected override CustomsV5 CreateCustoms(ShipmentEntity shipment)
@@ -131,8 +189,19 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         {
             IDhlExpressAccountEntity dhlExpressAccount = dhlExpressAccountRepository.GetAccountReadOnly(shipment);
 
+            if (dhlExpressAccount == null)
+            {
+                throw new ShippingException("There is no DHL Express account associated with this shipment.");
+            }
+
             UspsAccountEntity uspsAccount =
                 uspsAccountRepository.Accounts.FirstOrDefault(a => a.AccountId == dhlExpressAccount.UspsAccountId);
+
+            if (uspsAccount == null)
+            {
+                throw new ShippingException("There is no Stamps.com account associated with this DHL Express account.");
+            }
+
             return uspsAccount;
         }
 
@@ -164,6 +233,8 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         protected override RateV33 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV33 rate = CreateRateForRating(shipment, account);
+
+            rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
 
             // for Stamps.com the service type is always DHLEWW, the packaging type denotes the actual service
             rate.ServiceType = ServiceType.DHLEWW;
@@ -233,7 +304,6 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            rate.PackageType = GetPackageType((DhlExpressServiceType) shipment.DhlExpress.Service);
             rate.NonMachinable = shipment.DhlExpress.NonMachinable;
 
             rate.Length = shipment.DhlExpress.Packages[0].DimsLength;
@@ -249,7 +319,42 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
                 rate.ContentType = GetContentType((ShipEngineContentsType) shipment.DhlExpress.Contents);
             }
 
+            // Need to include this in the request, because it changes the fuel surcharge
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                rate.AddOns = new[]
+                {
+                    new AddOnV16
+                    {
+                        AddOnType = AddOnTypeV16.CARASAT
+                    }
+                };
+            }
+
             return rate;
+        }
+
+        /// <summary>
+        /// Get package type for the given service
+        /// </summary>
+        private static GenericResult<DhlExpressServiceType> GetServiceType(RateV33 rate)
+        {
+            if (rate.ServiceType != ServiceType.DHLEWW)
+            {
+                throw new ShippingException("Not a DhlExpress ServiceType");
+            }
+
+            switch (rate.PackageType)
+            {
+                case PackageTypeV10.ExpressEnvelope:
+                    return DhlExpressServiceType.ExpressEnvelope;
+                case PackageTypeV10.Package:
+                    return DhlExpressServiceType.ExpressWorldWide;
+                case PackageTypeV10.Documents:
+                    return DhlExpressServiceType.ExpressWorldWideDocuments;
+                default:
+                    throw new ShippingException("Not a DhlExpress ServiceType");
+            }
         }
 
         /// <summary>
@@ -288,12 +393,32 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         protected override void SaveLabelInformation(ShipmentEntity shipment, CreateIndiciumResult result, ThermalLanguage? thermalType)
         {
             shipment.TrackingNumber = result.TrackingNumber;
-            shipment.ShipmentCost = result.ShipmentCost;
+            shipment.ShipmentCost = GetRateTotalWithSurchargesAndAddOns(shipment, result.Rate);
             shipment.DhlExpress.StampsTransactionID = result.StampsTxID;
             shipment.BilledWeight = result.Rate.EffectiveWeightInOunces / 16D;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
+        }
+
+        /// <summary>
+        /// Get the rate total including surcharges and add ons
+        /// </summary>
+        private decimal GetRateTotalWithSurchargesAndAddOns(ShipmentEntity shipment, RateV33 rate)
+        {
+            decimal addOns = rate.Surcharges.Sum(s => s.Amount);
+
+            if (shipment.DhlExpress.SaturdayDelivery)
+            {
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARASAT).Sum(a => a.Amount);
+            }
+
+            if (shipment.DhlExpress.ResidentialDelivery)
+            {
+                addOns += rate.AddOns.Where(a => a.AddOnType == AddOnTypeV16.CARARES).Sum(a => a.Amount);
+            }
+
+            return rate.Amount + addOns;
         }
     } 
 }

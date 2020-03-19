@@ -24,11 +24,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Get rates
         /// </summary>
-        public RateV33[] GetRates(Credentials account, RateV33 rate)
+        public RateV33[] GetRates(Credentials account, RateV33 rate, Carrier carrier)
         {
             RateV33[] rateResults;
 
-            GetRates(account, rate, Carrier.USPS, out rateResults);
+            GetRates(account, rate, carrier, out rateResults);
 
             return rateResults;
         }

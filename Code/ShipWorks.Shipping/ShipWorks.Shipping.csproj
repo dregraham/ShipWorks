@@ -234,8 +234,12 @@
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressStampsRatingClient.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressShipEngineRatingClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressStampsRatingClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
@@ -420,6 +424,7 @@
     <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineDownloadedLabelData.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentValidatorFactory.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Ups\UpsTrackClient.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />

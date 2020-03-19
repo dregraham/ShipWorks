@@ -63,7 +63,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.SCGPP, PostalServiceType.GlobalPostStandardIntl},
             {ServiceType.SCGPESS, PostalServiceType.GlobalPostSmartSaverEconomyIntl},
             {ServiceType.SCGPPSS, PostalServiceType.GlobalPostSmartSaverStandardIntl},
-            {ServiceType.SCGPLSS, PostalServiceType.GlobalPostPlus }
+            {ServiceType.SCGPLSS, PostalServiceType.GlobalPostPlusSmartSaver },
+            {ServiceType.SCGPL, PostalServiceType.GlobalPostPlus }
         };
 
         /// <summary>

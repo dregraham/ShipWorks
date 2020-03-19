@@ -32,12 +32,12 @@ namespace ShipWorks.Shipping.Carriers.Dhl.API.Stamps
         /// </summary>
         public async Task<TelemetricResult<IDownloadedLabelData>> Create(ShipmentEntity shipment)
         {
-            if (shipment.DhlExpress.Packages.Count > 1)
+            if (shipment?.DhlExpress?.Packages?.Count > 1)
             {
                 throw new ShippingException("Multiple packages are not supported by this account.");
             }
 
-            if (shipment.RequestedLabelFormat == (int) ThermalLanguage.None)
+            if (shipment?.RequestedLabelFormat == (int) ThermalLanguage.None)
             {
                 throw new ShippingException("Standard labels are not supported by this account. To process this shipment go to Label Options and set Requested Label Format to Thermal - ZPL and try again.");
             }
