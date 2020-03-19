@@ -9,6 +9,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -37,7 +38,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         public OneBalanceSettingsControlViewModel(IUspsAccountManager uspsAccountManager,
             Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
             IIndex<ShipmentTypeCode, IOneBalanceShowSetupWizardViewModel> setupDialogLookup,
-            IOneBalanceAutoFundControlViewModel autoFundViewModel)
+            Func<IUspsAccountEntity, IOneBalanceAutoFundControlViewModel> autoFundViewModelFactory)
         {
             this.uspsAccountManager = uspsAccountManager;
             SetupWebClients();
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             BannerContext = setupDialogLookup[ShipmentTypeCode.UpsOnLineTools];
             CarrierAccountsContext = setupDialogLookup[ShipmentTypeCode.DhlExpress];
-            AutoFundContext = autoFundViewModel;
+            AutoFundContext = autoFundViewModelFactory(GetOneBalanceAccount());
 
             BannerContext.SetupComplete += OnOneBalanceSetupComplete;
             CarrierAccountsContext.SetupComplete += OnOneBalanceSetupComplete;
@@ -182,7 +183,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 catch (Exception ex)
                 {
                     bool keepTrying = false;
-                    
+
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {

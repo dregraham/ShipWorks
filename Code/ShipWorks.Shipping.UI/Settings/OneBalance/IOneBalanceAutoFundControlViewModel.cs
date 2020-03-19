@@ -26,7 +26,7 @@
         decimal MinimumBalance { get; set; }
 
         /// <summary>
-        /// Make an API call to stamps tp save the auto fund settings
+        /// Make an API call to stamps to save the auto fund settings
         /// </summary>
         void SaveSettings();
     }

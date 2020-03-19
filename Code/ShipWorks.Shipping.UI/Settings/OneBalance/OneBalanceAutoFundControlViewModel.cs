@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [Component]
     public class OneBalanceAutoFundControlViewModel : ViewModelBase, IOneBalanceAutoFundControlViewModel
     {
-        private readonly IUspsAccountManager accountManager;
+        private readonly IUspsAccountEntity account;
         private IUspsWebClient webClient;
         private AutoBuySettings autoBuySettings;
 
@@ -26,11 +26,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private string autoFundError;
 
         /// <summary>
-        /// Constuctor
+        /// Constructor
         /// </summary>
-        public OneBalanceAutoFundControlViewModel(IUspsAccountManager accountManager)
+        public OneBalanceAutoFundControlViewModel(IUspsAccountEntity account)
         {
-            this.accountManager = accountManager;
+            this.account = account;
             SetupWebClient();
             InitiateGetAutoFundSettings();
         }
@@ -80,6 +80,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public void SaveSettings()
         {
+            if (account == null)
+            {
+                return;
+            }
+
             // Only set if something changed
             // If we couldn't get the account settings initially don't try to save because
             // chances are we won't be able to and the user could get stuck on this page.
@@ -88,11 +93,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 autoBuySettings.PurchaseAmount != AutoFundAmount ||
                 autoBuySettings.TriggerAmount != MinimumBalance))
             {
-                var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-
-                if (account == null)
+                if (IsAutoFund && AutoFundAmount > 500)
                 {
-                    return;
+                    throw new UspsException("The amount to automatically fund cannot be greater than $500");
                 }
 
                 var newAutoBuySettings = new AutoBuySettings()
@@ -129,7 +132,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAutoFundSettings()
         {
             AutoFundError = null;
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
+
+            if (account == null)
+            {
+                return;
+            }
 
             try
             {
@@ -143,7 +150,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             }
             catch (Exception)
             {
-                // We don't need to log the exception because the webclient takes care of that
+                // We don't need to log the exception because the web client takes care of that
                 AutoFundError = "There was a problem retrieving your automatic funding settings. Your changes will not be saved.";
             }
         }
