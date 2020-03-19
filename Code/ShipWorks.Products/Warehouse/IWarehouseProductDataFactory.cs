@@ -66,6 +66,6 @@ namespace ShipWorks.Products.Warehouse
         /// Create result for given response data
         /// </summary>
         /// <param name="data"></param>
-        IGetProductsAfterSequenceResult CreateGetProductsAfterSquenceResult(GetProductsAfterSequenceResponseData data);
+        IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data);
     }
 }

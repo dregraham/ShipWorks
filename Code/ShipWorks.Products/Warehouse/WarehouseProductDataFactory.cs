@@ -59,5 +59,32 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public IProductsChangeResult CreateUploadResult(UploadResponseData response) =>
             new UploadProductsResult(response);
+
+        /// <summary>
+        /// Create a get product request for the given product id
+        /// </summary>
+        public IWarehouseProductRequestData CreateGetProductRequest(string productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Create request to get products after the given sequence
+        /// </summary>
+        /// <param name="sequence">Newest sequence in the db</param>
+        /// <returns></returns>
+        public IWarehouseProductRequestData CreateGetProductsAfterSequenceRequest(long sequence)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Create result for given response data
+        /// </summary>
+        /// <param name="data"></param>
+        public IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
