@@ -28,6 +28,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
 using ShipWorks.Editions.Freemium;
 using ShipWorks.Email;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Stores;
 
@@ -62,7 +63,8 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 typeof(DashboardStoreItem),
                 typeof(DashboardMessageItem),
                 typeof(DashboardTrialItem),
-                typeof(DashboardOnlineVersionItem)
+                typeof(DashboardOnlineVersionItem),
+                typeof(DashboardOneBalancePromoItem)
             };
 
         // The text to display when the dashboard is working in the background
@@ -506,6 +508,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForActionChanges();
             CheckForSchedulerServiceStoppedChanges();
             CheckForLicenseDependentChanges();
+            CheckForOneBalanceChanges();
             ValidateLocalRates();
         }
 
@@ -742,6 +745,27 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 if (actionItem != null)
                 {
                     RemoveDashboardItem(actionItem);
+                }
+            }
+        }
+
+        private static void CheckForOneBalanceChanges()
+        {
+            var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
+
+            if (UspsAccountManager.UspsAccountsReadOnly.Any(e => e.ShipEngineCarrierId != null))
+            {
+                if(oneBalanceItem != null)
+                {
+                    RemoveDashboardItem(oneBalanceItem);
+                }
+            }
+            else
+            {
+                if (oneBalanceItem == null)
+                {
+                    oneBalanceItem = new DashboardOneBalancePromoItem();
+                    AddDashboardItem(oneBalanceItem);
                 }
             }
         }
