@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
                     ShipDate = shipment.ShipDate,
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
-                    Packages = CreatePackages(packages, getPackageCode, addPackageInsurance),
+                    Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
             };
@@ -110,9 +110,22 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Creates ShipEngine api package DTOs from a list of package adapters.
+        /// Creates ShipEngine api package DTOs for rating from a list of package adapters.
         /// </summary>
-        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, 
+        public List<ShipmentPackage> CreatePackageForRating(List<IPackageAdapter> packages, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance) =>
+            CreatePackageInternal(packages, null, addPackageInsurance);
+
+        /// <summary>
+        /// Creates ShipEngine api package DTOs for a label request from a list of package adapters.
+        /// </summary>
+        public List<ShipmentPackage> CreatePackageForLabel(List<IPackageAdapter> packages,
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance) =>
+            CreatePackageInternal(packages, getPackageCode, addPackageInsurance);
+
+        /// <summary>
+        /// Creates ShipEngine api package DTOs for a label or rate request from a list of package adapters.
+        /// </summary>
+        private List<ShipmentPackage> CreatePackageInternal(List<IPackageAdapter> packages,
             Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
@@ -128,7 +141,7 @@ namespace ShipWorks.Shipping.ShipEngine
                         Unit = Dimensions.UnitEnum.Inch
                     },
                     Weight = new Weight(package.Weight, Weight.UnitEnum.Pound),
-                    PackageCode = getPackageCode(package),
+                    PackageCode = getPackageCode?.Invoke(package),
                     LabelMessages = new LabelMessages()
                 };
 

@@ -35,7 +35,12 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Creates pacakges for a shipEngine
         /// </summary>
-        List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, 
+        List<ShipmentPackage> CreatePackageForRating(List<IPackageAdapter> packages, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance);
+
+        /// <summary>
+        /// Creates pacakges for a shipEngine
+        /// </summary>
+        List<ShipmentPackage> CreatePackageForLabel(List<IPackageAdapter> packages,
             Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance);
     }
 }
