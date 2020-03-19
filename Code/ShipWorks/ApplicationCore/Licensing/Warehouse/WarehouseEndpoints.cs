@@ -73,5 +73,16 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// Create a change product route
         /// </summary>
         public static string ChangeProduct(IProductVariantEntity product) => $"api/product/{product.HubProductId}";
+
+        /// <summary>
+        /// Create a get product route
+        /// </summary>
+        public static string GetProduct(string hubProductId) => $"api/product/{hubProductId}";
+
+        /// <summary>
+        /// Create a get products after sequence route
+        /// </summary>
+        public static string GetProductsAfterSequence(string warehouseId, long sequence) => 
+            $"api/products/sync/{warehouseId}/after/{sequence}";
     }
 }
