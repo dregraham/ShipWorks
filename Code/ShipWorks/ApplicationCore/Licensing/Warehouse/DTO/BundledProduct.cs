@@ -19,6 +19,14 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// <summary>
         /// Constructor
         /// </summary>
+        public BundledProduct()
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         private BundledProduct(IProductBundleEntity bundledProduct)
         {
             Quantity = bundledProduct.Quantity;
@@ -28,11 +36,11 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// <summary>
         /// Quantity of the items in the bundle
         /// </summary>
-        public int Quantity { get; private set; }
+        public int Quantity { get; set; }
 
         /// <summary>
         /// Id of the bundled product
         /// </summary>
-        public string ProductId { get; private set; }
+        public string ProductId { get; set; }
     }
 }
