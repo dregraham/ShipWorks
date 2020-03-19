@@ -28,6 +28,18 @@ namespace ShipWorks.Products.Warehouse
             Task.FromResult(NullProductResult.Default);
 
         /// <summary>
+        /// Get a product from the Hub
+        /// </summary>
+        public Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken) =>
+            Task.FromResult<WarehouseProduct>(null);
+
+        /// <summary>
+        /// Get products from the Hub for this warehouse after the given sequence
+        /// </summary>
+        public Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken) =>
+            Task.FromResult(NullGetProductsAfterSequenceResult.Default);
+
+        /// <summary>
         /// Enable or disable the given products
         /// </summary>
         public Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation) =>
