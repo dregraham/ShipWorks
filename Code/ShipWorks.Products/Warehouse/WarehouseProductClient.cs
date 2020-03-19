@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -57,6 +58,22 @@ namespace ShipWorks.Products.Warehouse
                 .MakeRequest<ChangeProductResponseData>(request, "Change Product")
                 .Map(dataFactory.CreateChangeProductResult)
                 .ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Get a product from the Hub
+        /// </summary>
+        public Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Get products from the Hub for this warehouse after the given sequence
+        /// </summary>
+        public Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
