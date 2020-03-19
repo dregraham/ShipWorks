@@ -54,8 +54,14 @@ namespace ShipWorks.Shipping.ShipEngine
         private RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
         {
             double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
+            string days = apiRate.DeliveryDays.ToString();
 
-            return new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (amount), GetRateTag(shipmentType, apiRate.ServiceCode))
+            if (!string.IsNullOrWhiteSpace(apiRate.CarrierDeliveryDays))
+            {
+                days = $"{days} ({apiRate.CarrierDeliveryDays})";
+            }
+
+            return new RateResult(apiRate.ServiceType, days, (decimal) (amount), GetRateTag(shipmentType, apiRate.ServiceCode))
             {
                 CarrierDescription = apiRate.CarrierNickname,
                 ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,

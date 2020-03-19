@@ -181,14 +181,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             testObject.CreateRateShipmentRequest(shipment);
 
             dhlShipmentType.Verify(t => t.GetPackageAdapters(shipment), Times.Once());
-            shipmentElementFactory.Verify(f => f.CreatePackages(packageAdapters, It.IsAny<Func<IPackageAdapter, string>>(), It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()), Times.Once());
+            shipmentElementFactory.Verify(f => f.CreatePackageForRating(packageAdapters, It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()), Times.Once());
         }
 
         [Fact]
         public void CreateRateShipmentRequest_CreatesPackages_FromPacakgeAdapterDelegatesToShipmentType()
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
-            shipmentElementFactory.Setup(f => f.CreatePackages(It.IsAny<List<IPackageAdapter>>(), It.IsAny<Func<IPackageAdapter, string>>(), It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()))
+            shipmentElementFactory.Setup(f => f.CreatePackageForRating(It.IsAny<List<IPackageAdapter>>(), It.IsAny<Action<ShipmentPackage, IPackageAdapter>>()))
                 .Returns(apiPackages);            
             
             var request = testObject.CreateRateShipmentRequest(shipment);

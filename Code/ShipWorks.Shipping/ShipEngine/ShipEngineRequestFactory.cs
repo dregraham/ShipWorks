@@ -24,9 +24,9 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 Shipment = new AddressValidatingShipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson),
-                    ShipFrom = CreateAddress(shipment.OriginPerson),
-                    ShipDate = shipment.ShipDate,
+                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
+                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
+                    ShipDate = shipment.ShipDate
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
@@ -57,11 +57,11 @@ namespace ShipWorks.Shipping.ShipEngine
                 LabelLayout = "4x6",
                 Shipment = new Shipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson),
-                    ShipFrom = CreateAddress(shipment.OriginPerson),
+                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
+                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
                     ShipDate = shipment.ShipDate,
                     // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
-                    Packages = CreatePackages(packages, getPackageCode, addPackageInsurance),
+                    Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
             };
@@ -69,14 +69,31 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Get AddressResidentialIndicatorEnum for the given shipment
+        /// </summary>
+        private static Address.AddressResidentialIndicatorEnum GetShipToResidentialEnum(ShipmentEntity shipment)
+        {
+            try
+            {
+                return ResidentialDeterminationService.DetermineResidentialAddress(shipment) ?
+                    Address.AddressResidentialIndicatorEnum.Yes :
+                    Address.AddressResidentialIndicatorEnum.No;
+            }
+            catch (Exception)
+            {
+                return Address.AddressResidentialIndicatorEnum.Unknown;
+            }
+        }
+
+        /// <summary>
         /// Gets an AddressDTO from a shipment
         /// </summary>
-        private Address CreateAddress(PersonAdapter personAdapter)
+        private Address CreateAddress(PersonAdapter personAdapter, Address.AddressResidentialIndicatorEnum residentialIndicator)
         {
             string countryCode = personAdapter.CountryCode == "UK" ? "GB" : personAdapter.CountryCode;
             Address address = new Address
             {
-                AddressResidentialIndicator = Address.AddressResidentialIndicatorEnum.Unknown,
+                AddressResidentialIndicator = residentialIndicator,
                 Name = personAdapter.UnparsedName,
                 Phone = personAdapter.Phone,
                 CompanyName = personAdapter.Company,
@@ -93,9 +110,22 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Creates ShipEngine api package DTOs from a list of package adapters.
+        /// Creates ShipEngine api package DTOs for rating from a list of package adapters.
         /// </summary>
-        public List<ShipmentPackage> CreatePackages(List<IPackageAdapter> packages, 
+        public List<ShipmentPackage> CreatePackageForRating(List<IPackageAdapter> packages, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance) =>
+            CreatePackageInternal(packages, null, addPackageInsurance);
+
+        /// <summary>
+        /// Creates ShipEngine api package DTOs for a label request from a list of package adapters.
+        /// </summary>
+        public List<ShipmentPackage> CreatePackageForLabel(List<IPackageAdapter> packages,
+            Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance) =>
+            CreatePackageInternal(packages, getPackageCode, addPackageInsurance);
+
+        /// <summary>
+        /// Creates ShipEngine api package DTOs for a label or rate request from a list of package adapters.
+        /// </summary>
+        private List<ShipmentPackage> CreatePackageInternal(List<IPackageAdapter> packages,
             Func<IPackageAdapter, string> getPackageCode, Action<ShipmentPackage, IPackageAdapter> addPackageInsurance)
         {
             List<ShipmentPackage> apiPackages = new List<ShipmentPackage>();
@@ -111,7 +141,7 @@ namespace ShipWorks.Shipping.ShipEngine
                         Unit = Dimensions.UnitEnum.Inch
                     },
                     Weight = new Weight(package.Weight, Weight.UnitEnum.Pound),
-                    PackageCode = getPackageCode(package),
+                    PackageCode = getPackageCode?.Invoke(package),
                     LabelMessages = new LabelMessages()
                 };
 
