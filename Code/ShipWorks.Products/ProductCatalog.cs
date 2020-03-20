@@ -279,7 +279,9 @@ namespace ShipWorks.Products
         {
             List<IPrefetchPathElement2> prefetchPath = new List<IPrefetchPathElement2>
             {
-                ProductVariantEntity.PrefetchPathProduct.WithSubPath(ProductEntity.PrefetchPathAttributes),
+                ProductVariantEntity.PrefetchPathProduct
+                    .WithSubPath(ProductEntity.PrefetchPathAttributes)
+                    .WithSubPath(ProductEntity.PrefetchPathBundles.WithSubPath(ProductBundleEntity.PrefetchPathChildVariant)),
                 ProductVariantEntity.PrefetchPathAliases,
                 ProductVariantEntity.PrefetchPathIncludedInBundles,
                 ProductVariantEntity.PrefetchPathAttributeValues.WithSubPath(ProductVariantAttributeValueEntity.PrefetchPathProductAttribute)
@@ -474,7 +476,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
-        public async Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize)
+        public async Task<IEnumerable<ProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize, bool isBundle)
         {
             QueryFactory factory = new QueryFactory();
             InnerOuterJoin from = factory.ProductVariant
@@ -484,6 +486,7 @@ namespace ShipWorks.Products
             EntityQuery<ProductVariantEntity> query = factory.ProductVariant
                 .From(from)
                 .Where(ProductFields.UploadToWarehouseNeeded == true)
+                .AndWhere(ProductFields.IsBundle == isBundle)
                 .Limit(pageSize);
 
             foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)

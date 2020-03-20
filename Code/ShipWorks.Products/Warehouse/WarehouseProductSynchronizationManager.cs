@@ -45,7 +45,6 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public void EndSession()
         {
-            cancellationTokenSource?.Cancel();
             timer.Change(Never, Never);
         }
 

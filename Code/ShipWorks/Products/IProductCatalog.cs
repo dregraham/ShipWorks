@@ -76,7 +76,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
-        Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize);
+        Task<IEnumerable<ProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize, bool isBundle);
 
         /// <summary>
         /// Fetch count of product variants to upload to the warehouse.

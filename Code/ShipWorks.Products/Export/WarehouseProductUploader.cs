@@ -8,6 +8,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Products.Warehouse;
 
 namespace ShipWorks.Products.Export
@@ -41,27 +42,42 @@ namespace ShipWorks.Products.Export
         {
             var progressUpdater = await CreateProgressUpdater(progressItem).ConfigureAwait(false);
 
+            var shouldContinue = await PerformUpload(progressItem, progressUpdater, false)
+                    .Bind(_ => PerformUpload(progressItem, progressUpdater, true))
+                    .ConfigureAwait(false);
+
+            shouldContinue
+                .Do(x => progressItem.ProgressItem.Completed())
+                .OnFailure(progressItem.ProgressItem.Failed);
+        }
+
+        /// <summary>
+        /// Perform the upload to the Hub
+        /// </summary>
+        private async Task<GenericResult<bool>> PerformUpload(ISingleItemProgressDialog progressItem, IProgressUpdater progressUpdater, bool uploadBundles)
+        {
             GenericResult<bool> shouldContinue;
             do
             {
                 using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
                 {
-                    var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await warehouseProductClient.Upload(skus).ToResult().ConfigureAwait(false);
+                    var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize, uploadBundles).ConfigureAwait(false);
+                    var results = await warehouseProductClient.Upload(skus)
+                        .Do(x => x.ApplyTo(skus))
+                        .ToResult()
+                        .ConfigureAwait(false);
 
                     if (results.Success)
                     {
-                        await productCatalog.ResetNeedsWarehouseUploadFlag(sqlAdapter, skus).ConfigureAwait(false);
+                        await sqlAdapter.SaveEntityCollectionAsync(skus.ToEntityCollection()).ConfigureAwait(false);
+                        await sqlAdapter.SaveEntityCollectionAsync(skus.Select(x => x.Product).ToEntityCollection()).ConfigureAwait(false);
                         progressUpdater.Update(batchSize);
                     }
 
                     shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
                 }
             } while (shouldContinue.Match(x => x, ex => false));
-
-            shouldContinue
-                .Do(x => progressItem.ProgressItem.Completed())
-                .OnFailure(progressItem.ProgressItem.Failed);
+            return shouldContinue;
         }
 
         /// <summary>
