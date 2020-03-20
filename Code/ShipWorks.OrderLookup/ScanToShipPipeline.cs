@@ -26,10 +26,11 @@ using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Services;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
+using Cursor = System.Windows.Forms.Cursor;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.OrderLookup
 {
@@ -214,7 +215,7 @@ namespace ShipWorks.OrderLookup
                 .Subscribe(),
 
                 messenger.OfType<ScanToShipCreateShipmentMessage>()
-                    .Do(async m => await CreateNewShipment(m).ConfigureAwait(false))
+                    .Do(CreateNewShipment)
                     .CatchAndContinue((Exception ex) => HandleException(ex))
                     .Subscribe()
             );
@@ -565,6 +566,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async void ShipAgain(OrderLookupShipAgainMessage message)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
 
             using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
@@ -586,8 +589,10 @@ namespace ShipWorks.OrderLookup
         /// <summary>
         /// Create a new shipment for the order and load it
         /// </summary>
-        private async Task CreateNewShipment(ScanToShipCreateShipmentMessage message)
+        private async void CreateNewShipment(ScanToShipCreateShipmentMessage message)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
 
             using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
