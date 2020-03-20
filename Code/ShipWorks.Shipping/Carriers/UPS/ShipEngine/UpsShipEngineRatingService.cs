@@ -76,11 +76,32 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                     .Where(UpsShipEngineServiceTypeUtility.IsServiceSupported)
                     .Select(UpsShipEngineServiceTypeUtility.GetServiceCode);
 
-                return rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
+                RateGroup rateGroup = rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
+
+                AddFootnotes(rateGroup, rateShipmentResponse);
+
+                return rateGroup;
             }
             catch (Exception ex) when (ex.GetType() != typeof(ShippingException))
             {
                 throw new ShippingException(ex.GetBaseException().Message);
+            }
+        }
+
+        /// <summary>
+        /// Add footnotes to the rate group
+        /// </summary>
+        private void AddFootnotes(RateGroup rateGroup, RateShipmentResponse rateShipmentResponse)
+        {
+            var warnings = rateShipmentResponse.RateResponse.Rates.SelectMany(r => r.WarningMessages).Distinct();
+
+            foreach (string warning in warnings)
+            {
+                if (warning.Contains("Large Package Surcharge", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var largePackageSurchargeFootnoteFactory = new InformationFootnoteFactory(warning);
+                    rateGroup.AddFootnoteFactory(largePackageSurchargeFootnoteFactory);
+                }
             }
         }
     }
