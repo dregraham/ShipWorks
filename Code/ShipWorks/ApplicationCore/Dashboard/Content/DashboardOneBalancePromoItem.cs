@@ -31,7 +31,6 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
             DashboardBar.CanUserDismiss = true;
         }
 
-
         /// <summary>
         /// Open the default web browser to the help article
         /// </summary>
