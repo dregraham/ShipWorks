@@ -27,10 +27,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>();
+            List<IPackageAdapter> packageAdapters = new List<IPackageAdapter>()
+            {
+                new TestPackageAdapter()
+            };
+            
 
             Mock<ShipmentType> shipmentType = mock.Mock<ShipmentType>();
-            shipmentType.Setup(t => t.GetPackageAdapters(shipment))
+            shipmentType.Setup(t => t.GetPackageAdapters(It.IsAny<ShipmentEntity>()))
                 .Returns(packageAdapters);
             shipmentType.Setup(t => t.IsCustomsRequired(It.IsAny<ShipmentEntity>()))
                 .Returns(true);
