@@ -17,6 +17,6 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns>True if more products to get, false otherwise</returns>
-        Task<bool> Apply(CancellationToken cancellationToken);
+        Task<(long sequence, bool shouldContinue)> Apply(CancellationToken cancellationToken);
     }
 }

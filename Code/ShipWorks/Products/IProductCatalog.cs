@@ -82,5 +82,10 @@ namespace ShipWorks.Products
         /// Fetch count of product variants to upload to the warehouse.
         /// </summary>
         Task<int> FetchProductVariantsForUploadToWarehouseCount(ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Fetch the newest sequence number of all the products
+        /// </summary>
+        Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter);
     }
 }

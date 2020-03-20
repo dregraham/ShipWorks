@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using log4net;
 using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Products.Warehouse
@@ -12,6 +13,7 @@ namespace ShipWorks.Products.Warehouse
     {
         private static readonly TimeSpan Never = TimeSpan.FromMilliseconds(-1);
         private readonly Timer timer;
+        private readonly ILog log;
         private readonly IWarehouseProductSynchronizer productSynchronizer;
         private CancellationTokenSource cancellationTokenSource;
         private bool isDisposed;
@@ -19,8 +21,11 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseProductSynchronizationManager(IWarehouseProductSynchronizer productSynchronizer)
+        public WarehouseProductSynchronizationManager(
+            IWarehouseProductSynchronizer productSynchronizer,
+            Func<Type, ILog> createLog)
         {
+            log = createLog(GetType());
             this.productSynchronizer = productSynchronizer;
             timer = new Timer(HandleTimerTick);
         }
@@ -64,8 +69,10 @@ namespace ShipWorks.Products.Warehouse
                 {
                     await productSynchronizer.Synchronize(cancellationTokenSource.Token);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    log.Error("Error while syncing products", ex);
+
                     if (!cancellationTokenSource.IsCancellationRequested || !isDisposed)
                     {
                         timer.Change(TimeSpan.FromMinutes(10), TimeSpan.Zero);

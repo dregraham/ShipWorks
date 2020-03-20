@@ -26,7 +26,7 @@ namespace ShipWorks.Products.Warehouse
         /// Get products from the Hub after newest sequence in the db
         /// </summary>=
         /// <returns>True if more products to get, false otherwise</returns>
-        public Task<bool> Apply(CancellationToken cancellationToken) =>
-            Task.FromResult(false);
+        public Task<(long sequence, bool shouldContinue)> Apply(CancellationToken cancellationToken) =>
+            Task.FromResult((0L, false));
     }
 }

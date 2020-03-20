@@ -553,5 +553,16 @@ namespace ShipWorks.Products
 
             return clone;
         }
+
+        /// <summary>
+        /// Fetch the newest sequence number of all the products
+        /// </summary>
+        public async Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter)
+        {
+            var query = new QueryFactory().ProductVariant
+                .Select(ProductVariantFields.HubSequence.Max());
+
+            return await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+        }
     }
 }
