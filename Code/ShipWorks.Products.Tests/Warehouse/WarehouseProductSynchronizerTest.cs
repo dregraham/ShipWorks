@@ -49,7 +49,7 @@ namespace ShipWorks.Products.Tests.Warehouse
             await testObject.Synchronize(new CancellationToken());
 
             mock.Mock<IProductCatalog>()
-                .Verify(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>()), Times.Never);
+                .Verify(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>(), It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Fact]
@@ -58,14 +58,14 @@ namespace ShipWorks.Products.Tests.Warehouse
             await testObject.Synchronize(new CancellationToken());
 
             mock.Mock<IProductCatalog>()
-                .Verify(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>()));
+                .Verify(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>(), It.IsAny<CancellationToken>()));
         }
 
         [Fact]
         public async Task Synchronize_DelegatesToTheHub_WithSequence()
         {
             mock.Mock<IProductCatalog>()
-                .Setup(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>()))
+                .Setup(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(6);
             var token = new CancellationToken();
 
@@ -79,7 +79,7 @@ namespace ShipWorks.Products.Tests.Warehouse
         public async Task Synchronize_KeepsMakingRequests_UntilResultReturnsFalse()
         {
             mock.Mock<IProductCatalog>()
-                .Setup(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>()))
+                .Setup(x => x.FetchNewestSequence(It.IsAny<ISqlAdapter>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(6);
             var token = new CancellationToken();
             mock.FromFactory<IWarehouseProductClient>()

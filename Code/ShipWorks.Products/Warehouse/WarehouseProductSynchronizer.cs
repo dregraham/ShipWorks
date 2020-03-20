@@ -44,24 +44,24 @@ namespace ShipWorks.Products.Warehouse
                 return;
             }
 
-            var sequence = await GetNewestSequence();
+            var sequence = await GetNewestSequence(cancellationToken);
             bool shouldContinue;
 
             do
             {
                 var result = await warehouseProductClient.GetProductsAfterSequence(sequence, cancellationToken);
                 (sequence, shouldContinue) = await result.Apply(cancellationToken);
-            } while (shouldContinue);
+            } while (shouldContinue && !cancellationToken.IsCancellationRequested);
         }
 
         /// <summary>
         /// Gets the newest product sequence
         /// </summary>
-        private async Task<long> GetNewestSequence()
+        private async Task<long> GetNewestSequence(CancellationToken cancellationToken)
         {
             using (var sqlAdapter = sqlAdapterFactory.Create())
             {
-                return await productCatalog.FetchNewestSequence(sqlAdapter);
+                return await productCatalog.FetchNewestSequence(sqlAdapter, cancellationToken);
             }
         }
     }

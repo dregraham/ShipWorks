@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
@@ -86,6 +87,6 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch the newest sequence number of all the products
         /// </summary>
-        Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter);
+        Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter, CancellationToken cancellationToken);
     }
 }

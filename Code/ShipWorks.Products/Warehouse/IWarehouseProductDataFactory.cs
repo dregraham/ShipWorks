@@ -56,13 +56,6 @@ namespace ShipWorks.Products.Warehouse
         IWarehouseProductRequestData CreateGetProductRequest(string hubProductId);
 
         /// <summary>
-        /// Create request to get products after the given sequence
-        /// </summary>
-        /// <param name="sequence">Newest sequence in the db</param>
-        /// <returns></returns>
-        IWarehouseProductRequestData CreateGetProductsAfterSequenceRequest(long sequence);
-
-        /// <summary>
         /// Create result for given response data
         /// </summary>
         /// <param name="data"></param>

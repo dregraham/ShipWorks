@@ -7,6 +7,7 @@ using Autofac.Extras.Moq;
 using Moq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse;
@@ -288,6 +289,62 @@ namespace ShipWorks.Products.Tests.Warehouse
 
             Assert.NotNull(response);
             Assert.Equal("3", response.ProductId);
+        }
+
+        [Fact]
+        public async Task GetProductsAfterSequence_DelegatesToWarehouseProductRequestFactory()
+        {
+            mock.FromFactory<IConfigurationData>()
+                .Mock(x => x.FetchReadOnly())
+                .SetupGet(x => x.WarehouseID)
+                .Returns("ABC123");
+
+            await testObject.GetProductsAfterSequence(6, new CancellationToken());
+
+            mock.Mock<IWarehouseProductRequestFactory>()
+                .Verify(x => x.Create("api/products/sync/ABC123/after/6", Method.GET));
+        }
+
+        [Fact]
+        public async Task GetProductsAfterSequence_DelegatesToWarehouseRequestClient()
+        {
+            var cancellationToken = new CancellationToken();
+            var request = mock.Build<IRestRequest>();
+            mock.Mock<IWarehouseProductRequestFactory>()
+                .Setup(x => x.Create(AnyString, It.IsAny<Method>()))
+                .Returns(request);
+
+            await testObject.GetProductsAfterSequence(6, new CancellationToken());
+
+            mock.Mock<IWarehouseRequestClient>()
+                .Verify(x => x.MakeRequest<GetProductsAfterSequenceResponseData>(request, "Get Products After Sequence", cancellationToken));
+        }
+
+        [Fact]
+        public async Task GetProductsAfterSequence_DelegatesToDataFactory_ToCreateResult()
+        {
+            var response = new GetProductsAfterSequenceResponseData();
+            mock.Mock<IWarehouseRequestClient>()
+                .Setup(x => x.MakeRequest<GetProductsAfterSequenceResponseData>(It.IsAny<IRestRequest>(), AnyString, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            await testObject.GetProductsAfterSequence(6, new CancellationToken());
+
+            mock.Mock<IWarehouseProductDataFactory>()
+                .Verify(x => x.CreateGetProductsAfterSequenceResult(response));
+        }
+
+        [Fact]
+        public async Task GetProductsAfterSequence_ReturnsResult()
+        {
+            var result = mock.Build<IGetProductsAfterSequenceResult>();
+            mock.Mock<IWarehouseProductDataFactory>()
+                .Setup(x => x.CreateGetProductsAfterSequenceResult(It.IsAny<GetProductsAfterSequenceResponseData>()))
+                .Returns(result);
+
+            var response = await testObject.GetProductsAfterSequence(6, new CancellationToken());
+
+            Assert.Equal(result, response);
         }
     }
 }

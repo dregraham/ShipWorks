@@ -8,6 +8,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -22,15 +23,21 @@ namespace ShipWorks.Products.Warehouse
         private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseProductRequestFactory requestFactory;
         private readonly IWarehouseProductDataFactory dataFactory;
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseProductClient(IWarehouseRequestClient warehouseRequestClient, IWarehouseProductRequestFactory requestFactory, IWarehouseProductDataFactory dataFactory)
+        public WarehouseProductClient(
+            IWarehouseRequestClient warehouseRequestClient, 
+            IWarehouseProductRequestFactory requestFactory, 
+            IWarehouseProductDataFactory dataFactory,
+            IConfigurationData configurationData)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.requestFactory = requestFactory;
             this.dataFactory = dataFactory;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -77,9 +84,15 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Get products from the Hub for this warehouse after the given sequence
         /// </summary>
-        public Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken)
+        public async Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var warehouseId = configurationData.FetchReadOnly().WarehouseID;
+            var request = requestFactory.Create(WarehouseEndpoints.GetProductsAfterSequence(warehouseId, sequence), Method.GET);
+
+            return await warehouseRequestClient
+                .MakeRequest<GetProductsAfterSequenceResponseData>(request, "Get Products After Sequence", cancellationToken)
+                .Map(dataFactory.CreateGetProductsAfterSequenceResult)
+                .ConfigureAwait(true);
         }
 
         /// <summary>

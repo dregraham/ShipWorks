@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Collections;
@@ -560,12 +561,12 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch the newest sequence number of all the products
         /// </summary>
-        public async Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter)
+        public async Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter, CancellationToken cancellationToken)
         {
             var query = new QueryFactory().ProductVariant
                 .Select(ProductVariantFields.HubSequence.Max());
 
-            return await sqlAdapter.FetchScalarAsync<long>(query).ConfigureAwait(false);
+            return await sqlAdapter.FetchScalarAsync<long>(query, cancellationToken).ConfigureAwait(false);
         }
     }
 }
