@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -16,6 +18,7 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using SD.LLBLGen.Pro.QuerySpec;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -26,6 +29,7 @@ using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Products.Import;
 using ShipWorks.Products.Warehouse;
+using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products
 {
@@ -159,6 +163,12 @@ namespace ShipWorks.Products
 
             return true;
         }
+
+        /// <summary>
+        /// Fetch a product variant based on HubProductId
+        /// </summary>
+        public ProductVariantEntity FetchProductVariantEntityByHubProductId(ISqlAdapter sqlAdapter, string hubProductId) =>
+            FetchFirst(ProductVariantFields.HubProductId == hubProductId, sqlAdapter);
 
         /// <summary>
         /// Fetch a product variant based on ProductVariantID
@@ -317,6 +327,29 @@ namespace ShipWorks.Products
         /// </summary>
         public async Task<Result> Save(ProductVariantEntity productVariant)
         {
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+            {
+                try
+                {
+                    var result = await Save(productVariant, sqlAdapter).ConfigureAwait(false);
+
+                    sqlAdapter.Commit();
+
+                    return result;
+                }
+                catch (ORMQueryExecutionException)
+                {
+                    sqlAdapter.Rollback();
+                    throw;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Save the product
+        /// </summary>
+        public async Task<Result> Save(ProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
+        {
             Result validationResult = await productValidator.Validate(productVariant, this).ConfigureAwait(false);
             if (validationResult.Failure)
             {
@@ -330,11 +363,13 @@ namespace ShipWorks.Products
                 (Func<IProductVariantEntity, Task<IProductChangeResult>>) warehouseClient.AddProduct :
                 warehouseClient.ChangeProduct;
 
-            return await hubOperation(productVariant)
+            var result = await hubOperation(productVariant)
                 .Do(x => x.ApplyTo(productVariant))
-                .Bind(_ => SaveProductToDatabase(productVariant))
+                .Bind(_ => SaveProductToDatabase(productVariant, sqlAdapter))
                 .ToResult()
                 .ConfigureAwait(false);
+
+            return result;
         }
 
         /// <summary>
@@ -358,38 +393,26 @@ namespace ShipWorks.Products
         /// <summary>
         /// Save the product to the database
         /// </summary>
-        private async Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant)
+        public async Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant, ISqlAdapter sqlAdapter)
         {
             ProductEntity product = productVariant.Product;
             product.UploadToWarehouseNeeded = false;
 
-            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.CreateTransacted())
+            if (product.IsBundle)
             {
-                try
+                foreach (var bundle in productVariant.IncludedInBundles)
                 {
-                    if (product.IsBundle)
-                    {
-                        foreach (var bundle in productVariant.IncludedInBundles)
-                        {
-                            await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
-                        }
-                    }
-
-                    await DeleteRemovedBundleItems(sqlAdapter, product).ConfigureAwait(true);
-                    await DeleteRemovedVariantAttributeValues(sqlAdapter, productVariant).ConfigureAwait(true);
-
-                    sqlAdapter.SaveEntity(product);
-
-                    await DeleteUnusedAttributes(sqlAdapter).ConfigureAwait(false);
-
-                    sqlAdapter.Commit();
-                }
-                catch (ORMQueryExecutionException)
-                {
-                    sqlAdapter.Rollback();
-                    throw;
+                    await sqlAdapter.DeleteEntityAsync(bundle).ConfigureAwait(true);
                 }
             }
+
+            await DeleteRemovedBundleItems(sqlAdapter, product).ConfigureAwait(true);
+            await DeleteRemovedVariantAttributeValues(sqlAdapter, productVariant).ConfigureAwait(true);
+            await DeleteRemovedVariantAliases(sqlAdapter, productVariant).ConfigureAwait(true);
+
+            sqlAdapter.SaveEntity(product);
+
+            await DeleteUnusedAttributes(sqlAdapter).ConfigureAwait(false);
 
             return Unit.Default;
         }
@@ -402,6 +425,17 @@ namespace ShipWorks.Products
             foreach (ProductVariantAttributeValueEntity removedAttribute in productVariant.AttributeValues.RemovedEntitiesTracker)
             {
                 await sqlAdapter.DeleteEntityAsync(removedAttribute).ConfigureAwait(false);
+            }
+        }
+
+        /// <summary>
+        /// Delete removed variant aliases
+        /// </summary>
+        private async Task DeleteRemovedVariantAliases(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant)
+        {
+            foreach (ProductVariantAliasEntity removed in productVariant.Aliases.RemovedEntitiesTracker)
+            {
+                await sqlAdapter.DeleteEntityAsync(removed).ConfigureAwait(false);
             }
         }
 
@@ -568,7 +602,9 @@ namespace ShipWorks.Products
             var query = new QueryFactory().ProductVariant
                 .Select(ProductVariantFields.HubSequence.Max());
 
-            return await sqlAdapter.FetchScalarAsync<long>(query, cancellationToken).ConfigureAwait(false);
+            var result = await sqlAdapter.FetchScalarAsync<object>(query, cancellationToken).ConfigureAwait(false);
+
+            return (long?) result ?? 0;
         }
 
         /// <summary>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -72,7 +74,12 @@ namespace ShipWorks.Products.Warehouse
         /// <param name="data"></param>
         public IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data)
         {
-            throw new NotImplementedException();
+            var scope = IoC.UnsafeGlobalLifetimeScope;
+            IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
+            IWarehouseProductBundleService bundleService = scope.Resolve<IWarehouseProductBundleService>();
+            Func <WarehouseProduct, IHubProductUpdater> createHubProductUpdater = scope.Resolve<Func<WarehouseProduct, IHubProductUpdater>>();
+
+            return new GetProductsAfterSequenceResult(data, productCatalog, bundleService, createHubProductUpdater);
         }
     }
 }

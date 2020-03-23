@@ -92,7 +92,7 @@ namespace ShipWorks.Products.Warehouse
             return await warehouseRequestClient
                 .MakeRequest<GetProductsAfterSequenceResponseData>(request, "Get Products After Sequence", cancellationToken)
                 .Map(dataFactory.CreateGetProductsAfterSequenceResult)
-                .ConfigureAwait(true);
+                .ConfigureAwait(false);
         }
 
         /// <summary>

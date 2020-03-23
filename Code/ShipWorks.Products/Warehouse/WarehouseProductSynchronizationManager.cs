@@ -58,6 +58,8 @@ namespace ShipWorks.Products.Warehouse
         public void InitializeForCurrentSession() =>
             timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), Never);
 
+        private bool isRunning = false;
+
         /// <summary>
         /// Handle the timer tick event
         /// </summary>
@@ -66,6 +68,13 @@ namespace ShipWorks.Products.Warehouse
             Justification = "This is an event handler for a timer tick")]
         private async void HandleTimerTick(object state)
         {
+            if (isRunning)
+            {
+                return;
+            }
+
+            isRunning = true;
+
             using (cancellationTokenSource = new CancellationTokenSource())
             {
                 try
@@ -81,6 +90,8 @@ namespace ShipWorks.Products.Warehouse
                         timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), TimeSpan.Zero);
                     }
                 }
+
+                isRunning = false;
             }
         }
     }

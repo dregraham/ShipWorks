@@ -324,7 +324,7 @@ namespace ShipWorks.Products
         /// Add a product
         /// </summary>
         private async Task AddProductAction() =>
-            await EditProduct(ProductVariantEntity.Create(string.Empty), "New Product").ConfigureAwait(true);
+            await EditProduct(ProductVariantEntity.Create(string.Empty, DateTime.UtcNow), "New Product").ConfigureAwait(true);
 
         /// <summary>
         /// Edit the given product

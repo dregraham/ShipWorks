@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.Utility;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products.Warehouse
@@ -31,7 +32,9 @@ namespace ShipWorks.Products.Warehouse
             productVariant.EAN = warehouseProduct.Ean;
             productVariant.Product.IsActive = warehouseProduct.Enabled;
             productVariant.Product.IsBundle = warehouseProduct.IsBundle;
-            productVariant.CreatedDate = warehouseProduct.CreatedDate;
+            productVariant.CreatedDate = warehouseProduct.CreatedDate.ToSqlSafeDateTime();
+            
+            productVariant.IsActive = warehouseProduct.Enabled;
         }
     }
 }

@@ -58,7 +58,6 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create result for given response data
         /// </summary>
-        /// <param name="data"></param>
         IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data);
     }
 }

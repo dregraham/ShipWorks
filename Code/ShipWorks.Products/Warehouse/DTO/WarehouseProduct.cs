@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Products.Warehouse.DTO
 {
@@ -128,7 +129,8 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// <summary>
         /// Products that are bundled in this one
         /// </summary>
-        public IEnumerable<BundledProduct> BundledProducts { get; set; }
+        [JsonProperty("bundleItems")]
+        public Dictionary<string, BundledProduct> BundleItems { get; set; }
 
         /// <summary>
         /// Warehouse associations

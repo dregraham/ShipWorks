@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
@@ -56,10 +57,26 @@ namespace ShipWorks.Products
         ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID);
 
         /// <summary>
+        /// Fetch a product variant based on HubProductId
+        /// </summary>
+        ProductVariantEntity FetchProductVariantEntityByHubProductId(ISqlAdapter sqlAdapter, string hubProductId);
+
+        /// <summary>
         /// Save the given product
         /// </summary>
         Task<Result> Save(ProductVariantEntity product);
 
+        /// <summary>
+        /// Save the given product
+        /// </summary>
+        Task<Result> Save(ProductVariantEntity product, ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Save the product to the database
+        /// </summary>
+        Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant, ISqlAdapter sqlAdapter);
+
+        /// <summary>
         /// Get a DataTable of products from the database
         /// </summary>
         Task<DataTable> GetProductDataForExport();

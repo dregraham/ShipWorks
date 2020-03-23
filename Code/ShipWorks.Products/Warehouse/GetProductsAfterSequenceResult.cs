@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
@@ -61,7 +62,7 @@ namespace ShipWorks.Products.Warehouse
             var missingProducts = hubDetails.Where(x => x.Value.ProductVariant == null);
             foreach (var productData in missingProducts)
             {
-                var product = ProductVariantEntity.Create(productData.Value.ProductData.Sku);
+                var product = ProductVariantEntity.Create(productData.Value.ProductData.Sku, productData.Value.ProductData.CreatedDate.ToSqlSafeDateTime());
                 product.HubProductId = productData.Key;
                 productData.Value.ProductVariant = product;
             }
@@ -81,11 +82,15 @@ namespace ShipWorks.Products.Warehouse
                     .ConfigureAwait(false);
             }
 
+            if (productsToSave.Any())
+            {
             await sqlAdapter.SaveEntityCollectionAsync(productsToSave, false, true, cancellationToken).ConfigureAwait(false);
+            }
 
+            bool anyToReturn = hubDetails.Values.Any();
             return (
-                sequence: hubDetails.Values.Select(x => x.ProductData.Sequence).Max(),
-                shouldContinue: hubDetails.Values.Any());
+                sequence: anyToReturn ? hubDetails.Values.Select(x => x.ProductData.Sequence).Max() : 0,
+                shouldContinue: anyToReturn);
         }
     }
 }

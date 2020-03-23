@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -10,15 +11,17 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Create a new default ProductVariant
         /// </summary>
-        public static ProductVariantEntity Create(string sku)
+        public static ProductVariantEntity Create(string sku, DateTime createDateTime)
         {
             ProductVariantEntity productVariant = new ProductVariantEntity()
             {
                 Product = new ProductEntity()
                 {
                     IsActive = true,
-                    IsBundle = false
-                }
+                    IsBundle = false,
+                    CreatedDate = createDateTime
+                },
+                CreatedDate = createDateTime
             };
 
             productVariant.Aliases.Add(new ProductVariantAliasEntity()
