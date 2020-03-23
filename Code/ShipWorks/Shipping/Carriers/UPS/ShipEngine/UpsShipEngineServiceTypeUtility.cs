@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         {
             if (!packageCodeMap.ContainsKey(packageCode))
             {
-                throw new ShippingException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
+                throw new ShippingException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packaging type and try again.");
             }
 
             return packageCodeMap[packageCode];
