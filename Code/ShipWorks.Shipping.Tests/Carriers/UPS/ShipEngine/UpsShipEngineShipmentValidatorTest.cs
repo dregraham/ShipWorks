@@ -97,13 +97,5 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
 
             Assert.True(testObject.ValidateShipment(shipment).Failure);
         }
-
-        [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasAdditionalHandling()
-        {
-            shipment.Ups.Packages[0].AdditionalHandlingEnabled = true;
-
-            Assert.True(testObject.ValidateShipment(shipment).Failure);
-        }
     }
 }

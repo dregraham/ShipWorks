@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
@@ -161,13 +162,21 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// Creates the UPS advanced options node
         /// </summary>
         protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment) =>
-            new AdvancedOptions();
+            new AdvancedOptions()
+            {
+                NonMachinable = shipment.Ups.Packages.Any(p => p.AdditionalHandlingEnabled)
+            } ;
 
         /// <summary>
         /// Get the packaging code for the given adapter
         /// </summary>
-        protected override string GetPackagingCode(IPackageAdapter package) =>
-            UpsShipEngineServiceTypeUtility.GetPackageCode((UpsPackagingType) package.PackagingType);
+        protected override string GetPackagingCode(IPackageAdapter package)
+        {
+            string packagingCode = UpsShipEngineServiceTypeUtility.GetPackageCode((UpsPackagingType) package.PackagingType);
+
+            return string.IsNullOrWhiteSpace(packagingCode) ? null : packagingCode;
+        }
+            
 
         /// <summary>
         /// Creates the UPS customs node

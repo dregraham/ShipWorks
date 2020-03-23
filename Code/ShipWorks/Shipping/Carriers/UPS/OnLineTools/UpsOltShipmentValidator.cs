@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         /// <param name="emailNotify">The email notify.</param>
         private bool HasValidQvnMIOptions(int emailNotify) =>
-            !((emailNotify & (int) FedExEmailNotificationType.Exception) != 0 ||
-                (emailNotify & (int) FedExEmailNotificationType.Deliver) != 0);
+            (emailNotify & (int) UpsEmailNotificationType.Exception) != 0 ||
+                (emailNotify & (int) UpsEmailNotificationType.Deliver) != 0;
     }
 }
