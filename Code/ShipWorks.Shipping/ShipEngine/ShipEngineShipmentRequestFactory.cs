@@ -71,7 +71,16 @@ namespace ShipWorks.Shipping.ShipEngine
                 RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
                 List<IPackageAdapter> packages = GetPackages(shipment);
 
-                request.RateOptions = new RateRequest() { CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) }, PackageTypes = new List<string> { GetPackagingCode(packages.FirstOrDefault()) } };
+                request.RateOptions = new RateRequest() 
+                { 
+                    CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) }
+                };
+
+                string packagingCode = GetPackagingCode(packages.FirstOrDefault());
+                if(packagingCode != null)
+                {
+                    request.RateOptions.PackageTypes = new List<string>() { packagingCode };
+                }
 
                 request.Shipment.AdvancedOptions = CreateAdvancedOptions(shipment);
 

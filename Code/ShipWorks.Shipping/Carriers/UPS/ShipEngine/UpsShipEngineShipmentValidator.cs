@@ -21,11 +21,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("International shipments are not supported with this account.");
             }
 
-            if (shipment.ReturnShipment)
-            {
-                return Result.FromError("Return shipments are not supported with this account.");
-            }
-
             if (shipment.Ups.EmailNotifySender > 0 ||
                 shipment.Ups.EmailNotifyRecipient > 0 ||
                 shipment.Ups.EmailNotifyOther > 0)
@@ -61,11 +56,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             if (shipment.Ups.CommercialPaperlessInvoice)
             {
                 return Result.FromError("Paperless Invoicing is not supported with this account.");
-            }
-
-            if (shipment.Ups.Packages.Any(p => p.AdditionalHandlingEnabled))
-            {
-                return Result.FromError("Additional Handling is not supported with this account.");
             }
 
             if (shipment.Ups.Packages.Any(p => p.VerbalConfirmationEnabled))
