@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore;
 
@@ -11,8 +12,10 @@ namespace ShipWorks.Products.Warehouse
     /// </summary>
     public class WarehouseProductSynchronizationManager : IInitializeForCurrentUISession
     {
+        public const string ProductSyncIntervalBasePath = @"Software\Interapptive\ShipWorks\Options";
         private static readonly TimeSpan Never = TimeSpan.FromMilliseconds(-1);
         private readonly Timer timer;
+        private readonly int productSyncIntervalValue;
         private readonly ILog log;
         private readonly IWarehouseProductSynchronizer productSynchronizer;
         private CancellationTokenSource cancellationTokenSource;
@@ -28,6 +31,7 @@ namespace ShipWorks.Products.Warehouse
             log = createLog(GetType());
             this.productSynchronizer = productSynchronizer;
             timer = new Timer(HandleTimerTick);
+            productSyncIntervalValue = new RegistryHelper(ProductSyncIntervalBasePath).GetValue("ProductSyncIntervalValue", 10);
         }
 
         /// <summary>
@@ -52,13 +56,13 @@ namespace ShipWorks.Products.Warehouse
         /// Initialize the synchronizer for this session
         /// </summary>
         public void InitializeForCurrentSession() =>
-            timer.Change(TimeSpan.FromMinutes(10), Never);
+            timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), Never);
 
         /// <summary>
         /// Handle the timer tick event
         /// </summary>
         /// <param name="state"></param>
-        [SuppressMessage("Major Bug", "S3168:\"async\" methods should not return \"void\"", 
+        [SuppressMessage("Major Bug", "S3168:\"async\" methods should not return \"void\"",
             Justification = "This is an event handler for a timer tick")]
         private async void HandleTimerTick(object state)
         {
@@ -74,7 +78,7 @@ namespace ShipWorks.Products.Warehouse
 
                     if (!cancellationTokenSource.IsCancellationRequested || !isDisposed)
                     {
-                        timer.Change(TimeSpan.FromMinutes(10), TimeSpan.Zero);
+                        timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), TimeSpan.Zero);
                     }
                 }
             }

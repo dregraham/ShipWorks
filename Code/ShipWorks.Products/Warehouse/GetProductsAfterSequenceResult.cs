@@ -49,7 +49,7 @@ namespace ShipWorks.Products.Warehouse
                 hubDetails[product.HubProductId.Value].ProductVariant = product;
             }
 
-            var unknownProductSkus = hubDetails.Values.Where(x => x.ProductVariant == null).Select(x => x.ProductData.Sku);
+            var unknownProductSkus = hubDetails.Values.Where(x => x.ProductVariant == null).Select(x => x.ProductData.Sku).ToArray();
             var existingUnknownProducts = await productCatalog.FetchProductVariantEntities(sqlAdapter, unknownProductSkus, true).ConfigureAwait(false);
             foreach (var product in existingUnknownProducts)
             {
@@ -71,8 +71,8 @@ namespace ShipWorks.Products.Warehouse
                 productData.UpdateProductVariant();
             }
 
-            var productsToSave = hubDetails.Values.Select(x => x.ProductVariant.Product).ToEntityCollection();
-            await sqlAdapter.SaveEntityCollectionAsync(productsToSave).ConfigureAwait(false);
+            var productsToSave = hubDetails.Values.Select(x => x.ProductVariant).ToEntityCollection();
+            await sqlAdapter.SaveEntityCollectionAsync(productsToSave, true, true, cancellationToken).ConfigureAwait(false);
 
             foreach (var productData in hubDetails.Values)
             {
@@ -81,7 +81,7 @@ namespace ShipWorks.Products.Warehouse
                     .ConfigureAwait(false);
             }
 
-            await sqlAdapter.SaveEntityCollectionAsync(productsToSave).ConfigureAwait(false);
+            await sqlAdapter.SaveEntityCollectionAsync(productsToSave, false, true, cancellationToken).ConfigureAwait(false);
 
             return (
                 sequence: hubDetails.Values.Select(x => x.ProductData.Sequence).Max(),
