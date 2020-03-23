@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Autofac;
 using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing;
@@ -79,6 +82,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override ReturnsControlBase CreateReturnsControl()
         {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                bool onlyOneBalanceAccounts = scope.Resolve<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
+                    .AccountsReadOnly.All(a => a.ShipEngineCarrierId != null);
+
+                if (onlyOneBalanceAccounts)
+                {
+                    return base.CreateReturnsControl();
+                }
+            }
+
             return new UpsOltReturnsControl();
         }
 
