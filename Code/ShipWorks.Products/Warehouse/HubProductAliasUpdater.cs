@@ -29,7 +29,7 @@ namespace ShipWorks.Products.Warehouse
 
             foreach (var hubAlias in warehouseProduct.Aliases.Values)
             {
-                var alias = productVariant.Aliases.First(x => x.Sku == hubAlias.Sku);
+                var alias = productVariant.Aliases.FirstOrDefault(x => x.Sku == hubAlias.Sku);
                 if (alias == null)
                 {
                     alias = productVariant.Aliases.AddNew();

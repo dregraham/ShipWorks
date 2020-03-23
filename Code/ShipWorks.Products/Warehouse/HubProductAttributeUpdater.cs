@@ -28,7 +28,7 @@ namespace ShipWorks.Products.Warehouse
 
             foreach (var hubAttribute in warehouseProduct.Attributes)
             {
-                var attributeValue = productVariant.AttributeValues.First(x => x.ProductAttribute.AttributeName == hubAttribute.Name);
+                var attributeValue = productVariant.AttributeValues.FirstOrDefault(x => x.ProductAttribute.AttributeName == hubAttribute.Name);
                 if (attributeValue == null)
                 {
                     var attribute = productVariant.Product.Attributes.FirstOrDefault(x => x.AttributeName == hubAttribute.Name) ??
