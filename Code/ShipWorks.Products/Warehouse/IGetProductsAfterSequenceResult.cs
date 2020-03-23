@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using ShipWorks.Data.Connection;
 
-namespace ShipWorks.Products.Warehouse.DTO
+namespace ShipWorks.Products.Warehouse
 {
     /// <summary>
     /// Get products from the Hub after newest sequence in the db
@@ -17,6 +14,6 @@ namespace ShipWorks.Products.Warehouse.DTO
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns>True if more products to get, false otherwise</returns>
-        Task<(long sequence, bool shouldContinue)> Apply(CancellationToken cancellationToken);
+        Task<(long sequence, bool shouldContinue)> Apply(ISqlAdapter sqlAdapter, CancellationToken cancellationToken);
     }
 }

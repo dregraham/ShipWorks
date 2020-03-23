@@ -8,11 +8,9 @@ using System.Linq;
 using System.Reactive;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -48,10 +46,10 @@ namespace ShipWorks.Products
         /// Constructor
         /// </summary>
         public ProductCatalog(
-            ISqlSession sqlSession, 
-            Func<Type, ILog> logFactory, 
-            IMessageHelper messageHelper, 
-            ISqlAdapterFactory sqlAdapterFactory, 
+            ISqlSession sqlSession,
+            Func<Type, ILog> logFactory,
+            IMessageHelper messageHelper,
+            ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseProductClient warehouseClient,
             IProductValidator productValidator)
         {
@@ -197,7 +195,16 @@ namespace ShipWorks.Products
         /// <remarks>
         /// This will not populate the individual products bundles if it is a bundle product
         /// </remarks>
-        public async Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus)
+        public Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus) =>
+            FetchProductVariantEntities(sqlAdapter, skus, false);
+
+        /// <summary>
+        /// Fetch product variants based on a collection of skus
+        /// </summary>
+        /// <remarks>
+        /// This will not populate the individual products bundles if it is a bundle product
+        /// </remarks>
+        public async Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus, bool defaultSkuOnly)
         {
             if (skus.None())
             {
@@ -210,15 +217,16 @@ namespace ShipWorks.Products
                 .InnerJoin(factory.ProductVariantAlias)
                 .On(ProductVariantFields.ProductVariantID == ProductVariantAliasFields.ProductVariantID);
 
-            EntityQuery<ProductVariantEntity> query = factory.ProductVariant.From(from).Where(ProductVariantAliasFields.Sku.In(skus));
+            EntityQuery<ProductVariantEntity> query = factory.ProductVariant
+                .From(from)
+                .Where(ProductVariantAliasFields.Sku.In(skus));
 
-            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
+            if (defaultSkuOnly)
             {
-                query = query.WithPath(path);
+                query = query.AndWhere(ProductVariantAliasFields.IsDefault == true);
             }
 
-            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-            return queryResults.OfType<ProductVariantEntity>().Select(v => v);
+            return await ExecuteProductVariantListQuery(sqlAdapter, query).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -228,7 +236,7 @@ namespace ShipWorks.Products
         {
             if (variant?.Product?.IsNew ?? true)
             {
-                return new IProductAttributeEntity[0];
+                return Enumerable.Empty<IProductAttributeEntity>();
             }
 
             QueryFactory factory = new QueryFactory();
@@ -490,13 +498,7 @@ namespace ShipWorks.Products
                 .AndWhere(ProductFields.IsBundle == isBundle)
                 .Limit(pageSize);
 
-            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
-            {
-                query = query.WithPath(path);
-            }
-
-            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
-            return queryResults.OfType<ProductVariantEntity>();
+            return await ExecuteProductVariantListQuery(sqlAdapter, query).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -567,6 +569,32 @@ namespace ShipWorks.Products
                 .Select(ProductVariantFields.HubSequence.Max());
 
             return await sqlAdapter.FetchScalarAsync<long>(query, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get products for the list of Hub product ids
+        /// </summary>
+        public async Task<IEnumerable<ProductVariantEntity>> GetProductsByHubIds(ISqlAdapter sqlAdapter, IEnumerable<Guid> guid)
+        {
+            var query = new QueryFactory()
+                .ProductVariant
+                .Where(ProductVariantFields.HubProductId.In(guid));
+
+            return await ExecuteProductVariantListQuery(sqlAdapter, query).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Execute a query for a list of product variants with the full prefetch path
+        /// </summary>
+        private async Task<IEnumerable<ProductVariantEntity>> ExecuteProductVariantListQuery(ISqlAdapter sqlAdapter, EntityQuery<ProductVariantEntity> query)
+        {
+            foreach (IPrefetchPathElement2 path in ProductPrefetchPath.Value)
+            {
+                query = query.WithPath(path);
+            }
+
+            IEntityCollection2 queryResults = await sqlAdapter.FetchQueryAsync(query).ConfigureAwait(false);
+            return queryResults.OfType<ProductVariantEntity>();
         }
     }
 }

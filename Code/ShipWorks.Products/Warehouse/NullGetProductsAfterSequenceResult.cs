@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using ShipWorks.Products.Warehouse.DTO;
+using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Products.Warehouse
 {
@@ -24,9 +24,9 @@ namespace ShipWorks.Products.Warehouse
 
         /// <summary>
         /// Get products from the Hub after newest sequence in the db
-        /// </summary>=
+        /// </summary>
         /// <returns>True if more products to get, false otherwise</returns>
-        public Task<(long sequence, bool shouldContinue)> Apply(CancellationToken cancellationToken) =>
+        public Task<(long sequence, bool shouldContinue)> Apply(ISqlAdapter sqlAdapter, CancellationToken cancellationToken) =>
             Task.FromResult((0L, false));
     }
 }

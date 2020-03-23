@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -34,6 +34,16 @@ namespace ShipWorks.Products
         /// Fetch product variants based on a collection of skus
         /// </summary>
         Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus);
+
+        /// <summary>
+        /// Fetch product variants based on a collection of skus
+        /// </summary>
+        Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus, bool defaultSkuOnly);
+
+        /// <summary>
+        /// Get products for the list of Hub product ids
+        /// </summary>
+        Task<IEnumerable<ProductVariantEntity>> GetProductsByHubIds(ISqlAdapter sqlAdapter, IEnumerable<Guid> guid);
 
         /// <summary>
         /// Fetch a products siblings
