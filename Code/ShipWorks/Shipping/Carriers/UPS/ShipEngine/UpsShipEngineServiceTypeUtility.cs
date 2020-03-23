@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 { UpsPackagingType.BoxExpress, "ups_express_box" },
                 { UpsPackagingType.BoxExpressSmall, "ups_express_box_small" },
                 { UpsPackagingType.BoxExpressMedium, "ups_express_box_medium" },
-                { UpsPackagingType.BoxExpressLarge, "ups_express_box_large" },
+                { UpsPackagingType.BoxExpressLarge, "ups__express_box_large" },
                 { UpsPackagingType.Flats, "mi_bpm_flat" },
                 { UpsPackagingType.BPMParcels, "mi_bpm_parcel" },
                 { UpsPackagingType.FirstClassMail, "mi_first_class" },
