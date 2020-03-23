@@ -1,11 +1,5 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal;
-using System;
-using ShipWorks.Shipping.Carriers.UPS;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -15,32 +9,24 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     [Component(RegistrationType.SpecificService, Service = typeof(IOneBalanceSettingsControlHost))]
     public partial class OneBalanceSettingsControlHost : UserControl, IOneBalanceSettingsControlHost
     {
-        private OneBalanceSettingsControlViewModel settingsViewModel;
-        private readonly IUspsAccountManager accountManager;
-        private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
-        private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel;
+        IOneBalanceSettingsControlViewModel settingsViewModel;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public OneBalanceSettingsControlHost(IUspsAccountManager accountManager,
-            Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, 
-            IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
+        public OneBalanceSettingsControlHost(IOneBalanceSettingsControlViewModel settingsViewModel)
         {
             InitializeComponent();
-            this.accountManager = accountManager;
-            this.addMoneyDialogFactory = addMoneyDialogFactory;
-            this.bannerViewModel = bannerViewModel;
+            this.settingsViewModel = settingsViewModel;
+            this.settingsControl.DataContext = this.settingsViewModel;
         }
 
         /// <summary>
-        /// Initializes the hosted control
+        /// Save the settings view model
         /// </summary>
-        public void Initialize()
+        public void SaveSettings()
         {
-            settingsViewModel = new OneBalanceSettingsControlViewModel(accountManager, addMoneyDialogFactory, bannerViewModel);
-
-            settingsControl.DataContext = settingsViewModel;
+            settingsViewModel.SaveAutoFundSettings();
         }
     }
 }

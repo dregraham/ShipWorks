@@ -1,8 +1,14 @@
-﻿using Autofac;
+﻿using System;
+using System.Collections.Concurrent;
+using Autofac;
 using Autofac.Core;
+using Interapptive.Shared.Metrics;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating;
+using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -14,13 +20,6 @@ using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Shipping.Services.Builders;
-using System;
-using System.Collections.Concurrent;
-using Interapptive.Shared.Metrics;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating;
-using ShipWorks.Shipping.Carriers.Ups.LocalRating.Validation;
-using ShipWorks.Shipping.Carriers.UPS.BestRate;
-using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.UI.Carriers.Ups
 {
@@ -36,14 +35,10 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
         {
             base.Load(builder);
 
-            builder.RegisterType<UpsSetupWizard>()
-                .Keyed<IShipmentTypeSetupWizard>(ShipmentTypeCode.UpsOnLineTools)
-                .AsSelf();
-
-           builder.RegisterType<UpsShipmentServicesBuilder>()
-                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
-                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
-                .SingleInstance();
+            builder.RegisterType<UpsShipmentServicesBuilder>()
+                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
+                 .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
+                 .SingleInstance();
 
             builder.RegisterType<UpsServiceManagerFactory>()
                 .AsImplementedInterfaces();
@@ -77,7 +72,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
             builder.RegisterType<ConcurrentDictionary<long, DateTime>>()
                 .UsingConstructor()
                 .AsSelf();
-			
+
             builder.RegisterType<UpsServiceGateway>()
                 .AsImplementedInterfaces();
 
@@ -159,7 +154,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .WithParameter(new ResolvedParameter(
                     (parameters, _) => parameters.ParameterType == typeof(UpsShipmentType),
                     (_, context) => context.ResolveKeyed<ShipmentType>(shipmentType)));
-            
+
             builder.RegisterType<UpsBestRateRatingService>()
                 .Keyed<IUpsBestRateRatingService>(shipmentType)
                 .WithParameter(new ResolvedParameter(

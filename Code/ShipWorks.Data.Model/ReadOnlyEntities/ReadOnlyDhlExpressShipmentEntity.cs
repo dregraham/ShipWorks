@@ -46,6 +46,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Contents = source.Contents;
             NonDelivery = source.NonDelivery;
             ShipEngineLabelID = source.ShipEngineLabelID;
+            IntegratorTransactionID = source.IntegratorTransactionID;
+            StampsTransactionID = source.StampsTransactionID;
+            ResidentialDelivery = source.ResidentialDelivery;
             
             Shipment = (IShipmentEntity) source.Shipment?.AsReadOnly(objectMap);
             
@@ -115,8 +118,26 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// </summary>
         /// <remarks>Mapped on table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String ShipEngineLabelID { get; }
+        /// <summary> The IntegratorTransactionID property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."IntegratorTransactionID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> IntegratorTransactionID { get; }
+        /// <summary> The StampsTransactionID property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."StampsTransactionID"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> StampsTransactionID { get; }
+        /// <summary> The ResidentialDelivery property of the Entity DhlExpressShipment<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressShipment"."ResidentialDelivery"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Boolean ResidentialDelivery { get; }
         
         public IShipmentEntity Shipment { get; }
         

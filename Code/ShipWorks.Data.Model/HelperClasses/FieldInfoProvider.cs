@@ -892,7 +892,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "DhlExpressAccountID", typeof(System.Int64), true, false, true, false,  (int)DhlExpressAccountFieldIndex.DhlExpressAccountID, 0, 0, 19);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)DhlExpressAccountFieldIndex.RowVersion, 2147483647, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "AccountNumber", typeof(System.Int64), false, false, false, false,  (int)DhlExpressAccountFieldIndex.AccountNumber, 0, 0, 19);
-			this.AddElementFieldInfo("DhlExpressAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Description, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.FirstName, 30, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.MiddleName, 30, 0, 0);
@@ -905,6 +905,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Phone, 15, 0, 0);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "UspsAccountId", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressAccountFieldIndex.UspsAccountId, 0, 0, 19);
 		}
 		/// <summary>Inits DhlExpressPackageEntity's FieldInfo objects</summary>
 		private void InitDhlExpressPackageEntityInfos()
@@ -935,6 +936,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "SaturdayDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.SaturdayDelivery, 0, 0, 0);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "Contents", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressProfileEntity", "NonDelivery", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.NonDelivery, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressProfileEntity", "ResidentialDelivery", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)DhlExpressProfileFieldIndex.ResidentialDelivery, 0, 0, 0);
 		}
 		/// <summary>Inits DhlExpressShipmentEntity's FieldInfo objects</summary>
 		private void InitDhlExpressShipmentEntityInfos()
@@ -949,7 +951,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "Contents", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.Contents, 0, 0, 10);
 			this.AddElementFieldInfo("DhlExpressShipmentEntity", "NonDelivery", typeof(System.Int32), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.NonDelivery, 0, 0, 10);
-			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ShipEngineLabelID", typeof(System.String), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, 50, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "IntegratorTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.IntegratorTransactionID, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "StampsTransactionID", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlExpressShipmentFieldIndex.StampsTransactionID, 0, 0, 0);
+			this.AddElementFieldInfo("DhlExpressShipmentEntity", "ResidentialDelivery", typeof(System.Boolean), false, false, false, false,  (int)DhlExpressShipmentFieldIndex.ResidentialDelivery, 0, 0, 0);
 		}
 		/// <summary>Inits DimensionsProfileEntity's FieldInfo objects</summary>
 		private void InitDimensionsProfileEntityInfos()

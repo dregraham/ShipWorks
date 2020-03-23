@@ -2420,6 +2420,8 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Phone. </summary>
 		Phone,
+		///<summary>UspsAccountId. </summary>
+		UspsAccountId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2472,6 +2474,8 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2498,6 +2502,12 @@ namespace ShipWorks.Data.Model
 		NonDelivery,
 		///<summary>ShipEngineLabelID. </summary>
 		ShipEngineLabelID,
+		///<summary>IntegratorTransactionID. </summary>
+		IntegratorTransactionID,
+		///<summary>StampsTransactionID. </summary>
+		StampsTransactionID,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}

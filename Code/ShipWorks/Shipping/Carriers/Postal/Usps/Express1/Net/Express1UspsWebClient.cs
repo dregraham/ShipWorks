@@ -19,6 +19,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -544,9 +545,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Process the given shipment, downloading label images and tracking information
         /// </summary>
-        public Task<TelemetricResult<UspsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
+        public Task<TelemetricResult<StampsLabelResponse>> ProcessShipment(ShipmentEntity shipment)
         {
-            TelemetricResult<UspsLabelResponse> telemetricLabelResponse = null;
+            TelemetricResult<StampsLabelResponse> telemetricLabelResponse = null;
 
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
@@ -610,9 +611,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
         [NDependIgnoreLongMethod]
-        private TelemetricResult<UspsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private TelemetricResult<StampsLabelResponse> ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            TelemetricResult<UspsLabelResponse> telemetricResult = new TelemetricResult<UspsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
+            TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
 
             Guid uspsGuid = Guid.Empty;
             string tracking = string.Empty;
@@ -760,14 +761,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?) thermalType;
 
-            UspsLabelResponse uspsLabelResponse = new UspsLabelResponse
+            StampsLabelResponse stampsLabelResponse = new StampsLabelResponse
             {
                 Shipment = shipment,
                 ImageData = imageData,
                 LabelUrl = labelUrl
             };
 
-            telemetricResult.SetValue(uspsLabelResponse);
+            telemetricResult.SetValue(stampsLabelResponse);
             return telemetricResult;
         }
 
@@ -1315,6 +1316,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         public TrackingResult TrackShipment(ShipmentEntity shipment)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The Express1 webclient should never need to add a DHL account
+        /// This is only here for the interface
+        /// </summary>
+        public string AddDhlExpress(IUspsAccountEntity account)
+        {
+            throw new NotImplementedException("DHL Express is not supported by Express1.");
+        }
+
+        /// <summary>
+        /// Set automatic funding settings
+        /// This is only here for the interface
+        /// </summary>
+        public string SetAutoBuy(IUspsAccountEntity account, AutoBuySettings autoBuySettings)
+        {
+            throw new NotImplementedException("Automatic funding is not supported by Express1.");
         }
     }
 }

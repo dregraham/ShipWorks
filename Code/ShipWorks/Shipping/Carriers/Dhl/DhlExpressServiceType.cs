@@ -16,6 +16,10 @@ namespace ShipWorks.Shipping.Carriers.Dhl
 
         [Description("Express Envelope")]
         [ApiValue("express_envelope")]
-        ExpressEnvelope = 1
+        ExpressEnvelope = 1,
+
+        [Description("Express Worldwide Documents")]
+        [ApiValue("express_worldwide_documents")]
+        ExpressWorldWideDocuments = 2
     }
 }
