@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 { UpsPackagingType.Custom, "" },
                 { UpsPackagingType.Letter, "ups_letter" },
                 { UpsPackagingType.Box10Kg, "ups_10_kg_box" },
-                { UpsPackagingType.Box25Kg, "ups_25_kg_box	" },
+                { UpsPackagingType.Box25Kg, "ups_25_kg_box" },
                 { UpsPackagingType.Tube, "ups_tube" },
                 { UpsPackagingType.Pak, "ups_express_pak" },
                 { UpsPackagingType.BoxExpress, "ups_express_box" },
