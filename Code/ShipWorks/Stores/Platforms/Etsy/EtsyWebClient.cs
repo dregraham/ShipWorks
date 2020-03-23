@@ -298,9 +298,9 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <summary>
         /// Uploads the shipment details.
         /// </summary>
-        public void UploadShipmentDetails(long etsyShopID, long orderNumber, string trackingNumber, string etsyCarrierName, bool resetShippingStatusAndRetryOnFailure)
+        public void UploadShipmentDetails(long etsyShopId, long orderNumber, string trackingNumber, string etsyCarrierName, bool resetShippingStatusAndRetryOnFailure)
         {
-            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetSubmitTrackingUrl(etsyShopID, orderNumber));
+            OAuth oAuth = GetNewOAuth(EtsyEndpoints.GetSubmitTrackingUrl(etsyShopId, orderNumber));
 
             oAuth.OtherParameters.Add("tracking_code", trackingNumber);
             oAuth.OtherParameters.Add("carrier_name", etsyCarrierName);
@@ -313,60 +313,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             }
             catch (EtsyException webException)
             {
-                string errorDetail;
-
-                if (TryGetEmailAlreadySentMessage(webException, out errorDetail))
-                {
-                    // Updating tracking information can fail if the receipt is already marked as shipped.  If this happens,
-                    // we'll try to reset the shipped status and try updating the tracking information again.
-                    log.Warn(string.Format("Etsy order {0} already marked as shipped.", orderNumber), webException);
-
-                    if (resetShippingStatusAndRetryOnFailure)
-                    {
-                        UploadStatusDetails(orderNumber, null, null, false);
-                        UploadShipmentDetails(etsyShopID, orderNumber, trackingNumber, etsyCarrierName, false);
-                    }
-                    else
-                    {
-                        throw new EtsyException(String.Format("Error uploading tracking information: {0}", errorDetail));
-                    }
-                }
-                else
-                {
-                    throw;
-                }
+                throw new EtsyException($"Error uploading tracking information.", webException);
             }
-        }
-
-        /// <summary>
-        /// Try to get an email already sent message from the exception
-        /// </summary>
-        /// <remarks>This method is mainly meant to remove the logic that figures out what type of exception
-        /// we're dealing with, if it's the right error code, etc. from what we actually want to do
-        /// with that information.</remarks>
-        private static bool TryGetEmailAlreadySentMessage(Exception exception, out string errorDetail)
-        {
-            errorDetail = null;
-
-            if (exception == null)
-            {
-                return false;
-            }
-
-            WebException webException = exception.InnerException as WebException;
-            if (webException == null)
-            {
-                return false;
-            }
-
-            HttpWebResponse response = webException.Response as HttpWebResponse;
-            if (response == null)
-            {
-                return false;
-            }
-
-            errorDetail = response.GetResponseHeader("X-Error-Detail");
-            return response.StatusCode == HttpStatusCode.BadRequest && errorDetail.Contains("email has already been sent");
         }
 
         /// <summary>
