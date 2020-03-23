@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:s="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shared"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Settings.OneBalance"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -23,7 +24,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Enable your free UPS from ShipWorks account today and start saving money on labels. Setting up your account is easy and only takes about a minute." TextWrapping="Wrap"/>
-            <Button HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Command="{Binding ShowSetupDialogCommand}">
+            <Button HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Command="{Binding ShowSetupWizardCommand}">
+                <Button.CommandParameter>
+                    <s:ShipmentTypeCode>UpsOnLineTools</s:ShipmentTypeCode>
+                </Button.CommandParameter>
                 <TextBlock Text="Enable UPS" Margin="5,2,5,2"/>
             </Button>
         </Grid>

@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Label data that has been downloaded from USPS
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class UspsDownloadedLabelData : IDownloadedLabelData
+    public class StampsDownloadedLabelData : IDownloadedLabelData
     {
         private readonly ShipmentEntity shipment;
         private readonly byte[][] imageData;
@@ -21,12 +21,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsDownloadedLabelData(UspsLabelResponse uspsLabelResponse, IDataResourceManager dataResourceManager)
+        public StampsDownloadedLabelData(StampsLabelResponse stampsLabelResponse, IDataResourceManager dataResourceManager)
         {
             this.dataResourceManager = dataResourceManager;
-            shipment = uspsLabelResponse.Shipment;
-            imageData = uspsLabelResponse.ImageData;
-            labelUrl = uspsLabelResponse.LabelUrl;
+            shipment = stampsLabelResponse.Shipment;
+            imageData = stampsLabelResponse.ImageData;
+            labelUrl = stampsLabelResponse.LabelUrl;
         }
 
         /// <summary>

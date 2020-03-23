@@ -134,25 +134,73 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void TrackShipment_DelegatesTrackingToWebClient()
+        public void TrackShipment_CallsTrackWithCarrierAndTrackingNumber_WhenShipEngineLabelIDIsNull()
+        {
+            var shipment = new ShipmentEntity
+            {
+                TrackingNumber = "foo",
+                DhlExpress = new DhlExpressShipmentEntity
+                {
+                    ShipEngineLabelID = null
+                }
+            };
+
+            var webClient = mock.Mock<IShipEngineWebClient>();
+
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            testObject.TrackShipment(shipment);
+
+            webClient.Verify(x => x.Track("dhl_express", "foo", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void TrackShipment_CallsTrackWithShipEngineLabelID_WhenShipEngineLabelIDExists()
+        {
+            var shipment = new ShipmentEntity
+            {
+                TrackingNumber = "foo",
+                DhlExpress = new DhlExpressShipmentEntity
+                {
+                    ShipEngineLabelID = "bar"
+                }
+            };
+
+            var webClient = mock.Mock<IShipEngineWebClient>();
+
+            var testObject = mock.Create<DhlExpressShipmentType>();
+
+            testObject.TrackShipment(shipment);
+
+            webClient.Verify(x => x.Track("bar", ApiLogSource.DHLExpress), Times.Once);
+        }
+
+        [Fact]
+        public void TrackShipment_ReturnsCannedResult_WhenExceptionIsThrown()
         {
             var testObject = mock.Create<DhlExpressShipmentType>();
 
             var shipment = new ShipmentEntity()
             {
+                TrackingNumber = "test",
                 DhlExpress = new DhlExpressShipmentEntity()
                 {
-                    ShipEngineLabelID = "test"
+                    ShipEngineLabelID = "foo"
                 }
             };
+            
+            mock.Mock<IShipEngineWebClient>()
+                .Setup(c => c.Track("foo", ApiLogSource.DHLExpress))
+                .Throws(new Exception());
 
-            testObject.TrackShipment(shipment);
+            var testResult = testObject.TrackShipment(shipment);
+            string expectedSummary = "<a href='http://www.dhl.com/en/express/tracking.html?AWB=test&brand=DHL' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
 
-            mock.Mock<IShipEngineWebClient>().Verify(c => c.Track("test", ApiLogSource.DHLExpress), Times.Once);
+            Assert.Equal(expectedSummary, testResult.Summary);
         }
 
         [Fact]
-        public void TrackShipment_DelegatesTrackingInformationFromWebClient_ToTrackingResultFactory()
+        public void Track_DelegatesTrackingInformationFromWebClient_ToTrackingResultFactory()
         {
             var testObject = mock.Create<DhlExpressShipmentType>();
 
@@ -176,7 +224,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         }
 
         [Fact]
-        public void TrackShipment_ReturnsTrackingResultCreatedByFactory()
+        public void Track_ReturnsTrackingResultCreatedByFactory()
         {
             var testObject = mock.Create<DhlExpressShipmentType>();
 
@@ -197,30 +245,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
             var testResult = testObject.TrackShipment(shipment);
 
             Assert.Equal(trackingResult, testResult);
-        }
-
-        [Fact]
-        public void TrackShipment_ReturnsCannedResult_WhenExceptionIsThrown()
-        {
-            var testObject = mock.Create<DhlExpressShipmentType>();
-
-            var shipment = new ShipmentEntity()
-            {
-                TrackingNumber = "test",
-                DhlExpress = new DhlExpressShipmentEntity()
-                {
-                    ShipEngineLabelID = "foo"
-                }
-            };
-            
-            mock.Mock<IShipEngineTrackingResultFactory>()
-                .Setup(c => c.Create(It.IsAny<TrackingInformation>()))
-                .Throws(new Exception());
-
-            var testResult = testObject.TrackShipment(shipment);
-            string expectedSummary = "<a href='http://www.dhl.com/en/express/tracking.html?AWB=test&brand=DHL' style='color:blue; background-color:white'>Click here to view tracking information online</a>";
-
-            Assert.Equal(expectedSummary, testResult.Summary);
         }
 
         [Theory]

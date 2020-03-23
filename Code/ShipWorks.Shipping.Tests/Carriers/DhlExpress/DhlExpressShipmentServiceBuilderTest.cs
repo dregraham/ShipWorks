@@ -82,14 +82,15 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Theory]
         [InlineData(DhlExpressServiceType.ExpressWorldWide)]
         [InlineData(DhlExpressServiceType.ExpressEnvelope)]
+        [InlineData(DhlExpressServiceType.ExpressWorldWideDocuments)]
         public void BuildServiceTypeDictionary_DoesNotContainDuplicates_WhenMultipleShipmentsHaveTheSameService(DhlExpressServiceType serviceType)
         {
             var results = testObject.BuildServiceTypeDictionary(new[] {
                 CreateShipmentWithService(serviceType),
-                CreateShipmentWithService(serviceType)
+                CreateShipmentWithService(serviceType),
             });
 
-            Assert.Equal(2, results.Count);            
+            Assert.Equal(3, results.Count);            
         }
 
         private ShipmentEntity CreateShipmentWithService(DhlExpressServiceType service) =>

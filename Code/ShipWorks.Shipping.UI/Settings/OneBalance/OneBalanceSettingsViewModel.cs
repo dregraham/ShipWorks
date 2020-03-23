@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
+using Autofac.Features.Indexed;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -17,48 +20,50 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     /// <summary>
     /// View model for the OneBalanceSettingsControl
     /// </summary>
-    public class OneBalanceSettingsControlViewModel : ViewModelBase
+    [Component]
+    public class OneBalanceSettingsControlViewModel : ViewModelBase, IOneBalanceSettingsControlViewModel
     {
-        private IPostageWebClient webClient;
-        private readonly IUspsAccountManager accountManager;
+        private IPostageWebClient postageWebClient;
+        private readonly IUspsAccountManager uspsAccountManager;
         private UpsAccountEntity upsAccount;
         private readonly Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory;
 
         private decimal balance;
-        private string message;
-        private bool showMessage = false;
+        private string getBalanceError;
+        private bool showGetBalanceError = false;
         private bool showBanner;
-        private bool loading = true;
+        private bool loading = false;
         private bool addMoneyEnabled = true;
-        private readonly IOneBalanceEnableUpsBannerWpfViewModel bannerContext;
 
-        /// <summary>
-        /// Initialize the control to display information for the given account
-        /// </summary>
-        public OneBalanceSettingsControlViewModel(IUspsAccountManager accountManager, Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory, IOneBalanceEnableUpsBannerWpfViewModel bannerViewModel)
+        public OneBalanceSettingsControlViewModel(IUspsAccountManager uspsAccountManager,
+            Func<IPostageWebClient, IOneBalanceAddMoneyDialog> addMoneyDialogFactory,
+            IIndex<ShipmentTypeCode, IOneBalanceShowSetupWizardViewModel> setupDialogLookup,
+            Func<IUspsAccountEntity, IOneBalanceAutoFundControlViewModel> autoFundViewModelFactory)
         {
-            this.accountManager = accountManager;
-            SetupWebClient();
+            this.uspsAccountManager = uspsAccountManager;
+            SetupWebClients();
             upsAccount = GetUpsAccount();
 
             this.addMoneyDialogFactory = addMoneyDialogFactory;
             ShowBanner = upsAccount == null;
 
-            bannerContext = bannerViewModel;
+            BannerContext = setupDialogLookup[ShipmentTypeCode.UpsOnLineTools];
+            CarrierAccountsContext = setupDialogLookup[ShipmentTypeCode.DhlExpress];
+            AutoFundContext = autoFundViewModelFactory(GetOneBalanceAccount());
 
-            bannerContext.SetupComplete += OnOneBalanceSetupComplete;
+            BannerContext.SetupComplete += OnOneBalanceSetupComplete;
+            CarrierAccountsContext.SetupComplete += OnOneBalanceSetupComplete;
 
-            GetBalanceCommand = new RelayCommand(GetAccountBalance);
+            GetInitialValuesCommand = new RelayCommand(GetInitialValues);
             ShowAddMoneyDialogCommand = new RelayCommand(ShowAddMoneyDialog);
         }
 
         /// <summary>
         /// The current balance of the one balance account
         /// </summary>
-        /// 
         [Obfuscation(Exclude = true)]
-        public decimal Balance 
-        { 
+        public decimal Balance
+        {
             get => balance;
             set => Set(ref balance, value);
         }
@@ -67,20 +72,20 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// The message to be displayed in place of the account balance if needed
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Message
+        public string GetBalanceError
         {
-            get => message;
-            set => Set(ref message, value);
+            get => getBalanceError;
+            set => Set(ref getBalanceError, value);
         }
 
         /// <summary>
         /// A flag to indicate if we should show the message
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool ShowMessage
+        public bool ShowGetBalanceError
         {
-            get => showMessage;
-            set => Set(ref showMessage, value);
+            get => showGetBalanceError;
+            set => Set(ref showGetBalanceError, value);
         }
 
         /// <summary>
@@ -117,16 +122,25 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// The data context for the enable ups banner
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public IOneBalanceEnableUpsBannerWpfViewModel BannerContext
-        {
-            get => bannerContext;
-        }
+        public IOneBalanceShowSetupWizardViewModel BannerContext { get; }
 
         /// <summary>
-        /// RelayCommand for getting the account balance
+        /// The data context for the carrier accounts control
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ICommand GetBalanceCommand { get; }
+        public IOneBalanceShowSetupWizardViewModel CarrierAccountsContext { get; }
+
+        /// <summary>
+        /// The data context for the enable ups banner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public IOneBalanceAutoFundControlViewModel AutoFundContext { get; }
+
+        /// <summary>
+        /// RelayCommand for getting initial values to populate fields with
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand GetInitialValuesCommand { get; }
 
         /// <summary>
         /// Relay command for showing the add money dialog
@@ -139,21 +153,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void GetAccountBalance()
         {
-            Loading = true;
             ShowBanner = upsAccount == null;
 
-            Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.ApplicationIdle,
-                new Action(() =>
+            if (postageWebClient != null)
+            {
+                Task.Run(() =>
                 {
-                    if (webClient != null)
-                    {
-                        GetBalance();
-                    }
-
-                    AddMoneyEnabled = webClient != null && !showMessage;
-                    Loading = false;
-                }));
+                    GetBalance();
+                    AddMoneyEnabled = postageWebClient != null && !showGetBalanceError;
+                });
+            }
         }
 
         /// <summary>
@@ -162,32 +171,33 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetBalance()
         {
             int tries = 5;
-
+            Loading = true;
             while (tries-- > 0)
             {
                 try
                 {
-                    Balance = new PostageBalance(webClient).Value;
-
+                    Balance = new ShipWorks.Shipping.Carriers.Postal.PostageBalance(postageWebClient).Value;
+                    Loading = false;
                     break;
                 }
-                catch (UspsException ex)
+                catch (Exception ex)
                 {
                     bool keepTrying = false;
 
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        Message = $"Your One Balance account is not ready yet.";
+                        GetBalanceError = $"Your One Balance account is not ready yet.";
 
                         keepTrying = true;
                     }
                     else
                     {
-                        Message = "There was an error retrieving your account balance";
+                        GetBalanceError = "There was an error retrieving your account balance";
                     }
-                   
-                    ShowMessage = true;
+
+                    Loading = false;
+                    ShowGetBalanceError = true;
 
                     if (keepTrying)
                     {
@@ -203,10 +213,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void ShowAddMoneyDialog()
         {
-            var addMoneyDialog = addMoneyDialogFactory(webClient);
-           
+            var addMoneyDialog = addMoneyDialogFactory(postageWebClient);
+
             var dlgResult = addMoneyDialog.ShowDialog();
-            if(dlgResult == true)
+            if (dlgResult == true)
             {
                 GetAccountBalance();
             }
@@ -215,10 +225,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Sets up the web client
         /// </summary>
-        private void SetupWebClient()
+        private void SetupWebClients()
         {
-            var account = accountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
-            webClient = account == null ? null : new UspsPostageWebClient(account);
+            var account = GetOneBalanceAccount();
+            postageWebClient = account == null ? null : new UspsPostageWebClient(account);
         }
 
         /// <summary>
@@ -231,9 +241,38 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private void OnOneBalanceSetupComplete(object sender, EventArgs e)
         {
-            SetupWebClient();
+            SetupWebClients();
             upsAccount = GetUpsAccount();
             GetAccountBalance();
+            CarrierAccountsContext.Refresh();
+        }
+
+        /// <summary>
+        /// Get initial values for fields that need to be populated
+        /// </summary>
+        private void GetInitialValues()
+        {
+            GetAccountBalance();
+        }
+
+        /// <summary>
+        /// Send the auto fund settings to Stamps
+        /// </summary>
+        public void SaveAutoFundSettings() => AutoFundContext.SaveSettings();
+
+        /// <summary>
+        /// Determines which USPS account is One Balance, and if one exists returns it
+        /// </summary>
+        private UspsAccountEntity GetOneBalanceAccount()
+        {
+            /// If there's only one account it's a One Balance account
+            if (uspsAccountManager.UspsAccounts.Count == 1)
+            {
+                return uspsAccountManager.UspsAccounts.First();
+            }
+
+            // If there are multiple accounts the one with a ShipEngineCarrierId is the One Balance account
+            return uspsAccountManager.UspsAccounts.FirstOrDefault(a => a.ShipEngineCarrierId != null);
         }
     }
 }

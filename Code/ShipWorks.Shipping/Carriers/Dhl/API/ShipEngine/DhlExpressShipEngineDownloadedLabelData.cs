@@ -1,21 +1,21 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using Interapptive.Shared.ComponentRegistration;
 using ShipEngine.ApiClient.Model;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipEngine;
 
-namespace ShipWorks.Shipping.Carriers.Dhl
+namespace ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine
 {
     /// <summary>
     /// Save Dhl label data
     /// </summary>
     [Component(RegistrationType.Self)]
-    public class DhlExpressDownloadedLabelData : ShipEngineDownloadedLabelData
+    public class DhlExpressShipEngineDownloadedLabelData : ShipEngineDownloadedLabelData
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public DhlExpressDownloadedLabelData(ShipmentEntity shipment, 
+        public DhlExpressShipEngineDownloadedLabelData(ShipmentEntity shipment, 
             Label label, 
             IDataResourceManager resourceManager, 
             IShipEngineResourceDownloader resourceDownloader) 

@@ -7,7 +7,7 @@ using Moq;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Dhl.API.ShipEngine;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Xunit;
@@ -48,7 +48,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Save_SetsLabelInfoOnShipment()
         {
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         [Fact]
         public void Save_DelegatesToResourceDownloaderForLabelImage()
         {
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             label.LabelFormat = Label.LabelFormatEnum.Pdf;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
 
             label.LabelFormat = Label.LabelFormatEnum.Zpl;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             testObject.Save();
 
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         {
             label.LabelFormat = Label.LabelFormatEnum.Png;
 
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Save());
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.DhlExpress
         public void Save_ThrowsShipEngineException_WhenResourceDownloaderThrowsShipEngineException()
         {
             mock.Mock<IShipEngineResourceDownloader>().Setup(r => r.Download(It.IsAny<Uri>())).Throws(new ShipEngineException("something went wrong"));
-            var testObject = mock.Create<DhlExpressDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
+            var testObject = mock.Create<DhlExpressShipEngineDownloadedLabelData>(TypedParameter.From(shipment), TypedParameter.From(label));
 
             ShipEngineException ex = Assert.Throws<ShipEngineException>(() => testObject.Save());
 

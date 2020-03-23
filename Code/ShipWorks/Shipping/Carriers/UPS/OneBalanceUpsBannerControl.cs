@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                lifetimeScope.Resolve<UpsSetupWizard>().SetupOneBalanceAccount(this);
+                lifetimeScope.ResolveKeyed<IOneBalanceSetupWizard>(ShipmentTypeCode.UpsOnLineTools).SetupOneBalanceAccount(this);
             }
 
             UpsAccountManager.CheckForChangesNeeded();

@@ -77,6 +77,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.DeliveryDutyPaid, dutyDeliveryPaidState, dutyDeliveryPaid, labelDuty);
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.NonMachinable, nonMachinableState, nonMachinable, labelNonMachinable);
+            AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.ResidentialDelivery, resDeliveryState, resDelivery, labelResDelivery);
 
             //Customs
             AddValueMapping(DhlExpressProfile, DhlExpressProfileFields.Contents, contentsState, contents, labelContents);

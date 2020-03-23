@@ -6,8 +6,8 @@
     public interface IOneBalanceSettingsControlHost
     {
         /// <summary>
-        /// Initializes the hosted control
+        /// Send the auto fund settings to Stamps
         /// </summary>
-        void Initialize();
+        void SaveSettings();
     }
 }

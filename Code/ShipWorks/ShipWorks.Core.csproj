@@ -1280,6 +1280,7 @@
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
+    <Compile Include="Shipping\Settings\IOneBalanceSetupWizard.cs" />
     <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
@@ -1767,7 +1768,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\StampsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\PrefetchPathContainer.cs" />
@@ -11222,7 +11223,7 @@
     <None Include="Resources\Shipping\Icons\stamps.png" />
     <Resource Include="Resources\Shipping\Icons\ups.png" />
     <Resource Include="Resources\Shipping\Icons\usps.png" />
-    <None Include="Resources\Shipping\Icons\dhl.png" />
+    <Resource Include="Resources\Shipping\Icons\dhl.png" />
     <None Include="Resources\Shipping\Icons\bestrate.png" />
     <Content Include="Resources\Shipping\Icons\truck_blue.png" />
     <None Include="Resources\Shipping\Icons\truck_brown.png" />

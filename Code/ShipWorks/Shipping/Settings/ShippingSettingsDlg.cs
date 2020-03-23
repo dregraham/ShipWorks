@@ -14,9 +14,9 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -80,7 +80,6 @@ namespace ShipWorks.Shipping.Settings
             this.optionPageOneBalance.Controls.Clear();
 
             var controlHost = lifetimeScope.Resolve<IOneBalanceSettingsControlHost>();
-            controlHost.Initialize();
 
             var hostControl = controlHost as UserControl;
 
@@ -191,6 +190,12 @@ namespace ShipWorks.Shipping.Settings
             if (e.OptionPage == null ||
                 e.OptionPage.Controls.Count != 1)
             {
+                return;
+            }
+
+            if (e.OptionPage == optionPageOneBalance && !SaveOneBalanceSettings())
+            {
+                e.Cancel = true;
                 return;
             }
 
@@ -361,6 +366,12 @@ namespace ShipWorks.Shipping.Settings
             InformUserThatMyFiltersCantBeUsedFilters();
 
             SaveSettings();
+
+            if (!SaveOneBalanceSettings())
+            {
+                e.Cancel = true;
+                return;
+            }
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
@@ -549,6 +560,26 @@ namespace ShipWorks.Shipping.Settings
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Save the One Balance settings
+        /// </summary>
+        private bool SaveOneBalanceSettings()
+        {
+            var controlHost = optionPageOneBalance.Controls.OfType<IOneBalanceSettingsControlHost>().FirstOrDefault();
+
+            try
+            {
+                controlHost?.SaveSettings();
+                return true;
+            }
+            catch (UspsException ex)
+            {
+                MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{ex.Message}");
+            }
+
+            return false;
         }
     }
 }

@@ -74,6 +74,12 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<TrackingInformation> Track(string labelId, ApiLogSource apiLogSource);
 
         /// <summary>
+        /// Track a shipment using the carrier code and tracking number
+        /// </summary>
+        /// <returns></returns>
+        Task<TrackingInformation> Track(string carrier, string trackingNumber, ApiLogSource apiLogSource);
+
+        /// <summary>
         /// Connects the given stamps.com account to the users ShipEngine account
         /// </summary>
         Task<GenericResult<string>> ConnectStampsAccount(string username, string password);

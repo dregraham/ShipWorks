@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Security;
-using Interapptive.Shared.UI;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Dhl;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.Custom;
-using Interapptive.Shared.Utility;
 using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 
-namespace ShipWorks.Shipping.Carriers.DhlExpress
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     /// <summary>
     /// DHLExpress Account Editor Dialog
@@ -48,14 +46,24 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountNumber.Text = account.AccountNumber.ToString();
-
-            if (account.Description != GetDescription(account))
+            if (account.UspsAccountId == null)
             {
-                description.Text = account.Description;
-            }
+                accountNumber.Text = account.AccountNumber.ToString();
 
-            description.PromptText = GetDescription(account);
+                if (account.Description != GetDescription(account))
+                {
+                    description.Text = account.Description;
+                }
+
+                description.PromptText = GetDescription(account);
+            }
+            else
+            {
+                accountNumber.Text = "DHL Express from ShipWorks";
+                description.ReadOnly = true;
+                labelOptional.Visible = false;
+            }
+            
             contactInformation.LoadEntity(account.Address);
         }
 
