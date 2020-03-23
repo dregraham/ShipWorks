@@ -24,10 +24,9 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 Shipment = new AddressValidatingShipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
-                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
+                    ShipTo = CreateShipToAddress(shipment),
+                    ShipFrom = CreateShipFromAddress(shipment),
                     ShipDate = shipment.ShipDate
-                    // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound)
                 }
             };
             return request;
@@ -41,7 +40,7 @@ namespace ShipWorks.Shipping.ShipEngine
             return new PurchaseLabelWithoutShipmentRequest()
             {
                 LabelFormat = GetPurchaseLabelWithoutShipmentRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
-                LabelLayout = "4x6"
+                LabelLayout = "4x6"                
             };
         }
 
@@ -55,12 +54,13 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 LabelFormat = GetPurchaseLabelRequestLabelFormat((ThermalLanguage) shipment.RequestedLabelFormat),
                 LabelLayout = "4x6",
+                IsReturnLabel = shipment.ReturnShipment,           
+
                 Shipment = new Shipment()
                 {
-                    ShipTo = CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment)),
-                    ShipFrom = CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown),
+                    ShipTo = CreateShipToAddress(shipment),
+                    ShipFrom = CreateShipFromAddress(shipment),
                     ShipDate = shipment.ShipDate,
-                    // TotalWeight = new Weight(shipment.TotalWeight, Weight.UnitEnum.Pound),
                     Packages = CreatePackageForLabel(packages, getPackageCode, addPackageInsurance),
                     ServiceCode = serviceCode
                 }
@@ -82,6 +82,36 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (Exception)
             {
                 return Address.AddressResidentialIndicatorEnum.Unknown;
+            }
+        }
+
+        /// <summary>
+        /// Gets a ShipTo address DTO
+        /// </summary>
+        private Address CreateShipToAddress(ShipmentEntity shipment)
+        {
+            if (shipment.ReturnShipment)
+            {
+                return CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown);
+            }
+            else
+            {
+                return CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment));
+            }
+        }
+
+        /// <summary>
+        /// Gets a ShipFrom address DTO
+        /// </summary>
+        private Address CreateShipFromAddress(ShipmentEntity shipment)
+        {
+            if (shipment.ReturnShipment)
+            {
+                return CreateAddress(shipment.ShipPerson, GetShipToResidentialEnum(shipment));
+            }
+            else
+            {
+                return CreateAddress(shipment.OriginPerson, Address.AddressResidentialIndicatorEnum.Unknown);
             }
         }
 

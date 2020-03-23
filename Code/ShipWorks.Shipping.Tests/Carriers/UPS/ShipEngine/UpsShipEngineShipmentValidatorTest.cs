@@ -27,11 +27,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
         }
 
         [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentIsReturn()
+        public void ValidateShipment_ReturnsSuccess_WhenShipmentIsReturn()
         {
             shipment.ReturnShipment = true;
 
-            Assert.True(testObject.ValidateShipment(shipment).Failure);
+            Assert.True(testObject.ValidateShipment(shipment).Success);
         }
 
         [Fact]
@@ -99,11 +99,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
         }
 
         [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasAdditionalHandling()
+        public void ValidateShipment_ReturnsSuccess_WhenShipmentHasAdditionalHandling()
         {
             shipment.Ups.Packages[0].AdditionalHandlingEnabled = true;
 
-            Assert.True(testObject.ValidateShipment(shipment).Failure);
+            Assert.True(testObject.ValidateShipment(shipment).Success);
         }
     }
 }
