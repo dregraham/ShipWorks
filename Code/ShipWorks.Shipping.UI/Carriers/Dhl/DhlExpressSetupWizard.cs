@@ -33,7 +33,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
-        private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -180,14 +179,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             // We need to clear out the rate cache since rates (especially best rate) are no longer valid now
             // that a new account has been added.
             RateCache.Instance.Clear();
-        }
-
-        /// <summary>
-        /// Called when [open account link clicked].
-        /// </summary>
-        private void OnOpenAccountLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
-        {
-            WebHelper.OpenUrl(DhlExpressAccountUrl, this);
         }
 
         /// <summary>
