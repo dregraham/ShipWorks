@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Win32;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         public IProcessShipmentsWorkflow Create(IEnumerable<ShipmentEntity> shipments)
         {
-            if (shipments.Count() > 1 || shipments.First().IncludeReturn)
+            if ((shipments.Count() > 1 || shipments.First().IncludeReturn) && !ShouldForceSerial())
             {
                 return createParallelWorkflow();
             }
@@ -42,5 +43,13 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 return (IProcessShipmentsWorkflow) createSerialWorkflow();
             }
         }
+
+        /// <summary>
+        /// Should we force serial processing
+        /// </summary>
+        /// <returns></returns>
+        private bool ShouldForceSerial() =>
+            new RegistryHelper(ParallelProcessShipmentsWorkflow.LabelProcessingConcurrencyBasePath)
+                .GetValue("forceSerial", false);
     }
 }
