@@ -172,6 +172,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// </summary>
         protected override string GetPackagingCode(IPackageAdapter package)
         {
+            if (package == null)
+            {
+                return null;
+            }
+
             string packagingCode = UpsShipEngineServiceTypeUtility.GetPackageCode((UpsPackagingType) package.PackagingType);
 
             return string.IsNullOrWhiteSpace(packagingCode) ? null : packagingCode;

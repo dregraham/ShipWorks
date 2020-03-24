@@ -21,11 +21,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("International shipments are not supported with this account.");
             }
 
-            if (shipment.ReturnShipment)
-            {
-                return Result.FromError("Return shipments are not supported with this account.");
-            }
-
             if (shipment.Ups.EmailNotifySender > 0 ||
                 shipment.Ups.EmailNotifyRecipient > 0 ||
                 shipment.Ups.EmailNotifyOther > 0)
