@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,9 @@ namespace ShipWorks.Products.Warehouse
         /// <returns>True if more products to get, false otherwise</returns>
         public async Task<(long sequence, bool shouldContinue)> Apply(ISqlAdapter sqlAdapter, CancellationToken cancellationToken)
         {
+            // Keep the connection open even after making Save calls.
+            sqlAdapter.KeepConnectionOpen = true;
+
             var hubDetails = data.Products.ToDictionary(x => Guid.Parse(x.ProductId), createHubProductUpdater);
 
             var existingKnownProducts = await productCatalog.GetProductsByHubIds(sqlAdapter, hubDetails.Keys).ConfigureAwait(false);
@@ -73,18 +77,31 @@ namespace ShipWorks.Products.Warehouse
             }
 
             var productsToSave = hubDetails.Values.Select(x => x.ProductVariant).ToEntityCollection();
-            await sqlAdapter.SaveEntityCollectionAsync(productsToSave, true, true, cancellationToken).ConfigureAwait(false);
 
-            foreach (var productData in hubDetails.Values)
+            try
             {
-                await bundleService
-                    .UpdateProductBundleDetails(sqlAdapter, productData.ProductVariant, productData.ProductData, cancellationToken)
-                    .ConfigureAwait(false);
+                sqlAdapter.StartTransaction(IsolationLevel.ReadCommitted, "SavingProductsViaSynchronization");
+
+                await sqlAdapter.SaveEntityCollectionAsync(productsToSave, true, true, cancellationToken).ConfigureAwait(false);
+
+                foreach (var productData in hubDetails.Values)
+                {
+                    await bundleService
+                        .UpdateProductBundleDetails(sqlAdapter, productData.ProductVariant, productData.ProductData, cancellationToken)
+                        .ConfigureAwait(false);
+                }
+
+                if (productsToSave.Any())
+                {
+                    await sqlAdapter.SaveEntityCollectionAsync(productsToSave, false, true, cancellationToken).ConfigureAwait(false);
+                }
+
+                sqlAdapter.Commit();
             }
-
-            if (productsToSave.Any())
+            catch (Exception)
             {
-            await sqlAdapter.SaveEntityCollectionAsync(productsToSave, false, true, cancellationToken).ConfigureAwait(false);
+                sqlAdapter.Rollback();
+                throw;
             }
 
             bool anyToReturn = hubDetails.Values.Any();

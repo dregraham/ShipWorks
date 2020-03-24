@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -49,19 +48,11 @@ namespace ShipWorks.Products.Warehouse
 
             do
             {
-                try
-                {
-                    var result = await warehouseProductClient.GetProductsAfterSequence(sequence, cancellationToken);
-                    (sequence, shouldContinue) = await Functional.UsingAsync(
-                            sqlAdapterFactory.Create(),
-                            sqlAdapter => result.Apply(sqlAdapter, cancellationToken))
-                        .ConfigureAwait(false);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
+                var result = await warehouseProductClient.GetProductsAfterSequence(sequence, cancellationToken);
+                (sequence, shouldContinue) = await Functional.UsingAsync(
+                        sqlAdapterFactory.Create(),
+                        sqlAdapter => result.Apply(sqlAdapter, cancellationToken))
+                    .ConfigureAwait(false);
 
             } while (shouldContinue && !cancellationToken.IsCancellationRequested);
         }

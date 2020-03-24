@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using System;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -16,6 +17,7 @@ namespace ShipWorks.Products.Warehouse
         {
             productVariant.HubVersion = warehouseProduct.Version;
             productVariant.HubSequence = warehouseProduct.Sequence;
+            productVariant.HubProductId = Guid.Parse(warehouseProduct.ProductId);
             productVariant.Name = warehouseProduct.Name;
             productVariant.UPC = warehouseProduct.Upc;
             productVariant.ASIN = warehouseProduct.Asin;

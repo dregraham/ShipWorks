@@ -167,7 +167,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product variant based on HubProductId
         /// </summary>
-        public ProductVariantEntity FetchProductVariantEntityByHubProductId(ISqlAdapter sqlAdapter, string hubProductId) =>
+        public ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, Guid hubProductId) =>
             FetchFirst(ProductVariantFields.HubProductId == hubProductId, sqlAdapter);
 
         /// <summary>

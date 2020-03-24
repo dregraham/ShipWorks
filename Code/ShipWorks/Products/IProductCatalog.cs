@@ -59,7 +59,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch a product variant based on HubProductId
         /// </summary>
-        ProductVariantEntity FetchProductVariantEntityByHubProductId(ISqlAdapter sqlAdapter, string hubProductId);
+        ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, Guid hubProductId);
 
         /// <summary>
         /// Save the given product

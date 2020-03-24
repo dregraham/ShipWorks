@@ -13,13 +13,12 @@ namespace ShipWorks.Products.Warehouse
     public class WarehouseProductSynchronizationManager : IInitializeForCurrentUISession
     {
         public const string ProductSyncIntervalBasePath = @"Software\Interapptive\ShipWorks\Options";
-        private static readonly TimeSpan Never = TimeSpan.FromMilliseconds(-1);
-        private readonly Timer timer;
-        private readonly int productSyncIntervalValue;
+        private readonly System.Timers.Timer timer;
         private readonly ILog log;
         private readonly IWarehouseProductSynchronizer productSynchronizer;
         private CancellationTokenSource cancellationTokenSource;
         private bool isDisposed;
+        private bool isRunning;
 
         /// <summary>
         /// Constructor
@@ -30,43 +29,18 @@ namespace ShipWorks.Products.Warehouse
         {
             log = createLog(GetType());
             this.productSynchronizer = productSynchronizer;
-            timer = new Timer(HandleTimerTick);
-            productSyncIntervalValue = new RegistryHelper(ProductSyncIntervalBasePath).GetValue("ProductSyncIntervalValue", 10);
+            double productSyncIntervalValue = new RegistryHelper(ProductSyncIntervalBasePath).GetValue("ProductSyncIntervalValue", 10.0);
+            
+            timer = new System.Timers.Timer(TimeSpan.FromMinutes(productSyncIntervalValue).TotalMilliseconds);
+            timer.Elapsed += HandleTimerTick;
         }
 
         /// <summary>
-        /// Dispose the instance
+        /// Timer elapsed handler
         /// </summary>
-        public void Dispose()
-        {
-            isDisposed = true;
-            EndSession();
-            timer.Dispose();
-        }
-
-        /// <summary>
-        /// End the current UI session
-        /// </summary>
-        public void EndSession()
-        {
-            timer.Change(Never, Never);
-        }
-
-        /// <summary>
-        /// Initialize the synchronizer for this session
-        /// </summary>
-        public void InitializeForCurrentSession() =>
-            timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), Never);
-
-        private bool isRunning = false;
-
-        /// <summary>
-        /// Handle the timer tick event
-        /// </summary>
-        /// <param name="state"></param>
         [SuppressMessage("Major Bug", "S3168:\"async\" methods should not return \"void\"",
             Justification = "This is an event handler for a timer tick")]
-        private async void HandleTimerTick(object state)
+        private async void HandleTimerTick(object sender, System.Timers.ElapsedEventArgs e)
         {
             if (isRunning)
             {
@@ -84,15 +58,35 @@ namespace ShipWorks.Products.Warehouse
                 catch (Exception ex)
                 {
                     log.Error("Error while syncing products", ex);
-
-                    if (!cancellationTokenSource.IsCancellationRequested || !isDisposed)
-                    {
-                        timer.Change(TimeSpan.FromMinutes(productSyncIntervalValue), TimeSpan.Zero);
-                    }
                 }
 
                 isRunning = false;
             }
         }
+
+        /// <summary>
+        /// Dispose the instance
+        /// </summary>
+        public void Dispose()
+        {
+            isDisposed = true;
+            EndSession();
+            timer.Dispose();
+        }
+
+        /// <summary>
+        /// End the current UI session
+        /// </summary>
+        public void EndSession()
+        {
+            timer.Elapsed -= HandleTimerTick;
+            timer.Stop();
+        }
+
+        /// <summary>
+        /// Initialize the synchronizer for this session
+        /// </summary>
+        public void InitializeForCurrentSession() =>
+            timer.Start();
     }
 }

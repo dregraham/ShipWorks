@@ -67,7 +67,7 @@ namespace ShipWorks.Products.Warehouse
             // Try to get all hub product ids from the sw db, keep a list of 
             foreach (var huBundledProduct in warehouseProductDto.BundleItems)
             {
-                var swBundledProdEntity = productCatalog.FetchProductVariantEntityByHubProductId(sqlAdapter, huBundledProduct.Key);
+                var swBundledProdEntity = productCatalog.FetchProductVariantEntity(sqlAdapter, Guid.Parse(huBundledProduct.Key));
 
                 if (swBundledProdEntity == null)
                 {
@@ -91,16 +91,20 @@ namespace ShipWorks.Products.Warehouse
             await productCatalog.SaveProductToDatabase(productVariant, sqlAdapter).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Add a product bundle
+        /// </summary>
         private async Task<ProductVariantEntity> AddProductBundle(BundledProduct bundledProduct, ISqlAdapter sqlAdapter, CancellationToken cancellationToken)
         {
             var productDto = await warehouseProductClient.GetProduct(bundledProduct.ProductId, cancellationToken).ConfigureAwait(false);
             var updater = createHubProductUpdater(productDto);
 
-            var productVariant = new ProductVariantEntity() {Product = new ProductEntity()};
+            var productVariant = ProductVariantEntity.Create(productDto.Sku, productDto.CreatedDate);
             updater.ProductVariant = productVariant;
             updater.UpdateProductVariant();
 
             await sqlAdapter.SaveAndRefetchAsync(productVariant.Product).ConfigureAwait(false);
+
             return productVariant;
         }
     }

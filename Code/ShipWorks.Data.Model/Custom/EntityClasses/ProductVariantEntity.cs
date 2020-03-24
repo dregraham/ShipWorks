@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -15,13 +16,8 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             ProductVariantEntity productVariant = new ProductVariantEntity()
             {
-                Product = new ProductEntity()
-                {
-                    IsActive = true,
-                    IsBundle = false,
-                    CreatedDate = createDateTime
-                },
-                CreatedDate = createDateTime
+                Product = ProductEntity.Create(),
+                CreatedDate = createDateTime.ToSqlSafeDateTime()
             };
 
             productVariant.Aliases.Add(new ProductVariantAliasEntity()

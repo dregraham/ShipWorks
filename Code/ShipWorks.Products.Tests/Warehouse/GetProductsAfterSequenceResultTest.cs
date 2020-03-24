@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.Moq;
 using Moq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -227,6 +229,10 @@ namespace ShipWorks.Products.Tests.Warehouse
 
             mock.Mock<ISqlAdapter>()
                 .Verify(x => x.SaveEntityCollectionAsync(It.IsAny<EntityCollection<ProductVariantEntity>>(), true, true, cancellationToken));
+            mock.Mock<ISqlAdapter>()
+                .Verify(x => x.StartTransaction(IsolationLevel.ReadCommitted, AnyString));
+            mock.Mock<ISqlAdapter>()
+                .Verify(x => x.Commit());
         }
 
         [Fact]
@@ -269,6 +275,25 @@ namespace ShipWorks.Products.Tests.Warehouse
 
             mock.Mock<ISqlAdapter>()
                 .Verify(x => x.SaveEntityCollectionAsync(It.IsAny<EntityCollection<ProductVariantEntity>>(), false, true, cancellationToken));
+        }
+
+        [Fact]
+        public async Task Apply_CallsRollback_WhenSaveEntityCollection_Throws()
+        {
+            var warehouseProduct1 = new WarehouseProduct { ProductId = "00000000000000000000000000000001", Sku = "ABC123" };
+            var data = new GetProductsAfterSequenceResponseData { Products = new[] { warehouseProduct1 } };
+            var cancellationToken = new CancellationToken();
+
+            var sqlAdapter = mock.Mock<ISqlAdapter>();
+            sqlAdapter.Setup(a => a.SaveEntityCollectionAsync(It.IsAny<IEntityCollection2>(), true, true, cancellationToken))
+                .ThrowsAsync(new Exception());
+
+            var testObject = mock.Create<GetProductsAfterSequenceResult>(TypedParameter.From(data));
+
+            await Assert.ThrowsAsync<Exception>(() => testObject.Apply(mock.Mock<ISqlAdapter>().Object, cancellationToken));
+
+            mock.Mock<ISqlAdapter>()
+                .Verify(x => x.Rollback());
         }
 
         private class TestUpdater : IHubProductUpdater
