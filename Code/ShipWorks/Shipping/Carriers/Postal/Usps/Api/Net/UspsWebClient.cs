@@ -687,25 +687,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 CheckCertificate(webService.Url);
 
-                using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
+                var stopwatch = new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress");
+                TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
+
+                webService.CleanseAddressCompleted += (s, e) =>
                 {
-                    TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
+                    stopwatch.Dispose();
 
-                    webService.CleanseAddressCompleted += (s, e) =>
+                    if (e.Error != null)
                     {
-                        if (e.Error != null)
-                        {
-                            taskCompletion.SetException(e.Error);
-                        }
-                        else
-                        {
-                            taskCompletion.SetResult(e);
-                        }
-                    };
+                        taskCompletion.SetException(e.Error);
+                    }
+                    else
+                    {
+                        taskCompletion.SetResult(e);
+                    }
+                };
 
-                    webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
-                    return taskCompletion.Task;
-                }
+                webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
+                return taskCompletion.Task;
             }
         }
 
