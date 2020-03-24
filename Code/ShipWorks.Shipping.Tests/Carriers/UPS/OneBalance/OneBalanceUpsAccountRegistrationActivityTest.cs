@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.Ups.OneBalance;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
 {
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { new UspsAccountEntity() { ShipEngineCarrierId = "1" } });
 
             seWebClient = mock.Mock<IShipEngineWebClient>();
-            seWebClient.Setup(s => s.RegisterUpsAccount(It.IsAny<PersonAdapter>()))
+            seWebClient.Setup(s => s.RegisterUpsAccount(It.IsAny<PersonAdapter>(), AnyString))
                 .ReturnsAsync(GenericResult.FromSuccess("123"));
 
             testObject = mock.Create<OneBalanceUpsAccountRegistrationActivity>();
@@ -60,16 +61,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.FirstName = "123456789012345678901";
             // over 20 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.FirstName = "Joe";
             upsAccount.LastName = "blow";
             // between 1 and 20 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -90,19 +91,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
 
             upsAccount.Company = "1234567890123456789012345678901";
 
             // over 30 should fail also succeed because LLBLGen is limiting the filed
             // length to 30
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
             Assert.Equal(upsAccount.Company, "123456789012345678901234567890");
 
 
             upsAccount.Company = "foo bar";
             // between 1 and 30 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -123,16 +124,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.Street1 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.Street1 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -153,16 +154,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
 
             upsAccount.Street2 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.Street2 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -183,16 +184,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
 
             upsAccount.Street3 = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.Street3 = "1 South Memorial Drive";
             // between 1 and 30 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -213,16 +214,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.City = "1234567890123456789012345678901";
 
             // over 30 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.City = "St Louis";
             // between 1 and 30 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -243,16 +244,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.StateProvCode = "MOO";
 
             // over 2 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.StateProvCode = "MO";
             // 2 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -273,16 +274,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.CountryCode = "USSR";
 
             // over 2 should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.CountryCode = "US";
             // 2 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -303,12 +304,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             };
 
             // empty should fail
-            Assert.True((await testObject.Execute(upsAccount)).Failure);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Failure);
 
             upsAccount.Phone = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123";
 
             // over 200 should succeed
-            Assert.True((await testObject.Execute(upsAccount)).Success);
+            Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
         }
 
         [Fact]
@@ -333,7 +334,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
             seWebClient.Setup(c => c.ConnectStampsAccount("foo", "bar")).ReturnsAsync(GenericResult.FromSuccess("abcd"));
 
-            await testObject.Execute(upsAccount);
+            await testObject.Execute(upsAccount, AnyString);
 
             seWebClient.Verify(s => s.ConnectStampsAccount("foo", "bar"));
 
@@ -361,9 +362,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = "abcd" };
             uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] { uspsAccount });
 
-            await testObject.Execute(upsAccount);
+            await testObject.Execute(upsAccount, "boo");
 
-            seWebClient.Verify(s => s.RegisterUpsAccount(upsAccount.Address));
+            seWebClient.Verify(s => s.RegisterUpsAccount(upsAccount.Address, "boo"));
         }
     }
 }
