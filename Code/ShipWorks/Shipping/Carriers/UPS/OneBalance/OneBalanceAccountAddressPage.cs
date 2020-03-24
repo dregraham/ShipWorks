@@ -40,6 +40,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
+            if (upsAccount.ShipEngineCarrierId != null)
+            {
+                return;
+            }
+
             Wizard.Cursor = Cursors.WaitCursor;
 
             // for some reason, simply disabling the button doesn't work
