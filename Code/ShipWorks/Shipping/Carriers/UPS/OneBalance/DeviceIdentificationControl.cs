@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
 {
@@ -18,12 +19,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
     /// </remarks>
     public partial class DeviceIdentificationControl : UserControl
     {
-        private const string iOvationUrl = "https://mpsnare.iesnare.com/snare.js";
-
-        /// <summary>
-        /// The Identity required by UPS account registration
-        /// </summary>
-        public string Identity { get; private set; }
+        // content from: https://mpsnare.iesnare.com/snare.js
+        private static string deviceHtml = ResourceUtility.ReadString("ShipWorks.Shipping.Carriers.UPS.OneBalance.DiviceIdentification.html");
+        private static string functionName = "GetIdentifier";
 
         /// <summary>
         /// Constructor
@@ -35,16 +33,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         }
 
         /// <summary>
+        /// The Identity required by UPS account registration
+        /// </summary>
+        public string Identity { get; private set; }
+
+        /// <summary>
         /// Generate the html required to get a device id.
         /// </summary>
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            webBrowser.DocumentText =
-                "<!DOCTYPE html><html><head>" +
-                $"<script language='javascript' type='text/javascript' src='{iOvationUrl}'></script>" +
-                "<script>function GetIdentifier(){return ioGetBlackbox().blackbox;}</script>" +
-                "</head></html>";
+            webBrowser.DocumentText = deviceHtml;
         }
 
         /// <summary>
@@ -52,8 +51,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private void OnComplete(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            string functionName = "GetIdentifier";
-
             // null check so it doesn't bomb
             Identity = webBrowser.Document.InvokeScript(functionName)?.ToString();
         }
