@@ -46,8 +46,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
         public void ValidateShipment_ThrowsShippingException_WhenShipmentHasDryIce()
         {
             shipment.Ups.Packages[0].DryIceEnabled = true;
+            shipment.Ups.Packages[0].UpsShipment.Service = 1;
 
             Assert.True(testObject.ValidateShipment(shipment).Failure);
+        }
+
+        [Fact]
+        public void ValidateShipment_DoesntThrowShippingException_WhenShipmentHasDryIce_AndShipmentIsGround()
+        {
+            shipment.Ups.Packages[0].DryIceEnabled = true;
+
+            Assert.True(testObject.ValidateShipment(shipment).Success);
         }
 
         [Fact]
