@@ -27,13 +27,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 { UpsPackagingType.Custom, "" },
                 { UpsPackagingType.Letter, "ups_letter" },
                 { UpsPackagingType.Box10Kg, "ups_10_kg_box" },
-                { UpsPackagingType.Box25Kg, "ups_25_kg_box	" },
+                { UpsPackagingType.Box25Kg, "ups_25_kg_box" },
                 { UpsPackagingType.Tube, "ups_tube" },
                 { UpsPackagingType.Pak, "ups_express_pak" },
                 { UpsPackagingType.BoxExpress, "ups_express_box" },
                 { UpsPackagingType.BoxExpressSmall, "ups_express_box_small" },
                 { UpsPackagingType.BoxExpressMedium, "ups_express_box_medium" },
-                { UpsPackagingType.BoxExpressLarge, "ups_express_box_large" },
+                { UpsPackagingType.BoxExpressLarge, "ups__express_box_large" },
                 { UpsPackagingType.Flats, "mi_bpm_flat" },
                 { UpsPackagingType.BPMParcels, "mi_bpm_parcel" },
                 { UpsPackagingType.FirstClassMail, "mi_first_class" },
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         {
             if (!packageCodeMap.ContainsKey(packageCode))
             {
-                throw new ShippingException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packagin type and try again.");
+                throw new ShippingException($"{EnumHelper.GetDescription(packageCode)} is not supported from UPS from ShipWorks. Select a different packaging type and try again.");
             }
 
             return packageCodeMap[packageCode];
