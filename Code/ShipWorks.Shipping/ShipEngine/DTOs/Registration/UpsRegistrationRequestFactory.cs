@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
                     CountryCode = person.CountryCode
                 },
                 WeightUnits = "pound",
-                EndUserIpAddress = networkUtility.GetIPAddress(),
+                EndUserIpAddress = networkUtility.GetPublicIPAddress(),
                 SoftwareProvider = "ShipWorks",
                 SoftwareProductName = "ShipWorks"
             };
