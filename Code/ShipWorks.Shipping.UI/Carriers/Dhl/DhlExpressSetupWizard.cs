@@ -35,7 +35,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         private readonly IShipEngineWebClient shipEngineClient;
         private ShippingWizardPageFinish shippingWizardPageFinish;
         private readonly DhlExpressAccountEntity account;
-        private const string DhlExpressAccountUrl = "http://www.dhl-usa.com/en/express/shipping/open_account.html";
         private bool skipAccountSetup = false;
 
         /// <summary>
@@ -193,14 +192,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
         }
 
         /// <summary>
-        /// Called when [open account link clicked].
-        /// </summary>
-        private void OnOpenAccountLinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
-        {
-            WebHelper.OpenUrl(DhlExpressAccountUrl, this);
-        }
-
-        /// <summary>
         /// Shows the error message and prevents the user from proceeding through the wizard
         /// </summary>
         private void ShowWizardError(string errorMessage, WizardStepEventArgs e)
@@ -225,7 +216,7 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             {
                 uspsAccount = uspsAccounts.FirstOrDefault(x => x.ShipEngineCarrierId != null);
             }
-            
+
             // Only skip the account screen if they already have a One Balance USPS account.
             skipAccountSetup = uspsAccount != null;
 

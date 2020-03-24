@@ -466,7 +466,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             // Ground
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(
-                UpsServiceType.UpsGround, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, false, false));
+                UpsServiceType.UpsGround, UpsPackagingType.Custom, WeightUnitOfMeasure.Pounds, 0.1f, 150.0f, 9999, true, true, false));
 
             // UPS Standard
             localServicePackageSettings.Add(new UpsServicePackageTypeSetting(

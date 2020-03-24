@@ -28,9 +28,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("Quantum View Notify is not supported with this account.");
             }
 
-            if (shipment.Ups.Packages.Any(p => p.DryIceEnabled))
+            if (shipment.Ups.Packages.Any(p => p.DryIceEnabled && p.UpsShipment.Service != (int)UpsServiceType.UpsGround))
             {
-                return Result.FromError("Dry ice is not supported with this account.");
+                return Result.FromError("Dry ice is not supported with this service.");
             }
 
             if (shipment.Ups.CodEnabled)
@@ -66,6 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             if (shipment.Ups.PayorType != (int) UpsPayorType.Sender)
             {
                 return Result.FromError("Third Party Billing is not supported with this account.");
+            }
+
+            if(shipment.Ups.Packages.Any(p => p.DeclaredValue > 1000M))
+            {
+                return Result.FromError("This service is unavailable for shipments over $1000.");
             }
 
             return Result.FromSuccess();
