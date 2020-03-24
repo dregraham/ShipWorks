@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
         /// <summary>
         /// Creates a UpsRegistrationRequest
         /// </summary>
-        UpsRegistrationRequest Create(PersonAdapter person);
+        UpsRegistrationRequest Create(PersonAdapter person, string deviceIdentity);
     }
 }

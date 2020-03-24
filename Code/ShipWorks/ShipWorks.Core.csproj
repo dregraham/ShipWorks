@@ -1219,6 +1219,12 @@
     <Compile Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.Designer.cs">
       <DependentUpon>OneBalanceUpsBannerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.Designer.cs">
+      <DependentUpon>DeviceIdentificationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OneBalance\IOneBalanceUpsAccountRegistrationActivity.cs" />
     <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.cs">
       <SubType>UserControl</SubType>
@@ -8489,6 +8495,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.resx">
       <DependentUpon>OneBalanceUpsBannerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.resx">
+      <DependentUpon>DeviceIdentificationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.resx">
       <DependentUpon>OneBalanceAccountAddressPage.cs</DependentUpon>
