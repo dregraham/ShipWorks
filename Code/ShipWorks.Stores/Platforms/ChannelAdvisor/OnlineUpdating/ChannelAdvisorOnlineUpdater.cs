@@ -11,6 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon.SWA;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -226,8 +227,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             if (type == ShipmentTypeCode.AmazonSWA)
             {
-                // Ground is the only service Amazon SWA has
-                return "Ground";
+                return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
             }
 
             if (type == ShipmentTypeCode.AmazonSFP)
@@ -525,7 +525,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
                 case ShipmentTypeCode.AmazonSWA:
-                    return "Amazon";
+                    return "Amazon Shipping";
 
                 case ShipmentTypeCode.AmazonSFP:
                     return GetAmazonCarrierName(shipment);
