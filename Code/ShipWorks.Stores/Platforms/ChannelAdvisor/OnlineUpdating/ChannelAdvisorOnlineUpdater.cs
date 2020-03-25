@@ -171,7 +171,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
             {
                 log.Warn(ex);
             }
-
         }
 
         /// <summary>
