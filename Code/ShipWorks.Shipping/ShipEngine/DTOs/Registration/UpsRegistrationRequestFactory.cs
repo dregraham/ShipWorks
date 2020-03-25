@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Reflection;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 
@@ -49,13 +50,28 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
                     CountryCode = person.CountryCode
                 },
                 WeightUnits = "pound",
-                EndUserIpAddress = networkUtility.GetPublicIPAddress(),
+                EndUserIpAddress = GetIPAddress(),
                 DeviceIdentity = deviceIdentity,
                 SoftwareProvider = "ShipWorks",
                 SoftwareProductName = "ShipWorks"
             };
 
             return registration;
+        }
+
+        /// <summary>
+        /// Get IP Address
+        /// </summary>
+        private string GetIPAddress()
+        {
+            if (Assembly.GetExecutingAssembly().GetName().Version.Major > 1)
+            {
+                return networkUtility.GetPublicIPAddress();
+            }
+            else
+            {
+                return networkUtility.GetIPAddress();
+            }
         }
     }
 }
