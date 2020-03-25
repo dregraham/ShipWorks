@@ -548,7 +548,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person)
+        public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person, string deviceIdentity)
         {
             try
             {
@@ -562,7 +562,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
 
-                UpsRegistrationRequest registration = registrationRequestFactory.Create(person);
+                UpsRegistrationRequest registration = registrationRequestFactory.Create(person, deviceIdentity);
                 request.AddJsonBody(registration);
 
                 ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "RegisterUpsAccount");

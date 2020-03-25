@@ -87,6 +87,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter);
+        /// <param name="deviceIdentity">Identifier provided by IOvations software</param>
+        Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter, string deviceIdentity);
     }
 }

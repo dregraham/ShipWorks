@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
@@ -20,6 +21,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         private readonly IOneBalanceUpsAccountRegistrationActivity accountRegistrationActivity;
         private readonly IMessageHelper messageHelper;
         private readonly UpsAccountEntity upsAccount;
+        DeviceIdentificationControl deviceIdentification;
 
         /// <summary>
         /// Constructor
@@ -29,7 +31,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
             this.accountRegistrationActivity = accountRegistrationActivity;
             this.messageHelper = messageHelper;
             this.upsAccount = upsAccount;
+            deviceIdentification = new DeviceIdentificationControl() { Size = new Size(0, 0) };
             InitializeComponent();
+            Controls.Add(deviceIdentification);
 
             StepNextAsync += OnStepNext;
         }
@@ -40,6 +44,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private async Task OnStepNext(object sender, WizardStepEventArgs e)
         {
+            if (upsAccount.ShipEngineCarrierId != null)
+            {
+                return;
+            }
+
             Wizard.Cursor = Cursors.WaitCursor;
 
             // for some reason, simply disabling the button doesn't work
@@ -53,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
             // populate the account with the given address info
             PersonAdapter.Copy(personAdapter, new PersonAdapter(upsAccount, ""));
 
-            Result result = await accountRegistrationActivity.Execute(upsAccount).ConfigureAwait(true);
+            Result result = await accountRegistrationActivity.Execute(upsAccount, deviceIdentification.Identity).ConfigureAwait(true);
 
             if (result.Failure)
             {

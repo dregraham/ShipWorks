@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Execute the activity on the given account
         /// </summary>
-        public async Task<Result> Execute(UpsAccountEntity account)
+        public async Task<Result> Execute(UpsAccountEntity account, string deviceIdentity)
         {
             var validationResult = ValidateFields(account);
             if (validationResult.Failure)
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 return oneBalanceResult;
             }
 
-            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address).ConfigureAwait(false);
+            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address, deviceIdentity).ConfigureAwait(false);
             if (result.Success)
             {
                 account.ShipEngineCarrierId = result.Value;

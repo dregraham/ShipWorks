@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
         /// <summary>
         /// Create a UpsRegistrationRequest object
         /// </summary>
-        public UpsRegistrationRequest Create(PersonAdapter person)
+        public UpsRegistrationRequest Create(PersonAdapter person, string deviceIdentity)
         {
             UpsRegistrationRequest registration = new UpsRegistrationRequest()
             {
@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
                 },
                 WeightUnits = "pound",
                 EndUserIpAddress = networkUtility.GetPublicIPAddress(),
+                DeviceIdentity = deviceIdentity,
                 SoftwareProvider = "ShipWorks",
                 SoftwareProductName = "ShipWorks"
             };
