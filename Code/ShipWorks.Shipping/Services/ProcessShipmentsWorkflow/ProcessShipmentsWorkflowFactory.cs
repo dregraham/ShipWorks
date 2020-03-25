@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Win32;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
@@ -15,14 +15,18 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class ProcessShipmentsWorkflowFactory : IProcessShipmentsWorkflowFactory
     {
-        private readonly IIndex<ProcessShipmentsWorkflow, IProcessShipmentsWorkflow> workflows;
+        private readonly Func<SerialProcessShipmentsWorkflow> createSerialWorkflow;
+        private readonly Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ProcessShipmentsWorkflowFactory(IIndex<ProcessShipmentsWorkflow, IProcessShipmentsWorkflow> workflows)
+        public ProcessShipmentsWorkflowFactory(
+            Func<SerialProcessShipmentsWorkflow> createSerialWorkflow,
+            Func<ParallelProcessShipmentsWorkflow> createParallelWorkflow)
         {
-            this.workflows = workflows;
+            this.createParallelWorkflow = createParallelWorkflow;
+            this.createSerialWorkflow = createSerialWorkflow;
         }
 
         /// <summary>
@@ -30,14 +34,22 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
         /// </summary>
         public IProcessShipmentsWorkflow Create(IEnumerable<ShipmentEntity> shipments)
         {
-            var workflow = ProcessShipmentsWorkflow.Serial;
-
-            if (shipments.Count() > 1 || shipments.First().IncludeReturn)
+            if ((shipments.Count() > 1 || shipments.First().IncludeReturn) && !ShouldForceSerial())
             {
-                workflow = ProcessShipmentsWorkflow.Parallel;
+                return createParallelWorkflow();
             }
-
-            return workflows[workflow];
+            else
+            {
+                return (IProcessShipmentsWorkflow) createSerialWorkflow();
+            }
         }
+
+        /// <summary>
+        /// Should we force serial processing
+        /// </summary>
+        /// <returns></returns>
+        private bool ShouldForceSerial() =>
+            new RegistryHelper(ParallelProcessShipmentsWorkflow.LabelProcessingConcurrencyBasePath)
+                .GetValue("forceSerial", false);
     }
 }
