@@ -161,12 +161,23 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// <summary>
         /// Creates the UPS advanced options node
         /// </summary>
-        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment) =>
-            new AdvancedOptions()
+        protected override AdvancedOptions CreateAdvancedOptions(ShipmentEntity shipment)
+        {
+            var options = new AdvancedOptions()
             {
-                NonMachinable = shipment.Ups.Packages.Any(p => p.AdditionalHandlingEnabled)
-            } ;
+                NonMachinable = shipment.Ups.Packages.Any(p => p.AdditionalHandlingEnabled),
+                SaturdayDelivery = shipment.Ups.SaturdayDelivery
+            };
 
+            if (shipment.Ups.Packages.Any(p => p.DryIceEnabled))
+            {
+                options.DryIceWeight = new Weight(shipment.Ups.Packages.Sum(p => p.DryIceWeight), Weight.UnitEnum.Pound);
+                options.DryIce = true;
+            }
+
+            return options;
+        }
+ 
         /// <summary>
         /// Get the packaging code for the given adapter
         /// </summary>

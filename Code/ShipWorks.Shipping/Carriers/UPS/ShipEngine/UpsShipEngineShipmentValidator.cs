@@ -43,11 +43,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("Shipper Release is not supported with this account.");
             }
 
-            if (shipment.Ups.SaturdayDelivery)
-            {
-                return Result.FromError("Saturday Delivery is not supported with this account.");
-            }
-
             if (shipment.Ups.CarbonNeutral)
             {
                 return Result.FromError("Carbon Neutral is not supported with this account.");
