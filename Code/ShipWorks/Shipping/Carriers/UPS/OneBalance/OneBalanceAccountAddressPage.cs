@@ -53,7 +53,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
 
             // for some reason, simply disabling the button doesn't work
             Wizard.NextVisible = false;
-            Wizard.BackEnabled = false;
 
             // create PersonAdapter from control
             PersonAdapter personAdapter = new PersonAdapter();
