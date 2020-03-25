@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -14,10 +12,20 @@ namespace ShipWorks.Products.Warehouse
     [Component]
     public class WarehouseProductDataFactory : IWarehouseProductDataFactory
     {
+        private readonly Func<GetProductsAfterSequenceResponseData, IGetProductsAfterSequenceResult> createGetProductsAfterSequenceResult;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public WarehouseProductDataFactory(Func<GetProductsAfterSequenceResponseData, IGetProductsAfterSequenceResult> createGetProductsAfterSequenceResult)
+        {
+            this.createGetProductsAfterSequenceResult = createGetProductsAfterSequenceResult;
+        }
+
         /// <summary>
         /// Create an AddProductRequestData object
         /// </summary>
-        public IWarehouseProductRequestData CreateAddProductRequest(IProductVariantEntity product) => 
+        public IWarehouseProductRequestData CreateAddProductRequest(IProductVariantEntity product) =>
             new AddProductRequestData(product);
 
         /// <summary>
@@ -29,19 +37,19 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create a ChangeProductRequestData object
         /// </summary>
-        public IWarehouseProductRequestData CreateChangeProductRequest(IProductVariantEntity product) => 
+        public IWarehouseProductRequestData CreateChangeProductRequest(IProductVariantEntity product) =>
             new ChangeProductRequestData(product);
 
         /// <summary>
         /// Create an UploadProductRequestData object
         /// </summary>
-        public IWarehouseProductRequestData CreateUploadRequest(IEnumerable<IProductVariantEntity> products) => 
+        public IWarehouseProductRequestData CreateUploadRequest(IEnumerable<IProductVariantEntity> products) =>
             new UploadProductsRequestData(products);
 
         /// <summary>
         /// Create a change result from a ChangeProductDataResponse
         /// </summary>
-        public IProductChangeResult CreateChangeProductResult(ChangeProductResponseData response) => 
+        public IProductChangeResult CreateChangeProductResult(ChangeProductResponseData response) =>
             new ChangeProductResult(response);
 
         /// <summary>
@@ -72,14 +80,7 @@ namespace ShipWorks.Products.Warehouse
         /// Create result for given response data
         /// </summary>
         /// <param name="data"></param>
-        public IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data)
-        {
-            var scope = IoC.UnsafeGlobalLifetimeScope;
-            IProductCatalog productCatalog = scope.Resolve<IProductCatalog>();
-            IWarehouseProductBundleService bundleService = scope.Resolve<IWarehouseProductBundleService>();
-            Func <WarehouseProduct, IHubProductUpdater> createHubProductUpdater = scope.Resolve<Func<WarehouseProduct, IHubProductUpdater>>();
-
-            return new GetProductsAfterSequenceResult(data, productCatalog, bundleService, createHubProductUpdater);
-        }
+        public IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data) =>
+            createGetProductsAfterSequenceResult(data);
     }
 }

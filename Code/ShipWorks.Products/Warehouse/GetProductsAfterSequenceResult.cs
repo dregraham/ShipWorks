@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
@@ -14,6 +15,7 @@ namespace ShipWorks.Products.Warehouse
     /// <summary>
     /// Get products from the Hub after newest sequence in the db
     /// </summary>
+    [Component]
     public class GetProductsAfterSequenceResult : IGetProductsAfterSequenceResult
     {
         private readonly GetProductsAfterSequenceResponseData data;
