@@ -874,6 +874,7 @@
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
+    <Compile Include="Data\ShipmentNotProcessedIgnoreConcurrencyFactory.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom10Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
@@ -1202,6 +1203,7 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\ShipmentIgnoreConcurrencyScope.cs" />
     <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
