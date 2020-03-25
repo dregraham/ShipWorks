@@ -270,6 +270,16 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         }
 
         /// <summary>
+        /// Get insurance choices for the given shipment
+        /// </summary>
+        private static List<IInsuranceChoice> GetInsuranceChoices(ShipmentEntity shipment, ShipmentType shipmentType) =>
+            Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                                 choice.InsuranceValue > 0)
+                .ToList();
+
+        /// <summary>
         /// Add insurance details from the given shipment to the log shipment request
         /// </summary>
         private void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
@@ -281,11 +291,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             bool pennyOne = false;
             decimal insuredValue = 0;
 
-            List<IInsuranceChoice> insuredPackages = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                                 choice.InsuranceValue > 0)
-                .ToList();
+            List<IInsuranceChoice> insuredPackages = GetInsuranceChoices(shipment, shipmentType);
 
             if (insuredPackages.Count > 0)
             {
