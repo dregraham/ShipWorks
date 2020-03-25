@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
-        Task<Result> Execute(UpsAccountEntity account);
+        Task<Result> Execute(UpsAccountEntity account, string deviceIdentity);
     }
 }

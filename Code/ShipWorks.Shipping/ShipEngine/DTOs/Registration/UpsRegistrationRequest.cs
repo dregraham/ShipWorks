@@ -32,7 +32,10 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 
         [JsonProperty("end_user_ip_address")]
         public string EndUserIpAddress { get; set; }
-        
+
+        [JsonProperty("device_identity")]
+        public string DeviceIdentity { get; set; }
+
         [JsonProperty("software_provider")]
         public string SoftwareProvider { get; set; }
 
