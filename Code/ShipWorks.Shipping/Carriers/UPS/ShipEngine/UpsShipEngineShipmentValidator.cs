@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 return Result.FromError("Third Party Billing is not supported with this account.");
             }
 
-            if(shipment.Ups.Packages.Any(p => p.DeclaredValue > 1000M))
+            if(shipment.Ups.Packages.Any(p => p.DeclaredValue > 999M))
             {
                 return Result.FromError("This service is unavailable for shipments over $1000.");
             }
