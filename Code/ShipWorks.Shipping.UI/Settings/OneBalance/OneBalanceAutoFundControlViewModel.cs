@@ -98,6 +98,16 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                     throw new UspsException("The amount to automatically fund cannot be greater than $500");
                 }
 
+                if (IsAutoFund && MinimumBalance < 0.01M)
+                {
+                    throw new UspsException("Minimum balance amount must be greater than $0");
+                }
+
+                if (IsAutoFund && AutoFundAmount < 10)
+                {
+                    throw new UspsException("Amount to be funded must be at least $10");
+                }
+
                 var newAutoBuySettings = new AutoBuySettings()
                 {
                     AutoBuyEnabled = IsAutoFund,
