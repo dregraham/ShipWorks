@@ -576,7 +576,10 @@ namespace ShipWorks.Shipping.Settings
             }
             catch (UspsException ex)
             {
-                MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{ex.Message}");
+                var message = ex.Message.Replace("TriggerAmount", "Minimum Balance")
+                                        .Replace("PurchaseAmount", "Amount to be funded");
+
+                MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{message}");
             }
 
             return false;
