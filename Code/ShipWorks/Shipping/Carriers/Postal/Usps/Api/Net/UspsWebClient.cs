@@ -245,37 +245,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private TrackingResult TrackShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             TrackingResult result = new TrackingResult();
-            TrackingEvent[] trackingEvents;
-            DateTime? guaranteedDeliveryDate;
-            DateTime? expectedDeliveryDate;
-            string serviceDescription;
-            string carrier;
-            DestinationInfo destinationInfo;
 
             using (ISwsimV84 webService = CreateWebService("TrackShipment"))
             {
                 webService.TrackShipment(GetCredentials(account), shipment.TrackingNumber,
-                    out trackingEvents, out guaranteedDeliveryDate,
-                    out expectedDeliveryDate, out serviceDescription, out carrier, out destinationInfo);
-            }
+                    out TrackingEvent[] trackingEvents, out DateTime? guaranteedDeliveryDate,
+                    out DateTime? expectedDeliveryDate, out string serviceDescription,
+                    out string carrier, out DestinationInfo destinationInfo);
 
-            if (trackingEvents.Any())
-            {
-                foreach (TrackingEvent trackingEvent in trackingEvents)
+                if (trackingEvents.Any())
                 {
-                    result.Details.Add(new TrackingResultDetail()
+                    foreach (TrackingEvent trackingEvent in trackingEvents)
                     {
-                        Date = trackingEvent.Timestamp.ToString("M/dd/yyy"),
-                        Time = trackingEvent.Timestamp.ToString("h:mm tt"),
-                        Activity = trackingEvent.Event,
-                        Location = GetTrackEventLocation(trackingEvent)
-                    });
+                        result.Details.AddRange(new TrackingResultDetail()
+                        {
+                            Date = trackingEvent.Timestamp.ToString("M/dd/yyy"),
+                            Time = trackingEvent.Timestamp.ToString("h:mm tt"),
+                            Activity = trackingEvent.Event,
+                            Location = GetTrackEventLocation(trackingEvent)
+                        });
+                    }
+
+                    result.Summary = trackingEvents.OrderBy(te => te.Timestamp).Last().Event;
                 }
 
-                result.Summary = trackingEvents.OrderBy(te => te.Timestamp).Last().Event;
+                return result;
             }
-
-            return result;
         }
 
         /// <summary>
@@ -292,10 +287,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Populates a usps account entity.
         /// </summary>
         /// <param name="account">The account.</param>
-        public void PopulateUspsAccountEntity(UspsAccountEntity account)
-        {
+        public void PopulateUspsAccountEntity(UspsAccountEntity account) =>
             ExceptionWrapper(() => PopulateUspsAccountEntityInternal(account), account);
-        }
 
         /// <summary>
         /// The internal PopulateUspsAccountEntity implementation that is intended to be wrapped by the exception wrapper
@@ -393,46 +386,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Get the USPS URL of the given urlType
         /// </summary>
-        public string GetUrl(IUspsAccountEntity account, UrlType urlType)
-        {
-            return ExceptionWrapper(() => { return GetUrlInternal(account, urlType); }, account);
-        }
+        public string GetUrl(IUspsAccountEntity account, UrlType urlType) =>
+            ExceptionWrapper(() => GetUrlInternal(account, urlType), account);
 
         /// <summary>
         /// The internal GetUrl implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
         private string GetUrlInternal(IUspsAccountEntity account, UrlType urlType)
         {
-            string url;
-
             using (ISwsimV84 webService = CreateWebService("GetURL"))
             {
-                webService.GetURL(GetCredentials(account), urlType, string.Empty, out url);
+                webService.GetURL(GetCredentials(account), urlType, string.Empty, out string url);
+                return url;
             }
-
-            return url;
         }
 
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.
         /// </summary>
-        public void PurchasePostage(UspsAccountEntity account, decimal amount, decimal controlTotal)
-        {
+        public void PurchasePostage(UspsAccountEntity account, decimal amount, decimal controlTotal) =>
             ExceptionWrapper(() => { PurchasePostageInternal(account, amount, controlTotal); return true; }, account);
-        }
 
         /// <summary>
         /// The internal PurchasePostageInternal implementation intended to be wrapped by the exception wrapper
         /// </summary>
         private void PurchasePostageInternal(UspsAccountEntity account, decimal amount, decimal controlTotal)
         {
-            PurchaseStatus purchaseStatus;
-            int transactionID;
-            Usps.WebServices.PostageBalance postageBalance;
-            string rejectionReason;
-            bool miRequired_Unused;
-            PurchaseRejectionCode? purchaseRejectionCode_Unused;
-
             using (ISwsimV84 webService = CreateWebService("PurchasePostage"))
             {
                 webService.PurchasePostage(
@@ -443,17 +422,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     null, // IntegratorTxID
                     null, // SendEmail
                     false, //SendEmailSpecified
-                    out purchaseStatus,
-                    out transactionID,
-                    out postageBalance,
-                    out rejectionReason,
-                    out miRequired_Unused,
-                    out purchaseRejectionCode_Unused);
-            }
+                    out PurchaseStatus purchaseStatus,
+                    out int transactionID,
+                    out Usps.WebServices.PostageBalance postageBalance,
+                    out string rejectionReason,
+                    out bool miRequired_Unused,
+                    out PurchaseRejectionCode? purchaseRejectionCode_Unused);
 
-            if (purchaseStatus == PurchaseStatus.Rejected)
-            {
-                throw new UspsException(rejectionReason);
+                if (purchaseStatus == PurchaseStatus.Rejected)
+                {
+                    throw new UspsException(rejectionReason);
+                }
             }
         }
 
@@ -571,10 +550,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Cleans the address of the given person using the specified USPS account
         /// </summary>
-        private Task<Address> CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch)
-        {
-            return ExceptionWrapperAsync(() => CleanseAddressInternal(person, account, requireFullMatch), account);
-        }
+        private Task<Address> CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch) =>
+            ExceptionWrapperAsync(() => CleanseAddressInternal(person, account, requireFullMatch), account);
 
         /// <summary>
         /// Internal CleanseAddress implementation intended to be wrapped by the auth wrapper
@@ -712,11 +689,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Adjusts the length of the address line to be not more than 50 characters.
         /// </summary>
-        private static string AdjustAddressLineForLength(string addressLine)
-        {
-            const int maxLength = 50;
-            return addressLine.Length > maxLength ? addressLine.Substring(0, maxLength) : addressLine;
-        }
+        private static string AdjustAddressLineForLength(string addressLine) => addressLine.Truncate(50);
 
         /// <summary>
         /// Registers a new account with USPS
