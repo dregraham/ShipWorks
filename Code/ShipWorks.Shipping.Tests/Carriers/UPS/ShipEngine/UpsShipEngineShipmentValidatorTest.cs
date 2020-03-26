@@ -74,14 +74,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.ShipEngine
 
             Assert.True(testObject.ValidateShipment(shipment).Failure);
         }
-
-        [Fact]
-        public void ValidateShipment_ThrowsShippingException_WhenShipmentHasSaturdayDelivery()
-        {
-            shipment.Ups.SaturdayDelivery = true;
-
-            Assert.True(testObject.ValidateShipment(shipment).Failure);
-        }
         
         [Fact]
         public void ValidateShipment_ThrowsShippingException_WhenShipmentHasCarbonNeutral()

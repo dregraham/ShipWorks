@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
 {
@@ -51,8 +52,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OneBalance
         /// </summary>
         private void OnComplete(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            // null check so it doesn't bomb
-            Identity = webBrowser.Document.InvokeScript(functionName)?.ToString();
+            if (Assembly.GetExecutingAssembly().GetName().Version.Major > 1)
+            {
+                // null check so it doesn't bomb
+                Identity = webBrowser.Document.InvokeScript(functionName)?.ToString();
+            }
         }
     }
 }

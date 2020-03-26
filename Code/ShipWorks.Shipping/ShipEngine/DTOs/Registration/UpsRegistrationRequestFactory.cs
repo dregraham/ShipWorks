@@ -1,6 +1,8 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Reflection;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 {
@@ -12,14 +14,16 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
     {
         private readonly INetworkUtility networkUtility;
         private readonly IUpsCredentials upsCredentials;
+        private readonly IAssembly assembly;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsRegistrationRequestFactory(INetworkUtility networkUtility, IUpsCredentials upsCredentials)
+        public UpsRegistrationRequestFactory(INetworkUtility networkUtility, IUpsCredentials upsCredentials, IAssembly assembly)
         {
             this.networkUtility = networkUtility;
             this.upsCredentials = upsCredentials;
+            this.assembly = assembly;
         }
 
         /// <summary>
@@ -49,13 +53,28 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
                     CountryCode = person.CountryCode
                 },
                 WeightUnits = "pound",
-                EndUserIpAddress = networkUtility.GetPublicIPAddress(),
+                EndUserIpAddress = GetIPAddress(),
                 DeviceIdentity = deviceIdentity,
                 SoftwareProvider = "ShipWorks",
                 SoftwareProductName = "ShipWorks"
             };
 
             return registration;
+        }
+
+        /// <summary>
+        /// Get IP Address
+        /// </summary>
+        private string GetIPAddress()
+        {
+            if (assembly.GetExecutingAssemblyName().Version.Major > 1)
+            {
+                return networkUtility.GetPublicIPAddress();
+            }
+            else
+            {
+                return networkUtility.GetIPAddress();
+            }
         }
     }
 }
