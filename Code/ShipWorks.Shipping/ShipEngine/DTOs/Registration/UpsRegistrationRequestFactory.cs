@@ -2,6 +2,7 @@
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
 {
@@ -13,14 +14,16 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
     {
         private readonly INetworkUtility networkUtility;
         private readonly IUpsCredentials upsCredentials;
+        private readonly IAssembly assembly;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsRegistrationRequestFactory(INetworkUtility networkUtility, IUpsCredentials upsCredentials)
+        public UpsRegistrationRequestFactory(INetworkUtility networkUtility, IUpsCredentials upsCredentials, IAssembly assembly)
         {
             this.networkUtility = networkUtility;
             this.upsCredentials = upsCredentials;
+            this.assembly = assembly;
         }
 
         /// <summary>
@@ -64,7 +67,7 @@ namespace ShipWorks.Shipping.ShipEngine.DTOs.Registration
         /// </summary>
         private string GetIPAddress()
         {
-            if (Assembly.GetExecutingAssembly().GetName().Version.Major > 1)
+            if (assembly.GetExecutingAssemblyName().Version.Major > 1)
             {
                 return networkUtility.GetPublicIPAddress();
             }
