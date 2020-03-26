@@ -397,6 +397,7 @@
     <Compile Include="UI\ShipWorksSaveFileDialogException.cs" />
     <Compile Include="UI\UserConditionalNotificationType.cs" />
     <Compile Include="UI\WpfWindowStateSaver.cs" />
+    <Compile Include="Utility\AssemblyWrapper.cs" />
     <Compile Include="Utility\ClrHelper.cs" />
     <Compile Include="Utility\DateTimeExtensions.cs" />
     <Compile Include="Utility\DecimalExtensions.cs" />
@@ -550,6 +551,7 @@
     <Compile Include="Utility\GuidHelper.cs" />
     <Compile Include="Utility\HiddenAttribute.cs" />
     <Compile Include="Utility\HtmlEntityUtility.cs" />
+    <Compile Include="Utility\IAssembly.cs" />
     <Compile Include="Utility\IClrHelper.cs" />
     <Compile Include="Utility\IDateTimeProvider.cs" />
     <Compile Include="Utility\IEnvironmentWrapper.cs" />

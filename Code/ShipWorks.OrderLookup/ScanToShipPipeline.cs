@@ -26,10 +26,11 @@ using ShipWorks.OrderLookup.ScanPack;
 using ShipWorks.OrderLookup.ScanToShip;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Services;
 using ShipWorks.SingleScan;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Users;
+using Cursor = System.Windows.Forms.Cursor;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.OrderLookup
 {
@@ -209,9 +210,14 @@ namespace ShipWorks.OrderLookup
                     .Subscribe(),
 
                 messenger.OfType<OrderLookupShipAgainMessage>()
-                .Do(x => ShipAgain(x))
+                .Do(ShipAgain)
                 .CatchAndContinue((Exception ex) => HandleException(ex))
-                .Subscribe()
+                .Subscribe(),
+
+                messenger.OfType<ScanToShipCreateShipmentMessage>()
+                    .Do(CreateNewShipment)
+                    .CatchAndContinue((Exception ex) => HandleException(ex))
+                    .Subscribe()
             );
         }
 
@@ -560,6 +566,8 @@ namespace ShipWorks.OrderLookup
         /// </summary>
         private async void ShipAgain(OrderLookupShipAgainMessage message)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
 
             using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
@@ -574,6 +582,24 @@ namespace ShipWorks.OrderLookup
                 scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder.Shipments.Add(shipment);
 
                 await LoadOrder(scanToShipViewModel.OrderLookupViewModel.ShipmentModel.SelectedOrder).ConfigureAwait(false);
+                mainForm.SelectScanToShipTab();
+            }
+        }
+
+        /// <summary>
+        /// Create a new shipment for the order and load it
+        /// </summary>
+        private async void CreateNewShipment(ScanToShipCreateShipmentMessage message)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+
+            scanToShipViewModel.SelectedTab = (int) ScanToShipTab.ShipTab;
+
+            using (messageHelper.ShowProgressDialog("Create Shipment", "Creating new shipment"))
+            {
+                ShipmentEntity shipment = shippingManager.CreateShipment(message.OrderID);
+
+                await LoadOrder(shipment.Order).ConfigureAwait(false);
                 mainForm.SelectScanToShipTab();
             }
         }
