@@ -140,6 +140,25 @@ namespace ShipWorks.OrderLookup.ScanToShip
         }
 
         /// <summary>
+        /// Create a new shipment for the order loaded in scan to ship mode
+        /// </summary>
+        public void CreateNewShipment()
+        {
+            long? orderId = scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder?.OrderID;
+
+            if (orderId.HasValue && orderId.Value != 0)
+            {
+                messenger.Send(new ScanToShipCreateShipmentMessage(this, orderId.Value));
+            }
+        }
+
+        /// <summary>
+        /// Whether or not creating a new shipment is allowed
+        /// </summary>
+        public bool CreateNewShipmentAllowed() =>
+            scanToShipViewModel.OrderLookupViewModel.ShipmentModel?.SelectedOrder != null;
+
+        /// <summary>
         /// Allow the creation of a label
         /// </summary>
         public bool CreateLabelAllowed()

@@ -11141,7 +11141,6 @@
     <Resource Include="Resources\box_next_32_32.png" />
     <Resource Include="Resources\box_previous_32_32.png" />
     <Resource Include="Resources\index_32_32.png" />
-    <Resource Include="Resources\box_closed_redo_16_16.png" />
     <Resource Include="Resources\box_void_32_32.png" />
     <Resource Include="Resources\document_gear_32_32.png" />
     <None Include="Resources\amosoft.png" />
@@ -11149,6 +11148,8 @@
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <None Include="Resources\bonanza.png" />
+    <Resource Include="Resources\box_closed_redo_16_16.png" />
+    <Resource Include="Resources\box_closed_redo_32_32.png" />
     <Content Include="Resources\box_tall_32.png" />
     <Resource Include="Resources\buttonEndSearchDisabled.png" />
     <None Include="Resources\checkbox_circle_32.png" />
