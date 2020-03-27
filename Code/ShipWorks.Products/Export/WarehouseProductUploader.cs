@@ -4,9 +4,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Products.Warehouse;
@@ -57,9 +54,9 @@ namespace ShipWorks.Products.Export
         private async Task<GenericResult<bool>> PerformUpload(ISingleItemProgressDialog progressItem, IProgressUpdater progressUpdater, bool uploadBundles)
         {
             GenericResult<bool> shouldContinue;
-            do
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
             {
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+                do
                 {
                     var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize, uploadBundles).ConfigureAwait(false);
                     var results = await warehouseProductClient.Upload(skus)
@@ -69,14 +66,13 @@ namespace ShipWorks.Products.Export
 
                     if (results.Success)
                     {
-                        await sqlAdapter.SaveEntityCollectionAsync(skus.ToEntityCollection()).ConfigureAwait(false);
-                        await sqlAdapter.SaveEntityCollectionAsync(skus.Select(x => x.Product).ToEntityCollection()).ConfigureAwait(false);
+                        await sqlAdapter.SaveEntityCollectionAsync(skus.ToEntityCollection(), false, true).ConfigureAwait(false);
                         progressUpdater.Update(batchSize);
                     }
 
                     shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
-                }
-            } while (shouldContinue.Match(x => x, ex => false));
+                } while (shouldContinue.Match(x => x, ex => false));
+            }
             return shouldContinue;
         }
 

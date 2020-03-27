@@ -35,7 +35,6 @@ namespace ShipWorks.Products.Warehouse
             productVariant.Product.IsActive = warehouseProduct.Enabled;
             productVariant.Product.IsBundle = warehouseProduct.IsBundle;
             productVariant.CreatedDate = warehouseProduct.CreatedDate.ToSqlSafeDateTime();
-            
             productVariant.IsActive = warehouseProduct.Enabled;
         }
     }

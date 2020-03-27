@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -35,20 +36,17 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Handle syncing product bundles 
         /// </summary>
-        public async Task UpdateProductBundleDetails(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant, 
+        public async Task UpdateProductBundleDetails(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant,
             WarehouseProduct warehouseProductDto, CancellationToken cancellationToken)
         {
+            MethodConditions.EnsureArgumentIsNotNull(productVariant, nameof(productVariant));
+
             if (!warehouseProductDto.IsBundle)
             {
                 return;
             }
 
             if (warehouseProductDto.BundleItems == null || warehouseProductDto.BundleItems.None())
-            {
-                throw new WarehouseProductException("Product is marked as a bundle, but no bundle items were present.");
-            }
-
-            if (productVariant == null)
             {
                 throw new WarehouseProductException("Product is marked as a bundle, but no bundle items were present.");
             }
@@ -63,7 +61,7 @@ namespace ShipWorks.Products.Warehouse
                 productVariant.Product.Bundles.Remove(bundle);
                 productVariant.Product.Bundles.RemovedEntitiesTracker.Add(bundle);
             }
-            
+
             // Try to get all hub product ids from the sw db, keep a list of 
             foreach (var huBundledProduct in warehouseProductDto.BundleItems)
             {
@@ -74,8 +72,7 @@ namespace ShipWorks.Products.Warehouse
                     swBundledProdEntity = await AddProductBundle(huBundledProduct.Value, sqlAdapter, cancellationToken).ConfigureAwait(false);
                 }
                 else if (swBundledProdEntity.Product.IsBundle)
-                { 
-                    //TODO: I don't believe we support bundles made of bundles, so what should we do here?
+                {
                     throw new WarehouseProductException($"Bundles should not be comprised of bundles. Parent Sku: ${productVariant.DefaultSku}, Child ProductId: ${huBundledProduct.Value.ProductId}");
                 }
 
