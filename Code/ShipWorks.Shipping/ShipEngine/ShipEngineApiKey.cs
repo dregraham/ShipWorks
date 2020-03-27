@@ -15,10 +15,7 @@ namespace ShipWorks.Shipping.ShipEngine
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     public class ShipEngineApiKey : IShipEngineApiKey, IInitializeForCurrentSession
     {
-        private const string EncryptedPartnerApiKey = "Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA";
-
         private readonly IShippingSettings shippingSettings;
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IShipEnginePartnerWebClient partnerWebClient;
 
         /// <summary>
@@ -29,7 +26,6 @@ namespace ShipWorks.Shipping.ShipEngine
             IShipEnginePartnerWebClient partnerWebClient)
         {
             this.shippingSettings = shippingSettings;
-            this.encryptionProviderFactory = encryptionProviderFactory;
             this.partnerWebClient = partnerWebClient;
         }
 
@@ -62,15 +58,6 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             Value = apiKey;
-        }
-
-        /// <summary>
-        /// Gets the ShipWorks PartnerID
-        /// </summary>
-        public string GetPartnerApiKey()
-        {
-            IEncryptionProvider decrypter = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ShipEngine");
-            return decrypter.Decrypt(EncryptedPartnerApiKey);
         }
 
         /// <summary>

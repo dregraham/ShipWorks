@@ -37,52 +37,13 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                .Returns(new ShippingSettingsEntity());
 
             mock.Mock<IShipEnginePartnerWebClient>()
-                .Setup(c => c.GetApiKey(AnyString, AnyString))
+                .Setup(c => c.CreateNewAccount())
                 .ReturnsAsync("newkey");
 
             var testObject = mock.Create<ShipEngineApiKey>();
             await testObject.Configure();
 
             Assert.Equal("newkey", testObject.Value);
-        }
-
-        [Fact]
-        public async Task Configure_UsesAccountNumberWhenGettingApiKey()
-        {
-            mock.Mock<IShippingSettings>()
-               .Setup(s => s.Fetch())
-               .Returns(new ShippingSettingsEntity());
-
-            mock.Mock<IShipEnginePartnerWebClient>()
-                .Setup(c => c.CreateNewAccount(AnyString))
-                .ReturnsAsync("accountId");
-
-            var testObject = mock.Create<ShipEngineApiKey>();
-            await testObject.Configure();
-
-            mock.Mock<IShipEnginePartnerWebClient>()
-                .Verify(c => c.GetApiKey(AnyString, "accountId"), Times.Once());
-        }
-
-        [Fact]
-        public async Task Configure_UsePartnerApiKeyWhenGettingApiKey()
-        {
-            mock.Mock<IShippingSettings>()
-               .Setup(s => s.Fetch())
-               .Returns(new ShippingSettingsEntity());
-
-            var encryptionProvider = mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(f => f.CreateSecureTextEncryptionProvider(AnyString));
-
-            encryptionProvider
-                .Setup(p => p.Decrypt(AnyString))
-                .Returns("decrypted");
-
-            var testObject = mock.Create<ShipEngineApiKey>();
-            await testObject.Configure();
-
-            mock.Mock<IShipEnginePartnerWebClient>()
-                .Verify(c => c.GetApiKey("decrypted", AnyString), Times.Once());
         }
 
         [Fact]
@@ -103,7 +64,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             await testObject.Configure();
 
             mock.Mock<IShipEnginePartnerWebClient>()
-                .Verify(c => c.CreateNewAccount("decrypted"), Times.Once());
+                .Verify(c => c.CreateNewAccount(), Times.Once());
         }
 
         [Fact]
@@ -114,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                .Returns(new ShippingSettingsEntity());
 
             mock.Mock<IShipEnginePartnerWebClient>()
-                .Setup(c => c.CreateNewAccount(AnyString))
+                .Setup(c => c.CreateNewAccount())
                 .Throws(new ShipEngineException("error"));
 
             var testObject = mock.Create<ShipEngineApiKey>();
@@ -131,29 +92,13 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
                .Returns(new ShippingSettingsEntity());
 
             mock.Mock<IShipEnginePartnerWebClient>()
-                .Setup(c => c.GetApiKey(AnyString, AnyString))
+                .Setup(c => c.CreateNewAccount())
                 .Throws(new ShipEngineException("error"));
 
             var testObject = mock.Create<ShipEngineApiKey>();
             await testObject.Configure();
 
             Assert.True(string.IsNullOrEmpty(testObject.Value));
-        }
-
-        [Fact]
-        public async Task Configure_DecryptsPartnerApiKey()
-        {
-            mock.Mock<IShippingSettings>()
-              .Setup(s => s.Fetch())
-              .Returns(new ShippingSettingsEntity());
-
-            var encryptionProvider = mock.FromFactory<IEncryptionProviderFactory>()
-                .Mock(f => f.CreateSecureTextEncryptionProvider(AnyString));
-
-            var testObject = mock.Create<ShipEngineApiKey>();
-            await testObject.Configure();
-
-            encryptionProvider.Verify(p => p.Decrypt("Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA"), Times.Once());
         }
 
         public void Dispose()
