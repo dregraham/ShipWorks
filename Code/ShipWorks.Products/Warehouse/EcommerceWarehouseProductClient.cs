@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products.Warehouse
 {
@@ -24,6 +26,18 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product) => 
             Task.FromResult(NullProductResult.Default);
+
+        /// <summary>
+        /// Get a product from the Hub
+        /// </summary>
+        public Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken) =>
+            Task.FromResult<WarehouseProduct>(null);
+
+        /// <summary>
+        /// Get products from the Hub for this warehouse after the given sequence
+        /// </summary>
+        public Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken) =>
+            Task.FromResult(NullGetProductsAfterSequenceResult.Default);
 
         /// <summary>
         /// Enable or disable the given products

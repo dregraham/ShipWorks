@@ -28,7 +28,7 @@ namespace ShipWorks.Products.Warehouse
         /// <summary>
         /// Create an UploadProductRequestData object
         /// </summary>
-        IWarehouseProductRequestData CreateUploadProductsRequest(IEnumerable<IProductVariantEntity> products);
+        IWarehouseProductRequestData CreateUploadRequest(IEnumerable<IProductVariantEntity> products);
 
         /// <summary>
         /// Create a change result from a ChangeProductDataResponse
@@ -49,5 +49,15 @@ namespace ShipWorks.Products.Warehouse
         /// Create a change result from an UploadResponse
         /// </summary>
         IProductsChangeResult CreateUploadResult(UploadResponseData response);
+
+        /// <summary>
+        /// Create a get product request for the given product id
+        /// </summary>
+        IWarehouseProductRequestData CreateGetProductRequest(string hubProductId);
+
+        /// <summary>
+        /// Create result for given response data
+        /// </summary>
+        IGetProductsAfterSequenceResult CreateGetProductsAfterSequenceResult(GetProductsAfterSequenceResponseData data);
     }
 }

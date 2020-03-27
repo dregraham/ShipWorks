@@ -36,12 +36,25 @@ namespace ShipWorks.Products.Warehouse
         {
             payload.WarehouseId = configurationData.FetchReadOnly().WarehouseID;
 
+            IRestRequest request = Create(endpoint, method);
+
+            request.AddJsonBody(payload);
+
+            return request;
+        }
+
+        /// <summary>
+        /// Create a request object for making a warehouse product request
+        /// </summary>
+        /// <param name="endpoint">Url endpoint of the request</param>
+        /// <param name="method">HTTP method of the request</param>
+        /// <returns>Request object for use by the rest client</returns>
+        public IRestRequest Create(string endpoint, Method method)
+        {
             IRestRequest request = restRequestFactory.Create(endpoint, method);
 
             request.JsonSerializer = RestSharpJsonNetSerializer.CreateHubDefault();
             request.RequestFormat = DataFormat.Json;
-
-            request.AddJsonBody(payload);
 
             return request;
         }

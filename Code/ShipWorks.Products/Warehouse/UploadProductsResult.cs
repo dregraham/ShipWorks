@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -10,12 +11,14 @@ namespace ShipWorks.Products.Warehouse
     /// </summary>
     public class UploadProductsResult : IProductsChangeResult
     {
+        private readonly UploadResponseData responseData;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public UploadProductsResult(UploadResponseData request)
+        public UploadProductsResult(UploadResponseData responseData)
         {
-
+            this.responseData = responseData;
         }
 
         /// <summary>
@@ -23,7 +26,18 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public void ApplyTo(IEnumerable<ProductVariantEntity> productVariants)
         {
-            throw new NotImplementedException();
+            foreach (var variant in productVariants)
+            {
+                var itemData = responseData.Results.FirstOrDefault(x => x.Sku == variant.DefaultSku);
+
+                variant.Product.UploadToWarehouseNeeded = false;
+                variant.HubVersion = itemData?.Version;
+
+                if (!variant.HubProductId.HasValue)
+                {
+                    variant.HubProductId = string.IsNullOrEmpty(itemData?.Id) ? (Guid?) null : Guid.Parse(itemData.Id);
+                }
+            }
         }
     }
 }

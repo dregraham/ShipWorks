@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Reactive;
+using System.Threading;
 using System.Threading.Tasks;
-using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,6 +37,16 @@ namespace ShipWorks.Products
         Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus);
 
         /// <summary>
+        /// Fetch product variants based on a collection of skus
+        /// </summary>
+        Task<IEnumerable<ProductVariantEntity>> FetchProductVariantEntities(ISqlAdapter sqlAdapter, IEnumerable<string> skus, bool defaultSkuOnly);
+
+        /// <summary>
+        /// Get products for the list of Hub product ids
+        /// </summary>
+        Task<IEnumerable<ProductVariantEntity>> GetProductsByHubIds(ISqlAdapter sqlAdapter, IEnumerable<Guid> guid);
+
+        /// <summary>
         /// Fetch a products siblings
         /// </summary>
         Task<IEnumerable<IProductVariantEntity>> FetchSiblingVariants(IProductVariantEntity productVariant, ISqlAdapter sqlAdapter);
@@ -45,10 +57,26 @@ namespace ShipWorks.Products
         ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, long productVariantID);
 
         /// <summary>
+        /// Fetch a product variant based on HubProductId
+        /// </summary>
+        ProductVariantEntity FetchProductVariantEntity(ISqlAdapter sqlAdapter, Guid hubProductId);
+
+        /// <summary>
         /// Save the given product
         /// </summary>
         Task<Result> Save(ProductVariantEntity product);
 
+        /// <summary>
+        /// Save the given product
+        /// </summary>
+        Task<Result> Save(ProductVariantEntity product, ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Save the product to the database
+        /// </summary>
+        Task<Unit> SaveProductToDatabase(ProductVariantEntity productVariant, ISqlAdapter sqlAdapter);
+
+        /// <summary>
         /// Get a DataTable of products from the database
         /// </summary>
         Task<DataTable> GetProductDataForExport();
@@ -76,11 +104,16 @@ namespace ShipWorks.Products
         /// <summary>
         /// Fetch product variants to upload to the warehouse.
         /// </summary>
-        Task<IEnumerable<IProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize);
+        Task<IEnumerable<ProductVariantEntity>> FetchProductVariantsForUploadToWarehouse(ISqlAdapter sqlAdapter, int pageSize, bool isBundle);
 
         /// <summary>
         /// Fetch count of product variants to upload to the warehouse.
         /// </summary>
         Task<int> FetchProductVariantsForUploadToWarehouseCount(ISqlAdapter sqlAdapter);
+
+        /// <summary>
+        /// Fetch the newest sequence number of all the products
+        /// </summary>
+        Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter, CancellationToken cancellationToken);
     }
 }

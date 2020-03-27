@@ -23527,6 +23527,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.HubVersion);}
 		}
+		/// <summary>Creates a new ProductVariantEntity.HubSequence field instance</summary>
+		public static EntityField2 HubSequence
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ProductVariantFieldIndex.HubSequence);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ProductVariantAliasEntity</summary>

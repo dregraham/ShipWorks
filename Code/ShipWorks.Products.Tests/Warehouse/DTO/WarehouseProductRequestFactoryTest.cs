@@ -32,13 +32,51 @@ namespace ShipWorks.Products.Tests.Warehouse.DTO
         }
 
         [Fact]
-        public void Create_SetsWarehouseId_FromConfiguration()
+        public void Create_WithPayload_SetsWarehouseIdFromConfiguration()
         {
             var payload = mock.Mock<IWarehouseProductRequestData>();
 
             testObject.Create("/foo", Method.GET, payload.Object);
 
             payload.VerifySet(x => x.WarehouseId = "ABC123");
+        }
+
+        [Fact]
+        public void Create_WithPayload_DelegatesToRestRequestFactory()
+        {
+            testObject.Create("/foo", Method.PATCH, mock.Build<IWarehouseProductRequestData>());
+
+            mock.Mock<IRestRequestFactory>()
+                .Verify(x => x.Create("/foo", Method.PATCH));
+        }
+
+        [Fact]
+        public void Create_WithPayload_ConfiguresRequest()
+        {
+            var payload = mock.Build<IWarehouseProductRequestData>();
+            var request = mock.Mock<IRestRequest>();
+            mock.Mock<IRestRequestFactory>()
+                .Setup(x => x.Create(AnyString, It.IsAny<Method>()))
+                .Returns(request.Object);
+
+            testObject.Create("/foo", Method.PATCH, payload);
+
+            request.VerifySet(x => x.RequestFormat = DataFormat.Json);
+            request.VerifySet(x => x.JsonSerializer = It.Is<IRestSerializer>(s => ValidateSerializer(s)));
+            request.Verify(x => x.AddJsonBody(payload));
+        }
+
+        [Fact]
+        public void Create_WithPayload_ReturnsRequest()
+        {
+            var request = mock.Build<IRestRequest>();
+            mock.Mock<IRestRequestFactory>()
+                .Setup(x => x.Create(AnyString, It.IsAny<Method>()))
+                .Returns(request);
+
+            var result = testObject.Create("/foo", Method.PATCH, mock.Build<IWarehouseProductRequestData>());
+
+            Assert.Equal(request, result);
         }
 
         [Fact]
@@ -63,7 +101,6 @@ namespace ShipWorks.Products.Tests.Warehouse.DTO
 
             request.VerifySet(x => x.RequestFormat = DataFormat.Json);
             request.VerifySet(x => x.JsonSerializer = It.Is<IRestSerializer>(s => ValidateSerializer(s)));
-            request.Verify(x => x.AddJsonBody(payload));
         }
 
         [Fact]
@@ -74,7 +111,7 @@ namespace ShipWorks.Products.Tests.Warehouse.DTO
                 .Setup(x => x.Create(AnyString, It.IsAny<Method>()))
                 .Returns(request);
 
-            var result = testObject.Create("/foo", Method.PATCH, mock.Build<IWarehouseProductRequestData>());
+            var result = testObject.Create("/foo", Method.PATCH);
 
             Assert.Equal(request, result);
         }

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Products.Warehouse.DTO;
 
@@ -20,15 +23,21 @@ namespace ShipWorks.Products.Warehouse
         private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IWarehouseProductRequestFactory requestFactory;
         private readonly IWarehouseProductDataFactory dataFactory;
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseProductClient(IWarehouseRequestClient warehouseRequestClient, IWarehouseProductRequestFactory requestFactory, IWarehouseProductDataFactory dataFactory)
+        public WarehouseProductClient(
+            IWarehouseRequestClient warehouseRequestClient, 
+            IWarehouseProductRequestFactory requestFactory, 
+            IWarehouseProductDataFactory dataFactory,
+            IConfigurationData configurationData)
         {
             this.warehouseRequestClient = warehouseRequestClient;
             this.requestFactory = requestFactory;
             this.dataFactory = dataFactory;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -60,6 +69,33 @@ namespace ShipWorks.Products.Warehouse
         }
 
         /// <summary>
+        /// Get a product from the Hub
+        /// </summary>
+        public async Task<WarehouseProduct> GetProduct(string hubProductId, CancellationToken cancellationToken)
+        {
+            var payload = dataFactory.CreateGetProductRequest(hubProductId);
+            var request = requestFactory.Create(WarehouseEndpoints.GetProduct(hubProductId), Method.GET, payload);
+
+            return await warehouseRequestClient
+                .MakeRequest<WarehouseProduct>(request, "Get Product")
+                .ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// Get products from the Hub for this warehouse after the given sequence
+        /// </summary>
+        public async Task<IGetProductsAfterSequenceResult> GetProductsAfterSequence(long sequence, CancellationToken cancellationToken)
+        {
+            var warehouseId = configurationData.FetchReadOnly().WarehouseID;
+            var request = requestFactory.Create(WarehouseEndpoints.GetProductsAfterSequence(warehouseId, sequence), Method.GET);
+
+            return await warehouseRequestClient
+                .MakeRequest<GetProductsAfterSequenceResponseData>(request, "Get Products After Sequence", cancellationToken)
+                .Map(dataFactory.CreateGetProductsAfterSequenceResult)
+                .ConfigureAwait(true);
+        }
+
+        /// <summary>
         /// Enable or disable the given products
         /// </summary>
         public async Task<IProductsChangeResult> SetActivation(IEnumerable<Guid?> productIDs, bool activation)
@@ -83,12 +119,12 @@ namespace ShipWorks.Products.Warehouse
         /// </summary>
         public async Task<IProductsChangeResult> Upload(IEnumerable<IProductVariantEntity> products)
         {
-            if (products?.Any() != true)
+            if (products?.WhereNotNull().Any() != true)
             {
                 return NullProductsResult.Default;
             }
 
-            var payload = dataFactory.CreateUploadProductsRequest(products);
+            var payload = dataFactory.CreateUploadRequest(products);
             var request = requestFactory.Create(WarehouseEndpoints.UploadProducts, Method.POST, payload);
             request.AddHeader("version", "2");
 

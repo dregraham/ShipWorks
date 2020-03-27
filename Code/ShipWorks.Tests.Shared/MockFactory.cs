@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 
@@ -30,6 +31,20 @@ namespace ShipWorks.Tests.Shared
             mock.Mock<TFactory>()
                 .Setup(factoryMethod)
                 .Returns(createdMock);
+
+            return createdMock;
+        }
+
+        /// <summary>
+        /// Create a mock when the given factory method is called
+        /// </summary>
+        public Mock<TMock> MockAsync<TMock>(Expression<Func<TFactory, Task<TMock>>> factoryMethod) where TMock : class
+        {
+            var createdMock = mock.CreateMock<TMock>();
+
+            mock.Mock<TFactory>()
+                .Setup(factoryMethod)
+                .ReturnsAsync(createdMock.Object);
 
             return createdMock;
         }

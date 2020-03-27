@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace ShipWorks.Products.Warehouse.DTO
 {
@@ -8,6 +9,9 @@ namespace ShipWorks.Products.Warehouse.DTO
     [Obfuscation]
     public class UploadResponseData
     {
-
+        /// <summary>
+        /// Results of the import
+        /// </summary>
+        public IEnumerable<UploadResponseDataResult> Results { get; set; }
     }
 }

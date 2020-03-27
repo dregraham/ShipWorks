@@ -2423,6 +2423,7 @@
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
           <Field Name="HubProductId" Type="guid" IsOptional="true" FieldIndex="19" />
+          <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="21" />
           <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="20" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
           <Field Name="IsActive" Type="bool" FieldIndex="4" />
@@ -4632,7 +4633,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-02-23T19:28:03.0033371Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-19T21:29:09.0725059Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8028,6 +8029,7 @@
                     <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
                     <Field Name="HubProductId" Ordinal="20" IsOptional="true" DbType="25" />
                     <Field Name="HubVersion" Ordinal="21" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubSequence" Ordinal="22" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -13357,6 +13359,7 @@
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
             <FieldMapping FieldName="HubProductId" TargetFieldName="HubProductId" />
+            <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
             <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
             <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />

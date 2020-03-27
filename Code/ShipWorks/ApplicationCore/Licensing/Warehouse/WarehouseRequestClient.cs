@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -82,7 +83,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from redirectToken.");
                     }
 
-                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult);
+                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, CancellationToken.None);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)
@@ -106,7 +107,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Make an authenticated request
         /// </summary>
-        public async Task<T> MakeRequest<T>(IRestRequest restRequest, string logName)
+        public Task<T> MakeRequest<T>(IRestRequest restRequest, string logName) =>
+            MakeRequest<T>(restRequest, logName, CancellationToken.None);
+
+        /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        public async Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken)
         {
             ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, logName);
 
@@ -131,7 +138,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
             restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
 
-            var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest).ConfigureAwait(false);
+            var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest, cancellationToken).ConfigureAwait(false);
 
             try
             {
@@ -179,7 +186,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private async Task<IRestResponse> ResendAction(
             IRestRequest restRequest,
             IRestClient restClient,
-            GenericResult<TokenResponse> refreshTokenResult)
+            GenericResult<TokenResponse> refreshTokenResult,
+            CancellationToken cancellationToken)
         {
             authenticationToken = refreshTokenResult.Value.token;
 
@@ -191,7 +199,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
             }
 
-            return await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+            return await restClient.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
