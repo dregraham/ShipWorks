@@ -25,7 +25,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         private const string EnvironmentOtherTangoUrl = "EnvironmentOtherTangoUrl";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
         private const string EnvironmentOtherActivationUrl = "EnvironmentOtherActivationUrl";
-        private const string EnvironmentProxyActivationUrl = "EnvironmentOtherProxyUrl";
+        private const string EnvironmentOtherProxyUrl = "EnvironmentOtherProxyUrl";
 
         /// <summary>
         /// Constructor
@@ -71,7 +71,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
             string otherTangoUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherTangoUrl, "");
             string otherWarehouseUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherWarehouseUrl, "");
             string otherActivationUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherActivationUrl, "");
-            string otherProxyUrl = InterapptiveOnly.Registry.GetValue(EnvironmentProxyActivationUrl, "");
+            string otherProxyUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherProxyUrl, "");
 
             environments = new List<WebClientEnvironment>
             {
@@ -110,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 InterapptiveOnly.Registry.SetValue(EnvironmentOtherTangoUrl, SelectedEnvironment.TangoUrl);
                 InterapptiveOnly.Registry.SetValue(EnvironmentOtherWarehouseUrl, SelectedEnvironment.WarehouseUrl);
                 InterapptiveOnly.Registry.SetValue(EnvironmentOtherActivationUrl, SelectedEnvironment.ActivationUrl);
-                InterapptiveOnly.Registry.SetValue(EnvironmentProxyActivationUrl, SelectedEnvironment.ProxyUrl);
+                InterapptiveOnly.Registry.SetValue(EnvironmentOtherProxyUrl, SelectedEnvironment.ProxyUrl);
             }
         }
 
