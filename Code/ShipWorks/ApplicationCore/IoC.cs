@@ -26,6 +26,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.ApplicationCore.Licensing.FeatureRestrictions;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Security;
 using ShipWorks.Common;
@@ -286,6 +287,9 @@ namespace ShipWorks.ApplicationCore
                         (IShipSenseSynchronizer) c.Resolve<ShipSenseSynchronizer>() :
                         c.Resolve<NullShipSenseSynchronizer>())
                 .As<IShipSenseSynchronizer>();
+
+            builder.Register((c, _) =>
+                c.Resolve<WebClientEnvironmentFactory>().SelectedEnvironment);
         }
 
         /// <summary>

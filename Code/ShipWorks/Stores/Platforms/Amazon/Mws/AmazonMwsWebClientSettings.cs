@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws
 {
@@ -12,13 +13,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
         private readonly IInterapptiveOnly interapptiveOnly;
+        private readonly WebClientEnvironment webClientEnvironment;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials, IInterapptiveOnly interapptiveOnly)
+        public AmazonMwsWebClientSettings(IAmazonCredentials mwsCredentials, IInterapptiveOnly interapptiveOnly, WebClientEnvironment webClientEnvironment)
         {
             this.interapptiveOnly = interapptiveOnly;
+            this.webClientEnvironment = webClientEnvironment;
             Credentials = mwsCredentials;
         }
 
@@ -26,7 +29,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// Amazon MWS Credentials
         /// </summary>
         public IAmazonCredentials Credentials { get; set; }
-
         // Default base namespace for Amazon requests and responses
         private static readonly string endpointNamespace = "https://mws.amazonservices.com";
 
@@ -68,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public Uri ProxyEndpoint {
             get
             {
-                string endpoint = "https://proxy.hub.shipworks.com/amazonMws";
+                string endpoint = webClientEnvironment.ProxyUrl + "amazonMws";
 
                 if (interapptiveOnly.IsInterapptiveUser)
                 {
