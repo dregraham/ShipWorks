@@ -230,7 +230,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
                 TangoUrl = "http://localhost:4002/ShipWorksNet/ShipWorksV1.svc/account/shipworks",
                 ActivationUrl = "http://localhost:4002/ShipWorksNet/ActivationV1.svc",
                 WarehouseUrl = "http://localhost:4001/",
-                ProxyUrl = "https://localhost:3000/",
+                ProxyUrl = "http://localhost:3000/",
                 HeaderShipWorksUsername = "none",
                 HeaderShipWorksPassword = "none",
                 SoapAction = "",

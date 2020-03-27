@@ -8,13 +8,8 @@ namespace ShipWorks.Shipping.ShipEngine
     public interface IShipEnginePartnerWebClient
     {
         /// <summary>
-        /// Creates a new ShipEngine account and returns the account ID
+        /// Creates a new ShipEngine account and returns the api key
         /// </summary>
-        Task<string> CreateNewAccount(string partnerApiKey);
-
-        /// <summary>
-        /// Gets an ApiKey from the ShipEngine API
-        /// </summary>
-        Task<string> GetApiKey(string partnerApiKey, string shipEngineAccountId);
+        Task<string> CreateNewAccount();
     }
 }

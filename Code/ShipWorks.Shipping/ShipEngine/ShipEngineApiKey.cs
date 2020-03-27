@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = await GetNewApiKey();
+                    apiKey = await partnerWebClient.CreateNewAccount().ConfigureAwait(false);
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -62,17 +62,6 @@ namespace ShipWorks.Shipping.ShipEngine
             }
 
             Value = apiKey;
-        }
-
-        /// <summary>
-        /// Creates a new account and gets the API Key from ShipEngine
-        /// </summary>
-        private async Task<string> GetNewApiKey()
-        {
-            string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey);
-
-            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
         }
 
         /// <summary>
