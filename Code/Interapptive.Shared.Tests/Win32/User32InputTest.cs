@@ -25,7 +25,7 @@ namespace Interapptive.Shared.Tests.Win32
         {
             User32Input user32Input = new User32Input();
 
-            string result = user32Input.GetCharactersFromKeys(VirtualKeys.B, shift, control, altGr);
+            string result = user32Input.GetCharactersFromKeys(key, shift, control, altGr);
 
             Assert.Equal(expectedResult, result);
         }
