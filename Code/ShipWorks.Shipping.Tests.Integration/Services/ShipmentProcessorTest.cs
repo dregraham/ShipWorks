@@ -45,6 +45,7 @@ using ShipWorks.Tests.Shared.Carriers.Postal.Usps;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Tests.Shared.ExtensionMethods;
+using ShipWorks.Tests.Shared.XUnitExtensions.STAThreadAttributes;
 using ShipWorks.Users;
 using Xunit;
 
@@ -269,7 +270,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             messenger.Verify(m => m.Send(It.IsAny<ShipmentsProcessedMessage>(), It.IsAny<string>()), Times.Exactly(1));
         }
 
-        [Theory]
+        [STATheory]
         [InlineData(ShipmentTypeCode.Usps, typeof(UspsSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Usps, typeof(Express1UspsSetupWizard))]
