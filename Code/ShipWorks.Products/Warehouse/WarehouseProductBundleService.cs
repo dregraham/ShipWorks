@@ -38,9 +38,7 @@ namespace ShipWorks.Products.Warehouse
         public async Task UpdateProductBundleDetails(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant, 
             WarehouseProduct warehouseProductDto, CancellationToken cancellationToken)
         {
-            if (!warehouseProductDto.IsBundle ||
-                warehouseProductDto.BundleItems == null ||
-                warehouseProductDto.BundleItems.None())
+            if (!warehouseProductDto.IsBundle)
             {
                 return;
             }
