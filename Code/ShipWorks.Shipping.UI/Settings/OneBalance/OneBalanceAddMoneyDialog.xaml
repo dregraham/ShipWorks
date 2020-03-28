@@ -1,0 +1,48 @@
+﻿<ui:InteropWindow x:Class="ShipWorks.Shipping.UI.Settings.OneBalance.OneBalanceAddMoneyDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Shipping.UI.Settings.OneBalance"
+        xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        xmlns:c="http://schemas.shipworks.com/ui"
+        mc:Ignorable="d"
+        Title="Add Money To One Balance" 
+        Height="250" 
+        Width="300" 
+        Background="#FFF0F0F0"
+        Cursor="{Binding Cursor}">
+    <ui:InteropWindow.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/GlobalStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
+            <Style TargetType="TextBox" BasedOn="{StaticResource Grid.TextBox.Number}" />
+            <c:EmptyMoneyConverter x:Key="EmptyMoney"/>
+        </ResourceDictionary>
+    </ui:InteropWindow.Resources>
+    <StackPanel HorizontalAlignment="Center">
+        <TextBlock TextWrapping="Wrap"  Margin="0,20,0,0">
+            Enter an amount to prepay for postage with your ShipWorks One Balance account.
+            <Hyperlink NavigateUri="https://support.shipworks.com/hc/en-us/articles/360039872952" c:Link.OpenInBrowser="true">
+                Learn More
+            </Hyperlink>
+        </TextBlock>
+        <TextBlock Text="Amount" TextAlignment ="Center" Margin="0,30,0,0" Style="{StaticResource TextBlock.SectionHeader}" HorizontalAlignment="Center"/>
+        <TextBox Text="{Binding Amount, Converter={StaticResource EmptyMoney}}" HorizontalAlignment="Center" Margin="0,10,0,0" TextAlignment="Right"/>
+        <Grid Margin="0,40,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button HorizontalAlignment="Center" Margin="0" Command="{Binding BuyPostageCommand}" VerticalAlignment="Center" Width="65">
+                <TextBlock Text="Add" Margin="0,2,0,2"/>
+            </Button>
+            <Button HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Grid.Column="1" Width="65" IsCancel="True">
+                <TextBlock Text="Cancel" Margin="0,2,0,2"/>
+            </Button>
+        </Grid>
+    </StackPanel>
+</ui:InteropWindow>

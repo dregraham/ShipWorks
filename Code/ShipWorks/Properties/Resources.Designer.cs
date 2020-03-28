@@ -373,6 +373,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap box_closed_redo_32_32 {
+            get {
+                object obj = ResourceManager.GetObject("box_closed_redo_32_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap box_closed_with_label {
             get {
                 object obj = ResourceManager.GetObject("box_closed_with_label", resourceCulture);
@@ -4686,6 +4696,16 @@ namespace ShipWorks.Properties {
         public static System.Drawing.Bitmap unknown16 {
             get {
                 object obj = ResourceManager.GetObject("unknown16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap ups_from_shipworks {
+            get {
+                object obj = ResourceManager.GetObject("ups_from_shipworks", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

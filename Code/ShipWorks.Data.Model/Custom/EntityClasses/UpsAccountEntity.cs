@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Gets the account description.
         /// </summary>
-        public string ShortAccountDescription => AccountNumber;
+        public string ShortAccountDescription => string.IsNullOrWhiteSpace(ShipEngineCarrierId) ? AccountNumber : "UPS from ShipWorks";
 
         /// <summary>
         /// Applies account to shipment

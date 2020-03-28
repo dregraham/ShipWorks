@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
@@ -13,15 +15,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
     /// </summary>
     public class UpsOltLabelService : UpsLabelService
     {
-        private readonly IUpsOltShipmentValidator upsOltShipmentValidator;
+        private readonly IUpsShipmentValidatorFactory upsShipmentValidatorFactory;
+        private readonly IUpsLabelClientFactory labelClientFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOltLabelService(IUpsOltShipmentValidator upsOltShipmentValidator, Func<UpsLabelResponse, UpsDownloadedLabelData> createDownloadedLabelData) 
-            : base(createDownloadedLabelData)
+        public UpsOltLabelService(IUpsShipmentValidatorFactory upsShipmentValidatorFactory,
+            IUpsLabelClientFactory labelClientFactory)
+            : base(labelClientFactory)
         {
-            this.upsOltShipmentValidator = upsOltShipmentValidator;
+            this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
+            this.labelClientFactory = labelClientFactory;
         }
 
         /// <summary>
@@ -34,18 +39,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Call the base class for setting default values as needed based on the service/package type of the shipment
                 base.Create(shipment);
 
-                upsOltShipmentValidator.ValidateShipment(shipment);
+                Result validationResult = upsShipmentValidatorFactory.Create(shipment).ValidateShipment(shipment);
+                if (validationResult.Failure)
+                {
+                    throw new ShippingException(validationResult.Message);
+                }
 
                 UpsServicePackageTypeSetting.Validate(shipment);
-
-                TelemetricResult<IDownloadedLabelData> telemetricResult = new TelemetricResult<IDownloadedLabelData>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
                 
-                TelemetricResult<UpsLabelResponse> telemetricUpsLabelResponse = UpsApiShipClient.ProcessShipment(shipment);
-                
-                telemetricUpsLabelResponse.CopyTo(telemetricResult);
-                telemetricResult.SetValue(createDownloadedLabelData(telemetricUpsLabelResponse.Value));
-                
-                return Task.FromResult(telemetricResult);
+                return labelClientFactory.GetClient(shipment).GetLabel(shipment);
             }
             catch (UpsApiException ex)
             {

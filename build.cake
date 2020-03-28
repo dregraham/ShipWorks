@@ -285,6 +285,17 @@ Task("DeleteOldUnitTestRuns")
 	});
 
 /// <summary>
+/// DeleteOldSpecTestRuns
+/// </summary>
+Task("DeleteOldSpecTestRuns")
+    .Does(() =>
+	{
+		LogStartMessage("delete old unit test runs");
+		DeleteFiles("./TestResults/specs.xml");
+		LogFinishedMessage("delete old unit test runs");
+	});
+
+/// <summary>
 /// Unit Tests
 /// </summary>
 Task("TestUnits")
@@ -304,7 +315,7 @@ Task("TestUnits")
 /// Spec Tests
 /// </summary>
 Task("TestSpecs")
-    .IsDependentOn("DeleteOldUnitTestRuns")
+    .IsDependentOn("DeleteOldSpecTestRuns")
     .Does(() =>
 	{
 		LogStartMessage("specs tests");

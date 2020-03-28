@@ -2,6 +2,7 @@
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using log4net;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
@@ -21,12 +22,15 @@ namespace ShipWorks.Stores.Platforms.Volusion
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(VolusionStoreType));
 
+        private readonly ILicenseService licenseService;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public VolusionStoreType(StoreEntity store)
+        public VolusionStoreType(StoreEntity store, ILicenseService licenseService)
             : base(store)
         {
+            this.licenseService = licenseService;
         }
 
         /// <summary>
@@ -158,6 +162,24 @@ namespace ShipWorks.Stores.Platforms.Volusion
             }
 
             return base.GridOnlineColumnSupported(column);
+        }
+
+        /// <summary>
+        /// Should the Hub be used for this store?
+        /// </summary>
+        public override bool ShouldUseHub(IStoreEntity store) => true;
+
+        /// <summary>
+        /// Does this store type use a ShipEngine integration?
+        /// </summary>
+        public override bool IsShipEngine()
+        {
+            if (licenseService.IsHub)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

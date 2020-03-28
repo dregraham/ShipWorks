@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 
@@ -172,6 +174,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+                var licenseService = lifetimeScope.Resolve<ILicenseService>();
 
                 if (!webClient.ValidateCredentials(store))
                 {
@@ -209,6 +212,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.WizardPages
                         using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                         {
                             var webClient = lifetimeScope.Resolve<IVolusionWebClient>();
+                            var licenseService = lifetimeScope.Resolve<ILicenseService>();
 
                             if (!webClient.ValidateCredentials(store))
                             {

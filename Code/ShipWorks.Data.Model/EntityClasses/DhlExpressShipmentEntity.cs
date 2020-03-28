@@ -401,6 +401,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineLabelID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("IntegratorTransactionID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("StampsTransactionID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ResidentialDelivery", fieldHashtable);
 		}
 		#endregion
 
@@ -598,12 +604,42 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ShipEngineLabelID property of the Entity DhlExpressShipment<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ShipEngineLabelID
 		{
 			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, true); }
 			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, value); }
+		}
+
+		/// <summary> The IntegratorTransactionID property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."IntegratorTransactionID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> IntegratorTransactionID
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressShipmentFieldIndex.IntegratorTransactionID, false); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.IntegratorTransactionID, value); }
+		}
+
+		/// <summary> The StampsTransactionID property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."StampsTransactionID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> StampsTransactionID
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressShipmentFieldIndex.StampsTransactionID, false); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.StampsTransactionID, value); }
+		}
+
+		/// <summary> The ResidentialDelivery property of the Entity DhlExpressShipment<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ResidentialDelivery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ResidentialDelivery
+		{
+			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.ResidentialDelivery, true); }
+			set	{ SetValue((int)DhlExpressShipmentFieldIndex.ResidentialDelivery, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

@@ -1,6 +1,6 @@
 ﻿using ShipWorks.UI.Controls;
 
-namespace ShipWorks.Shipping.Carriers.DhlExpress
+namespace ShipWorks.Shipping.UI.Carriers.Dhl
 {
     partial class DhlExpressAccountEditorDlg
     {
@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             this.labelNote = new System.Windows.Forms.Label();
             this.description = new ShipWorks.UI.Controls.PromptTextBox();
             this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
-            this.accountNumber = new ShipWorks.UI.Controls.NumericTextBox();
+            this.accountNumber = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
@@ -166,10 +166,9 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
             // 
             // accountNumber
             // 
-            this.accountNumber.BackColor = System.Drawing.SystemColors.Control;
-            this.accountNumber.Enabled = false;
             this.accountNumber.Location = new System.Drawing.Point(91, 28);
             this.accountNumber.Name = "accountNumber";
+            this.accountNumber.ReadOnly = true;
             this.accountNumber.Size = new System.Drawing.Size(162, 21);
             this.accountNumber.TabIndex = 169;
             // 
@@ -215,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.DhlExpress
         private Data.Controls.PersonControl contactInformation;
         private System.Windows.Forms.Label labelDhlAccount;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private NumericTextBox accountNumber;
+        private System.Windows.Forms.TextBox accountNumber;
         private System.Windows.Forms.Label labelDescription;
         private PromptTextBox description;
         private System.Windows.Forms.Label labelOptional;

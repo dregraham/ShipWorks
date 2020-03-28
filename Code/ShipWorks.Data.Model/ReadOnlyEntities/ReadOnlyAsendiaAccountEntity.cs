@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary> The ShipEngineCarrierId property of the Entity AsendiaAccount<br/><br/>
         /// </summary>
         /// <remarks>Mapped on table field: "AsendiaAccount"."ShipEngineCarrierId"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String ShipEngineCarrierId { get; }
         /// <summary> The Description property of the Entity AsendiaAccount<br/><br/>

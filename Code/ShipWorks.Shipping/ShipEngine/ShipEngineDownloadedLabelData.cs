@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="shipment"></param>
         /// <param name="label"></param>
-        private void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
+        protected virtual void SaveLabelInfoToEntity(ShipmentEntity shipment, Label label)
         {
             shipment.TrackingNumber = label.TrackingNumber;
             shipment.ShipmentCost = (decimal) label.ShipmentCost.Amount;

@@ -2,10 +2,10 @@
 using ShipWorks.ApplicationCore.Logging;
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ShipEngine;
 using ShipEngine.ApiClient.Model;
 using log4net;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             IIndex<ShipmentTypeCode, ICarrierShipmentRequestFactory> shipmentRequestFactory,
             Func<ShipmentEntity, Label, AsendiaDownloadedLabelData> createDownloadedLabelData,
             Func<Type, ILog> logFactory) 
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
             log = logFactory(typeof(AsendiaLabelService));
             this.accountRepository = accountRepository;

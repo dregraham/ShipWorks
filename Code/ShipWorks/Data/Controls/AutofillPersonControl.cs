@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 
 namespace ShipWorks.Data.Controls
 {

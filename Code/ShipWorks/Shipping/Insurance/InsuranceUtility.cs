@@ -5,6 +5,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
@@ -13,6 +14,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.UI;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -130,7 +132,7 @@ namespace ShipWorks.Shipping.Insurance
         /// Check for any insurance issues in the given list
         /// </summary>
         [NDependIgnoreLongMethodAttribute]
-        public static void ValidateShipment(ShipmentEntity shipment)
+        public async static Task ValidateShipment(ShipmentEntity shipment, IAsyncMessageHelper messageHelper)
         {
             StoreEntity store = StoreManager.GetStore(shipment.Order.StoreID);
 
@@ -186,17 +188,8 @@ namespace ShipWorks.Shipping.Insurance
                 // They have to agree to the insurance agreement
                 if (string.IsNullOrWhiteSpace(settings.InsurancePolicy))
                 {
-                    bool result = (bool) Program.MainForm.Invoke(
-
-                        (Func<bool>) delegate
-                            {
-                                using (InsuranceAgreementDlg dlg = new InsuranceAgreementDlg())
-                                {
-                                    return (dlg.ShowDialog() == DialogResult.OK);
-                                }
-                            }
-                        );
-
+                    bool result = await messageHelper.ShowDialog(() => new InsuranceAgreementDlg()).ConfigureAwait(true) == DialogResult.OK;
+ 
                     if (result)
                     {
                         settings.InsurancePolicy = TangoWebClient.GenerateInsurancePolicyNumber(store);
@@ -584,7 +577,8 @@ namespace ShipWorks.Shipping.Insurance
                 if (postalService == PostalServiceType.InternationalPriority ||
                     postalService == PostalServiceType.GlobalPostStandardIntl ||
                     postalService == PostalServiceType.GlobalPostSmartSaverStandardIntl ||
-                    postalService == PostalServiceType.GlobalPostPlus)
+                    postalService == PostalServiceType.GlobalPostPlus ||
+                    postalService == PostalServiceType.GlobalPostPlusSmartSaver)
                 {
                     // Get how many increments of $50
                     int quantity = (int) Math.Ceiling(declaredValue / 50m);

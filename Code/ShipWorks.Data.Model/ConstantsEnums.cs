@@ -2420,6 +2420,8 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Phone. </summary>
 		Phone,
+		///<summary>UspsAccountId. </summary>
+		UspsAccountId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2472,6 +2474,8 @@ namespace ShipWorks.Data.Model
 		Contents,
 		///<summary>NonDelivery. </summary>
 		NonDelivery,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2498,6 +2502,12 @@ namespace ShipWorks.Data.Model
 		NonDelivery,
 		///<summary>ShipEngineLabelID. </summary>
 		ShipEngineLabelID,
+		///<summary>IntegratorTransactionID. </summary>
+		IntegratorTransactionID,
+		///<summary>StampsTransactionID. </summary>
+		StampsTransactionID,
+		///<summary>ResidentialDelivery. </summary>
+		ResidentialDelivery,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10038,6 +10048,10 @@ namespace ShipWorks.Data.Model
 		FNSku,
 		///<summary>EAN. </summary>
 		EAN,
+		///<summary>FNSku_. </summary>
+		FNSku_,
+		///<summary>EAN_. </summary>
+		EAN_,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12938,6 +12952,8 @@ namespace ShipWorks.Data.Model
 		LocalRatingEnabled,
 		///<summary>UpsRateTableID. </summary>
 		UpsRateTableID,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13350,6 +13366,8 @@ namespace ShipWorks.Data.Model
 		UspsPackageID,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>ShipEngineLabelID. </summary>
+		ShipEngineLabelID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13498,6 +13516,8 @@ namespace ShipWorks.Data.Model
 		GlobalPostAvailability,
 		///<summary>AcceptedFCMILetterWarning. </summary>
 		AcceptedFCMILetterWarning,
+		///<summary>ShipEngineCarrierId. </summary>
+		ShipEngineCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -79,6 +79,11 @@
         <option>transformxaml</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
       </inputassembly>
+      <inputassembly refid="93284234-1A41-41F4-A713-FB2D55BC6332">
+        <option>honoroas</option>
+        <option>transformxaml</option>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Api.dll" />
+      </inputassembly>
       <inputassembly refid="7bf4f5d4-15de-4a60-b69d-1ce530b08be7">
         <option>honoroas</option>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />
@@ -217,6 +222,9 @@
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.OrderLookup.dll" />
+      </assembly>
+      <assembly>
+        <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Api.dll" />
       </assembly>
       <assembly>
         <file dir="${configdir}\Artifacts\Application" name="ShipWorks.Products.dll" />

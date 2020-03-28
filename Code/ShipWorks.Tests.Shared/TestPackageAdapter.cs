@@ -7,7 +7,17 @@ namespace ShipWorks.Tests.Shared
 {
     public class TestPackageAdapter : IPackageAdapter
     {
-        public long PackageId => -1;
+        public TestPackageAdapter()
+        {
+            PackageId = -1;
+        }
+
+        public TestPackageAdapter(long packageId)
+        {
+            PackageId = packageId;
+        }
+
+        public long PackageId { get; }
         public int Index { get; set; }
         public double Weight { get; set; }
         public double AdditionalWeight { get; set; }

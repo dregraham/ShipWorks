@@ -14,8 +14,9 @@ using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings.Defaults;
 using ShipWorks.Templates.Printing;
 using ShipWorks.UI.Controls;
 
@@ -72,6 +73,20 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Load the One Balance control onto the One Balance page
+        /// </summary>
+        private void LoadOneBalancePage()
+        {
+            this.optionPageOneBalance.Controls.Clear();
+
+            var controlHost = lifetimeScope.Resolve<IOneBalanceSettingsControlHost>();
+
+            var hostControl = controlHost as UserControl;
+
+            this.optionPageOneBalance.Controls.Add(hostControl);
+        }
+
+        /// <summary>
         /// Load the providers panel with the checkboxes for selection
         /// </summary>
         private void LoadProvidersPanel()
@@ -103,9 +118,9 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadShipmentTypePages()
         {
-            while (optionControl.OptionPages.Count > 1)
+            while (optionControl.OptionPages.Count > 2)
             {
-                optionControl.OptionPages.RemoveAt(1);
+                optionControl.OptionPages.RemoveAt(2);
             }
 
             foreach (ShipmentType shipmentType in GetEnabledShipmentTypes().Where(t => t.ShipmentTypeCode != ShipmentTypeCode.None))
@@ -178,6 +193,12 @@ namespace ShipWorks.Shipping.Settings
                 return;
             }
 
+            if (e.OptionPage == optionPageOneBalance && !SaveOneBalanceSettings())
+            {
+                e.Cancel = true;
+                return;
+            }
+
             ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
 
             if (settingsControl != null)
@@ -230,25 +251,32 @@ namespace ShipWorks.Shipping.Settings
         {
             SaveSettings();
 
-            ShipmentTypeSettingsControl settingsControl = null;
-
-            if (e.OptionPage != null)
+            if (e.OptionPage == optionPageOneBalance)
             {
-                settingsControl = e.OptionPage.Controls.Count == 1 ?
-                    e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
-                    settingsControl = BuildPageControl(e.OptionPage);
+                LoadOneBalancePage();
             }
-
-            if (settingsControl != null)
+            else
             {
-                settingsControl.RefreshContent();
-                settingsControl.CurrentPage = settingsTabPage;
-            }
+                ShipmentTypeSettingsControl settingsControl = null;
 
-            if (e.OptionPage == optionPageGeneral)
-            {
-                originControl.Initialize();
-                usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
+                if (e.OptionPage != null)
+                {
+                    settingsControl = e.OptionPage.Controls.Count == 1 ?
+                        e.OptionPage.Controls[0] as ShipmentTypeSettingsControl :
+                        settingsControl = BuildPageControl(e.OptionPage);
+                }
+
+                if (settingsControl != null)
+                {
+                    settingsControl.RefreshContent();
+                    settingsControl.CurrentPage = settingsTabPage;
+                }
+
+                if (e.OptionPage == optionPageGeneral)
+                {
+                    originControl.Initialize();
+                    usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
+                }
             }
         }
 
@@ -280,6 +308,17 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private Control BuildSetupControl(ShipmentType shipmentType)
         {
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
+            {
+                OneBalanceUpsBannerControl upsControl = new OneBalanceUpsBannerControl();
+                upsControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+
+                upsControl.Dock = DockStyle.Fill;
+                upsControl.BackColor = Color.Transparent;
+
+                return upsControl;
+            }
+
             ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);
             setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
@@ -327,6 +366,12 @@ namespace ShipWorks.Shipping.Settings
             InformUserThatMyFiltersCantBeUsedFilters();
 
             SaveSettings();
+
+            if (!SaveOneBalanceSettings())
+            {
+                e.Cancel = true;
+                return;
+            }
 
             Messenger.Current.Send(new ShippingSettingsChangedMessage(this, ShippingSettings.Fetch()));
 
@@ -515,6 +560,26 @@ namespace ShipWorks.Shipping.Settings
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Save the One Balance settings
+        /// </summary>
+        private bool SaveOneBalanceSettings()
+        {
+            var controlHost = optionPageOneBalance.Controls.OfType<IOneBalanceSettingsControlHost>().FirstOrDefault();
+
+            try
+            {
+                controlHost?.SaveSettings();
+                return true;
+            }
+            catch (UspsException ex)
+            {
+                MessageHelper.ShowError(this, $"There was a problem saving your One Balance automatic funding settings:\n{ex.Message}");
+            }
+
+            return false;
         }
     }
 }

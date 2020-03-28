@@ -546,6 +546,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         }
 
         [Fact]
+        public void AccountDescription_ReturnsUPSFromShipWorks_WhenShipEngineAccount()
+        {
+            account2.ShipEngineCarrierId = "blah";
+            rateGroup1.Rates.Clear();
+            rateGroup2.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result = new RateResult("UPS Ground", "4", 4, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            rateGroup2.Rates.Add(result);
+            
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
+
+            string accountDescription = ((BestRateResultTag) rates.Rates.Single().Tag).AccountDescription;
+            Assert.Equal("UPS from ShipWorks", accountDescription);
+        }
+
+        [Fact]
+        public void AccountDescription_ReturnsAccountNumber_WhenShipEngineAccount()
+        {
+            account2.ShipEngineCarrierId = null;
+            account2.AccountNumber = "12345";
+            rateGroup1.Rates.Clear();
+            rateGroup2.Rates.Clear();
+            rateGroup3.Rates.Clear();
+
+            RateResult result = new RateResult("UPS Ground", "4", 4, UpsServiceType.UpsNextDayAir) { ServiceLevel = ServiceLevelType.OneDay };
+            rateGroup2.Rates.Add(result);
+
+            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
+
+            Assert.True(((BestRateResultTag) rates.Rates.Single().Tag).AccountDescription == "12345");
+        }
+
+        [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_UpsSettingSpecfiesShipWorks()
         {
             Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int) InsuranceProvider.ShipWorks }));

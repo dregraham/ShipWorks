@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsServiceType
     {
-        [Description("UPS Ground")]
+        [Description("UPS® Ground")]
         UpsGround = 0,
 
         [Description("UPS 3 Day Select®")]
@@ -98,6 +98,5 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
 
         [Description("UPS Second Day Air Intra")]
         Ups2ndDayAirIntra = 29
-
     }
 }

@@ -38,9 +38,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            accountNumber.Text = account.AccountNumber;
+            if (string.IsNullOrEmpty(account.ShipEngineCarrierId))
+            {
+                accountNumber.Text = account.AccountNumber;
+            }
+            else
+            {
+                accountNumber.Text = "UPS from ShipWorks";
+            }
             personControl.LoadEntity(new PersonAdapter(account, ""));
 
+            if (account.ShipEngineCarrierId != null)
+            {
+                description.ReadOnly = true;
+                labelOptional.Visible = false;
+            }
+            
             if (account.Description != UpsAccountManager.GetDefaultDescription(account))
             {
                 description.Text = account.Description;

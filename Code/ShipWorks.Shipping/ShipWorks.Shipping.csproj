@@ -121,6 +121,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
@@ -220,14 +221,25 @@
     <Compile Include="Carriers\BestRate\Footnote\BrokerExceptionsRateFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteViewModel.cs" />
     <Compile Include="Carriers\BestRate\Footnote\ShippingAccountRequiredForRatingFootnoteViewModel.cs" />
+    <Compile Include="Carriers\Dhl\API\DhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\IDhlExpressLabelClientFactory.cs" />
+    <Compile Include="Carriers\Dhl\API\ShipEngine\DhlExpressShipEngineDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Dhl\API\ShipEngine\DhlExpressShipEngineLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\DhlExpressStampsLabelClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\DhlExpressStampsWebClient.cs" />
+    <Compile Include="Carriers\Dhl\API\Stamps\IDhlExpressStampsWebClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountManager.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountDescription.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressAccountRepository.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressBestRateBroker.cs" />
-    <Compile Include="Carriers\Dhl\DhlExpressDownloadedLabelData.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressPrefetchProvider.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressStampsRatingClient.cs" />
+    <Compile Include="Carriers\Dhl\DhlExpressShipEngineRatingClient.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Dhl\DhlExpressShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressShipEngineRatingClient.cs" />
+    <Compile Include="Carriers\Dhl\IDhlExpressStampsRatingClient.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerk.cs" />
     <Compile Include="Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
@@ -397,7 +409,22 @@
     <Compile Include="Carriers\Postal\Usps\IUspsRatingService.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShippingProfileApplicationStrategy.cs" />
     <Compile Include="Carriers\Postal\WebTools\PostalWebToolsShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Ups\IUpsRateClientFactory.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\IUpsShipEngineRatingService.cs" />
+    <Compile Include="Carriers\Ups\IUpsLabelClient.cs" />
+    <Compile Include="Carriers\Ups\IUpsLabelClientFactory.cs" />
+    <Compile Include="Carriers\Ups\OneBalance\OneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineShipmentValidator.cs" />
+    <Compile Include="Carriers\Ups\UpsRateClientFactory.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineRatingService.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineLabelClient.cs" />
+    <Compile Include="Carriers\Ups\OneBalance\UpsShipmentRequestFactory.cs" />
+    <Compile Include="Carriers\Ups\UpsLabelClientFactory.cs" />
+    <Compile Include="Carriers\Ups\UpsOltLabelClient.cs" />
+    <Compile Include="Carriers\Ups\ShipEngine\UpsShipEngineDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Ups\UpsShipmentValidatorFactory.cs" />
     <Compile Include="Carriers\Ups\UpsShippingProfileApplicationStrategy.cs" />
+    <Compile Include="Carriers\Ups\UpsTrackClient.cs" />
     <Compile Include="Insurance\IInsuranceBehaviorChangeDialog.cs" />
     <Compile Include="Profiles\ProfileAppliedPipeline.cs" />
     <Compile Include="Insurance\InsuranceBehaviorChangeViewModel.cs" />
@@ -405,6 +432,7 @@
     <Compile Include="Services\AutoReturnShipmentService.cs" />
     <Compile Include="Services\IAutoReturnShipmentService.cs" />
     <Compile Include="Services\IScanPackOrderValidator.cs" />
+    <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ShippingProfileRepository.cs" />
     <Compile Include="Services\ArchiveRatesRetrieverService.cs" />
     <Compile Include="Profiles\BaseShippingProfileApplicationStrategy.cs" />
@@ -416,7 +444,7 @@
     <Compile Include="Carriers\Postal\Usps\UspsPrefetchProvider.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnoteViewModel.cs" />
     <Compile Include="Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnoteViewModel.cs" />
-    <Compile Include="Carriers\Postal\Usps\UspsDownloadedLabelData.cs" />
+    <Compile Include="Carriers\Postal\Usps\StampsDownloadedLabelData.cs" />
     <Compile Include="Carriers\Postal\PostalShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentPackageTypesBuilder.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapter.cs" />
@@ -437,22 +465,6 @@
     <Compile Include="Services\ShippingProfileFactory.cs" />
     <Compile Include="Services\EditableShippingProfileRepository.cs" />
     <Compile Include="Services\ShippingProfileService.cs" />
-    <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
-    <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
-    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
-    <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
-    <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
-    <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
-    <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
     <Compile Include="Carriers\Ups\LocalRating\AlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IAlaskaHawaiiZoneExcelReader.cs" />
     <Compile Include="Carriers\Ups\LocalRating\IUpsImportedRateValidator.cs" />
@@ -548,12 +560,9 @@
     <Compile Include="Rating\RateSelection.cs" />
     <Compile Include="Rating\RateSelectionFactory.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\DataFlow.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Services\LabelPrintingService.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ParallelProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflowFactory.cs" />
-    <Compile Include="Services\ProcessShipmentsWorkflow\SerialProcessShipmentsWorkflow.cs" />
     <Compile Include="Services\RatesRetriever.cs" />
     <Compile Include="Services\RatesRetrieverService.cs" />
     <Compile Include="Services\ShipmentFactory.cs" />
@@ -591,12 +600,35 @@
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
+    <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
+    <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
+    <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />
+    <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequestFactory.cs" />
+    <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationResponse.cs" />
+    <Compile Include="ShipEngine\ICarrierShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineApiKey.cs" />
-    <Compile Include="ShipEngine\IShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\IShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\IShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
+    <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\IShipEngineWebClient.cs" />
+    <Compile Include="ShipEngine\IUpsCredentials.cs" />
+    <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />
+    <Compile Include="ShipEngine\ShipEngineContentsType.cs" />
+    <Compile Include="ShipEngine\ShipEngineDownloadedLabelData.cs" />
     <Compile Include="ShipEngine\ShipEngineException.cs" />
+    <Compile Include="ShipEngine\ShipEngineLabelService.cs" />
+    <Compile Include="ShipEngine\ShipEngineNonDeliveryType.cs" />
     <Compile Include="ShipEngine\ShipEnginePartnerWebClient.cs" />
+    <Compile Include="ShipEngine\ShipEngineRateGroupFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineShipmentRequestFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineTrackingResultFactory.cs" />
+    <Compile Include="ShipEngine\ShipEngineWebClient.cs" />
+    <Compile Include="ShipEngine\UpsCredentials.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="Services\ShippingOriginManagerWrapper.cs" />
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
@@ -727,7 +759,6 @@
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

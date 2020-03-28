@@ -312,12 +312,43 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
             postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
 
+            LoadInsuranceData(shipment, shipWorksInsured);
+            AddInsuredWith(shipment, postRequest);
 
+            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
+            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
+
+            AddPolicyInformation(shipment, postRequest, shipWorksInsured);
+        }
+
+        /// <summary>
+        /// Add Policy Number and Request Stats to request
+        /// </summary>
+        private static void AddPolicyInformation(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest, bool shipWorksInsured)
+        {
+            if (shipWorksInsured)
+            {
+                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
+                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
+            }
+        }
+
+        /// <summary>
+        /// If appropriate, delegate to LoadInsuranceData
+        /// </summary>
+        private void LoadInsuranceData(ShipmentEntity shipment, bool shipWorksInsured)
+        {
             if (shipWorksInsured && shipment.InsurancePolicy == null)
             {
                 shipmentTypeDataService.LoadInsuranceData(shipment);
             }
+        }
 
+        /// <summary>
+        /// Add InsuredWith to request
+        /// </summary>
+        private static void AddInsuredWith(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest)
+        {
             if (shipment.InsurancePolicy == null)
             {
                 postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
@@ -328,15 +359,6 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                     InsuredWith.SuccessfullyInsuredViaApi :
                     InsuredWith.FailedToInsureViaApi;
                 postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
-            }
-
-            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
-            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
-
-            if (shipWorksInsured)
-            {
-                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
-                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
             }
         }
     }

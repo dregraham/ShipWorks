@@ -9,7 +9,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.ApplicationCore.Nudges
 {
     /// <summary>
-    /// Manager of all the Nudges that are available in ShipWorks. Nudges are retreived from Tango
+    /// Manager of all the Nudges that are available in ShipWorks. Nudges are retrieved from Tango
     /// and stored in memory.
     /// </summary>
     public static class NudgeManager
@@ -54,7 +54,7 @@ namespace ShipWorks.ApplicationCore.Nudges
             catch (TangoException exception)
             {
                 // Don't crash if SSL could not be verified
-                log.Error("Could not intialize nudges.", exception);
+                log.Error("Could not initialize nudges.", exception);
             }
         }
 

@@ -1,13 +1,12 @@
-﻿using Interapptive.Shared.ComponentRegistration;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ShipEngine.ApiClient.Model;
-using ShipWorks.Shipping.Editing.Rating;
-using Interapptive.Shared.Utility;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
+using ShipEngine.ApiClient.Model;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -26,14 +25,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
             foreach (Rate apiRate in rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
             {
-                RateResult rate = new RateResult(apiRate.ServiceType, apiRate.DeliveryDays.ToString(), (decimal) (apiRate.ShippingAmount?.Amount ?? 0), apiRate.ServiceCode)
-                {
-                    CarrierDescription = apiRate.CarrierNickname,
-                    ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
-                    ShipmentType = shipmentType,
-                    ProviderLogo = EnumHelper.GetImage(shipmentType)
-                };
-                results.Add(rate);
+                results.Add(GetRateResult(apiRate, shipmentType));
             }
 
             RateGroup rateGroup = new RateGroup(results);
@@ -41,6 +33,41 @@ namespace ShipWorks.Shipping.ShipEngine
             AddInvalidRateErrors(rateGroup, rateResponse, shipmentType);
 
             return rateGroup;
+        }
+
+        /// <summary>
+        /// Build the rate tag from the given shipment and service code
+        /// </summary>
+        private object GetRateTag(ShipmentTypeCode shipmentType, string serviceCode)
+        {
+            if (shipmentType == ShipmentTypeCode.UpsOnLineTools)
+            {
+                return UpsShipEngineServiceTypeUtility.GetServiceType(serviceCode);
+            }
+
+            return serviceCode;
+        }
+
+        /// <summary>
+        /// Build the rate result with the given rate
+        /// </summary>
+        private RateResult GetRateResult(Rate apiRate, ShipmentTypeCode shipmentType)
+        {
+            double amount = (apiRate.ShippingAmount?.Amount ?? 0) + (apiRate.OtherAmount?.Amount ?? 0) + (apiRate.InsuranceAmount?.Amount ?? 0);
+            string days = apiRate.DeliveryDays.ToString();
+
+            if (!string.IsNullOrWhiteSpace(apiRate.CarrierDeliveryDays))
+            {
+                days = $"{days} ({apiRate.CarrierDeliveryDays})";
+            }
+
+            return new RateResult(apiRate.ServiceType, days, (decimal) (amount), GetRateTag(shipmentType, apiRate.ServiceCode))
+            {
+                CarrierDescription = apiRate.CarrierNickname,
+                ExpectedDeliveryDate = apiRate.EstimatedDeliveryDate,
+                ShipmentType = shipmentType,
+                ProviderLogo = EnumHelper.GetImage(shipmentType)
+            };
         }
 
         /// <summary>
@@ -52,18 +79,12 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (rateResponse.InvalidRates.Any())
             {
-                foreach (Rate invalidRate in rateResponse.InvalidRates)
-                {
-                    invalidRate.ErrorMessages.ForEach(m => errorBuilder.AppendLine(m));
-                }
+                rateResponse.InvalidRates.SelectMany(x => x.ErrorMessages).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (rateResponse.Errors.Any())
             {
-                foreach (ProviderError error in rateResponse.Errors)
-                {
-                    errorBuilder.AppendLine(error.Message);
-                }
+                rateResponse.Errors.Select(x => x.Message).Distinct().ForEach(e => errorBuilder.AppendLine(e));
             }
 
             if (errorBuilder.Length > 0)

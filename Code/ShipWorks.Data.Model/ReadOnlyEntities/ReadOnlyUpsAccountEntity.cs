@@ -61,6 +61,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             PromoStatus = source.PromoStatus;
             LocalRatingEnabled = source.LocalRatingEnabled;
             UpsRateTableID = source.UpsRateTableID;
+            ShipEngineCarrierId = source.ShipEngineCarrierId;
             
             
             UpsRateTable = (IUpsRateTableEntity) source.UpsRateTable?.AsReadOnly(objectMap);
@@ -220,6 +221,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> UpsRateTableID { get; }
+        /// <summary> The ShipEngineCarrierId property of the Entity UpsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UpsAccount"."ShipEngineCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public System.String ShipEngineCarrierId { get; }
         
         
         public IUpsRateTableEntity UpsRateTable { get; }
