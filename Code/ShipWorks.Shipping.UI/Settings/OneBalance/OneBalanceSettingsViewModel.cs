@@ -154,13 +154,14 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         private void GetAccountBalance()
         {
             ShowBanner = upsAccount == null;
+            AddMoneyEnabled = postageWebClient != null;
 
             if (postageWebClient != null)
             {
                 Task.Run(() =>
                 {
                     GetBalance();
-                    AddMoneyEnabled = postageWebClient != null && !showGetBalanceError;
+                    AddMoneyEnabled = !showGetBalanceError;
                 });
             }
         }

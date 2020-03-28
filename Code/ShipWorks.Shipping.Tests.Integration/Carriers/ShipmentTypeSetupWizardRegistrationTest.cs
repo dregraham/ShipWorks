@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers
             container = ContainerInitializer.Build();
         }
 
-        [Theory]
+        [STATheory]
         [InlineData(ShipmentTypeCode.AmazonSFP, typeof(AmazonSFPShipmentSetupWizard))]
         [InlineData(ShipmentTypeCode.Endicia, typeof(EndiciaSetupWizard))]
         [InlineData(ShipmentTypeCode.Express1Endicia, typeof(Express1EndiciaSetupWizard))]
