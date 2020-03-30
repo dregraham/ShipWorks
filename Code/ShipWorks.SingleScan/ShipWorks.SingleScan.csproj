@@ -140,6 +140,7 @@
     <Compile Include="AutoPrintConfirmation\IAutoPrintConfirmationDlgViewModel.cs" />
     <Compile Include="AutoPrintResult.cs" />
     <Compile Include="ApplyProfileShortcutMessageIndicatorPipeline.cs" />
+    <Compile Include="Enums\SingleScanConfirmationMode.cs" />
     <Compile Include="MainGridControlShortcutPipeline.cs" />
     <Compile Include="ToggleAutoPrintPipeline.cs" />
     <Compile Include="VirtualKeyboardPipeline.cs" />
@@ -247,6 +248,7 @@
       <DependentUpon>ScannerRegistrationDialog.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
