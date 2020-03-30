@@ -2858,6 +2858,7 @@
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
           <Field Name="ShipSenseProcessedShipmentID" Type="long" FieldIndex="45" />
           <Field Name="ShipSenseUniquenessXml" Type="string" MaxLength="2147483647" FieldIndex="44" />
+          <Field Name="SingleScanConfirmationMode" Type="int" Precision="10" FieldIndex="55" />
           <Field Name="UpsAccessKey" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="UpsInsurancePennyOne" Type="bool" FieldIndex="18" />
           <Field Name="UpsInsuranceProvider" Type="int" FieldIndex="17" />
@@ -4640,7 +4641,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-12T18:41:30.5886271Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-30T19:31:45.6579294Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8710,6 +8711,7 @@
                     <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                     <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="SingleScanConfirmationMode" Ordinal="57" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -13805,6 +13807,7 @@
             <FieldMapping FieldName="ShipSenseEndShipmentID" TargetFieldName="ShipSenseEndShipmentID" />
             <FieldMapping FieldName="ShipSenseProcessedShipmentID" TargetFieldName="ShipSenseProcessedShipmentID" />
             <FieldMapping FieldName="ShipSenseUniquenessXml" TargetFieldName="ShipSenseUniquenessXml" />
+            <FieldMapping FieldName="SingleScanConfirmationMode" TargetFieldName="SingleScanConfirmationMode" />
             <FieldMapping FieldName="UpsAccessKey" TargetFieldName="UpsAccessKey" />
             <FieldMapping FieldName="UpsInsurancePennyOne" TargetFieldName="UpsInsurancePennyOne" />
             <FieldMapping FieldName="UpsInsuranceProvider" TargetFieldName="UpsInsuranceProvider" />

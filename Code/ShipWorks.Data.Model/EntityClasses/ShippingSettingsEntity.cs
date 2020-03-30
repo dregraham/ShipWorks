@@ -408,6 +408,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderLookupFieldLayout", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SingleScanConfirmationMode", fieldHashtable);
 		}
 		#endregion
 
@@ -1024,6 +1026,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, value); }
+		}
+
+		/// <summary> The SingleScanConfirmationMode property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."SingleScanConfirmationMode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 SingleScanConfirmationMode
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.SingleScanConfirmationMode, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.SingleScanConfirmationMode, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

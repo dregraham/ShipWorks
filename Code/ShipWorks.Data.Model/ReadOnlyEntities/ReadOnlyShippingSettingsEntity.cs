@@ -92,6 +92,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             ShipEngineApiKey = source.ShipEngineApiKey;
             ShipmentDateCutoffJson = source.ShipmentDateCutoffJson;
             OrderLookupFieldLayout = source.OrderLookupFieldLayout;
+            SingleScanConfirmationMode = source.SingleScanConfirmationMode;
             
             
             
@@ -436,6 +437,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String OrderLookupFieldLayout { get; }
+        /// <summary> The SingleScanConfirmationMode property of the Entity ShippingSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ShippingSettings"."SingleScanConfirmationMode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public System.Int32 SingleScanConfirmationMode { get; }
         
         
         
