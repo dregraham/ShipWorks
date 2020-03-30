@@ -142,6 +142,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("on-behalf-of", $"se-{accountId}");
                 request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{amazonSwaAccount.ShipEngineCarrierId}/settings");
+                request.AddHeader("SW-originalRequestMethod", Method.PUT.ToString());
                 request.Method = Method.PUT;
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
@@ -203,6 +204,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("on-behalf-of", $"se-{accountId}");
                 request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
@@ -608,6 +610,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("on-behalf-of", await GetApiKey().ConfigureAwait(false));
                 request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/registration/ups");
+                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
