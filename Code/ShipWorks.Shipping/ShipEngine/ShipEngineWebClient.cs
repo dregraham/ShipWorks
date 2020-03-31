@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
                 request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{amazonSwaAccount.ShipEngineCarrierId}/settings");
                 request.AddHeader("SW-originalRequestMethod", Method.PUT.ToString());
-                request.Method = Method.PUT;
+                request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
 
