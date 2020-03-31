@@ -447,7 +447,7 @@ namespace ShipWorks.SingleScan.Tests
                     "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
                 Continue = "Create New Label",
                 Title = "Order Previously Processed",
-                ContinueOptional = "Ask every time"
+                ContinueOptional = "Reprint Existing Label"
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
@@ -580,7 +580,8 @@ namespace ShipWorks.SingleScan.Tests
                 Body =
                     "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'.",
                 Continue = "Create 3 Labels",
-                Title = "Multiple Shipments"
+                Title = "Multiple Shipments",
+                ContinueOptional = "Reprint Existing Label"
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
@@ -626,7 +627,8 @@ namespace ShipWorks.SingleScan.Tests
                     "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 3 Labels'." +
                     "\r\n\r\nNote: ShipWorks will update each shipment with the weight from the scale.",
                 Continue = "Create 3 Labels",
-                Title = "Multiple Shipments"
+                Title = "Multiple Shipments",
+                ContinueOptional = "Reprint Existing Label"
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
