@@ -27,9 +27,16 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         {
             this.messenger = messenger;
 
+            ContinueOptionalClickCommand = new RelayCommand(AcceptOptional);
             ContinueClickCommand = new RelayCommand(Accept);
             CancelClickCommand = new RelayCommand(Cancel);
         }
+
+        /// <summary>
+        /// Gets the optional continue click command.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ICommand ContinueOptionalClickCommand { get; }
 
         /// <summary>
         /// Gets the continue click command.
@@ -50,6 +57,12 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public string DisplayText { get; private set; }
 
         /// <summary>
+        /// Gets the text to display to the user in the optional continue button.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ContinueOptionalText { get; private set; }
+
+        /// <summary>
         /// Gets the text to display to the user in the continue button.
         /// </summary>
         [Obfuscation(Exclude = true)]
@@ -58,15 +71,16 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Gets or sets the method to close the window.
         /// </summary>
-        public Action<bool> Close { get; set; }
+        public Action<bool?> Close { get; set; }
 
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scan, accepts the dialog.
         /// </summary>
-        public void Load(string barcodeAcceptanceText, string displayText, string continueText)
+        public void Load(string barcodeAcceptanceText, string displayText, string continueText, string continueOptionalText)
         {
             DisplayText = displayText;
             ContinueText = continueText;
+            ContinueOptionalText = continueOptionalText;
             barcodeAcceptanceMessageSubscription = messenger.OfType<SingleScanMessage>()
                 .Where(x => x.ScannedText == barcodeAcceptanceText)
                 .Subscribe(x => Accept());
@@ -78,6 +92,13 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public void Dispose()
         {
             barcodeAcceptanceMessageSubscription?.Dispose();
+        }
+        /// <summary>
+        /// Accepts this instance with an optional third value.
+        /// </summary>
+        private void AcceptOptional()
+        {
+            Close?.Invoke(false);
         }
 
         /// <summary>
@@ -93,7 +114,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// </summary>
         private void Cancel()
         {
-            Close?.Invoke(false);
+            Close?.Invoke(null);
         }
     }
 }

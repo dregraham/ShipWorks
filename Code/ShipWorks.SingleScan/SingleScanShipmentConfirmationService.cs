@@ -210,7 +210,8 @@ namespace ShipWorks.SingleScan
                 {
                     Title = "Order Previously Processed",
                     Body = AlreadyProcessedMessage,
-                    Continue = "Create New Label"
+                    Continue = "Create New Label",
+                    ContinueOptional = "Reprint Existing Label"
                 };
             }
 
