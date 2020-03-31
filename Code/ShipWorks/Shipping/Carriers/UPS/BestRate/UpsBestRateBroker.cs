@@ -210,11 +210,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <summary>
         /// Gets a description from the specified account
         /// </summary>
-        protected override string AccountDescription(UpsAccountEntity account)
-        {
-            return account.AccountNumber;
-        }
-        
+        protected override string AccountDescription(UpsAccountEntity account) => 
+            account.ShipEngineCarrierId != null ? "UPS from ShipWorks" : account.AccountNumber;
+
         /// <summary>
         /// Gets the rates function.
         /// </summary>

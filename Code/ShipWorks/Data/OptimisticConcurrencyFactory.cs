@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Data
 {
     /// <summary>
-    /// Factory that genereates the predicate expression that tests for concurrency
+    /// Factory that generates the predicate expression that tests for concurrency
     /// </summary>
     [DependencyInjectionInfo(typeof(FilterEntity), "ConcurrencyPredicateFactoryToUse")]
     [DependencyInjectionInfo(typeof(FilterSequenceEntity), "ConcurrencyPredicateFactoryToUse")]
@@ -22,9 +20,9 @@ namespace ShipWorks.Data
         /// <summary>
         /// Create the expression used to test for concurrency violations
         /// </summary>
-	    public IPredicateExpression CreatePredicate(ConcurrencyPredicateType predicateTypeToCreate, object containingEntity)
-	    {
-		    IPredicateExpression expression = new PredicateExpression();
+        public IPredicateExpression CreatePredicate(ConcurrencyPredicateType predicateTypeToCreate, object containingEntity)
+        {
+            IPredicateExpression expression = new PredicateExpression();
             CommonEntityBase entity = (CommonEntityBase) containingEntity;
 
             if (!entity.IgnoreConcurrency)
@@ -38,7 +36,7 @@ namespace ShipWorks.Data
                 }
             }
 
-		    return expression;
-	    }
+            return expression;
+        }
     }
 }
