@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 
                 logEntry.LogResponse(response, "txt");
 
-                if (response.StatusCode == HttpStatusCode.OK || response.StatusCode == HttpStatusCode.NoContent)
+                if (response.StatusCode == HttpStatusCode.NoContent)
                 {
                     return Result.FromSuccess();
                 }
