@@ -8,6 +8,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
+using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -111,19 +112,9 @@ namespace ShipWorks.SingleScan
                     // If the order has no non Voided Shipments add one and return it
                     confirmedShipments = new[] { shipmentFactory.Create(orderId) };
                 }
-                else if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+                else
                 {
-                    // If all of the shipments are processed and the user confirms they want to process again add a shipment
-                    if (shipments.All(s => s.Processed))
-                    {
-                        confirmedShipments = new[] { shipmentFactory.Create(orderId) };
-                    }
-
-                    // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-                    if (shipments.Any(s => !s.Processed))
-                    {
-                        confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
-                    }
+                    confirmedShipments = GetMultipleConfirmedShipments(orderId, scannedBarcode, shipments);
                 }
 
                 if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
@@ -139,6 +130,49 @@ namespace ShipWorks.SingleScan
             }
 
             return confirmedShipments;
+        }
+
+        /// <summary>
+        /// Get confirmed shipments when an order has multiple shipments
+        /// </summary>
+        private ShipmentEntity[] GetMultipleConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
+        {
+            var selectedMode = singleScanAutomationSettings.ConfirmationMode;
+
+            if (selectedMode == SingleScanConfirmationMode.PrintExisting && !shipments.Any(s => s.Processed))
+            {
+                // If the user's default setting is to print existing labels but there aren't any
+                // show the dialog
+                selectedMode = SingleScanConfirmationMode.Select;
+            }
+
+            if (selectedMode == SingleScanConfirmationMode.Select)
+            {
+                selectedMode = ShowConfirmationDialog(scannedBarcode, shipments);
+            }
+
+            if (selectedMode == SingleScanConfirmationMode.CreateNew)
+            {
+                // If all of the shipments are processed and the user confirms they want to process again add a shipment
+                if (shipments.All(s => s.Processed))
+                {
+                    return new[] { shipmentFactory.Create(orderId) };
+                }
+
+                // If some of the shipments are not process and the user confirms return only the unprocessed shipments
+                if (shipments.Any(s => !s.Processed))
+                {
+                    return shipments.Where(s => !s.Processed).ToArray();
+                }
+            }
+            else if (selectedMode == SingleScanConfirmationMode.PrintExisting)
+            {
+                // We should never get here if there are no processed shipments
+                return new ShipmentEntity[] { shipments.Where(s => s.Processed).OrderByDescending(s => s.ProcessedDate).First() };
+            }
+
+            // If selectedMode is still "Select", the user cancelled the dialog
+            return new ShipmentEntity[0];
         }
 
         private bool ShouldPrintAndProcessShipmentWithMultiplePackages(int packageCount, string scannedBarcode)
@@ -173,12 +207,9 @@ namespace ShipWorks.SingleScan
             shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
 
         /// <summary>
-        /// Check to see if we should print and process the given shipments
+        /// Ask the user to confirm what to do
         /// </summary>
-        /// <param name="shipments">the list of shipments</param>
-        /// <param name="scannedBarcode">the barcode that will accept and dismiss the dialog</param>
-        /// <returns></returns>
-        private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
+        private SingleScanConfirmationMode ShowConfirmationDialog(string scannedBarcode, ShipmentEntity[] shipments)
         {
             MessagingText messaging = GetMessaging(shipments);
 
@@ -188,14 +219,31 @@ namespace ShipWorks.SingleScan
                 DialogResult result = messageHelper.ShowDialog(
                     () => dlgFactory.Create(scannedBarcode, messaging));
 
-                bool shouldPrint = result == DialogResult.OK;
+                SingleScanConfirmationMode confirmationResult;
+                string telemetryText;
+
+                switch (result)
+                {
+                    case DialogResult.OK:
+                        confirmationResult = SingleScanConfirmationMode.CreateNew;
+                        telemetryText = "CreateNew";
+                        break;
+                    case DialogResult.Yes:
+                        confirmationResult = SingleScanConfirmationMode.PrintExisting;
+                        telemetryText = "PrintExisting";
+                        break;
+                    default:
+                        confirmationResult = SingleScanConfirmationMode.Select;
+                        telemetryText = "Cancel";
+                        break;
+                }
 
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Length);
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Unprocessed", shipments.Count(s => !s.Processed));
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Processed", shipments.Count(s => s.Processed));
-                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", shouldPrint ? "Continue" : "Cancel");
+                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", telemetryText);
 
-                return shouldPrint;
+                return confirmationResult;
             }
         }
 
@@ -224,12 +272,19 @@ namespace ShipWorks.SingleScan
                 multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
             }
 
-            return new MessagingText
+            var messaging = new MessagingText
             {
                 Title = "Multiple Shipments",
                 Body = multipleShipmentsMessage,
                 Continue = buttonText
             };
+
+            if (shipments.Any(s => s.Processed))
+            {
+                messaging.ContinueOptional = "Reprint Existing Label";
+            }
+
+            return messaging;
         }
     }
 }
