@@ -92,7 +92,9 @@ namespace ShipWorks.SingleScan
                             {
                                 messenger.Send(new ReprintLabelsMessage(this, shipments), string.Empty);
                                 AutoPrintResult result = new AutoPrintResult(scannedBarcode, orderID);
-                                return GenericResult.FromSuccess(result);
+
+                                // Use FromError so that we don't wait for a ShipmentsProcessed message
+                                return GenericResult.FromError("Shipments Printed", result);
                             }
 
                             bool weighSuccessful = autoWeighService.ApplyWeight(shipments, autoPrintTrackedDurationEvent);
