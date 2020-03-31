@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
@@ -88,6 +88,13 @@ namespace ShipWorks.SingleScan
 
                         if (!userCanceledPrint)
                         {
+                            if (shipments.All(s => s.Processed))
+                            {
+                                messenger.Send(new ReprintLabelsMessage(this, shipments), string.Empty);
+                                AutoPrintResult result = new AutoPrintResult(scannedBarcode, orderID);
+                                return GenericResult.FromSuccess(result);
+                            }
+
                             bool weighSuccessful = autoWeighService.ApplyWeight(shipments, autoPrintTrackedDurationEvent);
                             if (!weighSuccessful)
                             {
