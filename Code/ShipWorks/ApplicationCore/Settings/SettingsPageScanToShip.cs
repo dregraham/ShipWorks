@@ -10,6 +10,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -68,7 +69,7 @@ namespace ShipWorks.ApplicationCore.Settings
         public override void Save()
         {
             if (userSession.IsLoggedOn)
-            {                
+            {
                 if (autoPrint.Checked)
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
@@ -84,6 +85,8 @@ namespace ShipWorks.ApplicationCore.Settings
 
                 settings.AutoWeigh = autoWeigh.Checked;
                 settings.RequireVerificationToShip = requireVerificationToShip.Checked;
+
+                settings.SingleScanConfirmationMode = (int) Enum.Parse(typeof(SingleScanConfirmationMode), singleScanConfirmation.SelectedValue.ToString());
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -115,6 +118,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 enableScanner.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
+                singleScanConfirmation.SelectedValue = (SingleScanConfirmationMode) settings.SingleScanConfirmationMode;
 
                 LoadRequireVerificationSetting();
 
