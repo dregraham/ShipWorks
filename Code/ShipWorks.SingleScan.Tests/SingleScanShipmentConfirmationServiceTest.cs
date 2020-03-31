@@ -446,7 +446,8 @@ namespace ShipWorks.SingleScan.Tests
                 Body =
                     "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
                 Continue = "Create New Label",
-                Title = "Order Previously Processed"
+                Title = "Order Previously Processed",
+                ContinueOptional = "Ask every time"
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
