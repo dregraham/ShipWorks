@@ -11682,8 +11682,6 @@ namespace ShipWorks.Data.Model
 		ShipmentDateCutoffJson,
 		///<summary>OrderLookupFieldLayout. </summary>
 		OrderLookupFieldLayout,
-		///<summary>SingleScanConfirmationMode. </summary>
-		SingleScanConfirmationMode,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13460,6 +13458,8 @@ namespace ShipWorks.Data.Model
 		MinimizeRibbon,
 		///<summary>ShowQAToolbarBelowRibbon. </summary>
 		ShowQAToolbarBelowRibbon,
+		///<summary>SingleScanConfirmationMode. </summary>
+		SingleScanConfirmationMode,
 		/// <summary></summary>
 		AmountOfFields
 	}

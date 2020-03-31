@@ -27347,11 +27347,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.OrderLookupFieldLayout);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.SingleScanConfirmationMode field instance</summary>
-		public static EntityField2 SingleScanConfirmationMode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.SingleScanConfirmationMode);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
@@ -31431,6 +31426,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShowQAToolbarBelowRibbon
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.SingleScanConfirmationMode field instance</summary>
+		public static EntityField2 SingleScanConfirmationMode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.SingleScanConfirmationMode);}
 		}
 	}
 

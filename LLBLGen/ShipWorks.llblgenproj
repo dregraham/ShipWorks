@@ -2848,9 +2848,9 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
-          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="54" />
+          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="55" />
           <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
-          <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="53" />
+          <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="54" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -2858,7 +2858,6 @@
           <Field Name="ShipSenseEndShipmentID" Type="long" FieldIndex="46" />
           <Field Name="ShipSenseProcessedShipmentID" Type="long" FieldIndex="45" />
           <Field Name="ShipSenseUniquenessXml" Type="string" MaxLength="2147483647" FieldIndex="44" />
-          <Field Name="SingleScanConfirmationMode" Type="int" Precision="10" FieldIndex="55" />
           <Field Name="UpsAccessKey" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
           <Field Name="UpsInsurancePennyOne" Type="bool" FieldIndex="18" />
           <Field Name="UpsInsuranceProvider" Type="int" FieldIndex="17" />
@@ -3376,6 +3375,7 @@
           <Field Name="RequireVerificationToShip" Type="bool" FieldIndex="21" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
+          <Field Name="SingleScanConfirmationMode" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
@@ -4641,7 +4641,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-30T19:31:45.6579294Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-31T14:17:53.915753Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8711,7 +8711,6 @@
                     <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                     <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
-                    <Field Name="SingleScanConfirmationMode" Ordinal="57" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -9414,6 +9413,7 @@
                     <Field Name="RequireVerificationToShip" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="SingleScanConfirmationMode" Ordinal="25" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13807,7 +13807,6 @@
             <FieldMapping FieldName="ShipSenseEndShipmentID" TargetFieldName="ShipSenseEndShipmentID" />
             <FieldMapping FieldName="ShipSenseProcessedShipmentID" TargetFieldName="ShipSenseProcessedShipmentID" />
             <FieldMapping FieldName="ShipSenseUniquenessXml" TargetFieldName="ShipSenseUniquenessXml" />
-            <FieldMapping FieldName="SingleScanConfirmationMode" TargetFieldName="SingleScanConfirmationMode" />
             <FieldMapping FieldName="UpsAccessKey" TargetFieldName="UpsAccessKey" />
             <FieldMapping FieldName="UpsInsurancePennyOne" TargetFieldName="UpsInsurancePennyOne" />
             <FieldMapping FieldName="UpsInsuranceProvider" TargetFieldName="UpsInsuranceProvider" />
@@ -14334,6 +14333,7 @@
             <FieldMapping FieldName="RequireVerificationToShip" TargetFieldName="RequireVerificationToShip" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
+            <FieldMapping FieldName="SingleScanConfirmationMode" TargetFieldName="SingleScanConfirmationMode" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />

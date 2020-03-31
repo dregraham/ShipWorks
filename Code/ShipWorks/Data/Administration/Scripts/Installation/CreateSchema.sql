@@ -4333,6 +4333,7 @@ CREATE TABLE [dbo].[UserSettings]
 [RequireVerificationToShip] [bit] NOT NULL,
 [MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
 [ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0,
+[SingleScanConfirmationMode] [int] NOT NULL CONSTRAINT [DF_UserSettings_SingleScanConfirmationMode] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'
@@ -5277,8 +5278,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipmentsLoaderEnsureFiltersLoadedTimeout] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentsLoaderEnsureFiltersLoadedTimeout] DEFAULT ((0)),
 [ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT (''),
 [ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT (''),
-[SingleScanConfirmationMode] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_SingleScanConfirmationMode] DEFAULT ((0))
+[OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

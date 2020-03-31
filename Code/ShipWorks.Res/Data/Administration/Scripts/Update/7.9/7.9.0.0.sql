@@ -1,5 +1,5 @@
-PRINT N'Altering [dbo].[ShippingSettings]'
+PRINT N'Altering [dbo].[UserSettings]'
 GO
-ALTER TABLE [dbo].[ShippingSettings] ADD
-[SingleScanConfirmationMode] [int] NOT NULL CONSTRAINT [DF_ShippingSettings_SingleScanConfirmationMode] DEFAULT ((0))
+ALTER TABLE [dbo].[UserSettings] ADD
+[SingleScanConfirmationMode] [int] NOT NULL CONSTRAINT [DF_UserSettings_SingleScanConfirmationMode] DEFAULT ((0))
 GO

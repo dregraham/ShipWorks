@@ -3239,7 +3239,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineApiKey", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineApiKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
-			this.AddElementFieldInfo("ShippingSettingsEntity", "SingleScanConfirmationMode", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.SingleScanConfirmationMode, 0, 0, 10);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()
@@ -3799,6 +3798,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UserSettingsEntity", "RequireVerificationToShip", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.RequireVerificationToShip, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "MinimizeRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.MinimizeRibbon, 0, 0, 0);
 			this.AddElementFieldInfo("UserSettingsEntity", "ShowQAToolbarBelowRibbon", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, 0, 0, 0);
+			this.AddElementFieldInfo("UserSettingsEntity", "SingleScanConfirmationMode", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.SingleScanConfirmationMode, 0, 0, 10);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()
