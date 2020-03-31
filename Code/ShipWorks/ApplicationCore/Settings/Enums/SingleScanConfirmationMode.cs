@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace ShipWorks.SingleScan.Enums
+namespace ShipWorks.ApplicationCore.Settings.Enums
 {
     /// <summary>
     /// Enums representing each single scan confirmation mode.
