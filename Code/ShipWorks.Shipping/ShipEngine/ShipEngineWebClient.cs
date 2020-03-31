@@ -162,7 +162,11 @@ namespace ShipWorks.Shipping.ShipEngine
                     return Result.FromSuccess();
                 }
 
-                return GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
+                JObject responseBody = JObject.Parse(response.Content);
+
+                JToken error = responseBody["errors"]?.FirstOrDefault() ?? responseBody["message"];
+
+                return GenericResult.FromError<string>(error.ToString());
             }
             catch (ApiException ex)
             {
