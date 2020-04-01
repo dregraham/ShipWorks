@@ -8,6 +8,7 @@ using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using Moq;
+using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
@@ -632,6 +633,149 @@ namespace ShipWorks.SingleScan.Tests
             };
 
             dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async Task GetShipments_DelegatesToDialogFactory_WhenConfirmationModeSetToPrintExisting_AndThereAreNoProcessedShipments()
+        {
+            // Mock up the order loader to return one un-processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = false},
+                        new ShipmentEntity() {Processed = false},
+                    }));
+            Mock<IAutoPrintConfirmationDlgFactory> dlgFactory = mock.Mock<IAutoPrintConfirmationDlgFactory>();
+            mock.Mock<ISingleScanAutomationSettings>()
+                .Setup(s => s.ConfirmationMode)
+                .Returns(SingleScanConfirmationMode.PrintExisting);
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            await testObject.GetShipments(123, "foobar");
+
+            MessagingText continueText = new MessagingText()
+            {
+                Body =
+                    "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click 'Create 2 Labels'.",
+                Continue = "Create 2 Labels",
+                Title = "Multiple Shipments",
+            };
+
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async Task GetShipments_ReturnsOnlyProcessedShipments_WhenConfirmationModeSetToPrintExisting()
+        {
+            // Mock up the order loader to return one un-processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = true},
+                        new ShipmentEntity() {Processed = true},
+                        new ShipmentEntity() {Processed = false},
+                    }));
+            mock.Mock<ISingleScanAutomationSettings>()
+                .Setup(s => s.ConfirmationMode)
+                .Returns(SingleScanConfirmationMode.PrintExisting);
+
+            var shipments = await testObject.GetShipments(123, "foobar");
+            Assert.True(shipments.All(s => s.Processed == true));
+        }
+
+        [Fact]
+        public async Task GetShipments_DelegatesToDialogFactoryWithCorrectMessageText_WhenConfirmationModeSetToSelect()
+        {
+            // Mock up the order loader to return one un-processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = true},
+                        new ShipmentEntity() {Processed = true},
+                    }));
+            Mock<IAutoPrintConfirmationDlgFactory> dlgFactory = mock.Mock<IAutoPrintConfirmationDlgFactory>();
+            mock.Mock<ISingleScanAutomationSettings>()
+                .Setup(s => s.ConfirmationMode)
+                .Returns(SingleScanConfirmationMode.Select);
+            // Mock up the message helper to return DialogResult OK
+            mock.Mock<IMessageHelper>().Setup(m => m.ShowDialog(It.IsAny<Func<IForm>>())).Returns<Func<IForm>>(f =>
+            {
+                IForm form = f();
+                return form.ShowDialog(null);
+            });
+
+            await testObject.GetShipments(123, "foobar");
+
+            MessagingText continueText = new MessagingText()
+            {
+                Body =
+                    "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.",
+                Continue = "Create New Label",
+                Title = "Order Previously Processed",
+                ContinueOptional = "Reprint Existing Label"
+            };
+
+            dlgFactory.Verify(f => f.Create("foobar", continueText));
+        }
+
+        [Fact]
+        public async Task GetShipments_ReturnsNewShipment_WhenAllShipmentsAreProcessed_AndConfirmationModeSetToCreateNew()
+        {
+            // Mock up the order loader to return one un-processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = true},
+                        new ShipmentEntity() {Processed = true},
+                    }));
+            mock.Mock<ISingleScanAutomationSettings>()
+                .Setup(s => s.ConfirmationMode)
+                .Returns(SingleScanConfirmationMode.CreateNew);
+
+            var newShipment = new ShipmentEntity { Processed = false, ShipmentTypeCode = ShipmentTypeCode.FedEx };
+            mock.Mock<IShipmentFactory>()
+                .Setup(s => s.Create(It.IsAny<long>()))
+                .Returns(newShipment);
+
+            var result = await testObject.GetShipments(123, "foobar");
+            Assert.True(result.Count() == 1);
+            Assert.Equal(result.First(), newShipment);
+        }
+
+        [Fact]
+        public async Task GetShipments_ReturnsUnprocessedShipments_WhenSomeShipmentsAreUnprocessed_AndConfirmationModeSetToCreateNew()
+        {
+            var unprocessedShipment = new ShipmentEntity() { Processed = false };
+            // Mock up the order loader to return one un-processed shipment
+            mock.Mock<IOrderLoader>()
+                .Setup(o => o.LoadAsync(It.IsAny<long[]>(), ProgressDisplayOptions.NeverShow, true, Timeout.Infinite))
+                .ReturnsAsync(new ShipmentsLoadedEventArgs(null, false, "",
+                    new List<ShipmentEntity>()
+                    {
+                        new ShipmentEntity() {Processed = true},
+                        unprocessedShipment,
+                        new ShipmentEntity() {Processed = true},
+                    }));
+            mock.Mock<ISingleScanAutomationSettings>()
+                .Setup(s => s.ConfirmationMode)
+                .Returns(SingleScanConfirmationMode.CreateNew);
+
+            var result = await testObject.GetShipments(123, "foobar");
+            Assert.True(result.Count() == 1);
+            Assert.Equal(result.First(), unprocessedShipment);
         }
 
         [Fact]
