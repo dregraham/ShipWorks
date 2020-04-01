@@ -7,7 +7,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.ApplicationCore.Settings;
-using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
