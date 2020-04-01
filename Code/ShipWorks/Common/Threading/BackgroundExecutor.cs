@@ -13,7 +13,7 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// Class that provides functionality to update entities on a background thread
     /// </summary>
-    public class BackgroundExecutor<T>
+    public class BackgroundExecutor<T> : IBackgroundExecutor<T>
     {
         Control owner;
 
@@ -40,8 +40,6 @@ namespace ShipWorks.Common.Threading
         // Whether to delay showing the progress dialog
         private readonly bool delayProgressDialog;
 
-        private readonly bool hideProgressDialog;
-
         #region class OperationState
 
         class OperationState<TState>
@@ -49,7 +47,7 @@ namespace ShipWorks.Common.Threading
             public List<TState> Items;
             public object UserState;
 
-            public IProgressProvider ProgressProvider;
+            public ProgressProvider ProgressProvider;
 
             public Func<IProgressReporter, List<T>> Initializer;
             public ProgressItem InitializerProgress;
@@ -85,23 +83,6 @@ namespace ShipWorks.Common.Threading
             this.progressDescription = progressDescription;
             this.progressDetail = progressDetail;
             this.delayProgressDialog = delayProgressDialog;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        [NDependIgnoreTooManyParams]
-        public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail, bool delayProgressDialog, bool hideProgressDialog)
-        {
-            MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
-
-            this.owner = owner;
-
-            this.progressTitle = progressTitle;
-            this.progressDescription = progressDescription;
-            this.progressDetail = progressDetail;
-            this.delayProgressDialog = delayProgressDialog;
-            this.hideProgressDialog = hideProgressDialog;
         }
 
         /// <summary>
@@ -157,15 +138,7 @@ namespace ShipWorks.Common.Threading
             }
 
             // Progress Provider
-            IProgressProvider progressProvider;
-            if (hideProgressDialog)
-            {
-                progressProvider = new BackgroundProgressProvider();
-            }
-            else
-            {
-                progressProvider = new ProgressProvider();
-            }
+            ProgressProvider progressProvider = new ProgressProvider();
 
             // Initialization progress (if provided)
             ProgressItem initializerProgress = null;
@@ -179,21 +152,12 @@ namespace ShipWorks.Common.Threading
             ProgressItem workProgress = new ProgressItem(progressTitle);
             progressProvider.ProgressItems.Add(workProgress);
 
-            ProgressDisplayDelayer delayer;
+            // Progress Dialog
+            ProgressDlg progressDlg = new ProgressDlg(progressProvider);
+            progressDlg.Title = progressTitle;
+            progressDlg.Description = progressDescription;
 
-            if (!hideProgressDialog)
-            {
-                // Progress Dialog
-                ProgressDlg progressDlg = new ProgressDlg(progressProvider);
-                progressDlg.Title = progressTitle;
-                progressDlg.Description = progressDescription;
-
-                delayer = new ProgressDisplayDelayer(progressDlg);
-            }
-            else
-            {
-                delayer = null;
-            }
+            ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
 
             TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>> completionSource =
                 new TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>>();
@@ -218,7 +182,7 @@ namespace ShipWorks.Common.Threading
             // Show the progress window only after a certain amount of time goes by
             // if configured to do so
             double delaySeconds = delayProgressDialog ? .25 : 0;
-            delayer?.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
+            delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
 
             return completionSource.Task;
         }
