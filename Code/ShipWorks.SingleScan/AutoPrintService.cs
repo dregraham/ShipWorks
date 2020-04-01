@@ -90,7 +90,7 @@ namespace ShipWorks.SingleScan
                         {
                             if (shipments.All(s => s.Processed))
                             {
-                                messenger.Send(new ReprintLabelsMessage(this, shipments), string.Empty);
+                                messenger.Send(new ReprintLabelsMessage(this, shipments, true), string.Empty);
                                 AutoPrintResult result = new AutoPrintResult(scannedBarcode, orderID);
 
                                 // Use FromError so that we don't wait for a ShipmentsProcessed message

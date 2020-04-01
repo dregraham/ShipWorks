@@ -79,7 +79,8 @@ namespace ShipWorks.Shipping.Services
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(currentOwner,
                 "Print Shipments",
                 "ShipWorks is printing labels.",
-                "Printing {0} of {1}");
+                "Printing {0} of {1}",
+                message.ShouldDelayShowingProgress);
 
             // We are prepared for exceptions
             executor.PropagateException = true;

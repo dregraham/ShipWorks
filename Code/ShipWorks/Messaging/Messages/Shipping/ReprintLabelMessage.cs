@@ -19,6 +19,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
             Sender = sender;
             Shipments = shipments.ToReadOnly();
             MessageId = Guid.NewGuid();
+            ShouldDelayShowingProgress = false;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ReprintLabelsMessage(object sender, IEnumerable<ShipmentEntity> shipments, bool shouldDelay)
+        {
+            Sender = sender;
+            Shipments = shipments.ToReadOnly();
+            MessageId = Guid.NewGuid();
+            ShouldDelayShowingProgress = shouldDelay;
         }
 
         /// <summary>
@@ -35,5 +47,10 @@ namespace ShipWorks.Messaging.Messages.Shipping
         /// Id of the shipment to Reprint a label for
         /// </summary>
         public IEnumerable<ShipmentEntity> Shipments { get; }
+
+        /// <summary>
+        /// Whether to delay showing the progress dialog
+        /// </summary>
+        public bool ShouldDelayShowingProgress { get; }
     }
 }
