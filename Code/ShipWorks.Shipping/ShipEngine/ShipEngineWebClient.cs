@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -37,7 +35,7 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IStoreManager storeManager;
         private readonly IUpsRegistrationRequestFactory registrationRequestFactory;
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
-        private const string ProxyEndpoint = "shipEngine";
+        private const string ShipEngineProxyEndpoint = "shipEngine";
 
         /// <summary>
         /// Constructor
@@ -135,8 +133,8 @@ namespace ShipWorks.Shipping.ShipEngine
                     email: amazonSwaAccount.Email,
                     merchantSellerId: store.MerchantID,
                     mwsAuthToken: store.AuthToken);
-                
-                IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
+
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
 
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
@@ -148,7 +146,6 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
 
                 request.AddJsonBody(updateRequest);
-
 
                 ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "UpdateAmazonAccount");
                 logEntry.LogRequest(request, restClient, "txt");
@@ -202,7 +199,7 @@ namespace ShipWorks.Shipping.ShipEngine
                     Email = store?.Email ?? string.Empty
                 };
 
-                IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
 
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
@@ -214,7 +211,6 @@ namespace ShipWorks.Shipping.ShipEngine
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
 
                 request.AddJsonBody(amazonAccountInfo);
-
 
                 ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonAccount");
                 logEntry.LogRequest(request, restClient, "txt");
@@ -608,7 +604,7 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             try
             {
-                IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
 
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
@@ -643,5 +639,10 @@ namespace ShipWorks.Shipping.ShipEngine
                 return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
             }
         }
+
+        /// <summary>
+        /// Gets the proxy url for ShipEngine
+        /// </summary>
+        private string ShipEngineProxyUrl => new Uri(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl).AddToPath(ShipEngineProxyEndpoint).ToString();
     }
 }
