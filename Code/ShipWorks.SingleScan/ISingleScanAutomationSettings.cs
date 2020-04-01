@@ -1,4 +1,4 @@
-﻿using ShipWorks.ApplicationCore.Settings.Enums;
+﻿using ShipWorks.Settings;
 
 namespace ShipWorks.SingleScan
 {

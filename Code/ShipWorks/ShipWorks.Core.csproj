@@ -885,7 +885,6 @@
     <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
-    <Compile Include="ApplicationCore\Settings\Enums\SingleScanConfirmationMode.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />

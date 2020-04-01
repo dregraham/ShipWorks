@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Settings.Enums;
+using ShipWorks.Settings;
 
 namespace ShipWorks.ApplicationCore.Settings
 {

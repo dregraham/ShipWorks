@@ -10,7 +10,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Common.IO.Hardware.Scanner;
 using ShipWorks.Common.IO.KeyboardShortcuts;
 using ShipWorks.Common.IO.KeyboardShortcuts.Messages;
@@ -23,6 +22,7 @@ using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
+using ShipWorks.Settings;
 
 namespace ShipWorks.ApplicationCore.Settings
 {
@@ -86,7 +86,8 @@ namespace ShipWorks.ApplicationCore.Settings
                 settings.AutoWeigh = autoWeigh.Checked;
                 settings.RequireVerificationToShip = requireVerificationToShip.Checked;
 
-                settings.SingleScanConfirmationMode = (int) Enum.Parse(typeof(SingleScanConfirmationMode), singleScanConfirmation.SelectedValue.ToString());
+                settings.SingleScanConfirmationMode = (SingleScanConfirmationMode) Enum.Parse(typeof(SingleScanConfirmationMode), 
+                    singleScanConfirmation.SelectedValue.ToString());
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {

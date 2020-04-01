@@ -2,7 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Settings;
-using ShipWorks.ApplicationCore.Settings.Enums;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 

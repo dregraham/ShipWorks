@@ -106,6 +106,7 @@
     <TypeShortcut Shortcut="ShipmentTypeCode" Type="ShipWorks.Shipping.ShipmentTypeCode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShortcutHotkey" Type="System.String" />
+    <TypeShortcut Shortcut="SingleScanConfirmationMode" Type="ShipWorks.Settings.SingleScanConfirmationMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="UIMode" Type="ShipWorks.Settings.UIMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="VirtualKeys" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
@@ -3375,7 +3376,7 @@
           <Field Name="RequireVerificationToShip" Type="bool" FieldIndex="21" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
-          <Field Name="SingleScanConfirmationMode" Type="int" Precision="10" FieldIndex="24" />
+          <Field Name="SingleScanConfirmationMode" Type="SingleScanConfirmationMode" FieldIndex="24" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />

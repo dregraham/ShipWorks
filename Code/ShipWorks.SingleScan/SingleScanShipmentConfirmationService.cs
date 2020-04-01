@@ -8,11 +8,11 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
-using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Users.Security;
+using ShipWorks.Settings;
 
 namespace ShipWorks.SingleScan
 {

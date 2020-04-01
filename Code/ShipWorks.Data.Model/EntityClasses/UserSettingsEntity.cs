@@ -741,9 +741,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanConfirmationMode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int32 SingleScanConfirmationMode
+		public virtual ShipWorks.Settings.SingleScanConfirmationMode SingleScanConfirmationMode
 		{
-			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, true); }
+			get { return (ShipWorks.Settings.SingleScanConfirmationMode)GetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, value); }
 		}
 
