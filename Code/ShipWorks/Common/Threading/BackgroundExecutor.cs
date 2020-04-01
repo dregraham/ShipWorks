@@ -179,12 +179,21 @@ namespace ShipWorks.Common.Threading
             ProgressItem workProgress = new ProgressItem(progressTitle);
             progressProvider.ProgressItems.Add(workProgress);
 
-            // Progress Dialog
-            ProgressDlg progressDlg = new ProgressDlg(progressProvider);
-            progressDlg.Title = progressTitle;
-            progressDlg.Description = progressDescription;
+            ProgressDisplayDelayer delayer;
 
-            ProgressDisplayDelayer delayer = new ProgressDisplayDelayer(progressDlg);
+            if (!hideProgressDialog)
+            {
+                // Progress Dialog
+                ProgressDlg progressDlg = new ProgressDlg(progressProvider);
+                progressDlg.Title = progressTitle;
+                progressDlg.Description = progressDescription;
+
+                delayer = new ProgressDisplayDelayer(progressDlg);
+            }
+            else
+            {
+                delayer = null;
+            }
 
             TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>> completionSource =
                 new TaskCompletionSource<BackgroundExecutorCompletedEventArgs<T>>();
@@ -209,7 +218,7 @@ namespace ShipWorks.Common.Threading
             // Show the progress window only after a certain amount of time goes by
             // if configured to do so
             double delaySeconds = delayProgressDialog ? .25 : 0;
-            delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
+            delayer?.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
 
             return completionSource.Task;
         }
