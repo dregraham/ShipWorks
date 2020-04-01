@@ -7,6 +7,7 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.ApplicationCore.Settings.Enums;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -66,6 +67,45 @@ namespace ShipWorks.SingleScan.Tests
             await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
 
             Assert.Equal(1, messenger.SentMessages.OfType<ProcessShipmentsMessage>().Count());
+        }
+
+        [Fact]
+        public async Task OrderScanned_SendsReprintLabelsMessage_WhenOrderHasOnlyProcessedShipments()
+        {
+            testObject = mock.Create<AutoPrintService>();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+
+            shipments.Add(new ShipmentEntity(1) { Processed = true });
+            shipments.Add(new ShipmentEntity(2) { Processed = true });
+
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.GetShipments(It.IsAny<long>(), It.IsAny<string>())).
+                ReturnsAsync(shipments);
+
+            await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
+
+            Assert.Equal(1, messenger.SentMessages.OfType<ReprintLabelsMessage>().Count());
+        }
+
+        [Fact]
+        public async Task Print_ReturnsResultFromError_WhenOrderHasOnlyProcessedShipments()
+        {
+            testObject = mock.Create<AutoPrintService>();
+
+            SetAutoPrintSetting(SingleScanSettings.AutoPrint);
+
+            shipments.Add(new ShipmentEntity(1) { Processed = true });
+            shipments.Add(new ShipmentEntity(2) { Processed = true });
+
+            mock.Mock<ISingleScanConfirmationService>().
+                Setup(s => s.GetShipments(It.IsAny<long>(), It.IsAny<string>())).
+                ReturnsAsync(shipments);
+
+            var result = await testObject.Print(new AutoPrintServiceDto(singleScanFilterUpdateCompleteMessage, new SingleScanMessage(this, new ScanMessage(this, "A", IntPtr.Zero))));
+
+            Assert.True(result.Failure);
+            Assert.Equal(new AutoPrintResult("A", 5), result.Value);
         }
 
         [Fact]
