@@ -40,6 +40,8 @@ namespace ShipWorks.Common.Threading
         // Whether to delay showing the progress dialog
         private readonly bool delayProgressDialog;
 
+        private readonly bool hideProgressDialog;
+
         #region class OperationState
 
         class OperationState<TState>
@@ -47,7 +49,7 @@ namespace ShipWorks.Common.Threading
             public List<TState> Items;
             public object UserState;
 
-            public ProgressProvider ProgressProvider;
+            public IProgressProvider ProgressProvider;
 
             public Func<IProgressReporter, List<T>> Initializer;
             public ProgressItem InitializerProgress;
@@ -83,6 +85,23 @@ namespace ShipWorks.Common.Threading
             this.progressDescription = progressDescription;
             this.progressDetail = progressDetail;
             this.delayProgressDialog = delayProgressDialog;
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        [NDependIgnoreTooManyParams]
+        public BackgroundExecutor(Control owner, string progressTitle, string progressDescription, string progressDetail, bool delayProgressDialog, bool hideProgressDialog)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
+
+            this.owner = owner;
+
+            this.progressTitle = progressTitle;
+            this.progressDescription = progressDescription;
+            this.progressDetail = progressDetail;
+            this.delayProgressDialog = delayProgressDialog;
+            this.hideProgressDialog = hideProgressDialog;
         }
 
         /// <summary>
@@ -138,7 +157,15 @@ namespace ShipWorks.Common.Threading
             }
 
             // Progress Provider
-            ProgressProvider progressProvider = new ProgressProvider();
+            IProgressProvider progressProvider;
+            if (hideProgressDialog)
+            {
+                progressProvider = new BackgroundProgressProvider();
+            }
+            else
+            {
+                progressProvider = new ProgressProvider();
+            }
 
             // Initialization progress (if provided)
             ProgressItem initializerProgress = null;

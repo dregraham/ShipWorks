@@ -19,18 +19,18 @@ namespace ShipWorks.Messaging.Messages.Shipping
             Sender = sender;
             Shipments = shipments.ToReadOnly();
             MessageId = Guid.NewGuid();
-            ShouldDelayShowingProgress = false;
+            HideProgressDialog = false;
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ReprintLabelsMessage(object sender, IEnumerable<ShipmentEntity> shipments, bool shouldDelay)
+        public ReprintLabelsMessage(object sender, IEnumerable<ShipmentEntity> shipments, bool hideProgress)
         {
             Sender = sender;
             Shipments = shipments.ToReadOnly();
             MessageId = Guid.NewGuid();
-            ShouldDelayShowingProgress = shouldDelay;
+            HideProgressDialog = hideProgress;
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace ShipWorks.Messaging.Messages.Shipping
         public IEnumerable<ShipmentEntity> Shipments { get; }
 
         /// <summary>
-        /// Whether to delay showing the progress dialog
+        /// Whether to hide the progress dialog
         /// </summary>
-        public bool ShouldDelayShowingProgress { get; }
+        public bool HideProgressDialog { get; }
     }
 }

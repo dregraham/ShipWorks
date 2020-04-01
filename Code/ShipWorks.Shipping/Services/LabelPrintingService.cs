@@ -80,7 +80,8 @@ namespace ShipWorks.Shipping.Services
                 "Print Shipments",
                 "ShipWorks is printing labels.",
                 "Printing {0} of {1}",
-                message.ShouldDelayShowingProgress);
+                false,
+                message.HideProgressDialog);
 
             // We are prepared for exceptions
             executor.PropagateException = true;
