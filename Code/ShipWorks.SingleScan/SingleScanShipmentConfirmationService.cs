@@ -114,7 +114,7 @@ namespace ShipWorks.SingleScan
                 }
                 else
                 {
-                    confirmedShipments = GetMultipleConfirmedShipments(orderId, scannedBarcode, shipments);
+                    confirmedShipments = GetMultipleConfirmedShipments(orderId, scannedBarcode, shipments).ToArray();
                 }
 
                 if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
@@ -135,11 +135,11 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Get confirmed shipments when an order has multiple shipments
         /// </summary>
-        private ShipmentEntity[] GetMultipleConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
+        private IEnumerable<ShipmentEntity> GetMultipleConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
         {
             var selectedMode = singleScanAutomationSettings.ConfirmationMode;
 
-            if (selectedMode == SingleScanConfirmationMode.PrintExisting && !shipments.Any(s => s.Processed))
+            if (selectedMode == SingleScanConfirmationMode.PrintExisting && shipments.None(s => s.Processed))
             {
                 // If the user's default setting is to print existing labels but there aren't any
                 // show the dialog
@@ -159,20 +159,17 @@ namespace ShipWorks.SingleScan
                     return new[] { shipmentFactory.Create(orderId) };
                 }
 
-                // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-                if (shipments.Any(s => !s.Processed))
-                {
-                    return shipments.Where(s => !s.Processed).ToArray();
-                }
+                // If some of the shipments are not processed and the user confirms return only the unprocessed shipments
+                return shipments.Where(s => !s.Processed);
             }
             else if (selectedMode == SingleScanConfirmationMode.PrintExisting)
             {
                 // We should never get here if there are no processed shipments
-                return new ShipmentEntity[] { shipments.Where(s => s.Processed).OrderByDescending(s => s.ProcessedDate).First() };
+                return shipments.Where(s => s.Processed).OrderByDescending(s => s.ProcessedDate).Take(1);
             }
 
             // If selectedMode is still "Select", the user cancelled the dialog
-            return new ShipmentEntity[0];
+            return Enumerable.Empty<ShipmentEntity>();
         }
 
         private bool ShouldPrintAndProcessShipmentWithMultiplePackages(int packageCount, string scannedBarcode)
@@ -209,7 +206,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Ask the user to confirm what to do
         /// </summary>
-        private SingleScanConfirmationMode ShowConfirmationDialog(string scannedBarcode, ShipmentEntity[] shipments)
+        private SingleScanConfirmationMode ShowConfirmationDialog(string scannedBarcode, IEnumerable<ShipmentEntity> shipments)
         {
             MessagingText messaging = GetMessaging(shipments);
 
@@ -238,7 +235,7 @@ namespace ShipWorks.SingleScan
                         break;
                 }
 
-                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Length);
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Count());
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Unprocessed", shipments.Count(s => !s.Processed));
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Processed", shipments.Count(s => s.Processed));
                 telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", telemetryText);
@@ -250,7 +247,7 @@ namespace ShipWorks.SingleScan
         /// <summary>
         /// Get the Title/Message text to display to the user based on the Shipments
         /// </summary>
-        private MessagingText GetMessaging(ShipmentEntity[] shipments)
+        private MessagingText GetMessaging(IEnumerable<ShipmentEntity> shipments)
         {
             if (shipments.All(s => s.Processed))
             {

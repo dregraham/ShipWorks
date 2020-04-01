@@ -119,6 +119,8 @@ namespace ShipWorks.ApplicationCore.Settings
                 enableScanner.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
+
+                EnumHelper.BindComboBox<SingleScanConfirmationMode>(singleScanConfirmation);
                 singleScanConfirmation.SelectedValue = (SingleScanConfirmationMode) settings.SingleScanConfirmationMode;
 
                 LoadRequireVerificationSetting();
