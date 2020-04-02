@@ -20,9 +20,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Settings;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
-using ShipWorks.Settings;
 
 namespace ShipWorks.ApplicationCore.Settings
 {
@@ -120,7 +120,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 autoWeigh.Checked = settings.AutoWeigh;
 
                 EnumHelper.BindComboBox<SingleScanConfirmationMode>(singleScanConfirmation);
-                singleScanConfirmation.SelectedValue = (SingleScanConfirmationMode) settings.SingleScanConfirmationMode;
+                singleScanConfirmation.SelectedValue = settings.SingleScanConfirmationMode;
 
                 LoadRequireVerificationSetting();
 
