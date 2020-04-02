@@ -43,14 +43,6 @@ namespace ShipWorks.Common.Threading
         #endregion
 
         /// <summary>
-        /// Constructor
-        /// </summary>
-        public BackgroundExecutorWithoutDialog()
-        {
-
-        }
-
-        /// <summary>
         /// Indicates if an exception will be propagated to the ExecuteCompleted event.  If false, then the exception is left unhandled,
         /// and the app will likely crash.  Only set this to true if the hooked up ExecuteCompleted even is prepared to handle exceptions.
         /// </summary>
