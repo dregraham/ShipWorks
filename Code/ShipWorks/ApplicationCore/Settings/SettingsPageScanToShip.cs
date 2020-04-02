@@ -86,7 +86,7 @@ namespace ShipWorks.ApplicationCore.Settings
                 settings.AutoWeigh = autoWeigh.Checked;
                 settings.RequireVerificationToShip = requireVerificationToShip.Checked;
 
-                settings.SingleScanConfirmationMode = (SingleScanConfirmationMode) singleScanConfirmation.SelectedValue;
+                settings.SingleScanConfirmationMode = singleScanConfirmation.SelectedValue;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
