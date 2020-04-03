@@ -31,7 +31,7 @@ namespace ShipWorks.SingleScan
         private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
-        private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
+        private const string AlreadyProcessedMessage = "The scanned order has been previously processed. Select the action you would like to take:";
         private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
         private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
         public const string CannotProcessNoneMessage = "The resulting shipment has a carrier of \"None\".\r\n The carrier \"None\" does not support processing.";
