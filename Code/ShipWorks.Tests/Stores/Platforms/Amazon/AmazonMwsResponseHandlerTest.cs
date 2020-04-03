@@ -4,6 +4,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Tests.Shared;
@@ -30,7 +31,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             IAmazonCredentials creds = mock.Build<IAmazonCredentials>();
             IInterapptiveOnly interapptiveOnly = mock.Build<IInterapptiveOnly>();
 
-            mwsSettings = new AmazonMwsWebClientSettings(creds, interapptiveOnly);
+            mwsSettings = new AmazonMwsWebClientSettings(creds, interapptiveOnly, new WebClientEnvironment());
 
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();

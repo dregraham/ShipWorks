@@ -232,6 +232,7 @@
     <Compile Include="Extensions\IntExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\SemaphoreExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Extensions\WindowExtensions.cs" />
     <Compile Include="Extensions\ContinueOn.cs" />
     <Compile Include="Extensions\DecimalExtensions.cs" />
