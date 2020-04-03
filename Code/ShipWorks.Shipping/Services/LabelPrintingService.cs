@@ -76,10 +76,18 @@ namespace ShipWorks.Shipping.Services
         {
             Control currentOwner = message.Sender as Control ?? owner;
 
-            BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(currentOwner,
+            IBackgroundExecutor<ShipmentEntity> executor;
+            if (message.HideProgressDialog)
+            {
+                executor = new BackgroundExecutorWithoutDialog<ShipmentEntity>();
+            }
+            else
+            {
+                executor = new BackgroundExecutor<ShipmentEntity>(currentOwner,
                 "Print Shipments",
                 "ShipWorks is printing labels.",
                 "Printing {0} of {1}");
+            }
 
             // We are prepared for exceptions
             executor.PropagateException = true;

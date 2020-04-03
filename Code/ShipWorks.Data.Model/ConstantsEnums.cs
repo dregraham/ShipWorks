@@ -13458,6 +13458,8 @@ namespace ShipWorks.Data.Model
 		MinimizeRibbon,
 		///<summary>ShowQAToolbarBelowRibbon. </summary>
 		ShowQAToolbarBelowRibbon,
+		///<summary>SingleScanConfirmationMode. </summary>
+		SingleScanConfirmationMode,
 		/// <summary></summary>
 		AmountOfFields
 	}

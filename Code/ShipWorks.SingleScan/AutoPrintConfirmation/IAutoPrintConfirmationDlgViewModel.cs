@@ -12,13 +12,18 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Initializes the ViewModel with text to display and the barcode that when scanned, accepts the dialog.
         /// </summary>
-        void Load(string barcodeAcceptanceText, string displayText, string continueText);
+        void Load(string barcodeAcceptanceText, string displayText, string continueText, string continueOptionalText);
 
         /// <summary>
         /// Gets or sets the method to close the window.
         /// If user cancels, we will pass in false, else pass in true
         /// </summary>
-        Action<bool> Close { get; set; }
+        Action<bool?> Close { get; set; }
+
+        /// <summary>
+        /// Gets the optional continue click command.
+        /// </summary>
+        ICommand ContinueOptionalClickCommand { get; }
 
         /// <summary>
         /// Gets the continue click command.

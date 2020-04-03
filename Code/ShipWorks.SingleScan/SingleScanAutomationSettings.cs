@@ -1,9 +1,10 @@
-﻿using ShipWorks.ApplicationCore;
+﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
-using System;
 
 namespace ShipWorks.SingleScan
 {
@@ -41,6 +42,11 @@ namespace ShipWorks.SingleScan
         /// Should shipments be auto created
         /// </summary>
         public bool AutoCreateShipments => shippingSettings.AutoCreateShipments;
+
+        /// <summary>
+        /// Behavior when an scanned order has multiple shipments
+        /// </summary>
+        public SingleScanConfirmationMode ConfirmationMode => userSession.Settings.SingleScanConfirmationMode;
 
         /// <summary>
         /// Whether or not auto print is permitted in the current state

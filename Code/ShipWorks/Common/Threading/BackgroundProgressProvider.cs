@@ -16,6 +16,14 @@ namespace ShipWorks.Common.Threading
         /// <summary>
         /// Constructor
         /// </summary>
+        public BackgroundProgressProvider()
+        {
+            ProgressItems = new ThreadSafeObservableCollection<IProgressReporter>();
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BackgroundProgressProvider(IProgressReporter progressItem)
         {
             ProgressItems = new ThreadSafeObservableCollection<IProgressReporter>();

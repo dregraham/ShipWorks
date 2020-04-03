@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Users.Security;
+using ShipWorks.Settings;
 
 namespace ShipWorks.SingleScan
 {
@@ -30,12 +31,12 @@ namespace ShipWorks.SingleScan
         private readonly ISingleScanAutomationSettings singleScanAutomationSettings;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
-        private const string AlreadyProcessedMessage = "The scanned order has been previously processed. To create and print a new label, scan the barcode again or click 'Create New Label'.";
-        private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        private const string AlreadyProcessedMessage = "The scanned order has been previously processed. Select the action you would like to take:";
+        private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. Select the action you would like to take:";
         private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
         public const string CannotProcessNoneMessage = "The resulting shipment has a carrier of \"None\".\r\n The carrier \"None\" does not support processing.";
 
-        private const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
+        private const string AutoWeighMessage = "{0}\r\n\r\nNote:{1} ShipWorks will update each {2} with the weight from the scale.";
 
         /// <summary>
         /// Constructor
@@ -111,19 +112,9 @@ namespace ShipWorks.SingleScan
                     // If the order has no non Voided Shipments add one and return it
                     confirmedShipments = new[] { shipmentFactory.Create(orderId) };
                 }
-                else if (ShouldPrintAndProcessShipments(shipments, scannedBarcode))
+                else
                 {
-                    // If all of the shipments are processed and the user confirms they want to process again add a shipment
-                    if (shipments.All(s => s.Processed))
-                    {
-                        confirmedShipments = new[] { shipmentFactory.Create(orderId) };
-                    }
-
-                    // If some of the shipments are not process and the user confirms return only the unprocessed shipments
-                    if (shipments.Any(s => !s.Processed))
-                    {
-                        confirmedShipments = shipments.Where(s => !s.Processed).ToArray();
-                    }
+                    confirmedShipments = GetMultipleConfirmedShipments(orderId, scannedBarcode, shipments).ToArray();
                 }
 
                 if (singleScanAutomationSettings.IsAutoWeighEnabled && confirmedShipments.IsCountEqualTo(1))
@@ -141,6 +132,46 @@ namespace ShipWorks.SingleScan
             return confirmedShipments;
         }
 
+        /// <summary>
+        /// Get confirmed shipments when an order has multiple shipments
+        /// </summary>
+        private IEnumerable<ShipmentEntity> GetMultipleConfirmedShipments(long orderId, string scannedBarcode, ShipmentEntity[] shipments)
+        {
+            var selectedMode = singleScanAutomationSettings.ConfirmationMode;
+
+            if (selectedMode == SingleScanConfirmationMode.PrintExisting && shipments.None(s => s.Processed))
+            {
+                // If the user's default setting is to print existing labels but there aren't any
+                // show the dialog
+                selectedMode = SingleScanConfirmationMode.Select;
+            }
+
+            if (selectedMode == SingleScanConfirmationMode.Select)
+            {
+                selectedMode = ShowConfirmationDialog(scannedBarcode, shipments);
+            }
+
+            if (selectedMode == SingleScanConfirmationMode.CreateNew)
+            {
+                // If all of the shipments are processed and the user confirms they want to process again add a shipment
+                if (shipments.All(s => s.Processed))
+                {
+                    return new[] { shipmentFactory.Create(orderId) };
+                }
+
+                // If some of the shipments are not processed and the user confirms return only the unprocessed shipments
+                return shipments.Where(s => !s.Processed);
+            }
+            else if (selectedMode == SingleScanConfirmationMode.PrintExisting)
+            {
+                // We should never get here if there are no processed shipments
+                return shipments.Where(s => s.Processed).OrderByDescending(s => s.ProcessedDate).Take(1);
+            }
+
+            // If selectedMode is still "Select", the user cancelled the dialog
+            return Enumerable.Empty<ShipmentEntity>();
+        }
+
         private bool ShouldPrintAndProcessShipmentWithMultiplePackages(int packageCount, string scannedBarcode)
         {
             string buttonText = $"Print {packageCount} Labels";
@@ -148,7 +179,7 @@ namespace ShipWorks.SingleScan
             MessagingText messaging = new MessagingText()
             {
                 Title = "Multiple Packages",
-                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), "package"),
+                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), string.Empty, "package"),
                 Continue = buttonText
             };
 
@@ -173,12 +204,9 @@ namespace ShipWorks.SingleScan
             shipments.Any(shipment => shipment.ShipmentTypeCode == ShipmentTypeCode.None);
 
         /// <summary>
-        /// Check to see if we should print and process the given shipments
+        /// Ask the user to confirm what to do
         /// </summary>
-        /// <param name="shipments">the list of shipments</param>
-        /// <param name="scannedBarcode">the barcode that will accept and dismiss the dialog</param>
-        /// <returns></returns>
-        private bool ShouldPrintAndProcessShipments(ShipmentEntity[] shipments, string scannedBarcode)
+        private SingleScanConfirmationMode ShowConfirmationDialog(string scannedBarcode, IEnumerable<ShipmentEntity> shipments)
         {
             MessagingText messaging = GetMessaging(shipments);
 
@@ -188,21 +216,38 @@ namespace ShipWorks.SingleScan
                 DialogResult result = messageHelper.ShowDialog(
                     () => dlgFactory.Create(scannedBarcode, messaging));
 
-                bool shouldPrint = result == DialogResult.OK;
+                SingleScanConfirmationMode confirmationResult;
+                string telemetryText;
 
-                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Length);
+                switch (result)
+                {
+                    case DialogResult.OK:
+                        confirmationResult = SingleScanConfirmationMode.CreateNew;
+                        telemetryText = "CreateNew";
+                        break;
+                    case DialogResult.Yes:
+                        confirmationResult = SingleScanConfirmationMode.PrintExisting;
+                        telemetryText = "PrintExisting";
+                        break;
+                    default:
+                        confirmationResult = SingleScanConfirmationMode.Select;
+                        telemetryText = "Cancel";
+                        break;
+                }
+
+                telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Total", shipments.Count());
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Unprocessed", shipments.Count(s => !s.Processed));
                 telemetryEvent.AddMetric("SingleScan.AutoPrint.Confirmation.MultipleShipments.Processed", shipments.Count(s => s.Processed));
-                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", shouldPrint ? "Continue" : "Cancel");
+                telemetryEvent.AddProperty("SingleScan.AutoPrint.Confirmation.MultipleShipments.Action", telemetryText);
 
-                return shouldPrint;
+                return confirmationResult;
             }
         }
 
         /// <summary>
         /// Get the Title/Message text to display to the user based on the Shipments
         /// </summary>
-        private MessagingText GetMessaging(ShipmentEntity[] shipments)
+        private MessagingText GetMessaging(IEnumerable<ShipmentEntity> shipments)
         {
             if (shipments.All(s => s.Processed))
             {
@@ -210,25 +255,45 @@ namespace ShipWorks.SingleScan
                 {
                     Title = "Order Previously Processed",
                     Body = AlreadyProcessedMessage,
-                    Continue = "Create New Label"
+                    Continue = "Create New Label",
+                    ContinueOptional = "Reprint Existing Label"
                 };
             }
 
             string labels = shipments.Where(s => !s.Processed).IsCountGreaterThan(1) ? "Labels" : "Label";
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
-            string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
-            if (singleScanAutomationSettings.IsAutoWeighEnabled)
-            {
-                multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
-            }
-
-            return new MessagingText
+            var messaging = new MessagingText
             {
                 Title = "Multiple Shipments",
-                Body = multipleShipmentsMessage,
                 Continue = buttonText
             };
+
+            var processedShipmentsCount = shipments.Count(s => s.Processed);
+            if (processedShipmentsCount == 1)
+            {
+                messaging.ContinueOptional = "Reprint Existing Label";
+            }
+            else if (processedShipmentsCount > 1)
+            {
+                messaging.ContinueOptional = "Reprint Existing Labels";
+            }
+
+            string multipleShipmentsMessage = MultipleShipmentsMessage;
+            if (singleScanAutomationSettings.IsAutoWeighEnabled)
+            {
+                if (processedShipmentsCount == 0)
+                {
+                    multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, string.Empty, "shipment");
+                }
+                else
+                {
+                    multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, $" If '{buttonText}' is selected", "shipment");
+                }
+            }
+            messaging.Body = multipleShipmentsMessage;
+
+            return messaging;
         }
     }
 }
