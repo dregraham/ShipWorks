@@ -32,11 +32,11 @@ namespace ShipWorks.SingleScan
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
 
         private const string AlreadyProcessedMessage = "The scanned order has been previously processed. Select the action you would like to take:";
-        private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. To create a label for each unprocessed shipment in the order, scan the barcode again or click '{0}'.";
+        private const string MultipleShipmentsMessage = "The scanned order has multiple shipments. Select the action you would like to take:";
         private const string MultiplePackageMessage = "The resulting shipment has multiple packages. To create a label for each package, scan the barcode again or click '{0}'.";
         public const string CannotProcessNoneMessage = "The resulting shipment has a carrier of \"None\".\r\n The carrier \"None\" does not support processing.";
 
-        private const string AutoWeighMessage = "{0}\r\n\r\nNote: ShipWorks will update each {1} with the weight from the scale.";
+        private const string AutoWeighMessage = "{0}\r\n\r\nNote:{1} ShipWorks will update each {2} with the weight from the scale.";
 
         /// <summary>
         /// Constructor
@@ -263,23 +263,35 @@ namespace ShipWorks.SingleScan
             string labels = shipments.Where(s => !s.Processed).IsCountGreaterThan(1) ? "Labels" : "Label";
             string buttonText = $"Create {shipments.Count(s => !s.Processed)} {labels}";
 
-            string multipleShipmentsMessage = string.Format(MultipleShipmentsMessage, buttonText);
-            if (singleScanAutomationSettings.IsAutoWeighEnabled)
-            {
-                multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, "shipment");
-            }
-
             var messaging = new MessagingText
             {
                 Title = "Multiple Shipments",
-                Body = multipleShipmentsMessage,
                 Continue = buttonText
             };
 
-            if (shipments.Any(s => s.Processed))
+            var processedShipmentsCount = shipments.Count(s => s.Processed);
+            if (processedShipmentsCount == 1)
             {
                 messaging.ContinueOptional = "Reprint Existing Label";
             }
+            else if (processedShipmentsCount > 1)
+            {
+                messaging.ContinueOptional = "Reprint Existing Labels";
+            }
+
+            string multipleShipmentsMessage = MultipleShipmentsMessage;
+            if (singleScanAutomationSettings.IsAutoWeighEnabled)
+            {
+                if (processedShipmentsCount == 0)
+                {
+                    multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, string.Empty, "shipment");
+                }
+                else
+                {
+                    multipleShipmentsMessage = string.Format(AutoWeighMessage, multipleShipmentsMessage, $" If '{buttonText}' is selected", "shipment");
+                }
+            }
+            messaging.Body = multipleShipmentsMessage;
 
             return messaging;
         }
