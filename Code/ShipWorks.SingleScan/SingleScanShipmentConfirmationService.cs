@@ -179,7 +179,7 @@ namespace ShipWorks.SingleScan
             MessagingText messaging = new MessagingText()
             {
                 Title = "Multiple Packages",
-                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), "package"),
+                Body = string.Format(AutoWeighMessage, string.Format(MultiplePackageMessage, buttonText), string.Empty, "package"),
                 Continue = buttonText
             };
 
