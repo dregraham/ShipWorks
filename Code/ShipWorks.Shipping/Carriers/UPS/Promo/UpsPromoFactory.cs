@@ -4,7 +4,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using System;
 
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
@@ -43,28 +42,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.Promo
         public IUpsPromo Get(UpsAccountEntity account, UpsPromoSource source, UpsPromoAccountType accountType)
         {
             return new TelemetricUpsPromo(telemetryEventFunc, GetUpsPromo(account), source, accountType);
-        }
-
-        /// <summary>
-        /// Gets the footnote factory.
-        /// </summary>
-        public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account)
-        {
-            IUpsPromo promo = GetUpsPromo(account);
-
-            if (upsPromoPolicy.IsEligible(promo))
-            {
-                // At this point if we are shoing a footnote we know its for an existing account
-                IUpsPromo telemetricPromo = new TelemetricUpsPromo(telemetryEventFunc, promo, UpsPromoSource.PromoFootnote, UpsPromoAccountType.ExistingAccount);
-
-                // Create promo footnote factory
-                UpsPromoFootnoteFactory promoFootNoteFactory = new UpsPromoFootnoteFactory(telemetricPromo, account);
-
-                // Add factory to the final group rate group
-                return promoFootNoteFactory;
-            }
-
-            return null;
         }
 
         /// <summary>

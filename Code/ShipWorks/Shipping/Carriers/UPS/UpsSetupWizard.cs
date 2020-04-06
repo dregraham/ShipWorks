@@ -111,7 +111,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageRates,
                 wizardPageOptionsOlt,
                 wizardPageOptionsWorldShip,
-                wizardPagePromo,
                 wizardPageFinishOlt,
                 wizardPageFinishAddAccount,
                 oneBalanceFinishPage
@@ -146,7 +145,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageLicense);
                 Pages.Remove(wizardPageRates);
                 Pages.Remove(wizardPageInvoiceAuthentication);
-                Pages.Remove(wizardPagePromo);
                 Pages.Remove(wizardPageAccount);
                 // Only way to create new account is through One Balance, so remove the other finish pages so that
                 // the One Balance finish pages shows.
@@ -743,54 +741,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             else
             {
                 WebHelper.OpenUrl(new Uri(promo.Terms.URL), this);
-            }
-        }
-
-        /// <summary>
-        /// Called when Stepping Into wizardPagePromo
-        /// </summary>
-        private void OnWizardPagePromoSteppingInto(object sender, WizardSteppingIntoEventArgs e)
-        {
-            try
-            {
-                IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount, UpsPromoSource.SetupWizard,
-                    newAccount.Checked ? UpsPromoAccountType.NewAccount : UpsPromoAccountType.ExistingAccount);
-
-                promoDescription.Text = promo.Terms.Description;
-                promoControls.Top = promoDescription.Bottom + 5;
-
-                BackEnabled = false;
-            }
-            catch (UpsPromoException)
-            {
-                e.Skip = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when Stepping out of wizardPagePromo
-        /// </summary>
-        private void OnWizardPagePromoStepNext(object sender, WizardStepEventArgs e)
-        {
-            try
-            {
-                if (promoYes.Checked)
-                {
-                    promo.Terms.AcceptTerms();
-                    promo.Apply();
-                }
-                else
-                {
-                    if (existingAccount.Checked || shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
-                    {
-                        promo.Decline();
-                    }
-                }
-            }
-            catch (UpsPromoException)
-            {
-                upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
             }
         }
 

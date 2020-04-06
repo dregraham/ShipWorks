@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.Promo;
 using Xunit;
 

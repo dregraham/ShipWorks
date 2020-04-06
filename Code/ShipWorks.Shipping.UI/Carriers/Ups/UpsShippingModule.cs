@@ -139,9 +139,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             builder.RegisterType<UpsPromoFactory>()
                 .AsImplementedInterfaces();
-
-            builder.RegisterType<UpsPromoFootnoteViewModel>()
-                .AsImplementedInterfaces();
         }
 
         /// <summary>

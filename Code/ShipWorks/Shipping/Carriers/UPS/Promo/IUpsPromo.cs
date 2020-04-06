@@ -1,6 +1,4 @@
 ﻿using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
-
 namespace ShipWorks.Shipping.Carriers.UPS.Promo
 {
     public interface IUpsPromo

@@ -1,6 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.RateFootnotes;
 
 namespace ShipWorks.Shipping.Carriers.Ups.Promo
 {
@@ -14,14 +13,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.Promo
         /// Returns null
         /// </summary>
         public IUpsPromo Get(UpsAccountEntity account, UpsPromoSource source, UpsPromoAccountType accountType)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Returns null
-        /// </summary>
-        public UpsPromoFootnoteFactory GetFootnoteFactory(UpsAccountEntity account)
         {
             return null;
         }

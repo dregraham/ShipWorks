@@ -511,7 +511,6 @@
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTermsTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\PromoActiviationTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoTest.cs" />
@@ -531,7 +530,6 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformationTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountCreateUpsAccountEntityManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\UpsOpenAccountRequestFactoryTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\UpsServiceManagerFactoryTest.cs" />

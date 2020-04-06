@@ -524,7 +524,6 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
     <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
-    <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
     <Compile Include="Carriers\ShipmentPreProcessorFactory.cs" />
     <Compile Include="Carriers\Ups\WorldShip\WorldShipSetupWizard.cs">
