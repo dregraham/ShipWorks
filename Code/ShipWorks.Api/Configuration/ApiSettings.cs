@@ -8,11 +8,11 @@ namespace ShipWorks.Api.Configuration
         /// <summary>
         /// Whether or not the API is enabled
         /// </summary>
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
 
         /// <summary>
         /// The port number used by the API
         /// </summary>
-        public long Port { get; set; }
+        public long Port { get; set; } = 8081;
     }
 }

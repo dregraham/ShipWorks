@@ -7,6 +7,7 @@ using ShipWorks.Api.Configuration;
 using ShipWorks.Api.HealthCheck;
 using ShipWorks.Api.Infrastructure;
 using Interapptive.Shared.Utility;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.Api
 {
@@ -14,7 +15,8 @@ namespace ShipWorks.Api
     /// An local web server leveraging Owin infrastructure that can be
     /// self-hosted within ShipWorks.
     /// </summary>
-    public class ApiService : IInitializeForCurrentDatabase
+    [Component(SingleInstance = true)]
+    public class ApiService : IInitializeForCurrentDatabase, IApiService
     {
         private const double TimerInterval = 5000;
         private IDisposable server;
@@ -22,9 +24,12 @@ namespace ShipWorks.Api
         private readonly ILog log;
         private IApiStartupConfiguration apiStartup;
 		private readonly ITimer timer;
+        private readonly IApiSettingsRepository settingsRepository;
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
         private readonly IWebApp webApp;
+
+        private long? port;
 
         /// <summary>
         /// Constructor
@@ -33,15 +38,22 @@ namespace ShipWorks.Api
             IHealthCheckClient healthCheckClient,
             IWebApp webApp,
             ITimer timer,
+            IApiSettingsRepository settingsRepository,
             Func<Type, ILog> loggerFactory)
         {
             this.timer = timer;
+            this.settingsRepository = settingsRepository;
             timer.Interval = TimerInterval;
             log = loggerFactory(typeof(ApiService));
             this.apiStartupFactory = apiStartupFactory;
             this.healthCheckClient = healthCheckClient;
             this.webApp = webApp;
         }
+
+        /// <summary>
+        /// Is the service running
+        /// </summary>
+        public bool IsRunning { get; private set; } = false;
 
         /// <summary>
         /// Initialize the API for the current database
@@ -58,10 +70,23 @@ namespace ShipWorks.Api
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
-
+            
+            StopIfPortChanged();
             StartIfNotRunning();
 
             timer.Start();
+        }
+
+        private void StopIfPortChanged()
+        {
+            var settings = settingsRepository.Load();
+
+            if (port.HasValue && port != settings.Port)
+            {
+                IsRunning = false;
+                Stop();
+                port = settings.Port;
+            }
         }
 
         /// <summary>
@@ -69,15 +94,22 @@ namespace ShipWorks.Api
         /// </summary>
         private void StartIfNotRunning()
         {
-            if (!healthCheckClient.IsRunning())
+            if (healthCheckClient.IsRunning(port.Value))
             {
+                IsRunning = true;
+            }
+            else
+            {
+                IsRunning = false;
+
                 Stop();
 
                 try
                 {
                     apiStartup = apiStartupFactory();
-                    server = webApp.Start("http://+:8081/", apiStartup.Configuration);
+                    server = webApp.Start($"http://+:{port}/", apiStartup.Configuration);
                     log.Info("ShipWorks.API has started");
+                    IsRunning = true;
                 }
                 catch (Exception ex)
                 {

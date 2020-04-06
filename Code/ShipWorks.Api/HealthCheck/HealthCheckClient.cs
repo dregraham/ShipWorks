@@ -16,8 +16,7 @@ namespace ShipWorks.Api.HealthCheck
         private readonly IRestClientFactory clientFactory;
         private readonly IRestRequestFactory requestFactory;
         private readonly ILog log;
-        private const int PortNumber = 8081;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -32,24 +31,24 @@ namespace ShipWorks.Api.HealthCheck
         /// <summary>
         /// Returns true if running, else false
         /// </summary>
-        public bool IsRunning()
+        public bool IsRunning(long portNumber)
         {
             IRestClient client = clientFactory.Create();
             IRestRequest request =
-                requestFactory.Create($"http://{Environment.MachineName}:{PortNumber}/shipworks/api/v1/healthcheck", Method.GET);
+                requestFactory.Create($"http://{Environment.MachineName}:{portNumber}/shipworks/api/v1/healthcheck", Method.GET);
             request.Timeout = 2000;
 
             try
             {
                 HttpStatusCode statusCode = client.Execute(request).StatusCode;
 
-                log.Debug($"Api healthcheck response status {statusCode}");
+                log.Debug($"Api healthcheck response status {statusCode} on port ${portNumber}");
 
                 return statusCode == HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
-                log.Debug("Exception while performing ShipWorks api healthcheck", ex);
+                log.Debug($"Exception while performing ShipWorks api healthcheck on portNumber {portNumber}", ex);
                 return false;
             }
         }
