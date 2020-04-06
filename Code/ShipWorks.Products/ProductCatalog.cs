@@ -442,7 +442,7 @@ namespace ShipWorks.Products
         /// <summary>
         /// Delete unused attributes (this deletes all unused attributes, not just for this product)
         /// </summary>
-        private async Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter)
+        public async Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter)
         {
             RelationPredicateBucket bucket = new RelationPredicateBucket();
             bucket.Relations.Add(ProductAttributeEntity.Relations.ProductVariantAttributeValueEntityUsingProductAttributeID, JoinHint.Left);

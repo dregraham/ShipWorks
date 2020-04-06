@@ -77,7 +77,7 @@ namespace ShipWorks.Products.Tests.Warehouse
         [Fact]
         public void UpdateProductVariant_SetsCreatedDateForSqlServer_FromHubData()
         {
-            var createdDate = DateTime.MinValue;
+            var createdDate = DateTime.UtcNow;
             var variant = new ProductVariantEntity { Product = new ProductEntity() };
             var hubData = new WarehouseProduct
             {
@@ -100,7 +100,7 @@ namespace ShipWorks.Products.Tests.Warehouse
                 Ean = "TEST Ean",
                 Enabled = true,
                 IsBundle = true,
-                CreatedDate = createdDate,
+                CreatedDate = DateTime.MinValue,
             };
 
             testObject.UpdateProductVariant(variant, hubData);
@@ -124,7 +124,7 @@ namespace ShipWorks.Products.Tests.Warehouse
             Assert.Equal("TEST Ean", variant.EAN);
             Assert.Equal(true, variant.Product.IsActive);
             Assert.Equal(true, variant.Product.IsBundle);
-            Assert.Equal(createdDate.ToSqlSafeDateTime(), variant.CreatedDate);
+            Assert.True(variant.CreatedDate >= createdDate);
         }
     }
 }

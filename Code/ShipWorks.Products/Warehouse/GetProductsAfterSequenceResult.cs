@@ -8,6 +8,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Products.Warehouse.DTO;
 
 namespace ShipWorks.Products.Warehouse
@@ -84,6 +85,8 @@ namespace ShipWorks.Products.Warehouse
             {
                 sqlAdapter.StartTransaction(IsolationLevel.ReadCommitted, "SavingProductsViaSynchronization");
 
+                await DeleteAttributeValues(sqlAdapter, cancellationToken, productsToSave).ConfigureAwait(false);
+
                 await sqlAdapter.SaveEntityCollectionAsync(productsToSave, true, true, cancellationToken).ConfigureAwait(false);
 
                 foreach (var productData in hubDetails.Values)
@@ -110,6 +113,25 @@ namespace ShipWorks.Products.Warehouse
             return (
                 sequence: anyToReturn ? hubDetails.Values.Select(x => x.ProductData.Sequence).Max() : 0,
                 shouldContinue: anyToReturn);
+        }
+
+        /// <summary>
+        /// Delete any attribute values that were removed.  Also delete any unused attributes.
+        /// </summary>
+        private async Task DeleteAttributeValues(ISqlAdapter sqlAdapter, CancellationToken cancellationToken,
+            EntityCollection<ProductVariantEntity> productsToSave)
+        {
+            var productAttributeCollectionsToDelete = productsToSave
+                .Where(p => p.AttributeValues.RemovedEntitiesTracker != null)
+                .Select(p => p.AttributeValues.RemovedEntitiesTracker);
+
+            foreach (var productAttributeCollectionToDelete in productAttributeCollectionsToDelete)
+            {
+                await sqlAdapter.DeleteEntityCollectionAsync(productAttributeCollectionToDelete, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+
+            await productCatalog.DeleteUnusedAttributes(sqlAdapter).ConfigureAwait(false);
         }
     }
 }

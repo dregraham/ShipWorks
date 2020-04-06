@@ -24,6 +24,7 @@ namespace ShipWorks.Products.Warehouse
             foreach (var attribute in attributesToRemove)
             {
                 productVariant.AttributeValues.Remove(attribute);
+                productVariant.AttributeValues.RemovedEntitiesTracker.Add(attribute);
             }
 
             foreach (var hubAttribute in warehouseProduct.Attributes)

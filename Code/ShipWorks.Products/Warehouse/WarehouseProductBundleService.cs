@@ -39,16 +39,14 @@ namespace ShipWorks.Products.Warehouse
         public async Task UpdateProductBundleDetails(ISqlAdapter sqlAdapter, ProductVariantEntity productVariant,
             WarehouseProduct warehouseProductDto, CancellationToken cancellationToken)
         {
-            MethodConditions.EnsureArgumentIsNotNull(productVariant, nameof(productVariant));
-
             if (!warehouseProductDto.IsBundle)
             {
                 return;
             }
 
-            if (warehouseProductDto.BundleItems == null || warehouseProductDto.BundleItems.None())
+            if (productVariant == null)
             {
-                throw new WarehouseProductException("Product is marked as a bundle, but no bundle items were present.");
+                throw new ArgumentNullException("productVariant");
             }
 
             if (productVariant.Product.Bundles.RemovedEntitiesTracker == null)

@@ -34,7 +34,7 @@ namespace ShipWorks.Products.Warehouse
             productVariant.EAN = warehouseProduct.Ean;
             productVariant.Product.IsActive = warehouseProduct.Enabled;
             productVariant.Product.IsBundle = warehouseProduct.IsBundle;
-            productVariant.CreatedDate = warehouseProduct.CreatedDate.ToSqlSafeDateTime();
+            productVariant.CreatedDate = warehouseProduct.CreatedDate.ToSqlSafeDateTime(DateTime.UtcNow);
             productVariant.IsActive = warehouseProduct.Enabled;
         }
     }

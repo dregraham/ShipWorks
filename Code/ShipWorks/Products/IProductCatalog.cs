@@ -115,5 +115,10 @@ namespace ShipWorks.Products
         /// Fetch the newest sequence number of all the products
         /// </summary>
         Task<long> FetchNewestSequence(ISqlAdapter sqlAdapter, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Delete unused attributes (this deletes all unused attributes, not just for this product)
+        /// </summary>
+        Task DeleteUnusedAttributes(ISqlAdapter sqlAdapter);
     }
 }
