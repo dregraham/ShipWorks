@@ -76,7 +76,7 @@
             this.panelBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelBottom.Location = new System.Drawing.Point(0, 365);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(301, 28);
+            this.panelBottom.Size = new System.Drawing.Size(324, 28);
             this.panelBottom.TabIndex = 6;
             // 
             // ordersToolbar
@@ -89,7 +89,7 @@
             this.ordersToolbar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.chooseMoreButton,
             this.removeShipmentButton});
-            this.ordersToolbar.Location = new System.Drawing.Point(89, 1);
+            this.ordersToolbar.Location = new System.Drawing.Point(112, 1);
             this.ordersToolbar.Name = "ordersToolbar";
             this.ordersToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.ordersToolbar.Size = new System.Drawing.Size(215, 25);
@@ -123,7 +123,7 @@
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(301, 27);
+            this.panelTop.Size = new System.Drawing.Size(324, 27);
             this.panelTop.TabIndex = 5;
             // 
             // labelShipments
@@ -147,10 +147,10 @@
             this.newShipmentButton,
             this.menuItemCopyShipment,
             this.deleteShipmentButton});
-            this.shipmentsToolbar.Location = new System.Drawing.Point(62, 0);
+            this.shipmentsToolbar.Location = new System.Drawing.Point(70, 0);
             this.shipmentsToolbar.Name = "shipmentsToolbar";
             this.shipmentsToolbar.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.shipmentsToolbar.Size = new System.Drawing.Size(242, 25);
+            this.shipmentsToolbar.Size = new System.Drawing.Size(257, 25);
             this.shipmentsToolbar.TabIndex = 0;
             this.shipmentsToolbar.Text = "toolStrip1";
             // 
@@ -160,9 +160,36 @@
             this.newShipmentButton.Image = global::ShipWorks.Properties.Resources.box_closed_add16;
             this.newShipmentButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newShipmentButton.Name = "newShipmentButton";
-            this.newShipmentButton.Size = new System.Drawing.Size(86, 22);
-            this.newShipmentButton.Text = "Create New";
+            this.newShipmentButton.Size = new System.Drawing.Size(102, 22);
+            this.newShipmentButton.Text = "New Shipment";
             this.newShipmentButton.Click += new System.EventHandler(this.OnAddShipmentToOrder);
+            // 
+            // menuItemCopyShipment
+            // 
+            this.menuItemCopyShipment.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuCopyShipment,
+            this.menuCopyShipmentReturn});
+            this.menuItemCopyShipment.Image = global::ShipWorks.Properties.Resources.box_closed_redo_16_16;
+            this.menuItemCopyShipment.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.menuItemCopyShipment.Name = "menuItemCopyShipment";
+            this.menuItemCopyShipment.Size = new System.Drawing.Size(92, 22);
+            this.menuItemCopyShipment.Text = "Ship Again";
+            // 
+            // menuCopyShipment
+            // 
+            this.menuCopyShipment.Image = global::ShipWorks.Properties.Resources.box_closed_redo_16_16;
+            this.menuCopyShipment.Name = "menuCopyShipment";
+            this.menuCopyShipment.Size = new System.Drawing.Size(182, 22);
+            this.menuCopyShipment.Text = "&Ship Again";
+            this.menuCopyShipment.Click += new System.EventHandler(this.OnCopy);
+            // 
+            // menuCopyShipmentReturn
+            // 
+            this.menuCopyShipmentReturn.Image = global::ShipWorks.Properties.Resources.box_next;
+            this.menuCopyShipmentReturn.Name = "menuCopyShipmentReturn";
+            this.menuCopyShipmentReturn.Size = new System.Drawing.Size(182, 22);
+            this.menuCopyShipmentReturn.Text = "Ship Again as Return";
+            this.menuCopyShipmentReturn.Click += new System.EventHandler(this.OnCopyAsReturn);
             // 
             // deleteShipmentButton
             // 
@@ -180,7 +207,7 @@
             this.panelStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelStatus.Location = new System.Drawing.Point(0, 345);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(301, 20);
+            this.panelStatus.Size = new System.Drawing.Size(324, 20);
             this.panelStatus.TabIndex = 8;
             // 
             // kryptonStatusPanel
@@ -198,9 +225,9 @@
             this.kryptonStatusPanel.Panel.Controls.Add(this.labelSelectedShipments);
             this.kryptonStatusPanel.Panel.Controls.Add(this.labelStatusEtch);
             this.kryptonStatusPanel.Panel.Controls.Add(this.labelTotalShipments);
-            this.kryptonStatusPanel.Size = new System.Drawing.Size(301, 20);
-            this.kryptonStatusPanel.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)(((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left)
-                        | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
+            this.kryptonStatusPanel.Size = new System.Drawing.Size(324, 20);
+            this.kryptonStatusPanel.StateCommon.Border.DrawBorders = ((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders)(((ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Bottom | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Left) 
+            | ComponentFactory.Krypton.Toolkit.PaletteDrawBorders.Right)));
             this.kryptonStatusPanel.TabIndex = 1;
             // 
             // labelGridSettings
@@ -211,7 +238,7 @@
             this.labelGridSettings.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelGridSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGridSettings.ForeColor = System.Drawing.Color.Blue;
-            this.labelGridSettings.Location = new System.Drawing.Point(227, 2);
+            this.labelGridSettings.Location = new System.Drawing.Point(250, 2);
             this.labelGridSettings.Name = "labelGridSettings";
             this.labelGridSettings.Size = new System.Drawing.Size(68, 13);
             this.labelGridSettings.TabIndex = 44;
@@ -313,33 +340,6 @@
             this.menuCopy.Size = new System.Drawing.Size(271, 22);
             this.menuCopy.Text = "Copy";
             // 
-            // menuItemCopyShipment
-            // 
-            this.menuItemCopyShipment.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuCopyShipment,
-            this.menuCopyShipmentReturn});
-            this.menuItemCopyShipment.Image = global::ShipWorks.Properties.Resources.box_closed_add16;
-            this.menuItemCopyShipment.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.menuItemCopyShipment.Name = "menuItemCopyShipment";
-            this.menuItemCopyShipment.Size = new System.Drawing.Size(62, 22);
-            this.menuItemCopyShipment.Text = "Copy";
-            // 
-            // menuCopyShipment
-            // 
-            this.menuCopyShipment.Image = global::ShipWorks.Properties.Resources.box_closed_add16;
-            this.menuCopyShipment.Name = "menuCopyShipment";
-            this.menuCopyShipment.Size = new System.Drawing.Size(152, 22);
-            this.menuCopyShipment.Text = "&Copy";
-            this.menuCopyShipment.Click += new System.EventHandler(this.OnCopy);
-            // 
-            // menuCopyShipmentReturn
-            // 
-            this.menuCopyShipmentReturn.Image = global::ShipWorks.Properties.Resources.box_next;
-            this.menuCopyShipmentReturn.Name = "menuCopyShipmentReturn";
-            this.menuCopyShipmentReturn.Size = new System.Drawing.Size(152, 22);
-            this.menuCopyShipmentReturn.Text = "Copy as Return";
-            this.menuCopyShipmentReturn.Click += new System.EventHandler(this.OnCopyAsReturn);
-            // 
             // entityGrid
             // 
             this.entityGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
@@ -356,7 +356,7 @@
             office2007Renderer1.ColumnShade = Divelements.SandGrid.Rendering.ColumnShadeType.None;
             this.entityGrid.Renderer = office2007Renderer1;
             this.entityGrid.ShadeAlternateRows = true;
-            this.entityGrid.Size = new System.Drawing.Size(301, 318);
+            this.entityGrid.Size = new System.Drawing.Size(324, 318);
             this.entityGrid.SortColumn = this.gridColumn2;
             this.entityGrid.TabIndex = 7;
             this.entityGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnGridSelectionChanged);
@@ -381,7 +381,7 @@
             this.Controls.Add(this.panelTop);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ShipmentGridControl";
-            this.Size = new System.Drawing.Size(301, 393);
+            this.Size = new System.Drawing.Size(324, 393);
             this.panelBottom.ResumeLayout(false);
             this.panelBottom.PerformLayout();
             this.ordersToolbar.ResumeLayout(false);

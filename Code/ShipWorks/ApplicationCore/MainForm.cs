@@ -210,6 +210,7 @@ namespace ShipWorks
                     buttonOrderLookupViewCreateLabel.Enabled = canProcess;
                     buttonOrderLookupViewApplyProfile.Enabled = canProcess;
 
+                    buttonOrderLookupViewNewShipment.Enabled = orderLookupControl?.CreateNewShipmentAllowed() == true;
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
 
@@ -217,6 +218,14 @@ namespace ShipWorks
                 currentUserSettings.GetUIMode() == UIMode.OrderLookup) 
                 {
                     buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
+                }
+
+                if (x is OrderLookupClearOrderMessage && currentUserSettings.GetUIMode() == UIMode.OrderLookup)
+                {
+                    buttonOrderLookupViewCreateLabel.Enabled = false;
+                    buttonOrderLookupViewApplyProfile.Enabled = false;
+                    buttonOrderLookupViewNewShipment.Enabled = false;
+                    buttonOrderLookupViewShipShipAgain.Enabled = false;
                 }
             });
         }
@@ -269,15 +278,23 @@ namespace ShipWorks
         /// <summary>
         /// User clicks the Create Label button in Order Lookup Mode
         /// </summary>
-        private void OnButtonOrderLookupViewCreateLabel(object sender, System.EventArgs e)
+        private void OnButtonOrderLookupViewCreateLabel(object sender, EventArgs e)
         {
             orderLookupControl.CreateLabel().Forget();
         }
 
         /// <summary>
+        /// User clicks the New Shipment button in Scan to Ship (formerly Order Lookup) mode
+        /// </summary>
+        private void OnButtonOrderLookupViewNewShipment(object sender, EventArgs e)
+        {
+            orderLookupControl.CreateNewShipment();
+        }
+
+        /// <summary>
         /// User clicks the Ship Again button in Order Lookup Mode
         /// </summary>
-        private void OnButtonOrderLookupViewShipAgain(object sender, System.EventArgs e)
+        private void OnButtonOrderLookupViewShipAgain(object sender, EventArgs e)
         {
             orderLookupControl.ShipAgain();
         }
@@ -569,6 +586,7 @@ namespace ShipWorks
                 sqlChangeTracking.Enable();
 
                 LogonToShipWorks(user);
+                DashboardManager.ShowOneBalancePromo();
 
                 // If we successfully logged on, the last update must have succeeded.
                 AutoUpdateSettings.LastAutoUpdateSucceeded = true;
@@ -1316,6 +1334,7 @@ namespace ShipWorks
             // Since no order will be selected when they change modes, set these to false.
             buttonOrderLookupViewCreateLabel.Enabled = false;
             buttonOrderLookupViewApplyProfile.Enabled = false;
+            buttonOrderLookupViewNewShipment.Enabled = false;
             buttonOrderLookupViewShipShipAgain.Enabled = false;
             buttonOrderLookupViewUnverify.Enabled = false;
         }

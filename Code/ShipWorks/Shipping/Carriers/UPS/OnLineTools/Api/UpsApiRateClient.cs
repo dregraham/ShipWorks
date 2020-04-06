@@ -341,8 +341,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 {
                     guaranteedDaysToDelivery = null;
                 }
-
-
+                
                 if (!string.IsNullOrEmpty(warning))
                 {
                     log.WarnFormat("UPS returned a warning for rate {0}: {1}", serviceCode, warning);

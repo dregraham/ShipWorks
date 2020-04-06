@@ -5612,6 +5612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.Phone);}
 		}
+		/// <summary>Creates a new DhlExpressAccountEntity.UspsAccountId field instance</summary>
+		public static EntityField2 UspsAccountId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.UspsAccountId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>
@@ -5722,6 +5727,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.NonDelivery);}
 		}
+		/// <summary>Creates a new DhlExpressProfileEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressProfileFieldIndex.ResidentialDelivery);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressShipmentEntity</summary>
@@ -5776,6 +5786,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipEngineLabelID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ShipEngineLabelID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.IntegratorTransactionID field instance</summary>
+		public static EntityField2 IntegratorTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.IntegratorTransactionID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.StampsTransactionID field instance</summary>
+		public static EntityField2 StampsTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.StampsTransactionID);}
+		}
+		/// <summary>Creates a new DhlExpressShipmentEntity.ResidentialDelivery field instance</summary>
+		public static EntityField2 ResidentialDelivery
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressShipmentFieldIndex.ResidentialDelivery);}
 		}
 	}
 
@@ -30287,6 +30312,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.UpsRateTableID);}
 		}
+		/// <summary>Creates a new UpsAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.ShipEngineCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsLetterRateEntity</summary>
@@ -31197,6 +31227,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.RequestedLabelFormat);}
 		}
+		/// <summary>Creates a new UpsShipmentEntity.ShipEngineLabelID field instance</summary>
+		public static EntityField2 ShipEngineLabelID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsShipmentFieldIndex.ShipEngineLabelID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UserEntity</summary>
@@ -31526,6 +31561,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AcceptedFCMILetterWarning
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.AcceptedFCMILetterWarning);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.ShipEngineCarrierId field instance</summary>
+		public static EntityField2 ShipEngineCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.ShipEngineCarrierId);}
 		}
 	}
 

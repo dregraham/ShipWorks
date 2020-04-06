@@ -305,6 +305,11 @@ namespace ShipWorks.Shipping.Services
             ShippingManager.IsShipmentTypeConfigured(shipmentTypeCode);
 
         /// <summary>
+        /// Creates a new shipment for the given order ID
+        /// </summary>
+        public ShipmentEntity CreateShipment(long orderID) => ShippingManager.CreateShipment(orderID);
+
+        /// <summary>
         /// Create a shipment as a copy of an existing shipment as a return
         /// </summary>
         public ShipmentEntity CreateReturnShipment(ShipmentEntity shipment)

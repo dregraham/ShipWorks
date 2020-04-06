@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SWA
             Func<ShipmentEntity, Label, AmazonSWADownloadedLabelData> createDownloadedLabelData,
             IRatesRetriever ratesRetriever,
             Func<Type, ILog> logFactory)
-            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData)
+            : base(shipEngineWebClient, shipmentRequestFactory, createDownloadedLabelData, logFactory)
         {
             log = logFactory(typeof(AmazonSWALabelService));
             this.accountRepository = accountRepository;

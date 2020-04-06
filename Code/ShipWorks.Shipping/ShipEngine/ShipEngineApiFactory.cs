@@ -28,5 +28,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Create the Labels Api
         /// </summary>
         public ILabelsApi CreateLabelsApi() => new LabelsApi();
+
+        /// <summary>
+        /// Create the Tracking API
+        /// </summary>
+        public ITrackingApi CreateTrackingApi() => new TrackingApi();
     }
 }

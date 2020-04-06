@@ -328,6 +328,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Email", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("Phone", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("UspsAccountId", fieldHashtable);
 		}
 		#endregion
 
@@ -418,8 +420,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The ShipEngineCarrierId property of the Entity DhlExpressAccount<br/><br/></summary>
 		/// <remarks>Mapped on  table field: "DhlExpressAccount"."ShipEngineCarrierId"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 12<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String ShipEngineCarrierId
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.ShipEngineCarrierId, true); }
@@ -544,6 +546,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)DhlExpressAccountFieldIndex.Phone, true); }
 			set	{ SetValue((int)DhlExpressAccountFieldIndex.Phone, value); }
+		}
+
+		/// <summary> The UspsAccountId property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."UspsAccountId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> UspsAccountId
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressAccountFieldIndex.UspsAccountId, false); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.UspsAccountId, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

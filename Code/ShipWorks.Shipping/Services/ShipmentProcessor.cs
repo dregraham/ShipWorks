@@ -262,7 +262,7 @@ namespace ShipWorks.Shipping.Services
                 }
 
                 string message = workflowResult.NewErrors.Take(3)
-                    .Aggregate("Some errors occurred during processing.", (x, y) => x + "\n\n" + y);
+                    .Aggregate($"Your request cannot be completed at this time. Please contact ShipWorks Support at (800) 952-7784 for assistance.{Environment.NewLine} {Environment.NewLine} Error Message(s): ", (x, y) => x + "\n\n" + y);
 
                 if (workflowResult.NewErrors.Count > 3)
                 {

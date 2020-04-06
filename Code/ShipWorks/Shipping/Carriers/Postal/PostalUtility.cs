@@ -611,7 +611,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             PostalServiceType[] postalServiceTypes = {
                 PostalServiceType.GlobalPostEconomyIntl, PostalServiceType.GlobalPostStandardIntl,
                 PostalServiceType.GlobalPostSmartSaverEconomyIntl, PostalServiceType.GlobalPostSmartSaverStandardIntl,
-                PostalServiceType.GlobalPostPlus
+                PostalServiceType.GlobalPostPlus, PostalServiceType.GlobalPostPlusSmartSaver
             };
 
             return postalServiceTypes.Contains(serviceType);

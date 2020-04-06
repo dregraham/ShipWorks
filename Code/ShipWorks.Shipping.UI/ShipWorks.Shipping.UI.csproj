@@ -376,6 +376,38 @@
     </Compile>
     <Compile Include="Settings\BestRateAccountSettingsViewModel.cs" />
     <Compile Include="Settings\BestRateCarrier.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAccountHelper.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAutoFundControlViewModel.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceSettingsControlViewModel.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceAddMoneyDialog.cs" />
+    <Compile Include="Settings\OneBalance\IOneBalanceShowSetupWizardViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAccountHelper.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml.cs">
+      <DependentUpon>OneBalanceAddMoneyDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceAddMoneyViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml.cs">
+      <DependentUpon>OneBalanceAutoFundControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceAutoFundControlViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceCarrierAccountControl.xaml.cs">
+      <DependentUpon>OneBalanceCarrierAccountControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceCarrierAccountsControlViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml.cs">
+      <DependentUpon>OneBalanceEnableUpsBannerWpfControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceShowSetupDialogViewModel.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControl.xaml.cs">
+      <DependentUpon>OneBalanceSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsControlHost.Designer.cs">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\OneBalance\OneBalanceSettingsViewModel.cs" />
     <Compile Include="ShippingPanel\CustomsControl\CustomsControl.xaml.cs">
       <DependentUpon>CustomsControl.xaml</DependentUpon>
     </Compile>
@@ -562,6 +594,10 @@
       <Project>{D9FBA556-68E0-4961-A400-636A9A6BC7BC}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.ThirdPartyApi\ShipWorks.ThirdPartyApi.csproj">
+      <Project>{0406CA21-03B7-4BF0-AEB3-993C7BE208B9}</Project>
+      <Name>ShipWorks.ThirdPartyApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj">
       <Project>{1f6a1dc6-dd72-4279-8747-6789f83711ff}</Project>
       <Name>ShipWorks.UI</Name>
@@ -703,6 +739,9 @@
     <EmbeddedResource Include="Settings\BestRateAccountSettingsControlHost.resx">
       <DependentUpon>BestRateAccountSettingsControlHost.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings\OneBalance\OneBalanceSettingsControlHost.resx">
+      <DependentUpon>OneBalanceSettingsControlHost.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ShippingPanel\ShippingPanel.resx">
       <DependentUpon>ShippingPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -809,6 +848,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RatingPanel\RatingPanelControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceAddMoneyDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceAutoFundControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceCarrierAccountControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceEnableUpsBannerWpfControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Settings\OneBalance\OneBalanceSettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

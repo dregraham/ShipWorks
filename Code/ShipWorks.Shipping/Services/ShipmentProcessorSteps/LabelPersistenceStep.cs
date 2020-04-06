@@ -147,7 +147,16 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         {
             using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
             {
-                SaveShipment(shipment, adapter);
+                // Assuming that this save SHOULD be the one that wins since we have a label that could 
+                // be bought with out of pocket money.
+                // Use the ShipmentIgnoreConcurrencyScope so that any ORMConcurrencyExceptions should not
+                // occur.  
+                // We should only use this in VERY SPECIFIC SCENARIOS, not just anywhere where 
+                // ORMConcurrencyExceptions are found.
+                using (new ShipmentIgnoreConcurrencyScope(shipment))
+                {
+                    SaveShipment(shipment, adapter);
+                }
 
                 DispatchShipmentProcessedActions(shipment, adapter);
 

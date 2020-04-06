@@ -90,6 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 AddToServices(PostalServiceType.GlobalPostSmartSaverEconomyIntl);
                 AddToServices(PostalServiceType.GlobalPostSmartSaverStandardIntl);
+                AddToServices(PostalServiceType.GlobalPostPlusSmartSaver);
             }
 
             if (globalPostAvailability.HasFlag(GlobalPostServiceAvailability.GlobalPostPlus))
@@ -118,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     return;
                 }
 
-                AccountInfoV37 accountInfo = result as AccountInfoV37;
+                AccountInfoV41 accountInfo = result as AccountInfoV41;
 
                 if (accountInfo != null)
                 {

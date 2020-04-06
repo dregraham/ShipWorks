@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
+using Autofac;
+using Interapptive.Shared.Collections;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using ShipWorks.Shipping.Carriers.UPS.ShipEngine;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Processing;
@@ -55,7 +60,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             IEnumerable<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
+
+            IEnumerable<int> availableServiceTypes = allServiceTypes.Except(GetExcludedServiceTypes(repository));
+
+            // Filter out non-supported shipengine services when they have ups accounts and
+            // all of the accounts are shipengine accounts.
+            var upsAccounts = AccountRepository.AccountsReadOnly;
+            if (upsAccounts.Any() && upsAccounts.None(a => string.IsNullOrEmpty(a.ShipEngineCarrierId)))
+            {
+                // All UPS accounts are using ShipEngine, so only show the services supported by it
+                IEnumerable<int> seSupportedServices = UpsShipEngineServiceTypeUtility.GetSupportedServices().Cast<int>();
+
+                availableServiceTypes = availableServiceTypes.Intersect(seSupportedServices);
+            }
+
+            return availableServiceTypes;
         }
 
         /// <summary>
@@ -63,6 +82,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override ReturnsControlBase CreateReturnsControl()
         {
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                bool onlyOneBalanceAccounts = scope.Resolve<ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity>>()
+                    .AccountsReadOnly.All(a => a.ShipEngineCarrierId != null);
+
+                if (onlyOneBalanceAccounts)
+                {
+                    return base.CreateReturnsControl();
+                }
+            }
+
             return new UpsOltReturnsControl();
         }
 
@@ -71,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
+            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(loaded));
 
             // Add the labels content
             container.AddElement("Labels",
@@ -93,6 +123,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
         {
             List<TemplateLabelData> labelData = new List<TemplateLabelData>();
+        
+            if (shipment().Ups.ShipEngineLabelID != null)
+            {
+                return DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID)
+                    .Where(x => x.Label.StartsWith("LabelPrimary") || x.Label.StartsWith("LabelPart"))
+                    .Select(x => new TemplateLabelData(null, "Label", x.Label.StartsWith("LabelPrimary") ?
+                        TemplateLabelCategory.Primary : TemplateLabelCategory.Supplemental, x))
+                    .ToList();
+            }
 
             // Add labels for each package
             foreach (long packageID in DataProvider.GetRelatedKeys(shipment().ShipmentID, EntityType.UpsPackageEntity))

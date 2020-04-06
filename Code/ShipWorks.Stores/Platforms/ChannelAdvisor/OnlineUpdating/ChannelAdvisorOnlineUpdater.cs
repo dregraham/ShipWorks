@@ -6,12 +6,12 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Administration.Recovery;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon.SWA;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
@@ -114,10 +114,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
                     //Manually set the shipping status
                     ChannelAdvisorOrderEntity caOrder = order as ChannelAdvisorOrderEntity;
-                    if(caOrder != null)
+                    if (caOrder != null)
                     {
                         await SetShippedStatus(caOrder);
-                    }                                      
+                    }
                 }
                 catch (ChannelAdvisorException ex)
                 {
@@ -149,7 +149,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// </summary>
         private async Task SetShippedStatus(ChannelAdvisorOrderEntity order)
         {
-            order.OnlineShippingStatus = (int)ChannelAdvisorShippingStatus.Shipped;
+            order.OnlineShippingStatus = (int) ChannelAdvisorShippingStatus.Shipped;
             try
             {
                 await SqlAdapterRetry.ExecuteWithRetryAsync(
@@ -158,9 +158,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
                         async () =>
                                 {
                                     using (ISqlAdapter adapter = this.adapterFactory.Create())
-                                        {
-                                            await adapter.SaveEntityAsync(order);
-                                        }
+                                    {
+                                        await adapter.SaveEntityAsync(order);
+                                    }
                                     return true;
                                 },
                         ex => true);
@@ -168,11 +168,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             //If an exception escapes the retry we want to igonore it
             //so that customer doesn't try to reupload the order  
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 log.Warn(ex);
             }
-                
         }
 
         /// <summary>
@@ -225,6 +224,11 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
+
+            if (type == ShipmentTypeCode.AmazonSWA)
+            {
+                return EnumHelper.GetDescription((AmazonSWAServiceType) shipment.AmazonSWA.Service);
+            }
 
             if (type == ShipmentTypeCode.AmazonSFP)
             {
@@ -520,6 +524,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
 
             switch ((ShipmentTypeCode) shipment.ShipmentType)
             {
+                case ShipmentTypeCode.AmazonSWA:
+                    return "Amazon Shipping";
+
                 case ShipmentTypeCode.AmazonSFP:
                     return GetAmazonCarrierName(shipment);
 
@@ -700,7 +707,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.OnlineUpdating
         /// <returns></returns>
         private static string GetAmazonShipmentClassCodeFedEx(string amazonShippingServiceName)
         {
-            switch (amazonShippingServiceName.Replace(" One Rate",""))
+            switch (amazonShippingServiceName.Replace(" One Rate", ""))
             {
                 case "FedEx Priority Overnight®":
                     return "PRIORITY";
