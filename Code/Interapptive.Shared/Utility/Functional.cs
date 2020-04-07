@@ -154,7 +154,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Parse a string value into XML
         /// </summary>
-        public static GenericResult<T> DeserializeXml<T>(this string value) =>
+        public static GenericResult<T> DeserializeXml<T>(string value) =>
             Try(() => SerializationUtility.DeserializeFromXml<T>(value));
 
         /// <summary>

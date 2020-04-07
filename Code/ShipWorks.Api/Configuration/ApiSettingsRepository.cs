@@ -38,7 +38,7 @@ namespace ShipWorks.Api.Configuration
             {
                 if (File.Exists(fullPath))
                 {
-                    var apiSettingsResult = File.ReadAllText(fullPath).DeserializeXml<ApiSettings>();
+                    var apiSettingsResult = DeserializeXml<ApiSettings>(File.ReadAllText(fullPath));
                     if (apiSettingsResult.Success)
                     {
                         apiSettings = apiSettingsResult.Value;
