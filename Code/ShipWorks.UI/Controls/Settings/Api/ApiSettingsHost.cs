@@ -29,6 +29,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            Visible = false;
+
             ApiSettingsControl apiSettingsControl= new ApiSettingsControl();
             ElementHost elementHost = new ElementHost();
             elementHost.Dock = DockStyle.Fill;
@@ -37,6 +39,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
 
             apiSettingsControl.DataContext = viewModel;
             viewModel.Load();
+
+            Visible = true;
         }
     }
 }

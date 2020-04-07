@@ -138,6 +138,8 @@ namespace ShipWorks.Api
         /// </summary>
         private void Stop()
         {
+            IsRunning = false;
+
             if (server != null)
             {
                 server.Dispose();
