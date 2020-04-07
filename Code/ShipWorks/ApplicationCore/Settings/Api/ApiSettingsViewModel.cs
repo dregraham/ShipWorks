@@ -194,13 +194,13 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 if (apiService.IsRunning && apiService.Port.ToString() == Port)
                 {
                     Status = "Running";
-                    messageHelper.ShowInformation("Successfully started the ShipWorks API.");
+                    messageHelper.ShowInformation("Successfully updated the ShipWorks API port number.");
                     break;
                 }
 
                 if (tries == 9)
                 {
-                    messageHelper.ShowError("Failed to start the ShipWorks API.");
+                    messageHelper.ShowError("Failed to update the ShipWorks API port number.");
                     break;
                 }
 
