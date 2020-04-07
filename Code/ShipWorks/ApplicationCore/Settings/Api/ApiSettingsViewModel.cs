@@ -106,9 +106,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             apiSettings.Enabled = true;
             settingsRepository.Save(apiSettings);
 
-            int tries = 0;
-
-            for (int i = 0; i < 10; i++)
+            for (int tries = 0; tries < 10; tries++)
             {
                 if (apiService.IsRunning)
                 {
@@ -117,7 +115,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     break;
                 }
 
-                if (tries == 10)
+                if (tries == 9)
                 {
                     messageHelper.ShowError("Failed to start the ShipWorks API.");
                     break;
@@ -137,9 +135,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             apiSettings.Enabled = false;
             settingsRepository.Save(apiSettings);
 
-            int tries = 0;
-
-            for (int i = 0; i < 10; i++)
+            for (int tries = 0; tries < 10; tries++)
             {
                 if (!apiService.IsRunning)
                 {
@@ -148,7 +144,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     break;
                 }
 
-                if (tries == 10)
+                if (tries == 9)
                 {
                     messageHelper.ShowError("Failed to stop the ShipWorks API.");
                     break;
