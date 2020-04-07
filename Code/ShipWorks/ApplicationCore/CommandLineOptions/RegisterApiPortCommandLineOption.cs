@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using ShipWorks.Api;
+using ShipWorks.Api.Configuration;
 using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
@@ -13,7 +14,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     public class RegisterApiPortCommandLineOption : ICommandLineCommandHandler
     {
         private readonly ILog log = LogManager.GetLogger(typeof(RegisterApiPortCommandLineOption));
-        private const long DefaultPortNumber = 8081;
 
         /// <summary>
         /// Name of this command
@@ -27,11 +27,12 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(DefaultPortNumber);
+                long port = scope.Resolve<IApiSettingsRepository>().Load().Port;
+                bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(port);
 
                 if (!registrationSuccess)
                 {
-                    log.Error($"Failed to register port {DefaultPortNumber} for the ShipWorks API");
+                    log.Error($"Failed to register port {port} for the ShipWorks API");
                 }
 
                 return Task.CompletedTask;
