@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings.Api;
 using ShipWorks.ApplicationCore.Settings.Warehouse;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Editions;
@@ -65,6 +66,7 @@ namespace ShipWorks.ApplicationCore.Settings
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
                 settingsPages["Advanced"] = InitializeSettingsPage(new SettingsPageAdvanced());
+                settingsPages["API"] = InitializeSettingsPage(scope.Resolve<IApiSettingsPage>());
             }
 
             if (InterapptiveOnly.IsInterapptiveUser || InterapptiveOnly.MagicKeysDown)

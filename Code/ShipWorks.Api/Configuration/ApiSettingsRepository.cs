@@ -45,7 +45,7 @@ namespace ShipWorks.Api.Configuration
                     }
                     else
                     {
-                        log.Warn($"Coudn't deserialize ApiSettings: '{apiSettingsResult.Message}'");
+                        log.Warn($"Couldn't deserialize ApiSettings: '{apiSettingsResult.Message}'");
                     }
                 }
             }

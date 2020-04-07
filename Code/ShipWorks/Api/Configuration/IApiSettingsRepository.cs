@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShipWorks.Api.Configuration
+﻿namespace ShipWorks.Api.Configuration
 {
     /// <summary>
     /// Interface for an ApiSettingsRepository

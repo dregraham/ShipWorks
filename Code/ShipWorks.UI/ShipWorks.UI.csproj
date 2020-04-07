@@ -213,6 +213,15 @@
     <Compile Include="Controls\MainGrid\MainGridHeader.xaml.cs">
       <DependentUpon>MainGridHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsControl.xaml.cs">
+      <DependentUpon>ApiSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsHost.Designer.cs">
+      <DependentUpon>ApiSettingsHost.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Settings\DesignModeWarehouseListViewModel.cs" />
     <Compile Include="Controls\Settings\DesignModeWarehouseSettingsViewModel.cs" />
     <Compile Include="Controls\Settings\WarehouseListDialog.xaml.cs">
@@ -405,6 +414,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\Settings\Api\ApiSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Settings\WarehouseListDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -589,6 +602,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Settings\Api\ApiSettingsHost.resx">
+      <DependentUpon>ApiSettingsHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
