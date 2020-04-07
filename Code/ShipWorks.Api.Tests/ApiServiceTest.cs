@@ -33,7 +33,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_StopsAndStartsTheTimer_WhenTimeEllapses()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning())
+                .Setup(h => h.IsRunning(8081))
                 .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -52,7 +52,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_StartsWebApp_WhenServiceIsNotRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning())
+                .Setup(h => h.IsRunning(8081))
                 .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -67,7 +67,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_DoesNotStartWebApp_WhenServiceIsRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning())
+                .Setup(h => h.IsRunning(8081))
                 .Returns(true);
 
             var testObject = mock.Create<ApiService>();
@@ -81,7 +81,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_DisposesOldService_WhenServiceIsNotRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning())
+                .Setup(h => h.IsRunning(8081))
                 .Returns(false);
 
             var startedWebApp = mock.CreateMock<IDisposable>();
