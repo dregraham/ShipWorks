@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.ApplicationCore.Settings.Api
 {
@@ -86,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         {
             apiSettings = settingsRepository.Load();
 
-            Status = apiSettings.Enabled ? "Running" : "Stopped";
+            Status = apiService.IsRunning ? "Running" : "Stopped";
             Port = apiSettings.Port.ToString();
         }
 
@@ -95,8 +101,30 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Start()
         {
+            messageHelper.SetCursor(Cursors.WaitCursor);
+
             apiSettings.Enabled = true;
             settingsRepository.Save(apiSettings);
+
+            int tries = 0;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (apiService.IsRunning)
+                {
+                    Status = "Running";
+                    messageHelper.ShowInformation("Successfully started the ShipWorks API.");
+                    break;
+                }
+
+                if (tries == 10)
+                {
+                    messageHelper.ShowError("Failed to start the ShipWorks API.");
+                    break;
+                }
+
+                Thread.Sleep(1000);
+            }
         }
 
         /// <summary>
@@ -104,8 +132,30 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Stop()
         {
+            messageHelper.SetCursor(Cursors.WaitCursor);
+
             apiSettings.Enabled = false;
             settingsRepository.Save(apiSettings);
+
+            int tries = 0;
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (!apiService.IsRunning)
+                {
+                    Status = "Stopped";
+                    messageHelper.ShowInformation("Successfully stopped the ShipWorks API.");
+                    break;
+                }
+
+                if (tries == 10)
+                {
+                    messageHelper.ShowError("Failed to stop the ShipWorks API.");
+                    break;
+                }
+
+                Thread.Sleep(1000);
+            }
         }
 
         /// <summary>
@@ -113,6 +163,8 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Update()
         {
+            messageHelper.SetCursor(Cursors.WaitCursor);
+
             // validate port number
             if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
             {
@@ -139,6 +191,24 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             else
             {
                 messageHelper.ShowError($"Failed to register port {portNumber}.");
+            }
+
+            for (int tries = 0; tries < 10; tries++)
+            {
+                if (apiService.IsRunning && apiService.Port.ToString() == Port)
+                {
+                    Status = "Running";
+                    messageHelper.ShowInformation("Successfully started the ShipWorks API.");
+                    break;
+                }
+
+                if (tries == 9)
+                {
+                    messageHelper.ShowError("Failed to start the ShipWorks API.");
+                    break;
+                }
+
+                Thread.Sleep(1000);
             }
         }
     }

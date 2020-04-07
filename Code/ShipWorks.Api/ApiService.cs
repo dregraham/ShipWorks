@@ -56,6 +56,11 @@ namespace ShipWorks.Api
         public bool IsRunning { get; private set; } = false;
 
         /// <summary>
+        /// The port the service is currently running on
+        /// </summary>
+        public long? Port => port;
+
+        /// <summary>
         /// Initialize the API for the current database
         /// </summary>
         public void InitializeForCurrentDatabase(ExecutionMode executionMode)

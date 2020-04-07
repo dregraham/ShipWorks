@@ -9,5 +9,10 @@
         /// Is the service running
         /// </summary>
         bool IsRunning { get; }
+
+        /// <summary>
+        /// The port the service is currently running on
+        /// </summary>
+        long? Port { get; }
     }
 }
