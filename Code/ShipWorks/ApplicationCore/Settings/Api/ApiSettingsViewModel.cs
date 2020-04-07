@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -11,6 +13,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
+using ShipWorks.ApplicationCore.CommandLineOptions;
 using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.ApplicationCore.Settings.Api
@@ -155,6 +158,35 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         }
 
         /// <summary>
+        /// Start an external admin process to open the port
+        /// </summary>
+        /// <returns></returns>
+        private bool RegisterPort()
+        {
+            try
+            {
+                // We need to launch the process to elevate ourselves
+                Process process = new Process();
+                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName}");
+                process.StartInfo.Verb = "runas";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    return false;
+                }
+            }
+            catch (Win32Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
         /// Update the port number
         /// </summary>
         private void Update()
@@ -168,24 +200,27 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 return;
             }
 
-            // register port
-            bool registrationResult = portRegistrationService.Register(portNumber);
+            long oldPort = apiSettings.Port;
 
-            // if registration was successful save, else show error
-            if (registrationResult)
+            // save the setting to disk and then run a process as admin to open that port
+            apiSettings.Port = portNumber;
+            try
             {
-                apiSettings.Port = portNumber;
-                try
-                {
-                    settingsRepository.Save(apiSettings);
-                }
-                catch (Exception)
-                {
-                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
-                }
+                settingsRepository.Save(apiSettings);
             }
-            else
+            catch (Exception)
             {
+                messageHelper.ShowError($"Failed to update to port {portNumber}.");
+            }
+
+            var result = RegisterPort();
+
+            if (!result)
+            {
+                // if it failed to open the port we need to roll back the setting on disk 
+                apiSettings.Port = oldPort;
+                settingsRepository.Save(apiSettings);
+
                 messageHelper.ShowError($"Failed to register port {portNumber}.");
             }
 
