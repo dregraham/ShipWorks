@@ -145,10 +145,16 @@ namespace Interapptive.Shared.Utility
         private IDisposable StartTimedEvent(string eventName)
         {
             var fullName = $"{baseTelemetryName}.{eventName}";
+            var extraProp = string.Empty;
+
+            if (properties.ContainsKey("IntegratorTransactionID"))
+            { 
+                extraProp = properties["IntegratorTransactionID"];
+            }
 
             if (log.IsDebugEnabled)
             {
-                log.Debug($"Stopwatch {fullName} starting...");
+                log.Debug($"Stopwatch {fullName} {extraProp} starting...");
             }
 
             var stopwatch = new Stopwatch();
@@ -163,7 +169,7 @@ namespace Interapptive.Shared.Utility
 
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug($"Stopwatch {fullName}: Elapsed {elapsed} ms.");
+                    log.Debug($"Stopwatch {fullName} {extraProp}: Elapsed {elapsed} ms.");
                 }
             });
         }

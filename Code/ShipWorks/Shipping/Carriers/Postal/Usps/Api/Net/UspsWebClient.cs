@@ -899,6 +899,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (UspsApiException ex)
             {
+                log.Error($"ProcessShipment exception for shipmentId: {shipment.ShipmentID}, IntegratorTransactionID: {shipment.Postal.Usps.IntegratorTransactionID.ToString("D")}", ex);
+
                 TranslateProcessShipmentException(account, ex);
 
                 // This isn't an exception we can handle, so just throw the original exception
@@ -970,6 +972,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             CreateIndiciumResult result = null;
+            telemetricResult.AddProperty("IntegratorTransactionID", integratorTransactionID.ToString("D"));
 
             using (ISwsimV90 webService = CreateWebService("Process"))
             {
