@@ -18,7 +18,7 @@ namespace ShipWorks.Api.Configuration
 
         /// <summary>
         /// Load Settings
-        /// </summary
+        /// </summary>
         ApiSettings Load();
     }
 }
