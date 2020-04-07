@@ -97,7 +97,6 @@ namespace ShipWorks.Api
         {
             if (port.HasValue && port != settings.Port)
             {
-                IsRunning = false;
                 Stop();
             }
 
@@ -115,8 +114,6 @@ namespace ShipWorks.Api
             }
             else
             {
-                IsRunning = false;
-
                 Stop();
 
                 try
