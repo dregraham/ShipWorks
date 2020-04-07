@@ -80,10 +80,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
-
-            // Sets up a new account only if they already have an account and don't have a Shipengine account.
-            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            // Always set up a new account when using One Balance
+            newAccountOnly = true;
             return ShowDialog(owner);
         }
 
