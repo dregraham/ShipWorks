@@ -1250,6 +1250,12 @@
     <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidatorFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.Designer.cs">
+      <DependentUpon>UpsBannerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />

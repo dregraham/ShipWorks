@@ -82,6 +82,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             // Always set up a new account when using One Balance
             newAccountOnly = true;
+            newAccount.Checked = true;
             return ShowDialog(owner);
         }
 
@@ -123,6 +124,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     UpdateLogo(UpsLogoType.UpsFromShipWorks);
                     Pages.Remove(wizardPageWelcomeOlt);
+                    Pages.Remove(wizardPageLicense);
                 }
             }
             else
@@ -257,7 +259,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
             string accountNumber = EnteredAccountNumber();
-
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
                 // we are using worldship so the new account option is never shown to the user

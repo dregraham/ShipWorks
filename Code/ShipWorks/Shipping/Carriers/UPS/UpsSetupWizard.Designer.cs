@@ -227,6 +227,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // existingAccount
             // 
             this.existingAccount.AutoSize = true;
+            this.existingAccount.Checked = true;
             this.existingAccount.Location = new System.Drawing.Point(0, 31);
             this.existingAccount.Name = "existingAccount";
             this.existingAccount.Size = new System.Drawing.Size(230, 17);
@@ -239,7 +240,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // newAccount
             // 
             this.newAccount.AutoSize = true;
-            this.newAccount.Checked = true;
             this.newAccount.Location = new System.Drawing.Point(0, 8);
             this.newAccount.Name = "newAccount";
             this.newAccount.Size = new System.Drawing.Size(335, 17);
