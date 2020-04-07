@@ -1,5 +1,4 @@
 ﻿using System;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Carriers.UPS

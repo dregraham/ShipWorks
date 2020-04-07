@@ -13,8 +13,6 @@ using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
-using ShipWorks.Shipping.Carriers.UPS.Promo.Api;
 using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -84,7 +82,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
 
             RegisterOltSpecificTypes(builder);
             RegisterWorldShipSpecificTypes(builder);
-            RegisterPromoTypes(builder);
             RegisterLocalRatingTypes(builder);
         }
 
@@ -122,23 +119,6 @@ namespace ShipWorks.Shipping.UI.Carriers.Ups
                 .Keyed<ILabelService>(ShipmentTypeCode.UpsWorldShip);
 
             builder.RegisterType<WorldShipPackageImporter>().AsSelf();
-        }
-
-        /// <summary>
-        /// Registers the promo types.
-        /// </summary>
-        private void RegisterPromoTypes(ContainerBuilder builder)
-        {
-            builder.RegisterType<UpsPromoWebClientFactory>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<UpsPromoPolicy>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<UpsPromoFactory>()
-                .AsImplementedInterfaces();
         }
 
         /// <summary>

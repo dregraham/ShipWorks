@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -27,7 +26,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository;
         private readonly UpsApiTransitTimeClient transitTimeClient;
         private readonly UpsShipmentType shipmentType;
-        private readonly IUpsPromoFactory promoFactory;
         private readonly IUpsRateClientFactory rateClientFactory;
         private readonly IUpsShipEngineRatingService shipEngineRatingService;
 
@@ -39,14 +37,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> accountRepository,
             UpsApiTransitTimeClient transitTimeClient,
             UpsShipmentType shipmentType,
-            IUpsPromoFactory promoFactory,
             IUpsRateClientFactory rateClientFactory,
             IUpsShipEngineRatingService shipEngineRatingService)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
             this.shipmentType = shipmentType;
-            this.promoFactory = promoFactory;
             this.rateClientFactory = rateClientFactory;
             this.shipEngineRatingService = shipEngineRatingService;
         }

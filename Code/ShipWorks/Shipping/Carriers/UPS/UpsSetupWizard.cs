@@ -17,7 +17,6 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -36,7 +35,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private IUpsPromo promo;
 
         private string upsLicense;
 
@@ -729,22 +727,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             accountNumberPanel.Visible = existingAccount.Checked;
         }
 
-        /// <summary>
-        /// Called when [promo terms link clicked].
-        /// </summary>
-        private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(promo?.Terms?.URL))
-            {
-                MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
-            }
-            else
-            {
-                WebHelper.OpenUrl(new Uri(promo.Terms.URL), this);
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// When stepping into the welcome page, show the UPS logo
         /// </summary>
         private void OnSteppingIntoWelcome(object sender, WizardSteppingIntoEventArgs e)

@@ -5,7 +5,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.Ups.Promo;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
@@ -34,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             ILicenseService licenseService,
             IUpsRateClientFactory rateClientFactory,
             IUpsShipEngineRatingService shipEngineRatingService)
-            : base(accountRepository, transitTimeClient, shipmentType, new NullPromoFactory(), rateClientFactory, shipEngineRatingService)
+            : base(accountRepository, transitTimeClient, shipmentType, rateClientFactory, shipEngineRatingService)
         {
             this.licenseService = licenseService;
             this.rateClientFactory = rateClientFactory;

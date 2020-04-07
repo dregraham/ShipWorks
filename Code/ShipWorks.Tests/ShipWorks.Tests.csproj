@@ -509,11 +509,6 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiShipClientTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsApiTrackResponseTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTermsTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoActiviationTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromoTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoFactoryTest.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationAddressManipulatorTest.cs" />
