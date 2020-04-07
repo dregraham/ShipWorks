@@ -70,23 +70,33 @@ namespace ShipWorks.Api
         private void OnTimerElapsed(object sender, ElapsedEventArgs e)
         {
             timer.Stop();
-            
-            StopIfPortChanged();
-            StartIfNotRunning();
+
+            var settings = settingsRepository.Load();
+            if (settings.Enabled)
+            {
+                StopIfPortChanged(settings);
+                StartIfNotRunning();
+            }
+            else
+            {
+                Stop();
+            }            
 
             timer.Start();
         }
 
-        private void StopIfPortChanged()
+        /// <summary>
+        /// Stop If Port Changed
+        /// </summary>
+        private void StopIfPortChanged(ApiSettings settings)
         {
-            var settings = settingsRepository.Load();
-
             if (port.HasValue && port != settings.Port)
             {
                 IsRunning = false;
                 Stop();
-                port = settings.Port;
             }
+
+            port = settings.Port;
         }
 
         /// <summary>

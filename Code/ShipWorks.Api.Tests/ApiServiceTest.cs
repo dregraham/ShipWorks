@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Utility;
@@ -11,9 +7,9 @@ using Owin;
 using ShipWorks.Api.Configuration;
 using ShipWorks.Api.HealthCheck;
 using ShipWorks.Api.Infrastructure;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Tests.Shared;
 using Xunit;
+using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Api.Tests
 {
@@ -21,12 +17,16 @@ namespace ShipWorks.Api.Tests
     {
         private readonly AutoMock mock;
         private readonly Mock<ITimer> timer;
+        private readonly ApiSettings apiSettings = new ApiSettings();
 
         public ApiServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             timer = mock.Mock<ITimer>();
+            mock.Mock<IApiSettingsRepository>()
+                .Setup(r => r.Load())
+                .Returns(() => apiSettings);
         }
 
         [Fact]
@@ -61,6 +61,41 @@ namespace ShipWorks.Api.Tests
             timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
 
             mock.Mock<IWebApp>().Verify(a => a.Start("http://+:8081/", It.IsAny<Action<IAppBuilder>>()), Times.Once);
+        }
+
+        [Fact]
+        public void InitializeForCurrentDatabase_StartsWebApp_WithCorrectPort()
+        {
+            apiSettings.Port = 42;
+
+            mock.Mock<IHealthCheckClient>()
+               .Setup(h => h.IsRunning(8081))
+               .Returns(false);
+
+            var testObject = mock.Create<ApiService>();
+
+            testObject.InitializeForCurrentDatabase(null);
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+
+            mock.Mock<IWebApp>().Verify(a => a.Start("http://+:42/", It.IsAny<Action<IAppBuilder>>()), Times.Once);
+        }
+
+        [Fact]
+        public void InitializeForCurrentDatabase_DoesNotStartWebApp_WhenApiDisabled()
+        {
+            apiSettings.Enabled = false;
+
+
+            mock.Mock<IHealthCheckClient>()
+               .Setup(h => h.IsRunning(8081))
+               .Returns(false);
+
+            var testObject = mock.Create<ApiService>();
+
+            testObject.InitializeForCurrentDatabase(null);
+            timer.Raise(r => r.Elapsed += null, EventArgs.Empty as ElapsedEventArgs);
+
+            mock.Mock<IWebApp>().Verify(a => a.Start(AnyString, It.IsAny<Action<IAppBuilder>>()), Times.Never);
         }
 
         [Fact]
