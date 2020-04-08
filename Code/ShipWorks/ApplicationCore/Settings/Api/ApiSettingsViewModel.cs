@@ -1,20 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
-using ShipWorks.ApplicationCore.CommandLineOptions;
 using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.ApplicationCore.Settings.Api
@@ -31,6 +25,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private readonly IApiService apiService;
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
+        private readonly IApiPortRegistrationService apiPortRegistrationService;
         private string status;
         private string port;
         private ApiSettings apiSettings;
@@ -38,12 +33,12 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiSettingsViewModel(IApiService apiService, IApiSettingsRepository settingsRepository, IMessageHelper messageHelper)
+        public ApiSettingsViewModel(IApiService apiService, IApiSettingsRepository settingsRepository, IMessageHelper messageHelper, IApiPortRegistrationService apiPortRegistrationService)
         {
             this.apiService = apiService;
             this.settingsRepository = settingsRepository;
             this.messageHelper = messageHelper;
-
+            this.apiPortRegistrationService = apiPortRegistrationService;
             StartCommand = new RelayCommand(Start);
             StopCommand = new RelayCommand(Stop);
             UpdateCommand = new RelayCommand(Update);
@@ -169,35 +164,6 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         }
 
         /// <summary>
-        /// Start an external admin process to open the port
-        /// </summary>
-        /// <returns></returns>
-        private bool RegisterPort()
-        {
-            try
-            {
-                // We need to launch the process to elevate ourselves
-                Process process = new Process();
-                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName}");
-                process.StartInfo.Verb = "runas";
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                process.Start();
-                process.WaitForExit();
-
-                if (process.ExitCode != 0)
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Update the port number
         /// </summary>
         private void Update()
@@ -231,7 +197,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     messageHelper.ShowError($"Failed to update to port {portNumber}.");
                 }
 
-                bool result = RegisterPort();
+                bool result = apiPortRegistrationService.RegisterAsAdmin();
 
                 if (!result)
                 {

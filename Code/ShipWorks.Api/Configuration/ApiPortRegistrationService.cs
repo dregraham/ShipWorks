@@ -1,5 +1,9 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
+using ShipWorks.ApplicationCore.CommandLineOptions;
 
 namespace ShipWorks.Api.Configuration
 {
@@ -17,6 +21,34 @@ namespace ShipWorks.Api.Configuration
             string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
 
             return NetshCommand.Execute(command) == 0;
+        }
+
+        /// <summary>
+        /// Register the port configured in ApiSettings running the process as admin
+        /// </summary>
+        public bool RegisterAsAdmin()
+        {
+            try
+            {
+                // We need to launch the process to elevate ourselves
+                Process process = new Process();
+                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName}");
+                process.StartInfo.Verb = "runas";
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    return false;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
