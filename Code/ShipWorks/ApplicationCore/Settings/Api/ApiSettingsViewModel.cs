@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -29,7 +30,6 @@ namespace ShipWorks.ApplicationCore.Settings.Api
 
         private readonly IApiService apiService;
         private readonly IApiSettingsRepository settingsRepository;
-        private readonly IApiPortRegistrationService portRegistrationService;
         private readonly IMessageHelper messageHelper;
         private string status;
         private string port;
@@ -38,11 +38,10 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiSettingsViewModel(IApiService apiService, IApiSettingsRepository settingsRepository, IApiPortRegistrationService portRegistrationService, IMessageHelper messageHelper)
+        public ApiSettingsViewModel(IApiService apiService, IApiSettingsRepository settingsRepository, IMessageHelper messageHelper)
         {
             this.apiService = apiService;
             this.settingsRepository = settingsRepository;
-            this.portRegistrationService = portRegistrationService;
             this.messageHelper = messageHelper;
 
             StartCommand = new RelayCommand(Start);
@@ -53,6 +52,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// The API Status
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Status
         {
             get => status;
@@ -62,30 +62,39 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// The port currently being used by the api
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Port
         {
             get => port;
-            set => Set(ref port, value);
+            set 
+            {
+                Set(ref port, value);
+                RaisePropertyChanged(nameof(DocumentationUrl));
+            }
         }
 
         /// <summary>
         /// Command to start API
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand StartCommand { get; }
 
         /// <summary>
         /// Command to stop API
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand StopCommand { get; }
 
         /// <summary>
         /// Command for updating port number
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public ICommand UpdateCommand { get; }
 
         /// <summary>
         /// Url for the API Docs
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string DocumentationUrl => $"http://{Environment.MachineName}:{Port}/swagger/ui/index";
 
         /// <summary>
@@ -104,27 +113,28 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Start()
         {
-            messageHelper.SetCursor(Cursors.WaitCursor);
-
-            apiSettings.Enabled = true;
-            settingsRepository.Save(apiSettings);
-
-            for (int tries = 0; tries < 10; tries++)
+            using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                if (apiService.IsRunning)
-                {
-                    Status = "Running";
-                    messageHelper.ShowInformation("Successfully started the ShipWorks API.");
-                    break;
-                }
+                apiSettings.Enabled = true;
+                settingsRepository.Save(apiSettings);
 
-                if (tries == 9)
+                for (int tries = 0; tries < 10; tries++)
                 {
-                    messageHelper.ShowError("Failed to start the ShipWorks API.");
-                    break;
-                }
+                    if (apiService.IsRunning)
+                    {
+                        Status = "Running";
+                        messageHelper.ShowInformation("Successfully started the ShipWorks API.");
+                        break;
+                    }
 
-                Thread.Sleep(1000);
+                    if (tries == 9)
+                    {
+                        messageHelper.ShowError("Failed to start the ShipWorks API.");
+                        break;
+                    }
+
+                    Thread.Sleep(1000);
+                }
             }
         }
 
@@ -133,27 +143,28 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Stop()
         {
-            messageHelper.SetCursor(Cursors.WaitCursor);
-
-            apiSettings.Enabled = false;
-            settingsRepository.Save(apiSettings);
-
-            for (int tries = 0; tries < 10; tries++)
+            using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                if (!apiService.IsRunning)
-                {
-                    Status = "Stopped";
-                    messageHelper.ShowInformation("Successfully stopped the ShipWorks API.");
-                    break;
-                }
+                apiSettings.Enabled = false;
+                settingsRepository.Save(apiSettings);
 
-                if (tries == 9)
+                for (int tries = 0; tries < 10; tries++)
                 {
-                    messageHelper.ShowError("Failed to stop the ShipWorks API.");
-                    break;
-                }
+                    if (!apiService.IsRunning)
+                    {
+                        Status = "Stopped";
+                        messageHelper.ShowInformation("Successfully stopped the ShipWorks API.");
+                        break;
+                    }
 
-                Thread.Sleep(1000);
+                    if (tries == 9)
+                    {
+                        messageHelper.ShowError("Failed to stop the ShipWorks API.");
+                        break;
+                    }
+
+                    Thread.Sleep(1000);
+                }
             }
         }
 
@@ -178,7 +189,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     return false;
                 }
             }
-            catch (Win32Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -191,55 +202,66 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         private void Update()
         {
-            messageHelper.SetCursor(Cursors.WaitCursor);
-
-            // validate port number
-            if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
+            using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                messageHelper.ShowError("Please enter a valid port number.");
-                return;
-            }
-
-            long oldPort = apiSettings.Port;
-
-            // save the setting to disk and then run a process as admin to open that port
-            apiSettings.Port = portNumber;
-            try
-            {
-                settingsRepository.Save(apiSettings);
-            }
-            catch (Exception)
-            {
-                messageHelper.ShowError($"Failed to update to port {portNumber}.");
-            }
-
-            var result = RegisterPort();
-
-            if (!result)
-            {
-                // if it failed to open the port we need to roll back the setting on disk 
-                apiSettings.Port = oldPort;
-                settingsRepository.Save(apiSettings);
-
-                messageHelper.ShowError($"Failed to register port {portNumber}.");
-            }
-
-            for (int tries = 0; tries < 10; tries++)
-            {
-                if (apiService.IsRunning && apiService.Port.ToString() == Port)
+                // validate port number
+                if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
                 {
-                    Status = "Running";
-                    messageHelper.ShowInformation("Successfully updated the ShipWorks API port number.");
-                    break;
+                    messageHelper.ShowError("Please enter a valid port number.");
+                    return;
                 }
 
-                if (tries == 9)
+                // if the are trying to update the port to what the port is already set to return
+                if (apiSettings.Port == portNumber)
                 {
-                    messageHelper.ShowError("Failed to update the ShipWorks API port number.");
-                    break;
+                    return;
                 }
 
-                Thread.Sleep(1000);
+                Status = "Updating";
+                long oldPort = apiSettings.Port;
+
+                // save the setting to disk and then run a process as admin to open that port
+                apiSettings.Port = portNumber;
+                try
+                {
+                    settingsRepository.Save(apiSettings);
+                }
+                catch (Exception)
+                {
+                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                }
+
+                bool result = RegisterPort();
+
+                if (!result)
+                {
+                    // if it failed to open the port we need to roll back the setting on disk 
+                    apiSettings.Port = oldPort;
+                    settingsRepository.Save(apiSettings);
+
+                    messageHelper.ShowError($"Failed to register port {portNumber}.");
+
+                    return;
+                }
+
+                for (int tries = 0; tries < 10; tries++)
+                {
+                    if (apiService.IsRunning && apiService.Port.ToString() == Port)
+                    {
+                        Status = "Running";
+                        messageHelper.ShowInformation("Successfully updated the ShipWorks API port number.");
+                        break;
+                    }
+
+                    if (tries == 9)
+                    {
+                        Status = apiService.IsRunning ? "Running" : "Stopped";
+                        messageHelper.ShowError("Failed to update the ShipWorks API port number.");
+                        break;
+                    }
+
+                    Thread.Sleep(1000);
+                }
             }
         }
     }
