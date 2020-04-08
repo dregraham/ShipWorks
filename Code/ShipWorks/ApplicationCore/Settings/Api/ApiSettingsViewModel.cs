@@ -212,9 +212,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
 
                 for (int tries = 0; tries < 10; tries++)
                 {
-                    if (apiService.IsRunning && apiService.Port.ToString() == Port)
+                    if (!apiSettings.Enabled || apiService.IsRunning && apiService.Port.ToString() == Port)
                     {
-                        Status = "Running";
+                        Status = apiService.IsRunning ? "Running" : "Stopped";
                         messageHelper.ShowInformation("Successfully updated the ShipWorks API port number.");
                         break;
                     }
