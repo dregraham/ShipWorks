@@ -12,6 +12,12 @@ namespace ShipWorks.Shipping.Services.Telemetry
 
     public class PostalTelemetryMutator : ICarrierTelemetryMutator
     {
+        public void MutateShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        {
+            SetShipmentTelemetry(telemetryEvent, shipment);
+            SetPackageTelemetry(telemetryEvent, shipment);
+        }
+
         /// <summary>
         /// Sets the Postal specific shipment telemetry properties
         /// </summary>

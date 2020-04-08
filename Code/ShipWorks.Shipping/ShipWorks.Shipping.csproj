@@ -601,6 +601,7 @@
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\ICarrierTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\PostalTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\UpsTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\UspsTelemetryMutator.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
