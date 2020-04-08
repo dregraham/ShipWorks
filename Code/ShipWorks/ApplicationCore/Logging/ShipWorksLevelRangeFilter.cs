@@ -8,8 +8,14 @@ using log4net.Filter;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
+    /// <summary>
+    /// Log filter for ShipWorks based on log level
+    /// </summary>
     public class ShipWorksLevelRangeFilter : LevelRangeFilter
     {
+        /// <summary>
+        /// Filter out api logging and use base LevelRangeFilter
+        /// </summary>
         public override FilterDecision Decide(LoggingEvent loggingEvent)
         {
             if (loggingEvent.LoggerName.Equals("ApiMiddleware", StringComparison.InvariantCulture))
