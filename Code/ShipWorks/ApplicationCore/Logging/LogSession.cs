@@ -42,6 +42,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
         // Log pattern
         private const string traceLayoutPattern = "%date{HH:mm:ss.fff} %-5level [%logger] [%thread] --> %message%newline";
+        private const string justMessagePattern = "%message%newline";
 
         /// <summary>
         /// Initialize the configuration of the logger.  If sessionName is specified, it's appended to the default log folder name.
@@ -166,7 +167,7 @@ namespace ShipWorks.ApplicationCore.Logging
                 RollingFileAppender appender = CreateFileAppender(Path.Combine(LogFolder, "shipworks.log"), traceLayoutPattern);
                 ApplyShipWorksLogging(appender);
 
-                RollingFileAppender apiAppender = CreateFileAppender(Path.Combine(DataPath.LogRoot, "shipworks_api.log"), traceLayoutPattern);
+                RollingFileAppender apiAppender = CreateFileAppender(Path.Combine(DataPath.LogRoot, "shipworks_api.log"), justMessagePattern);
 
                 var apiLogFilter = new ApiLogFilter();
                 apiLogFilter.ActivateOptions();

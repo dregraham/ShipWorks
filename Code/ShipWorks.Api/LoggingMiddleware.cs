@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
+using log4net;
 using Microsoft.Owin;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
@@ -16,7 +17,8 @@ namespace ShipWorks.Api
     /// </summary>
     public class LoggingMiddleware : OwinMiddleware
     {
-        IApiLogEntry logEntry;
+        private readonly IApiLogEntry shipworksApiLog;
+        private readonly ILog middlewareLogger;
 
         /// <summary>
         /// Constructor
@@ -24,7 +26,8 @@ namespace ShipWorks.Api
         public LoggingMiddleware(OwinMiddleware next)
             : base(next)
         {
-            logEntry = new LogEntryFactory().GetLogEntry(ApiLogSource.ShipWorksAPI, "API", LogActionType.Other);
+            shipworksApiLog = new LogEntryFactory().GetLogEntry(ApiLogSource.ShipWorksAPI, "API", LogActionType.Other);
+            middlewareLogger = LogManager.GetLogger("ApiMiddleware");
         }
 
         /// <summary>
@@ -32,17 +35,43 @@ namespace ShipWorks.Api
         /// </summary>
         public override async Task Invoke(IOwinContext context)
         {
+            DateTime now = DateTime.Now;
+
             if (ShouldLog(context))
             {
-                logEntry.LogRequest(BuildRequestLog(context.Request), "json");
+                shipworksApiLog.LogRequest(BuildRequestLog(context.Request), "json");
             }
 
             await Next.Invoke(context);
 
             if (ShouldLog(context))
             {
-                logEntry.LogResponse(BuildResponseLog(context.Response), "json");
+                shipworksApiLog.LogResponse(BuildResponseLog(context.Response), "json");
             }
+
+            LogContext(context, now);
+        }
+
+        private void LogContext(IOwinContext context, DateTime now)
+        {
+            List<string> dataToLog = new List<string>
+            {
+                context.Request.RemoteIpAddress,
+                context.Authentication?.User?.Identity.Name,
+                now.ToString("MM/dd/yyyy, h:mm:tt"),
+                "ShopWorks.API",
+                context.Request.Uri.Host,
+                context.Request.LocalIpAddress,
+                (now-DateTime.Now).Duration().TotalMilliseconds.ToString(),
+                context.Response.ContentLength?.ToString(),
+                context.Response.StatusCode.ToString(),
+                "-", // Windows status code
+                context.Request.Method,
+                context.Request.Uri.LocalPath,
+                "-" // Parameters
+            };
+            string toLog = string.Join(", ", dataToLog.Select(d=>string.IsNullOrWhiteSpace(d) ? "-" : d));
+            middlewareLogger.Info(toLog);
         }
 
         /// <summary>

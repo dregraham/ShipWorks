@@ -12,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Logging
     {
         public override FilterDecision Decide(LoggingEvent loggingEvent)
         {
-            if (loggingEvent.LoggerName.Contains("ShipWorks.Api"))
+            if (loggingEvent.LoggerName.Equals("ApiMiddleware", StringComparison.InvariantCulture))
             {
                 return FilterDecision.Accept;
             }
