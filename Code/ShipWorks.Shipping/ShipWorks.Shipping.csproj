@@ -599,6 +599,7 @@
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\FedexTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\ICarrierTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\PostalTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\UpsTelemetryMutator.cs" />
