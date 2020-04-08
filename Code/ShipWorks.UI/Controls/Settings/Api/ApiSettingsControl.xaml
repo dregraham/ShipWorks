@@ -6,6 +6,7 @@
              xmlns:api="clr-namespace:ShipWorks.ApplicationCore.Settings.Api;assembly=ShipWorks.Core"
              xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
              xmlns:controls="clr-namespace:ShipWorks.UI.Controls"
+             xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance api:ApiSettingsViewModel}"
              FontSize="11"
@@ -23,7 +24,8 @@
             </Style>
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
-            </Style>            
+            </Style>
+            <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="10">
@@ -61,7 +63,7 @@
                        Margin="0 0 0 10"/>
             <TextBlock Grid.Row="0" 
                        Grid.Column="1"
-                       Text="{Binding Status}"
+                       Text="{Binding Status, Converter={StaticResource EnumDescription}}"
                        HorizontalAlignment="Center"
                        TextAlignment="Center"
                        Margin="10 0 10 10"/>

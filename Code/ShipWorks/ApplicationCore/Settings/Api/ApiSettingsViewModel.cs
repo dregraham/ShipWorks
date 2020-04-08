@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
 using Cursors = System.Windows.Forms.Cursors;
@@ -26,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
         private readonly IApiPortRegistrationService apiPortRegistrationService;
-        private string status;
+        private ApiStatus status;
         private string port;
         private ApiSettings apiSettings;
 
@@ -48,7 +49,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// The API Status
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Status
+        public ApiStatus Status
         {
             get => status;
             set => Set(ref status, value);
@@ -98,8 +99,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         public void Load()
         {
             apiSettings = settingsRepository.Load();
-
-            Status = apiService.IsRunning ? "Running" : "Stopped";
+            Status = apiService.Status;
             Port = apiSettings.Port.ToString();
         }
 
@@ -113,23 +113,10 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 apiSettings.Enabled = true;
                 settingsRepository.Save(apiSettings);
 
-                for (int tries = 0; tries < 10; tries++)
-                {
-                    if (apiService.IsRunning)
-                    {
-                        Status = "Running";
-                        messageHelper.ShowInformation("Successfully started the ShipWorks API.");
-                        break;
-                    }
+                string success = "Successfully started the ShipWorks API.";
+                string fail = "Failed to start the ShipWorks API.";
 
-                    if (tries == 9)
-                    {
-                        messageHelper.ShowError("Failed to start the ShipWorks API.");
-                        break;
-                    }
-
-                    Thread.Sleep(1000);
-                }
+                WaitForStatusToUpdate(ApiStatus.Running, success, fail);
             }
         }
 
@@ -143,23 +130,10 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 apiSettings.Enabled = false;
                 settingsRepository.Save(apiSettings);
 
-                for (int tries = 0; tries < 10; tries++)
-                {
-                    if (!apiService.IsRunning)
-                    {
-                        Status = "Stopped";
-                        messageHelper.ShowInformation("Successfully stopped the ShipWorks API.");
-                        break;
-                    }
+                string success = "Successfully stopped the ShipWorks API.";
+                string fail = "Failed to stop the ShipWorks API.";
 
-                    if (tries == 9)
-                    {
-                        messageHelper.ShowError("Failed to stop the ShipWorks API.");
-                        break;
-                    }
-
-                    Thread.Sleep(1000);
-                }
+                WaitForStatusToUpdate(ApiStatus.Stopped, success, fail);
             }
         }
 
@@ -170,21 +144,16 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                // validate port number
-                if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
-                {
-                    messageHelper.ShowError("Please enter a valid port number.");
-                    return;
-                }
-
-                // if the are trying to update the port to what the port is already set to return
-                if (apiSettings.Port == portNumber)
+                GenericResult<long> portValidationResult = ValidatePort();
+                if (portValidationResult.Failure)
                 {
                     return;
                 }
 
-                Status = "Updating";
+                long portNumber = portValidationResult.Value;
                 long oldPort = apiSettings.Port;
+
+                Status = ApiStatus.Updating;
 
                 // save the setting to disk and then run a process as admin to open that port
                 apiSettings.Port = portNumber;
@@ -210,25 +179,73 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     return;
                 }
 
-                for (int tries = 0; tries < 10; tries++)
-                {
-                    if (!apiSettings.Enabled || apiService.IsRunning && apiService.Port.ToString() == Port)
-                    {
-                        Status = apiService.IsRunning ? "Running" : "Stopped";
-                        messageHelper.ShowInformation("Successfully updated the ShipWorks API port number.");
-                        break;
-                    }
+                ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
+                string success = "Successfully updated the ShipWorks API port number.";
+                string fail = "Failed to update the ShipWorks API port number.";
 
-                    if (tries == 9)
-                    {
-                        Status = apiService.IsRunning ? "Running" : "Stopped";
-                        messageHelper.ShowError("Failed to update the ShipWorks API port number.");
-                        break;
-                    }
-
-                    Thread.Sleep(1000);
-                }
+                WaitForStatusToUpdate(expectedStatus, success, fail);
             }
+        }
+
+        /// <summary>
+        /// Validate the port string and if valid, return it as a long
+        /// </summary>
+        private GenericResult<long> ValidatePort()
+        {
+            // validate port number
+            if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
+            {
+                messageHelper.ShowError("Please enter a valid port number.");
+                return GenericResult.FromError<long>(string.Empty);
+            }
+
+            // if the are trying to update the port to what the port is already set to return
+            if (apiSettings.Port == portNumber)
+            {
+                return GenericResult.FromError<long>(string.Empty);
+            }
+
+            return GenericResult.FromSuccess(portNumber);
+        }
+
+        /// <summary>
+        /// Wait for the api status to match the expected status
+        /// </summary>
+        private void WaitForStatusToUpdate(ApiStatus expectedStatus, string successMessage, string failureMessage)
+        {
+            for (int tries = 0; tries < 10; tries++)
+            {
+                if (CheckForStatusUpdate(expectedStatus))
+                {
+                    Status = apiService.Status;
+                    messageHelper.ShowInformation(successMessage);
+                    break;
+                }
+
+                if (tries == 9)
+                {
+                    messageHelper.ShowError(failureMessage);
+                    break;
+                }
+
+                Thread.Sleep(1000);
+            }
+        }
+
+        /// <summary>
+        /// Check if the current api status matches the expected status
+        /// </summary>
+        private bool CheckForStatusUpdate(ApiStatus expectedStatus)
+        {
+            if (Status == ApiStatus.Updating)
+            {
+                // If we're updating the port and the api is disabled, just show success
+                // otherwise make sure its not only running, but running on the new port
+                return !apiSettings.Enabled ||
+                       apiService.Status == ApiStatus.Running && apiService.Port.ToString() == Port;
+            }
+
+            return apiService.Status == expectedStatus;
         }
     }
 }

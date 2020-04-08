@@ -53,7 +53,7 @@ namespace ShipWorks.Api
         /// <summary>
         /// Is the service running
         /// </summary>
-        public bool IsRunning { get; private set; } = false;
+        public ApiStatus Status { get; private set; } = ApiStatus.Stopped;
 
         /// <summary>
         /// The port the service is currently running on
@@ -110,7 +110,7 @@ namespace ShipWorks.Api
         {
             if (healthCheckClient.IsRunning(port.Value))
             {
-                IsRunning = true;
+                Status = ApiStatus.Running;
             }
             else
             {
@@ -121,7 +121,7 @@ namespace ShipWorks.Api
                     apiStartup = apiStartupFactory();
                     server = webApp.Start($"http://+:{port}/", apiStartup.Configuration);
                     log.Info("ShipWorks.API has started");
-                    IsRunning = true;
+                    Status = ApiStatus.Running;
                 }
                 catch (Exception ex)
                 {
@@ -135,7 +135,7 @@ namespace ShipWorks.Api
         /// </summary>
         private void Stop()
         {
-            IsRunning = false;
+            Status = ApiStatus.Stopped;
 
             if (server != null)
             {

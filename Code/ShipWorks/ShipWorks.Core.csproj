@@ -788,6 +788,7 @@
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
+    <Compile Include="Api\ApiStatus.cs" />
     <Compile Include="Api\Configuration\ApiSettings.cs" />
     <Compile Include="Api\Configuration\IApiSettingsRepository.cs" />
     <Compile Include="Api\IApiPortRegistrationService.cs" />
