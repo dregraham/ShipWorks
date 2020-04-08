@@ -35,7 +35,9 @@ namespace ShipWorks.Api.Configuration
         /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
+            appBuilder.Use<LoggingMiddleware>();
             appBuilder.UseWebApi(httpConfiguration);
+
 
             ConfigureApiVersioning();
             RegisterApiControllers(appBuilder);
