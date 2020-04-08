@@ -13,6 +13,6 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific package telemetry properties
         /// </summary>
-        void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IPackageAdapter[] packages);
+        void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment);
     }
 }

@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific package telemetry properties
         /// </summary>
-        public void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IPackageAdapter[] packages)
+        public void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
            //There are no postal specific fields
         }
