@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,19 +38,52 @@ namespace ShipWorks.Api
         {
             DateTime now = DateTime.Now;
 
-            if (ShouldLog(context))
+            bool shouldLog = ShouldLog(context);
+
+            if (shouldLog)
             {
                 shipworksApiLog.LogRequest(BuildRequestLog(context.Request), "json");
             }
 
+            // Convert write only context stream to readable memory stream
+            Stream responseBodyStream = context.Response.Body;
+            MemoryStream responseBuffer = new MemoryStream();
+            context.Response.Body = responseBuffer;
+
+            // Actually run request
             await Next.Invoke(context);
 
-            if (ShouldLog(context))
+            // Get the response body
+            responseBuffer.Seek(0, SeekOrigin.Begin);
+            var responseBody = new StreamReader(responseBuffer).ReadToEnd();
+
+            // reset the stream
+            responseBuffer.Seek(0, SeekOrigin.Begin);
+            await responseBuffer.CopyToAsync(responseBodyStream);
+
+            if (shouldLog)
             {
-                shipworksApiLog.LogResponse(BuildResponseLog(context.Response), "json");
+                shipworksApiLog.LogResponse(BuildResponseLog(context.Response.StatusCode, responseBody), "json");
             }
 
             LogContext(context, now);
+        }       
+
+        /// <summary>
+        /// Build a string containing the request that gets logged
+        /// </summary>
+        string BuildRequestLog(IOwinRequest request)
+        {
+            return JsonConvert.SerializeObject(new RequestLogEntry(request));
+        }
+
+
+        /// <summary>
+        /// Build a string containing the response that gets logged
+        /// </summary>
+        private string BuildResponseLog(int statusCode, string body)
+        {
+            return JsonConvert.SerializeObject(new ResponseLogEntry(statusCode, body));
         }
 
         private void LogContext(IOwinContext context, DateTime now)
@@ -70,7 +104,7 @@ namespace ShipWorks.Api
                 context.Request.Uri.LocalPath,
                 "-" // Parameters
             };
-            string toLog = string.Join(", ", dataToLog.Select(d=>string.IsNullOrWhiteSpace(d) ? "-" : d));
+            string toLog = string.Join(", ", dataToLog.Select(d => string.IsNullOrWhiteSpace(d) ? "-" : d));
             middlewareLogger.Info(toLog);
         }
 
@@ -87,29 +121,15 @@ namespace ShipWorks.Api
                 !path.Contains("swagger");
         }
 
-        /// <summary>
-        /// Build a string containing the request that gets logged
-        /// </summary>
-        string BuildRequestLog(IOwinRequest request)
-        {
-            return JsonConvert.SerializeObject(new RequestLogEntry(request));
-        }
-
-
-        /// <summary>
-        /// Build a string containing the response that gets logged
-        /// </summary>
-        string BuildResponseLog(IOwinResponse response)
-        {
-            return JsonConvert.SerializeObject(new ResponseLogEntry(response));
-        }
-
         public class ResponseLogEntry
         {
-            public ResponseLogEntry(IOwinResponse response)
+            /// <summary>
+            /// Constructor
+            /// </summary>
+            public ResponseLogEntry(int statusCode, string body)
             {
-                StatusCode = response.StatusCode;
-                Body = response.Body.ConvertToString();
+                StatusCode = statusCode;
+                Body = body;
             }
 
             public int StatusCode { get; }
