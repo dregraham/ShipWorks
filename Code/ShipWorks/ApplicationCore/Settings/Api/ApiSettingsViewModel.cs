@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
+using Common.Logging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
@@ -28,6 +29,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
         private readonly IApiPortRegistrationService apiPortRegistrationService;
+        private ILog log;
         private ApiStatus status;
         private string port;
         private ApiSettings apiSettings;
@@ -35,12 +37,18 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiSettingsViewModel(IApiService apiService, IApiSettingsRepository settingsRepository, IMessageHelper messageHelper, IApiPortRegistrationService apiPortRegistrationService)
+        public ApiSettingsViewModel(
+            IApiService apiService, 
+            IApiSettingsRepository settingsRepository, 
+            IMessageHelper messageHelper, 
+            IApiPortRegistrationService apiPortRegistrationService,
+            Func<Type, ILog> logFactory)
         {
             this.apiService = apiService;
             this.settingsRepository = settingsRepository;
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
+            this.log = logFactory(typeof(ApiSettingsViewModel));
             StartCommand = new RelayCommand(Start, () => Status == ApiStatus.Stopped);
             StopCommand = new RelayCommand(Stop, () => Status == ApiStatus.Running);
             UpdateCommand = new RelayCommand(Update, () => Status != ApiStatus.Updating);
@@ -160,19 +168,18 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                     messageHelper.ShowError($"Failed to register port {portNumber}.");
                     return;
                 }
-                else
-                {
-                    apiSettings.Port = portNumber;
-                    try
-                    {
-                        settingsRepository.Save(apiSettings);
-                    }
-                    catch (Exception)
-                    {
-                        messageHelper.ShowError($"Failed to update to port {portNumber}.");
-                    }
-                }
 
+                apiSettings.Port = portNumber;
+                try
+                {
+                    settingsRepository.Save(apiSettings);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("An error occurred saving api settings.", ex);
+                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                }
+                
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
                 string fail = "Failed to update the ShipWorks API port number.";
 
@@ -186,7 +193,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private GenericResult<long> ValidatePort()
         {
             // validate port number
-            if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
+            if (!long.TryParse(Port, out long portNumber) || portNumber <= MinPort || portNumber > MaxPort)
             {
                 messageHelper.ShowError("Please enter a valid port number.");
                 return GenericResult.FromError<long>(string.Empty);
