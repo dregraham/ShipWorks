@@ -598,6 +598,7 @@
     <Compile Include="Services\Dialogs\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Services\Telemetry\AmazonSWATelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\FedexTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\ICarrierTelemetryMutator.cs" />
