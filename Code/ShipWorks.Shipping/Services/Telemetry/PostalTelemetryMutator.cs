@@ -9,10 +9,9 @@ namespace ShipWorks.Shipping.Services.Telemetry
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.PostalWebTools)]
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Express1Endicia)]
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Express1Usps)]
-
     public class PostalTelemetryMutator : ICarrierTelemetryMutator
     {
-        public void MutateShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
@@ -25,6 +24,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         {
             var postalShipment = shipment.Postal;
             var shipmentTypeCode = shipment.ShipmentTypeCode.ToString();
+
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Confirmation", EnumHelper.GetDescription((PostalConfirmationType)postalShipment.Confirmation));
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.CustomsContentDescription", postalShipment.CustomsContentDescription);
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PostalCustomsContentType", EnumHelper.GetDescription((PostalCustomsContentType)postalShipment.CustomsContentType));
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific package telemetry properties
         /// </summary>
-        public void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
            //There are no postal specific fields
         }

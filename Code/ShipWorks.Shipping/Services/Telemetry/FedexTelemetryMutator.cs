@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared;
+﻿using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
@@ -23,10 +18,19 @@ namespace ShipWorks.Shipping.Services.Telemetry
     public class FedexTelemetryMutator : ICarrierTelemetryMutator
     {
         /// <summary>
+        /// Sets the carrier specific telemetry properties
+        /// </summary>
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        {
+            SetShipmentTelemetry(telemetryEvent, shipment);
+            SetPackageTelemetry(telemetryEvent, shipment);
+        }
+
+        /// <summary>
         /// Set Fedex-specific shipment telemetry
         /// </summary>
         [NDependIgnoreLongMethod]
-        public void MutateShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var fedExShipment = shipment.FedEx;
 
@@ -191,14 +195,12 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty("Label.FedEx.ThirdPartyConsignee", fedExShipment.ThirdPartyConsignee.ToString());
             telemetryEvent.AddProperty("Label.FedEx.TrafficInArmsLicenseNumber", fedExShipment.TrafficInArmsLicenseNumber);
             telemetryEvent.AddProperty("Label.FedEx.WeightUnitType", EnumHelper.GetDescription((WeightUnitOfMeasure) fedExShipment.WeightUnitType));
-
-            SetPackageTelemetry(telemetryEvent, shipment);
         }
 
         /// <summary>
-        /// Set FedEx-sepcific package telemetry
+        /// Set FedEx-specific package telemetry
         /// </summary>
-        public void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             for(int i = 0; i < shipment.FedEx.Packages.Count; i++)
             {

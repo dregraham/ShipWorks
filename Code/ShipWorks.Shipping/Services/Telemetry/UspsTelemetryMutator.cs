@@ -16,6 +16,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         {
             base.SetShipmentTelemetry(telemetryEvent, shipment);
             var uspsShipment = shipment.Postal.Usps;
+
             telemetryEvent.AddProperty($"Label.Usps.RequestedLabelFormat", EnumHelper.GetDescription((LabelFormatType)uspsShipment.RequestedLabelFormat));
             telemetryEvent.AddProperty($"Label.Usps.HidePostage", uspsShipment.HidePostage.ToString());
             telemetryEvent.AddProperty($"Label.Usps.RequireFullAddressValidation", uspsShipment.RequireFullAddressValidation.ToString());

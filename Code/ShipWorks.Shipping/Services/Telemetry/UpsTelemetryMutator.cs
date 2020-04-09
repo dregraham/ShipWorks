@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Ups specific package telemetry properties
         /// </summary>
-        public void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var packages = shipment.Ups.Packages;
             for(int i = 0; i < packages.Count; i++)
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Ups specific shipment telemetry properties
         /// </summary>
-        public void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var upsShipment = shipment.Ups;
             telemetryEvent.AddProperty("Label.Ups.CarbonNeutral", upsShipment.CarbonNeutral.ToString());
