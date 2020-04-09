@@ -1,6 +1,9 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
@@ -25,8 +28,8 @@ namespace ShipWorks.Shipping.Services.Telemetry
 
             telemetryEvent.AddProperty("Label.iParcel.Reference", iParcelShipment.Reference);
             telemetryEvent.AddProperty("Label.iParcel.IsDeliveryDutyPaid", iParcelShipment.IsDeliveryDutyPaid.ToString());
-            telemetryEvent.AddProperty("Label.iParcel.Service", iParcelShipment.Service.ToString());
-            telemetryEvent.AddProperty("Label.iParcel.RequestedLabelFormat", iParcelShipment.RequestedLabelFormat.ToString());
+            telemetryEvent.AddProperty("Label.iParcel.Service", EnumHelper.GetDescription((iParcelServiceType) iParcelShipment.Service));
+            telemetryEvent.AddProperty("Label.iParcel.RequestedLabelFormat", EnumHelper.GetDescription((ThermalLanguage) iParcelShipment.RequestedLabelFormat));
             telemetryEvent.AddProperty("Label.iParcel.TrackByEmail", iParcelShipment.TrackByEmail.ToString());
             telemetryEvent.AddProperty("Label.iParcel.TrackBySMS", iParcelShipment.TrackBySMS.ToString());
         }
@@ -52,6 +55,9 @@ namespace ShipWorks.Shipping.Services.Telemetry
                 telemetryEvent.AddProperty($"Label.Package.{i}.Insurance", package.Insurance.ToString());
                 telemetryEvent.AddProperty($"Label.Package.{i}.InsuranceValue", package.InsuranceValue.ToString());
                 telemetryEvent.AddProperty($"Label.Package.{i}.InsurancePennyOne", package.InsurancePennyOne.ToString());
+                telemetryEvent.AddProperty($"Label.Package.{i}.ParcelNumber", package.ParcelNumber);
+                telemetryEvent.AddProperty($"Label.Package.{i}.SkuAndQuantities", package.SkuAndQuantities);
+                telemetryEvent.AddProperty($"Label.Package.{i}.TrackingNumber", package.TrackingNumber);
                 telemetryEvent.AddProperty($"Label.Package.{i}.Weight", package.Weight.ToString());
             }
         }
