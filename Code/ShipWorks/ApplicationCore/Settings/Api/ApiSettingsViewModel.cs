@@ -10,6 +10,7 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
+using ShipWorks.ApplicationCore.Interaction;
 using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.ApplicationCore.Settings.Api
@@ -40,9 +41,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             this.settingsRepository = settingsRepository;
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
-            StartCommand = new RelayCommand(Start);
-            StopCommand = new RelayCommand(Stop);
-            UpdateCommand = new RelayCommand(Update);
+            StartCommand = new RelayCommand(Start, () => Status == ApiStatus.Stopped);
+            StopCommand = new RelayCommand(Stop, () => Status == ApiStatus.Running);
+            UpdateCommand = new RelayCommand(Update, () => Status != ApiStatus.Updating);
         }
 
         /// <summary>
@@ -113,10 +114,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 apiSettings.Enabled = true;
                 settingsRepository.Save(apiSettings);
 
-                string success = "Successfully started the ShipWorks API.";
                 string fail = "Failed to start the ShipWorks API.";
 
-                WaitForStatusToUpdate(ApiStatus.Running, success, fail);
+                WaitForStatusToUpdate(ApiStatus.Running, fail);
             }
         }
 
@@ -130,10 +130,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 apiSettings.Enabled = false;
                 settingsRepository.Save(apiSettings);
 
-                string success = "Successfully stopped the ShipWorks API.";
                 string fail = "Failed to stop the ShipWorks API.";
 
-                WaitForStatusToUpdate(ApiStatus.Stopped, success, fail);
+                WaitForStatusToUpdate(ApiStatus.Stopped, fail);
             }
         }
 
@@ -175,10 +174,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 }
 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
-                string success = "Successfully updated the ShipWorks API port number.";
                 string fail = "Failed to update the ShipWorks API port number.";
 
-                WaitForStatusToUpdate(expectedStatus, success, fail);
+                WaitForStatusToUpdate(expectedStatus, fail);
             }
         }
 
@@ -206,14 +204,13 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// Wait for the api status to match the expected status
         /// </summary>
-        private void WaitForStatusToUpdate(ApiStatus expectedStatus, string successMessage, string failureMessage)
+        private void WaitForStatusToUpdate(ApiStatus expectedStatus, string failureMessage)
         {
             for (int tries = 0; tries < 10; tries++)
             {
                 if (CheckForStatusUpdate(expectedStatus))
                 {
                     Status = apiService.Status;
-                    messageHelper.ShowInformation(successMessage);
                     break;
                 }
 
