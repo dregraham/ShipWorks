@@ -27,9 +27,11 @@ namespace ShipWorks.Shipping.Services.Telemetry
         private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var packages = shipment.Ups.Packages;
+
             for(int i = 0; i < packages.Count; i++)
             {
                 var package = packages[i];
+
                 telemetryEvent.AddProperty($"Label.Package.{i}.BillableWeight", package.BillableWeight.ToString());
                 telemetryEvent.AddProperty($"Label.Package.{i}.DeclaredValue", package.DeclaredValue.ToString());
                 telemetryEvent.AddProperty($"Label.Package.{i}.DryIceEnabled", package.DryIceEnabled.ToString()); 
@@ -57,6 +59,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var upsShipment = shipment.Ups;
+
             telemetryEvent.AddProperty("Label.Ups.CarbonNeutral", upsShipment.CarbonNeutral.ToString());
             telemetryEvent.AddProperty("Label.Ups.Cn22Number", upsShipment.Cn22Number);
             telemetryEvent.AddProperty("Label.Ups.CodAmount", upsShipment.CodAmount.ToString());
