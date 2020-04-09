@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Net;
 using log4net;
 using Microsoft.Owin;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 
-namespace ShipWorks.Api
+namespace ShipWorks.Api.Configuration.Logging
 {
     /// <summary>
     /// Middleware for handling logging for the ShipWorks API
@@ -122,50 +120,6 @@ namespace ShipWorks.Api
 
             return !path.Contains("healthcheck") &&
                 !path.Contains("swagger");
-        }
-
-        /// <summary>
-        /// ResponseLogEntry
-        /// </summary>
-        public class ResponseLogEntry
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            public ResponseLogEntry(int statusCode, string body)
-            {
-                StatusCode = statusCode;
-                Body = body;
-            }
-
-            public int StatusCode { get; }
-            public string Body { get; }
-        }
-
-        /// <summary>
-        /// Request to be logged
-        /// </summary>
-        public class RequestLogEntry
-        {
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            /// <param name="request"></param>
-            public RequestLogEntry(IOwinRequest request)
-            {
-                Path = request.Path.ToString();
-                Body = request.Body.ConvertToString();
-            }
-
-            /// <summary>
-            /// The Path
-            /// </summary>
-            public string Path { get; }
-
-            /// <summary>
-            /// The Body
-            /// </summary>
-            public string Body { get; }
         }
     }
 }

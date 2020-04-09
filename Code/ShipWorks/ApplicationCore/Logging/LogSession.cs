@@ -174,7 +174,6 @@ namespace ShipWorks.ApplicationCore.Logging
 
                 apiAppender.AddFilter(apiLogFilter);
 
-
                 BasicConfigurator.Configure(appender, apiAppender);
             }
 
