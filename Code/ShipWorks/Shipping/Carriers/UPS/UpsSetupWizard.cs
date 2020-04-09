@@ -113,6 +113,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 oneBalanceFinishPage
             });
 
+            if (!newAccountOnly)
+            {
+                existingAccount.Checked = true;
+            }
+
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
             // Prepare the correct Welcome page

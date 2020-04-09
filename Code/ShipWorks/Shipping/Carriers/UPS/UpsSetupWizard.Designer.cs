@@ -255,7 +255,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelWelcome1.Name = "labelWelcome1";
             this.labelWelcome1.Size = new System.Drawing.Size(516, 26);
             this.labelWelcome1.TabIndex = 0;
-            this.labelWelcome1.Text = "ShipWorks offers savings up to 62% on UPS Shipments, as well as waived fuel and r" +
+            this.labelWelcome1.Text = "ShipWorks offers savings up to 62% on UPS® Shipments, as well as waived fuel and r" +
     "esidential surcharges, through ShipWorks One Balance.";
             // 
             // wizardPageLicense

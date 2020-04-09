@@ -61,7 +61,7 @@
             this.detailLabel.Name = "detailLabel";
             this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
-            this.detailLabel.Text = "If you already have a UPS account number, you can add your existing UPS account to ShipWorks.\r\n";
+            this.detailLabel.Text = "If you already have a UPS® account number, you can add your existing UPS® account to ShipWorks.\r\n";
             // 
             // OneBalanceUpsBannerControl
             // 

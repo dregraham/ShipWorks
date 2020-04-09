@@ -61,8 +61,8 @@
             this.detailLabel.Name = "detailLabel";
             this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
-            this.detailLabel.Text = "Enable your free UPS from ShipWorks account today and start saving money on label" +
-    "s. Setting up your account is easy and only takes about a minute.\r\n";
+            this.detailLabel.Text = "Take advantage of advanced rates with UPS® shipping labels for orders across all " +
+                "sales channels. Get started today!";
             // 
             // OneBalanceUpsBannerControl
             // 
