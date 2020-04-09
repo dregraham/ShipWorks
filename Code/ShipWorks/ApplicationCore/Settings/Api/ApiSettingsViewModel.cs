@@ -218,17 +218,13 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 if (CheckForStatusUpdate(expectedStatus))
                 {
                     Status = apiService.Status;
-                    break;
-                }
-
-                if (tries == 9)
-                {
-                    messageHelper.ShowError(failureMessage);
-                    break;
+                    return;
                 }
 
                 Thread.Sleep(1000);
             }
+
+            messageHelper.ShowError(failureMessage);
         }
 
         /// <summary>
