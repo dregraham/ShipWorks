@@ -1,8 +1,11 @@
-﻿namespace ShipWorks.Api.Configuration.Logging
+﻿using System.Reflection;
+
+namespace ShipWorks.Api.Configuration.Logging
 {
     /// <summary>
     /// ResponseLogEntry
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public struct ResponseLogEntry
     {
         /// <summary>

@@ -8,12 +8,14 @@ using log4net;
 using Microsoft.Owin;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
+using System.Reflection;
 
 namespace ShipWorks.Api.Configuration.Logging
 {
     /// <summary>
     /// Middleware for handling logging for the ShipWorks API
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class LoggingMiddleware : OwinMiddleware
     {
         private readonly IApiLogEntry shipworksApiLog;

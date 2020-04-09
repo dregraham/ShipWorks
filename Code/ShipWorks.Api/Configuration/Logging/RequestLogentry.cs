@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Extensions;
+﻿using System.Reflection;
+using Interapptive.Shared.Extensions;
 using Microsoft.Owin;
 
 namespace ShipWorks.Api.Configuration.Logging
@@ -6,6 +7,7 @@ namespace ShipWorks.Api.Configuration.Logging
     /// <summary>
     /// Request to be logged
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public struct RequestLogEntry
     {
         /// <summary>
