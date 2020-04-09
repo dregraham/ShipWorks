@@ -29,8 +29,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 // If a part was passed as the first arg use it otherwise load port from repo
-                long port = long.TryParse(args.FirstOrDefault(), out long portNumber) && portNumber > 0 ? 
-                    portNumber : 
+                long port = long.TryParse(args.FirstOrDefault(), out long portNumber) ?
+                    portNumber :
                     scope.Resolve<IApiSettingsRepository>().Load().Port;
 
                 bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port);
