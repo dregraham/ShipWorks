@@ -15,7 +15,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
-using Swashbuckle.Swagger;
 using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
@@ -24,7 +23,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
     /// Controller for StreamTech
     /// </summary>
     [ApiVersion("1.0")]
-    [RoutePrefix("shipworks/api/v{version:apiVersion}/orders")]
+    [RoutePrefix("shipworks/api/v{version:apiVersion}/thirdparty/streamtech")]
     [Obfuscation(Exclude = true)]
     public class StreamTechController : ApiController
     {
@@ -32,6 +31,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
         private readonly IShipmentFactory shipmentFactory;
         private readonly IApiShipmentProcessor shipmentProcessor;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
+        private readonly IApiLabelFactory apiLabelFactory;
         private readonly ILog log;
 
         /// <summary>
@@ -42,33 +42,35 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
             IShipmentFactory shipmentFactory,
             IApiShipmentProcessor shipmentProcessor,
             ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
+            IApiLabelFactory apiLabelFactory,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
             this.shipmentFactory = shipmentFactory;
             this.shipmentProcessor = shipmentProcessor;
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
+            this.apiLabelFactory = apiLabelFactory;
             log = logFactory(typeof(StreamTechController));
         }
 
         /// <summary>
         /// Returns an order matching the number or order ID
         /// </summary>
-        /// <param name="value">The request from StreamTech</param>
-        [HttpGet]
-        [Route("")]
+        /// <param name="barcode">The request from StreamTech</param>
+        /// <param name="streamTechRequest">The request from StreamTech</param>
+        [HttpPost]
+        [Route("{barcode}")]
         [SwaggerResponse(HttpStatusCode.OK, Type = typeof(string), Description = "Label information conforming to the StreamTech spec")]
         [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(string), Description = "No order found")]
         [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(string), Description = "Multiple Orders found matching the OrderNumber")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(string), Description = "The server is experiencing errors")]
 
-        public async Task<HttpResponseMessage> ProcessShipment([FromBody]string value)
+        public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, [FromBody]StreamTechRequest streamTechRequest)
         {
-            var request = new StreamTechRequest().Request;
-
+            var request = streamTechRequest.Request;
             try
             {
-                IEnumerable<OrderEntity> orders = orderRepository.GetOrders(request.MessageNumber);
+                IEnumerable<OrderEntity> orders = orderRepository.GetOrders(barcode);
 
                 ComparisonResult comparisonResult = orders.CompareCountTo(1);
 
@@ -97,12 +99,14 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
                         if (processResult.IsSuccessful)
                         {
                             var processedShipment = processResult.Shipment;
+                            var processedShipmentAdapter = carrierShipmentAdapterFactory.Get(processedShipment);
+
                             responseData.VerifyBarcodes = processedShipment.TrackingNumber;
                             responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
                             responseData.ExpectedWeight = processedShipment.TotalWeight;
                             //responseData.MinimumWeight = processedShipment.TotalWeight;
                             //responseData.MaximumWeight = processedShipment.TotalWeight;
-                            responseData.ZplLabel = "";
+                            responseData.ZplLabel = apiLabelFactory.GetLabels(processedShipmentAdapter).First().Image;
                         }
                         else
                         {
@@ -111,21 +115,15 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
                             responseData.ErrorDescription = ex.Message;
                         }
 
-                        return Request.CreateResponse(HttpStatusCode.OK, new StreamTechResponse()
-                        {
-                            Response = responseData
-                        });
+                        return CreateResponse(Request, HttpStatusCode.OK, responseData);
 
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
-                        return Request.CreateResponse(HttpStatusCode.Conflict, new StreamTechResponse()
+                        return CreateResponse(Request, HttpStatusCode.Conflict, new ResponseData()
                         {
-                            Response = new ResponseData()
-                            {
-                                MessageNumber = request.MessageNumber,
-                                ErrorCode = "409",
-                                ErrorDescription = "Multiple Orders found matching the OrderNumber"
-                            }
+                            MessageNumber = request.MessageNumber,
+                            ErrorCode = "409",
+                            ErrorDescription = "Multiple Orders found matching the OrderNumber"
                         });
                     default:
                         // No orders found, return 404
@@ -140,18 +138,19 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
             catch (Exception ex)
             {
                 log.Error("An error occured getting orders", ex);
-                return Request.CreateResponse(HttpStatusCode.InternalServerError, new StreamTechResponse()
+
+                return CreateResponse(Request, HttpStatusCode.InternalServerError, new ResponseData()
                 {
-                    Response = new ResponseData()
-                    {
-                        MessageNumber = request.MessageNumber,
-                        ErrorCode = "500",
-                        ErrorDescription = ex.Message
-                    }
+                    MessageNumber = request.MessageNumber,
+                    ErrorCode = "500",
+                    ErrorDescription = ex.Message
                 });
             }
         }
 
+        /// <summary>
+        /// Create a response using the given data
+        /// </summary>
         private static HttpResponseMessage CreateResponse(HttpRequestMessage request, HttpStatusCode statusCode, ResponseData responseData)
         {
             return request.CreateResponse(statusCode, new StreamTechResponse()

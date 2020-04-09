@@ -91,7 +91,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
         public double MaximumWeight { get; set; }
 
         /// <summary>
-        /// Label Type Values (ZPL, XML:<ZPL Template Name>) or Blank, Default = ZPL
+        /// Label Type
         /// </summary>
         public string LabelType => "ZPL";
 
@@ -106,7 +106,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
         public string LabelDestinationCharset => "NONE";
 
         /// <summary>
-        /// Variable length label delimited by ^XA<DATA>^XZ 
+        /// Variable length label
         /// </summary>
         public string ZplLabel { get; set; }
 
