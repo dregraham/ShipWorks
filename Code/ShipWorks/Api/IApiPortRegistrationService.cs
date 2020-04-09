@@ -11,8 +11,8 @@
         bool Register(long portNumber);
 
         /// <summary>
-        /// Register the port configured in ApiSettings running the process as admin
+        /// Register the given port running the process as admin
         /// </summary>
-        bool RegisterAsAdmin();
+        bool RegisterAsAdmin(long portNumber);
     }
 }

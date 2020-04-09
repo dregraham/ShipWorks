@@ -8,7 +8,7 @@
         /// <summary>
         /// Is the service running
         /// </summary>
-        bool IsRunning { get; }
+        ApiStatus Status { get; }
 
         /// <summary>
         /// The port the service is currently running on

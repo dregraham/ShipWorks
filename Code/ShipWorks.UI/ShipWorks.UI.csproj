@@ -231,6 +231,7 @@
       <DependentUpon>WarehouseSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TokenTextBox.cs" />
+    <Compile Include="Controls\UACButton.cs" />
     <Compile Include="Controls\UnitTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
@@ -581,6 +582,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Controls\UACButton.xaml" />
     <Page Include="Themes\Controls\UnitTextBox.xaml" />
     <Page Include="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>

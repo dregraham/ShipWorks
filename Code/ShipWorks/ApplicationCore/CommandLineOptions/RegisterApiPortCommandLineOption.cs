@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using log4net;
@@ -25,9 +26,15 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
+            long port = 8081;
+
+            if (long.TryParse(args.FirstOrDefault(), out long portNumber) && portNumber > 0)
+            {
+                port = portNumber;
+            }
+
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                long port = scope.Resolve<IApiSettingsRepository>().Load().Port;
                 bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(port);
 
                 if (!registrationSuccess)
