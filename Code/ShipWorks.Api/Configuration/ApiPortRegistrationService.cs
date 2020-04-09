@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore.CommandLineOptions;
 
 namespace ShipWorks.Api.Configuration
@@ -13,6 +14,16 @@ namespace ShipWorks.Api.Configuration
     [Component]
     public class ApiPortRegistrationService : IApiPortRegistrationService
     {
+        private readonly ILog log;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApiPortRegistrationService(Func<Type, ILog> logFactory)
+        {
+            log = logFactory(typeof(ApiPortRegistrationService));
+        }
+
         /// <summary>
         /// Register the given port
         /// </summary>
@@ -43,8 +54,9 @@ namespace ShipWorks.Api.Configuration
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("Error while attempting to register port as admin.", ex);
                 return false;
             }
 
