@@ -26,16 +26,14 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         /// </summary>
         public Task Execute(List<string> args)
         {
-            long port = 8081;
-
-            if (long.TryParse(args.FirstOrDefault(), out long portNumber) && portNumber > 0)
-            {
-                port = portNumber;
-            }
-
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(port);
+                // If a part was passed as the first arg use it otherwise load port from repo
+                long port = long.TryParse(args.FirstOrDefault(), out long portNumber) && portNumber > 0 ? 
+                    portNumber : 
+                    scope.Resolve<IApiSettingsRepository>().Load().Port;
+
+                bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port);
 
                 if (!registrationSuccess)
                 {
