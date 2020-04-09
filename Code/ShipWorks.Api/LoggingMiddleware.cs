@@ -86,6 +86,9 @@ namespace ShipWorks.Api
             return JsonConvert.SerializeObject(new ResponseLogEntry(statusCode, body));
         }
 
+        /// <summary>
+        /// Logs the request and response in IISLog format
+        /// </summary>
         private void LogContext(IOwinContext context, DateTime now)
         {
             List<string> dataToLog = new List<string>
@@ -121,6 +124,9 @@ namespace ShipWorks.Api
                 !path.Contains("swagger");
         }
 
+        /// <summary>
+        /// ResponseLogEntry
+        /// </summary>
         public class ResponseLogEntry
         {
             /// <summary>
