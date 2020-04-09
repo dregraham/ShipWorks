@@ -151,32 +151,27 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 }
 
                 long portNumber = portValidationResult.Value;
-                long oldPort = apiSettings.Port;
 
                 Status = ApiStatus.Updating;
 
-                // save the setting to disk and then run a process as admin to open that port
-                apiSettings.Port = portNumber;
-                try
-                {
-                    settingsRepository.Save(apiSettings);
-                }
-                catch (Exception)
-                {
-                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
-                }
-
-                bool result = apiPortRegistrationService.RegisterAsAdmin();
+                bool result = apiPortRegistrationService.RegisterAsAdmin(portNumber);
 
                 if (!result)
                 {
-                    // if it failed to open the port we need to roll back the setting on disk 
-                    apiSettings.Port = oldPort;
-                    settingsRepository.Save(apiSettings);
-
                     messageHelper.ShowError($"Failed to register port {portNumber}.");
-
                     return;
+                }
+                else
+                {
+                    apiSettings.Port = portNumber;
+                    try
+                    {
+                        settingsRepository.Save(apiSettings);
+                    }
+                    catch (Exception)
+                    {
+                        messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                    }
                 }
 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
