@@ -1,7 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
+namespace ShipWorks.Api.Partner.StreamTech
 {
     /// <summary>
     /// Request data from the StreamTech system

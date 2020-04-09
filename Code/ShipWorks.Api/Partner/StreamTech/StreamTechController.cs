@@ -17,13 +17,13 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
 using Swashbuckle.Swagger.Annotations;
 
-namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
+namespace ShipWorks.Api.Partner.StreamTech
 {
     /// <summary>
     /// Controller for StreamTech
     /// </summary>
     [ApiVersion("1.0")]
-    [RoutePrefix("shipworks/api/v{version:apiVersion}/thirdparty/streamtech")]
+    [RoutePrefix("shipworks/api/v{version:apiVersion}/partner/streamtech")]
     [Obfuscation(Exclude = true)]
     public class StreamTechController : ApiController
     {
@@ -32,6 +32,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
         private readonly IApiShipmentProcessor shipmentProcessor;
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly IApiLabelFactory apiLabelFactory;
+        private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly ILog log;
 
         /// <summary>
@@ -43,6 +44,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
             IApiShipmentProcessor shipmentProcessor,
             ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IApiLabelFactory apiLabelFactory,
+            IShippingProfileRepository shippingProfileRepository,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
@@ -50,6 +52,7 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
             this.shipmentProcessor = shipmentProcessor;
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.apiLabelFactory = apiLabelFactory;
+            this.shippingProfileRepository = shippingProfileRepository;
             log = logFactory(typeof(StreamTechController));
         }
 
@@ -80,6 +83,10 @@ namespace ShipWorks.Api.ThirdPartyIntegrations.StreamTech
                         ShipmentEntity shipment = shipmentFactory.Create(orders.First());
 
                         var shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
+
+                        shippingProfileRepository.GetAll()
+                            .Where(p => p.Shortcut.Barcode == request.PackageType)
+                            .FirstOrDefault()?.Apply(shipment);
 
                         foreach (IPackageAdapter package in shipmentAdapter.GetPackageAdapters())
                         {
