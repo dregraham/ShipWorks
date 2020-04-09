@@ -11,10 +11,12 @@ namespace ShipWorks.Shipping.Services.Telemetry
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Express1Usps)]
     public class PostalTelemetryMutator : ICarrierTelemetryMutator
     {
+        /// <summary>
+        /// Sets the carrier specific telemetry properties for Postal
+        /// </summary>
         public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
-            SetPackageTelemetry(telemetryEvent, shipment);
         }
 
         /// <summary>
@@ -38,14 +40,6 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NoPostage", postalShipment.NoPostage.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PackagingType", EnumHelper.GetDescription((PostalPackagingType)postalShipment.PackagingType));
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Memo1", EnumHelper.GetDescription((PostalServiceType)postalShipment.Service));
-        }
-
-        /// <summary>
-        /// Sets the carrier specific package telemetry properties
-        /// </summary>
-        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
-        {
-           //There are no postal specific fields
         }
     }
 }
