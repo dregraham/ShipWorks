@@ -34,7 +34,7 @@ namespace ShipWorks.Api.Configuration.Logging
         /// </summary>
         public override async Task Invoke(IOwinContext context)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
 
             bool shouldLog = ShouldLog(context);
 
