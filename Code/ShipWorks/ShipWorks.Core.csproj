@@ -884,6 +884,8 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
+    <Compile Include="ApplicationCore\Logging\ApiLogFilter.cs" />
+    <Compile Include="ApplicationCore\Logging\ShipWorksLevelRangeFilter.cs" />
     <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
     <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
