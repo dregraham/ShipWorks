@@ -7,6 +7,9 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Set the iParcel specific telemetry
+    /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.iParcel)]
     public class iParcelTelemetryMutator : ICarrierTelemetryMutator
     {

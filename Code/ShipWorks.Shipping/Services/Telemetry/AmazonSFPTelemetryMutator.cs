@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Carriers.Amazon.SFP.Enums;
 namespace ShipWorks.Shipping.Services.Telemetry
 {
     /// <summary>
-    /// Sets the Amazon specific telemetry
+    /// Sets the AmazonSFP specific telemetry
     /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.AmazonSFP)]
     public class AmazonSFPTelemetryMutator : ICarrierTelemetryMutator

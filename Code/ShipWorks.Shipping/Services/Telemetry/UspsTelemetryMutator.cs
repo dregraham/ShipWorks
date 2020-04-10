@@ -6,6 +6,9 @@ using ShipWorks.Filters.Content.Conditions.Shipments;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Sets the USPS specific telemetry
+    /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Usps)]
     public class UspsTelemetryMutator : PostalTelemetryMutator
     {

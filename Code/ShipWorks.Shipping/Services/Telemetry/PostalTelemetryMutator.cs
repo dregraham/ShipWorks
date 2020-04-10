@@ -6,6 +6,9 @@ using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Sets the Postal specific telemetry
+    /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.PostalWebTools)]
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Express1Endicia)]
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Express1Usps)]

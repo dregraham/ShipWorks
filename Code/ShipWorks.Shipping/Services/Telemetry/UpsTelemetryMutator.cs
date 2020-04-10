@@ -8,6 +8,9 @@ using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Sets the UPS specific telemetry
+    /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.UpsOnLineTools)]
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.UpsWorldShip)]
     public class UpsTelemetryMutator : ICarrierTelemetryMutator

@@ -6,6 +6,9 @@ using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Sets the OnTrac specific telemetry
+    /// </summary>
     public class OnTracTelemetryMutator : ICarrierTelemetryMutator
     {
         /// <summary>
