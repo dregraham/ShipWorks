@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.IO;
+using System.Reflection;
 using Interapptive.Shared.Extensions;
 using Microsoft.Owin;
 
@@ -13,11 +14,10 @@ namespace ShipWorks.Api.Configuration.Logging
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="request"></param>
-        public RequestLogEntry(IOwinRequest request)
+        public RequestLogEntry(string path, string body)
         {
-            Path = request.Path.ToString();
-            Body = request.Body.ConvertToString();
+            Path = path;
+            Body = body;
         }
 
         /// <summary>

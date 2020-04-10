@@ -9,6 +9,7 @@ using Microsoft.Owin;
 using Newtonsoft.Json;
 using ShipWorks.ApplicationCore.Logging;
 using System.Reflection;
+using Interapptive.Shared.Extensions;
 
 namespace ShipWorks.Api.Configuration.Logging
 {
@@ -18,7 +19,7 @@ namespace ShipWorks.Api.Configuration.Logging
     [Obfuscation(Exclude = true)]
     public class LoggingMiddleware : OwinMiddleware
     {
-        private readonly IApiLogEntry shipworksApiLog;
+        private IApiLogEntry logEntry;
         private readonly ILog middlewareLogger;
 
         /// <summary>
@@ -27,7 +28,6 @@ namespace ShipWorks.Api.Configuration.Logging
         public LoggingMiddleware(OwinMiddleware next)
             : base(next)
         {
-            shipworksApiLog = new LogEntryFactory().GetLogEntry(ApiLogSource.ShipWorksAPI, "API", LogActionType.Other);
             middlewareLogger = LogManager.GetLogger("ApiMiddleware");
         }
 
@@ -42,7 +42,22 @@ namespace ShipWorks.Api.Configuration.Logging
 
             if (shouldLog)
             {
-                shipworksApiLog.LogRequest(BuildRequestLog(context.Request), "json");
+                logEntry = new LogEntryFactory().GetLogEntry(ApiLogSource.ShipWorksAPI, "API", LogActionType.Other);
+
+                MemoryStream requestStream = new MemoryStream();
+                context.Request.Body.CopyTo(requestStream);
+                context.Request.Body = requestStream;
+
+                using (MemoryStream logStream = new MemoryStream())
+                {
+                    requestStream.CopyTo(logStream);
+
+                    // Roll all the streams back
+                    requestStream.Seek(0, SeekOrigin.Begin);
+                    logStream.Seek(0, SeekOrigin.Begin);
+
+                    logEntry.LogRequest(BuildRequestLog(context.Request.Path.ToString(), logStream.ConvertToString()), "json");
+                }
             }
 
             // Convert write only context stream to readable memory stream
@@ -63,7 +78,7 @@ namespace ShipWorks.Api.Configuration.Logging
 
             if (shouldLog)
             {
-                shipworksApiLog.LogResponse(BuildResponseLog(context.Response.StatusCode, responseBody), "json");
+                logEntry.LogResponse(BuildResponseLog(context.Response.StatusCode, responseBody), "json");
             }
 
             LogContext(context, now);
@@ -72,19 +87,14 @@ namespace ShipWorks.Api.Configuration.Logging
         /// <summary>
         /// Build a string containing the request that gets logged
         /// </summary>
-        string BuildRequestLog(IOwinRequest request)
-        {
-            return JsonConvert.SerializeObject(new RequestLogEntry(request));
-        }
-
+        string BuildRequestLog(string path, string body) =>
+            JsonConvert.SerializeObject(new RequestLogEntry(path, body));
 
         /// <summary>
         /// Build a string containing the response that gets logged
         /// </summary>
-        private string BuildResponseLog(int statusCode, string body)
-        {
-            return JsonConvert.SerializeObject(new ResponseLogEntry(statusCode, body));
-        }
+        private string BuildResponseLog(int statusCode, string body) =>
+            JsonConvert.SerializeObject(new ResponseLogEntry(statusCode, body));
 
         /// <summary>
         /// Logs the request and response in IISLog format

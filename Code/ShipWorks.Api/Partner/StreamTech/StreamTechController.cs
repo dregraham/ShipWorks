@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.ModelBinding;
 using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
@@ -15,6 +17,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
+using Swashbuckle.Swagger;
 using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.Partner.StreamTech
@@ -68,7 +71,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(string), Description = "Multiple Orders found matching the OrderNumber")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(string), Description = "The server is experiencing errors")]
 
-        public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, [FromBody]StreamTechRequest streamTechRequest)
+        public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, StreamTechRequest streamTechRequest)
         {
             var request = streamTechRequest.Request;
             try
@@ -111,6 +114,10 @@ namespace ShipWorks.Api.Partner.StreamTech
                             responseData.VerifyBarcodes = processedShipment.TrackingNumber;
                             responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
                             responseData.ExpectedWeight = processedShipment.TotalWeight;
+
+                            // This feature is only available in some StreamTech situations
+                            // in the future we might want to have a user configurable option
+                            // to set tolerance for what we consider max and min allowed weights 
                             //responseData.MinimumWeight = processedShipment.TotalWeight;
                             //responseData.MaximumWeight = processedShipment.TotalWeight;
                             responseData.ZplLabel = apiLabelFactory.GetLabels(processedShipmentAdapter).First().Image;
@@ -118,8 +125,8 @@ namespace ShipWorks.Api.Partner.StreamTech
                         else
                         {
                             Exception ex = processResult.Error;
-                            responseData.ErrorCode = "99";
-                            responseData.ErrorDescription = ex.Message;
+                            responseData.ErrorCode = 99;
+                            responseData.ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes(ex.Message));
                         }
 
                         return CreateResponse(Request, HttpStatusCode.OK, responseData);
@@ -129,16 +136,16 @@ namespace ShipWorks.Api.Partner.StreamTech
                         return CreateResponse(Request, HttpStatusCode.Conflict, new ResponseData()
                         {
                             MessageNumber = request.MessageNumber,
-                            ErrorCode = "409",
-                            ErrorDescription = "Multiple Orders found matching the OrderNumber"
-                        });
+                            ErrorCode = 409,
+                            ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes("Multiple Orders found matching the OrderNumber"))
+                        }); ;
                     default:
                         // No orders found, return 404
                         return CreateResponse(Request, HttpStatusCode.NotFound, new ResponseData()
                         {
                             MessageNumber = request.MessageNumber,
-                            ErrorCode = "404",
-                            ErrorDescription = "No order found"
+                            ErrorCode = 404,
+                            ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes("No order found"))
                         });
                 }
             }
@@ -149,12 +156,12 @@ namespace ShipWorks.Api.Partner.StreamTech
                 return CreateResponse(Request, HttpStatusCode.InternalServerError, new ResponseData()
                 {
                     MessageNumber = request.MessageNumber,
-                    ErrorCode = "500",
-                    ErrorDescription = ex.Message
+                    ErrorCode = 500,
+                    ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes(ex.Message))
                 });
             }
         }
-
+                
         /// <summary>
         /// Create a response using the given data
         /// </summary>

@@ -40,8 +40,20 @@ namespace ShipWorks.Api.Orders.Shipments
         /// </summary>
         /// <param name="carrierShipmentAdapter"></param>
         /// <returns></returns>
-        public IEnumerable<LabelData> GetLabels(ICarrierShipmentAdapter carrierShipmentAdapter) =>
-            GetLabelConsumerIds(carrierShipmentAdapter).SelectMany(p => GetLabels(p));
+        public IEnumerable<LabelData> GetLabels(ICarrierShipmentAdapter carrierShipmentAdapter)
+        {
+            IEnumerable<long> consumerIDs = GetLabelConsumerIds(carrierShipmentAdapter);
+
+            List<LabelData> result = new List<LabelData>();
+
+            foreach (long consumerID in consumerIDs)
+            {
+                result.AddRange(GetLabels(consumerID));
+            }
+
+            return result;
+        }
+            
 
         /// <summary>
         /// Get the label ConsumerIds for the given adapter
