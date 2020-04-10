@@ -1,8 +1,11 @@
+using System.Reflection;
+
 namespace ShipWorks.Api.Configuration
 {
     /// <summary>
     /// Settings for the ShipWorks API
     /// </summary>
+    [Obfuscation(Exclude = true, ApplyToMembers = true, StripAfterObfuscation = false)]
     public class ApiSettings
     {
         /// <summary>
