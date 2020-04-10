@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Services.Telemetry;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -15,14 +17,16 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     {
         private readonly ILabelRetrievalStep labelRetrievalStep;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
+        private IIndex<ShipmentTypeCode, ICarrierTelemetryMutator> mutator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TelemetricLabelRetrievalStep(ILabelRetrievalStep labelRetrievalStep, ICarrierShipmentAdapterFactory shipmentAdapterFactory)
+        public TelemetricLabelRetrievalStep(ILabelRetrievalStep labelRetrievalStep, ICarrierShipmentAdapterFactory shipmentAdapterFactory, IIndex<ShipmentTypeCode, ICarrierTelemetryMutator> mutator)
         {
             this.labelRetrievalStep = labelRetrievalStep;
             this.shipmentAdapterFactory = shipmentAdapterFactory;
+            this.mutator = mutator;
         }
 
         /// <summary>
@@ -64,6 +68,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             SetPackageTelemetryProperties(telemetryEvent, shipmentAdapter.GetPackageAdapters());
             telemetryEvent.AddProperty("StoreType", EnumHelper.GetDescription(shipmentAdapter.Store.StoreTypeCode));
             telemetryEvent.AddProperty("Label.IsReturn", shipment.ReturnShipment.ToString());
+
+            mutator[shipment.ShipmentTypeCode].MutateTelemetry(telemetryEvent, shipment);
 
             DateTime? verifiedDate = shipment.Order?.VerifiedDate;
 

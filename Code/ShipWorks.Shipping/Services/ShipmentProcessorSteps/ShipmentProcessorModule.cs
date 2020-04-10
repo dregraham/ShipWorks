@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Autofac.Features.Indexed;
+using ShipWorks.Shipping.Services.Telemetry;
 
 namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 {
@@ -10,8 +12,8 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterDecorator<ILabelRetrievalStep>(
-                (c, inner) => new TelemetricLabelRetrievalStep(inner, c.Resolve<ICarrierShipmentAdapterFactory>()),
-                "LabelRetrievalStep");
+                (c, inner) => new TelemetricLabelRetrievalStep(inner, c.Resolve<ICarrierShipmentAdapterFactory>(), 
+                    c.Resolve<IIndex<ShipmentTypeCode, ICarrierTelemetryMutator>>()), "LabelRetrievalStep");
         }
     }
 }
