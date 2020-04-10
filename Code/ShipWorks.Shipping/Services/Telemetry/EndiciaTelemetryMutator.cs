@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Endicia specific shipment telemetry properties
         /// </summary>
-        public override void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        protected override void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             base.SetShipmentTelemetry(telemetryEvent, shipment);
             var endiciaShipment = shipment.Postal.Endicia;

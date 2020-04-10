@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Postal specific shipment telemetry properties
         /// </summary>
-        public virtual void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        protected virtual void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
         {
             var postalShipment = shipment.Postal;
             var shipmentTypeCode = shipment.ShipmentTypeCode.ToString();
