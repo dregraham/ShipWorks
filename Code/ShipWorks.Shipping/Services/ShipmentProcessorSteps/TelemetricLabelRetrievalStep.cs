@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
     {
         private readonly ILabelRetrievalStep labelRetrievalStep;
         private readonly ICarrierShipmentAdapterFactory shipmentAdapterFactory;
-        private IIndex<ShipmentTypeCode, ICarrierTelemetryMutator> mutator;
+        private readonly IIndex<ShipmentTypeCode, ICarrierTelemetryMutator> mutator;
 
         /// <summary>
         /// Constructor
