@@ -330,14 +330,6 @@ namespace ShipWorks.Shipping.Settings
 
                 controlPanel.Controls.Add(upsOneBalanceControl);
 
-                var upsTrademarkInfo = new Label();
-                upsTrademarkInfo.Dock = DockStyle.Bottom;
-                upsTrademarkInfo.Font = new System.Drawing.Font("Tahoma", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-                upsTrademarkInfo.ForeColor = System.Drawing.SystemColors.ControlDark;
-                upsTrademarkInfo.Text = "UPS, the UPS Shield trademark, the UPS Ready mark, the UPS Developer Kit mark and" +
-                                        " the Color Brown are trademarks of United Parcel Service of America, Inc. All Ri" +
-                                        "ghts Reserved.";
-                controlPanel.Controls.Add(upsTrademarkInfo);
                 return controlPanel;
             }
 
