@@ -6,6 +6,9 @@ using ShipWorks.Shipping.Carriers.Amazon.SWA;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
+    /// <summary>
+    /// Sets the AmazonSWA specific telemetry
+    /// </summary>
     public class AmazonSWATelemetryMutator : ICarrierTelemetryMutator
     {
         /// <summary>
