@@ -151,9 +151,12 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
+                var originalPort = apiSettings.Port.ToString();
+
                 GenericResult<long> portValidationResult = ValidatePort();
                 if (portValidationResult.Failure)
                 {
+                    Port = originalPort;
                     return;
                 }
 
@@ -165,7 +168,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
 
                 if (!result)
                 {
+                    Status = apiService.Status;
                     messageHelper.ShowError($"Failed to register port {portNumber}.");
+                    Port = originalPort;
                     return;
                 }
 
@@ -176,14 +181,17 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 }
                 catch (Exception ex)
                 {
+                    Port = originalPort;
+                    Status = apiService.Status;
                     log.Error("An error occurred saving api settings.", ex);
                     messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                    return;
                 }
                 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
                 string fail = "Failed to update the ShipWorks API port number.";
 
-                WaitForStatusToUpdate(expectedStatus, fail);
+                Status = apiService.Status;
             }
         }
 
@@ -224,6 +232,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 Thread.Sleep(1000);
             }
 
+            Status = apiService.Status;
             messageHelper.ShowError(failureMessage);
         }
 
