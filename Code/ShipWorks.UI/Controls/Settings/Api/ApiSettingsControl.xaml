@@ -64,9 +64,9 @@
             <TextBlock Grid.Row="0" 
                        Grid.Column="1"
                        Text="{Binding Status, Converter={StaticResource EnumDescription}}"
-                       HorizontalAlignment="Center"
+                       HorizontalAlignment="Left"
                        TextAlignment="Center"
-                       Margin="10 0 10 10"/>
+                       Margin="5 0 10 10"/>
             <Button Grid.Row="0" 
                     Grid.Column="2"
                     Content="Start"
@@ -85,7 +85,7 @@
             <TextBox Grid.Row="1"
                      Grid.Column="1"
                      Text="{Binding Port}"
-                     Margin="10 0 10 0"
+                     Margin="5 0 10 0"
                      VerticalContentAlignment="Center"
                      Height="23"/>
             <controls:UACButton Grid.Row="1"

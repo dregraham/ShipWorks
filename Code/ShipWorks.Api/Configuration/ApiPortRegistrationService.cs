@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
+using log4net;
 using ShipWorks.ApplicationCore.CommandLineOptions;
 
 namespace ShipWorks.Api.Configuration
@@ -13,6 +14,16 @@ namespace ShipWorks.Api.Configuration
     [Component]
     public class ApiPortRegistrationService : IApiPortRegistrationService
     {
+        private readonly ILog log;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ApiPortRegistrationService(Func<Type, ILog> logFactory)
+        {
+            log = logFactory(typeof(ApiPortRegistrationService));
+        }
+
         /// <summary>
         /// Register the given port
         /// </summary>
@@ -24,15 +35,15 @@ namespace ShipWorks.Api.Configuration
         }
 
         /// <summary>
-        /// Register the port configured in ApiSettings running the process as admin
+        /// Register the given port running the process as admin
         /// </summary>
-        public bool RegisterAsAdmin()
+        public bool RegisterAsAdmin(long portNumber)
         {
             try
             {
                 // We need to launch the process to elevate ourselves
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName}");
+                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName} {portNumber}");
                 process.StartInfo.Verb = "runas";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.Start();
@@ -43,8 +54,9 @@ namespace ShipWorks.Api.Configuration
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                log.Error("Error while attempting to register port as admin.", ex);
                 return false;
             }
 
