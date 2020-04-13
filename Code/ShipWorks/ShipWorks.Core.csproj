@@ -1250,6 +1250,12 @@
     <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidatorFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.Designer.cs">
+      <DependentUpon>UpsBannerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
@@ -1810,15 +1816,6 @@
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidator.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoAccountType.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoSource.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
@@ -2142,7 +2139,6 @@
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
@@ -2158,25 +2154,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IPromoClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IUpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoWebClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.Designer.cs">
-      <DependentUpon>UpsPromoFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoPolicy.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.Designer.cs">
-      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
@@ -8542,12 +8519,6 @@
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsShipmentCharacteristicsControl.resx">
       <DependentUpon>UpsShipmentCharacteristicsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.resx">
-      <DependentUpon>UpsPromoFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.resx">
-      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsDryIceControl.resx">
       <DependentUpon>UpsDryIceControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -9332,19 +9303,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Shipping\Carriers\UPS\OpenAccount\Wsdl\UPSSecurity.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\common.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\Error1.1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl" />
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Stores\Platforms\CsCart\shipworks3.php" />

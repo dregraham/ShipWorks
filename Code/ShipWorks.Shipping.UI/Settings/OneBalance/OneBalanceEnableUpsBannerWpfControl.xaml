@@ -23,12 +23,12 @@
                 <ColumnDefinition Width="350"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Enable your free UPS from ShipWorks account today and start saving money on labels. Setting up your account is easy and only takes about a minute." TextWrapping="Wrap"/>
+            <TextBlock Text= "Take advantage of reduced rates with UPS® shipping labels for orders across all sales channels. Get started today!" TextWrapping="Wrap"/>
             <Button HorizontalAlignment="Right" Grid.Column="1" VerticalAlignment="Center" Command="{Binding ShowSetupWizardCommand}">
                 <Button.CommandParameter>
                     <s:ShipmentTypeCode>UpsOnLineTools</s:ShipmentTypeCode>
                 </Button.CommandParameter>
-                <TextBlock Text="Enable UPS" Margin="5,2,5,2"/>
+                <TextBlock Text="Add UPS" Margin="5,2,5,2"/>
             </Button>
         </Grid>
     </StackPanel>

@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Carriers.UPS
 {
-    partial class OneBalanceUpsBannerControl
+    partial class UpsBannerControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -35,7 +35,7 @@
             // 
             // button1
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.Location = new System.Drawing.Point(507, 38);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(90, 23);
@@ -47,22 +47,21 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Tahoma", 12.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.label1.Location = new System.Drawing.Point(7, 5);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(401, 21);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Save up to 62% off standard UPS label prices";
+            this.label1.Text = "Connect your own account";
             // 
             // detailLabel
             // 
-            this.detailLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.detailLabel.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
             this.detailLabel.Location = new System.Drawing.Point(7, 38);
             this.detailLabel.Name = "detailLabel";
             this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
-            this.detailLabel.Text = "Take advantage of reduced rates with UPS® shipping labels for orders across all" +
-                " sales channels. Get started today!";
+            this.detailLabel.Text = "If you already have a UPS® account number, you can add your existing UPS® account to ShipWorks.\r\n";
             // 
             // OneBalanceUpsBannerControl
             // 

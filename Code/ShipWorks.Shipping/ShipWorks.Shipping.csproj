@@ -523,8 +523,6 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
-    <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
-    <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
     <Compile Include="Carriers\ShipmentPreProcessorFactory.cs" />
     <Compile Include="Carriers\Ups\WorldShip\WorldShipSetupWizard.cs">
@@ -647,7 +645,6 @@
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentType.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonMwsSignature.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRatingService.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPShipmentRequestDetailsFactory.cs" />
@@ -696,7 +693,6 @@
     <Compile Include="Carriers\Postal\Usps\UspsRatingService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsRatingService.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoPolicy.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />
