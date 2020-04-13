@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NonRectangular", postalShipment.NonRectangular.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NoPostage", postalShipment.NoPostage.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PackagingType", EnumHelper.GetDescription((PostalPackagingType) postalShipment.PackagingType));
-            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Memo1", EnumHelper.GetDescription((PostalServiceType) postalShipment.Service));
+            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Service", EnumHelper.GetDescription((PostalServiceType) postalShipment.Service));
         }
     }
 }
