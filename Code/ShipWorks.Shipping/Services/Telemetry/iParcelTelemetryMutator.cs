@@ -45,8 +45,9 @@ namespace ShipWorks.Shipping.Services.Telemetry
         {
             int packageIndex = 0;
 
-            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
+            foreach (var iParcelPackageEntity in shipment.IParcel.Packages)
             {
+                var package = (IParcelPackageEntity) iParcelPackageEntity;
                 packageIndex++;
 
                 telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());
