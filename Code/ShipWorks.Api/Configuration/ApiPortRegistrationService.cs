@@ -27,11 +27,18 @@ namespace ShipWorks.Api.Configuration
         /// <summary>
         /// Register the given port
         /// </summary>
-        public bool Register(long portNumber)
+        public bool Register(long portNumber, bool useHttps)
         {
-            string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
+            if (useHttps)
+            {
+                return RegisterWithHttps(portNumber);
+            }
+            else
+            {
+                string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
 
-            return NetshCommand.Execute(command) == 0;
+                return NetshCommand.Execute(command) == 0;
+            }
         }
 
         /// <summary>
@@ -64,6 +71,7 @@ namespace ShipWorks.Api.Configuration
         }
 
         public bool RegisterWithHttpsAsAdmin(long portNumber)
+        private bool RegisterWithHttps(long portNumber)
         {
             throw new NotImplementedException();
         }

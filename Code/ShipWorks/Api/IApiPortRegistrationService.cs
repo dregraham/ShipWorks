@@ -8,16 +8,11 @@
         /// <summary>
         /// Register the given port number
         /// </summary>
-        bool Register(long portNumber);
+        bool Register(long portNumber, bool useHttps);
 
         /// <summary>
         /// Register the given port running the process as admin
         /// </summary>
         bool RegisterAsAdmin(long portNumber);
-
-        /// <summary>
-        /// /// Register the given port with https running the process as admin
-        /// </summary>
-        bool RegisterWithHttpsAsAdmin(long portNumber);
     }
 }
