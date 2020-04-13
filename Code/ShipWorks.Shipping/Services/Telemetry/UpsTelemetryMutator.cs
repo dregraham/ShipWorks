@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty("Label.Ups.ShipmentChargeType", EnumHelper.GetDescription((UpsShipmentChargeType) upsShipment.ShipmentChargeType));
             telemetryEvent.AddProperty("Label.Ups.ShipperRelease", upsShipment.ShipperRelease.ToString());
             telemetryEvent.AddProperty("Label.Ups.PayorPostalCode", EnumHelper.GetDescription((UpsPostalSubclassificationType) upsShipment.Subclassification));
-            telemetryEvent.AddProperty("Label.Ups.WorldShipStatus", EnumHelper.GetDescription((WorldShipStatusType) upsShipment.WorldShipStatus));
+            telemetryEvent.AddProperty("Label.Ups.WorldShipStatus", ((WorldShipStatusType) upsShipment.WorldShipStatus).ToString());
         }
 
         /// <summary>
