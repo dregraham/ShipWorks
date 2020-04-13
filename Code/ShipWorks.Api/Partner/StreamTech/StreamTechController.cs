@@ -12,6 +12,7 @@ using log4net;
 using Microsoft.Web.Http;
 using ShipWorks.Api.Orders;
 using ShipWorks.Api.Orders.Shipments;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
@@ -34,6 +35,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         private readonly ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory;
         private readonly IApiLabelFactory apiLabelFactory;
         private readonly IShippingProfileRepository shippingProfileRepository;
+        private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly ILog log;
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace ShipWorks.Api.Partner.StreamTech
             ICarrierShipmentAdapterFactory carrierShipmentAdapterFactory,
             IApiLabelFactory apiLabelFactory,
             IShippingProfileRepository shippingProfileRepository,
+            IShipmentTypeManager shipmentTypeManager,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
@@ -54,6 +57,7 @@ namespace ShipWorks.Api.Partner.StreamTech
             this.carrierShipmentAdapterFactory = carrierShipmentAdapterFactory;
             this.apiLabelFactory = apiLabelFactory;
             this.shippingProfileRepository = shippingProfileRepository;
+            this.shipmentTypeManager = shipmentTypeManager;
             log = logFactory(typeof(StreamTechController));
         }
 
@@ -185,6 +189,9 @@ namespace ShipWorks.Api.Partner.StreamTech
                 package.DimsWidth = request.Width;
                 package.DimsHeight = request.Height;
             }
+
+            // Force ZPL because its the only format streamtech supports
+            shipmentTypeManager.Get(shipment).SaveRequestedLabelFormat(ThermalLanguage.ZPL, shipment);
 
             return shipmentProcessor.Process(shipment);
         }
