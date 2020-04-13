@@ -2,7 +2,7 @@
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Amazon.SFP.Enums;
 
 namespace ShipWorks.Shipping.Services.Telemetry
@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
         }
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific shipment telemetry properties
         /// </summary>
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var amazonSfpShipment = shipment.AmazonSFP;
 

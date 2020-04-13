@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.Services.Telemetry
@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties for Postal
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
         }
@@ -25,14 +25,14 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Postal specific shipment telemetry properties
         /// </summary>
-        protected virtual void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        protected virtual void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var postalShipment = shipment.Postal;
             var shipmentTypeCode = shipment.ShipmentTypeCode.ToString();
 
-            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Confirmation", EnumHelper.GetDescription((PostalConfirmationType)postalShipment.Confirmation));
+            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Confirmation", EnumHelper.GetDescription((PostalConfirmationType) postalShipment.Confirmation));
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.CustomsContentDescription", postalShipment.CustomsContentDescription);
-            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PostalCustomsContentType", EnumHelper.GetDescription((PostalCustomsContentType)postalShipment.CustomsContentType));
+            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PostalCustomsContentType", EnumHelper.GetDescription((PostalCustomsContentType) postalShipment.CustomsContentType));
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Insurance", postalShipment.Insurance.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.InsuranceValue", postalShipment.InsuranceValue.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Memo1", postalShipment.Memo1);
@@ -41,8 +41,8 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NonMachinable", postalShipment.NonMachinable.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NonRectangular", postalShipment.NonRectangular.ToString());
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.NoPostage", postalShipment.NoPostage.ToString());
-            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PackagingType", EnumHelper.GetDescription((PostalPackagingType)postalShipment.PackagingType));
-            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Memo1", EnumHelper.GetDescription((PostalServiceType)postalShipment.Service));
+            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.PackagingType", EnumHelper.GetDescription((PostalPackagingType) postalShipment.PackagingType));
+            telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Memo1", EnumHelper.GetDescription((PostalServiceType) postalShipment.Service));
         }
     }
 }

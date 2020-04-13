@@ -2,13 +2,13 @@
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Services.Telemetry
 {
     /// <summary>
-    /// Sets Asendia-specific telemetry
+    /// Sets Asendia specific telemetry
     /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.Asendia)]
     public class AsendiaTelemetryMutator : ICarrierTelemetryMutator
@@ -16,22 +16,20 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
         }
 
         /// <summary>
-        /// Sets Asendia-specific shipment telemetry
+        /// Sets Asendia specific shipment telemetry
         /// </summary>
-        /// <param name="telemetryEvent"></param>
-        /// <param name="shipment"></param>
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var asendiaShipment = shipment.Asendia;
 
             telemetryEvent.AddProperty("Label.Asendia.AsendiaAccountID", asendiaShipment.AsendiaAccountID.ToString());
-            telemetryEvent.AddProperty("Label.Asendia.", EnumHelper.GetDescription((ShipEngineContentsType) asendiaShipment.Contents));
+            telemetryEvent.AddProperty("Label.Asendia.Contents", EnumHelper.GetDescription((ShipEngineContentsType) asendiaShipment.Contents));
             telemetryEvent.AddProperty("Label.Asendia.DimsAddWeight", asendiaShipment.DimsAddWeight.ToString());
             telemetryEvent.AddProperty("Label.Asendia.DimsHeight", asendiaShipment.DimsHeight.ToString());
             telemetryEvent.AddProperty("Label.Asendia.DimsLength", asendiaShipment.DimsLength.ToString());

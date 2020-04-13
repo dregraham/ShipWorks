@@ -5,6 +5,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.FedEx;
@@ -20,17 +21,17 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
         }
 
         /// <summary>
-        /// Set Fedex-specific shipment telemetry
+        /// Set Fedex specific shipment telemetry
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var fedExShipment = shipment.FedEx;
 
@@ -198,56 +199,58 @@ namespace ShipWorks.Shipping.Services.Telemetry
         }
 
         /// <summary>
-        /// Set FedEx-specific package telemetry
+        /// Set FedEx specific package telemetry
         /// </summary>
-        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
-            for(int i = 0; i < shipment.FedEx.Packages.Count; i++)
-            {
-                var package = shipment.FedEx.Packages[i];
+            int packageIndex = 0;
 
-                telemetryEvent.AddProperty($"Label.Package.{i}.AlcoholRecipientType", ((ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip.AlcoholRecipientType) package.AlcoholRecipientType).ToString("G"));
-                telemetryEvent.AddProperty($"Label.Package.{i}.BatteryMaterial", EnumHelper.GetDescription(package.BatteryMaterial));
-                telemetryEvent.AddProperty($"Label.Package.{i}.BatteryPacking", EnumHelper.GetDescription(package.BatteryPacking));
-                telemetryEvent.AddProperty($"Label.Package.{i}.BatteryRegulatorySubtype", EnumHelper.GetDescription(package.BatteryRegulatorySubtype));
-                telemetryEvent.AddProperty($"Label.Package.{i}.ContainerType", package.ContainerType);
-                telemetryEvent.AddProperty($"Label.Package.{i}.ContainsAlcohol", package.ContainsAlcohol.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsAccessibilityType", EnumHelper.GetDescription((FedExDangerousGoodsAccessibilityType) package.DangerousGoodsAccessibilityType));
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsCargoAircraftOnly", package.DangerousGoodsCargoAircraftOnly.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsEmergencyContactPhone", package.DangerousGoodsEmergencyContactPhone);
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsEnabled", package.DangerousGoodsEnabled.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsOfferor", package.DangerousGoodsOfferor);
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsPackagingCount", package.DangerousGoodsPackagingCount.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DangerousGoodsType", EnumHelper.GetDescription((FedExDangerousGoodsMaterialType) package.DangerousGoodsType));
-                telemetryEvent.AddProperty($"Label.Package.{i}.DeclaredValue", package.DeclaredValue.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsAddWeight", package.DimsAddWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsWeight", package.DimsWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DryIceWeight", package.DryIceWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.FedExPackageID", package.FedExPackageID.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.FreightPackaging", EnumHelper.GetDescription(package.FreightPackaging));
-                telemetryEvent.AddProperty($"Label.Package.{i}.FreightPieces", package.FreightPieces.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialClass", package.HazardousMaterialClass);
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialNumber", package.HazardousMaterialNumber);
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialPackingGroup", EnumHelper.GetDescription((FedExHazardousMaterialsPackingGroup) package.HazardousMaterialPackingGroup));
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialProperName", package.HazardousMaterialProperName);
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialQuantityUnits", EnumHelper.GetDescription((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits));
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialQuantityValue", package.HazardousMaterialQuantityValue.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.HazardousMaterialTechnicalName", package.HazardousMaterialTechnicalName);
-                telemetryEvent.AddProperty($"Label.Package.{i}.Insurance", package.Insurance.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.InsurancePennyOne", package.InsurancePennyOne.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.InsuranceValue", package.InsuranceValue.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.NumberOfContainers", package.NumberOfContainers.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.PackingDetailsCargoAircraftOnly", package.PackingDetailsCargoAircraftOnly.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.PackingDetailsPackingInstructions", package.PackingDetailsPackingInstructions);
-                telemetryEvent.AddProperty($"Label.Package.{i}.PriorityAlert", package.PriorityAlert.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.PriorityAlertDetailContent", package.PriorityAlertDetailContent);
-                telemetryEvent.AddProperty($"Label.Package.{i}.PriorityAlertEnhancementType", EnumHelper.GetDescription((FedExPriorityAlertEnhancementType) package.PriorityAlertEnhancementType));
-                telemetryEvent.AddProperty($"Label.Package.{i}.SignatoryContactName", package.SignatoryContactName);
-                telemetryEvent.AddProperty($"Label.Package.{i}.SignatoryPlace", package.SignatoryPlace);
-                telemetryEvent.AddProperty($"Label.Package.{i}.SignatoryTitle", package.SignatoryTitle);
-                telemetryEvent.AddProperty($"Label.Package.{i}.SkidPieces", package.SkidPieces.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.TrackingNumber", package.TrackingNumber);
-                telemetryEvent.AddProperty($"Label.Package.{i}.Weight", package.Weight.ToString());
+            foreach (IFedExPackageEntity package in shipment.FedEx.Packages)
+            {
+                packageIndex++;
+
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.AlcoholRecipientType", ((ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip.AlcoholRecipientType) package.AlcoholRecipientType).ToString("G"));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.BatteryMaterial", EnumHelper.GetDescription(package.BatteryMaterial));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.BatteryPacking", EnumHelper.GetDescription(package.BatteryPacking));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.BatteryRegulatorySubtype", EnumHelper.GetDescription(package.BatteryRegulatorySubtype));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.ContainerType", package.ContainerType);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.ContainsAlcohol", package.ContainsAlcohol.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsAccessibilityType", EnumHelper.GetDescription((FedExDangerousGoodsAccessibilityType) package.DangerousGoodsAccessibilityType));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsCargoAircraftOnly", package.DangerousGoodsCargoAircraftOnly.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsEmergencyContactPhone", package.DangerousGoodsEmergencyContactPhone);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsEnabled", package.DangerousGoodsEnabled.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsOfferor", package.DangerousGoodsOfferor);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsPackagingCount", package.DangerousGoodsPackagingCount.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DangerousGoodsType", EnumHelper.GetDescription((FedExDangerousGoodsMaterialType) package.DangerousGoodsType));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsAddWeight", package.DimsAddWeight.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsWeight", package.DimsWeight.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DryIceWeight", package.DryIceWeight.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FedExPackageID", package.FedExPackageID.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FreightPackaging", EnumHelper.GetDescription(package.FreightPackaging));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FreightPieces", package.FreightPieces.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialClass", package.HazardousMaterialClass);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialNumber", package.HazardousMaterialNumber);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialPackingGroup", EnumHelper.GetDescription((FedExHazardousMaterialsPackingGroup) package.HazardousMaterialPackingGroup));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialProperName", package.HazardousMaterialProperName);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialQuantityUnits", EnumHelper.GetDescription((FedExHazardousMaterialsQuantityUnits) package.HazardousMaterialQuanityUnits));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialQuantityValue", package.HazardousMaterialQuantityValue.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialTechnicalName", package.HazardousMaterialTechnicalName);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.Insurance", package.Insurance.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.InsurancePennyOne", package.InsurancePennyOne.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.InsuranceValue", package.InsuranceValue.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.NumberOfContainers", package.NumberOfContainers.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PackingDetailsCargoAircraftOnly", package.PackingDetailsCargoAircraftOnly.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PackingDetailsPackingInstructions", package.PackingDetailsPackingInstructions);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlert", package.PriorityAlert.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlertDetailContent", package.PriorityAlertDetailContent);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.PriorityAlertEnhancementType", EnumHelper.GetDescription((FedExPriorityAlertEnhancementType) package.PriorityAlertEnhancementType));
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.SignatoryContactName", package.SignatoryContactName);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.SignatoryPlace", package.SignatoryPlace);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.SignatoryTitle", package.SignatoryTitle);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.SkidPieces", package.SkidPieces.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.TrackingNumber", package.TrackingNumber);
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.Weight", package.Weight.ToString());
             }
         }
     }

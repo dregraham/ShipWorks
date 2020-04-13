@@ -1,7 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 
 namespace ShipWorks.Shipping.Services.Telemetry
@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Endicia specific shipment telemetry properties
         /// </summary>
-        protected override void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        protected override void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             base.SetShipmentTelemetry(telemetryEvent, shipment);
             var endiciaShipment = shipment.Postal.Endicia;

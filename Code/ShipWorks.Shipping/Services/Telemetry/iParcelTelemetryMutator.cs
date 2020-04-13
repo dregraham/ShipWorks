@@ -3,6 +3,7 @@ using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 
 namespace ShipWorks.Shipping.Services.Telemetry
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific shipment telemetry properties
         /// </summary>
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var iParcelShipment = shipment.IParcel;
 
@@ -40,28 +41,28 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific package telemetry properties
         /// </summary>
-        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, ShipmentEntity shipment)
+        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
-            var packages = shipment.IParcel.Packages;
+            int packageIndex = 0;
 
-            for (int i = 0; i < packages.Count; i++)
+            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
             {
-                var package = packages[i];
+                packageIndex++;
 
-                telemetryEvent.AddProperty($"Label.Package.{i}.DeclaredValue", package.DeclaredValue.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsAddWeight", package.DimsAddWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsHeight", package.DimsHeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsLength", package.DimsLength.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsProfileID", package.DimsProfileID.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsWeight", package.DimsWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.DimsWidth", package.DimsWidth.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.Insurance", package.Insurance.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.InsuranceValue", package.InsuranceValue.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.InsurancePennyOne", package.InsurancePennyOne.ToString());
-                telemetryEvent.AddProperty($"Label.Package.{i}.ParcelNumber", package.ParcelNumber);
-                telemetryEvent.AddProperty($"Label.Package.{i}.SkuAndQuantities", package.SkuAndQuantities);
-                telemetryEvent.AddProperty($"Label.Package.{i}.TrackingNumber", package.TrackingNumber);
-                telemetryEvent.AddProperty($"Label.Package.{i}.Weight", package.Weight.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsAddWeight", package.DimsAddWeight.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsHeight", package.DimsHeight.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsLength", package.DimsLength.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsProfileID", package.DimsProfileID.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsWeight", package.DimsWeight.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DimsWidth", package.DimsWidth.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.Insurance", package.Insurance.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.InsuranceValue", package.InsuranceValue.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.InsurancePennyOne", package.InsurancePennyOne.ToString());
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.ParcelNumber", package.ParcelNumber);
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.SkuAndQuantities", package.SkuAndQuantities);
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.TrackingNumber", package.TrackingNumber);
+                telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.Weight", package.Weight.ToString());
             }
         }
     }
