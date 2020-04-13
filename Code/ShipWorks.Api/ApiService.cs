@@ -28,7 +28,7 @@ namespace ShipWorks.Api
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
         private readonly IWebApp webApp;
-
+        private bool useHttps;
         private long? port;
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace ShipWorks.Api
             var settings = settingsRepository.Load();
             if (settings.Enabled)
             {
-                StopIfPortChanged(settings);
+                StopIfSettingsChanged(settings);
                 StartIfNotRunning();
             }
             else
@@ -93,7 +93,7 @@ namespace ShipWorks.Api
         /// <summary>
         /// Stop If Port Changed
         /// </summary>
-        private void StopIfPortChanged(ApiSettings settings)
+        private void StopIfSettingsChanged(ApiSettings settings)
         {
             if (port.HasValue && port != settings.Port)
             {
@@ -101,6 +101,12 @@ namespace ShipWorks.Api
             }
 
             port = settings.Port;
+
+            if (useHttps != settings.UseHttps)
+            {
+                Stop();
+                useHttps = settings.UseHttps;
+            }
         }
 
         /// <summary>
@@ -118,8 +124,9 @@ namespace ShipWorks.Api
 
                 try
                 {
+                    string s = useHttps ? "s" : string.Empty;
                     apiStartup = apiStartupFactory();
-                    server = webApp.Start($"http://+:{port}/", apiStartup.Configuration);
+                    server = webApp.Start($"http{s}://+:{port}/", apiStartup.Configuration);
                     log.Info("ShipWorks.API has started");
                     Status = ApiStatus.Running;
                 }
