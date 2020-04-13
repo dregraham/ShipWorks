@@ -32,6 +32,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private ILog log;
         private ApiStatus status;
         private string port;
+        private bool useHttps;
         private ApiSettings apiSettings;
 
         /// <summary>
@@ -74,6 +75,20 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             set 
             {
                 Set(ref port, value);
+                RaisePropertyChanged(nameof(DocumentationUrl));
+            }
+        }
+
+        /// <summary>
+        /// Should the API use HTTPS
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool UseHttps
+        {
+            get => useHttps;
+            set
+            {
+                Set(ref useHttps, value);
                 RaisePropertyChanged(nameof(DocumentationUrl));
             }
         }
@@ -145,13 +160,14 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         }
 
         /// <summary>
-        /// Update the port number
+        /// Update Port and Protocol
         /// </summary>
         private void Update()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
                 var originalPort = apiSettings.Port.ToString();
+                var originalUseHttps = apiSettings.UseHttps;
 
                 GenericResult<long> portValidationResult = ValidatePort();
                 if (portValidationResult.Failure)
@@ -164,17 +180,19 @@ namespace ShipWorks.ApplicationCore.Settings.Api
 
                 Status = ApiStatus.Updating;
 
-                bool result = apiPortRegistrationService.RegisterAsAdmin(portNumber);
+                bool result = apiPortRegistrationService.Register(portNumber, UseHttps);
 
                 if (!result)
                 {
                     Status = apiService.Status;
-                    messageHelper.ShowError($"Failed to register port {portNumber}.");
+                    messageHelper.ShowError($"Failed to update settings.");
                     Port = originalPort;
+                    UseHttps = originalUseHttps;
                     return;
                 }
 
                 apiSettings.Port = portNumber;
+                apiSettings.UseHttps = UseHttps;
                 try
                 {
                     settingsRepository.Save(apiSettings);
@@ -182,16 +200,17 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 catch (Exception ex)
                 {
                     Port = originalPort;
+                    UseHttps = originalUseHttps;
                     Status = apiService.Status;
                     log.Error("An error occurred saving api settings.", ex);
-                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                    messageHelper.ShowError($"Failed to update sttings.");
                     return;
                 }
                 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
-                string fail = "Failed to update the ShipWorks API port number.";
+                string fail = "Failed to update the ShipWorks API settings.";
 
-                Status = apiService.Status;
+                WaitForStatusToUpdate(expectedStatus, fail);
             }
         }
 
