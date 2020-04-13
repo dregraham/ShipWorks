@@ -420,6 +420,7 @@
     <Compile Include="Services\Telemetry\AmazonSWATelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\AsendiaTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\iParcelTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\OnTracTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\PostalTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\UpsTelemetryMutatorTest.cs" />

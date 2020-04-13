@@ -1,5 +1,4 @@
-﻿using System;
-using Autofac.Extras.Moq;
+﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -7,7 +6,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Services.Telemetry;
-using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -21,7 +19,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
 
         public UpsTelemetryMutatorTest()
         {
-            var package = new UpsPackageEntity()
+            var package = new UpsPackageEntity
             {
                 Weight = 1,
                 DeclaredValue = 1.0m,
@@ -97,8 +95,6 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
                     Packages = {package}
                 }
             };
-            
-
 
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
             trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
@@ -108,7 +104,6 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
         public void MutateTelemetry_SetsTelemetryPropertiesFromShipment()
         {
             var testObject = new UpsTelemetryMutator();
-
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipment);
 
             trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.CarbonNeutral", "True"));
@@ -166,24 +161,24 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             var testObject = new UpsTelemetryMutator();
 
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipment);
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.BillableWeight", "1349"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DeclaredValue", "1.0"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceEnabled", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceIsForMedicalUse", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceRegulationSet", "CFR"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceWeight", "1"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.Girth", "200"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.Insurance", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.InsurancePennyOne", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.InsuranceValue", "1.0"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.IsLargePackage", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.LongestSide", "75"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.PackagingType", "UPS 25 KG Box®"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.SecondLongestSize", "50"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationEnabled", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationName", "Test"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationPhone", "4445556666"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationPhoneExtension", "ext1"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.BillableWeight", "1349"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.DeclaredValue", "1.0"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.DryIceEnabled", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.DryIceIsForMedicalUse", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.DryIceRegulationSet", "CFR"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.DryIceWeight", "1"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.Girth", "200"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.Insurance", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.InsurancePennyOne", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.InsuranceValue", "1.0"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.IsLargePackage", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.LongestSide", "75"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.PackagingType", "UPS 25 KG Box®"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.SecondLongestSize", "50"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.VerbalConfirmationEnabled", "True"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.VerbalConfirmationName", "Test"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.VerbalConfirmationPhone", "4445556666"));
+            trackedDurationEventMock.Verify(x => x.AddProperty("Label.Ups.Package.1.VerbalConfirmationPhoneExtension", "ext1"));
         }
     }
 }
