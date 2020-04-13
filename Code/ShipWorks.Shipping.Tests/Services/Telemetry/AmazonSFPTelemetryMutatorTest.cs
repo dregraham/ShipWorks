@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
         }
 
         [Fact]
-        public void SetsTelemetryPropertiesFromShipment()
+        public void MutateTelemetry_SetsTelemetryPropertiesFromShipment()
         {
             var testObject = new AmazonSFPTelemetryMutator();
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipment);
