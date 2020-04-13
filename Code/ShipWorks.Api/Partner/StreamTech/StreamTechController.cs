@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
@@ -41,6 +42,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public StreamTechController(
             IApiOrderRepository orderRepository,
             IShipmentFactory shipmentFactory,
