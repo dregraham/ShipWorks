@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the USPS specific shipment telemetry properties
         /// </summary>
-        protected override void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        protected override void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             base.SetShipmentTelemetry(telemetryEvent, shipment);
             var uspsShipment = shipment.Postal.Usps;

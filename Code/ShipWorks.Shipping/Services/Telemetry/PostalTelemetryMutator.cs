@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties for Postal
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        public void MutateTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
         }
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the Postal specific shipment telemetry properties
         /// </summary>
-        protected virtual void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        protected virtual void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var postalShipment = shipment.Postal;
             var shipmentTypeCode = shipment.ShipmentTypeCode.ToString();

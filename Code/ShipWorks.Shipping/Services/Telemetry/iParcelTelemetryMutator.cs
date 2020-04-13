@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        public void MutateTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific shipment telemetry properties
         /// </summary>
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        private void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var iParcelShipment = shipment.IParcel;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific package telemetry properties
         /// </summary>
-        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        private void SetPackageTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             int packageIndex = 0;
 

@@ -416,6 +416,7 @@
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="Services\EditableShippingProfileRepositoryTest.cs" />
     <Compile Include="Services\ShippingProfileServiceTest.cs" />
+    <Compile Include="Services\Telemetry\AsendiaTelemetryMutatorTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />

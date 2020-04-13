@@ -11,6 +11,6 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment);
+        void MutateTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment);
     }
 }

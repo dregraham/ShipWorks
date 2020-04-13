@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties for AmazonSWA
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        public void MutateTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
         }
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the AmazonSWA specific shipment telemetry properties
         /// </summary>
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        private void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var amazonSwaShipment = shipment.AmazonSWA;
 

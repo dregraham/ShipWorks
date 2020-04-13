@@ -4,7 +4,6 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -21,7 +20,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Sets the carrier specific telemetry properties
         /// </summary>
-        public void MutateTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        public void MutateTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             SetShipmentTelemetry(telemetryEvent, shipment);
             SetPackageTelemetry(telemetryEvent, shipment);
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// Set Fedex specific shipment telemetry
         /// </summary>
         [NDependIgnoreLongMethod]
-        private void SetShipmentTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        private void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var fedExShipment = shipment.FedEx;
 
@@ -201,7 +200,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         /// <summary>
         /// Set FedEx specific package telemetry
         /// </summary>
-        private void SetPackageTelemetry(TrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
+        private void SetPackageTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             int packageIndex = 0;
 
