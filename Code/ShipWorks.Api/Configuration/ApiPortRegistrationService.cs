@@ -62,5 +62,10 @@ namespace ShipWorks.Api.Configuration
 
             return true;
         }
+
+        public bool RegisterWithHttpsAsAdmin(long portNumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,5 +14,10 @@
         /// Register the given port running the process as admin
         /// </summary>
         bool RegisterAsAdmin(long portNumber);
+
+        /// <summary>
+        /// /// Register the given port with https running the process as admin
+        /// </summary>
+        bool RegisterWithHttpsAsAdmin(long portNumber);
     }
 }
