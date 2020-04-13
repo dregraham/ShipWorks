@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
         protected virtual void SetShipmentTelemetry(ITrackedDurationEvent telemetryEvent, IShipmentEntity shipment)
         {
             var postalShipment = shipment.Postal;
-            var shipmentTypeCode = shipment.ShipmentTypeCode.ToString();
+            var shipmentTypeCode = shipment.ShipmentTypeCode.ToString("G");
 
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.Confirmation", EnumHelper.GetDescription((PostalConfirmationType) postalShipment.Confirmation));
             telemetryEvent.AddProperty($"Label.{shipmentTypeCode}.CustomsContentDescription", postalShipment.CustomsContentDescription);
