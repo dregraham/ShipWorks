@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
     /// Sets FedEx-specific telemetry
     /// </summary>
     [KeyedComponent(typeof(ICarrierTelemetryMutator), ShipmentTypeCode.FedEx)]
-    public class FedexTelemetryMutator : ICarrierTelemetryMutator
+    public class FedExTelemetryMutator : ICarrierTelemetryMutator
     {
         /// <summary>
         /// Sets the carrier specific telemetry properties
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty("Label.FedEx.CodAccountNumber", fedExShipment.CodAccountNumber);
             telemetryEvent.AddProperty("Label.FedEx.CodAddFreight", fedExShipment.CodAddFreight.ToString());
             telemetryEvent.AddProperty("Label.FedEx.CodAmount", fedExShipment.CodAmount.ToString());
-            telemetryEvent.AddProperty("Label.FedEx.CodChargeBasis", fedExShipment.CodChargeBasis.ToString());
+            telemetryEvent.AddProperty("Label.FedEx.CodChargeBasis", EnumHelper.GetDescription((FedExCodAddTransportationChargeBasisType) fedExShipment.CodChargeBasis));
             telemetryEvent.AddProperty("Label.FedEx.CodCity", fedExShipment.CodCity);
             telemetryEvent.AddProperty("Label.FedEx.CodCompany", fedExShipment.CodCompany);
             telemetryEvent.AddProperty("Label.FedEx.CodCountryCode", fedExShipment.CodCountryCode);
@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty("Label.FedEx.MaskedData", fedExShipment.MaskedData != null ? EnumHelper.GetDescription((FedExMaskedDataType) fedExShipment.MaskedData) : string.Empty);
             telemetryEvent.AddProperty("Label.FedEx.MasterFormID", fedExShipment.MasterFormID);
             telemetryEvent.AddProperty("Label.FedEx.NonStandardContainer", fedExShipment.NonStandardContainer.ToString());
-            telemetryEvent.AddProperty("Label.FedEx.OriginResidentialDetermination", fedExShipment.OriginResidentialDetermination.ToString());
+            telemetryEvent.AddProperty("Label.FedEx.OriginResidentialDetermination", EnumHelper.GetDescription((ResidentialDeterminationType) fedExShipment.OriginResidentialDetermination));
             telemetryEvent.AddProperty("Label.FedEx.PackagingType", EnumHelper.GetDescription((FedExPackagingType) fedExShipment.PackagingType));
             telemetryEvent.AddProperty("Label.FedEx.PayorDutiesAccount", fedExShipment.PayorDutiesAccount);
             telemetryEvent.AddProperty("Label.FedEx.PayorDutiesCountryCode", fedExShipment.PayorDutiesCountryCode);
@@ -224,8 +224,10 @@ namespace ShipWorks.Shipping.Services.Telemetry
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsAddWeight", package.DimsAddWeight.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsWeight", package.DimsWeight.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsHeight", package.DimsHeight.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsLength", package.DimsLength.ToString());
+                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DimsWidth", package.DimsWidth.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.DryIceWeight", package.DryIceWeight.ToString());
-                telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FedExPackageID", package.FedExPackageID.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FreightPackaging", EnumHelper.GetDescription(package.FreightPackaging));
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.FreightPieces", package.FreightPieces.ToString());
                 telemetryEvent.AddProperty($"Label.FedEx.Package.{packageIndex}.HazardousMaterialClass", package.HazardousMaterialClass);

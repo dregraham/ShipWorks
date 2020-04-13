@@ -602,7 +602,7 @@
     <Compile Include="Services\Telemetry\AmazonSWATelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\AsendiaTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutator.cs" />
-    <Compile Include="Services\Telemetry\FedexTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\FedExTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\ICarrierTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\iParcelTelemetryMutator.cs" />
     <Compile Include="Services\Telemetry\OnTracTelemetryMutator.cs" />

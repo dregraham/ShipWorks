@@ -418,6 +418,7 @@
     <Compile Include="Services\ShippingProfileServiceTest.cs" />
     <Compile Include="Services\Telemetry\AmazonSFPTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\AmazonSWATelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\FedExTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\AsendiaTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\EndiciaTelemetryMutatorTest.cs" />
     <Compile Include="Services\Telemetry\iParcelTelemetryMutatorTest.cs" />

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 {
-    [Obfuscation(Exclude = true)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
     public enum FedExMaskedDataType
     {
         [Description("Secondary Barcode")]
