@@ -140,7 +140,17 @@ namespace ShipWorks.Api.Partner.StreamTech
                 // to set tolerance for what we consider max and min allowed weights 
                 //responseData.MinimumWeight = processedShipment.TotalWeight;
                 //responseData.MaximumWeight = processedShipment.TotalWeight;
-                responseData.ZplLabel = apiLabelFactory.GetLabels(processedShipmentAdapter).First().Image;
+
+                var label = apiLabelFactory.GetLabels(processedShipmentAdapter).FirstOrDefault();
+                if (label == null)
+                {
+                    responseData.ErrorCode = 99;
+                    responseData.ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes("Label not Generated."));
+                }
+                else
+                {
+                    responseData.ZplLabel = label.Image;
+                }
             }
             else
             {
