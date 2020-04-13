@@ -19,7 +19,6 @@ namespace ShipWorks.Api.Orders.Shipments
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dataResourceManager"></param>
         public ApiLabelFactory(IDataResourceManager dataResourceManager)
         {
             this.dataResourceManager = dataResourceManager;
@@ -38,8 +37,6 @@ namespace ShipWorks.Api.Orders.Shipments
         /// <summary>
         /// Get labels for the given carrierShipmentAdapter
         /// </summary>
-        /// <param name="carrierShipmentAdapter"></param>
-        /// <returns></returns>
         public IEnumerable<LabelData> GetLabels(ICarrierShipmentAdapter carrierShipmentAdapter)
         {
             IEnumerable<long> consumerIDs = GetLabelConsumerIds(carrierShipmentAdapter);

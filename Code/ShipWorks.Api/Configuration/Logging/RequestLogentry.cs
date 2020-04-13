@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Reflection;
-using Interapptive.Shared.Extensions;
-using Microsoft.Owin;
+﻿using System.Reflection;
 
 namespace ShipWorks.Api.Configuration.Logging
 {

@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.ModelBinding;
 using Interapptive.Shared.Collections;
 using log4net;
 using Microsoft.Web.Http;
@@ -17,7 +16,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Messaging.Messages.Shipping;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Services;
-using Swashbuckle.Swagger;
 using Swashbuckle.Swagger.Annotations;
 
 namespace ShipWorks.Api.Partner.StreamTech
@@ -70,67 +68,21 @@ namespace ShipWorks.Api.Partner.StreamTech
         [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(string), Description = "No order found")]
         [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(string), Description = "Multiple Orders found matching the OrderNumber")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(string), Description = "The server is experiencing errors")]
-
         public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, StreamTechRequest streamTechRequest)
         {
-            var request = streamTechRequest.Request;
+            RequestData request = streamTechRequest.Request;
             try
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(barcode);
-
                 ComparisonResult comparisonResult = orders.CompareCountTo(1);
 
                 switch (comparisonResult)
                 {
                     case ComparisonResult.Equal:
-                        ShipmentEntity shipment = shipmentFactory.Create(orders.First());
-
-                        var shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
-
-                        shippingProfileRepository.GetAll()
-                            .Where(p => p.Shortcut.Barcode == request.PackageType)
-                            .FirstOrDefault()?.Apply(shipment);
-
-                        foreach (IPackageAdapter package in shipmentAdapter.GetPackageAdapters())
-                        {
-                            package.Weight = request.Weight;
-                            package.DimsLength = request.Length;
-                            package.DimsWidth = request.Width;
-                            package.DimsHeight = request.Height;
-                        }
-
-                        ProcessShipmentResult processResult = await shipmentProcessor.Process(shipment).ConfigureAwait(false);
-
-                        var responseData = new ResponseData()
-                        {
-                            MessageNumber = request.MessageNumber
-                        };
-
-                        if (processResult.IsSuccessful)
-                        {
-                            var processedShipment = processResult.Shipment;
-                            var processedShipmentAdapter = carrierShipmentAdapterFactory.Get(processedShipment);
-
-                            responseData.VerifyBarcodes = processedShipment.TrackingNumber;
-                            responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
-                            responseData.ExpectedWeight = processedShipment.TotalWeight;
-
-                            // This feature is only available in some StreamTech situations
-                            // in the future we might want to have a user configurable option
-                            // to set tolerance for what we consider max and min allowed weights 
-                            //responseData.MinimumWeight = processedShipment.TotalWeight;
-                            //responseData.MaximumWeight = processedShipment.TotalWeight;
-                            responseData.ZplLabel = apiLabelFactory.GetLabels(processedShipmentAdapter).First().Image;
-                        }
-                        else
-                        {
-                            Exception ex = processResult.Error;
-                            responseData.ErrorCode = 99;
-                            responseData.ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes(ex.Message));
-                        }
+                        ProcessShipmentResult processResult = await ProcessShipment(orders.First(), request);
+                        ResponseData responseData = BuildResponseData(processResult, request.MessageNumber);
 
                         return CreateResponse(Request, HttpStatusCode.OK, responseData);
-
                     case ComparisonResult.More:
                         // More than 1 order found, return 409
                         return CreateResponse(Request, HttpStatusCode.Conflict, new ResponseData()
@@ -161,7 +113,72 @@ namespace ShipWorks.Api.Partner.StreamTech
                 });
             }
         }
-                
+
+        /// <summary>
+        /// Build the ResponseData based on the shipment result
+        /// </summary>
+        /// <param name="processShipmentResult">The result of processing the shipment</param>
+        /// <param name="messageNumber">The StreamTech message number we are responding to</param>
+        private ResponseData BuildResponseData(ProcessShipmentResult processShipmentResult, string messageNumber)
+        {
+            ResponseData responseData = new ResponseData()
+            {
+                MessageNumber = messageNumber
+            };
+
+            if (processShipmentResult.IsSuccessful)
+            {
+                ShipmentEntity processedShipment = processShipmentResult.Shipment;
+                ICarrierShipmentAdapter processedShipmentAdapter = carrierShipmentAdapterFactory.Get(processedShipment);
+
+                responseData.VerifyBarcodes = processedShipment.TrackingNumber;
+                responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
+                responseData.ExpectedWeight = processedShipment.TotalWeight;
+
+                // This feature is only available in some StreamTech situations
+                // in the future we might want to have a user configurable option
+                // to set tolerance for what we consider max and min allowed weights 
+                //responseData.MinimumWeight = processedShipment.TotalWeight;
+                //responseData.MaximumWeight = processedShipment.TotalWeight;
+                responseData.ZplLabel = apiLabelFactory.GetLabels(processedShipmentAdapter).First().Image;
+            }
+            else
+            {
+                Exception ex = processShipmentResult.Error;
+                responseData.ErrorCode = 99;
+                responseData.ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes(ex.Message));
+            }
+
+            return responseData;
+        }
+
+        /// <summary>
+        /// Process a shipment for the given order based on the RquestData
+        /// </summary>
+        /// <param name="order">The order to process a shipment for</param>
+        /// <param name="request">Data used to process the shipment, dims, weight and profile to apply</param>
+        /// <returns></returns>
+        private Task<ProcessShipmentResult> ProcessShipment(OrderEntity order, RequestData request)
+        {
+            ShipmentEntity shipment = shipmentFactory.Create(order);
+
+            ICarrierShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
+
+            shippingProfileRepository.GetAll()
+                .Where(p => p.Shortcut.Barcode == request.PackageType)
+                .FirstOrDefault()?.Apply(shipment);
+
+            foreach (IPackageAdapter package in shipmentAdapter.GetPackageAdapters())
+            {
+                package.Weight = request.Weight;
+                package.DimsLength = request.Length;
+                package.DimsWidth = request.Width;
+                package.DimsHeight = request.Height;
+            }
+
+            return shipmentProcessor.Process(shipment);
+        }
+
         /// <summary>
         /// Create a response using the given data
         /// </summary>
