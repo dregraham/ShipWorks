@@ -43,35 +43,42 @@ namespace ShipWorks.Api.Configuration.Logging
             if (shouldLog)
             {
                 logEntry = new LogEntryFactory().GetLogEntry(ApiLogSource.ShipWorksAPI, "API", LogActionType.Other);
-                using (StreamReader reader = new StreamReader(context.Request.Body))
+
+                MemoryStream requestStream = new MemoryStream();
+                context.Request.Body.CopyTo(requestStream);
+                context.Request.Body = requestStream;
+
+                using (MemoryStream logStream = new MemoryStream())
                 {
-                    string requestBody = await reader.ReadToEndAsync().ConfigureAwait(false);
-                    logEntry.LogRequest(BuildRequestLog(context.Request.Path.ToString(), requestBody), "json");
-                    context.Request.Body.Position = 0;
+                    requestStream.CopyTo(logStream);
+
+                    // Roll all the streams back
+                    requestStream.Seek(0, SeekOrigin.Begin);
+                    logStream.Seek(0, SeekOrigin.Begin);
+
+                    logEntry.LogRequest(BuildRequestLog(context.Request.Path.ToString(), logStream.ConvertToString()), "json");
                 }
             }
 
             // Convert write only context stream to readable memory stream
             Stream responseBodyStream = context.Response.Body;
-            using (MemoryStream responseBuffer = new MemoryStream())
+            MemoryStream responseBuffer = new MemoryStream();
+            context.Response.Body = responseBuffer;
+
+            // Actually run request
+            await Next.Invoke(context);
+
+            // Get the response body
+            responseBuffer.Seek(0, SeekOrigin.Begin);
+            var responseBody = new StreamReader(responseBuffer).ReadToEnd();
+
+            // reset the stream
+            responseBuffer.Seek(0, SeekOrigin.Begin);
+            await responseBuffer.CopyToAsync(responseBodyStream);
+
+            if (shouldLog)
             {
-                context.Response.Body = responseBuffer;
-
-                // Actually run request
-                await Next.Invoke(context);
-
-                // Get the response body
-                responseBuffer.Seek(0, SeekOrigin.Begin);
-                var responseBody = new StreamReader(responseBuffer).ReadToEnd();
-
-                // reset the stream
-                responseBuffer.Seek(0, SeekOrigin.Begin);
-                await responseBuffer.CopyToAsync(responseBodyStream);
-
-                if (shouldLog)
-                {
-                    logEntry.LogResponse(BuildResponseLog(context.Response.StatusCode, responseBody), "json");
-                }
+                logEntry.LogResponse(BuildResponseLog(context.Response.StatusCode, responseBody), "json");
             }
 
             LogContext(context, now);
