@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             telemetryEvent.AddProperty("Label.AmazonSFP.DimsAddWeight", amazonSfpShipment.DimsAddWeight.ToString());
             telemetryEvent.AddProperty("Label.AmazonSFP.DimsHeight", amazonSfpShipment.DimsHeight.ToString());
             telemetryEvent.AddProperty("Label.AmazonSFP.DimsLength", amazonSfpShipment.DimsLength.ToString());
+            telemetryEvent.AddProperty("Label.AmazonSFP.DimsWidth", amazonSfpShipment.DimsWidth.ToString());
             telemetryEvent.AddProperty("Label.AmazonSFP.DimsProfileID", amazonSfpShipment.DimsProfileID.ToString());
             telemetryEvent.AddProperty("Label.AmazonSFP.DimsWeight", amazonSfpShipment.DimsWeight.ToString());
             telemetryEvent.AddProperty("Label.AmazonSFP.Insurance", amazonSfpShipment.Insurance.ToString());
