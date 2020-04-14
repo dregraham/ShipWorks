@@ -15,6 +15,19 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class UACButton : Button
     {
+        public static readonly DependencyProperty ShowShieldProperty =
+            DependencyProperty.Register("ShowShield", typeof(bool), typeof(UACButton),
+                                        new PropertyMetadata(default(bool)));
+
+        /// <summary>
+        /// Whether or not the UAC Shield should show
+        /// </summary>
+        public bool ShowShield
+        {
+            get => (bool) GetValue(ShowShieldProperty);
+            set => SetValue(ShowShieldProperty, value);
+        }
+
         /// <summary>
         /// When the template is applied, get the uac icon and add it
         /// </summary>
