@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Reflection;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Api.Partner.StreamTech
 {
     /// <summary>
     /// Response data to return to StreamTech
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class StreamTechResponse
     {
         /// <summary>
@@ -17,6 +19,7 @@ namespace ShipWorks.Api.Partner.StreamTech
     /// <summary>
     /// The data within the StreamTechResponse
     /// </summary>
+    [Obfuscation(Exclude = true)]
     public class ResponseData
     {
         /// <summary>
