@@ -106,7 +106,7 @@ namespace ShipWorks.Api.Configuration.Logging
                 context.Request.RemoteIpAddress,
                 context.Authentication?.User?.Identity.Name,
                 now.ToString("MM/dd/yyyy, h:mm:tt"),
-                "ShopWorks.API",
+                "ShipWorks.API",
                 context.Request.Uri.Host,
                 context.Request.LocalIpAddress,
                 (now-DateTime.Now).Duration().TotalMilliseconds.ToString(),
