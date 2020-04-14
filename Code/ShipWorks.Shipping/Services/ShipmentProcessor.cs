@@ -284,10 +284,7 @@ namespace ShipWorks.Shipping.Services
 
             if (answer == DialogResult.OK)
             {
-                using (Form dlg = workflowResult.OutOfFundsException.CreatePostageDialog(lifetimeScope))
-                {
-                    dlg.ShowDialog(owner);
-                }
+                messageHelper.ShowDialog(() => workflowResult.OutOfFundsException.CreatePostageDialog(lifetimeScope));
             }
         }
 
