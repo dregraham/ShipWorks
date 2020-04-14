@@ -192,6 +192,8 @@ namespace ShipWorks.Api.Partner.StreamTech
                 package.DimsHeight = request.Height;
             }
 
+            shipmentAdapter.UpdateDynamicData();
+
             // Force ZPL because its the only format streamtech supports
             shipmentTypeManager.Get(shipment).SaveRequestedLabelFormat(ThermalLanguage.ZPL, shipment);
 
