@@ -91,6 +91,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             foreach (var upsPackageEntity in shipment.Ups.Packages)
             {
                 var package = (UpsPackageEntity) upsPackageEntity;
+
                 packageIndex++;
 
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.BillableWeight", package.BillableWeight.ToString());
