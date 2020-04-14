@@ -44,13 +44,13 @@ namespace ShipWorks.Api.Configuration
         /// <summary>
         /// Register the given port running the process as admin
         /// </summary>
-        public bool RegisterAsAdmin(long portNumber)
+        public bool RegisterAsAdmin(long portNumber, bool useHttps)
         {
             try
             {
                 // We need to launch the process to elevate ourselves
                 Process process = new Process();
-                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName} {portNumber}");
+                process.StartInfo = new ProcessStartInfo(Application.ExecutablePath, $"/cmd:{new RegisterApiPortCommandLineOption().CommandName} {portNumber} {useHttps}");
                 process.StartInfo.Verb = "runas";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.Start();
@@ -72,7 +72,33 @@ namespace ShipWorks.Api.Configuration
 
         private bool RegisterWithHttps(long portNumber)
         {
-            throw new NotImplementedException();
+            string scriptFilePath = "./RegisterApiWithHttps.ps1";
+
+            try
+            {
+                Process process = new Process();
+                process.StartInfo = new ProcessStartInfo()
+                {
+                    FileName = "powershell.exe",
+                    Arguments = $"-File \"{scriptFilePath}\" {portNumber}",
+                    Verb = "runas",
+                    WindowStyle = ProcessWindowStyle.Hidden
+                };
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Error while attempting to register port with https.", ex);
+                return false;
+            }
+
+            return true;
         }
     }
 }

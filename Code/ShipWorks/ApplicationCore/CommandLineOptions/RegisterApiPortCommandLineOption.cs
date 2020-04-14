@@ -28,12 +28,29 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                // If a part was passed as the first arg use it otherwise load port from repo
-                long port = long.TryParse(args.FirstOrDefault(), out long portNumber) ?
-                    portNumber :
-                    scope.Resolve<IApiSettingsRepository>().Load().Port;
+                ApiSettings settings = scope.Resolve<IApiSettingsRepository>().Load();
+                long port;
+                bool useHttps;
 
-                bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port);
+                if (args.Count != 2)
+                {
+                    port = settings.Port;
+                    useHttps = settings.UseHttps;
+                }
+                else
+                {
+                    // Try to get port from args, fallback to settings
+                    port = long.TryParse(args[0], out long portNumber) ?
+                        portNumber :
+                        settings.Port;
+
+                    // Try to get useHttps from args, fallback to settings
+                    useHttps = bool.TryParse(args[1], out bool https) ?
+                        https :
+                        settings.UseHttps;
+                }
+
+                bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps);
 
                 if (!registrationSuccess)
                 {

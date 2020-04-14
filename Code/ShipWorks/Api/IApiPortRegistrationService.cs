@@ -13,6 +13,6 @@
         /// <summary>
         /// Register the given port running the process as admin
         /// </summary>
-        bool RegisterAsAdmin(long portNumber);
+        bool RegisterAsAdmin(long portNumber, bool useHttps);
     }
 }

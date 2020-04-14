@@ -8,7 +8,7 @@ namespace Interapptive.Shared.Win32
     /// </summary>
     public static class NetshCommand
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowsFirewallUtility));
+        static readonly ILog log = LogManager.GetLogger(typeof(NetshCommand));
 
         /// <summary>
         /// Execute 'netsh' with the specified arguments
