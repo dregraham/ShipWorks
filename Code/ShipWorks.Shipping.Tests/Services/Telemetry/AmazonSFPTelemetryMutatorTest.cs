@@ -24,16 +24,16 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
                 {
                     AmazonUniqueShipmentID = "AmazonUniqueShipmentID",
                     CarrierName = "CarrierName",
-                    DeclaredValue = 1.0m,
+                    DeclaredValue = 27.0m,
                     DeliveryExperience = (int) AmazonSFPDeliveryExperienceType.DeliveryConfirmationWithoutSignature,
                     DimsAddWeight = true,
                     DimsHeight = 3.5,
-                    DimsLength = 3.5,
-                    DimsWidth = 3.5,
-                    DimsWeight = 3.5,
+                    DimsLength = 4.5,
+                    DimsWidth = 5.5,
+                    DimsWeight = 6.5,
                     DimsProfileID = 1234,
                     Insurance = true,
-                    InsuranceValue = 1.0m,
+                    InsuranceValue = 12.0m,
                     Reference1 = "Reference",
                     RequestedLabelFormat = (int) ThermalLanguage.ZPL,
                     ShippingServiceID = "ShippingServiceID",
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x => 
                 x.AddProperty("Label.AmazonSFP.CarrierName", "CarrierName"));
             trackedDurationEventMock.Verify(x => 
-                x.AddProperty("Label.AmazonSFP.DeclaredValue", "1.0"));
+                x.AddProperty("Label.AmazonSFP.DeclaredValue", "27.0"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.AmazonSFP.DeliveryExperience", "Delivery Confirmation Without Signature"));
             trackedDurationEventMock.Verify(x =>
@@ -64,17 +64,17 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.AmazonSFP.DimsHeight", "3.5"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.AmazonSFP.DimsLength", "3.5"));
+                x.AddProperty("Label.AmazonSFP.DimsLength", "4.5"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.AmazonSFP.DimsWidth", "3.5"));
+                x.AddProperty("Label.AmazonSFP.DimsWidth", "5.5"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.AmazonSFP.DimsWeight", "3.5"));
+                x.AddProperty("Label.AmazonSFP.DimsWeight", "6.5"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.AmazonSFP.DimsProfileID", "1234"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.AmazonSFP.Insurance", "True"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.AmazonSFP.InsuranceValue", "1.0"));
+                x.AddProperty("Label.AmazonSFP.InsuranceValue", "12.0"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.AmazonSFP.Reference", "Reference"));
             trackedDurationEventMock.Verify(x =>

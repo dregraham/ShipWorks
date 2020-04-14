@@ -20,20 +20,20 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
         {
             var package = new IParcelPackageEntity()
             {
-                DeclaredValue = 1.0m,
+                DeclaredValue = 794.8m,
                 DimsAddWeight = true,
                 DimsHeight = 3.5,
-                DimsLength = 3.5,
-                DimsWeight = 3.5,
-                DimsWidth = 3.5,
+                DimsLength = 4.5,
+                DimsWeight = 5.5,
+                DimsWidth = 6.5,
                 DimsProfileID = 12345,
                 Insurance = true,
-                InsuranceValue = 1.0m,
+                InsuranceValue = 29756.7m,
                 InsurancePennyOne = true,
                 ParcelNumber = "ParcelNumber",
                 SkuAndQuantities = "SkuAndQuantities",
                 TrackingNumber = "TrackingNumber",
-                Weight = 3.5
+                Weight = 7.5
             };
 
             shipment = new ShipmentEntity()
@@ -81,23 +81,23 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipment);
 
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.iParcel.Package.1.DeclaredValue", "1.0"));
+                x.AddProperty("Label.iParcel.Package.1.DeclaredValue", "794.8"));
             trackedDurationEventMock.Verify(x => 
                 x.AddProperty("Label.iParcel.Package.1.DimsAddWeight", "True"));
             trackedDurationEventMock.Verify(x => 
                 x.AddProperty("Label.iParcel.Package.1.DimsHeight", "3.5"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.iParcel.Package.1.DimsLength", "3.5"));
+                x.AddProperty("Label.iParcel.Package.1.DimsLength", "4.5"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.iParcel.Package.1.DimsProfileID", "12345"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.iParcel.Package.1.DimsWeight", "3.5"));
+                x.AddProperty("Label.iParcel.Package.1.DimsWeight", "5.5"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.iParcel.Package.1.DimsWidth", "3.5"));
+                x.AddProperty("Label.iParcel.Package.1.DimsWidth", "6.5"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.iParcel.Package.1.Insurance", "True"));
             trackedDurationEventMock.Verify(x =>
-                x.AddProperty("Label.iParcel.Package.1.InsuranceValue", "1.0"));
+                x.AddProperty("Label.iParcel.Package.1.InsuranceValue", "29756.7"));
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.iParcel.Package.1.InsurancePennyOne", "True"));
             trackedDurationEventMock.Verify(x =>
@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             trackedDurationEventMock.Verify(x =>
                 x.AddProperty("Label.iParcel.Package.1.TrackingNumber", "TrackingNumber"));
             trackedDurationEventMock.Verify(x => 
-                x.AddProperty("Label.iParcel.Package.1.Weight", "3.5"));
+                x.AddProperty("Label.iParcel.Package.1.Weight", "7.5"));
         }
     }
 }
