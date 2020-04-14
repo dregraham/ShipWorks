@@ -2,7 +2,6 @@
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -88,26 +87,19 @@ namespace ShipWorks.Shipping.Services.Telemetry
         {
             int packageIndex = 0;
 
-            foreach (var upsPackageEntity in shipment.Ups.Packages)
+            foreach (IUpsPackageEntity package in shipment.Ups.Packages)
             {
-                var package = (UpsPackageEntity) upsPackageEntity;
-
                 packageIndex++;
 
-                telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.BillableWeight", package.BillableWeight.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.DryIceEnabled", package.DryIceEnabled.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.DryIceIsForMedicalUse", package.DryIceIsForMedicalUse.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.DryIceRegulationSet", EnumHelper.GetDescription((UpsDryIceRegulationSet) package.DryIceRegulationSet));
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.DryIceWeight", package.DryIceWeight.ToString());
-                telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.Girth", package.Girth.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.Insurance", package.Insurance.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.InsurancePennyOne", package.InsurancePennyOne.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.InsuranceValue", package.InsuranceValue.ToString());
-                telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.IsLargePackage", package.IsLargePackage.ToString());
-                telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.LongestSide", package.LongestSide.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.PackagingType", EnumHelper.GetDescription((UpsPackagingType) package.PackagingType));
-                telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.SecondLongestSize", package.SecondLongestSize.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.VerbalConfirmationEnabled", package.VerbalConfirmationEnabled.ToString());
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.VerbalConfirmationName", package.VerbalConfirmationName);
                 telemetryEvent.AddProperty($"Label.Ups.Package.{packageIndex}.VerbalConfirmationPhone", package.VerbalConfirmationPhone);

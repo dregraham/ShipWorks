@@ -2,7 +2,6 @@
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 
@@ -45,9 +44,8 @@ namespace ShipWorks.Shipping.Services.Telemetry
         {
             int packageIndex = 0;
 
-            foreach (var iParcelPackageEntity in shipment.IParcel.Packages)
+            foreach (IIParcelPackageEntity package in shipment.IParcel.Packages)
             {
-                var package = (IParcelPackageEntity) iParcelPackageEntity;
                 packageIndex++;
 
                 telemetryEvent.AddProperty($"Label.iParcel.Package.{packageIndex}.DeclaredValue", package.DeclaredValue.ToString());

@@ -2,7 +2,6 @@
 using Interapptive.Shared.Metrics;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -22,6 +21,9 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
 
         public UpsTelemetryMutatorTest()
         {
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            trackedDurationEventMock = mock.MockRepository.Create<ITrackedDurationEvent>();
+
             package = mock.Mock<IUpsPackageEntity>();
             package.SetupGet(x => x.Weight).Returns(1);
             package.SetupGet(x => x.DeclaredValue).Returns(1.0m);
@@ -92,18 +94,14 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             upsShipment.SetupGet(x => x.WorldShipStatus).Returns((int) WorldShipStatusType.Completed);
             upsShipment.SetupGet(x => x.Packages).Returns(new[] {package.Object});
 
-
             shipmentMock = mock.MockRepository.Create<IShipmentEntity>();
             shipmentMock.SetupGet(x => x.Ups).Returns(upsShipment.Object);
-
-
         }
 
         [Fact]
         public void MutateTelemetry_SetsTelemetryPropertiesFromShipment()
         {
             var testObject = new UpsTelemetryMutator();
-
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipmentMock.Object);
 
             upsShipment.VerifyGet(x => x.CarbonNeutral, Times.Once);
@@ -172,7 +170,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
         {
             var testObject = new UpsTelemetryMutator();
             testObject.MutateTelemetry(trackedDurationEventMock.Object, shipmentMock.Object);
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.BillableWeight", "1349"));
+
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DeclaredValue", "1.0"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceEnabled", "True"));
             package.VerifyGet(x => x.DryIceEnabled, Times.Once);
@@ -180,14 +178,10 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
             package.VerifyGet(x => x.DryIceIsForMedicalUse, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceRegulationSet", "CFR"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.DryIceWeight", "2"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.Girth", "200"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.Insurance", "True"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.InsurancePennyOne", "True"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.InsuranceValue", "2.0"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.IsLargePackage", "True"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.LongestSide", "75"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.PackagingType", "UPS 25 KG Box®"));
-            trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.SecondLongestSize", "50"));
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationEnabled", "True"));
             package.VerifyGet(x => x.VerbalConfirmationEnabled, Times.Once);
             trackedDurationEventMock.Verify(x => x.AddProperty($"Label.Ups.Package.1.VerbalConfirmationName", "Test"));
