@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
 
         public iParcelTelemetryMutatorTest()
         {
-            var package = new IParcelPackageEntity()
+            var package = new IParcelPackageEntity
             {
                 DeclaredValue = 794.8m,
                 DimsAddWeight = true,
@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
 
             shipment = new ShipmentEntity()
             {
-                IParcel = new IParcelShipmentEntity()
+                IParcel = new IParcelShipmentEntity
                 {
                     Reference = "Reference",
                     IsDeliveryDutyPaid = true,
