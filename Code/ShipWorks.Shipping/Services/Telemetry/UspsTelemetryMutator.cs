@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Services.Telemetry
             base.SetShipmentTelemetry(telemetryEvent, shipment);
             var uspsShipment = shipment.Postal.Usps;
 
-            telemetryEvent.AddProperty($"Label.Usps.RequestedLabelFormat", EnumHelper.GetDescription((LabelFormatType) uspsShipment.RequestedLabelFormat));
+            telemetryEvent.AddProperty($"Label.Usps.RequestedLabelFormat", EnumHelper.GetDescription((ThermalLanguage) uspsShipment.RequestedLabelFormat));
             telemetryEvent.AddProperty($"Label.Usps.HidePostage", uspsShipment.HidePostage.ToString());
             telemetryEvent.AddProperty($"Label.Usps.RequireFullAddressValidation", uspsShipment.RequireFullAddressValidation.ToString());
         }

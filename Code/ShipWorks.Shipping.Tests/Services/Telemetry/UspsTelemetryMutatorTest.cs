@@ -1,6 +1,7 @@
 ﻿using Autofac.Extras.Moq;
 using Interapptive.Shared.Metrics;
 using Moq;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Services.Telemetry;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
                 {
                     Usps = new UspsShipmentEntity
                     {
-                        RequestedLabelFormat = (int)LabelFormatType.Standard,
+                        RequestedLabelFormat = (int)ThermalLanguage.None,
                         HidePostage = true,
                         RequireFullAddressValidation = true
                     }

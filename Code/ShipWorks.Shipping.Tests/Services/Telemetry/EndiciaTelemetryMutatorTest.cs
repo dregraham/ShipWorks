@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Tests.Services.Telemetry
                         ReferenceID2 = "2",
                         ReferenceID3 = "3",
                         ReferenceID4 = "4",
-                        RequestedLabelFormat = (int)LabelFormatType.Standard,
+                        RequestedLabelFormat = (int)ThermalLanguage.None,
                         ScanBasedReturn = true,
                         StealthPostage = true
                     }
