@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
@@ -11,10 +10,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
-using ShipWorks.ApplicationCore.Interaction;
 using Cursors = System.Windows.Forms.Cursors;
 
-namespace ShipWorks.ApplicationCore.Settings.Api
+namespace ShipWorks.UI.Controls.Settings.Api
 {
     /// <summary>
     /// Api Settings logic
@@ -29,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
         private readonly IApiPortRegistrationService apiPortRegistrationService;
-        private ILog log;
+        private readonly ILog log;
         private ApiStatus status;
         private string port;
         private bool useHttps;
@@ -52,8 +50,7 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
             this.log = logFactory(typeof(ApiSettingsViewModel));
-            StartCommand = new RelayCommand(Start, () => Status == ApiStatus.Stopped);
-            StopCommand = new RelayCommand(Stop, () => Status == ApiStatus.Running);
+            StartCommand = new RelayCommand(ToggleEnabled);
             UpdateCommand = new RelayCommand(Update, () => Status != ApiStatus.Updating);
             SaveButtonText = "Save";
         }
@@ -65,7 +62,11 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         public ApiStatus Status
         {
             get => status;
-            set => Set(ref status, value);
+            set
+            {
+                Set(ref status, value);
+                RaisePropertyChanged(nameof(StartButtonText));
+            }
         }
 
         /// <summary>
@@ -101,12 +102,6 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand StartCommand { get; }
-
-        /// <summary>
-        /// Command to stop API
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand StopCommand { get; }
 
         /// <summary>
         /// Command for updating port number
@@ -178,32 +173,28 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         /// <summary>
         /// Start the API
         /// </summary>
-        private void Start()
+        private void ToggleEnabled()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                apiSettings.Enabled = true;
-                settingsRepository.Save(apiSettings);
+                if (Status == ApiStatus.Running)
+                {
+                    apiSettings.Enabled = false;
+                    settingsRepository.Save(apiSettings);
 
-                string fail = "Failed to start the ShipWorks API.";
+                    string fail = "Failed to stop the ShipWorks API.";
 
-                WaitForStatusToUpdate(ApiStatus.Running, fail);
-            }
-        }
+                    WaitForStatusToUpdate(ApiStatus.Stopped, fail);
+                }
+                else if (Status == ApiStatus.Stopped)
+                {
+                    apiSettings.Enabled = true;
+                    settingsRepository.Save(apiSettings);
 
-        /// <summary>
-        /// Stop the API
-        /// </summary>
-        private void Stop()
-        {
-            using (messageHelper.SetCursor(Cursors.WaitCursor))
-            {
-                apiSettings.Enabled = false;
-                settingsRepository.Save(apiSettings);
+                    string fail = "Failed to start the ShipWorks API.";
 
-                string fail = "Failed to stop the ShipWorks API.";
-
-                WaitForStatusToUpdate(ApiStatus.Stopped, fail);
+                    WaitForStatusToUpdate(ApiStatus.Running, fail);
+                }
             }
         }
 
