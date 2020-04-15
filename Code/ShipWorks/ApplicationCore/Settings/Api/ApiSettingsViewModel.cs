@@ -191,6 +191,8 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
                 string fail = "Failed to update the ShipWorks API port number.";
 
+                WaitForStatusToUpdate(expectedStatus, fail);
+
                 Status = apiService.Status;
             }
         }
