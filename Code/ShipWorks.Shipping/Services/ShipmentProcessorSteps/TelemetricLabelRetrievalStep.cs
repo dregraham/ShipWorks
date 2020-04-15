@@ -69,7 +69,15 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
             telemetryEvent.AddProperty("StoreType", EnumHelper.GetDescription(shipmentAdapter.Store.StoreTypeCode));
             telemetryEvent.AddProperty("Label.IsReturn", shipment.ReturnShipment.ToString());
 
-            mutator[shipment.ShipmentTypeCode].MutateTelemetry(telemetryEvent, shipment);
+            try
+            {
+                mutator[shipment.ShipmentTypeCode].MutateTelemetry(telemetryEvent, shipment);
+            }
+            catch (Exception)
+            {
+                // We don't need to do anything with an exception because we're dealing with telemetry
+                // and we don't want a failure here to cause the shipment to not process
+            }
 
             DateTime? verifiedDate = shipment.Order?.VerifiedDate;
 
