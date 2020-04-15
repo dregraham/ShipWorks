@@ -145,8 +145,8 @@
                     Margin="5 0 0 0"
                     Content="{Binding SaveButtonText}"
                     Command="{Binding UpdateCommand}"
-                    ShowShield="{Binding SettingsChanged}"
-                    IsEnabled="{Binding SettingsChanged}"
+                    ShowShield="{Binding IsSaveEnabled}"
+                    IsEnabled="{Binding IsSaveEnabled}"
                     Template="{StaticResource UACButtonTemplate}"
                     Width="75"
                     Height="23"/>

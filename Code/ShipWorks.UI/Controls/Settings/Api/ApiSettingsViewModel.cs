@@ -32,7 +32,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         private string port;
         private bool useHttps;
         private ApiSettings apiSettings;
-        private bool settingsChanged;
+        private bool isSaveEnabled;
         private string saveButtonText;
 
         /// <summary>
@@ -78,8 +78,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
             get => port;
             set
             {
-                SettingsChanged = value != apiSettings.Port.ToString();
                 Set(ref port, value);
+                UpdateSaveButton();
             }
         }
 
@@ -92,8 +92,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
             get => useHttps;
             set
             {
-                SettingsChanged = value != apiSettings.UseHttps;
                 Set(ref useHttps, value);
+                UpdateSaveButton();
             }
         }
 
@@ -128,6 +128,9 @@ namespace ShipWorks.UI.Controls.Settings.Api
         [Obfuscation(Exclude = true)]
         public string DocumentationUrl => $"{ApiUrl}/swagger/ui/index";
 
+        /// <summary>
+        /// Text to display on the start button
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string StartButtonText
         {
@@ -146,6 +149,9 @@ namespace ShipWorks.UI.Controls.Settings.Api
             }
         }
 
+        /// <summary>
+        /// Text to display on the save button
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string SaveButtonText
         {
@@ -153,11 +159,14 @@ namespace ShipWorks.UI.Controls.Settings.Api
             set => Set(ref saveButtonText, value);
         }
 
+        /// <summary>
+        /// Whether or not saving is enabled
+        /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool SettingsChanged
+        public bool IsSaveEnabled
         {
-            get => settingsChanged;
-            set => Set(ref settingsChanged, value);
+            get => isSaveEnabled;
+            set => Set(ref isSaveEnabled, value);
         }
 
         /// <summary>
@@ -168,6 +177,16 @@ namespace ShipWorks.UI.Controls.Settings.Api
             apiSettings = settingsRepository.Load();
             Status = apiService.Status;
             Port = apiSettings.Port.ToString();
+            UseHttps = apiSettings.UseHttps;
+        }
+
+        /// <summary>
+        /// Update the save buttons text and whether or not it's enabled
+        /// </summary>
+        private void UpdateSaveButton()
+        {
+            IsSaveEnabled = Port != apiSettings.Port.ToString() || UseHttps != apiSettings.UseHttps;
+            SaveButtonText = "Save";
         }
 
         /// <summary>
@@ -177,24 +196,24 @@ namespace ShipWorks.UI.Controls.Settings.Api
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
+                ApiStatus statusToCheckFor = ApiStatus.Running;
+                string verb = "start";
+
                 if (Status == ApiStatus.Running)
                 {
                     apiSettings.Enabled = false;
-                    settingsRepository.Save(apiSettings);
-
-                    string fail = "Failed to stop the ShipWorks API.";
-
-                    WaitForStatusToUpdate(ApiStatus.Stopped, fail);
+                    verb = "stop";
+                    statusToCheckFor = ApiStatus.Stopped;
                 }
                 else if (Status == ApiStatus.Stopped)
                 {
                     apiSettings.Enabled = true;
-                    settingsRepository.Save(apiSettings);
-
-                    string fail = "Failed to start the ShipWorks API.";
-
-                    WaitForStatusToUpdate(ApiStatus.Running, fail);
                 }
+
+                settingsRepository.Save(apiSettings);
+
+                string failureMessage = $"Failed to {verb} the ShipWorks API.";
+                WaitForStatusToUpdate(statusToCheckFor, failureMessage);
             }
         }
 
@@ -219,7 +238,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
 
                 Status = ApiStatus.Updating;
                 SaveButtonText = "Saving";
-                bool result = apiPortRegistrationService.Register(portNumber, UseHttps);
+                bool result = apiPortRegistrationService.RegisterAsAdmin(portNumber, UseHttps);
 
                 if (!result)
                 {
@@ -252,6 +271,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
                 WaitForStatusToUpdate(expectedStatus, fail);
 
                 SaveButtonText = "Saved";
+                IsSaveEnabled = false;
                 RaisePropertyChanged(nameof(ApiUrl));
                 RaisePropertyChanged(nameof(DocumentationUrl));
             }
