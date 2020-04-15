@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -50,11 +52,22 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                         settings.UseHttps;
                 }
 
-                bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps);
+                bool registrationSuccess;
+                try
+                {
+                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error registering port", ex);
+                    registrationSuccess = false;
+                }                
 
                 if (!registrationSuccess)
                 {
-                    log.Error($"Failed to register port {port} for the ShipWorks API");
+                    var errorMessage = $"Failed to register port {port} for the ShipWorks API";
+                    log.Error(errorMessage);
+                    Environment.ExitCode = -1;
                 }
 
                 return Task.CompletedTask;

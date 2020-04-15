@@ -289,12 +289,6 @@ namespace ShipWorks.UI.Controls.Settings.Api
                 return GenericResult.FromError<long>(string.Empty);
             }
 
-            // if the are trying to update the port to what the port is already set to return
-            if (apiSettings.Port == portNumber)
-            {
-                return GenericResult.FromError<long>(string.Empty);
-            }
-
             return GenericResult.FromSuccess(portNumber);
         }
 
