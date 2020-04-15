@@ -74,7 +74,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         [SwaggerResponse(HttpStatusCode.NotFound, Type = typeof(string), Description = "No order found")]
         [SwaggerResponse(HttpStatusCode.Conflict, Type = typeof(string), Description = "Multiple Orders found matching the OrderNumber")]
         [SwaggerResponse(HttpStatusCode.InternalServerError, Type = typeof(string), Description = "The server is experiencing errors")]
-        public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, StreamTechRequest streamTechRequest)
+        public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, [FromBody]StreamTechRequest streamTechRequest)
         {
             RequestData request = streamTechRequest.Request;
             try

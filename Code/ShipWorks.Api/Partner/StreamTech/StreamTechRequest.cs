@@ -1,14 +1,11 @@
 ﻿using System.Reflection;
-using System.Web.Http.ModelBinding;
 using Newtonsoft.Json;
-using ShipWorks.Api.Configuration;
 
 namespace ShipWorks.Api.Partner.StreamTech
 {
     /// <summary>
     /// Request data from the StreamTech system
     /// </summary>
-    [ModelBinder(typeof(JsonNetModelBinder))]
     [Obfuscation(Exclude = true)]
     public class StreamTechRequest
     {
