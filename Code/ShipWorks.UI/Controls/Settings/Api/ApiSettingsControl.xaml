@@ -18,7 +18,7 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/UACButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Width" Value="82"/>
+                <Setter Property="Width" Value="75"/>
                 <Setter Property="Height" Value="23"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
@@ -28,8 +28,9 @@
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Margin="10">
+    <Grid Margin="10" Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -41,66 +42,114 @@
                 BorderThickness="0,0,0,1">
             <TextBlock FontWeight="Bold"
                        Foreground="{StaticResource ResourceKey=SectionHeaderTextBrush}"
-                       Text="ShipWorks API Settings"/>
+                       Text="Status"/>
         </Border>
         <Grid Grid.Row="1"
               Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition SharedSizeGroup="Column1"/>
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            
+
             <TextBlock Grid.Row="0" 
                        Grid.Column="0"
                        Text="Status:"
                        HorizontalAlignment="Right"
                        Margin="0 0 0 10"/>
-            <TextBlock Grid.Row="0" 
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="5 0 0 10">
+                <TextBlock Text="{Binding Status}"
+                           HorizontalAlignment="Left"
+                           Margin="0 0 10 0"
+                           Width="44"/>
+                <Button Content="{Binding StartButtonText}"
+                        Command="{Binding StartCommand}"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="1" 
+                       Grid.Column="0"
+                       Text="URL:"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 0 10"/>
+            <TextBlock Grid.Row="1" 
                        Grid.Column="1"
-                       Text="{Binding Status, Converter={StaticResource EnumDescription}}"
+                       Text="{Binding ApiUrl}"
                        HorizontalAlignment="Left"
                        TextAlignment="Center"
-                       Margin="5 0 10 10"/>
-            <Button Grid.Row="0" 
-                    Grid.Column="2"
-                    Content="Start"
-                    Command="{Binding StartCommand}"
-                    Margin="0 0 10 10"/>
-            <Button Grid.Row="0" 
-                    Grid.Column="3"
-                    Content="Stop"
-                    Command="{Binding StopCommand}"
-                    Margin="0 0 0 10"/>
+                       Margin="5 0 0 10"/>
+            <TextBlock Grid.Row="2"
+                   Grid.Column="1"
+                   Margin="5 0 0 00">
+                <Hyperlink NavigateUri="{Binding DocumentationUrl}"
+                           attachedProperties:Link.OpenInBrowser="true">
+                    ShipWorks API Documentation
+                </Hyperlink>
+            </TextBlock>
+        </Grid>        
+        <Border Grid.Row="2"
+                Padding="5"
+                Background="{StaticResource ResourceKey=SectionHeaderBackgroundBrush}"
+                BorderBrush="LightGray"
+                BorderThickness="0,0,0,1">
+            <TextBlock FontWeight="Bold"
+                       Foreground="{StaticResource ResourceKey=SectionHeaderTextBrush}"
+                       Text="Configuration"/>
+        </Border>
+        <Grid Grid.Row="3"
+              Margin="10 10 10 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Column1"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="1"
-                       Grid.Column="0"                       
+            <TextBlock Grid.Row="0" 
+                       Grid.Column="0"
+                       Text="Use HTTPS:"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 0 10"/>
+
+            <CheckBox Grid.Row="0"
+                      Grid.Column="1"
+                      Margin="4 0 0 10"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding UseHttps}"/>
+
+            <TextBlock Grid.Row="1" 
+                       Grid.Column="0"
                        Text="Port:"
-                       HorizontalAlignment="Right"/>
+                       HorizontalAlignment="Right"
+                       Margin="0 0 0 10"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
-                     Text="{Binding Port}"
-                     Margin="5 0 10 0"
+                     Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="5 0 0 10"
+                     HorizontalAlignment="Left"
                      VerticalContentAlignment="Center"
-                     Height="23"/>
-            <controls:UACButton Grid.Row="1"
-                    Grid.Column="2"
-                    Content="Update"
+                     Height="23"
+                     Width="60"/>
+            <controls:UACButton Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="5 0 0 0"
+                    Content="{Binding SaveButtonText}"
                     Command="{Binding UpdateCommand}"
-                    Margin="0 0 10 0"
-                    HorizontalContentAlignment="Center"
-                    Template="{StaticResource UACButtonTemplate}"/>
+                    ShowShield="{Binding SettingsChanged}"
+                    IsEnabled="{Binding SettingsChanged}"
+                    Template="{StaticResource UACButtonTemplate}"
+                    Width="75"
+                    Height="23"/>
         </Grid>
-        <TextBlock Grid.Row="2"
-                   Margin="10 0 0 10">
-            <Hyperlink NavigateUri="{Binding DocumentationUrl}"
-                       attachedProperties:Link.OpenInBrowser="true">ShipWorks API Documentation
-            </Hyperlink>
-        </TextBlock>            
     </Grid>
 </UserControl>
