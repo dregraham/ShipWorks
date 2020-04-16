@@ -63,15 +63,19 @@ namespace ShipWorks.Api.Configuration
         {
             RemoveOldRegistrations(portNumber, useHttps, oldPortNumber, oldUseHttps);
 
-            if (useHttps)
+            // register the port
+            string s = useHttps ? "s" : string.Empty;
+            string command = $"http add urlacl url=http{s}://+:{portNumber}/ user=Everyone";
+
+            NetshCommand.Execute(command);
+
+            if (!useHttps)
             {
-                return RegisterWithHttps(portNumber);
+                return true;
             }
             else
             {
-                string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
-
-                return NetshCommand.Execute(command) == 0;
+                return RegisterWithHttps(portNumber);
             }
         }
 
@@ -113,23 +117,14 @@ namespace ShipWorks.Api.Configuration
                 if (string.IsNullOrWhiteSpace(thumbprint))
                 {
                     log.Error("Failed to retrieve ShipWorksAPI certificate");
-                }
-
-                // register the port
-                string command = $"http add urlacl url=https://+:{portNumber}/ user=Everyone";
-
-                if (NetshCommand.Execute(command) == 0)
-                {
-                    // add the ssl cert to the port
-                    command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{214124cd-d05b-4309-9af9-9caa44b2b74a}} certstorename=Root";
-
-                    return NetshCommand.Execute(command) == 0;
-                }
-                else
-                {
-                    log.Error($"Failed to register url https://+:{portNumber}/");
                     return false;
                 }
+
+                // add the ssl cert to the port
+                string command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{214124cd-d05b-4309-9af9-9caa44b2b74a}} certstorename=Root";
+
+                return NetshCommand.Execute(command) == 0;
+
             }
             catch (Exception ex)
             {
