@@ -10,7 +10,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
     /// <summary>
     /// Winforms host for the WPF ApiSettingsControl
     /// </summary>
-    [Component]
+    [Component(RegistrationType.SpecificService, Service = typeof(IApiSettingsPage))]
     public partial class ApiSettingsHost : SettingsPageBase, IApiSettingsPage
     {
         private readonly ApiSettingsViewModel viewModel;
