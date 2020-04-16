@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     /// Window for buying endicia postage
     /// </summary>
     [Component(RegistrationType.Self)]
-    public partial class EndiciaBuyPostageDlg : Form, IExpress1PurchasePostageDlg
+    public partial class EndiciaBuyPostageDlg : Form, IExpress1PurchasePostageDlg, IForm
     {
         static readonly ILog log = LogManager.GetLogger(typeof(EndiciaBuyPostageDlg));
 
