@@ -55,6 +55,8 @@ namespace ShipWorks.Api.Configuration.Logging
                     requestStream.CopyTo(logStream);
                     logEntry.LogRequest(BuildRequestLog(context.Request.Path.ToString(), logStream.ConvertToString()), "json");
                 }
+
+                requestStream.Seek(0, SeekOrigin.Begin);
             }
 
             // Convert write only context stream to readable memory stream
