@@ -15,6 +15,7 @@ namespace ShipWorks.Api.Configuration
     [Component]
     public class ApiPortRegistrationService : IApiPortRegistrationService
     {
+        private const string ShipWorksApiCertificateName = "ShipWorksAPI";
         private readonly ILog log;
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace ShipWorks.Api.Configuration
             {
                 FileName = "powershell.exe",
                 Arguments =
-                    @"New-SelfSignedCertificate -FriendlyName ShipWorksAPI -NotAfter (Get-Date -Year 2038 -Month 1 -Day 19) -Subject ShipWorksAPI -CertStoreLocation Cert:\LocalMachine\My",
+                    $@"New-SelfSignedCertificate -FriendlyName {ShipWorksApiCertificateName} -NotAfter (Get-Date -Year 2038 -Month 1 -Day 19) -Subject {ShipWorksApiCertificateName} -CertStoreLocation Cert:\LocalMachine\My",
                 WindowStyle = ProcessWindowStyle.Hidden
             };
             process.Start();
@@ -154,7 +155,7 @@ namespace ShipWorks.Api.Configuration
         private static X509Certificate2 GetShipWorksApiCertFromStore(X509Store store)
         {
             X509Certificate2Collection certCollection =
-                store.Certificates.Find(X509FindType.FindBySubjectName, "ShipWorksApi", false);
+                store.Certificates.Find(X509FindType.FindBySubjectName, ShipWorksApiCertificateName, false);
 
             return certCollection.Count > 0 ? certCollection[0] : null;
         }
