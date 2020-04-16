@@ -48,14 +48,11 @@ namespace ShipWorks.Api.Configuration.Logging
                 context.Request.Body.CopyTo(requestStream);
                 context.Request.Body = requestStream;
 
+                requestStream.Seek(0, SeekOrigin.Begin);
+
                 using (MemoryStream logStream = new MemoryStream())
                 {
                     requestStream.CopyTo(logStream);
-
-                    // Roll all the streams back
-                    requestStream.Seek(0, SeekOrigin.Begin);
-                    logStream.Seek(0, SeekOrigin.Begin);
-
                     logEntry.LogRequest(BuildRequestLog(context.Request.Path.ToString(), logStream.ConvertToString()), "json");
                 }
             }

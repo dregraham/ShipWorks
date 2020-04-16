@@ -77,6 +77,17 @@ namespace ShipWorks.Api.Partner.StreamTech
         public async Task<HttpResponseMessage> ProcessShipment([FromUri]string barcode, [FromBody]StreamTechRequest streamTechRequest)
         {
             RequestData request = streamTechRequest.Request;
+
+            if (request == null)
+            {
+                return CreateResponse(Request, HttpStatusCode.BadRequest, new ResponseData()
+                {
+                    MessageNumber = "0",
+                    ErrorCode = 400,
+                    ZplLabel = Convert.ToBase64String(Encoding.UTF8.GetBytes("Invalid Request"))
+                });
+            }
+
             try
             {
                 IEnumerable<OrderEntity> orders = orderRepository.GetOrders(barcode);
