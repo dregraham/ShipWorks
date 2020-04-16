@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create a dialog that will allow a customer to purchase more postage
         /// </summary>
-        public Form CreatePostageDialog(ILifetimeScope lifetimeScope)
+        public IForm CreatePostageDialog(ILifetimeScope lifetimeScope)
         {
             EndiciaBuyPostageDlg dialog = lifetimeScope.Resolve<EndiciaBuyPostageDlg>();
             dialog.LoadAccount(account);

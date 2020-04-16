@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// Window for purchasing more USPS postage
     /// </summary>
     [Component(RegistrationType.Self)]
-    public partial class UspsPurchasePostageDlg : Form, IExpress1PurchasePostageDlg
+    public partial class UspsPurchasePostageDlg : Form, IExpress1PurchasePostageDlg, IForm
     {
         static readonly ILog log = LogManager.GetLogger(typeof(UspsPurchasePostageDlg));
 
