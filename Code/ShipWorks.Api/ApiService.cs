@@ -80,7 +80,7 @@ namespace ShipWorks.Api
             if (settings.Enabled)
             {
                 StopIfSettingsChanged(settings);
-                StartIfNotRunning();
+                StartIfNotRunning(settings);
             }
             else
             {
@@ -112,7 +112,7 @@ namespace ShipWorks.Api
         /// <summary>
         /// Start the ShipWorks API
         /// </summary>
-        private void StartIfNotRunning()
+        private void StartIfNotRunning(ApiSettings settings)
         {
             if (healthCheckClient.IsRunning(port.Value))
             {
@@ -125,10 +125,13 @@ namespace ShipWorks.Api
                 try
                 {
                     string s = useHttps ? "s" : string.Empty;
+                    string url = $"http{s}://+:{port}/";
                     apiStartup = apiStartupFactory();
-                    server = webApp.Start($"http{s}://+:{port}/", apiStartup.Configuration);
+                    server = webApp.Start(url, apiStartup.Configuration);
                     log.Info("ShipWorks.API has started");
                     Status = ApiStatus.Running;
+                    settings.LastSuccessfulUrl = url;
+                    settingsRepository.Save(settings);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Api
+﻿using ShipWorks.Api.Configuration;
+
+namespace ShipWorks.Api
 {
     /// <summary>
     /// Represents the Api Port Registration Service
@@ -8,7 +10,7 @@
         /// <summary>
         /// Register the given port number
         /// </summary>
-        bool Register(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps);
+        bool Register(ApiSettings settings);
 
         /// <summary>
         /// Register the given port running the process as admin

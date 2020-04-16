@@ -31,32 +31,26 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ApiSettings settings = scope.Resolve<IApiSettingsRepository>().Load();
-                long port;
-                bool useHttps;
-                long oldPort = settings.Port;
-                bool oldUseHttps = settings.UseHttps;
-                if (args.Count != 2)
-                {
-                    port = settings.Port;
-                    useHttps = settings.UseHttps;
-                }
-                else
+
+                if (args.Count == 2)
                 {
                     // Try to get port from args, fallback to settings
-                    port = long.TryParse(args[0], out long portNumber) ?
-                        portNumber :
-                        settings.Port;
+                    if (long.TryParse(args[0], out long portNumber))
+                    {
+                        settings.Port = portNumber;
+                    }
 
                     // Try to get useHttps from args, fallback to settings
-                    useHttps = bool.TryParse(args[1], out bool https) ?
-                        https :
-                        settings.UseHttps;
+                    if (bool.TryParse(args[1], out bool https))
+                    {
+                        settings.UseHttps = https;
+                    }
                 }
 
                 bool registrationSuccess;
                 try
                 {
-                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps, oldPort, oldUseHttps);
+                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(settings);
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +60,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 if (!registrationSuccess)
                 {
-                    var errorMessage = $"Failed to register port {port} for the ShipWorks API";
+                    var errorMessage = $"Failed to register port {settings.Port} for the ShipWorks API";
                     log.Error(errorMessage);
                     Environment.ExitCode = -1;
                 }

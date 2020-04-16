@@ -22,5 +22,10 @@ namespace ShipWorks.Api.Configuration
         /// The port number used by the API
         /// </summary>
         public long Port { get; set; } = 8081;
+
+        /// <summary>
+        /// The last url that the API successfully started on
+        /// </summary>
+        public string LastSuccessfulUrl { get; set; }
     }
 }

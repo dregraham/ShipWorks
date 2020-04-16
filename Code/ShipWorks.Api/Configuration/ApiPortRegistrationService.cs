@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -59,49 +60,68 @@ namespace ShipWorks.Api.Configuration
         /// <summary>
         /// Register the given port
         /// </summary>
-        public bool Register(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps)
+        public bool Register(ApiSettings settings)
         {
-            RemoveOldRegistrations(portNumber, useHttps, oldPortNumber, oldUseHttps);
-
-            // register the port
-            string s = useHttps ? "s" : string.Empty;
-            string command = $"http add urlacl url=http{s}://+:{portNumber}/ user=Everyone";
-
-            NetshCommand.Execute(command);
-
-            if (!useHttps)
+            if (!string.IsNullOrWhiteSpace(settings.LastSuccessfulUrl))
             {
+                // We need to remove the previous registrations so they don't conflict with new ones
+                RemoveOldRegistrations(settings.LastSuccessfulUrl);
+            }
+
+            // register the new url
+            string s = settings.UseHttps ? "s" : string.Empty;
+            string command = $"http add urlacl url=http{s}://+:{settings.Port}/ user=Everyone";
+
+            if (NetshCommand.Execute(command) != 0)
+            {
+                // if the add url failed, re-add the old one
+                command = $"http add urlacl url={settings.LastSuccessfulUrl} user=Everyone";
+                NetshCommand.Execute(command);
+                return false;
+            }
+
+            if (settings.UseHttps)
+            {
+                Result result = RegisterWithHttps(settings.Port);
+                if (result.Failure)
+                {
+                    log.Error("Failed to retrieve ShipWorksAPI certificate");
+
+                    // If we failed to add the sslcert to the new url, add it back to the old one
+                    RegisterWithHttps(new Uri(settings.LastSuccessfulUrl).Port);
+                    return false;
+                }
+
                 return true;
             }
-            else
-            {
-                return RegisterWithHttps(portNumber);
-            }
+
+            return true;
         }
 
         /// <summary>
         /// Remove any old url and sslcert registrations
         /// </summary>
-        private void RemoveOldRegistrations(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps)
+        private void RemoveOldRegistrations(string oldUrl)
         {
-            if (portNumber != oldPortNumber || useHttps != oldUseHttps)
+            Uri oldUri = new Uri(oldUrl.Replace("+", "localhost"));
+
+            log.Info("Removing old url registration");
+            bool oldUseHttps = oldUri.Scheme == Uri.UriSchemeHttps;
+
+            string command = $"http delete urlacl url={oldUrl}";
+
+            if (NetshCommand.Execute(command) != 0)
             {
-                string s = oldUseHttps ? "s" : string.Empty;
-                string command = $"http delete urlacl url=http{s}://+:{oldPortNumber}/";
+                log.Error("Failed to remove old url registration");
+            }
+
+            if (oldUseHttps)
+            {
+                command = $"http delete sslcert ipport=0.0.0.0:{oldUri.Port}";
 
                 if (NetshCommand.Execute(command) != 0)
                 {
-                    log.Error("Failed to remove old url registration");
-                }
-
-                if (oldUseHttps)
-                {
-                    command = $"http delete sslcert ipport=0.0.0.0:{oldPortNumber}";
-
-                    if (NetshCommand.Execute(command) != 0)
-                    {
-                        log.Error("Failed to remove ssl cert from old url");
-                    }
+                    log.Error("Failed to remove ssl cert from old url");
                 }
             }
         }
@@ -109,27 +129,26 @@ namespace ShipWorks.Api.Configuration
         /// <summary>
         /// Register the given port and add an ssl certificate to it
         /// </summary>
-        private bool RegisterWithHttps(long portNumber)
+        private Result RegisterWithHttps(long portNumber)
         {
             try
             {
                 string thumbprint = GetShipWorksApiCertificateThumbprint();
                 if (string.IsNullOrWhiteSpace(thumbprint))
                 {
-                    log.Error("Failed to retrieve ShipWorksAPI certificate");
-                    return false;
+                    return Result.FromError("Failed to retrieve ShipWorksAPI certificate");
                 }
 
                 // add the ssl cert to the port
                 string command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{214124cd-d05b-4309-9af9-9caa44b2b74a}} certstorename=Root";
 
-                return NetshCommand.Execute(command) == 0;
-
+                return NetshCommand.Execute(command) == 0 ?
+                    Result.FromSuccess() :
+                    Result.FromError("Failed to add ssl cert to url");
             }
             catch (Exception ex)
             {
-                log.Error("Error while attempting to register port with https.", ex);
-                return false;
+                return Result.FromError(ex);
             }
         }
 
