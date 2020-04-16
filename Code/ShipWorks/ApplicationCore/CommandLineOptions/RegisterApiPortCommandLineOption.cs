@@ -33,7 +33,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 ApiSettings settings = scope.Resolve<IApiSettingsRepository>().Load();
                 long port;
                 bool useHttps;
-
+                long oldPort = settings.Port;
+                bool oldUseHttps = settings.UseHttps;
                 if (args.Count != 2)
                 {
                     port = settings.Port;
@@ -55,7 +56,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 bool registrationSuccess;
                 try
                 {
-                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps);
+                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port, useHttps, oldPort, oldUseHttps);
                 }
                 catch (Exception ex)
                 {

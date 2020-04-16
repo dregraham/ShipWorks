@@ -8,7 +8,7 @@
         /// <summary>
         /// Register the given port number
         /// </summary>
-        bool Register(long portNumber, bool useHttps);
+        bool Register(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps);
 
         /// <summary>
         /// Register the given port running the process as admin

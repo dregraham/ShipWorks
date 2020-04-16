@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using ShipWorks.ApplicationCore.CommandLineOptions;
@@ -24,23 +25,6 @@ namespace ShipWorks.Api.Configuration
         public ApiPortRegistrationService(Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(ApiPortRegistrationService));
-        }
-
-        /// <summary>
-        /// Register the given port
-        /// </summary>
-        public bool Register(long portNumber, bool useHttps)
-        {
-            if (useHttps)
-            {
-                return RegisterWithHttps(portNumber);
-            }
-            else
-            {
-                string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
-
-                return NetshCommand.Execute(command) == 0;
-            }
         }
 
         /// <summary>
@@ -70,6 +54,52 @@ namespace ShipWorks.Api.Configuration
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Register the given port
+        /// </summary>
+        public bool Register(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps)
+        {
+            RemoveOldRegistrations(portNumber, useHttps, oldPortNumber, oldUseHttps);
+
+            if (useHttps)
+            {
+                return RegisterWithHttps(portNumber);
+            }
+            else
+            {
+                string command = $"http add urlacl url=http://+:{portNumber}/ user=Everyone";
+
+                return NetshCommand.Execute(command) == 0;
+            }
+        }
+
+        /// <summary>
+        /// Remove any old url and sslcert registrations
+        /// </summary>
+        private void RemoveOldRegistrations(long portNumber, bool useHttps, long oldPortNumber, bool oldUseHttps)
+        {
+            if (portNumber != oldPortNumber || useHttps != oldUseHttps)
+            {
+                string s = oldUseHttps ? "s" : string.Empty;
+                string command = $"http delete urlacl url=http{s}://+:{oldPortNumber}/";
+
+                if (NetshCommand.Execute(command) != 0)
+                {
+                    log.Error("Failed to remove old url registration");
+                }
+
+                if (oldUseHttps)
+                {
+                    command = $"http delete sslcert ipport=0.0.0.0:{oldPortNumber}";
+
+                    if (NetshCommand.Execute(command) != 0)
+                    {
+                        log.Error("Failed to remove ssl cert from old url");
+                    }
+                }
+            }
         }
 
         /// <summary>
