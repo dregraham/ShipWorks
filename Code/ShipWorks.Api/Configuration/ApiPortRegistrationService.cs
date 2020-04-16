@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Win32;
@@ -70,25 +71,32 @@ namespace ShipWorks.Api.Configuration
             return true;
         }
 
+        /// <summary>
+        /// Register the given port and add an ssl certificate to it
+        /// </summary>
         private bool RegisterWithHttps(long portNumber)
         {
-            string scriptFilePath = "./RegisterApiWithHttps.ps1";
-
             try
             {
-                Process process = new Process();
-                process.StartInfo = new ProcessStartInfo()
+                string thumbprint = GetShipWorksApiCertificateThumbprint();
+                if (string.IsNullOrWhiteSpace(thumbprint))
                 {
-                    FileName = "powershell.exe",
-                    Arguments = $"-File \"{scriptFilePath}\" {portNumber}",
-                    Verb = "runas",
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                process.Start();
-                process.WaitForExit();
+                    log.Error("Failed to retrieve ShipWorksAPI certificate");
+                }
 
-                if (process.ExitCode != 0)
+                // register the port
+                string command = $"http add urlacl url=https://+:{portNumber}/ user=Everyone";
+
+                if (NetshCommand.Execute(command) == 0)
                 {
+                    // add the ssl cert to the port
+                    command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{214124cd-d05b-4309-9af9-9caa44b2b74a}} certstorename=Root";
+
+                    return NetshCommand.Execute(command) == 0;
+                }
+                else
+                {
+                    log.Error($"Failed to register url https://+:{portNumber}/");
                     return false;
                 }
             }
@@ -97,8 +105,58 @@ namespace ShipWorks.Api.Configuration
                 log.Error("Error while attempting to register port with https.", ex);
                 return false;
             }
+        }
 
-            return true;
+        /// <summary>
+        /// Get the thumbprint of the ShipWorksAPI certificate. If a certificate does not already exist, this will create one.
+        /// </summary>
+        private string GetShipWorksApiCertificateThumbprint()
+        {
+            X509Store rootStore = new X509Store("Root", StoreLocation.LocalMachine);
+            rootStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+            X509Certificate2 cert = GetShipWorksApiCertFromStore(rootStore) ?? CreateShipWorksApiCertificate();
+
+            return cert?.Thumbprint;
+        }
+
+        /// <summary>
+        /// Create a ShipWorksAPI certificate and move it to the root certificate store
+        /// </summary>
+        private X509Certificate2 CreateShipWorksApiCertificate()
+        {
+            Process process = new Process();
+            process.StartInfo = new ProcessStartInfo()
+            {
+                FileName = "powershell.exe",
+                Arguments =
+                    @"New-SelfSignedCertificate -FriendlyName ShipWorksAPI -NotAfter (Get-Date -Year 2038 -Month 1 -Day 19) -Subject ShipWorksAPI -CertStoreLocation Cert:\LocalMachine\My",
+                WindowStyle = ProcessWindowStyle.Hidden
+            };
+            process.Start();
+            process.WaitForExit();
+
+            // New-SelfSignedCertificate can only store them in the "My" store. Get the thumbprint so we can move it
+            X509Store myStore = new X509Store("My", StoreLocation.LocalMachine);
+            myStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+            var cert = GetShipWorksApiCertFromStore(myStore);
+
+            process.StartInfo.Arguments = $"Move-Item -Path Cert:\\LocalMachine\\My\\{cert.Thumbprint} -Destination Cert:\\LocalMachine\\Root";
+            process.Start();
+            process.WaitForExit();
+
+            return cert;
+        }
+
+        /// <summary>
+        /// Get the ShipWorksAPI certificate from the given store. Returns null if not found.
+        /// </summary>
+        private static X509Certificate2 GetShipWorksApiCertFromStore(X509Store store)
+        {
+            X509Certificate2Collection certCollection =
+                store.Certificates.Find(X509FindType.FindBySubjectName, "ShipWorksApi", false);
+
+            return certCollection.Count > 0 ? certCollection[0] : null;
         }
     }
 }
