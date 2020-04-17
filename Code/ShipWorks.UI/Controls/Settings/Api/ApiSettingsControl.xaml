@@ -26,6 +26,7 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
+            <valueConverters:InverseBooleanConverter x:Key="InverseBool" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="10" Grid.IsSharedSizeScope="True">
@@ -121,11 +122,17 @@
                        HorizontalAlignment="Right"
                        Margin="0 0 0 10"/>
 
-            <CheckBox Grid.Row="0"
-                      Grid.Column="1"
-                      Margin="4 0 0 10"
-                      VerticalAlignment="Center"
-                      IsChecked="{Binding UseHttps}"/>
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
+                        Margin="4 0 0 10"
+                        Orientation="Horizontal">
+                <CheckBox VerticalAlignment="Center"
+                          IsChecked="{Binding UseHttps}"
+                          IsEnabled="{Binding IsWindows7, Converter={StaticResource InverseBool}}"/>
+                <TextBlock Text="This option is not supported on Windows 7"
+                           Margin="10 0 0 0"
+                           Visibility="{Binding IsWindows7, Converter={StaticResource BoolToVis}}"/>
+            </StackPanel>
 
             <TextBlock Grid.Row="1" 
                        Grid.Column="0"
@@ -141,6 +148,7 @@
                      Height="23"
                      Width="60"/>
             <controls:UACButton Grid.Row="2"
+                    HorizontalAlignment="Left"
                     Grid.Column="1"
                     Margin="5 0 0 0"
                     Content="{Binding SaveButtonText}"

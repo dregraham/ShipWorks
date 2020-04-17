@@ -170,6 +170,18 @@ namespace ShipWorks.UI.Controls.Settings.Api
         }
 
         /// <summary>
+        /// Whether or not the user is on Windows 7
+        /// </summary>
+        public bool IsWindows7
+        {
+            get
+            {
+                Version osVersion = Environment.OSVersion.Version;
+                return osVersion.Major == 6 && osVersion.Minor == 1;
+            }
+        }
+
+        /// <summary>
         /// Load the current api settings
         /// </summary>
         public void Load()
