@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -50,8 +50,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
             this.log = logFactory(typeof(ApiSettingsViewModel));
-            StartCommand = new RelayCommand(ToggleEnabled);
-            UpdateCommand = new RelayCommand(Update, () => Status != ApiStatus.Updating);
+            StartCommand = new RelayCommand(async () => await ToggleEnabled().ConfigureAwait(true));
+            UpdateCommand = new RelayCommand(async () => await Update().ConfigureAwait(true), () => Status != ApiStatus.Updating);
             SaveButtonText = "Save";
         }
 
@@ -192,7 +192,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// <summary>
         /// Start the API
         /// </summary>
-        private void ToggleEnabled()
+        private async Task ToggleEnabled()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
@@ -213,14 +213,14 @@ namespace ShipWorks.UI.Controls.Settings.Api
                 settingsRepository.Save(apiSettings);
 
                 string failureMessage = $"Failed to {verb} the ShipWorks API.";
-                WaitForStatusToUpdate(statusToCheckFor, failureMessage);
+                await WaitForStatusToUpdate(statusToCheckFor, failureMessage).ConfigureAwait(true);
             }
         }
 
         /// <summary>
         /// Update Port and Protocol
         /// </summary>
-        private void Update()
+        private async Task Update()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
@@ -268,7 +268,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
                 string fail = "Failed to update the ShipWorks API settings.";
 
-                WaitForStatusToUpdate(expectedStatus, fail);
+                await WaitForStatusToUpdate(expectedStatus, fail).ConfigureAwait(true);
 
                 SaveButtonText = "Saved";
                 IsSaveEnabled = false;
@@ -295,7 +295,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// <summary>
         /// Wait for the api status to match the expected status
         /// </summary>
-        private void WaitForStatusToUpdate(ApiStatus expectedStatus, string failureMessage)
+        private async Task WaitForStatusToUpdate(ApiStatus expectedStatus, string failureMessage)
         {
             for (int tries = 0; tries < 10; tries++)
             {
@@ -305,7 +305,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
                     return;
                 }
 
-                Thread.Sleep(1000);
+                await Task.Delay(1000).ConfigureAwait(false);
             }
 
             Status = apiService.Status;
