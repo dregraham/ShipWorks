@@ -61,13 +61,14 @@
             this.detailLabel.Name = "detailLabel";
             this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
-            this.detailLabel.Text = "Take advantage of reduced rates with UPS® shipping labels for orders across all" +
-                " sales channels. Get started today!";
+            this.detailLabel.Text = "Take advantage of reduced rates with UPS® shipping labels for orders across all s" +
+    "ales channels. Get started today!";
             // 
             // OneBalanceUpsBannerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(244)))), ((int)(((byte)(244)))), ((int)(((byte)(244)))));
             this.Controls.Add(this.detailLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);

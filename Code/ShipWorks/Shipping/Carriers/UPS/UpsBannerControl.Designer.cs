@@ -67,6 +67,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (244)))), ((int) (((byte) (244)))), ((int) (((byte) (244)))));
             this.Controls.Add(this.detailLabel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
