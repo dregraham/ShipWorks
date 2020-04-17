@@ -60,7 +60,8 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
 
                 if (!registrationSuccess)
                 {
-                    var errorMessage = $"Failed to register port {settings.Port} for the ShipWorks API";
+                    string s = settings.UseHttps ? "s" : string.Empty;
+                    var errorMessage = $"Failed to register the ShipWorks API with http{s}://+:{settings.Port}/";
                     log.Error(errorMessage);
                     Environment.ExitCode = -1;
                 }

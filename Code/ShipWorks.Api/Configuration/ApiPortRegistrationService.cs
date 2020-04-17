@@ -7,6 +7,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.CommandLineOptions;
 
 namespace ShipWorks.Api.Configuration
@@ -17,14 +18,16 @@ namespace ShipWorks.Api.Configuration
     [Component]
     public class ApiPortRegistrationService : IApiPortRegistrationService
     {
+        private readonly IShipWorksSession shipWorksSession;
         private const string ShipWorksApiCertificateName = "ShipWorksAPI";
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ApiPortRegistrationService(Func<Type, ILog> logFactory)
+        public ApiPortRegistrationService(IShipWorksSession shipWorksSession, Func<Type, ILog> logFactory)
         {
+            this.shipWorksSession = shipWorksSession;
             log = logFactory(typeof(ApiPortRegistrationService));
         }
 
@@ -140,7 +143,7 @@ namespace ShipWorks.Api.Configuration
                 }
 
                 // add the ssl cert to the port
-                string command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{214124cd-d05b-4309-9af9-9caa44b2b74a}} certstorename=Root";
+                string command = $"http add sslcert ipport=0.0.0.0:{portNumber} certhash={thumbprint} appid={{{shipWorksSession.InstanceID}}} certstorename=Root";
 
                 return NetshCommand.Execute(command) == 0 ?
                     Result.FromSuccess() :
