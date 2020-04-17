@@ -1,5 +1,12 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
+                    xmlns:controls="clr-namespace:ShipWorks.UI.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary>
+            <valueConverters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        </ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
     <ControlTemplate x:Key="UACButtonTemplate" TargetType="{x:Type Button}">
             <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                 <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
@@ -7,7 +14,8 @@
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                    <Image x:Name="icon" Grid.Column="0"
+                    <Image x:Name="icon" Grid.Column="0"                           
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type controls:UACButton}}, Path=ShowShield, Converter={StaticResource BoolToVis}}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"
                            Width="16"

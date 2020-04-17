@@ -28,7 +28,7 @@ namespace ShipWorks.Api
         private readonly Func<IApiStartupConfiguration> apiStartupFactory;
         private readonly IHealthCheckClient healthCheckClient;
         private readonly IWebApp webApp;
-
+        private bool useHttps;
         private long? port;
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace ShipWorks.Api
             var settings = settingsRepository.Load();
             if (settings.Enabled)
             {
-                StopIfPortChanged(settings);
-                StartIfNotRunning();
+                StopIfSettingsChanged(settings);
+                StartIfNotRunning(settings);
             }
             else
             {
@@ -93,7 +93,7 @@ namespace ShipWorks.Api
         /// <summary>
         /// Stop If Port Changed
         /// </summary>
-        private void StopIfPortChanged(ApiSettings settings)
+        private void StopIfSettingsChanged(ApiSettings settings)
         {
             if (port.HasValue && port != settings.Port)
             {
@@ -101,12 +101,18 @@ namespace ShipWorks.Api
             }
 
             port = settings.Port;
+
+            if (useHttps != settings.UseHttps)
+            {
+                Stop();
+                useHttps = settings.UseHttps;
+            }
         }
 
         /// <summary>
         /// Start the ShipWorks API
         /// </summary>
-        private void StartIfNotRunning()
+        private void StartIfNotRunning(ApiSettings settings)
         {
             if (healthCheckClient.IsRunning(port.Value))
             {
@@ -118,10 +124,14 @@ namespace ShipWorks.Api
 
                 try
                 {
+                    string s = useHttps ? "s" : string.Empty;
+                    string url = $"http{s}://+:{port}/";
                     apiStartup = apiStartupFactory();
-                    server = webApp.Start($"http://+:{port}/", apiStartup.Configuration);
+                    server = webApp.Start(url, apiStartup.Configuration);
                     log.Info("ShipWorks.API has started");
                     Status = ApiStatus.Running;
+                    settings.LastSuccessfulUrl = url;
+                    settingsRepository.Save(settings);
                 }
                 catch (Exception ex)
                 {

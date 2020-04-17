@@ -890,7 +890,6 @@
     <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
-    <Compile Include="ApplicationCore\Settings\Api\ApiSettingsViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Api\IApiSettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />

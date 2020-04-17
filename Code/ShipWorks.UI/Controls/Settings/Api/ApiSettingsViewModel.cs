@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Input;
@@ -11,10 +10,9 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Api;
 using ShipWorks.Api.Configuration;
-using ShipWorks.ApplicationCore.Interaction;
 using Cursors = System.Windows.Forms.Cursors;
 
-namespace ShipWorks.ApplicationCore.Settings.Api
+namespace ShipWorks.UI.Controls.Settings.Api
 {
     /// <summary>
     /// Api Settings logic
@@ -29,18 +27,21 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         private readonly IApiSettingsRepository settingsRepository;
         private readonly IMessageHelper messageHelper;
         private readonly IApiPortRegistrationService apiPortRegistrationService;
-        private ILog log;
+        private readonly ILog log;
         private ApiStatus status;
         private string port;
+        private bool useHttps;
         private ApiSettings apiSettings;
+        private bool isSaveEnabled;
+        private string saveButtonText;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ApiSettingsViewModel(
-            IApiService apiService, 
-            IApiSettingsRepository settingsRepository, 
-            IMessageHelper messageHelper, 
+            IApiService apiService,
+            IApiSettingsRepository settingsRepository,
+            IMessageHelper messageHelper,
             IApiPortRegistrationService apiPortRegistrationService,
             Func<Type, ILog> logFactory)
         {
@@ -49,9 +50,9 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             this.messageHelper = messageHelper;
             this.apiPortRegistrationService = apiPortRegistrationService;
             this.log = logFactory(typeof(ApiSettingsViewModel));
-            StartCommand = new RelayCommand(Start, () => Status == ApiStatus.Stopped);
-            StopCommand = new RelayCommand(Stop, () => Status == ApiStatus.Running);
+            StartCommand = new RelayCommand(ToggleEnabled);
             UpdateCommand = new RelayCommand(Update, () => Status != ApiStatus.Updating);
+            SaveButtonText = "Save";
         }
 
         /// <summary>
@@ -61,7 +62,11 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         public ApiStatus Status
         {
             get => status;
-            set => Set(ref status, value);
+            set
+            {
+                Set(ref status, value);
+                RaisePropertyChanged(nameof(StartButtonText));
+            }
         }
 
         /// <summary>
@@ -71,10 +76,24 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         public string Port
         {
             get => port;
-            set 
+            set
             {
                 Set(ref port, value);
-                RaisePropertyChanged(nameof(DocumentationUrl));
+                UpdateSaveButton();
+            }
+        }
+
+        /// <summary>
+        /// Should the API use HTTPS
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool UseHttps
+        {
+            get => useHttps;
+            set
+            {
+                Set(ref useHttps, value);
+                UpdateSaveButton();
             }
         }
 
@@ -85,22 +104,70 @@ namespace ShipWorks.ApplicationCore.Settings.Api
         public ICommand StartCommand { get; }
 
         /// <summary>
-        /// Command to stop API
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public ICommand StopCommand { get; }
-
-        /// <summary>
         /// Command for updating port number
         /// </summary>
         [Obfuscation(Exclude = true)]
         public ICommand UpdateCommand { get; }
 
         /// <summary>
+        /// The root URL for the ShipWorks API
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ApiUrl
+        {
+            get
+            {
+                string s = UseHttps ? "s" : string.Empty;
+                return $"http{s}://{Environment.MachineName}:{Port}";
+            }
+        }
+
+        /// <summary>
         /// Url for the API Docs
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string DocumentationUrl => $"http://{Environment.MachineName}:{Port}/swagger/ui/index";
+        public string DocumentationUrl => $"{ApiUrl}/swagger/ui/index";
+
+        /// <summary>
+        /// Text to display on the start button
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string StartButtonText
+        {
+            get
+            {
+                switch (Status)
+                {
+                    case ApiStatus.Running:
+                        return "Stop";
+                    case ApiStatus.Stopped:
+                        return "Start";
+                    case ApiStatus.Updating:
+                    default:
+                        return "Updating";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Text to display on the save button
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string SaveButtonText
+        {
+            get => saveButtonText;
+            set => Set(ref saveButtonText, value);
+        }
+
+        /// <summary>
+        /// Whether or not saving is enabled
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsSaveEnabled
+        {
+            get => isSaveEnabled;
+            set => Set(ref isSaveEnabled, value);
+        }
 
         /// <summary>
         /// Load the current api settings
@@ -110,48 +177,55 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             apiSettings = settingsRepository.Load();
             Status = apiService.Status;
             Port = apiSettings.Port.ToString();
+            UseHttps = apiSettings.UseHttps;
+        }
+
+        /// <summary>
+        /// Update the save buttons text and whether or not it's enabled
+        /// </summary>
+        private void UpdateSaveButton()
+        {
+            IsSaveEnabled = Port != apiSettings.Port.ToString() || UseHttps != apiSettings.UseHttps;
+            SaveButtonText = "Save";
         }
 
         /// <summary>
         /// Start the API
         /// </summary>
-        private void Start()
+        private void ToggleEnabled()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
-                apiSettings.Enabled = true;
+                ApiStatus statusToCheckFor = ApiStatus.Running;
+                string verb = "start";
+
+                if (Status == ApiStatus.Running)
+                {
+                    apiSettings.Enabled = false;
+                    verb = "stop";
+                    statusToCheckFor = ApiStatus.Stopped;
+                }
+                else if (Status == ApiStatus.Stopped)
+                {
+                    apiSettings.Enabled = true;
+                }
+
                 settingsRepository.Save(apiSettings);
 
-                string fail = "Failed to start the ShipWorks API.";
-
-                WaitForStatusToUpdate(ApiStatus.Running, fail);
+                string failureMessage = $"Failed to {verb} the ShipWorks API.";
+                WaitForStatusToUpdate(statusToCheckFor, failureMessage);
             }
         }
 
         /// <summary>
-        /// Stop the API
-        /// </summary>
-        private void Stop()
-        {
-            using (messageHelper.SetCursor(Cursors.WaitCursor))
-            {
-                apiSettings.Enabled = false;
-                settingsRepository.Save(apiSettings);
-
-                string fail = "Failed to stop the ShipWorks API.";
-
-                WaitForStatusToUpdate(ApiStatus.Stopped, fail);
-            }
-        }
-
-        /// <summary>
-        /// Update the port number
+        /// Update Port and Protocol
         /// </summary>
         private void Update()
         {
             using (messageHelper.SetCursor(Cursors.WaitCursor))
             {
                 var originalPort = apiSettings.Port.ToString();
+                var originalUseHttps = apiSettings.UseHttps;
 
                 GenericResult<long> portValidationResult = ValidatePort();
                 if (portValidationResult.Failure)
@@ -163,18 +237,20 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 long portNumber = portValidationResult.Value;
 
                 Status = ApiStatus.Updating;
-
-                bool result = apiPortRegistrationService.RegisterAsAdmin(portNumber);
+                SaveButtonText = "Saving";
+                bool result = apiPortRegistrationService.RegisterAsAdmin(portNumber, UseHttps);
 
                 if (!result)
                 {
                     Status = apiService.Status;
-                    messageHelper.ShowError($"Failed to register port {portNumber}.");
+                    messageHelper.ShowError("Failed to update settings.");
                     Port = originalPort;
+                    UseHttps = originalUseHttps;
                     return;
                 }
 
                 apiSettings.Port = portNumber;
+                apiSettings.UseHttps = UseHttps;
                 try
                 {
                     settingsRepository.Save(apiSettings);
@@ -182,18 +258,22 @@ namespace ShipWorks.ApplicationCore.Settings.Api
                 catch (Exception ex)
                 {
                     Port = originalPort;
+                    UseHttps = originalUseHttps;
                     Status = apiService.Status;
                     log.Error("An error occurred saving api settings.", ex);
-                    messageHelper.ShowError($"Failed to update to port {portNumber}.");
+                    messageHelper.ShowError("Failed to update settings.");
                     return;
                 }
                 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
-                string fail = "Failed to update the ShipWorks API port number.";
+                string fail = "Failed to update the ShipWorks API settings.";
 
                 WaitForStatusToUpdate(expectedStatus, fail);
 
-                Status = apiService.Status;
+                SaveButtonText = "Saved";
+                IsSaveEnabled = false;
+                RaisePropertyChanged(nameof(ApiUrl));
+                RaisePropertyChanged(nameof(DocumentationUrl));
             }
         }
 
@@ -206,12 +286,6 @@ namespace ShipWorks.ApplicationCore.Settings.Api
             if (!long.TryParse(Port, out long portNumber) || portNumber <= MinPort || portNumber > MaxPort)
             {
                 messageHelper.ShowError("Please enter a valid port number.");
-                return GenericResult.FromError<long>(string.Empty);
-            }
-
-            // if the are trying to update the port to what the port is already set to return
-            if (apiSettings.Port == portNumber)
-            {
                 return GenericResult.FromError<long>(string.Empty);
             }
 

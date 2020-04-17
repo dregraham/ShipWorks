@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -28,16 +30,39 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                // If a part was passed as the first arg use it otherwise load port from repo
-                long port = long.TryParse(args.FirstOrDefault(), out long portNumber) ?
-                    portNumber :
-                    scope.Resolve<IApiSettingsRepository>().Load().Port;
+                ApiSettings settings = scope.Resolve<IApiSettingsRepository>().Load();
 
-                bool registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(port);
+                if (args.Count == 2)
+                {
+                    // Try to get port from args, fallback to settings
+                    if (long.TryParse(args[0], out long portNumber))
+                    {
+                        settings.Port = portNumber;
+                    }
+
+                    // Try to get useHttps from args, fallback to settings
+                    if (bool.TryParse(args[1], out bool https))
+                    {
+                        settings.UseHttps = https;
+                    }
+                }
+
+                bool registrationSuccess;
+                try
+                {
+                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(settings);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error registering port", ex);
+                    registrationSuccess = false;
+                }                
 
                 if (!registrationSuccess)
                 {
-                    log.Error($"Failed to register port {port} for the ShipWorks API");
+                    var errorMessage = $"Failed to register port {settings.Port} for the ShipWorks API";
+                    log.Error(errorMessage);
+                    Environment.ExitCode = -1;
                 }
 
                 return Task.CompletedTask;
