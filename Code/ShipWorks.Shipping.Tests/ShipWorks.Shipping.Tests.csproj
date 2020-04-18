@@ -360,7 +360,6 @@
     <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancyTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateRecentShipmentRepositoryTest.cs" />
     <Compile Include="Carriers\UPS\LocalRating\Validation\UpsLocalRateValidatorTest.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoPolicyTest.cs" />
     <Compile Include="Carriers\Postal\Usps\UspsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsShipmentAdapterTest.cs" />
     <Compile Include="Carriers\Ups\UpsOltShipmentPackageTypesBuilderTest.cs" />
@@ -416,6 +415,16 @@
     <Compile Include="Carriers\Ups\UpsRateHashingServiceTest.cs" />
     <Compile Include="Services\EditableShippingProfileRepositoryTest.cs" />
     <Compile Include="Services\ShippingProfileServiceTest.cs" />
+    <Compile Include="Services\Telemetry\AmazonSFPTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\AmazonSWATelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\FedExTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\AsendiaTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\EndiciaTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\iParcelTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\OnTracTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\PostalTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\UpsTelemetryMutatorTest.cs" />
+    <Compile Include="Services\Telemetry\UspsTelemetryMutatorTest.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKeyTest.cs" />
     <Compile Include="Settings\ShipmentDateCutoffTest.cs" />
     <Compile Include="ShipEngine\ShipEngineTrackingResultFactoryTest.cs" />

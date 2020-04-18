@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [Obfuscation(Exclude = true, StripAfterObfuscation = false)]
     public enum FedExMaskedDataType
     {
-        SecondaryBarcode=0
+        [Description("Secondary Barcode")]
+        SecondaryBarcode = 0
     }
 }

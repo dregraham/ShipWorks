@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Services;
-using System.Linq;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -71,13 +71,13 @@ namespace ShipWorks.Shipping.ShipEngine
                 RateShipmentRequest request = shipmentElementFactory.CreateRateRequest(shipment);
                 List<IPackageAdapter> packages = GetPackages(shipment);
 
-                request.RateOptions = new RateRequest() 
-                { 
+                request.RateOptions = new RateRequest()
+                {
                     CarrierIds = new List<string> { GetShipEngineCarrierID(shipment) }
                 };
 
                 string packagingCode = GetPackagingCode(packages.FirstOrDefault());
-                if(packagingCode != null)
+                if (packagingCode != null)
                 {
                     request.RateOptions.PackageTypes = new List<string>() { packagingCode };
                 }
@@ -88,9 +88,9 @@ namespace ShipWorks.Shipping.ShipEngine
                 {
                     request.Shipment.Customs = CreateCustoms(shipment);
                 }
-                
+
                 request.Shipment.Packages = shipmentElementFactory.CreatePackageForRating(packages, SetPackageInsurance);
-                                
+
                 return request;
             }
 
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Get the given package adapters package code
         /// </summary>
-        protected virtual string GetPackagingCode(IPackageAdapter package) => string.Empty;
+        protected virtual string GetPackagingCode(IPackageAdapter package) => null;
 
         /// <summary>
         /// Set insurance info for the given ShipmentPackage based onthe package adapter
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// Creates the ShipEngine customs node
         /// </summary>
         protected abstract InternationalOptions CreateCustoms(ShipmentEntity shipment);
-        
+
         /// <summary>
         /// Gets the carrier specific packages
         /// </summary>

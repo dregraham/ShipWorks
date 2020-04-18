@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -21,6 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Create a dialog that will allow a customer to purchase more postage
         /// </summary>
-        Form CreatePostageDialog(ILifetimeScope lifetimeScope);
+        IForm CreatePostageDialog(ILifetimeScope lifetimeScope);
     }
 }
