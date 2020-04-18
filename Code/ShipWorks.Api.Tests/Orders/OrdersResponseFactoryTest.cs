@@ -18,11 +18,18 @@ namespace ShipWorks.Api.Tests.Orders
     public class OrdersResponseFactoryTest
     {
         private readonly AutoMock mock;
+        private readonly Mock<ICarrierShipmentAdapter> shipmentAdapter;
         private readonly OrdersResponseFactory testObject;
 
         public OrdersResponseFactoryTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>(); 
+            shipmentAdapter.SetupGet(x => x.ServiceTypeName).Returns("Service");
+
+            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(f => f.Get(AnyShipment)).Returns(shipmentAdapter);
+
             testObject = mock.Create<OrdersResponseFactory>();
         }
 
@@ -110,8 +117,6 @@ namespace ShipWorks.Api.Tests.Orders
         {
             ProcessShipmentResult processShipmentResult = CreateProcessShipmentResult();
 
-            SetupCarrierShipmentAdapterFactory();
-
             var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
 
             Assert.Equal("FedEx", response.Carrier);
@@ -121,8 +126,6 @@ namespace ShipWorks.Api.Tests.Orders
         public void CreateProcessShipmentResponse_SetsService()
         {
             ProcessShipmentResult processShipmentResult = CreateProcessShipmentResult();
-
-            SetupCarrierShipmentAdapterFactory();
 
             var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
 
@@ -134,7 +137,6 @@ namespace ShipWorks.Api.Tests.Orders
         {
             ProcessShipmentResult processShipmentResult = CreateProcessShipmentResult();
 
-            SetupCarrierShipmentAdapterFactory();
 
             var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
 
@@ -146,81 +148,19 @@ namespace ShipWorks.Api.Tests.Orders
         {
             ProcessShipmentResult processShipmentResult = CreateProcessShipmentResult();
 
-            SetupCarrierShipmentAdapterFactory();
-
             var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
 
             Assert.Equal("foo", response.Tracking);
         }
 
         [Fact]
-        public void CreateProcessShipmentResponse_SetsLabel_WhenCarrierSupportsMultiplePackages()
+        public void CreateProcessShipmentResponse_DelegatesToApiLabelFactoryForLabels()
         {
-            var package1Labels = new[]
-            {
-                new LabelData("Package 1 Label Name 1", "Package 1 Label Image 1"),
-                new LabelData("Package 1 Label Name 2", "Package 1 Label Image 2"),
-            };
+            ProcessShipmentResult processShipmentResult = CreateProcessShipmentResult();
 
-            var package2Label = new[]
-            {
-                new LabelData("Package 2 Label Name 1", "Package 2 Label Image 1"),
-            };
+            testObject.CreateProcessShipmentResponse(processShipmentResult);
 
-            var expectedLabels = package1Labels.Concat(package2Label);
-
-            mock.Mock<IPackageAdapter>().SetupSequence(x => x.PackageId)
-                .Returns(1)
-                .Returns(2);
-
-            var packageAdapter1 = new TestPackageAdapter(1);
-            var packageAdapter2 = new TestPackageAdapter(2);
-
-            IEnumerable<IPackageAdapter> packageAdapters = new[]
-            {
-                packageAdapter1,
-                packageAdapter2
-            };
-
-            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.SetupGet(x => x.ServiceTypeName).Returns("Service");
-            shipmentAdapter.SetupGet(x => x.SupportsMultiplePackages).Returns(true);
-            shipmentAdapter.Setup(x => x.GetPackageAdapters()).Returns(packageAdapters);
-
-            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(f => f.Get(AnyShipment)).Returns(shipmentAdapter);
-
-            mock.Mock<IApiLabelFactory>().Setup(a => a.GetLabels(packageAdapter1.PackageId)).Returns(package1Labels);
-            mock.Mock<IApiLabelFactory>().Setup(a => a.GetLabels(packageAdapter2.PackageId)).Returns(package2Label);
-
-            var processShipmentResult = CreateProcessShipmentResult();
-
-            var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
-
-            Assert.Equal(expectedLabels, response.Labels);
-        }
-
-        [Fact]
-        public void CreateProcessShipmentResponse_SetsLabel_WhenCarrierDoesNotSupportMultiplePackages()
-        {
-            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.SetupGet(x => x.ServiceTypeName).Returns("Service");
-            shipmentAdapter.SetupGet(x => x.SupportsMultiplePackages).Returns(false);
-
-            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(f => f.Get(AnyShipment)).Returns(shipmentAdapter);
-
-            var expectedLabels = new[]
-            {
-                new LabelData("Package 1 Label Name 1", "Package 1 Label Image 1"),
-                new LabelData("Package 1 Label Name 2", "Package 1 Label Image 2"),
-            };
-
-            mock.Mock<IApiLabelFactory>().Setup(f => f.GetLabels(AnyLong)).Returns(expectedLabels);
-
-            var processShipmentResult = CreateProcessShipmentResult();
-
-            var response = testObject.CreateProcessShipmentResponse(processShipmentResult);
-
-            Assert.Equal(expectedLabels, response.Labels);
+            mock.Mock<IApiLabelFactory>().Verify(f => f.GetLabels(shipmentAdapter.Object));
         }
 
         private static ProcessShipmentResult CreateProcessShipmentResult()
@@ -234,14 +174,6 @@ namespace ShipWorks.Api.Tests.Orders
                     TrackingNumber = "foo"
                 }
             );
-        }
-
-        private void SetupCarrierShipmentAdapterFactory()
-        {
-            var shipmentAdapter = mock.Mock<ICarrierShipmentAdapter>();
-            shipmentAdapter.SetupGet(x => x.ServiceTypeName).Returns("Service");
-
-            mock.Mock<ICarrierShipmentAdapterFactory>().Setup(f => f.Get(AnyShipment)).Returns(shipmentAdapter);
         }
     }
 }

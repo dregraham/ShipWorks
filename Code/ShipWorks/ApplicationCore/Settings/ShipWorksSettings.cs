@@ -4,7 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Settings.Api;
 using ShipWorks.ApplicationCore.Settings.Warehouse;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Editions;
@@ -21,6 +23,7 @@ namespace ShipWorks.ApplicationCore.Settings
         // Maps list item name to the settings page that should be displayed for it
         private Dictionary<string, ISettingsPage> settingsPages = new Dictionary<string, ISettingsPage>();
         private readonly IMessenger messenger;
+        private IApiSettingsPage apiSettingsPage;
 
         /// <summary>
         /// Indicates if warehouse is allowed
@@ -65,6 +68,8 @@ namespace ShipWorks.ApplicationCore.Settings
             if (UserSession.IsLoggedOn && UserSession.User.IsAdmin)
             {
                 settingsPages["Advanced"] = InitializeSettingsPage(new SettingsPageAdvanced());
+                apiSettingsPage = scope.Resolve<IApiSettingsPage>();
+                settingsPages["API"] = InitializeSettingsPage(apiSettingsPage);
             }
 
             if (InterapptiveOnly.IsInterapptiveUser || InterapptiveOnly.MagicKeysDown)
@@ -99,6 +104,12 @@ namespace ShipWorks.ApplicationCore.Settings
         /// </summary>
         private void OnChangeSettingsPage(object sender, EventArgs e)
         {
+            if (apiSettingsPage.Control.Visible && apiSettingsPage?.IsSaving == true)
+            {
+                MessageHelper.ShowError(this, "ShipWorks is currently updating API settings. Please wait.");
+                return;
+            }
+
             string pageName = menuList.Items[menuList.SelectedIndex].ToString();
             ISettingsPage page = settingsPages[pageName];
 
@@ -132,6 +143,18 @@ namespace ShipWorks.ApplicationCore.Settings
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// When the form is trying to close itself, check to make sure we aren't in the middle of saving.
+        /// </summary>
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (apiSettingsPage?.IsSaving == true)
+            {
+                MessageHelper.ShowError(this, "ShipWorks is currently updating API settings. Please wait.");
+                e.Cancel = true;
+            }
         }
 
         /// <summary>

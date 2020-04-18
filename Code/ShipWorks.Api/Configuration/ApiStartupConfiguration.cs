@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Http.Routing;
 using Autofac;
 using Autofac.Integration.WebApi;
@@ -7,6 +6,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Microsoft.Web.Http;
 using Microsoft.Web.Http.Routing;
 using Owin;
+using ShipWorks.Api.Configuration.Logging;
 
 namespace ShipWorks.Api.Configuration
 {
@@ -35,6 +35,7 @@ namespace ShipWorks.Api.Configuration
         /// </summary>
         public void Configuration(IAppBuilder appBuilder)
         {
+            appBuilder.Use<LoggingMiddleware>();
             appBuilder.UseWebApi(httpConfiguration);
 
             ConfigureApiVersioning();

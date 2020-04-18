@@ -8,7 +8,7 @@ namespace Interapptive.Shared.Win32
     /// </summary>
     public static class NetshCommand
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(WindowsFirewallUtility));
+        static readonly ILog log = LogManager.GetLogger(typeof(NetshCommand));
 
         /// <summary>
         /// Execute 'netsh' with the specified arguments
@@ -19,7 +19,9 @@ namespace Interapptive.Shared.Win32
 
             Process process = new Process();
             process.StartInfo = new ProcessStartInfo("netsh", args);
-            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
             process.Start();
             string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();

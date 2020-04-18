@@ -148,5 +148,7 @@ namespace ShipWorks.ApplicationCore.Logging
         ShipWorksWarehouse,
 
         Rakuten,
+
+        ShipWorksAPI
     }
 }

@@ -8,6 +8,6 @@
         /// <summary>
         /// Returns true if running, else false
         /// </summary>
-        bool IsRunning();
+        bool IsRunning(long portNumber);
     }
 }
