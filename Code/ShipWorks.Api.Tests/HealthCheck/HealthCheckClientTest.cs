@@ -5,6 +5,7 @@ using Interapptive.Shared.Net.RestSharp;
 using Moq;
 using RestSharp;
 using ShipWorks.Api.HealthCheck;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Tests.Shared;
 using Xunit;
 
@@ -16,49 +17,56 @@ namespace ShipWorks.Api.Tests.HealthCheck
 
         public HealthCheckClientTest()
         {
-            mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            mock = AutoMockExtensions.GetLooseThatReturnsMocks();            
         }
 
         [Fact]
-        public void IsRunning_ReturnsTrue_WhenEndpointReturns200()
+        public void IsRunning_ReturnsTrue_WhenEndpointReturns200_AndInstanceIDMatches()
         {
-            var response = mock.Mock<IRestResponse>();
+            var instanceGuid = Guid.NewGuid();
+
+            var response = mock.Mock<IRestResponse<HealthCheckResponse>>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
+            response.Setup(r => r.Data).Returns(new HealthCheckResponse(instanceGuid, "OK"));
+
+            mock.Mock<IShipWorksSession>().Setup(s => s.InstanceID).Returns(instanceGuid);
 
             mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
-                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Returns(response);
+                .Setup(x => x.Execute<HealthCheckResponse>(It.IsAny<IRestRequest>())).Returns(response);
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.True(testObject.IsRunning());
+            Assert.True(testObject.IsRunning(8081));
         }
 
         [Fact]
         public void IsRunning_ReturnsFalse_WhenEndpointDoesNotReturn200()
         {
-            var response = mock.Mock<IRestResponse>();
+            var instanceGuid = Guid.NewGuid();
+
+            var response = mock.Mock<IRestResponse<HealthCheckResponse>>();
             response.Setup(r => r.StatusCode).Returns(HttpStatusCode.InternalServerError);
+            response.Setup(r => r.Data).Returns(new HealthCheckResponse(instanceGuid, "OK"));
+
+            mock.Mock<IShipWorksSession>().Setup(s => s.InstanceID).Returns(instanceGuid);
 
             mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
-                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Returns(response);
+                .Setup(x => x.Execute<HealthCheckResponse>(It.IsAny<IRestRequest>())).Returns(response);
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.False(testObject.IsRunning());
+            Assert.False(testObject.IsRunning(8081));
         }
 
         [Fact]
         public void IsRunning_ReturnsFalse_WhenExceptionOccurs()
         {
-            var response = mock.Mock<IRestResponse>();
-            response.Setup(r => r.StatusCode).Returns(HttpStatusCode.OK);
-
             mock.FromFactory<IRestClientFactory>().Mock(x => x.Create())
-                .Setup(x => x.Execute(It.IsAny<IRestRequest>())).Throws(new Exception());
+                .Setup(x => x.Execute<HealthCheckResponse>(It.IsAny<IRestRequest>())).Throws(new Exception());
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.False(testObject.IsRunning());
+            Assert.False(testObject.IsRunning(8081));
         }
     }
 }

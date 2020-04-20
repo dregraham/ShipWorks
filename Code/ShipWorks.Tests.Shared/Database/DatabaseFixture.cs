@@ -13,6 +13,7 @@ using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Utility;
 using Moq;
 using Respawn;
+using ShipWorks.Api.Configuration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
@@ -312,6 +313,9 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>())).Returns(true);
             securityContext.Setup(x => x.HasPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(true);
             securityContext.Setup(x => x.RequestPermission(It.IsAny<PermissionType>(), It.IsAny<long>())).Returns(Result.FromSuccess());
+
+            var apiSettingsRepository = mock.Override<IApiSettingsRepository>();
+            apiSettingsRepository.Setup(r => r.Load()).Returns(new ApiSettings());
 
             ShippingManager.InitializeForCurrentDatabase();
 

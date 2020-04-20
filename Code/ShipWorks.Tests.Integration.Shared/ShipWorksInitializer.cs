@@ -111,7 +111,7 @@ namespace ShipWorks.Tests.Integration.Shared
                     instance = Guid.Parse("{a721d9e4-fb3b-4a64-a612-8579b1251c95}");
                     break;
                 case "kevin":
-                    instance = Guid.Parse("{1393db92-517a-48ae-afb1-8f9d4edda751}");
+                    instance = Guid.Parse("{10000000-0000-0000-0000-000000000000}");
                     break;
                 case "MSTest-vm":
                     instance = Guid.Parse("{3BAE47D1-6903-428B-BD9D-31864E614709}");
