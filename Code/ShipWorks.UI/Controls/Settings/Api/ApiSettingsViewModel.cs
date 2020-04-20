@@ -278,7 +278,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
                 }
                 
                 ApiStatus expectedStatus = apiSettings.Enabled ? ApiStatus.Running : ApiStatus.Stopped;
-                string fail = "Failed to update the ShipWorks API settings.";
+                string fail = "Failed to restart the ShipWorks API with the new settings. Please try restarting ShipWorks or changing your settings.";
 
                 await WaitForStatusToUpdate(expectedStatus, fail).ConfigureAwait(true);
 
