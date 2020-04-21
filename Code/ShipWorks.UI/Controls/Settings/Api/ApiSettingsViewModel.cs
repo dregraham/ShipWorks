@@ -172,6 +172,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// <summary>
         /// Whether or not the user is on Windows 7
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsWindows7
         {
             get
