@@ -298,7 +298,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
             Port = Port.TrimStart('0');
 
             // validate port number
-            if (!long.TryParse(Port, out long portNumber) || portNumber <= MinPort || portNumber > MaxPort)
+            if (!long.TryParse(Port, out long portNumber) || portNumber < MinPort || portNumber > MaxPort)
             {
                 messageHelper.ShowError($"Please enter a valid port number between {MinPort} and {MaxPort}.");
                 return GenericResult.FromError<long>(string.Empty);
