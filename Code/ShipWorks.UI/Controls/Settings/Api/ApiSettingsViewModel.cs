@@ -223,6 +223,8 @@ namespace ShipWorks.UI.Controls.Settings.Api
                     apiSettings.Enabled = true;
                 }
 
+                Status = ApiStatus.Updating;
+
                 settingsRepository.Save(apiSettings);
 
                 string failureMessage = $"Failed to {verb} the ShipWorks API.";
@@ -312,7 +314,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// </summary>
         private async Task WaitForStatusToUpdate(ApiStatus expectedStatus, string failureMessage)
         {
-            for (int tries = 0; tries < 10; tries++)
+            for (int tries = 0; tries < 15; tries++)
             {
                 if (CheckForStatusUpdate(expectedStatus))
                 {
