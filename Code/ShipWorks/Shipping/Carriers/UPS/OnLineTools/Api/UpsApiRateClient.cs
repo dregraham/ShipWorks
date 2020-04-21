@@ -225,11 +225,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             UpsRateType accountRateType = (UpsRateType) account.RateType;
             UpsServiceType serviceType = (UpsServiceType) ups.Service;
 
-            if (UpsUtility.IsUpsMiService(serviceType))
-            {
-                return new List<UpsServiceRate>();
-            }
-
             // PickupType
             xmlWriter.WriteStartElement("PickupType");
             xmlWriter.WriteElementString("Code", UpsApiCore.GetPickupTypeCode(accountRateType));
@@ -341,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 {
                     guaranteedDaysToDelivery = null;
                 }
-                
+
                 if (!string.IsNullOrEmpty(warning))
                 {
                     log.WarnFormat("UPS returned a warning for rate {0}: {1}", serviceCode, warning);
