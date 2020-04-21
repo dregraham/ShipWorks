@@ -36,7 +36,7 @@ namespace ShipWorks.Api.Tests.HealthCheck
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.True(testObject.IsRunning(8081));
+            Assert.True(testObject.IsRunning(8081, false));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace ShipWorks.Api.Tests.HealthCheck
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.False(testObject.IsRunning(8081));
+            Assert.False(testObject.IsRunning(8081, false));
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace ShipWorks.Api.Tests.HealthCheck
 
             IHealthCheckClient testObject = mock.Create<HealthCheckClient>();
 
-            Assert.False(testObject.IsRunning(8081));
+            Assert.False(testObject.IsRunning(8081, false));
         }
     }
 }
