@@ -135,7 +135,7 @@ namespace ShipWorks.Api
                 }
                 catch (Exception ex)
                 {
-                    log.Debug("Unable to start the ShipWorks API.", ex);
+                    log.Error("Unable to start the ShipWorks API.", ex);
                 }
             }
         }
