@@ -20,7 +20,7 @@ namespace ShipWorks.UI.Controls.Settings.Api
     [Component(RegistrationType.Self)]
     public class ApiSettingsViewModel : ViewModelBase
     {
-        private const int MinPort = 0;
+        private const int MinPort = 1024;
         private const int MaxPort = 65535;
 
         private readonly IApiService apiService;
@@ -295,10 +295,12 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// </summary>
         private GenericResult<long> ValidatePort()
         {
+            Port = Port.TrimStart('0');
+
             // validate port number
             if (!long.TryParse(Port, out long portNumber) || portNumber <= MinPort || portNumber > MaxPort)
             {
-                messageHelper.ShowError("Please enter a valid port number.");
+                messageHelper.ShowError($"Please enter a valid port number between {MinPort} and {MaxPort}.");
                 return GenericResult.FromError<long>(string.Empty);
             }
 
