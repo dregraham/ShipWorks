@@ -34,11 +34,12 @@ namespace ShipWorks.Api.HealthCheck
         /// <summary>
         /// Returns true if running, else false
         /// </summary>
-        public bool IsRunning(long portNumber)
+        public bool IsRunning(long portNumber, bool useHttps)
         {
             IRestClient client = clientFactory.Create();
+            string s = useHttps ? "s" : string.Empty;
             IRestRequest request =
-                requestFactory.Create($"http://{Environment.MachineName}:{portNumber}/shipworks/api/v1/healthcheck", Method.GET);
+                requestFactory.Create($"http{s}://{Environment.MachineName}:{portNumber}/shipworks/api/v1/healthcheck", Method.GET);
             request.Timeout = 2000;
 
             try

@@ -114,7 +114,7 @@ namespace ShipWorks.Api
         /// </summary>
         private void StartIfNotRunning(ApiSettings settings)
         {
-            if (healthCheckClient.IsRunning(port.Value))
+            if (healthCheckClient.IsRunning(port.Value, useHttps))
             {
                 Status = ApiStatus.Running;
             }
