@@ -2,7 +2,6 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping;
-using System;
 
 namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
 {
@@ -34,7 +33,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// <summary>
         /// Gets the shortened account description.
         /// </summary>
-        public string ShortAccountDescription => AccountNumber.ToString();
+        public string ShortAccountDescription => UspsAccountId != null ? Description : AccountNumber.ToString();
 
         /// <summary>
         /// Applies account to shipment
