@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.helpLink1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink1.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink1.Location = new System.Drawing.Point(184, 21);
+            this.helpLink1.Location = new System.Drawing.Point(245, 21);
             this.helpLink1.Name = "helpLink1";
             this.helpLink1.Size = new System.Drawing.Size(65, 13);
             this.helpLink1.TabIndex = 13;
