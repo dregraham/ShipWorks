@@ -1220,6 +1220,9 @@
     <Compile Include="Shipping\Carriers\Amazon\SWA\AmazonSWAServiceType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\OneBalanceCreateStampsAccountDialog.xaml.cs">
+      <DependentUpon>OneBalanceCreateStampsAccountDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsLogoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsTrackClient.cs" />
@@ -11559,6 +11562,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ApplicationCore\Crashes\CrashDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Shipping\Carriers\OneBalanceCreateStampsAccountDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

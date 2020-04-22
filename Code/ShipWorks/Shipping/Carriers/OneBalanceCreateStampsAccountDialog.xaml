@@ -1,0 +1,40 @@
+﻿<ui:InteropWindow xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        x:Class="ShipWorks.Shipping.Carriers.OneBalanceCreateStampsAccountDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShipWorks.Shipping.Carriers"
+        mc:Ignorable="d"
+        Title="Create Stamps.com Account" Height="450" Width="800">
+    <ui:InteropWindow.Resources>
+        <Style TargetType="Button">
+            <Setter Property="MinWidth" Value="75" />
+            <Setter Property="Padding" Value="4,2,4,2" />
+        </Style>
+    </ui:InteropWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Image Source="/Resources/ups_from_shipworks.png" Margin="25" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center" Width="250"/>
+        <TextBlock Text="Getting access to great rates with UPS from ShipWorks requires a Stamps.com account." Grid.Row="1" Grid.Column="1" MaxWidth="250" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" MaxWidth="250" TextWrapping="Wrap" Margin="0,10,0,0">
+            Please create a Stamps.com account 
+            <Hyperlink NavigateUri="https://registration.stamps.com/registration/#!&amp;p=profile">here</Hyperlink>
+            and try again.
+        </TextBlock>
+        <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
+            <Button IsCancel="True" IsDefault="True" Grid.Row="3" HorizontalAlignment="Right" Margin="10">Close</Button>
+        </Border>
+        
+    </Grid>
+</ui:InteropWindow>
