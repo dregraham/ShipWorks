@@ -33,7 +33,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_StopsAndStartsTheTimer_WhenTimeEllapses()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning(8081))
+                .Setup(h => h.IsRunning(8081, false))
                 .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -52,7 +52,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_StartsWebApp_WhenServiceIsNotRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning(8081))
+                .Setup(h => h.IsRunning(8081, false))
                 .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -69,7 +69,7 @@ namespace ShipWorks.Api.Tests
             apiSettings.Port = 42;
 
             mock.Mock<IHealthCheckClient>()
-               .Setup(h => h.IsRunning(8081))
+               .Setup(h => h.IsRunning(8081, false))
                .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -87,7 +87,7 @@ namespace ShipWorks.Api.Tests
 
 
             mock.Mock<IHealthCheckClient>()
-               .Setup(h => h.IsRunning(8081))
+               .Setup(h => h.IsRunning(8081, false))
                .Returns(false);
 
             var testObject = mock.Create<ApiService>();
@@ -102,7 +102,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_DoesNotStartWebApp_WhenServiceIsRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning(8081))
+                .Setup(h => h.IsRunning(8081, false))
                 .Returns(true);
 
             var testObject = mock.Create<ApiService>();
@@ -116,7 +116,7 @@ namespace ShipWorks.Api.Tests
         public void InitializeForCurrentDatabase_DisposesOldService_WhenServiceIsNotRunning()
         {
             mock.Mock<IHealthCheckClient>()
-                .Setup(h => h.IsRunning(8081))
+                .Setup(h => h.IsRunning(8081, false))
                 .Returns(false);
 
             var startedWebApp = mock.CreateMock<IDisposable>();

@@ -6,9 +6,10 @@
              xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
              xmlns:controls="clr-namespace:ShipWorks.UI.Controls"
              xmlns:valueConverters="clr-namespace:ShipWorks.UI.ValueConverters"
-             xmlns:api="clr-namespace:ShipWorks.UI.Controls.Settings.Api"
+             xmlns:apiUi="clr-namespace:ShipWorks.UI.Controls.Settings.Api"
+             xmlns:api="clr-namespace:ShipWorks.Api;assembly=ShipWorks.Core"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance api:ApiSettingsViewModel}"
+             d:DataContext="{d:DesignInstance apiUi:ApiSettingsViewModel}"
              FontSize="11"
              FontFamily="Tahoma">
     <UserControl.Resources>
@@ -27,6 +28,7 @@
             </Style>
             <valueConverters:EnumDescriptionConverter x:Key="EnumDescription" />
             <valueConverters:InverseBooleanConverter x:Key="InverseBool" />
+            <valueConverters:ValueEqualToParameterConverter x:Key="WhenNotEqual" Invert="True"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid Margin="10" Grid.IsSharedSizeScope="True">
@@ -72,7 +74,8 @@
                            Margin="0 0 10 0"
                            Width="44"/>
                 <Button Content="{Binding StartButtonText}"
-                        Command="{Binding StartCommand}"/>
+                        Command="{Binding StartCommand}"
+                        IsEnabled="{Binding Status, Converter={StaticResource WhenNotEqual}, ConverterParameter={x:Static api:ApiStatus.Updating}}"/>
             </StackPanel>
 
             <TextBlock Grid.Row="1" 

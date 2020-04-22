@@ -8,6 +8,6 @@
         /// <summary>
         /// Returns true if running, else false
         /// </summary>
-        bool IsRunning(long portNumber);
+        bool IsRunning(long portNumber, bool useHttps);
     }
 }
