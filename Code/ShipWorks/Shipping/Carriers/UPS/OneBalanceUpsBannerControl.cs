@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.UPS
@@ -40,6 +44,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
+                var uspsAccountRepository = lifetimeScope.Resolve<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
+                if (uspsAccountRepository.AccountsReadOnly.None())
+                {
+                    new OneBalanceCreateStampsAccountDialog(this.ParentForm).ShowDialog();
+                    return;
+                }
                 lifetimeScope.ResolveKeyed<IOneBalanceSetupWizard>(ShipmentTypeCode.UpsOnLineTools).SetupOneBalanceAccount(this);
             }
 

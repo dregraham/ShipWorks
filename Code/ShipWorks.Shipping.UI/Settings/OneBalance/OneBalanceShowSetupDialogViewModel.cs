@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         {
             if (uspsAccountRepository.AccountsReadOnly.None())
             {
-                new OneBalanceCreateStampsAccountDialog().ShowDialog();
+                new OneBalanceCreateStampsAccountDialog(window).ShowDialog();
                 return;
             }
 
