@@ -11,5 +11,10 @@ namespace ShipWorks.Shipping.Settings
         /// Open an account setup wizard for adding a One Balance carrier account
         /// </summary>
         DialogResult SetupOneBalanceAccount(IWin32Window owner);
+
+        ///<summary>
+        /// Add an existing account
+        /// </summary>
+        DialogResult SetupExistingAccount(IWin32Window owner);
     }
 }

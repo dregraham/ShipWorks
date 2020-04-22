@@ -154,10 +154,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                IShipmentTypeSetupWizard dlg = lifetimeScope.Resolve<IShipmentTypeSetupWizardFactory>()
-                    .Create(ShipmentTypeCode.UpsOnLineTools, OpenedFromSource.Manager, TypedParameter.From(true));
+                IOneBalanceSetupWizard dlg = lifetimeScope.ResolveKeyed<IOneBalanceSetupWizard>(ShipmentTypeCode.UpsOnLineTools);
 
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                if (dlg.SetupExistingAccount(this) == DialogResult.OK)
                 {
                     LoadShippers();
                 }

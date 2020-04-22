@@ -227,6 +227,14 @@ namespace ShipWorks.Shipping.UI.Carriers.Dhl
             return ShowDialog(owner);
         }
 
+        ///<summary>
+        /// Add an existing DHL Express account
+        /// </summary>
+        public DialogResult SetupExistingAccount(IWin32Window owner)
+        {
+            return ShowDialog(owner);
+        }
+
         /// <summary>
         /// Copies the account info from a usps account
         /// </summary>
