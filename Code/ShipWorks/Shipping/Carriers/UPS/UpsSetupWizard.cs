@@ -87,19 +87,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
-        /// Setup an existing UPS Account. 
-        /// </summary>
-        public DialogResult SetupExistingAccount(IWin32Window owner)
-        {
-            this.panelNewOrExisting.Visible = false;
-            this.existingAccount.Checked = true;
-            this.labelWelcome1.Text = "Add an existing UPS account to ShipWorks.";
-            this.labelWelcome2.Visible = false;
-            this.helpLink1.Visible = false;
-            this.accountNumberPanel.Location = new System.Drawing.Point(25, 45);
-            return ShowDialog(owner);
-        }
-        /// <summary>
         /// Now that we have two separate selections, new or existing account, we have to reset to the original list of pages.
         /// Otherwise, if the user clicks next, pages for the currently selection option would be set, but if they click back
         /// and choose the other option, it's pages wouldn't be in the collection.
