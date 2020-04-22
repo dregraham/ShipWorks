@@ -4,6 +4,9 @@ using System.Windows.Forms;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -32,8 +35,9 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             IWin32Window window,
             IOneBalanceAccountHelper accountHelper,
             IMessageHelper messageHelper,
-            IShipmentTypeManager shipmentTypeManager)
-            : base(setupWizardFactory, window)
+            IShipmentTypeManager shipmentTypeManager,
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
+            : base(setupWizardFactory, window, uspsAccountRepository)
         {
             this.accountHelper = accountHelper;
             this.messageHelper = messageHelper;
