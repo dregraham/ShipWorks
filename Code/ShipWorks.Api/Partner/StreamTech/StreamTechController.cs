@@ -97,7 +97,7 @@ namespace ShipWorks.Api.Partner.StreamTech
                 {
                     case ComparisonResult.Equal:
                         ProcessShipmentResult processResult = await ProcessShipment(orders.First(), request);
-                        ResponseData responseData = BuildResponseData(processResult, request.MessageNumber);
+                        ResponseData responseData = BuildResponseData(processResult, request);
 
                         return CreateResponse(Request, HttpStatusCode.OK, responseData);
                     case ComparisonResult.More:
@@ -135,12 +135,13 @@ namespace ShipWorks.Api.Partner.StreamTech
         /// Build the ResponseData based on the shipment result
         /// </summary>
         /// <param name="processShipmentResult">The result of processing the shipment</param>
-        /// <param name="messageNumber">The StreamTech message number we are responding to</param>
-        private ResponseData BuildResponseData(ProcessShipmentResult processShipmentResult, string messageNumber)
+        /// <param name="requestData">The request data from StreamTech</param>
+        private ResponseData BuildResponseData(ProcessShipmentResult processShipmentResult, RequestData requestData)
         {
             ResponseData responseData = new ResponseData()
             {
-                MessageNumber = messageNumber
+                MessageNumber = requestData.MessageNumber, 
+                PackageIDBarcode = requestData.PackageIDBarcode
             };
 
             if (processShipmentResult.IsSuccessful)
