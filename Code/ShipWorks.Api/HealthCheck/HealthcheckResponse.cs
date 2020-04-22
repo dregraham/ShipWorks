@@ -11,6 +11,13 @@ namespace ShipWorks.Api.HealthCheck
     public class HealthCheckResponse
     {
         /// <summary>
+        /// Constructor 
+        /// </summary>
+        public HealthCheckResponse()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public HealthCheckResponse(Guid instanceId, string status)
@@ -23,12 +30,12 @@ namespace ShipWorks.Api.HealthCheck
         /// The status of the ShipWorks API
         /// </summary>
         [JsonProperty("status")]
-        public string Status { get; }
+        public string Status { get; set; }
 
         /// <summary>
         /// The ShipWorks instance ID that is running the API
         /// </summary>
         [JsonProperty("instanceId")]
-        public Guid InstanceId { get; }
+        public Guid InstanceId { get; set; }
     }
 }

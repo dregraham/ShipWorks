@@ -22,6 +22,8 @@ namespace ShipWorks.Api.Configuration
         {
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
+            builder.RegisterWebApiModelBinderProvider();
+            
             builder.RegisterType<HttpConfiguration>().AsSelf();
         }
     }

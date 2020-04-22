@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Services;
 
 namespace ShipWorks.Api.Orders.Shipments
 {
@@ -17,7 +19,6 @@ namespace ShipWorks.Api.Orders.Shipments
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="dataResourceManager"></param>
         public ApiLabelFactory(IDataResourceManager dataResourceManager)
         {
             this.dataResourceManager = dataResourceManager;
@@ -31,6 +32,43 @@ namespace ShipWorks.Api.Orders.Shipments
         {
             return dataResourceManager.GetConsumerResourceReferences(consumerID)
                 .Select(r => new LabelData(r.Label, Convert.ToBase64String(r.ReadAllBytes())));
+        }
+
+        /// <summary>
+        /// Get labels for the given carrierShipmentAdapter
+        /// </summary>
+        public IEnumerable<LabelData> GetLabels(ICarrierShipmentAdapter carrierShipmentAdapter)
+        {
+            IEnumerable<long> consumerIDs = GetLabelConsumerIds(carrierShipmentAdapter);
+
+            List<LabelData> result = new List<LabelData>();
+
+            foreach (long consumerID in consumerIDs)
+            {
+                result.AddRange(GetLabels(consumerID));
+            }
+
+            return result;
+        }
+            
+
+        /// <summary>
+        /// Get the label ConsumerIds for the given adapter
+        /// </summary>
+        private IEnumerable<long> GetLabelConsumerIds(ICarrierShipmentAdapter shipmentAdapter)
+        {
+            // Single package carriers and DHL Express store label data under the shipmentId
+            // DHL Express is a ShipEngine carrier and therefor uses the common ShipEngine logic
+            // for storing labels which is why it uses the shipmentId and not the packageId
+            if (!shipmentAdapter.SupportsMultiplePackages ||
+                shipmentAdapter.ShipmentTypeCode == ShipmentTypeCode.DhlExpress)
+            {
+                return new[] { shipmentAdapter.Shipment.ShipmentID };
+            }
+            else
+            {
+                return shipmentAdapter.GetPackageAdapters().Select(p => p.PackageId);
+            }
         }
     }
 }

@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using ShipWorks.Api;
+using ShipWorks.Api.Configuration;
 using ShipWorks.ApplicationCore.Interaction;
 
 namespace ShipWorks.ApplicationCore.CommandLineOptions
@@ -13,7 +17,6 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     public class RegisterApiPortCommandLineOption : ICommandLineCommandHandler
     {
         private readonly ILog log = LogManager.GetLogger(typeof(RegisterApiPortCommandLineOption));
-        private const long DefaultPortNumber = 8081;
 
         /// <summary>
         /// Name of this command
@@ -27,11 +30,40 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
         {
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
-                bool registrationSuccess =  scope.Resolve<IApiPortRegistrationService>().Register(DefaultPortNumber);
+                ApiSettings settings = scope.Resolve<IApiSettingsRepository>().Load();
+
+                if (args.Count == 2)
+                {
+                    // Try to get port from args, fallback to settings
+                    if (long.TryParse(args[0], out long portNumber))
+                    {
+                        settings.Port = portNumber;
+                    }
+
+                    // Try to get useHttps from args, fallback to settings
+                    if (bool.TryParse(args[1], out bool https))
+                    {
+                        settings.UseHttps = https;
+                    }
+                }
+
+                bool registrationSuccess;
+                try
+                {
+                    registrationSuccess = scope.Resolve<IApiPortRegistrationService>().Register(settings);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error registering port", ex);
+                    registrationSuccess = false;
+                }                
 
                 if (!registrationSuccess)
                 {
-                    log.Error($"Failed to register port {DefaultPortNumber} for the ShipWorks API");
+                    string s = settings.UseHttps ? "s" : string.Empty;
+                    var errorMessage = $"Failed to register the ShipWorks API with http{s}://+:{settings.Port}/";
+                    log.Error(errorMessage);
+                    Environment.ExitCode = -1;
                 }
 
                 return Task.CompletedTask;
