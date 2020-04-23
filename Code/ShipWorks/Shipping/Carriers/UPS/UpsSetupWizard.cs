@@ -82,7 +82,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             // Always set up a new account when using One Balance
             newAccountOnly = true;
-            newAccount.Checked = true;
             return ShowDialog(owner);
         }
 
@@ -113,11 +112,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 oneBalanceFinishPage
             });
 
-            if (!newAccountOnly)
-            {
-                existingAccount.Checked = true;
-            }
-
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
             // Prepare the correct Welcome page
@@ -137,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageWelcomeOlt);
             }
 
-            if (existingAccount.Checked)
+            if (!newAccountOnly)
             {
                 Pages.Remove(oneBalanceTandCPage);
                 Pages.Remove(oneBalanceAddressPage);
@@ -191,27 +185,26 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     optionsControlWorldShip.LoadSettings();
                     Pages.Remove(wizardPageOptionsOlt);
                 }
-
-                Pages.Add(new ShippingWizardPageOrigin(shipmentType));
-                Pages.Add(new ShippingWizardPageDefaults(shipmentType));
-
-                ShippingWizardPageAutomation automationPage = new ShippingWizardPageAutomation(shipmentType);
-
-                // WorldShip doesn't need printing
-                if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
-                {
-                    Pages.Add(new ShippingWizardPagePrinting(shipmentType));
-                }
-
-                Pages.Add(automationPage);
             }
 
+            Pages.Add(new ShippingWizardPageOrigin(shipmentType));
+            Pages.Add(new ShippingWizardPageDefaults(shipmentType));
+
+            ShippingWizardPageAutomation automationPage = new ShippingWizardPageAutomation(shipmentType);
+
+            // WorldShip doesn't need printing
+            if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
+            {
+                Pages.Add(new ShippingWizardPagePrinting(shipmentType));
+            }
+
+            Pages.Add(automationPage);
             Pages.Remove(wizardPageFinishAddAccount);
 
             // Insure finish is last
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
-                if (existingAccount.Checked)
+                if (!newAccountOnly)
                 {
                     Pages.Remove(wizardPageFinishOlt);
                     Pages.Add(wizardPageFinishOlt);
@@ -254,7 +247,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnLoad(object sender, EventArgs e)
         {
             ResetWizardPagesCollection();
-            ShowAccountNumberPanel();
         }
 
         /// <summary>
@@ -266,11 +258,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             string accountNumber = EnteredAccountNumber();
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
-                // we are using worldship so the new account option is never shown to the user
-                // set the newAccount to false
-                newAccount.Checked = false;
-                existingAccount.Checked = true;
-
                 if (!worldShipAgree1.Checked || !worldShipAgree2.Checked)
                 {
                     MessageHelper.ShowInformation(this, "You must read and agree to the WorldShip information statements.");
@@ -279,18 +266,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     return;
                 }
             }
-            else
-            {
-                // Make sure one of the check boxes is checked.
-                if (!newAccount.Checked && !existingAccount.Checked)
-                {
-                    MessageHelper.ShowMessage(this, "Please select an account option, New or Existing.");
-                    e.NextPage = CurrentPage;
-                }
-            }
 
             // Validate the entered account number
-            if (string.IsNullOrWhiteSpace(accountNumber) && existingAccount.Checked)
+            if (string.IsNullOrWhiteSpace(accountNumber) && !newAccountOnly)
             {
                 // Note: this will need to be refactored when we unhide the ability to create
                 // a new UPS account from ShipWorks
@@ -303,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             ResetWizardPagesCollection();
 
             // If this is for an existing account, remove the open account and one balance wizard pages.
-            if (existingAccount.Checked)
+            if (!newAccountOnly)
             {
                 e.NextPage = wizardPageLicense;
             }
@@ -620,7 +598,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnStepIntoOptionsOlt(object sender, WizardSteppingIntoEventArgs e)
         {
             // Disable the back button if we created a One Balance account
-            BackEnabled = existingAccount.Checked;
+            BackEnabled = !newAccountOnly;
         }
 
         /// <summary>
@@ -667,7 +645,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
 
                 // We created a new UPS account
-                if (newAccount.Checked)
+                if (newAccountOnly)
                 {
                     labelSetupComplete1.Text = "Congratulations, you successfully created a UPS account within ShipWorks!";
                     labelSetupComplete2.Text = $"Your new UPS account number: {upsAccount.AccountNumber}";
@@ -701,7 +679,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="e">The <see cref="WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void OnSteppingIntoRates(object sender, WizardSteppingIntoEventArgs e)
         {
-            upsRateTypeControl.Initialize(upsAccount, newAccount.Checked);
+            upsRateTypeControl.Initialize(upsAccount, newAccountOnly);
         }
 
         /// <summary>
@@ -713,24 +691,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 e.NextPage = CurrentPage;
             }
-        }
-
-        /// <summary>
-        /// Called when [account option check changed].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void OnAccountOptionCheckChanged(object sender, EventArgs e)
-        {
-            ShowAccountNumberPanel();
-        }
-
-        /// <summary>
-        /// Shows the account number panel.
-        /// </summary>
-        private void ShowAccountNumberPanel()
-        {
-            accountNumberPanel.Visible = existingAccount.Checked;
         }
 
          /// <summary>
