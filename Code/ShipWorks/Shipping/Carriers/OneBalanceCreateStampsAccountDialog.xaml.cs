@@ -16,7 +16,9 @@ namespace ShipWorks.Shipping.Carriers
             InitializeComponent();
         }
 
-
+        /// <summary>
+        /// Opens a browser to the stamps registration page
+        /// </summary>
         private void Hyperlink_Click(object sender, RoutedEventArgs e)
         {
             WebHelper.OpenUrl("https://registration.stamps.com/registration/#!&p=profile", this);
