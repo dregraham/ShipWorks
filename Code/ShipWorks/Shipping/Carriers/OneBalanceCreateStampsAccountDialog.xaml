@@ -38,9 +38,7 @@
         <Image Margin="0,0,10,25" Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Bottom"  RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="HighQuality" Source="/ShipWorks.Core;component/Resources/ups_from_shipworks.png" Stretch="None"/>
         <TextBlock Text="Getting access to great rates with UPS from ShipWorks requires a Stamps.com account." Grid.Row="1" Grid.Column="1"/>
         <TextBlock Grid.Row="2" Grid.Column="1" TextWrapping="Wrap" Margin="0,10,0,0">
-            Please create a Stamps.com account 
-            <Hyperlink Click="Hyperlink_Click">here</Hyperlink>
-            and try again.
+            Please create a Stamps.com account in the USPS portion of Shipping Settings and try again.
         </TextBlock>
         <Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Grid.Row="3" Grid.ColumnSpan="3" VerticalAlignment="Bottom">
             <Button IsCancel="True" IsDefault="True" Grid.Row="3" HorizontalAlignment="Right" Margin="10">Close</Button>
