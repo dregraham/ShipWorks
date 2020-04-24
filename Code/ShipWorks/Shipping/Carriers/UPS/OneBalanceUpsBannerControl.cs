@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 var uspsAccountRepository = lifetimeScope.Resolve<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
                 if (uspsAccountRepository.AccountsReadOnly.None())
                 {
-                    new OneBalanceCreateStampsAccountDialog(this.ParentForm).ShowDialog();
+                    MessageHelper.ShowError(this.ParentForm, "Getting access to great rates with UPS from ShipWorks requires a Stamps.com account.\n\r\n\rPlease create a Stamps.com account in the USPS portion of Shipping Settings and try again.");
                     return;
                 }
                 lifetimeScope.ResolveKeyed<IOneBalanceSetupWizard>(ShipmentTypeCode.UpsOnLineTools).SetupOneBalanceAccount(this);

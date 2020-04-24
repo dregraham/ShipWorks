@@ -37,9 +37,8 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
             IWin32Window window,
             IOneBalanceAccountHelper accountHelper,
             IMessageHelper messageHelper,
-            IShipmentTypeManager shipmentTypeManager,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
-            : base(setupWizardFactory, window, uspsAccountRepository)
+            IShipmentTypeManager shipmentTypeManager)
+            : base(setupWizardFactory, window, accountHelper)
         {
             this.accountHelper = accountHelper;
             this.messageHelper = messageHelper;
@@ -102,7 +101,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private bool RemoteDhlAccountEnabled()
         {
-            var result = accountHelper.GetUspsAccount();
+            var result = accountHelper.GetUspsAccount(ShipmentTypeCode.DhlExpress);
 
             if (result.Success)
             {
@@ -137,7 +136,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private bool AddDhlExpress()
         {
-            var result = accountHelper.GetUspsAccount();
+            var result = accountHelper.GetUspsAccount(ShipmentTypeCode.DhlExpress);
 
             if (result.Failure)
             {

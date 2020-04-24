@@ -7,6 +7,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -22,7 +24,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
     {
         private readonly IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory;
         private readonly IWin32Window window;
-        private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
+        private readonly IOneBalanceAccountHelper accountHelper;
 
         public event EventHandler SetupComplete;
 
@@ -31,11 +33,11 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public OneBalanceShowSetupDialogViewModel(IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory,
             IWin32Window window,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
+            IOneBalanceAccountHelper accountHelper)
         {
             this.setupWizardFactory = setupWizardFactory;
             this.window = window;
-            this.uspsAccountRepository = uspsAccountRepository;
+            this.accountHelper = accountHelper;
             ShowSetupWizardCommand = new RelayCommand<ShipmentTypeCode>((shipmentTypeCode) => InternalShowSetupWizard(shipmentTypeCode));
         }
 
@@ -59,9 +61,10 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         protected virtual void ShowSetupWizard(ShipmentTypeCode shipmentTypeCode)
         {
-            if (uspsAccountRepository.AccountsReadOnly.None())
+            var result = accountHelper.GetUspsAccount(shipmentTypeCode);
+            if (result.Failure)
             {
-                new OneBalanceCreateStampsAccountDialog(window).ShowDialog();
+                MessageHelper.ShowError(window, result.Exception.Message);
                 return;
             }
 

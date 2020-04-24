@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Get the account from stamps
         /// </summary>
-        GenericResult<IUspsAccountEntity> GetUspsAccount();
+        GenericResult<IUspsAccountEntity> GetUspsAccount(ShipmentTypeCode shipmentTypeCode);
 
         /// <summary>
         /// Get the dhl account from the local database
