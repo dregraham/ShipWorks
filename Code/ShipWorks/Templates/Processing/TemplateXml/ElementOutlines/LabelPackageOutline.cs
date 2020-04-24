@@ -22,12 +22,12 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         long? packageID;
         List<TemplateLabelData> labelData;
 
-        ImageFormat standardLabelFormat;
+        Func<ImageFormat> standardLabelFormat;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelPackageOutline(TemplateTranslationContext context, ImageFormat standardLabelFormat)
+        public LabelPackageOutline(TemplateTranslationContext context, Func<ImageFormat> standardLabelFormat)
             : base(context)
         {
             this.standardLabelFormat = standardLabelFormat;
