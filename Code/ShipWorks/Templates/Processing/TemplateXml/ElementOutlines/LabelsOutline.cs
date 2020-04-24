@@ -16,7 +16,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelsOutline(TemplateTranslationContext context, Func<ShipmentEntity> shipment, Lazy<List<TemplateLabelData>> labels, ImageFormat standardLabelFormat) :
+        public LabelsOutline(TemplateTranslationContext context, Func<ShipmentEntity> shipment, Lazy<List<TemplateLabelData>> labels, Func<ImageFormat> standardLabelFormat) :
             base(context)
         {
             AddAttribute("type", () => shipment().ActualLabelFormat == null ? "image" : "thermal");

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Add the labels content
             container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
             Lazy<TemplateLabelData> codReturn = new Lazy<TemplateLabelData>(() => labels.Value.FirstOrDefault(l => l.Name == "COD"));
