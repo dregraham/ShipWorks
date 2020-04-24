@@ -53,12 +53,17 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<string> CreateNewAccount()
         {
-            var createShipEngineAccount = new CreateShipEngineAccount()
-            {
-                ExternalAccountID = $"{tangoWebClient.GetTangoCustomerId()}-{databaseIdentifier.Get()}"
-            };
+            string customerId = tangoWebClient.GetTangoCustomerId();
+            var createShipEngineAccount = new CreateShipEngineAccount();
 
-            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(JsonConvert.SerializeObject(createShipEngineAccount), "application/json");
+            if (!string.IsNullOrEmpty(customerId))
+            {
+                createShipEngineAccount.ExternalAccountID = $"{customerId}-{databaseIdentifier.Get()}";
+            }
+
+            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(
+                JsonConvert.SerializeObject(createShipEngineAccount,
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), "application/json");
             request.Headers.Add("SW-originalRequestUrl", CreateAccountUrl);
             request.Uri = new Uri(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
 
