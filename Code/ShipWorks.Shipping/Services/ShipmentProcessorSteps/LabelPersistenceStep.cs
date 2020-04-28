@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
@@ -100,6 +101,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         shipmentForTango = ResetTemporaryAddressChanges(result, shipment);
 
+                        SaveSingleLabelTransacted(result, shipment);
+                    }
+                    catch (TransactionInDoubtException)
+                    {
                         SaveSingleLabelTransacted(result, shipment);
                     }
                     catch (ORMConcurrencyException)
