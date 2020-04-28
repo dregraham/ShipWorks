@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service
         /// </summary>
-        public ISwsimV90 Create(string logName, LogActionType logActionType)
+        public IExtendedSwsimV90 Create(string logName, LogActionType logActionType)
         {
             var client = new SwsimV90(logEntryFactory.GetLogEntry(ApiLogSource.Usps, logName, logActionType))
             {

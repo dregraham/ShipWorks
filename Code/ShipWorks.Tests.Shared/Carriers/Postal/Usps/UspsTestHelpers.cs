@@ -1,5 +1,4 @@
 ﻿using Moq;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
         /// </summary>
         /// <remarks>This hang is because we're mixing async calls with waits. Until we can use async calls
         /// for more of the web client, we'll need to use this.</remarks>
-        public static void SetupAddressValidationResponse(Mock<ISwsimV90> mock)
+        public static void SetupAddressValidationResponse(Mock<IExtendedSwsimV90> mock)
         {
             var type = typeof(CleanseAddressCompletedEventArgs);
 

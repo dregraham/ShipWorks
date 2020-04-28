@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
@@ -141,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private ISwsimV90 CreateWebService(string logName, LogActionType logActionType) =>
+        private IExtendedSwsimV90 CreateWebService(string logName, LogActionType logActionType) =>
            webServiceFactory.Create(logName, logActionType);
 
         /// <summary>
@@ -538,7 +539,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     noConfirmationServiceRates.AddRange(rateResults.Where(r => r.ServiceType == ServiceType.USFC || r.ServiceType == ServiceType.USPM));
                 }
             }
-            
+
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
             foreach (RateV33 noConfirmationServiceRate in noConfirmationServiceRates)
             {
@@ -663,33 +664,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Cleanse an address asynchronously
         /// </summary>
-        private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address)
-        {
-            using (ISwsimV90 webService = CreateWebService("CleanseAddress", LogActionType.ExtendedLogging))
-            {
-                CheckCertificate(webService.Url);
-
-                var stopwatch = new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress");
-                TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
-
-                webService.CleanseAddressCompleted += (s, e) =>
+        private Task<CleanseAddressCompletedEventArgs> CleanseAddressAsync(UspsAccountEntity account, Address address) =>
+            Functional.UsingAsync(CreateWebService("CleanseAddress", LogActionType.ExtendedLogging),
+                webService =>
                 {
-                    stopwatch.Dispose();
+                    CheckCertificate(webService.Url);
 
-                    if (e.Error != null)
-                    {
-                        taskCompletion.SetException(e.Error);
-                    }
-                    else
-                    {
-                        taskCompletion.SetResult(e);
-                    }
-                };
+                    var stopwatch = new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress");
+                    var taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
 
-                webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
-                return taskCompletion.Task;
-            }
-        }
+                    var callState = new object();
+
+                    var abortTimer = new Timer(
+                        webService.CancelAsync,
+                        callState,
+                        TimeSpan.FromMilliseconds(webService.Timeout),
+                        Timeout.InfiniteTimeSpan);
+
+                    webService.CleanseAddressCompleted += (s, e) =>
+                    {
+                        abortTimer.Dispose();
+                        stopwatch.Dispose();
+
+                        if (e.Error != null)
+                        {
+                            taskCompletion.SetException(e.Error);
+                        }
+                        else if (e.Cancelled)
+                        {
+                            taskCompletion.SetException(new TimeoutException());
+                        }
+                        else
+                        {
+                            taskCompletion.SetResult(e);
+                        }
+                    };
+
+                    webService.CleanseAddressAsync(GetCredentials(account, true), address, null, callState);
+
+                    return taskCompletion.Task;
+                });
 
         /// <summary>
         /// Adjusts the length of the address line to be not more than 50 characters.
@@ -945,9 +959,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         protected async Task<TelemetricResult<StampsLabelResponse>> ProcessShipmentInternal(
             ShipmentEntity shipment,
-            UspsAccountEntity account, 
-            bool requireFullAddressValidation, 
-            Guid integratorTransactionID, 
+            UspsAccountEntity account,
+            bool requireFullAddressValidation,
+            Guid integratorTransactionID,
             bool createEnvelopeRequest = false)
         {
             TelemetricResult<StampsLabelResponse> telemetricResult = new TelemetricResult<StampsLabelResponse>(TelemetricResultBaseName.ApiResponseTimeInMilliseconds);
@@ -1075,7 +1089,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="shipment"></param>
         /// <returns></returns>
-        protected virtual string GetMemoText(ShipmentEntity shipment) => 
+        protected virtual string GetMemoText(ShipmentEntity shipment) =>
             UspsUtility.BuildMemoField(shipment.Postal);
 
         /// <summary>

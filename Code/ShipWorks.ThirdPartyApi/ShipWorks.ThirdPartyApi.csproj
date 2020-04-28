@@ -192,6 +192,8 @@
     <Compile Include="..\ShipWorks\Properties\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\IExtendedSwsimV90.cs" />
+    <Compile Include="Custom\Shipping\Carriers\Postal\Usps\Net\SwsimV90.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
