@@ -103,8 +103,9 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         SaveSingleLabelTransacted(result, shipment);
                     }
-                    catch (TransactionInDoubtException)
+                    catch (TransactionInDoubtException ex)
                     {
+                        log.Error("Error saving label, retrying.", ex);
                         SaveSingleLabelTransacted(result, shipment);
                     }
                     catch (ORMConcurrencyException)
