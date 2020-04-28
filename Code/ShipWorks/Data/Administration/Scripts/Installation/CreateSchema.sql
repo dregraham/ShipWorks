@@ -4333,6 +4333,7 @@ CREATE TABLE [dbo].[UserSettings]
 [RequireVerificationToShip] [bit] NOT NULL,
 [MinimizeRibbon] [bit] NOT NULL DEFAULT 0,
 [ShowQAToolbarBelowRibbon] [bit] NOT NULL DEFAULT 0,
+[SingleScanConfirmationMode] [int] NOT NULL CONSTRAINT [DF_UserSettings_SingleScanConfirmationMode] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

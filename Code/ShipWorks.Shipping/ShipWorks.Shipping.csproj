@@ -523,8 +523,6 @@
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateRecentShipmentRepository.cs" />
     <Compile Include="Carriers\Ups\LocalRating\Validation\UpsLocalRateValidator.cs" />
     <Compile Include="Carriers\WeekdaysOnlyShipmentDateManipulator.cs" />
-    <Compile Include="Carriers\Ups\Promo\NullPromoFactory.cs" />
-    <Compile Include="Carriers\Ups\Promo\UpsPromoFootnoteViewModel.cs" />
     <Compile Include="Carriers\DefaultShipmentPreProcessor.cs" />
     <Compile Include="Carriers\ShipmentPreProcessorFactory.cs" />
     <Compile Include="Carriers\Ups\WorldShip\WorldShipSetupWizard.cs">
@@ -598,6 +596,17 @@
     <Compile Include="Services\Dialogs\ShippingDialogService.cs" />
     <Compile Include="Services\ShippingManagerWrapper.cs" />
     <Compile Include="Services\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Services\Telemetry\AmazonSFPTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\AmazonSWATelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\AsendiaTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\EndiciaTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\FedExTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\ICarrierTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\iParcelTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\OnTracTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\PostalTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\UpsTelemetryMutator.cs" />
+    <Compile Include="Services\Telemetry\UspsTelemetryMutator.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
@@ -647,7 +656,6 @@
     <Compile Include="Carriers\Amazon\SFP\AmazonSFPShipmentType.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPAccountValidator.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonMwsSignature.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRateGroupFactory.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPRatingService.cs" />
     <Compile Include="Carriers\Amazon\SFP\Api\AmazonSFPShipmentRequestDetailsFactory.cs" />
@@ -696,7 +704,6 @@
     <Compile Include="Carriers\Postal\Usps\UspsRatingService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsLabelService.cs" />
     <Compile Include="Carriers\Postal\WebTools\WebToolsRatingService.cs" />
-    <Compile Include="Carriers\UPS\Promo\UpsPromoPolicy.cs" />
     <Compile Include="Carriers\Ups\UpsLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsOltLabelService.cs" />
     <Compile Include="Carriers\Ups\UpsRateHashingService.cs" />

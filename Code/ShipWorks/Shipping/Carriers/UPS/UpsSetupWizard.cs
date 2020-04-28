@@ -17,7 +17,6 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
-using ShipWorks.Shipping.Carriers.UPS.Promo;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -36,7 +35,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly ShipmentType shipmentType;
         private readonly bool forceAccountOnly;
-        private IUpsPromo promo;
 
         private string upsLicense;
 
@@ -82,10 +80,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public DialogResult SetupOneBalanceAccount(IWin32Window owner)
         {
-            var existingAccounts = UpsAccountManager.AccountsReadOnly.ToList();
-
-            // Sets up a new account only if they already have an account and don't have a Shipengine account.
-            newAccountOnly = existingAccounts.Any() && existingAccounts.All(a => string.IsNullOrEmpty(a.ShipEngineCarrierId));
+            // Always set up a new account when using One Balance
+            newAccountOnly = true;
+            newAccount.Checked = true;
             return ShowDialog(owner);
         }
 
@@ -111,11 +108,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageRates,
                 wizardPageOptionsOlt,
                 wizardPageOptionsWorldShip,
-                wizardPagePromo,
                 wizardPageFinishOlt,
                 wizardPageFinishAddAccount,
                 oneBalanceFinishPage
             });
+
+            if (!newAccountOnly)
+            {
+                existingAccount.Checked = true;
+            }
 
             bool addAccountOnly = ShippingManager.IsShipmentTypeConfigured(shipmentType.ShipmentTypeCode) || forceAccountOnly;
 
@@ -128,6 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     UpdateLogo(UpsLogoType.UpsFromShipWorks);
                     Pages.Remove(wizardPageWelcomeOlt);
+                    Pages.Remove(wizardPageLicense);
                 }
             }
             else
@@ -146,7 +148,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 Pages.Remove(wizardPageLicense);
                 Pages.Remove(wizardPageRates);
                 Pages.Remove(wizardPageInvoiceAuthentication);
-                Pages.Remove(wizardPagePromo);
                 Pages.Remove(wizardPageAccount);
                 // Only way to create new account is through One Balance, so remove the other finish pages so that
                 // the One Balance finish pages shows.
@@ -160,7 +161,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             upsAccount.InvoiceAuth = false;
             upsAccount.RateType = (int) UpsRateType.DailyPickup;
             upsAccount.InitializeNullsToDefault();
-            upsAccount.PromoStatus = (int) UpsPromoStatus.None;
+
+            // UPS Promo no longer supported.
+            upsAccount.PromoStatus = 0;
             upsAccount.LocalRatingEnabled = false;
 
             personControl.LoadEntity(new PersonAdapter(upsAccount, ""));
@@ -261,7 +264,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnStepNextWelcome(object sender, WizardStepEventArgs e)
         {
             string accountNumber = EnteredAccountNumber();
-
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
             {
                 // we are using worldship so the new account option is never shown to the user
@@ -731,70 +733,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             accountNumberPanel.Visible = existingAccount.Checked;
         }
 
-        /// <summary>
-        /// Called when [promo terms link clicked].
-        /// </summary>
-        private void OnPromoTermsLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(promo?.Terms?.URL))
-            {
-                MessageHelper.ShowError(this, "An error occurred while attempting to retrieve the terms and conditions of the promo. Please try again later.");
-            }
-            else
-            {
-                WebHelper.OpenUrl(new Uri(promo.Terms.URL), this);
-            }
-        }
-
-        /// <summary>
-        /// Called when Stepping Into wizardPagePromo
-        /// </summary>
-        private void OnWizardPagePromoSteppingInto(object sender, WizardSteppingIntoEventArgs e)
-        {
-            try
-            {
-                IUpsPromoFactory upsPromoFactory = IoC.UnsafeGlobalLifetimeScope.Resolve<IUpsPromoFactory>();
-                promo = upsPromoFactory.Get(upsAccount, UpsPromoSource.SetupWizard,
-                    newAccount.Checked ? UpsPromoAccountType.NewAccount : UpsPromoAccountType.ExistingAccount);
-
-                promoDescription.Text = promo.Terms.Description;
-                promoControls.Top = promoDescription.Bottom + 5;
-
-                BackEnabled = false;
-            }
-            catch (UpsPromoException)
-            {
-                e.Skip = true;
-            }
-        }
-
-        /// <summary>
-        /// Called when Stepping out of wizardPagePromo
-        /// </summary>
-        private void OnWizardPagePromoStepNext(object sender, WizardStepEventArgs e)
-        {
-            try
-            {
-                if (promoYes.Checked)
-                {
-                    promo.Terms.AcceptTerms();
-                    promo.Apply();
-                }
-                else
-                {
-                    if (existingAccount.Checked || shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsWorldShip)
-                    {
-                        promo.Decline();
-                    }
-                }
-            }
-            catch (UpsPromoException)
-            {
-                upsPromoFailed.Text = @"An error occurred when trying to apply promotion. Standard UPS account created.";
-            }
-        }
-
-        /// <summary>
+         /// <summary>
         /// When stepping into the welcome page, show the UPS logo
         /// </summary>
         private void OnSteppingIntoWelcome(object sender, WizardSteppingIntoEventArgs e)

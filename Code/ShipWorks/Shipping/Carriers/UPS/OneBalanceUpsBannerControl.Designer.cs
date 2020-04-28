@@ -40,7 +40,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(90, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Enable UPS";
+            this.button1.Text = "Add UPS";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.OnEnableUps);
             // 
@@ -61,8 +61,8 @@
             this.detailLabel.Name = "detailLabel";
             this.detailLabel.Size = new System.Drawing.Size(450, 59);
             this.detailLabel.TabIndex = 2;
-            this.detailLabel.Text = "Enable your free UPS from ShipWorks account today and start saving money on label" +
-    "s. Setting up your account is easy and only takes about a minute.\r\n";
+            this.detailLabel.Text = "Take advantage of reduced rates with UPS® shipping labels for orders across all" +
+                " sales channels. Get started today!";
             // 
             // OneBalanceUpsBannerControl
             // 

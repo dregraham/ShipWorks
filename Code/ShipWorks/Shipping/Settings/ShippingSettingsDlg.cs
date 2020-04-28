@@ -310,13 +310,27 @@ namespace ShipWorks.Shipping.Settings
         {
             if (shipmentType.ShipmentTypeCode == ShipmentTypeCode.UpsOnLineTools)
             {
-                OneBalanceUpsBannerControl upsControl = new OneBalanceUpsBannerControl();
+                Panel controlPanel = new Panel();
+                controlPanel.Dock = DockStyle.Fill;
+                controlPanel.BackColor = Color.Transparent;
+
+                UpsBannerControl upsControl = new UpsBannerControl();
                 upsControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
-                upsControl.Dock = DockStyle.Fill;
+                upsControl.Dock = DockStyle.Top;
                 upsControl.BackColor = Color.Transparent;
 
-                return upsControl;
+                controlPanel.Controls.Add(upsControl);
+
+                OneBalanceUpsBannerControl upsOneBalanceControl = new OneBalanceUpsBannerControl();
+                upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
+
+                upsOneBalanceControl.Dock = DockStyle.Top;
+                upsOneBalanceControl.BackColor = Color.Transparent;
+
+                controlPanel.Controls.Add(upsOneBalanceControl);
+
+                return controlPanel;
             }
 
             ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType, OpenedFromSource.Manager);

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
@@ -15,6 +13,7 @@ using RestSharp;
 using ShipEngine.ApiClient.Api;
 using ShipEngine.ApiClient.Client;
 using ShipEngine.ApiClient.Model;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,6 +34,8 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IShipEngineApiFactory shipEngineApiFactory;
         private readonly IStoreManager storeManager;
         private readonly IUpsRegistrationRequestFactory registrationRequestFactory;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
+        private const string ShipEngineProxyEndpoint = "shipEngine";
 
         /// <summary>
         /// Constructor
@@ -42,13 +43,15 @@ namespace ShipWorks.Shipping.ShipEngine
         public ShipEngineWebClient(IShipEngineApiKey shipEngineApiKey,
             ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory,
-            IStoreManager storeManager, IUpsRegistrationRequestFactory registrationRequestFactory)
+            IStoreManager storeManager, IUpsRegistrationRequestFactory registrationRequestFactory,
+            WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             this.shipEngineApiKey = shipEngineApiKey;
             this.apiLogEntryFactory = apiLogEntryFactory;
             this.shipEngineApiFactory = shipEngineApiFactory;
             this.storeManager = storeManager;
             this.registrationRequestFactory = registrationRequestFactory;
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
         }
 
         /// <summary>
@@ -126,15 +129,41 @@ namespace ShipWorks.Shipping.ShipEngine
                 // first we have to get the account id
                 string accountId = await GetAccountID();
 
-                ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
-
                 AmazonShippingUsAccountSettingsDTO updateRequest = new AmazonShippingUsAccountSettingsDTO(
                     email: amazonSwaAccount.Email,
                     merchantSellerId: store.MerchantID,
                     mwsAuthToken: store.AuthToken);
 
-                await apiInstance.AmazonShippingUsAccountCarrierUpdateSettingsAsync(amazonSwaAccount.ShipEngineCarrierId, updateRequest, shipEngineApiKey.GetPartnerApiKey(), $"se-{accountId}");
-                return Result.FromSuccess();
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
+                request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{amazonSwaAccount.ShipEngineCarrierId}/settings");
+                request.AddHeader("SW-originalRequestMethod", Method.PUT.ToString());
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+                request.AddJsonBody(updateRequest);
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "UpdateAmazonAccount");
+                logEntry.LogRequest(request, restClient, "txt");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+                
+                logEntry.LogResponse(response, "txt");
+
+                if (response.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return Result.FromSuccess();
+                }
+
+                JObject responseBody = JObject.Parse(response.Content);
+
+                JToken error = responseBody["errors"]?.FirstOrDefault() ?? responseBody["message"];
+
+                return GenericResult.FromError<string>(error.ToString());
             }
             catch (ApiException ex)
             {
@@ -170,10 +199,33 @@ namespace ShipWorks.Shipping.ShipEngine
                     Email = store?.Email ?? string.Empty
                 };
 
-                ICarrierAccountsApi apiInstance = shipEngineApiFactory.CreateCarrierAccountsApi();
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
 
-                return await ConnectCarrierAccount(apiInstance, ApiLogSource.AmazonSWA, "ConnectAmazonShippingAccount",
-                apiInstance.AmazonShippingUsAccountCarrierConnectAccountAsync(amazonAccountInfo, shipEngineApiKey.GetPartnerApiKey(), $"se-{accountId}"));
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
+                request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+                request.AddJsonBody(amazonAccountInfo);
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "ConnectAmazonAccount");
+                logEntry.LogRequest(request, restClient, "txt");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "txt");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    ConnectAccountResponseDTO result = JsonConvert.DeserializeObject<ConnectAccountResponseDTO>(response.Content);
+                    return result.CarrierId;
+                }
+
+                return GenericResult.FromError<string>(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
             }
             catch (ApiException ex)
             {
@@ -552,12 +604,13 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             try
             {
-                IRestClient restClient = new RestClient("https://api.shipengine.com/v1/registration/ups");
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
 
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
-                request.AddHeader("api-key", shipEngineApiKey.GetPartnerApiKey());
-                request.AddHeader("on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/registration/ups");
+                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
@@ -586,5 +639,10 @@ namespace ShipWorks.Shipping.ShipEngine
                 return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
             }
         }
+
+        /// <summary>
+        /// Gets the proxy url for ShipEngine
+        /// </summary>
+        private string ShipEngineProxyUrl => new Uri(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl).AddToPath(ShipEngineProxyEndpoint).ToString();
     }
 }

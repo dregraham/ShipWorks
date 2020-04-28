@@ -31427,6 +31427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.ShowQAToolbarBelowRibbon);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.SingleScanConfirmationMode field instance</summary>
+		public static EntityField2 SingleScanConfirmationMode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.SingleScanConfirmationMode);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

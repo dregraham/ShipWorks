@@ -14,7 +14,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
     public class LabelStandardOutline : ElementOutline
     {
         Orientation orientation;
-        ImageFormat imageFormat;
+        Func<ImageFormat> imageFormat;
 
         TemplateLabelData labelData;
         LabelImageInfo imageInfo;
@@ -33,7 +33,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// <summary>
         /// Constructor
         /// </summary>
-        public LabelStandardOutline(TemplateTranslationContext context, ImageFormat imageFormat)
+        public LabelStandardOutline(TemplateTranslationContext context, Func<ImageFormat> imageFormat)
             : base(context)
         {
             this.imageFormat = imageFormat;
@@ -61,7 +61,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                     var resource = labelData.Resource;
 
                     // Start out assuming the label as-is is the orientation we need
-                    string labelPath = resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(imageFormat));
+                    string labelPath = resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(imageFormat()));
                     try
                     {
                         try
@@ -74,7 +74,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
                             // The resouce file is probably corrupt, so try regenerating the alternate file
                             // and try to load again. If it fails again, just let it bubble up as this is a 
                             // legitimate exception
-                            resource.RegenerateAlternateFile(TemplateLabelUtility.GetFileExtension(imageFormat));
+                            resource.RegenerateAlternateFile(TemplateLabelUtility.GetFileExtension(imageFormat()));
                             labelImage =
                                 TemplateLabelUtility.LoadImageFromDisk(Path.Combine(DataPath.CurrentResources,
                                     labelPath));

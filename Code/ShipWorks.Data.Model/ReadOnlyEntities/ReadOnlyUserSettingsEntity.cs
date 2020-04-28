@@ -60,6 +60,7 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             RequireVerificationToShip = source.RequireVerificationToShip;
             MinimizeRibbon = source.MinimizeRibbon;
             ShowQAToolbarBelowRibbon = source.ShowQAToolbarBelowRibbon;
+            SingleScanConfirmationMode = source.SingleScanConfirmationMode;
             
             User = (IUserEntity) source.User?.AsReadOnly(objectMap);
             
@@ -213,6 +214,12 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean ShowQAToolbarBelowRibbon { get; }
+        /// <summary> The SingleScanConfirmationMode property of the Entity UserSettings<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UserSettings"."SingleScanConfirmationMode"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+        public ShipWorks.Settings.SingleScanConfirmationMode SingleScanConfirmationMode { get; }
         
         public IUserEntity User { get; }
         

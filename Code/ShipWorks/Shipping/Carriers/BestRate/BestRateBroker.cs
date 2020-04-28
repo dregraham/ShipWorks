@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apitron.PDF.Rasterizer.Navigation;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.Custom.EntityClasses;
@@ -442,6 +444,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.ShipSenseStatus = originalShipment.ShipSenseStatus;
             currentShipment.ShipSenseChangeSets = originalShipment.ShipSenseChangeSets;
             currentShipment.ContentWeight = originalShipment.ContentWeight;
+
+            if (originalShipment.BestRate.RequestedLabelFormat != (int) ThermalLanguage.None)
+            {
+                ShipmentType.SaveRequestedLabelFormat((ThermalLanguage) originalShipment.BestRate.RequestedLabelFormat, currentShipment);
+            }
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
 

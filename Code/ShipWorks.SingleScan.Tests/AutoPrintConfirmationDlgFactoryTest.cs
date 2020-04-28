@@ -27,12 +27,14 @@ namespace ShipWorks.SingleScan.Tests
             {
                 Body = "displaytext",
                 Continue = "continuetext",
-                Title = "title"
+                Title = "title",
+                ContinueOptional = "continueOptionText"
             };
 
             testObject.Create("scanmessagetext", continueText);
 
-            viewModel.Verify(v => v.Load("scanmessagetext", "displaytext", "continuetext"));
+            viewModel.Verify(v => 
+                v.Load("scanmessagetext", "displaytext", "continuetext", "continueOptionText"));
         }
 
         [Fact]

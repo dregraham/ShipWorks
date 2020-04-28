@@ -36,7 +36,7 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         public IForm Create(string scanMessageText, MessagingText messaging)
         {
             IAutoPrintConfirmationDlgViewModel viewModel = autoPrintConfirmationDlgViewModel(messenger);
-            viewModel.Load(scanMessageText, messaging.Body, messaging.Continue);
+            viewModel.Load(scanMessageText, messaging.Body, messaging.Continue, messaging.ContinueOptional);
 
             IAutoPrintConfirmationDialog dialog = autoPrintConfirmationDialog(viewModel);
             dialog.Text = messaging.Title;

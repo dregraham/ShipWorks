@@ -106,6 +106,7 @@
     <TypeShortcut Shortcut="ShipmentTypeCode" Type="ShipWorks.Shipping.ShipmentTypeCode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShortcutHotkey" Type="System.String" />
+    <TypeShortcut Shortcut="SingleScanConfirmationMode" Type="ShipWorks.Settings.SingleScanConfirmationMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="UIMode" Type="ShipWorks.Settings.UIMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="VirtualKeys" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
@@ -2848,9 +2849,9 @@
           <Field Name="IParcelInsuranceProvider" Type="int" FieldIndex="37" />
           <Field Name="OnTracInsurancePennyOne" Type="bool" FieldIndex="36" />
           <Field Name="OnTracInsuranceProvider" Type="int" FieldIndex="35" />
-          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="54" />
+          <Field Name="OrderLookupFieldLayout" Type="string" MaxLength="2147483647" FieldIndex="55" />
           <Field Name="ShipEngineApiKey" Type="string" MaxLength="50" FieldIndex="53" />
-          <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="53" />
+          <Field Name="ShipmentDateCutoffJson" Type="string" MaxLength="1000" FieldIndex="54" />
           <Field Name="ShipmentEditLimit" Type="int" FieldIndex="51" />
           <Field Name="ShipmentsLoaderEnsureFiltersLoadedTimeout" Type="int" Precision="10" FieldIndex="52" />
           <Field Name="ShippingSettingsID" Type="bool" IsPrimaryKey="true" FieldIndex="0" />
@@ -3375,6 +3376,7 @@
           <Field Name="RequireVerificationToShip" Type="bool" FieldIndex="21" />
           <Field Name="ShippingWeightFormat" Type="int" FieldIndex="10" />
           <Field Name="ShowQAToolbarBelowRibbon" Type="bool" FieldIndex="23" />
+          <Field Name="SingleScanConfirmationMode" Type="SingleScanConfirmationMode" FieldIndex="24" />
           <Field Name="SingleScanSettings" Type="int" FieldIndex="15" />
           <Field Name="TemplateExpandedFolders" Type="string" IsOptional="true" MaxLength="2147483647" FieldIndex="11" />
           <Field Name="TemplateLastSelected" Type="long" FieldIndex="12" />
@@ -4640,7 +4642,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-12T18:41:30.5886271Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-31T14:17:53.915753Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9412,6 +9414,7 @@
                     <Field Name="RequireVerificationToShip" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
+                    <Field Name="SingleScanConfirmationMode" Ordinal="25" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -14331,6 +14334,7 @@
             <FieldMapping FieldName="RequireVerificationToShip" TargetFieldName="RequireVerificationToShip" />
             <FieldMapping FieldName="ShippingWeightFormat" TargetFieldName="ShippingWeightFormat" />
             <FieldMapping FieldName="ShowQAToolbarBelowRibbon" TargetFieldName="ShowQAToolbarBelowRibbon" />
+            <FieldMapping FieldName="SingleScanConfirmationMode" TargetFieldName="SingleScanConfirmationMode" />
             <FieldMapping FieldName="SingleScanSettings" TargetFieldName="SingleScanSettings" />
             <FieldMapping FieldName="TemplateExpandedFolders" TargetFieldName="TemplateExpandedFolders" />
             <FieldMapping FieldName="TemplateLastSelected" TargetFieldName="TemplateLastSelected" />

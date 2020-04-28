@@ -20,6 +20,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
 using ShipWorks.IO.KeyboardShortcuts;
 using ShipWorks.Messaging.Messages.Dialogs;
+using ShipWorks.Settings;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Users;
 
@@ -68,7 +69,7 @@ namespace ShipWorks.ApplicationCore.Settings
         public override void Save()
         {
             if (userSession.IsLoggedOn)
-            {                
+            {
                 if (autoPrint.Checked)
                 {
                     settings.SingleScanSettings = (int) SingleScanSettings.AutoPrint;
@@ -84,6 +85,8 @@ namespace ShipWorks.ApplicationCore.Settings
 
                 settings.AutoWeigh = autoWeigh.Checked;
                 settings.RequireVerificationToShip = requireVerificationToShip.Checked;
+
+                settings.SingleScanConfirmationMode = (SingleScanConfirmationMode) singleScanConfirmation.SelectedValue;
 
                 using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
@@ -115,6 +118,9 @@ namespace ShipWorks.ApplicationCore.Settings
                 enableScanner.Checked = (SingleScanSettings) settings.SingleScanSettings != SingleScanSettings.Disabled;
                 autoPrint.Checked = (SingleScanSettings) settings.SingleScanSettings == SingleScanSettings.AutoPrint;
                 autoWeigh.Checked = settings.AutoWeigh;
+
+                EnumHelper.BindComboBox<SingleScanConfirmationMode>(singleScanConfirmation);
+                singleScanConfirmation.SelectedValue = settings.SingleScanConfirmationMode;
 
                 LoadRequireVerificationSetting();
 

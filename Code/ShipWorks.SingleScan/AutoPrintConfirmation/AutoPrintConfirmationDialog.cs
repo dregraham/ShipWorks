@@ -25,9 +25,16 @@ namespace ShipWorks.SingleScan.AutoPrintConfirmation
         /// <summary>
         /// Wire up close and return dialog result
         /// </summary>
-        private void SetDlgResultAndClose(bool confirm)
+        private void SetDlgResultAndClose(bool? confirm)
         {
-            DialogResult = confirm ? DialogResult.OK : DialogResult.Cancel;
+            if(confirm == null)
+            {
+                DialogResult = DialogResult.Cancel;
+            }
+            else
+            {
+                DialogResult = confirm == true ? DialogResult.OK : DialogResult.Yes;
+            }          
             viewModel.Dispose();
             Close();
         }
