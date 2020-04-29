@@ -190,11 +190,11 @@ namespace ShipWorks.Api.Partner.StreamTech
         {
             ShipmentEntity shipment = shipmentFactory.Create(order);
 
-            ICarrierShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
-
             shippingProfileRepository.GetAll()
                 .Where(p => p.Shortcut.Barcode == request.PackageType)
                 .FirstOrDefault()?.Apply(shipment);
+
+            ICarrierShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
 
             foreach (IPackageAdapter package in shipmentAdapter.GetPackageAdapters())
             {
