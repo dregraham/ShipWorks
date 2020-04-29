@@ -89,6 +89,7 @@ namespace ShipWorks.Stores.Platforms.Walmart.Warehouse
                 if (orderItem == null)
                 {
                     // This should never happen
+                    log.Info("Skipping Walmart warehouse item because no matching ID was found.");
                     continue;
                 }
 
