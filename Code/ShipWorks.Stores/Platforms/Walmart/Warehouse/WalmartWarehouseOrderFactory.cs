@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -74,6 +75,28 @@ namespace ShipWorks.Stores.Platforms.Walmart.Warehouse
 
             walmartItemEntity.LineNumber = walmartWarehouseItem.LineNumber;
             walmartItemEntity.OnlineStatus = walmartWarehouseItem.OnlineStatus;
+        }
+
+        /// <summary>
+        /// Load any additional store-specific details
+        /// </summary>
+        protected override void LoadAdditionalDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            foreach (WarehouseOrderItem item in warehouseOrder.Items)
+            {
+                var orderItem = orderEntity.OrderItems.FirstOrDefault(x => x.HubItemID == item.ID);
+
+                if (orderItem == null)
+                {
+                    // This should never happen
+                    continue;
+                }
+
+                var walmartOrderItem = (WalmartOrderItemEntity) orderItem;
+                var walmartWarehouseItem = item.AdditionalData[walmartEntryKey].ToObject<WalmartWarehouseItem>();
+
+                walmartOrderItem.OnlineStatus = walmartWarehouseItem.OnlineStatus;
+            }
         }
     }
 }
