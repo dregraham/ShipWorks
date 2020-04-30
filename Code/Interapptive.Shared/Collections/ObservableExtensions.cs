@@ -247,7 +247,6 @@ namespace Interapptive.Shared.Collections
                 return state.CloseGate();
             }
 
-            Console.WriteLine($"Buffering {item}");
             return state.BufferItem(item);
         }
 

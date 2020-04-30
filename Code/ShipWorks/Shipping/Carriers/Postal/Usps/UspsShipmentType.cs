@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Add the labels content
             container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
         }

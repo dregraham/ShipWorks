@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             // Add the labels content
             container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
             // Lazily evaluate the full path to the primary label

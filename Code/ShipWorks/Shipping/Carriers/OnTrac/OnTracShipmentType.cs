@@ -320,7 +320,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // Add the labels content
             container.AddElement(
                 "Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
         }
 
