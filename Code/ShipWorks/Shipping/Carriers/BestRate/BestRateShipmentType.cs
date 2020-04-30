@@ -21,7 +21,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// <summary>
     /// Best rate implementation of ShipmentType
     /// </summary>
-    public class BestRateShipmentType : ShipmentType
+    public class 
+        BestRateShipmentType : ShipmentType
     {
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
@@ -204,9 +205,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.BestRate.InsuranceValue = 0;
             shipment.BestRate.Insurance = false;
 
-            base.ConfigureNewShipment(shipment);
+            shipment.BestRate.RequestedLabelFormat = (int) ThermalLanguage.None;
 
-            shipment.BestRate.RequestedLabelFormat = (int) LabelFormatType.Standard;
+            base.ConfigureNewShipment(shipment);
         }
 
         /// <summary>
