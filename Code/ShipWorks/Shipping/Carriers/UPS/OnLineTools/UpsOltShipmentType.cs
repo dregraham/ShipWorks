@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 
             // Add the labels content
             container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Gif),
+                new LabelsOutline(container.Context, shipment, labels, () => GetStandardImageFormat(loaded)),
                 ElementOutline.If(() => shipment().Processed));
 
             // Legacy stuff
@@ -116,6 +116,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             outline.AddElement("PublishedCharges", () => loaded().Ups.PublishedCharges);
             outline.AddElement("Package", new UpsLegacyPackageTemplateOutline(container.Context), () => labels.Value, ElementOutline.If(() => shipment().ActualLabelFormat == null));
         }
+
+        /// <summary>
+        /// Labels originating from ShipEngine are png, ups olt are gif
+        /// </summary>
+        private static ImageFormat GetStandardImageFormat(Func<ShipmentEntity> shipment) =>
+            shipment().Ups.ShipEngineLabelID != null ? ImageFormat.Png : ImageFormat.Gif;
 
         /// <summary>
         /// Load all the label data for the given shipmentID

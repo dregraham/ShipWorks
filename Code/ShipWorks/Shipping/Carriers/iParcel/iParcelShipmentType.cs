@@ -438,7 +438,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
 
             // Add the labels content
-            container.AddElement("Labels", new LabelsOutline(container.Context, shipment, labels, ImageFormat.Jpeg), ElementOutline.If(() => shipment().Processed));
+            container.AddElement("Labels", new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Jpeg), ElementOutline.If(() => shipment().Processed));
 
             // Add xml element for the carrier tracking url
             container.AddElement("CarrierTrackingUrl", () => GetCarrierTrackingUrl(shipment()));

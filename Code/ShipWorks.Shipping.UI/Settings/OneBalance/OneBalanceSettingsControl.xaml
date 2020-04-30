@@ -62,7 +62,7 @@
                     </TextBlock.Visibility>
                 </TextBlock>
                 <Button HorizontalAlignment="Right"  Command="{Binding ShowAddMoneyDialogCommand}" IsEnabled="{Binding AddMoneyEnabled}" Grid.Column="2">
-                    <TextBlock Text="Add Money" Margin="5,2,5,2"/>
+                    <TextBlock Text="Add Funds" Margin="5,2,5,2"/>
                 </Button>
             </Grid>
             <local:OneBalanceCarrierAccountControl  Margin="50,30,0,0" DataContext="{Binding CarrierAccountsContext}"/>

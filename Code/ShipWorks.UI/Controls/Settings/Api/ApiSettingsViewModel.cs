@@ -334,12 +334,10 @@ namespace ShipWorks.UI.Controls.Settings.Api
         /// </summary>
         private bool CheckForStatusUpdate(ApiStatus expectedStatus)
         {
-            if (Status == ApiStatus.Updating)
+            if (expectedStatus == ApiStatus.Running)
             {
-                // If we're updating the port and the api is disabled, just show success
-                // otherwise make sure its not only running, but running on the new port
-                return !apiSettings.Enabled ||
-                       apiService.Status == ApiStatus.Running && apiService.Port.ToString() == Port;
+                // Make sure its running and on the correct port
+                return apiService.Status == ApiStatus.Running && apiService.Port == apiSettings.Port;
             }
 
             return apiService.Status == expectedStatus;
