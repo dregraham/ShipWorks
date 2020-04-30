@@ -11332,7 +11332,7 @@
     <Content Include="Resources\Stores\Icons\zentail.png" />
     <None Include="Resources\table_sql32.png" />
     <None Include="Resources\windows.png" />
-    <None Include="Resources\ups_from_shipworks.png" />
+    <Resource Include="Resources\ups_from_shipworks.png" />
     <Content Include="Resources\view_linked_arrow.png" />
     <Content Include="Resources\view_linked_infinity.png" />
     <None Include="Resources\view_next.png" />

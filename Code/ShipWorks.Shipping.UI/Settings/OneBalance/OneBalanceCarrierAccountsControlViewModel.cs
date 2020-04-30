@@ -2,8 +2,12 @@
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -28,12 +32,13 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParamsAttribute]
         public OneBalanceCarrierAccountsControlViewModel(IIndex<ShipmentTypeCode, IOneBalanceSetupWizard> setupWizardFactory,
             IWin32Window window,
             IOneBalanceAccountHelper accountHelper,
             IMessageHelper messageHelper,
             IShipmentTypeManager shipmentTypeManager)
-            : base(setupWizardFactory, window)
+            : base(setupWizardFactory, window, accountHelper)
         {
             this.accountHelper = accountHelper;
             this.messageHelper = messageHelper;
@@ -96,7 +101,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private bool RemoteDhlAccountEnabled()
         {
-            var result = accountHelper.GetUspsAccount();
+            var result = accountHelper.GetUspsAccount(ShipmentTypeCode.DhlExpress);
 
             if (result.Success)
             {
@@ -131,7 +136,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         private bool AddDhlExpress()
         {
-            var result = accountHelper.GetUspsAccount();
+            var result = accountHelper.GetUspsAccount(ShipmentTypeCode.DhlExpress);
 
             if (result.Failure)
             {
