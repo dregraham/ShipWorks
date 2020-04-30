@@ -117,5 +117,28 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
                 ebayItemEntity.ExtendedOrderID = ebayWarehouseItem.ExtendedOrderID;
             }
         }
+
+        /// <summary>
+        /// Load any additional store-specific details
+        /// </summary>
+        protected override void LoadAdditionalDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+            foreach (WarehouseOrderItem item in warehouseOrder.Items)
+            {
+                var orderItem = orderEntity.OrderItems.FirstOrDefault(x => x.HubItemID == item.ID);
+
+                if (orderItem == null)
+                {
+                    // This should never happen
+                    log.Info("Skipping eBay warehouse item because no matching ID was found.");
+                    continue;
+                }
+
+                var eBayOrderItem = (EbayOrderItemEntity) orderItem;
+                var eBayWarehouseItem = item.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();
+
+                eBayOrderItem.MyEbayShipped = eBayWarehouseItem.MyEbayShipped;
+            }
+        }
     }
 }
