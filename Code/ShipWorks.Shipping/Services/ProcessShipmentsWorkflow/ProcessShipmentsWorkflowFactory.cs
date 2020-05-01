@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
@@ -16,6 +15,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     [Component]
     public class ProcessShipmentsWorkflowFactory : IProcessShipmentsWorkflowFactory
     {
+        public const string LabelProcessingForceSerialBasePath = @"Software\Interapptive\ShipWorks\Options\LabelProcessingConcurrency";
         private readonly IIndex<ProcessShipmentsWorkflow, IProcessShipmentsWorkflow> workflows;
 
         /// <summary>
