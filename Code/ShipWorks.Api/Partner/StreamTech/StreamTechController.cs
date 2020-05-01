@@ -37,6 +37,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         private readonly IApiLabelFactory apiLabelFactory;
         private readonly IShippingProfileRepository shippingProfileRepository;
         private readonly IShipmentTypeManager shipmentTypeManager;
+        private readonly IShippingManager shippingManager;
         private readonly ILog log;
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace ShipWorks.Api.Partner.StreamTech
             IApiLabelFactory apiLabelFactory,
             IShippingProfileRepository shippingProfileRepository,
             IShipmentTypeManager shipmentTypeManager,
+            IShippingManager shippingManager,
             Func<Type, ILog> logFactory)
         {
             this.orderRepository = orderRepository;
@@ -60,6 +62,7 @@ namespace ShipWorks.Api.Partner.StreamTech
             this.apiLabelFactory = apiLabelFactory;
             this.shippingProfileRepository = shippingProfileRepository;
             this.shipmentTypeManager = shipmentTypeManager;
+            this.shippingManager = shippingManager;
             log = logFactory(typeof(StreamTechController));
         }
 
@@ -152,6 +155,8 @@ namespace ShipWorks.Api.Partner.StreamTech
                 responseData.VerifyBarcodes = processedShipment.TrackingNumber;
                 responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
                 responseData.ExpectedWeight = processedShipment.TotalWeight;
+
+                responseData.SortCode = shippingManager.GetActualServiceUsed(processedShipment);
 
                 // This feature is only available in some StreamTech situations
                 // in the future we might want to have a user configurable option

@@ -67,7 +67,7 @@ namespace ShipWorks.Api.Partner.StreamTech
         /// Carrier code is used for sortation.
         /// </summary>
         [JsonProperty("sort_code")]
-        public string SortCode => "0";
+        public string SortCode { get; set; } = "0";
 
         /// <summary>
         /// Quality control – Values are 0 or 1, If QC equals 1, then the carton will
