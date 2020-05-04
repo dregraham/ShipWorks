@@ -5435,6 +5435,17 @@ namespace ShipWorks
         #endregion
 
         /// <summary>
+        /// The Create Asendia Manifest button is pushed
+        /// </summary>
+        private void OnAsendiaManifest(object sender, EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var asendiaManifestCreator = lifetimeScope.Resolve<IAsendiaManifestCreator>();
+            }
+        }
+
+        /// <summary>
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
