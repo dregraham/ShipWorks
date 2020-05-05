@@ -389,13 +389,11 @@ namespace ShipWorks
             // Initialize the grid menu provider
             gridMenuLayoutProvider.Initialize(gridControl);
 
-
-
             // Initialize ribbon security
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFedExClose, () => FedExAccountManager.Accounts.Count > 0);
-            ribbonSecurityProvider.AddAdditionalCondition(buttonAscendiaClose, AreThereAnyAsendiaAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonAsendiaClose, AreThereAnyAsendiaAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
@@ -433,8 +431,7 @@ namespace ShipWorks
         /// Checks whether we have any postal accounts
         /// </summary>
         private static bool AreThereAnyPostalAccounts() =>
-            Using(
-                IoC.BeginLifetimeScope(),
+            Using(IoC.BeginLifetimeScope(),
                 scope => scope.Resolve<IEnumerable<IScanFormAccountRepository>>().Any(x => x.HasAccounts));
 
         /// <summary>
