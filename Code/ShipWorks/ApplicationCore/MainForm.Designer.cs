@@ -2409,7 +2409,7 @@ namespace ShipWorks
             //
             this.buttonAscendiaClose.Guid = new System.Guid("1A47D1AA-92F7-4A2A-980D-C8C2CA72B0A9");
             this.buttonAscendiaClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
-            //this.ribbonSecurityProvider.SetPermission(this.buttonFedExClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.ribbonSecurityProvider.SetPermission(this.buttonAscendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonAscendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
             this.buttonAscendiaClose.Text = "Ascendia Close";
             this.buttonAscendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
