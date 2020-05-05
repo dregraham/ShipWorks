@@ -5,6 +5,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipEngine;
 
@@ -40,12 +41,15 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                 ShipmentFields.ReturnShipment == false &
                 ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia);
 
+            bucket.Relations.Add(ShipmentEntity.Relations.AsendiaShipmentEntityUsingShipmentID);
+
             // We just need ShipEngine Label IDs
             ResultsetFields resultFields = new ResultsetFields(1);
             resultFields.DefineField(AsendiaShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
 
             // Do the fetch
-            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, 
+                CommandBehavior.CloseConnection, 0, true))
             {
                 List<string> keys = new List<string>();
 
