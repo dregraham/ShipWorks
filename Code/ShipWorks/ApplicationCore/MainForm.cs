@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5449,15 +5448,15 @@ namespace ShipWorks
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var result = await lifetimeScope.Resolve<IAsendiaManifestCreator>().CreateManifest().ConfigureAwait(false);
+                var result = await lifetimeScope.Resolve<IAsendiaManifestCreator>().CreateManifest().ConfigureAwait(true);
 
                 if (result.Success)
                 {
                     MessageHelper.ShowMessage(this, "Asendia manifest created.");
                     return;
                 }
-
-                MessageHelper.ShowError(this, $"An error occurred creating the Asendia manifest: {result.Message}");
+                MessageHelper.ShowError(this, "An error occurred creating the Asendia manifest");
+                log.Error(result.Exception.Message);
             }
         }
 
