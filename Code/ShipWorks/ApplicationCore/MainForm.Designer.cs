@@ -281,6 +281,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewSCANForm = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupOrderLookupViewSCANForm = new Divelements.SandRibbon.Popup();
             this.buttonOrderLookupViewFedExClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.buttonOrderLookupViewAsendiaClose = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.popupOrderLookupViewFedExEndOfDay = new Divelements.SandRibbon.Popup();
             this.ribbonTabAdmin = new Divelements.SandRibbon.RibbonTab();
             this.ribbonChunkConfiguration = new Divelements.SandRibbon.RibbonChunk();
@@ -2747,7 +2748,8 @@ namespace ShipWorks
             this.buttonOrderLookupViewReprint,
             this.buttonOrderLookupViewShipAgain,
             this.buttonOrderLookupViewSCANForm,
-            this.buttonOrderLookupViewFedExClose});
+            this.buttonOrderLookupViewFedExClose,
+            this.buttonOrderLookupViewAsendiaClose});
             this.ribbonChunkOrderLookupViewActions.Text = "Actions";
             //
             // buttonOrderLookupViewVoid
@@ -2802,6 +2804,14 @@ namespace ShipWorks
             this.buttonOrderLookupViewFedExClose.QuickAccessKey = "F";
             this.buttonOrderLookupViewFedExClose.Text = "FedEx Close";
             this.buttonOrderLookupViewFedExClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            //
+            // buttonOrderLookupViewAsendiaClose
+            //
+            this.buttonOrderLookupViewAsendiaClose.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
+            this.buttonOrderLookupViewAsendiaClose.Guid = new System.Guid("B5962343-E43E-40A7-98B3-84F6869FC2A9");
+            this.buttonOrderLookupViewAsendiaClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
+            this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewAsendiaClose.Text = "Asendia Close";
             //
             // popupOrderLookupViewFedExEndOfDay
             //
@@ -3713,6 +3723,7 @@ namespace ShipWorks
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewShipAgain;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewSCANForm;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewFedExClose;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonOrderLookupViewAsendiaClose;
         private Divelements.SandRibbon.Popup popupOrderLookupViewSCANForm;
         private Divelements.SandRibbon.Popup popupOrderLookupViewFedExEndOfDay;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonCreateLabel;
