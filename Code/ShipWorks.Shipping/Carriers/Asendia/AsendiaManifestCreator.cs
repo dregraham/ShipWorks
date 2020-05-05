@@ -35,21 +35,22 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         public async Task<Result> CreateManifest()
         {
             // Create the predicate for the query to determine which shipments are eligible
-            RelationPredicateBucket bucket = new RelationPredicateBucket(
+            RelationPredicateBucket bucket = new RelationPredicateBucket
+            (
                 ShipmentFields.Processed == true &
                 ShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date &
                 ShipmentFields.ReturnShipment == false &
-                ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia);
+                ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia
+            );
 
             bucket.Relations.Add(ShipmentEntity.Relations.AsendiaShipmentEntityUsingShipmentID);
 
-            // We just need ShipEngine Label IDs
+            // We just need ShipEngineLabelID
             ResultsetFields resultFields = new ResultsetFields(1);
             resultFields.DefineField(AsendiaShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
 
             // Do the fetch
-            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, 
-                CommandBehavior.CloseConnection, 0, true))
+            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
             {
                 List<string> keys = new List<string>();
 
