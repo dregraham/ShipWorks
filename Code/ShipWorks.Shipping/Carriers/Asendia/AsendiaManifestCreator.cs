@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -30,18 +31,16 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Create an Asendia Manifest from today's shipments
         /// </summary>
-        public void CreateManifest()
+        public async Task<Result> CreateManifest()
         {
             // Create the predicate for the query to determine which shipments are eligible
-            RelationPredicateBucket bucket = new RelationPredicateBucket
-                (
+            RelationPredicateBucket bucket = new RelationPredicateBucket(
                 ShipmentFields.Processed == true &
                 ShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date &
                 ShipmentFields.ReturnShipment == false &
-                ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia
-                );
+                ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia);
 
-            // We just need shipment IDs
+            // We just need ShipEngine Label IDs
             ResultsetFields resultFields = new ResultsetFields(1);
             resultFields.DefineField(AsendiaShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
 
@@ -55,17 +54,8 @@ namespace ShipWorks.Shipping.Carriers.Asendia
                     keys.Add(reader.GetString(0));
                 }
 
-                SubmitRequest(keys);
+                return await webClient.CreateAsendiaManifest(keys).ConfigureAwait(false);
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="keys"></param>
-        private void SubmitRequest(List<string> keys)
-        {
-            // TODO
         }
     }
 }

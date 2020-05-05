@@ -81,6 +81,7 @@ using ShipWorks.Products;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -214,8 +215,8 @@ namespace ShipWorks
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
 
-                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) && 
-                currentUserSettings.GetUIMode() == UIMode.OrderLookup) 
+                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) &&
+                currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
                     buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
                 }
@@ -1167,7 +1168,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
             }
-            catch(AppearanceException)
+            catch (AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this,
@@ -3045,7 +3046,8 @@ namespace ShipWorks
             if (InvokeRequired)
             {
                 // Put the heartbeat on the UI thread
-                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options); });
+                BeginInvoke((MethodInvoker) delegate
+                { ForceHeartbeat(options); });
                 return;
             }
 
@@ -4233,9 +4235,15 @@ namespace ShipWorks
 
             switch (settings.DetailViewMode)
             {
-                case DetailViewMode.Normal: activeRadio = buttonDetailViewNormal; break;
-                case DetailViewMode.DetailOnly: activeRadio = buttonDetailViewDetail; break;
-                case DetailViewMode.NormalWithDetail: activeRadio = buttonDetailViewNormalDetail; break;
+                case DetailViewMode.Normal:
+                    activeRadio = buttonDetailViewNormal;
+                    break;
+                case DetailViewMode.DetailOnly:
+                    activeRadio = buttonDetailViewDetail;
+                    break;
+                case DetailViewMode.NormalWithDetail:
+                    activeRadio = buttonDetailViewNormalDetail;
+                    break;
             }
 
             // Uncheck the old ones
@@ -5437,11 +5445,19 @@ namespace ShipWorks
         /// <summary>
         /// The Create Asendia Manifest button is pushed
         /// </summary>
-        private void OnAsendiaManifest(object sender, EventArgs e)
+        private async void OnAsendiaManifest(object sender, EventArgs e)
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var asendiaManifestCreator = lifetimeScope.Resolve<IAsendiaManifestCreator>();
+                var result = await lifetimeScope.Resolve<IAsendiaManifestCreator>().CreateManifest().ConfigureAwait(false);
+
+                if (result.Success)
+                {
+                    MessageHelper.ShowMessage(this, "Asendia manifest created.");
+                    return;
+                }
+
+                MessageHelper.ShowError(this, $"An error occurred creating the Asendia manifest: {result.Message}");
             }
         }
 

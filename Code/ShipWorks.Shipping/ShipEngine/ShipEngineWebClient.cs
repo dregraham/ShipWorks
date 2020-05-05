@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 logEntry.LogRequest(request, restClient, "txt");
 
                 IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
-                
+
                 logEntry.LogResponse(response, "txt");
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
@@ -625,7 +626,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 logEntry.LogResponse(response, "txt");
 
-                if(response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     JObject responseObject = JObject.Parse(response.Content);
 
@@ -637,6 +638,50 @@ namespace ShipWorks.Shipping.ShipEngine
             catch (Exception ex)
             {
                 return GenericResult.FromError<string>("Unable to register the UPS Account", ex);
+            }
+        }
+
+        /// <summary>
+        /// Create an Asendia Manifest for the given label IDs
+        /// </summary>
+        public async Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIds)
+        {
+            try
+            {
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
+                request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/manifests");
+                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+                request.AddJsonBody(
+                    new
+                    {
+                        label_ids = labelIds
+                    });
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "CreateAsendiaManifest");
+                logEntry.LogRequest(request, restClient, "txt");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "txt");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return Result.FromSuccess();
+                }
+
+                return Result.FromError(JObject.Parse(response.Content)["errors"].FirstOrDefault()?["message"].ToString());
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
             }
         }
 
