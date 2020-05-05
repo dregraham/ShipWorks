@@ -7,6 +7,7 @@ using log4net;
 using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Stores.Content;
 using ShipWorks.Warehouse;
 using ShipWorks.Warehouse.DTO.Orders;
 
@@ -123,6 +124,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// </summary>
         protected override void LoadAdditionalDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
+            // Make sure items are fetched
+            OrderUtility.PopulateOrderDetails(orderEntity);
+
             foreach (WarehouseOrderItem item in warehouseOrder.Items)
             {
                 var orderItem = orderEntity.OrderItems.FirstOrDefault(x => x.HubItemID == item.ID);
