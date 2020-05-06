@@ -2409,7 +2409,7 @@ namespace ShipWorks
             // buttonAsendiaClose
             //
             this.buttonAsendiaClose.Guid = new System.Guid("1A47D1AA-92F7-4A2A-980D-C8C2CA72B0A9");
-            this.buttonAsendiaClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
+            this.buttonAsendiaClose.Image = global::ShipWorks.Properties.Resources.element_into;
             this.ribbonSecurityProvider.SetPermission(this.buttonAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonAsendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
             this.buttonAsendiaClose.Text = "Ascendia Close";
@@ -2807,9 +2807,8 @@ namespace ShipWorks
             //
             // buttonOrderLookupViewAsendiaClose
             //
-            this.buttonOrderLookupViewAsendiaClose.DropDownStyle = Divelements.SandRibbon.DropDownStyle.Integral;
             this.buttonOrderLookupViewAsendiaClose.Guid = new System.Guid("B5962343-E43E-40A7-98B3-84F6869FC2A9");
-            this.buttonOrderLookupViewAsendiaClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
+            this.buttonOrderLookupViewAsendiaClose.Image = global::ShipWorks.Properties.Resources.element_into;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonOrderLookupViewAsendiaClose.Text = "Asendia Close";
             this.buttonOrderLookupViewAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
