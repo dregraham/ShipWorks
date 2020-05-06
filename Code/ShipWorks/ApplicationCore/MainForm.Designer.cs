@@ -2812,6 +2812,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewAsendiaClose.Image = ((System.Drawing.Image) (resources.GetObject("buttonFedExClose.Image")));
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonOrderLookupViewAsendiaClose.Text = "Asendia Close";
+            this.buttonOrderLookupViewAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // popupOrderLookupViewFedExEndOfDay
             //
