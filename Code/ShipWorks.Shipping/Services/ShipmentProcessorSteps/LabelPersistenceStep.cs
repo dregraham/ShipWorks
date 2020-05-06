@@ -103,13 +103,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         SaveSingleLabelTransacted(result, shipment);
                     }
-                    catch (TransactionInDoubtException ex)
+                    catch (Exception ex) when (ex is ORMConcurrencyException || ex is TransactionInDoubtException)
                     {
                         log.Error("Error saving label, retrying.", ex);
-                        SaveSingleLabelTransacted(result, shipment);
-                    }
-                    catch (ORMConcurrencyException)
-                    {
+
                         // Try to get the shipment from the db and make the changes to it, and re-save.
                         ShipmentEntity dbShipment = ShippingManager.GetShipment(shipment.ShipmentID);
                         ShippingManager.EnsureShipmentLoaded(dbShipment);
@@ -164,9 +161,17 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
                     SaveShipment(shipment, adapter);
                 }
 
-                DispatchShipmentProcessedActions(shipment, adapter);
-
                 log.Info("LabelPersistenceStep.SaveSingleLabel: adapter.Commit()");
+                adapter.Commit();
+            }
+
+            // Dispatch actions in a separate transaction i dont know why
+            // and i dont want to know why but if we save the shipment and 
+            // dispatch actions in the same transaction it throws a 
+            // TransactionInDoubtException very rarely
+            using (ISqlAdapter adapter = sqlAdapterFactory.CreateTransacted())
+            {
+                DispatchShipmentProcessedActions(shipment, adapter);
                 adapter.Commit();
             }
         }
