@@ -63,6 +63,7 @@ namespace ShipWorks.Warehouse
                 await LoadNotes(orderEntity, warehouseOrder).ConfigureAwait(false);
 
                 LoadStoreOrderDetails(store, orderEntity, warehouseOrder);
+                LoadAdditionalDetails(store, orderEntity, warehouseOrder);
 
                 Debug.Assert(orderEntity.OrderNumber != 0,
                              "Ensure order number was set by the store specific order factory");
@@ -77,6 +78,14 @@ namespace ShipWorks.Warehouse
             {
                 throw new DownloadException("Could not load store specific data for order", ex.InnerException);
             }
+        }
+
+        /// <summary>
+        /// Load any additional store-specific details
+        /// </summary>
+        protected virtual void LoadAdditionalDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        {
+
         }
 
         /// <summary>
@@ -263,7 +272,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Load payment details from the warehouse order into the order entity
         /// </summary>
-        protected  void LoadPaymentDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
+        protected void LoadPaymentDetails(OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
             foreach (WarehouseOrderPaymentDetail warehouseOrderCharge in warehouseOrder.PaymentDetails)
             {
