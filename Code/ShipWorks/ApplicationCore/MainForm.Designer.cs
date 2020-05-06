@@ -3390,6 +3390,7 @@ namespace ShipWorks
             buttonShippingSettings.TelemetryEventName = "Shipping.Settings";
             buttonShippingProfiles.TelemetryEventName = "Shipping.Profiles";
             buttonFedExClose.TelemetryEventName = "FedExClose";
+            buttonAsendiaClose.TelemetryEventName = "AsendiaClose";
             buttonEndiciaSCAN.TelemetryEventName = "EndiciaScan";
             buttonHelpForum.TelemetryEventName = "Help.Forum";
             buttonHelpRemote.TelemetryEventName = "Help.Remote";
@@ -3410,6 +3411,7 @@ namespace ShipWorks
             buttonOrderLookupViewUnverify.TelemetryEventName = "OrderLookup.Unverify";
             buttonOrderLookupViewSCANForm.TelemetryEventName = "OrderLookup.ScanForm";
             buttonOrderLookupViewFedExClose.TelemetryEventName = "OrderLookup.FedExClose";
+            buttonOrderLookupViewAsendiaClose.TelemetryEventName = "OrderLookup.AsendiaClose";
             buttonCreateLabel.TelemetryEventName = "CreateLabel";
             buttonOrderLookupViewFields.TelemetryEventName = "OrderLookup.Fields";
             buttonProductCatalogEditProduct.TelemetryEventName = "Product.Edit";
