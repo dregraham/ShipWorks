@@ -2810,6 +2810,7 @@ namespace ShipWorks
             this.buttonOrderLookupViewAsendiaClose.Guid = new System.Guid("B5962343-E43E-40A7-98B3-84F6869FC2A9");
             this.buttonOrderLookupViewAsendiaClose.Image = global::ShipWorks.Properties.Resources.element_into;
             this.ribbonSecurityProvider.SetPermission(this.buttonOrderLookupViewAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
+            this.buttonOrderLookupViewAsendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
             this.buttonOrderLookupViewAsendiaClose.Text = "Asendia Close";
             this.buttonOrderLookupViewAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
