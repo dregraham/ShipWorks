@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Data.Administration.VersionSpecificUpdates
@@ -56,7 +57,10 @@ namespace ShipWorks.Data.Administration.VersionSpecificUpdates
         {
             List<long> accountsToExclude = new List<long>();
 
+            ShippingManager.InitializeForCurrentDatabase();
             shippingSettings.InitializeForCurrentDatabase();
+            ShippingProfileManager.InitializeForCurrentSession();
+
             var shippingSettingsEntity = shippingSettings.FetchReadOnly();
 
             foreach (ShipmentTypeCode shipmentTypeCode in shipmentTypeManager.ConfiguredShipmentTypeCodes.Except(shipmentTypeManager.BestRateExcludedShipmentTypes()))
