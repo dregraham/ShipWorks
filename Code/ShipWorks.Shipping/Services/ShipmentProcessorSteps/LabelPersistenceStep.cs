@@ -103,13 +103,10 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps
 
                         SaveSingleLabelTransacted(result, shipment);
                     }
-                    catch (TransactionInDoubtException ex)
+                    catch (Exception ex) when(ex is ORMConcurrencyException || ex is TransactionInDoubtException)
                     {
                         log.Error("Error saving label, retrying.", ex);
-                        SaveSingleLabelTransacted(result, shipment);
-                    }
-                    catch (ORMConcurrencyException)
-                    {
+
                         // Try to get the shipment from the db and make the changes to it, and re-save.
                         ShipmentEntity dbShipment = ShippingManager.GetShipment(shipment.ShipmentID);
                         ShippingManager.EnsureShipmentLoaded(dbShipment);
