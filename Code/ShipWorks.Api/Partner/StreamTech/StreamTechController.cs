@@ -153,6 +153,8 @@ namespace ShipWorks.Api.Partner.StreamTech
                 responseData.CarrierCode = processedShipment.ShipmentTypeCode.ToString();
                 responseData.ExpectedWeight = processedShipment.TotalWeight;
 
+                responseData.SortCode = processedShipmentAdapter.ServiceTypeName;
+
                 // This feature is only available in some StreamTech situations
                 // in the future we might want to have a user configurable option
                 // to set tolerance for what we consider max and min allowed weights 
@@ -190,10 +192,15 @@ namespace ShipWorks.Api.Partner.StreamTech
         {
             ShipmentEntity shipment = shipmentFactory.Create(order);
 
-            shippingProfileRepository.GetAll()
+            if (!string.IsNullOrWhiteSpace(request.PackageType))
+            {
+                var profile = shippingProfileRepository.GetAll()
                 .Where(p => p.Shortcut.Barcode == request.PackageType)
-                .FirstOrDefault()?.Apply(shipment);
+                .FirstOrDefault();
 
+                profile?.Apply(shipment);
+            }
+            
             ICarrierShipmentAdapter shipmentAdapter = carrierShipmentAdapterFactory.Get(shipment);
 
             foreach (IPackageAdapter package in shipmentAdapter.GetPackageAdapters())

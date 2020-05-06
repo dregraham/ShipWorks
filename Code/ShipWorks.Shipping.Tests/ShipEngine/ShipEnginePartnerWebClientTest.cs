@@ -1,6 +1,8 @@
-﻿using Autofac.Extras.Moq;
+﻿using Autofac;
+using Autofac.Extras.Moq;
 using Interapptive.Shared.Net;
 using Moq;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using System;
@@ -14,10 +16,17 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
     public class ShipEnginePartnerWebClientTest : IDisposable
     {
         readonly AutoMock mock;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
 
         public ShipEnginePartnerWebClientTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+
+            webClientEnvironmentFactory = mock.Create<WebClientEnvironmentFactory>();
+            webClientEnvironmentFactory.SelectedEnvironment = new WebClientEnvironment()
+            {
+                ProxyUrl = "https://proxy.hub.shipworks.com/"
+            };
         }
 
         [Fact]
@@ -47,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponseAsync())
                 .ReturnsAsync(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerWebClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>(new TypedParameter(typeof(WebClientEnvironmentFactory), webClientEnvironmentFactory));
 
             var accountId = await testObject.CreateNewAccount();
 
@@ -81,7 +90,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponseAsync())
                 .ReturnsAsync(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerWebClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>(new TypedParameter(typeof(WebClientEnvironmentFactory), webClientEnvironmentFactory));
 
             await testObject.CreateNewAccount();
 
@@ -101,7 +110,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponseAsync())
                 .ReturnsAsync(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerWebClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>(new TypedParameter(typeof(WebClientEnvironmentFactory), webClientEnvironmentFactory));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount());        
         }
@@ -119,7 +128,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
             request.Setup(r => r.GetResponseAsync())
                 .ReturnsAsync(responseReader.Object);
 
-            var testObject = mock.Create<ShipEnginePartnerWebClient>();
+            var testObject = mock.Create<ShipEnginePartnerWebClient>(new TypedParameter(typeof(WebClientEnvironmentFactory), webClientEnvironmentFactory));
 
             await Assert.ThrowsAsync<ShipEngineException>(() => testObject.CreateNewAccount());
         }

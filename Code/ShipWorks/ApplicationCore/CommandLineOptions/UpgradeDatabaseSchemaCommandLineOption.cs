@@ -53,16 +53,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                     throw new Exception("Cannot connect to SQL Server. Not running upgrade.");
                 }
 
-                // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
-                // is lost, we can still track the customer id.
-                using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-                {
-                    ITangoWebClient tangoWebClient = scope.Resolve<ITangoWebClient>();
-                    tangoCustomerId = tangoWebClient.GetTangoCustomerId();
-                }
-
-                Telemetry.GetCustomerID = () => tangoCustomerId;
-                log.Info($"TangoCustomerId: {tangoCustomerId}.");
+                Telemetry.GetCustomerID = GetTangoCustomerId;
 
                 autoUpgradeFailureSubmitter.Initialize();
 
@@ -98,6 +89,20 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
             }
 
             return Task.CompletedTask;
+        }
+
+        /// <summary>
+        /// Method to get the tango customer id
+        /// </summary>
+        private string GetTangoCustomerId()
+        {
+            // Cache the result from TangoWebClient.GetTangoCustomerId() now so that if the db connection
+            // is lost, we can still track the customer id.
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                ITangoWebClient tangoWebClient = scope.Resolve<ITangoWebClient>();
+                return tangoWebClient.GetTangoCustomerId();
+            }
         }
 
         /// <summary>
