@@ -2412,7 +2412,7 @@ namespace ShipWorks
             this.buttonAsendiaClose.Image = global::ShipWorks.Properties.Resources.element_into;
             this.ribbonSecurityProvider.SetPermission(this.buttonAsendiaClose, ShipWorks.Users.Security.PermissionType.ShipmentsCreateEditProcess);
             this.buttonAsendiaClose.Activate += new System.EventHandler(this.OnAsendiaManifest);
-            this.buttonAsendiaClose.Text = "Ascendia Close";
+            this.buttonAsendiaClose.Text = "Asendia Close";
             this.buttonAsendiaClose.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             //
             // buttonEndiciaSCAN
