@@ -25,7 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// <summary>
         /// Constructor
         /// </summary>
-        public AsendiaManifestCreator(IDateTimeProvider dateTimeProvider, IShipEngineWebClient webClient, ISqlAdapterFactory adapterFactory)
+        public AsendiaManifestCreator(IDateTimeProvider dateTimeProvider,
+            IShipEngineWebClient webClient,
+            ISqlAdapterFactory adapterFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.webClient = webClient;
@@ -37,11 +39,14 @@ namespace ShipWorks.Shipping.Carriers.Asendia
         /// </summary>
         public async Task<Result> CreateManifest()
         {
+            var currentTime = dateTimeProvider.GetUtcNow();
+
             // Create the predicate for the query to determine which shipments are eligible
             RelationPredicateBucket bucket = new RelationPredicateBucket
             (
                 ShipmentFields.Processed == true &
-                ShipmentFields.ProcessedDate >= dateTimeProvider.GetUtcNow().Date &
+                ShipmentFields.ProcessedDate >= currentTime.Date &
+                ShipmentFields.ProcessedDate < currentTime.AddDays(1).Date &
                 ShipmentFields.ReturnShipment == false &
                 ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Asendia
             );
@@ -49,26 +54,61 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             bucket.Relations.Add(ShipmentEntity.Relations.AsendiaShipmentEntityUsingShipmentID);
 
             // We just need ShipEngineLabelID
-            ResultsetFields resultFields = new ResultsetFields(1);
+            ResultsetFields resultFields = new ResultsetFields(2);
             resultFields.DefineField(AsendiaShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
+            resultFields.DefineField(AsendiaShipmentFields.AsendiaAccountID, 1, "AsendiaAccountID", "");
+
+            Dictionary<long, List<string>> results = new Dictionary<long, List<string>>();
 
             // Do the fetch
             using (IDataReader reader = adapterFactory.Create().FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, false))
             {
-                List<string> keys = new List<string>();
-
                 while (reader.Read())
                 {
-                    keys.Add(reader.GetString(0));
-                }
+                    string labelID = reader.GetString(0);
+                    long accountID = reader.GetInt64(1);
+                    List<string> accountLabels;
 
-                if (keys.None())
-                {
-                    return Result.FromError("Could not find any shipments for manifest.");
-                }
+                    if (!string.IsNullOrWhiteSpace(labelID))
+                    {
+                        if (!results.TryGetValue(accountID, out accountLabels))
+                        {
+                            // If this is the first label for this account, new up a list for it
+                            accountLabels = new List<string>();
+                            results[accountID] = accountLabels;
+                        }
 
-                return await webClient.CreateAsendiaManifest(keys).ConfigureAwait(false);
+                        accountLabels.Add(labelID);
+                    }
+                }
             }
+
+            if (results.None())
+            {
+                return Result.FromError("Could not find any shipments for manifest.");
+            }
+
+            return await CreateManifest(results).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Create manifests for each account
+        /// </summary>
+        private async Task<Result> CreateManifest(Dictionary<long, List<string>> labels)
+        {
+            Result lastResult = Result.FromSuccess();
+
+            foreach (List<string> keys in labels.Values)
+            {
+                var result = await webClient.CreateAsendiaManifest(keys).ConfigureAwait(false);
+
+                if (result.Failure)
+                {
+                    lastResult = result;
+                }
+            }
+
+            return lastResult;
         }
     }
 }

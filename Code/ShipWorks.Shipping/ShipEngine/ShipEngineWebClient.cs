@@ -642,35 +642,26 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Create an Asendia Manifest for the given label IDs
+        /// Create an Asendia Manifest for the given label IDs, retrying if necessary
         /// </summary>
-        public async Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIds)
+        public async Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIDs)
         {
             try
             {
-                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+                var response = await SubmitAsendiaManifest(labelIDs).ConfigureAwait(false);
 
-                IRestRequest request = new RestRequest();
-                request.AddHeader("Content-Type", "application/json");
-                request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
-                request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/manifests");
-                request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
-                request.Method = Method.POST;
-                request.RequestFormat = DataFormat.Json;
-                request.JsonSerializer = new RestSharpJsonNetSerializer();
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    var alreadyManifestedIDs = JObject.Parse(response.Content)["errors"]
+                        .Where(x => x["message"].ToString().Equals("Label has been manifested.", StringComparison.OrdinalIgnoreCase))
+                        .Select(x => x["label_id"].ToString());
 
-                request.AddJsonBody(
-                    new
+                    if (alreadyManifestedIDs.Any())
                     {
-                        label_ids = labelIds
-                    });
-
-                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "CreateAsendiaManifest");
-                logEntry.LogRequest(request, restClient, "txt");
-
-                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
-
-                logEntry.LogResponse(response, "txt");
+                        var newIDs = labelIDs.Except(alreadyManifestedIDs);
+                        response = await SubmitAsendiaManifest(newIDs);
+                    }
+                }
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -683,6 +674,38 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 return Result.FromError(ex);
             }
+        }
+
+        /// <summary>
+        /// Submit the Asendia Manifest creation request to ShipEngine
+        /// </summary>
+        private async Task<IRestResponse> SubmitAsendiaManifest(IEnumerable<string> labelIDs)
+        {
+            IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+
+            IRestRequest request = new RestRequest();
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
+            request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/manifests");
+            request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
+            request.Method = Method.POST;
+            request.RequestFormat = DataFormat.Json;
+            request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+            request.AddJsonBody(
+                new
+                {
+                    label_ids = labelIDs
+                });
+
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "CreateAsendiaManifest");
+            logEntry.LogRequest(request, restClient, "txt");
+
+            IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+            logEntry.LogResponse(response, "txt");
+
+            return response;
         }
 
         /// <summary>
