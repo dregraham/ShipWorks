@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -19,14 +20,16 @@ namespace ShipWorks.Shipping.Carriers.Asendia
     {
         private readonly IDateTimeProvider dateTimeProvider;
         private readonly IShipEngineWebClient webClient;
+        private readonly ISqlAdapterFactory adapterFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AsendiaManifestCreator(IDateTimeProvider dateTimeProvider, IShipEngineWebClient webClient)
+        public AsendiaManifestCreator(IDateTimeProvider dateTimeProvider, IShipEngineWebClient webClient, ISqlAdapterFactory adapterFactory)
         {
             this.dateTimeProvider = dateTimeProvider;
             this.webClient = webClient;
+            this.adapterFactory = adapterFactory;
         }
 
         /// <summary>
@@ -50,13 +53,18 @@ namespace ShipWorks.Shipping.Carriers.Asendia
             resultFields.DefineField(AsendiaShipmentFields.ShipEngineLabelID, 0, "ShipEngineLabelID", "");
 
             // Do the fetch
-            using (IDataReader reader = SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+            using (IDataReader reader = adapterFactory.Create().FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, false))
             {
                 List<string> keys = new List<string>();
 
                 while (reader.Read())
                 {
                     keys.Add(reader.GetString(0));
+                }
+
+                if (keys.None())
+                {
+                    return Result.FromError("Could not find any shipments for manifest.");
                 }
 
                 return await webClient.CreateAsendiaManifest(keys).ConfigureAwait(false);
