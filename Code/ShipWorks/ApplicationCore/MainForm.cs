@@ -426,7 +426,7 @@ namespace ShipWorks
         /// </summary>
         private static bool AreThereAnyAsendiaAccounts() =>
             Using(IoC.BeginLifetimeScope(),
-                scope => scope.Resolve<IEnumerable<IAsendiaAccountRepository>>().Any(x => x.AccountsReadOnly.Any()));
+                scope => scope.Resolve<IAsendiaAccountRepository>().AccountsReadOnly.Any());
 
         /// <summary>
         /// Checks whether we have any postal accounts
