@@ -8,6 +8,7 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Settings;
 
 namespace ShipWorks.Escalator
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Escalator
         public ShipWorksUpgrade(
             IUpdaterWebClient updaterWebClient,
             IShipWorksInstaller shipWorksInstaller,
-			IFileWriter fileWriter,
+            IFileWriter fileWriter,
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
@@ -112,6 +113,12 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
+            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            {
+                log.InfoFormat("Not upgrading because auto updates have been disabled.");
+                return;
+            }
+
             bool shouldRetry = true;
             int retryCount = 0;
 
