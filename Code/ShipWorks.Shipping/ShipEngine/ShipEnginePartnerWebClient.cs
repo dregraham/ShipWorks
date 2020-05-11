@@ -1,16 +1,17 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ShipWorks.ApplicationCore.Logging;
-using System;
-using System.Net;
-using System.Threading.Tasks;
-using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
-using ShipWorks.Shipping.ShipEngine.DTOs;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -33,6 +34,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
                                           WebClientEnvironmentFactory webClientEnvironmentFactory,
                                           Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
