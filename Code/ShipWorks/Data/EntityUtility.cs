@@ -916,7 +916,7 @@ namespace ShipWorks.Data
         /// </summary>
         public static void CopyChangedFields(IEntity2 sourceEntity, IEntity2 destinationEntity)
         {
-            var sourceGraph = GetObjectGraph(sourceEntity, true, true);
+            var sourceGraph = GetObjectGraph(sourceEntity, null, null);
             var destinationGraph = GetObjectGraph(destinationEntity, null, null);
 
             foreach (var sourceChild in sourceGraph)

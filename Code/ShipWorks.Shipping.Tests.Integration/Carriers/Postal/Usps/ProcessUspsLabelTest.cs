@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
         [Fact]
         public async Task Process_WithUspsShipment_SavesTrackingNumber()
         {
-            Mock<ISwsimV90> webService = context.Mock.CreateMock<ISwsimV90>(w =>
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Carriers.Postal.Usps
                 { "third", Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Set(x => x.Username, "third").Save().AccountId },
             };
 
-            Mock<ISwsimV90> webService = context.Mock.CreateMock<ISwsimV90>(w =>
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
             {
                 UspsTestHelpers.SetupAddressValidationResponse(w);
                 w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>())).Returns(defaultResponse);
