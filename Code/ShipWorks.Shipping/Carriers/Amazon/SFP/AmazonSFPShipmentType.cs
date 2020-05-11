@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.SFP
             // Add the labels content
             container.AddElement(
                 "Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
             ElementOutline outline = container.AddElement("Amazon");

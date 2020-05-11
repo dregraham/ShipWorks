@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Load all the shippers into the grid
         /// </summary>
-        private void LoadAccounts()
+        public void LoadAccounts()
         {
             Cursor.Current = Cursors.WaitCursor;
 

@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Utility;
+﻿using Interapptive.Shared.Extensions;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 
@@ -26,7 +27,7 @@ namespace ShipWorks.Shipping.Services.ShipmentProcessorSteps.LabelRetrieval
         {
             // This method should return validation results instead of throwing, but that would be a bigger refactoring
             // than we're doing here.  So for now, we'll just let it throw if it fails.
-            insuranceUtility.ValidateShipment(shipment);
+            insuranceUtility.ValidateShipment(shipment).Wait();
 
             return Result.FromSuccess();
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Xml;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
@@ -33,19 +34,23 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         private readonly IShipmentTypeManager shipmentTypeManager;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IShipmentTypeDataService shipmentTypeDataService;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public TangoLogShipmentRequest(
             IHttpRequestSubmitterFactory requestSubmitterFactory,
             ITangoWebRequestClient client,
             IShipmentTypeManager shipmentTypeManager,
             IStoreTypeManager storeTypeManager,
             ISqlAdapterFactory sqlAdapterFactory,
+            IShipmentTypeDataService shipmentTypeDataService,
             Func<Type, ILog> createLog)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
+            this.shipmentTypeDataService = shipmentTypeDataService;
             this.storeTypeManager = storeTypeManager;
             this.shipmentTypeManager = shipmentTypeManager;
             this.client = client;
@@ -151,7 +156,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("identifier", storeType.LicenseIdentifier);
 
             // If isretry is true, Tango will check to see if the shipment exists, and if it does
-            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // it will not insert it into the database.  If it doesn't exist, it will do the
             // insert.
             postRequest.Variables.Add("isretry", "1");
         }
@@ -159,7 +164,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// <summary>
         /// Prepare the log shipment request
         /// </summary>
-        private static void PrepareLogShipmentRequest(ShipmentEntity shipment,
+        private void PrepareLogShipmentRequest(ShipmentEntity shipment,
                                                       ShipmentType shipmentType,
                                                       IHttpVariableRequestSubmitter postRequest)
         {
@@ -180,7 +185,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("carrierCost", shipment.ShipmentCost.ToString());
 
             // If isretry is true, Tango will check to see if the shipment exists, and if it does
-            // it will not insert it into the database.  If it doesn't exist, it will do the 
+            // it will not insert it into the database.  If it doesn't exist, it will do the
             // insert.
             postRequest.Variables.Add("isretry", "1");
 
@@ -265,9 +270,19 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         }
 
         /// <summary>
+        /// Get insurance choices for the given shipment
+        /// </summary>
+        private static List<IInsuranceChoice> GetInsuranceChoices(ShipmentEntity shipment, ShipmentType shipmentType) =>
+            Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
+                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
+                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
+                                 choice.InsuranceValue > 0)
+                .ToList();
+
+        /// <summary>
         /// Add insurance details from the given shipment to the log shipment request
         /// </summary>
-        private static void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
+        private void AddInsuranceDetailsToLogShipmentRequest(ShipmentEntity shipment,
                                                                     IHttpVariableRequestSubmitter postRequest,
                                                                     ShipmentType shipmentType)
         {
@@ -276,11 +291,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             bool pennyOne = false;
             decimal insuredValue = 0;
 
-            List<IInsuranceChoice> insuredPackages = Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
-                .Where(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                                 choice.InsuranceValue > 0)
-                .ToList();
+            List<IInsuranceChoice> insuredPackages = GetInsuranceChoices(shipment, shipmentType);
 
             if (insuredPackages.Count > 0)
             {
@@ -301,6 +312,43 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
             postRequest.Variables.Add("declaredvalue", insuredValue.ToString());
             postRequest.Variables.Add("swinsurance", shipWorksInsured ? "1" : "0");
 
+            LoadInsuranceData(shipment, shipWorksInsured);
+            AddInsuredWith(shipment, postRequest);
+
+            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
+            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
+
+            AddPolicyInformation(shipment, postRequest, shipWorksInsured);
+        }
+
+        /// <summary>
+        /// Add Policy Number and Request Stats to request
+        /// </summary>
+        private static void AddPolicyInformation(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest, bool shipWorksInsured)
+        {
+            if (shipWorksInsured)
+            {
+                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
+                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
+            }
+        }
+
+        /// <summary>
+        /// If appropriate, delegate to LoadInsuranceData
+        /// </summary>
+        private void LoadInsuranceData(ShipmentEntity shipment, bool shipWorksInsured)
+        {
+            if (shipWorksInsured && shipment.InsurancePolicy == null)
+            {
+                shipmentTypeDataService.LoadInsuranceData(shipment);
+            }
+        }
+
+        /// <summary>
+        /// Add InsuredWith to request
+        /// </summary>
+        private static void AddInsuredWith(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest)
+        {
             if (shipment.InsurancePolicy == null)
             {
                 postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(InsuredWith.NotWithApi));
@@ -311,15 +359,6 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
                     InsuredWith.SuccessfullyInsuredViaApi :
                     InsuredWith.FailedToInsureViaApi;
                 postRequest.Variables.Add("insuredwith", EnumHelper.GetApiValue(insuredWith));
-            }
-
-            postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
-            postRequest.Variables.Add("carrierInsured", carrierInsured ? "1" : "0");
-
-            if (shipWorksInsured)
-            {
-                postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
-                postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
             }
         }
     }

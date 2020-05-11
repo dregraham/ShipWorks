@@ -63,5 +63,22 @@ namespace Interapptive.Shared.Extensions
                 return false;
             }
         }
+
+        /// <summary>
+        /// Validate that the string is within the min and max allowed values
+        /// </summary>
+        /// <param name="input">the string to test</param>
+        /// <param name="maxLength">the max length</param>
+        /// <param name="minLength">the min length</param>
+        /// <param name="errorMessage">the error to display</param>
+        public static Result ValidateLength(this string input, int? maxLength, int? minLength, string errorMessage = "")
+        {
+            if (input?.Length > maxLength || input?.Length < minLength)
+            {
+                return Result.FromError(errorMessage);
+            }
+
+            return Result.FromSuccess();
+        }
     }
 }

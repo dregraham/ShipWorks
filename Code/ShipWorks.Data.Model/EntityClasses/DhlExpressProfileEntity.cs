@@ -365,6 +365,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Contents", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("NonDelivery", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ResidentialDelivery", fieldHashtable);
 		}
 		#endregion
 
@@ -541,6 +543,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressProfileFieldIndex.NonDelivery, false); }
 			set	{ SetValue((int)DhlExpressProfileFieldIndex.NonDelivery, value); }
+		}
+
+		/// <summary> The ResidentialDelivery property of the Entity DhlExpressProfile<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressProfile"."ResidentialDelivery"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> ResidentialDelivery
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)DhlExpressProfileFieldIndex.ResidentialDelivery, false); }
+			set	{ SetValue((int)DhlExpressProfileFieldIndex.ResidentialDelivery, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'ShippingProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

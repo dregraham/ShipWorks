@@ -18,9 +18,16 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         public string GetDefaultAccountDescription(ICarrierAccount carrierAccount)
         {
             DhlExpressAccountEntity account = carrierAccount as DhlExpressAccountEntity;
+
+            if (account?.UspsAccountId != null)
+            {
+                return "DHL Express from ShipWorks";
+            }
+
             MethodConditions.EnsureArgumentIsNotNull(account, "account");
 
-            string[] descriptionComponents = { account.AccountNumber.ToString(), account.Street1, account.PostalCode };
+            string[] descriptionComponents =
+                {account?.AccountNumber.ToString(), account?.Street1, account?.PostalCode};
 
             return string.Join(",", descriptionComponents.Where(s => !string.IsNullOrWhiteSpace(s)));
         }

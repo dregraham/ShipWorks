@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [Fact]
         public void GetAccountInfo_ReturnsAccountInformation()
         {
-            AccountInfoV37 info = testObject.GetAccountInfo(account) as AccountInfoV37;
+            AccountInfoV41 info = testObject.GetAccountInfo(account) as AccountInfoV41;
 
             // Basically just a connectivity test to confirm that the web client is not broken
             Assert.NotNull(info);

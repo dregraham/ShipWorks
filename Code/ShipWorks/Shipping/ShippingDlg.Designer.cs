@@ -292,13 +292,13 @@ namespace ShipWorks.Shipping
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.shipmentControl);
-            this.splitContainer.Panel1MinSize = 230;
+            this.splitContainer.Panel1MinSize = 324;
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.ratesSplitContainer);
             this.splitContainer.Size = new System.Drawing.Size(651, 489);
-            this.splitContainer.SplitterDistance = 291;
+            this.splitContainer.SplitterDistance = 324;
             this.splitContainer.TabIndex = 0;
             this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.OnSplitterMoved);
             // 
@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping
             this.shipmentControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shipmentControl.Location = new System.Drawing.Point(0, 0);
             this.shipmentControl.Name = "shipmentControl";
-            this.shipmentControl.Size = new System.Drawing.Size(291, 489);
+            this.shipmentControl.Size = new System.Drawing.Size(324, 489);
             this.shipmentControl.TabIndex = 0;
             this.shipmentControl.SelectionChanged += new ShipWorks.Shipping.Editing.ShipmentSelectionChangedEventHandler(this.OnChangeSelectedShipments);
             // 

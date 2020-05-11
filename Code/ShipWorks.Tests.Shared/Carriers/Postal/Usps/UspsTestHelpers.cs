@@ -1,5 +1,4 @@
 ﻿using Moq;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
@@ -14,11 +13,13 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
         /// </summary>
         /// <remarks>This hang is because we're mixing async calls with waits. Until we can use async calls
         /// for more of the web client, we'll need to use this.</remarks>
-        public static void SetupAddressValidationResponse(Mock<ISwsimV84> mock)
+        public static void SetupAddressValidationResponse(Mock<IExtendedSwsimV90> mock)
         {
-            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
-                .Raises(x => x.CleanseAddressCompleted += null, new CleanseAddressCompletedEventArgs(new object[] {
-                    "", // Result
+            var type = typeof(CleanseAddressCompletedEventArgs);
+
+            var results = new object[]
+            {
+                "", // Result
                     new Address(),
                     true,
                     true,
@@ -27,10 +28,18 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
                     false,
                     new Address[] { },
                     new StatusCodes(),
-                    new RateV31[] { },
+                    new RateV33[] { },
                     "",
                     0
-                }, null, false, null));
+            };
+
+            var eventArgs = (CleanseAddressCompletedEventArgs) type.Assembly.CreateInstance(type.FullName, false,
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
+                null, new object[] { results, null, false, null }, null, null);
+
+
+            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
+                .Raises(x => x.CleanseAddressCompleted += null, eventArgs);
         }
     }
 }

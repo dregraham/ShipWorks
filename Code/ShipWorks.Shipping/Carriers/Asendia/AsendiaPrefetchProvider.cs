@@ -5,7 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Asendia
 {
     /// <summary>
-    /// Provide a prefetch path for a DhlExpress shipment
+    /// Provide a prefetch path for an Asendia shipment
     /// </summary>
     [KeyedComponent(typeof(IShipmentTypePrefetchProvider), ShipmentTypeCode.Asendia)]
     public class AsendiaPrefetchProvider : IShipmentTypePrefetchProvider

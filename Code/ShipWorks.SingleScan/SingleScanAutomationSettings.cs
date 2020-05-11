@@ -1,6 +1,8 @@
-﻿using ShipWorks.ApplicationCore;
+﻿using System;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Settings;
+using ShipWorks.Settings;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Users;
 
@@ -12,16 +14,16 @@ namespace ShipWorks.SingleScan
     [Component]
     public class SingleScanAutomationSettings : ISingleScanAutomationSettings
     {
-        private readonly IMainForm mainForm;
+        private readonly Func<IMainForm> createMainForm;
         private readonly IUserSession userSession;
         private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleScanAutomationSettings"/> class.
         /// </summary>
-        public SingleScanAutomationSettings(IMainForm mainForm, IUserSession userSession, IShippingSettings shippingSettings)
+        public SingleScanAutomationSettings(Func<IMainForm> createMainForm, IUserSession userSession, IShippingSettings shippingSettings)
         {
-            this.mainForm = mainForm;
+            this.createMainForm = createMainForm;
             this.userSession = userSession;
             this.shippingSettings = shippingSettings;
         }
@@ -42,12 +44,17 @@ namespace ShipWorks.SingleScan
         public bool AutoCreateShipments => shippingSettings.AutoCreateShipments;
 
         /// <summary>
+        /// Behavior when an scanned order has multiple shipments
+        /// </summary>
+        public SingleScanConfirmationMode ConfirmationMode => userSession.Settings.SingleScanConfirmationMode;
+
+        /// <summary>
         /// Whether or not auto print is permitted in the current state
         /// </summary>
         public bool IsAutoPrintEnabled()
         {
             return userSession.Settings?.SingleScanSettings == (int) SingleScanSettings.AutoPrint &&
-                   !mainForm.AdditionalFormsOpen();
+                   !createMainForm().AdditionalFormsOpen();
         }
     }
 }

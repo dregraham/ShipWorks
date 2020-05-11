@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
     /// <summary>
     /// Process shipments one at a time
     /// </summary>
-    [Component(RegistrationType.Self)]
+    [KeyedComponent(typeof(IProcessShipmentsWorkflow), ProcessShipmentsWorkflow.Serial)]
     public class SerialProcessShipmentsWorkflow : IProcessShipmentsWorkflow
     {
         private readonly ShipmentPreparationStep prepareShipmentTask;
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                 workProgress.Starting();
                 prepareShipmentTask.CounterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessingAction;
 
-                IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource);
+                IEnumerable<ProcessShipmentState> input = await CreateShipmentProcessorInput(shipments, chosenRateResult, cancellationSource).ConfigureAwait(false);
                 return await Task.Run(async () =>
                 {
                     ProcessShipmentsWorkflowResult workflowResult = new ProcessShipmentsWorkflowResult(chosenRateResult);
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     workProgress.Completed();
 
                     return result;
-                });
+                }).ConfigureAwait(false);
             }
         }
 
@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Services.ProcessShipmentsWorkflow
                     {
                         return shippingManager.SaveShipmentsToDatabase(shipments, true);
                     }
-                });
+                }).ConfigureAwait(false);          
 
             return shipments.Select((shipment, i) =>
             {

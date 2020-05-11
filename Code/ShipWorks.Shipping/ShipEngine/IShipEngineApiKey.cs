@@ -12,16 +12,9 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         string Value { get; }
 
-
         /// <summary>
         /// Ensures the ApiKey contains a value
         /// </summary>
         Task Configure();
-
-        /// <summary>
-        /// Get the partner api key
-        /// </summary>
-        /// <returns></returns>
-        string GetPartnerApiKey();
     }
 }

@@ -42,6 +42,7 @@ namespace ShipWorks.ApplicationCore.Logging
 
         // Log pattern
         private const string traceLayoutPattern = "%date{HH:mm:ss.fff} %-5level [%logger] [%thread] --> %message%newline";
+        private const string justMessagePattern = "%message%newline";
 
         /// <summary>
         /// Initialize the configuration of the logger.  If sessionName is specified, it's appended to the default log folder name.
@@ -163,10 +164,17 @@ namespace ShipWorks.ApplicationCore.Logging
             // Add in application tracing
             if (logOptions.LogShipWorks)
             {
-                RollingFileAppender appender = CreateFileAppender("shipworks.log", traceLayoutPattern);
+                RollingFileAppender appender = CreateFileAppender(Path.Combine(LogFolder, "shipworks.log"), traceLayoutPattern);
                 ApplyShipWorksLogging(appender);
 
-                BasicConfigurator.Configure(appender);
+                RollingFileAppender apiAppender = CreateFileAppender(Path.Combine(DataPath.LogRoot, "shipworks_api.log"), justMessagePattern);
+
+                var apiLogFilter = new ApiLogFilter();
+                apiLogFilter.ActivateOptions();
+
+                apiAppender.AddFilter(apiLogFilter);
+
+                BasicConfigurator.Configure(appender, apiAppender);
             }
 
             DynamicQueryEngine.Switch.Level = TraceLevel.Off;
@@ -178,7 +186,7 @@ namespace ShipWorks.ApplicationCore.Logging
         private static void ApplyShipWorksLogging(AppenderSkeleton appender)
         {
             // We only want info and above in the file
-            LevelRangeFilter levelFilter = new LevelRangeFilter();
+            ShipWorksLevelRangeFilter levelFilter = new ShipWorksLevelRangeFilter();
 
             levelFilter.LevelMin = logOptions.MinLevel;
             levelFilter.LevelMax = logOptions.MaxLevel;
@@ -191,7 +199,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// <summary>
         /// Create the main log file
         /// </summary>
-        private static RollingFileAppender CreateFileAppender(string logFileName, string layoutPattern)
+        private static RollingFileAppender CreateFileAppender(string filePath, string layoutPattern)
         {
             RollingFileAppender appender = new RollingFileAppender();
 
@@ -214,7 +222,7 @@ namespace ShipWorks.ApplicationCore.Logging
             appender.StaticLogFileName = true;
 
             // The file to which to log
-            appender.File = Path.Combine(LogFolder, logFileName);
+            appender.File = filePath;
             appender.ActivateOptions();
 
             return appender;

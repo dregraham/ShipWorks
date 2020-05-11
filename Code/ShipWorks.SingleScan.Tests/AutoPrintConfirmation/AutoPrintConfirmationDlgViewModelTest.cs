@@ -28,7 +28,7 @@ namespace ShipWorks.SingleScan.Tests.AutoPrintConfirmation
             mock.Provide<IMessenger>(testMessenger);
 
             testObject = mock.Create<AutoPrintConfirmationDlgViewModel>();
-            testObject.Load("barcode", "displayText", "continueText");
+            testObject.Load("barcode", "displayText", "continueText", "continueOptionalText");
         }
 
         [Fact]
@@ -78,8 +78,7 @@ namespace ShipWorks.SingleScan.Tests.AutoPrintConfirmation
 
             testObject.CancelClickCommand.Execute(null);
 
-            Assert.NotNull(dialogResult);
-            Assert.False(dialogResult.Value);
+            Assert.Null(dialogResult);
         }
 
         [Fact]

@@ -15,7 +15,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Messaging.Messages;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Users.Security;
@@ -273,6 +272,12 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// </summary>
         public void EnforceCapabilities(EnforcementContext context, IWin32Window owner)
         {
+            if (!Program.ExecutionMode.IsUISupported)
+            {
+                EnforceCapabilities(context);
+                return;
+            }
+
             Refresh();
 
             // Enforce restrictions when not in the trial period

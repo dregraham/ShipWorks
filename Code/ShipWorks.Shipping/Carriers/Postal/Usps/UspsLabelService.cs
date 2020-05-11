@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes;
         private readonly IIndex<ShipmentTypeCode, ILabelService> labelServices;
         private readonly IUspsRatingService uspsRatingService;
-        private readonly Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData;
+        private readonly Func<StampsLabelResponse, StampsDownloadedLabelData> createDownloadedLabelData;
         private readonly IUspsTermsAndConditions termsAndConditions;
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsLabelService(IIndex<ShipmentTypeCode, IUspsShipmentType> uspsShipmentTypes,
             IIndex<ShipmentTypeCode, ILabelService> labelServices,
             IUspsRatingService uspsRatingService,
-            Func<UspsLabelResponse, UspsDownloadedLabelData> createDownloadedLabelData,
+            Func<StampsLabelResponse, StampsDownloadedLabelData> createDownloadedLabelData,
             IUspsTermsAndConditions termsAndConditions)
         {
             this.uspsShipmentTypes = uspsShipmentTypes;
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     termsAndConditions.Validate(shipment);
 
-                    TelemetricResult<UspsLabelResponse> telemetricLabelResponse =
+                    TelemetricResult<StampsLabelResponse> telemetricLabelResponse =
                         await uspsShipmentType.CreateWebClient().ProcessShipment(shipment).ConfigureAwait(false);
 
                     telemetricLabelResponse.CopyTo(telemetricResult);
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                         IUspsWebClient client = uspsShipmentType.CreateWebClient();
 
-                        TelemetricResult<UspsLabelResponse> telemetricUspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
+                        TelemetricResult<StampsLabelResponse> telemetricUspsLabelResponse = await client.ProcessShipment(shipment).ConfigureAwait(false);
 
                         telemetricUspsLabelResponse.CopyTo(telemetricResult);
                         telemetricResult.SetValue(createDownloadedLabelData(telemetricUspsLabelResponse.Value));

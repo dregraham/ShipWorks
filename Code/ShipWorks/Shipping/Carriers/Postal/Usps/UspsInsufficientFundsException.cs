@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Autofac;
+using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create a dialog that will allow a customer to purchase more postage
         /// </summary>
-        public Form CreatePostageDialog(ILifetimeScope lifetimeScope)
+        public IForm CreatePostageDialog(ILifetimeScope lifetimeScope)
         {
             UspsPurchasePostageDlg dialog = lifetimeScope.Resolve<UspsPurchasePostageDlg>();
             dialog.LoadAccount(account);

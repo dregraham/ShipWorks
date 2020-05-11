@@ -213,6 +213,16 @@
     <Compile Include="Controls\MainGrid\MainGridHeader.xaml.cs">
       <DependentUpon>MainGridHeader.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsControl.xaml.cs">
+      <DependentUpon>ApiSettingsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsHost.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsHost.Designer.cs">
+      <DependentUpon>ApiSettingsHost.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Settings\Api\ApiSettingsViewModel.cs" />
     <Compile Include="Controls\Settings\DesignModeWarehouseListViewModel.cs" />
     <Compile Include="Controls\Settings\DesignModeWarehouseSettingsViewModel.cs" />
     <Compile Include="Controls\Settings\WarehouseListDialog.xaml.cs">
@@ -222,6 +232,7 @@
       <DependentUpon>WarehouseSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TokenTextBox.cs" />
+    <Compile Include="Controls\UACButton.cs" />
     <Compile Include="Controls\UnitTextBox.cs" />
     <Compile Include="Controls\WebBrowser\DismissableWebBrowserDlg.xaml.cs">
       <DependentUpon>DismissableWebBrowserDlg.xaml</DependentUpon>
@@ -302,6 +313,7 @@
     <Compile Include="ValueConverters\BooleanToIntConverter.cs" />
     <Compile Include="ValueConverters\BooleanToGridRowHeightConverter.cs" />
     <Compile Include="ValueConverters\BooleanLambdaConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToSolidColorBrushConverter.cs" />
     <Compile Include="ValueConverters\BooleanToStringConverter.cs" />
     <Compile Include="ValueConverters\SectionLayoutVisibilityConverter.cs" />
     <Compile Include="ValueConverters\VisibilityMultiConverter.cs" />
@@ -403,6 +415,10 @@
     <Page Include="Controls\MainGrid\MainGridHeader.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Settings\Api\ApiSettingsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Settings\WarehouseListDialog.xaml">
       <SubType>Designer</SubType>
@@ -567,6 +583,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Themes\Controls\UACButton.xaml" />
     <Page Include="Themes\Controls\UnitTextBox.xaml" />
     <Page Include="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>
@@ -588,6 +605,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Controls\CustomerLicenseActivation\CustomerLicenseActivationControlHost.resx">
       <DependentUpon>CustomerLicenseActivationControlHost.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Settings\Api\ApiSettingsHost.resx">
+      <DependentUpon>ApiSettingsHost.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

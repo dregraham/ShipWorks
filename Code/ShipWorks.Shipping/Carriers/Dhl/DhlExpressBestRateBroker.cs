@@ -1,12 +1,11 @@
-﻿using ShipWorks.Shipping.Carriers.BestRate;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Insurance;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Dhl
 {
@@ -135,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
         /// </summary>
         protected override string AccountDescription(DhlExpressAccountEntity account)
         {
-            return account.AccountNumber.ToString();
+            return account.AccountDescription;
         }
     }
 }

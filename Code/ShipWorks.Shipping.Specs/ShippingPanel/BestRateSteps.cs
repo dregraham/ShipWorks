@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<ISwsimV84> client;
+        private Mock<IExtendedSwsimV90> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -156,13 +156,13 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
             }, 5, TimeSpan.FromSeconds(250), ex => true);
 
         /// <summary>
-        /// Create a mocked version of ISwsimV84
+        /// Create a mocked version of ISwsimV90
         /// </summary>
-        private Mock<ISwsimV84> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<IExtendedSwsimV90> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<ISwsimV84>();
+            var uspsClient = mock.CreateMock<IExtendedSwsimV90>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
-                .Returns(new AccountInfoResult(new AccountInfoV37
+                .Returns(new AccountInfoResult(new AccountInfoV41
                 {
                     Terms = new Terms
                     {
@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 .Returns(new CreateIndiciumResult
                 {
                     TrackingNumber = "123abc",
-                    Rate = new RateV31(),
+                    Rate = new RateV33(),
                     StampsTxID = Guid.NewGuid()
                 });
             return uspsClient;
@@ -199,12 +199,18 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
                 true, // IsPOBoxSpecified
                 new [] { address }, // CandidateAddresses
                 new StatusCodes(), // Status codes
-                new RateV31[0], // Rates
+                new RateV33[0], // Rates
                 "", // AddressCleansingResult
                 AddressVerificationLevel.Maximum // Verification Level
             };
 
-            return new CleanseAddressCompletedEventArgs(results, null, false, null);
+            var type = typeof(CleanseAddressCompletedEventArgs);
+
+            var eventArgs = (CleanseAddressCompletedEventArgs) type.Assembly.CreateInstance(type.FullName, false,
+                System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
+                null, new object[] { results, null, false, null }, null, null);
+
+            return eventArgs;
         }
 
         /// <summary>

@@ -1,5 +1,7 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using Interapptive.Shared.Security;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 using System.Threading.Tasks;
@@ -10,12 +12,10 @@ namespace ShipWorks.Shipping.ShipEngine
     /// Api key for communicating with ShipEngine
     /// </summary>
     [Component(SingleInstance = true)]
-    public class ShipEngineApiKey : IShipEngineApiKey
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    public class ShipEngineApiKey : IShipEngineApiKey, IInitializeForCurrentSession
     {
-        private const string EncryptedPartnerApiKey = "Auapk4J9PBSgT+Luq91kHHGNhTddMY2y0Ih7x0/7V5bjZ1FQE2yF7WyR7oR0e0DA";
-
         private readonly IShippingSettings shippingSettings;
-        private readonly IEncryptionProviderFactory encryptionProviderFactory;
         private readonly IShipEnginePartnerWebClient partnerWebClient;
 
         /// <summary>
@@ -26,7 +26,6 @@ namespace ShipWorks.Shipping.ShipEngine
             IShipEnginePartnerWebClient partnerWebClient)
         {
             this.shippingSettings = shippingSettings;
-            this.encryptionProviderFactory = encryptionProviderFactory;
             this.partnerWebClient = partnerWebClient;
         }
 
@@ -46,7 +45,7 @@ namespace ShipWorks.Shipping.ShipEngine
             {
                 if (string.IsNullOrEmpty(apiKey))
                 {
-                    apiKey = await GetNewApiKey();
+                    apiKey = await partnerWebClient.CreateNewAccount().ConfigureAwait(false);
                     settings.ShipEngineApiKey = apiKey;
 
                     shippingSettings.Save(settings);
@@ -62,23 +61,10 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
-        /// Creates a new account and gets the API Key from ShipEngine
+        /// Reset the api key value when logging in
+        /// this ensures that we get a fresh value when connecting to a new database
         /// </summary>
-        private async Task<string> GetNewApiKey()
-        {
-            string partnerApiKey = GetPartnerApiKey();
-            string shipEngineAccountId = await partnerWebClient.CreateNewAccount(partnerApiKey);
-
-            return await partnerWebClient.GetApiKey(partnerApiKey, shipEngineAccountId);            
-        }
-
-        /// <summary>
-        /// Gets the ShipWorks PartnerID
-        /// </summary>
-        public string GetPartnerApiKey()
-        {
-            IEncryptionProvider decrypter = encryptionProviderFactory.CreateSecureTextEncryptionProvider("ShipEngine");
-            return decrypter.Decrypt(EncryptedPartnerApiKey);
-        }
+        public void InitializeForCurrentSession() =>
+            Value = null;
     }
 }

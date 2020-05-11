@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
         private readonly AutoMock mock;
         private readonly UspsTermsAndConditions testObject;
         private readonly Mock<IIndex<ShipmentTypeCode, IUspsShipmentType>> shipmentTypeRepo;
-        private readonly AccountInfoV37 accountInfo;
+        private readonly AccountInfoV41 accountInfo;
         private readonly Mock<IUspsWebClient> webClient;
         private readonly Mock<IUspsShipmentType> uspsShipmentType;
         private readonly Mock<ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity>> accountRepo;
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Postal.Usps
             accountRepo = mock.Mock<ICarrierAccountRetriever<UspsAccountEntity, IUspsAccountEntity>>();
             accountRepo.Setup(r => r.GetAccountReadOnly(It.IsAny<ShipmentEntity>())).Returns(uspsAccount);
 
-            accountInfo = new AccountInfoV37()
+            accountInfo = new AccountInfoV41()
             {
                 Terms = new Terms()
                 {

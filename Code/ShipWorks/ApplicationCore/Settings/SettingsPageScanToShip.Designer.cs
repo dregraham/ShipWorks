@@ -1,4 +1,10 @@
-﻿namespace ShipWorks.ApplicationCore.Settings
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using ShipWorks.Settings;
+
+namespace ShipWorks.ApplicationCore.Settings
 {
     partial class SettingsPageScanToShip
     {
@@ -44,6 +50,8 @@
             this.infoTipVerificationWarehouseOnly = new ShipWorks.UI.Controls.InfoTip();
             this.printShortcutsLabel = new System.Windows.Forms.Label();
             this.sectionTitle1 = new ShipWorks.UI.Controls.SectionTitle();
+            this.singleScanConfirmation = new System.Windows.Forms.ComboBox();
+            this.singleScanConfirmationLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // infoTipSingleScan
@@ -132,7 +140,7 @@
             // 
             // sectionTitleShipping
             // 
-            this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionTitleShipping.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleShipping.Location = new System.Drawing.Point(10, 10);
             this.sectionTitleShipping.Name = "sectionTitleShipping";
@@ -201,13 +209,34 @@
             // 
             // sectionTitle1
             // 
-            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitle1.Location = new System.Drawing.Point(10, 207);
             this.sectionTitle1.Name = "sectionTitle1";
             this.sectionTitle1.Size = new System.Drawing.Size(523, 22);
             this.sectionTitle1.TabIndex = 43;
             this.sectionTitle1.Text = "Shipping Workflow";
+            // 
+            // singleScanConfirmationLabel
+            // 
+            this.singleScanConfirmationLabel.Location = new System.Drawing.Point(18, 271);
+            this.singleScanConfirmationLabel.Name = "singleScanConfirmationLabel";
+            this.singleScanConfirmationLabel.Size = new System.Drawing.Size(621, 69);
+            this.singleScanConfirmationLabel.TabIndex = 50;
+            this.singleScanConfirmationLabel.Text = "Default behavior when scanning a previously processed order:";
+            // 
+            // singleScanConfirmation
+            // 
+            this.singleScanConfirmation.DataSource = Enum.GetValues(typeof(SingleScanConfirmationMode))
+                .Cast<SingleScanConfirmationMode>()
+                .Select(x => new KeyValuePair<SingleScanConfirmationMode, string>(x, EnumHelper.GetDescription(x)))
+                .ToList();
+            this.singleScanConfirmation.DisplayMember = "Value";
+            this.singleScanConfirmation.ValueMember = "Key";
+            this.singleScanConfirmation.Location = new System.Drawing.Point(330, 268);
+            this.singleScanConfirmation.Name = "singleScanConfirmation";
+            this.singleScanConfirmation.Size = new System.Drawing.Size(115, 39);
+            this.singleScanConfirmation.TabIndex = 51;
             // 
             // SettingsPageScanToShip
             // 
@@ -229,8 +258,10 @@
             this.Controls.Add(this.registerScannerButton);
             this.Controls.Add(this.autoPrint);
             this.Controls.Add(this.enableScanner);
+            this.Controls.Add(this.singleScanConfirmation);
+            this.Controls.Add(this.singleScanConfirmationLabel);
             this.Name = "SettingsPageScanToShip";
-            this.Size = new System.Drawing.Size(547, 333);
+            this.Size = new System.Drawing.Size(547, 500);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -255,5 +286,7 @@
         private ShipWorks.UI.Controls.InfoTip infoTipAutoWeigh;
         private ShipWorks.UI.Controls.InfoTip infoTipAutoPrint;
         private ShipWorks.UI.Controls.InfoTip infoTipSingleScan;
+        private System.Windows.Forms.Label singleScanConfirmationLabel;
+        private System.Windows.Forms.ComboBox singleScanConfirmation;
     }
 }

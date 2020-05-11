@@ -143,6 +143,15 @@
       <HintPath>..\..\packages\Autofac.Mef.4.0.0\lib\net45\Autofac.Integration.Mef.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Integration.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.Owin.4.2.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.WebApi2.4.0.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.WebApi.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Autofac.WebApi2.Owin.4.0.0\lib\net45\Autofac.Integration.WebApi.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=3.3.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Common.Logging.3.3.1\lib\net40\Common.Logging.dll</HintPath>
       <Private>True</Private>
@@ -225,6 +234,18 @@
       <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.4.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.HttpListener.3.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Hosting.4.1.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Services3, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Microsoft.Web.Services3.dll</HintPath>
@@ -238,6 +259,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -379,6 +403,9 @@
     <Reference Include="System.Management" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
@@ -422,6 +449,15 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.Owin.5.2.7\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
@@ -752,12 +788,18 @@
     <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
+    <Compile Include="Api\ApiStatus.cs" />
+    <Compile Include="Api\Configuration\ApiSettings.cs" />
+    <Compile Include="Api\Configuration\IApiSettingsRepository.cs" />
+    <Compile Include="Api\IApiPortRegistrationService.cs" />
+    <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpgradeLockCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\DatabaseUpgradeBackupManager.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\RegisterApiPortCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UpgradeDatabaseSchemaCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
@@ -770,6 +812,7 @@
     <Compile Include="ApplicationCore\Crashes\ServiceCrash.cs" />
     <Compile Include="ApplicationCore\Crashes\SubmissionDetails.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardLicenseItem.cs" />
+    <Compile Include="ApplicationCore\Dashboard\Content\DashboardOneBalancePromoItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardSchedulerServiceStoppedItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardStoreItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\IUpgradeResultsChecker.cs" />
@@ -840,7 +883,13 @@
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRemoteLoginWithToken.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironmentFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\WebClientEnvironments\WebClientEnvironment.cs" />
+    <Compile Include="ApplicationCore\Logging\ApiLogFilter.cs" />
+    <Compile Include="ApplicationCore\Logging\ShipWorksLevelRangeFilter.cs" />
     <Compile Include="ApplicationCore\ModeChangeBehavior.cs" />
+    <Compile Include="ApplicationCore\Nudges\INudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NullNudgeManager.cs" />
+    <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
+    <Compile Include="ApplicationCore\Settings\Api\IApiSettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
@@ -868,7 +917,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
+    <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />
+    <Compile Include="Common\Threading\IBackgroundExecutor.cs" />
     <Compile Include="Data\Administration\ISqlSchemaUpdater.cs" />
     <Compile Include="ApplicationCore\MainGridHeaderViewModel.cs" />
     <Compile Include="Data\Administration\IUpdateService.cs" />
@@ -876,6 +927,7 @@
     <Compile Include="Data\Administration\UpdateService.cs" />
     <Compile Include="Data\Administration\VersionSpecificUpdates\V_07_04_00_02.cs" />
     <Compile Include="Data\Connection\DatabaseUpgradeTelemetry.cs" />
+    <Compile Include="Data\ShipmentNotProcessedIgnoreConcurrencyFactory.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom10Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom1Condition.cs" />
     <Compile Include="Filters\Content\Conditions\OrderItems\Custom2Condition.cs" />
@@ -1168,7 +1220,48 @@
     <Compile Include="Shipping\Carriers\Amazon\SWA\IAmazonSWAAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\IShippingAccountListProvider.cs" />
     <Compile Include="Shipping\Carriers\ShippingAccountListProvider.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsLogoType.cs" />
+    <Compile Include="Shipping\Carriers\UPS\IUpsTrackClient.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.Designer.cs">
+      <DependentUpon>OneBalanceUpsBannerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.Designer.cs">
+      <DependentUpon>DeviceIdentificationControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\IOneBalanceUpsAccountRegistrationActivity.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.Designer.cs">
+      <DependentUpon>OneBalanceAccountAddressPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceFinishPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceFinishPage.Designer.cs">
+      <DependentUpon>OneBalanceFinishPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.Designer.cs">
+      <DependentUpon>OneBalanceTermsAndConditionsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\ShipEngine\UpsShipEngineServiceTypeUtility.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebClientResponse.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidatorFactory.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\UpsBannerControl.Designer.cs">
+      <DependentUpon>UpsBannerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\CoreExtensions\Grid\ShipmentCarrierAccountDisplayType.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaim.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\IInsureShipClaimValidator.cs" />
@@ -1196,6 +1289,8 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\IInsureShipVoidValidator.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
+    <Compile Include="Shipping\IOneBalanceSettingsControlHost.cs" />
+    <Compile Include="Shipping\IShipmentTypeDataService.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShippingRestrictionType.cs" />
     <Compile Include="Shipping\Profiles\EditableShippingProfile.cs" />
@@ -1203,6 +1298,12 @@
     <Compile Include="Shipping\Profiles\IProfilePopupService.cs" />
     <Compile Include="Shipping\Profiles\ProfileException.cs" />
     <Compile Include="Shipping\Services\IAppliableShippingProfileRepository.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflow.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
+    <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
+    <Compile Include="Shipping\Settings\IOneBalanceSetupWizard.cs" />
+    <Compile Include="Shipping\ShipmentIgnoreConcurrencyScope.cs" />
+    <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
     <Compile Include="Shipping\Policies\AmazonSFPShippingRestrictionType.cs" />
@@ -1689,7 +1790,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1RegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsTermsAndConditionsException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsLabelResponse.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\StampsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebToolsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\PrefetchPathContainer.cs" />
@@ -1720,16 +1821,7 @@
     <Compile Include="Shipping\Carriers\UPS\LocalRating\Validation\UpsLocalRateDiscrepancy.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiTrackResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsRatingMethod.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsOltShipmentValidator.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoAcceptanceTerms.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\PromoActivation.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\IUpsPromoFootnoteViewModel.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\TelemetricUpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromo.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoAccountType.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoException.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoSource.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\IUpsShipmentValidator.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsDownloadedLabelData.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsLabelResponse.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\IUpsServiceMapping.cs" />
@@ -2053,7 +2145,6 @@
     <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Enums\UpsPromoStatus.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
@@ -2069,25 +2160,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IPromoClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\IUpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsPromoWebClientFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\Api\UpsApiPromoClient.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.Designer.cs">
-      <DependentUpon>UpsPromoFootnote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnoteFactory.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\IUpsPromoPolicy.cs" />
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.Designer.cs">
-      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
@@ -8408,6 +8480,21 @@
     <EmbeddedResource Include="Shipping\Carriers\UPS\LocalRating\RateFootnotes\UpsLocalRatingDisabledFootnote.resx">
       <DependentUpon>UpsLocalRatingDisabledFootnote.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalanceUpsBannerControl.resx">
+      <DependentUpon>OneBalanceUpsBannerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\DeviceIdentificationControl.resx">
+      <DependentUpon>DeviceIdentificationControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceAccountAddressPage.resx">
+      <DependentUpon>OneBalanceAccountAddressPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceFinishPage.resx">
+      <DependentUpon>OneBalanceFinishPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\OneBalanceTermsAndConditionsPage.resx">
+      <DependentUpon>OneBalanceTermsAndConditionsPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -8437,12 +8524,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsShipmentCharacteristicsControl.resx">
       <DependentUpon>UpsShipmentCharacteristicsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\RateFootnotes\UpsPromoFootnote.resx">
-      <DependentUpon>UpsPromoFootnote.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\Promo\UpsPromoDlg.resx">
-      <DependentUpon>UpsPromoDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsDryIceControl.resx">
       <DependentUpon>UpsDryIceControl.cs</DependentUpon>
@@ -9200,7 +9281,7 @@
     </None>
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv29.wsdl" />
     <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl" />
-    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv84.wsdl" />
+    <None Include="Shipping\Carriers\Postal\Usps\Wsdl\swsimv90.wsdl" />
     <None Include="Shipping\Carriers\UPS\OnLineTools\Wsdl\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -9228,19 +9309,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Shipping\Carriers\UPS\OpenAccount\Wsdl\UPSSecurity.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\common.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\Error1.1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.wsdl" />
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\PromoDiscount.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Shipping\Carriers\UPS\Promo\Wsdl\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Stores\Platforms\CsCart\shipworks3.php" />
@@ -9381,6 +9449,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BasicShipmentUploadTaskEditor.resx">
       <DependentUpon>BasicShipmentUploadTaskEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\GenericModule\CoreExtensions\Actions\GenericStoreOrderUpdateTaskEditor.resx">
       <DependentUpon>GenericStoreOrderUpdateTaskEditor.cs</DependentUpon>
@@ -11040,7 +11109,6 @@
     <Resource Include="Resources\box_next_32_32.png" />
     <Resource Include="Resources\box_previous_32_32.png" />
     <Resource Include="Resources\index_32_32.png" />
-    <Resource Include="Resources\box_closed_redo_16_16.png" />
     <Resource Include="Resources\box_void_32_32.png" />
     <Resource Include="Resources\document_gear_32_32.png" />
     <None Include="Resources\amosoft.png" />
@@ -11048,6 +11116,8 @@
     <None Include="Resources\asendia.png" />
     <Resource Include="Resources\box_closed_with_label_32_32.png" />
     <None Include="Resources\bonanza.png" />
+    <Resource Include="Resources\box_closed_redo_16_16.png" />
+    <Resource Include="Resources\box_closed_redo_32_32.png" />
     <Content Include="Resources\box_tall_32.png" />
     <Resource Include="Resources\buttonEndSearchDisabled.png" />
     <None Include="Resources\checkbox_circle_32.png" />
@@ -11129,9 +11199,9 @@
     <None Include="Resources\Shipping\Icons\ontrac.png" />
     <None Include="Resources\Shipping\Icons\other.png" />
     <None Include="Resources\Shipping\Icons\stamps.png" />
-    <None Include="Resources\Shipping\Icons\ups.png" />
-    <None Include="Resources\Shipping\Icons\usps.png" />
-    <None Include="Resources\Shipping\Icons\dhl.png" />
+    <Resource Include="Resources\Shipping\Icons\ups.png" />
+    <Resource Include="Resources\Shipping\Icons\usps.png" />
+    <Resource Include="Resources\Shipping\Icons\dhl.png" />
     <None Include="Resources\Shipping\Icons\bestrate.png" />
     <Content Include="Resources\Shipping\Icons\truck_blue.png" />
     <None Include="Resources\Shipping\Icons\truck_brown.png" />
@@ -11261,9 +11331,11 @@
     <Content Include="Resources\Stores\Icons\zentail.png" />
     <None Include="Resources\table_sql32.png" />
     <None Include="Resources\windows.png" />
+    <Resource Include="Resources\ups_from_shipworks.png" />
     <Content Include="Resources\view_linked_arrow.png" />
     <Content Include="Resources\view_linked_infinity.png" />
     <None Include="Resources\view_next.png" />
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\DiviceIdentification.html" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />

@@ -7,6 +7,10 @@ using ShipWorks.ApplicationCore.Logging;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.Shipping.ShipEngine.DTOs;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -17,64 +21,64 @@ namespace ShipWorks.Shipping.ShipEngine
     public class ShipEnginePartnerWebClient : IShipEnginePartnerWebClient
     {
         private const string CreateAccountUrl = "https://api.shipengine.com/v1/partners/accounts";
-        private const string CreateApiKeyUrl = "https://api.shipengine.com/v1/partners/accounts/{0}/api_keys";
+        private const string ProxyEndpoint = "shipEngine";
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
+        private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ITangoWebClient tangoWebClient;
+        private readonly IDatabaseIdentifier databaseIdentifier;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
-            Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
-            Func<Type, ILog> logFactory)
+                                          WebClientEnvironmentFactory webClientEnvironmentFactory,
+                                          Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+                                          ITangoWebClient tangoWebClient,
+                                          IDatabaseIdentifier databaseIdentifier,
+                                          Func<Type, ILog> logFactory)
         {
             this.requestFactory = requestFactory;
+            this.webClientEnvironmentFactory = webClientEnvironmentFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            this.tangoWebClient = tangoWebClient;
+            this.databaseIdentifier = databaseIdentifier;
             log = logFactory(typeof(ShipEnginePartnerWebClient));
         }
 
         /// <summary>
         /// Creates a new ShipEngine account and returns the account ID
         /// </summary>
-        public async Task<string> CreateNewAccount(string partnerApiKey)
+        public async Task<string> CreateNewAccount()
         {
-            return await SendPartnerRequest(partnerApiKey, CreateAccountUrl, string.Empty, "CreateNewAccount", "account_id");
-        }
+            string customerId = tangoWebClient.GetTangoCustomerId();
+            var createShipEngineAccount = new CreateShipEngineAccount();
 
-        /// <summary>
-        /// Gets an ApiKey from the ShipEngine API
-        /// </summary>
-        public async Task<string> GetApiKey(string partnerApiKey, string shipEngineAccountId)
-        {
-            string requestUrl = string.Format(CreateApiKeyUrl, shipEngineAccountId);
-            string postText = "{\"description\": \"ShipWorks Access Key\"}";
+            if (!string.IsNullOrEmpty(customerId))
+            {
+                createShipEngineAccount.ExternalAccountID = $"{customerId}-{databaseIdentifier.Get()}";
+            }
 
-            return await SendPartnerRequest(partnerApiKey, requestUrl, postText, "GetApiKey", "encrypted_api_key");
-        }
-
-        /// <summary>
-        /// Send actual request to ShipEngine
-        /// </summary>
-        private async Task<string> SendPartnerRequest(string partnerApiKey, string requestUrl, string postText, string logName, string responseFieldName)
-        {
-            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(postText, "application/json");
-            request.Headers.Add("api-key", partnerApiKey);
-            request.Uri = new Uri(requestUrl);
+            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(
+                JsonConvert.SerializeObject(createShipEngineAccount,
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), "application/json");
+            request.Headers.Add("SW-originalRequestUrl", CreateAccountUrl);
+            request.Uri = new Uri(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
 
             JToken responseToken = null;
 
-            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, logName);
+            IApiLogEntry apiLogEntry = apiLogEntryFactory(ApiLogSource.ShipEngine, "CreateNewAccount");
             apiLogEntry.LogRequest(request);
 
             try
             {
-                IHttpResponseReader response = await request.GetResponseAsync();
+                IHttpResponseReader response = await request.GetResponseAsync().ConfigureAwait(false);
                 string result = response.ReadResult();
 
                 apiLogEntry.LogResponse(result);
-                responseToken = JObject.Parse(result)[responseFieldName];
+                responseToken = JObject.Parse(result)["api_key"]["encrypted_api_key"];
             }
             catch (JsonReaderException ex)
             {
@@ -88,8 +92,8 @@ namespace ShipWorks.Shipping.ShipEngine
 
             if (responseToken == null)
             {
-                log.Error($"Unable to get {responseFieldName} from ShipEngine");
-                throw new ShipEngineException($"Unable to get {responseFieldName} from ShipEngine.");
+                log.Error("Unable to get api key from ShipEngine");
+                throw new ShipEngineException("Unable to get api key from ShipEngine.");
             }
 
             return responseToken.ToString();

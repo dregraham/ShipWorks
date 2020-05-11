@@ -4,10 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:ShipWorks.SingleScan.AutoPrintConfirmation"
+        xmlns:ui="http://schemas.shipworks.com/ui"
         d:DataContext="{d:DesignInstance local:AutoPrintConfirmationDlgViewModel}"
         mc:Ignorable="d"
         FontFamily="Tahoma"
         FontSize="8.25pt">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ui:NullVisibilityConverter x:Key="HiddenIfNull"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid Width="500">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -26,6 +32,13 @@
             <StackPanel
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
+                <Button
+                    Height="25"
+                    Padding="10 0 10 0"
+                    Margin="0 0 8 0"
+                    Content="{Binding ContinueOptionalText}"
+                    Command="{Binding ContinueOptionalClickCommand}"
+                    Visibility="{Binding ContinueOptionalText, Converter={StaticResource HiddenIfNull}}"/>
                 <Button
                     Height="25"
                     Padding="10 0 10 0"

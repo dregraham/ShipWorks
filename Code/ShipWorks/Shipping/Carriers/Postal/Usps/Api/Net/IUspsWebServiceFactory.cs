@@ -1,4 +1,5 @@
 ﻿using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -10,6 +11,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Create the web service
         /// </summary>
-        ISwsimV84 Create(string logName, LogActionType logActionType);
+        IExtendedSwsimV90 Create(string logName, LogActionType logActionType);
     }
 }

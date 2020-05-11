@@ -26,6 +26,11 @@
         public string ActivationUrl { get; set; }
 
         /// <summary>
+        /// URL for the ShipWorks Proxy
+        /// </summary>
+        public string ProxyUrl { get; set; }
+
+        /// <summary>
         /// ShipWorks username that is put in the header
         /// </summary>
         public string HeaderShipWorksUsername { get; set; }

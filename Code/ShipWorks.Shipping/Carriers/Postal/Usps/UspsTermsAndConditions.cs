@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             IUspsAccountEntity account = accountAcceptanceCache
                 .Where(kv => !kv.Value)?
                 .Take(1)
-                .Select(kv=>kv.Key)
+                .Select(kv => kv.Key)
                 .Select(accountRetriever.GetAccountReadOnly)
                 .SingleOrDefault();
 
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private bool AreTermsAccepted(IUspsAccountEntity uspsAccount)
         {
             IUspsWebClient webClient = uspsShipmentTypes[ShipmentTypeCode.Usps].CreateWebClient();
-            AccountInfoV37 accountInfo = (AccountInfoV37) webClient.GetAccountInfo(uspsAccount);
+            AccountInfoV41 accountInfo = (AccountInfoV41) webClient.GetAccountInfo(uspsAccount);
             return accountInfo.Terms.TermsAR && accountInfo.Terms.TermsSL && accountInfo.Terms.TermsGP;
         }
     }

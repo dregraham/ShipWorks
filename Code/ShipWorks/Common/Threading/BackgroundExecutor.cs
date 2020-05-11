@@ -13,7 +13,7 @@ namespace ShipWorks.Common.Threading
     /// <summary>
     /// Class that provides functionality to update entities on a background thread
     /// </summary>
-    public class BackgroundExecutor<T>
+    public class BackgroundExecutor<T> : IBackgroundExecutor<T>
     {
         Control owner;
 

@@ -397,6 +397,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("MinimizeRibbon", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShowQAToolbarBelowRibbon", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("SingleScanConfirmationMode", fieldHashtable);
 		}
 		#endregion
 
@@ -733,6 +735,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.ShowQAToolbarBelowRibbon, value); }
+		}
+
+		/// <summary> The SingleScanConfirmationMode property of the Entity UserSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."SingleScanConfirmationMode"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual ShipWorks.Settings.SingleScanConfirmationMode SingleScanConfirmationMode
+		{
+			get { return (ShipWorks.Settings.SingleScanConfirmationMode)GetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.SingleScanConfirmationMode, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UserEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>

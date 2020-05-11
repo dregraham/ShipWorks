@@ -7,6 +7,7 @@ using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Metrics;
+using log4net;
 
 namespace Interapptive.Shared.Utility
 {
@@ -15,6 +16,7 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public class TelemetricResult<T> : ITelemetryCollection<T>
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(TelemetricResult<T>));
         private readonly string baseTelemetryName;
         private readonly Dictionary<string, List<long>> telemetry;
         private readonly Dictionary<string, string> properties = new Dictionary<string, string>();
@@ -142,6 +144,19 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         private IDisposable StartTimedEvent(string eventName)
         {
+            var fullName = $"{baseTelemetryName}.{eventName}";
+            var extraProp = string.Empty;
+
+            if (properties.ContainsKey("IntegratorTransactionID"))
+            { 
+                extraProp = properties["IntegratorTransactionID"];
+            }
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug($"Stopwatch {fullName} {extraProp} starting...");
+            }
+
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -150,7 +165,12 @@ namespace Interapptive.Shared.Utility
                 stopwatch.Stop();
 
                 long elapsed = stopwatch.ElapsedMilliseconds;
-                AddEntry($"{baseTelemetryName}.{eventName}", elapsed);
+                AddEntry(fullName, elapsed);
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug($"Stopwatch {fullName} {extraProp}: Elapsed {elapsed} ms.");
+                }
             });
         }
 

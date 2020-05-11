@@ -327,6 +327,7 @@
     <Compile Include="Layout\OrderLookupLayoutDefaults.cs" />
     <Compile Include="Layout\PanelInfo.cs" />
     <Compile Include="Messages\OrderLookupShipAgainMessage.cs" />
+    <Compile Include="Messages\ScanToShipCreateShipmentMessage.cs" />
     <Compile Include="Messages\ScanToShipShipmentLoadedMessage.cs" />
     <Compile Include="OrderLookupConfirmationService.cs" />
     <Compile Include="OrderLookupOrderIDRetriever.cs" />

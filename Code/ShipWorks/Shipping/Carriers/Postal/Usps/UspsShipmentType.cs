@@ -312,7 +312,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Add the labels content
             container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
+                new LabelsOutline(container.Context, shipment, labels, () => ImageFormat.Png),
                 ElementOutline.If(() => shipment().Processed));
 
         }
@@ -485,6 +485,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 case (int) PostalServiceType.GlobalPostStandardIntl:
                 case (int) PostalServiceType.GlobalPostSmartSaverStandardIntl:
+                case (int) PostalServiceType.GlobalPostPlus:
+                case (int) PostalServiceType.GlobalPostPlusSmartSaver:
                     return $"USPS {EnumHelper.GetDescription(PostalServiceType.InternationalPriority)}";
 
                 default:

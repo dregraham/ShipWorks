@@ -62,5 +62,15 @@ namespace ShipWorks.UI.Controls
         /// Save the order
         /// </summary>
         void Save();
+
+        /// <summary>
+        /// Create a new shipment for the selected order
+        /// </summary>
+        void CreateNewShipment();
+
+        /// <summary>
+        /// Whether or not creating a new shipment is allowed
+        /// </summary>
+        bool CreateNewShipmentAllowed();
     }
 }

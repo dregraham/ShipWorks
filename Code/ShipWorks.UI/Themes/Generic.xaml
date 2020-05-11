@@ -10,5 +10,6 @@
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WeightControl.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/WaitSpinner.xaml" />
         <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/UnitTextBox.xaml" />
+        <ResourceDictionary Source="/ShipWorks.UI;component/Themes/Controls/UACButton.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

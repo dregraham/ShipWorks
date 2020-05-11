@@ -19,5 +19,10 @@
         /// The text to display in the continue button
         /// </summary>
         public string Continue { get; set; }
+
+        /// <summary>
+        /// The text to display in the continue optional button
+        /// </summary>
+        public string ContinueOptional { get; set; }
     }
 }

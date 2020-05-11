@@ -1,3 +1,5 @@
+using System.Windows.Forms;
+
 namespace ShipWorks.ApplicationCore.Settings
 {
     partial class ShipWorksSettings
@@ -108,6 +110,7 @@ namespace ShipWorks.ApplicationCore.Settings
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "ShipWorks Settings";
+            this.FormClosing += new FormClosingEventHandler(this.OnFormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.ResumeLayout(false);
 

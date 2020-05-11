@@ -387,6 +387,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                         case PostalServiceType.GlobalPostStandardIntl:
                         case PostalServiceType.GlobalPostSmartSaverStandardIntl:
                         case PostalServiceType.GlobalPostPlus:
+                        case PostalServiceType.GlobalPostPlusSmartSaver:
                             uspsType = PostalServiceType.InternationalPriority;
                             break;
                     }
