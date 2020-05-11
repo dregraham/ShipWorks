@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -40,6 +41,7 @@ namespace ShipWorks.Shipping.ShipEngine
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShipEngineWebClient(IShipEngineApiKey shipEngineApiKey,
             ILogEntryFactory apiLogEntryFactory,
             IShipEngineApiFactory shipEngineApiFactory,
@@ -151,7 +153,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 logEntry.LogRequest(request, restClient, "txt");
 
                 IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
-                
+
                 logEntry.LogResponse(response, "txt");
 
                 if (response.StatusCode == HttpStatusCode.NoContent)
@@ -625,7 +627,7 @@ namespace ShipWorks.Shipping.ShipEngine
 
                 logEntry.LogResponse(response, "txt");
 
-                if(response.StatusCode == HttpStatusCode.OK)
+                if (response.StatusCode == HttpStatusCode.OK)
                 {
                     JObject responseObject = JObject.Parse(response.Content);
 
