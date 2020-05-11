@@ -53,6 +53,12 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
+            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            {
+                log.InfoFormat("Not upgrading because auto updates have been disabled.");
+                return;
+            }
+
             bool relaunchShipWorks = true;
             bool shouldRetry = true;
             int retryCount = 0;
@@ -113,12 +119,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(string tangoCustomerId)
         {
-            if (AutoUpdateSettings.IsAutoUpdateDisabled)
-            {
-                log.InfoFormat("Not upgrading because auto updates have been disabled.");
-                return;
-            }
-
             bool shouldRetry = true;
             int retryCount = 0;
 
