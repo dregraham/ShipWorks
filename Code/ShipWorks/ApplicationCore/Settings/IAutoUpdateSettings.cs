@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Escalator
+﻿namespace ShipWorks.ApplicationCore.Settings
 {
     /// <summary>
     /// Interface for AutoUpdateSettingsWrapper

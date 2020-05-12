@@ -7,6 +7,7 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Settings;
 
 namespace ShipWorks.Escalator
 {
@@ -21,12 +22,14 @@ namespace ShipWorks.Escalator
         Timer upgradeTimer;
         Timer checkUpgradeWindowTimer;
         private readonly ILog log;
+        private readonly IAutoUpdateSettings autoUpdateSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="shipWorksUpgrade"></param>
-        public UpgradeTimeWindow(IShipWorksUpgrade shipWorksUpgrade, Func<Type, ILog> logFactory)
+        public UpgradeTimeWindow(IShipWorksUpgrade shipWorksUpgrade, Func<Type, ILog> logFactory,
+            IAutoUpdateSettings autoUpdateSettings)
         {
             log = logFactory(GetType());
             log.Info("Constructing UpgradeTimeWindow");
@@ -35,6 +38,7 @@ namespace ShipWorks.Escalator
             checkUpgradeWindowTimer.Elapsed += OnCheckUpgradeWindowTimerElapsed;
             checkUpgradeWindowTimer.AutoReset = true;
             checkUpgradeWindowTimer.Enabled = true;
+            this.autoUpdateSettings = autoUpdateSettings;
         }
 
         /// <summary>
@@ -92,7 +96,12 @@ namespace ShipWorks.Escalator
             upgradeTimer = new Timer(millisecondsToOpenWindow);
 
             upgradeTimer.Elapsed += async (sender, e) =>
-                await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+            {
+                if (autoUpdateSettings.IsAutoUpdateEnabled)
+                {
+                    await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+                }
+            };
 
             upgradeTimer.AutoReset = false;
             upgradeTimer.Enabled = true;

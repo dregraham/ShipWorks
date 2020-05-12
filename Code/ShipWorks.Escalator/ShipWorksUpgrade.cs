@@ -24,7 +24,6 @@ namespace ShipWorks.Escalator
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
         private readonly IFailedUpgradeFile failedUpgradeFile;
-        private readonly IAutoUpdateSettings autoUpdateSettings;
         private const int MaxRetryCount = 3;
 
         /// <summary>
@@ -37,8 +36,7 @@ namespace ShipWorks.Escalator
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
-            IFailedUpgradeFile failedUpgradeFile,
-            IAutoUpdateSettings autoUpdateSettings)
+            IFailedUpgradeFile failedUpgradeFile)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
@@ -46,7 +44,6 @@ namespace ShipWorks.Escalator
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.shipWorksLauncher = shipWorksLauncher;
             this.failedUpgradeFile = failedUpgradeFile;
-            this.autoUpdateSettings = autoUpdateSettings;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -55,12 +52,6 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
-            if (!autoUpdateSettings.IsAutoUpdateEnabled)
-            {
-                log.Info("Not upgrading because auto updates have been disabled.");
-                return;
-            }
-
             bool relaunchShipWorks = true;
             bool shouldRetry = true;
             int retryCount = 0;
@@ -130,8 +121,8 @@ namespace ShipWorks.Escalator
                 {
                     Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-                     ShipWorksRelease shipWorksRelease = await updaterWebClient
-                        .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+                    ShipWorksRelease shipWorksRelease = await updaterWebClient
+                       .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
 
                     if (shipWorksRelease == null)
                     {
