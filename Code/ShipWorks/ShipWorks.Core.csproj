@@ -892,6 +892,7 @@
     <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\Api\IApiSettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
+    <Compile Include="ApplicationCore\Settings\AutoUpdateSettingsWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
@@ -11498,6 +11499,10 @@
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
       <Project>{6F05267C-1883-4526-8D83-E46B7B2D2FAF}</Project>
       <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Escalator\ShipWorks.Escalator.csproj">
+      <Project>{E63D098C-7C6D-4B5B-9A0F-CECA60BFD035}</Project>
+      <Name>ShipWorks.Escalator</Name>
     </ProjectReference>
     <ProjectReference Include="..\ShipWorks.Res\ShipWorks.Res.csproj">
       <Project>{3451502d-c78c-44ec-86ac-8f50a6531f5c}</Project>

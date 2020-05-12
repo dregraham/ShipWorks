@@ -8,7 +8,6 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore.Settings;
 
 namespace ShipWorks.Escalator
 {
@@ -25,6 +24,7 @@ namespace ShipWorks.Escalator
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
         private readonly IFailedUpgradeFile failedUpgradeFile;
+        private readonly IAutoUpdateSettings autoUpdateSettings;
         private const int MaxRetryCount = 3;
 
         /// <summary>
@@ -37,7 +37,8 @@ namespace ShipWorks.Escalator
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
-            IFailedUpgradeFile failedUpgradeFile)
+            IFailedUpgradeFile failedUpgradeFile,
+            IAutoUpdateSettings autoUpdateSettings)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
@@ -45,6 +46,7 @@ namespace ShipWorks.Escalator
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.shipWorksLauncher = shipWorksLauncher;
             this.failedUpgradeFile = failedUpgradeFile;
+            this.autoUpdateSettings = autoUpdateSettings;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -53,7 +55,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
-            if (AutoUpdateSettings.IsAutoUpdateDisabled)
+            if (!autoUpdateSettings.IsAutoUpdateEnabled())
             {
                 log.InfoFormat("Not upgrading because auto updates have been disabled.");
                 return;
