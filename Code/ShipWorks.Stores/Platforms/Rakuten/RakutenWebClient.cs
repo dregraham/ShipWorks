@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;

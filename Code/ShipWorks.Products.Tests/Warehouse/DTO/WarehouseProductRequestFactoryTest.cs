@@ -1,5 +1,5 @@
 ﻿using Autofac.Extras.Moq;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Net.RestSharp;
 using Moq;
 using Newtonsoft.Json.Serialization;
 using RestSharp;

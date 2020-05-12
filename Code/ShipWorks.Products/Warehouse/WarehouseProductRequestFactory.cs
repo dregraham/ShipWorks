@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using Interapptive.Shared.Net;
+using Interapptive.Shared.Net.RestSharp;
 using RestSharp;
 using ShipWorks.Common.Net;
 using ShipWorks.Data;

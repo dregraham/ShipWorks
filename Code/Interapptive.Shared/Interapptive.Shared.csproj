@@ -273,7 +273,6 @@
     <Compile Include="Net\IHttpRequestSubmitter.cs" />
     <Compile Include="Net\IHttpVariableCollection.cs" />
     <Compile Include="Net\IHttpVariableRequestSubmitter.cs" />
-    <Compile Include="Net\IRestRequestFactory.cs" />
     <Compile Include="Net\IWebHelper.cs" />
     <Compile Include="Net\RestSharp\IRestClientFactory.cs" />
     <Compile Include="Net\RestSharp\IRestRequestFactory.cs" />
