@@ -26,6 +26,8 @@
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.servicesPanel = new System.Windows.Forms.Panel();
+            this.shipmentRestrictionsHeader = new System.Windows.Forms.Label();
+            this.noDims = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.pennyOne = new System.Windows.Forms.CheckBox();
@@ -89,7 +91,7 @@
             this.panel.Controls.Add(this.labelAccounts);
             this.panel.Location = new System.Drawing.Point(4, 89);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(570, 917);
+            this.panel.Size = new System.Drawing.Size(570, 950);
             this.panel.TabIndex = 16;
             // 
             // panelMailInnovations
@@ -131,6 +133,8 @@
             // 
             // servicesPanel
             // 
+            this.servicesPanel.Controls.Add(this.shipmentRestrictionsHeader);
+            this.servicesPanel.Controls.Add(this.noDims);
             this.servicesPanel.Controls.Add(this.label1);
             this.servicesPanel.Controls.Add(this.insuranceProviderChooser);
             this.servicesPanel.Controls.Add(this.pennyOne);
@@ -139,8 +143,28 @@
             this.servicesPanel.Controls.Add(this.upsPackagingTypeServicePickerControl);
             this.servicesPanel.Location = new System.Drawing.Point(5, 344);
             this.servicesPanel.Name = "servicesPanel";
-            this.servicesPanel.Size = new System.Drawing.Size(564, 532);
+            this.servicesPanel.Size = new System.Drawing.Size(564, 580);
             this.servicesPanel.TabIndex = 16;
+            // 
+            // shipmentRestrictionsHeader
+            // 
+            this.shipmentRestrictionsHeader.AutoSize = true;
+            this.shipmentRestrictionsHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shipmentRestrictionsHeader.Location = new System.Drawing.Point(-1, 530);
+            this.shipmentRestrictionsHeader.Name = "shipmentRestrictionsHeader";
+            this.shipmentRestrictionsHeader.Size = new System.Drawing.Size(123, 13);
+            this.shipmentRestrictionsHeader.TabIndex = 14;
+            this.shipmentRestrictionsHeader.Text = "Shipment Restrictions";
+            // 
+            // noDims
+            // 
+            this.noDims.AutoSize = true;
+            this.noDims.Location = new System.Drawing.Point(17, 550);
+            this.noDims.Name = "noDims";
+            this.noDims.Size = new System.Drawing.Size(298, 17);
+            this.noDims.TabIndex = 16;
+            this.noDims.Text = "Allow UPS to provide rates and process labels when no dimensions are entered.";
+            this.noDims.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -228,6 +252,8 @@
         private OneBalanceUpsBannerControl oneBalanceUpsBannerControl;
         private System.Windows.Forms.Panel panel;
         private System.Windows.Forms.Panel servicesPanel;
+        private System.Windows.Forms.Label shipmentRestrictionsHeader;
+        private System.Windows.Forms.CheckBox noDims;
         private System.Windows.Forms.Label label1;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.CheckBox pennyOne;
