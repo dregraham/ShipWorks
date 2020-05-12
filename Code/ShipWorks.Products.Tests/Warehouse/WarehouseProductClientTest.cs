@@ -45,7 +45,7 @@ namespace ShipWorks.Products.Tests.Warehouse
             await testObject.AddProduct(product);
 
             mock.Mock<IWarehouseProductRequestFactory>()
-                .Verify(x => x.Create("api/products", Method.PUT, payload));
+                .Verify(x => x.Create("api/products", Method.POST, payload));
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace ShipWorks.Products.Tests.Warehouse
             await testObject.ChangeProduct(product);
 
             mock.Mock<IWarehouseProductRequestFactory>()
-                .Verify(x => x.Create("api/product/738227a1-613e-4128-abe9-d525ce843f8a", Method.POST, payload));
+                .Verify(x => x.Create("api/product/738227a1-613e-4128-abe9-d525ce843f8a", Method.PUT, payload));
         }
 
         [Fact]
@@ -153,7 +153,7 @@ namespace ShipWorks.Products.Tests.Warehouse
         [Fact]
         public async Task SetActivation_ThrowsException_WhenAtLeastOneGuidIsNull()
         {
-            await Assert.ThrowsAsync<WarehouseProductException>(() => 
+            await Assert.ThrowsAsync<WarehouseProductException>(() =>
                 testObject.SetActivation(new Guid?[] { Guid.NewGuid(), null }, true));
         }
 
@@ -226,7 +226,7 @@ namespace ShipWorks.Products.Tests.Warehouse
                 .Setup(x => x.CreateUploadRequest(It.Is<IEnumerable<IProductVariantEntity>>(g => g.SequenceEqual(new IProductVariantEntity[] { product1, product2 }))))
                 .Returns(payload);
 
-            await testObject.Upload(new [] { product1, product2 });
+            await testObject.Upload(new[] { product1, product2 });
 
             mock.Mock<IWarehouseProductRequestFactory>()
                 .Verify(x => x.Create("api/products/import", Method.POST, payload));
@@ -283,7 +283,7 @@ namespace ShipWorks.Products.Tests.Warehouse
 
             mock.Mock<IWarehouseRequestClient>()
                 .Setup(x => x.MakeRequest<WarehouseProduct>(It.IsAny<IRestRequest>(), AnyString))
-                .ReturnsAsync(new WarehouseProduct() { ProductId = "3"});
+                .ReturnsAsync(new WarehouseProduct() { ProductId = "3" });
 
             var response = await testObject.GetProduct(It.IsAny<string>(), It.IsAny<CancellationToken>());
 

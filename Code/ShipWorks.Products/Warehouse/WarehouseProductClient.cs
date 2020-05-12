@@ -29,8 +29,8 @@ namespace ShipWorks.Products.Warehouse
         /// Constructor
         /// </summary>
         public WarehouseProductClient(
-            IWarehouseRequestClient warehouseRequestClient, 
-            IWarehouseProductRequestFactory requestFactory, 
+            IWarehouseRequestClient warehouseRequestClient,
+            IWarehouseProductRequestFactory requestFactory,
             IWarehouseProductDataFactory dataFactory,
             IConfigurationData configurationData)
         {
@@ -46,7 +46,7 @@ namespace ShipWorks.Products.Warehouse
         public async Task<IProductChangeResult> AddProduct(IProductVariantEntity product)
         {
             var payload = dataFactory.CreateAddProductRequest(product);
-            var request = requestFactory.Create(WarehouseEndpoints.AddProduct, Method.PUT, payload);
+            var request = requestFactory.Create(WarehouseEndpoints.AddProduct, Method.POST, payload);
 
             return await warehouseRequestClient
                 .MakeRequest<AddProductResponseData>(request, "Add Product")
@@ -60,7 +60,7 @@ namespace ShipWorks.Products.Warehouse
         public async Task<IProductChangeResult> ChangeProduct(IProductVariantEntity product)
         {
             var payload = dataFactory.CreateChangeProductRequest(product);
-            var request = requestFactory.Create(WarehouseEndpoints.ChangeProduct(product), Method.POST, payload);
+            var request = requestFactory.Create(WarehouseEndpoints.ChangeProduct(product), Method.PUT, payload);
 
             return await warehouseRequestClient
                 .MakeRequest<ChangeProductResponseData>(request, "Change Product")
