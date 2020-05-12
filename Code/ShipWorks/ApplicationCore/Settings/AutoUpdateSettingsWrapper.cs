@@ -1,5 +1,4 @@
 ﻿using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Escalator;
 
 namespace ShipWorks.ApplicationCore.Settings
 {
