@@ -55,7 +55,7 @@ namespace ShipWorks.Escalator
         /// </summary>
         public async Task Upgrade(Version version)
         {
-            if (!autoUpdateSettings.IsAutoUpdateEnabled())
+            if (!autoUpdateSettings.IsAutoUpdateEnabled)
             {
                 log.Info("Not upgrading because auto updates have been disabled.");
                 return;

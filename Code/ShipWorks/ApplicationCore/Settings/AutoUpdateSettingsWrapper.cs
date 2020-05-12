@@ -12,11 +12,11 @@ namespace ShipWorks.ApplicationCore.Settings
         /// <summary>
         /// Whether Auto Update is enabled (this inverts the IsAutoUpdateDisabled for clarity)
         /// </summary>
-        public bool IsAutoUpdateEnabled() => !AutoUpdateSettings.IsAutoUpdateDisabled;
+        public bool IsAutoUpdateEnabled => !AutoUpdateSettings.IsAutoUpdateDisabled;
 
         /// <summary>
         /// Whether the last auto update succeeded
         /// </summary>
-        public bool LastAutoUpdateSucceeded() => AutoUpdateSettings.LastAutoUpdateSucceeded;
+        public bool LastAutoUpdateSucceeded => AutoUpdateSettings.LastAutoUpdateSucceeded;
     }
 }

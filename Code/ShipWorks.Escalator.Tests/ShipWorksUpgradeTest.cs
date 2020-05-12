@@ -19,7 +19,7 @@ namespace ShipWorks.Escalator.Tests
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            mock.Mock<IAutoUpdateSettings>().Setup(x => x.IsAutoUpdateEnabled()).Returns(true);
+            mock.Mock<IAutoUpdateSettings>().Setup(x => x.IsAutoUpdateEnabled).Returns(true);
 
             updaterWebClient = mock.Mock<IUpdaterWebClient>();
             testObject = mock.Create<ShipWorksUpgrade>();
