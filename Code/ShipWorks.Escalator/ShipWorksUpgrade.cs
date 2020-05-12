@@ -57,7 +57,7 @@ namespace ShipWorks.Escalator
         {
             if (!autoUpdateSettings.IsAutoUpdateEnabled())
             {
-                log.InfoFormat("Not upgrading because auto updates have been disabled.");
+                log.Info("Not upgrading because auto updates have been disabled.");
                 return;
             }
 
@@ -130,8 +130,9 @@ namespace ShipWorks.Escalator
                 {
                     Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
-                    ShipWorksRelease shipWorksRelease = await updaterWebClient
+                     ShipWorksRelease shipWorksRelease = await updaterWebClient
                         .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+
                     if (shipWorksRelease == null)
                     {
                         log.InfoFormat("New version not found for tango customer {0} running version {1}",
