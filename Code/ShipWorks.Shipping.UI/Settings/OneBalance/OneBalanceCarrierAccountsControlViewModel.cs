@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac.Features.Indexed;
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
                 try
                 {
                     var response = (AccountInfoV41) webClient.GetAccountInfo(result.Value);
-                    return response.Capabilities.CanPrintDX;
+                    return response.Capabilities.CanPrintDX && (response.ConfiguredCarriers?.Any(c=>c.Carrier == Carrier.DHLExpress) ?? false);
                 }
                 catch (Exception)
                 {
