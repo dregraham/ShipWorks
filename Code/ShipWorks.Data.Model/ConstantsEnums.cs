@@ -11682,6 +11682,8 @@ namespace ShipWorks.Data.Model
 		ShipmentDateCutoffJson,
 		///<summary>OrderLookupFieldLayout. </summary>
 		OrderLookupFieldLayout,
+		///<summary>UpsAllowNoDims. </summary>
+		UpsAllowNoDims,
 		/// <summary></summary>
 		AmountOfFields
 	}

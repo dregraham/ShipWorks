@@ -27347,6 +27347,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.OrderLookupFieldLayout);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.UpsAllowNoDims field instance</summary>
+		public static EntityField2 UpsAllowNoDims
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsAllowNoDims);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>
