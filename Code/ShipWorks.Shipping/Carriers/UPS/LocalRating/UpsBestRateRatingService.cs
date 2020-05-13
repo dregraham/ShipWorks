@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Ups.ShipEngine;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
@@ -21,6 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly ILicenseService licenseService;
         private readonly IUpsRateClientFactory rateClientFactory;
         private UpsRatingMethod ratingMethod;
+        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBestRateRatingService"/> class.
@@ -32,8 +35,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
             UpsShipmentType shipmentType,
             ILicenseService licenseService,
             IUpsRateClientFactory rateClientFactory,
-            IUpsShipEngineRatingService shipEngineRatingService)
-            : base(accountRepository, transitTimeClient, shipmentType, rateClientFactory, shipEngineRatingService)
+            IUpsShipEngineRatingService shipEngineRatingService,
+            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository)
+            : base(accountRepository, transitTimeClient, shipmentType, rateClientFactory, shipEngineRatingService, settingsRepository)
         {
             this.licenseService = licenseService;
             this.rateClientFactory = rateClientFactory;
