@@ -8135,7 +8135,7 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1203, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [IsDefault] [bit] NOT NULL CONSTRAINT [DF_ProductVariantAlias_IsDefault] DEFAULT ((0))
 )
 GO
