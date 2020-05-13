@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly Func<UpsLabelResponse, WorldShipDownloadedLabelData> createDownloadedLabelData;
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
-        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Constructor
@@ -33,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             this.createDownloadedLabelData = createDownloadedLabelData;
             this.upsAccountRepository = upsAccountRepository;
-            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>

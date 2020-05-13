@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Ups;
@@ -19,7 +18,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         private readonly IUpsShipmentValidatorFactory upsShipmentValidatorFactory;
         private readonly IUpsLabelClientFactory labelClientFactory;
-        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Constructor
@@ -31,7 +29,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
             this.labelClientFactory = labelClientFactory;
-            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>

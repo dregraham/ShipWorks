@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.Carriers.Ups.LocalRating
         private readonly ILicenseService licenseService;
         private readonly IUpsRateClientFactory rateClientFactory;
         private UpsRatingMethod ratingMethod;
-        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBestRateRatingService"/> class.
