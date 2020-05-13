@@ -892,8 +892,6 @@
     <Compile Include="ApplicationCore\Nudges\NudgeManagerWrapper.cs" />
     <Compile Include="ApplicationCore\Settings\Api\IApiSettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
-    <Compile Include="ApplicationCore\Settings\AutoUpdateSettingsWrapper.cs" />
-    <Compile Include="ApplicationCore\Settings\IAutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
