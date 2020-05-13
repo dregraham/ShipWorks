@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         private readonly DataContext context;
         private readonly IMessenger messenger;
         private readonly ShippingPanelViewModel shippingPanelViewModel;
-        private Mock<ISwsimV90> client;
+        private Mock<IExtendedSwsimV90> client;
         private Mock<ILicenseService> licenseService;
 
         public BestRateSteps(DatabaseFixture db)
@@ -158,9 +158,9 @@ namespace ShipWorks.Shipping.Specs.ShippingPanel
         /// <summary>
         /// Create a mocked version of ISwsimV90
         /// </summary>
-        private Mock<ISwsimV90> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
+        private Mock<IExtendedSwsimV90> CreateMockedUspsWebService(Autofac.Extras.Moq.AutoMock mock)
         {
-            var uspsClient = mock.CreateMock<ISwsimV90>();
+            var uspsClient = mock.CreateMock<IExtendedSwsimV90>();
             uspsClient.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
                 .Returns(new AccountInfoResult(new AccountInfoV41
                 {
