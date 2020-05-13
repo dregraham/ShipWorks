@@ -91,7 +91,7 @@
             this.panel.Controls.Add(this.labelAccounts);
             this.panel.Location = new System.Drawing.Point(4, 89);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(570, 950);
+            this.panel.Size = new System.Drawing.Size(570, 940);
             this.panel.TabIndex = 16;
             // 
             // panelMailInnovations
@@ -143,7 +143,7 @@
             this.servicesPanel.Controls.Add(this.upsPackagingTypeServicePickerControl);
             this.servicesPanel.Location = new System.Drawing.Point(5, 344);
             this.servicesPanel.Name = "servicesPanel";
-            this.servicesPanel.Size = new System.Drawing.Size(564, 580);
+            this.servicesPanel.Size = new System.Drawing.Size(564, 570);
             this.servicesPanel.TabIndex = 16;
             // 
             // shipmentRestrictionsHeader
@@ -153,7 +153,7 @@
             this.shipmentRestrictionsHeader.Location = new System.Drawing.Point(-1, 530);
             this.shipmentRestrictionsHeader.Name = "shipmentRestrictionsHeader";
             this.shipmentRestrictionsHeader.Size = new System.Drawing.Size(123, 13);
-            this.shipmentRestrictionsHeader.TabIndex = 14;
+            this.shipmentRestrictionsHeader.TabIndex = 18;
             this.shipmentRestrictionsHeader.Text = "Shipment Restrictions";
             // 
             // noDims
@@ -162,7 +162,7 @@
             this.noDims.Location = new System.Drawing.Point(17, 550);
             this.noDims.Name = "noDims";
             this.noDims.Size = new System.Drawing.Size(298, 17);
-            this.noDims.TabIndex = 16;
+            this.noDims.TabIndex = 19;
             this.noDims.Text = "Allow UPS to provide rates and process labels when no dimensions are entered.";
             this.noDims.UseVisualStyleBackColor = true;
             // 
@@ -189,9 +189,9 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(17, 497);
+            this.pennyOne.Location = new System.Drawing.Point(17, 491);
             this.pennyOne.Name = "pennyOne";
-            this.pennyOne.Size = new System.Drawing.Size(298, 17);
+            this.pennyOne.Size = new System.Drawing.Size(290, 17);
             this.pennyOne.TabIndex = 16;
             this.pennyOne.Text = "Use ShipWorks Insurance for the first $100 of coverage.";
             this.pennyOne.UseVisualStyleBackColor = true;
@@ -202,7 +202,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(309, 498);
+            this.pennyOneLink.Location = new System.Drawing.Point(313, 491);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 17;
