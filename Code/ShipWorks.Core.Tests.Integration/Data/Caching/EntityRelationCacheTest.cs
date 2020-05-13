@@ -70,44 +70,6 @@ namespace ShipWorks.Tests.Data.Caching
             Assert.True(shipments.Select(x => x.ShipmentID).Except(keys).None());
         }
 
-        [Fact]
-        public void GetRelatedKeys_Timing_ForCustomerToShipment()
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            int times = 1000;
-            for (int i = 0; i < 1000; i++)
-            {
-                var ids = new List<long>() { context.Order.CustomerID };
-                var keys = relationCache.GetRelatedKeys(ids, EntityType.ShipmentEntity, true, null);
-                var shipments = context.Order.Shipments;
-                Assert.True(shipments.Select(x => x.ShipmentID).Except(keys).None());
-            }
-
-            sw.Stop();
-            Debug.WriteLine($"Time to GetRelatedKeys {times}: {sw.ElapsedMilliseconds}");
-        }
-
-        [Fact]
-        public void GetRelatedKeys_Timing_ForCustomerToOrderItem()
-        {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            int times = 1000;
-            for (int i = 0; i < 1000; i++)
-            {
-                var ids = new List<long>() { context.Order.CustomerID };
-                var keys = relationCache.GetRelatedKeys(ids, EntityType.OrderItemEntity, true, null);
-                var orderItems = context.Order.OrderItems;
-                Assert.True(orderItems.Select(oi => oi.OrderItemID).Except(keys).None());
-            }
-
-            sw.Stop();
-            Debug.WriteLine($"Time to GetRelatedKeys {times}: {sw.ElapsedMilliseconds}");
-        }
-
         private ISqlAdapter CreateAdapter(ref int counter)
         {
             counter++;

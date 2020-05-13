@@ -72,7 +72,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
                 dbName = connection.Database;
 
                 backupPathAndfilename = DbUtils.GetRestoreBackupFilename(thisAssembly, "ShipWorks.Core.Tests.Integration.DbBackups.ShipWorks_Bad.bk");
-                
+
                 db.ResetDatabase(connection, dbName, backupPathAndfilename);
             }
 
@@ -99,7 +99,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
                 dbName = connection.Database;
 
                 backupPathAndfilename = DbUtils.GetRestoreBackupFilename(thisAssembly, "ShipWorks.Core.Tests.Integration.DbBackups.ShipWorks_Good.bk");
-                
+
                 db.ResetDatabase(connection, dbName, backupPathAndfilename);
             }
 
