@@ -1208,6 +1208,7 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="Shipping\Carriers\Asendia\IAsendiaManifestCreator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\UploadDocuments\Request\FedExUploadImagesRequest.cs" />
@@ -11128,6 +11129,7 @@
     <Content Include="Resources\data_time.png" />
     <Content Include="Resources\data_time_16.png" />
     <Content Include="Resources\data_unknown_16.png" />
+    <Resource Include="Resources\element_into.png" />
     <Content Include="Resources\info.png" />
     <Resource Include="Resources\info_20x20.png" />
     <Content Include="Resources\merge_icon_16x16.png" />

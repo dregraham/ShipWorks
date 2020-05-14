@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -81,6 +80,7 @@ using ShipWorks.Products;
 using ShipWorks.Properties;
 using ShipWorks.Settings;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -214,8 +214,8 @@ namespace ShipWorks
                     buttonOrderLookupViewShipShipAgain.Enabled = orderLookupControl?.ShipAgainAllowed() == true;
                 }
 
-                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) && 
-                currentUserSettings.GetUIMode() == UIMode.OrderLookup) 
+                if ((x is ShipmentSelectionChangedMessage || x is OrderLookupUnverifyMessage || x is OrderVerifiedMessage) &&
+                currentUserSettings.GetUIMode() == UIMode.OrderLookup)
                 {
                     buttonOrderLookupViewUnverify.Enabled = orderLookupControl?.UnverifyOrderAllowed() == true;
                 }
@@ -393,6 +393,8 @@ namespace ShipWorks
             ribbonSecurityProvider.AddAdditionalCondition(buttonUpdateOnline, () => OnlineUpdateCommandProvider.HasOnlineUpdateCommands());
             ribbonSecurityProvider.AddAdditionalCondition(buttonFedExClose, () => FedExAccountManager.Accounts.Count > 0);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewFedExClose, () => FedExAccountManager.Accounts.Count > 0);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonAsendiaClose, AreThereAnyAsendiaAccounts);
+            ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewAsendiaClose, AreThereAnyAsendiaAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonEndiciaSCAN, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonOrderLookupViewSCANForm, AreThereAnyPostalAccounts);
             ribbonSecurityProvider.AddAdditionalCondition(buttonFirewall, () => SqlSession.IsConfigured && !SqlSession.Current.Configuration.IsLocalDb());
@@ -420,12 +422,17 @@ namespace ShipWorks
         }
 
         /// <summary>
+        /// Checks whether we have an Asendia account
+        /// </summary>
+        private static bool AreThereAnyAsendiaAccounts() =>
+            Using(IoC.BeginLifetimeScope(),
+                scope => scope.Resolve<IAsendiaAccountRepository>().AccountsReadOnly.Any());
+
+        /// <summary>
         /// Checks whether we have any postal accounts
         /// </summary>
-        /// <returns></returns>
         private static bool AreThereAnyPostalAccounts() =>
-            Using(
-                IoC.BeginLifetimeScope(),
+            Using(IoC.BeginLifetimeScope(),
                 scope => scope.Resolve<IEnumerable<IScanFormAccountRepository>>().Any(x => x.HasAccounts));
 
         /// <summary>
@@ -1167,7 +1174,7 @@ namespace ShipWorks
             {
                 windowLayoutProvider.LoadLayout(user.Settings.WindowLayout);
             }
-            catch(AppearanceException)
+            catch (AppearanceException)
             {
                 windowLayoutProvider.LoadDefault();
                 MessageHelper.ShowMessage(this,
@@ -3045,7 +3052,8 @@ namespace ShipWorks
             if (InvokeRequired)
             {
                 // Put the heartbeat on the UI thread
-                BeginInvoke((MethodInvoker) delegate { ForceHeartbeat(options); });
+                BeginInvoke((MethodInvoker) delegate
+                { ForceHeartbeat(options); });
                 return;
             }
 
@@ -4233,9 +4241,15 @@ namespace ShipWorks
 
             switch (settings.DetailViewMode)
             {
-                case DetailViewMode.Normal: activeRadio = buttonDetailViewNormal; break;
-                case DetailViewMode.DetailOnly: activeRadio = buttonDetailViewDetail; break;
-                case DetailViewMode.NormalWithDetail: activeRadio = buttonDetailViewNormalDetail; break;
+                case DetailViewMode.Normal:
+                    activeRadio = buttonDetailViewNormal;
+                    break;
+                case DetailViewMode.DetailOnly:
+                    activeRadio = buttonDetailViewDetail;
+                    break;
+                case DetailViewMode.NormalWithDetail:
+                    activeRadio = buttonDetailViewNormalDetail;
+                    break;
             }
 
             // Uncheck the old ones
@@ -5433,6 +5447,25 @@ namespace ShipWorks
         }
 
         #endregion
+
+        /// <summary>
+        /// The Create Asendia Manifest button is pushed
+        /// </summary>
+        private async void OnAsendiaManifest(object sender, EventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                var result = await lifetimeScope.Resolve<IAsendiaManifestCreator>().CreateManifest().ConfigureAwait(true);
+
+                if (result.Success)
+                {
+                    MessageHelper.ShowMessage(this, "Asendia manifest created.");
+                    return;
+                }
+                MessageHelper.ShowError(this, "An error occurred creating the Asendia manifest");
+                log.Error(result.Exception.Message);
+            }
+        }
 
         /// <summary>
         /// Clean up any resources being used.

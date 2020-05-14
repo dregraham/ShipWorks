@@ -205,6 +205,7 @@
     <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Asendia\AsendiaException.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaManifestCreator.cs" />
     <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />

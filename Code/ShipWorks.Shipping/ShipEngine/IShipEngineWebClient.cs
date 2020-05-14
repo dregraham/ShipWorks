@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipEngine.ApiClient.Model;
@@ -89,5 +90,10 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         /// <param name="deviceIdentity">Identifier provided by IOvations software</param>
         Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter personAdapter, string deviceIdentity);
+
+        /// <summary>
+        /// Create an Asendia Manifest for the given label IDs
+        /// </summary>
+        Task<Result> CreateAsendiaManifest(IEnumerable<string> labelIds);
     }
 }
