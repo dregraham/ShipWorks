@@ -2425,11 +2425,12 @@
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
           <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
-          <Field Name="EAN_" Type="string" IsOptional="true" MaxLength="30" FieldIndex="20" />
           <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
-          <Field Name="FNSku_" Type="string" IsOptional="true" MaxLength="300" FieldIndex="19" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
+          <Field Name="HubProductId" Type="guid" IsOptional="true" FieldIndex="19" />
+          <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="21" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="20" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
           <Field Name="IsActive" Type="bool" FieldIndex="4" />
           <Field Name="ISBN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="7" />
@@ -8041,6 +8042,9 @@
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
+                    <Field Name="HubProductId" Ordinal="20" IsOptional="true" DbType="25" />
+                    <Field Name="HubVersion" Ordinal="21" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubSequence" Ordinal="22" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -13373,11 +13377,12 @@
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
             <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
-            <FieldMapping FieldName="EAN_" TargetFieldName="EAN" />
             <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
-            <FieldMapping FieldName="FNSku_" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="HubProductId" TargetFieldName="HubProductId" />
+            <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
             <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />

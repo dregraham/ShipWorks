@@ -296,7 +296,6 @@
     <Compile Include="Platforms\Rakuten\DTO\Requests\RakutenGetOrdersRequest.cs" />
     <Compile Include="Platforms\Rakuten\Enums\RakutenOrderStatus.cs" />
     <Compile Include="Platforms\Rakuten\IRakutenRestClientFactory.cs" />
-    <Compile Include="Platforms\Rakuten\IRakutenRestRequestFactory.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\IRakutenOrderSearchProvider.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdateCommandCreator.cs" />
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenOnlineUpdater.cs" />
@@ -304,7 +303,6 @@
     <Compile Include="Platforms\Rakuten\OnlineUpdating\RakutenUploadDetails.cs" />
     <Compile Include="Platforms\Rakuten\RakutenCipherKey.cs" />
     <Compile Include="Platforms\Rakuten\RakutenRestClientFactory.cs" />
-    <Compile Include="Platforms\Rakuten\RakutenRestRequestFactory.cs" />
     <Compile Include="Platforms\Rakuten\RakutenStoreType.cs" />
     <Compile Include="Platforms\Rakuten\RakutenWebClient.cs" />
     <Compile Include="Platforms\Overstock\Warehouse\OverstockStore.cs" />
