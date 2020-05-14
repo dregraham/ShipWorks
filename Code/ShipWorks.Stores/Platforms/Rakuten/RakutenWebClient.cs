@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
     {
         private readonly LruCache<string, RakutenProductsResponse> productCache;
         private readonly IRakutenRestClientFactory clientFactory;
-        private readonly IRakutenRestRequestFactory requestFactory;
+        private readonly IRestRequestFactory requestFactory;
         private readonly IInterapptiveOnly interapptiveOnly;
         private readonly ILogEntryFactory logFactory;
         private readonly RestSharpJsonNetSerializer jsonSerializer;
@@ -48,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Rakuten
         /// Constructor
         /// </summary>
         public RakutenWebClient(IEncryptionProviderFactory encryptionProviderFactory,
-            IRakutenRestClientFactory clientFactory, IRakutenRestRequestFactory requestFactory,
+            IRakutenRestClientFactory clientFactory, IRestRequestFactory requestFactory,
             IInterapptiveOnly interapptiveOnly,
             ILogEntryFactory logFactory)
         {

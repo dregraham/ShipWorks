@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
@@ -82,7 +83,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         return GenericResult.FromError<IRestResponse>("Unable to obtain a valid token from redirectToken.");
                     }
 
-                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult);
+                    restResponse = await ResendAction(restRequest, restClient, redirectTokenResult, CancellationToken.None);
                 }
 
                 if (restResponse.StatusCode == HttpStatusCode.OK)
@@ -104,9 +105,107 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         }
 
         /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        public Task<T> MakeRequest<T>(IRestRequest restRequest, string logName) =>
+            MakeRequest<T>(restRequest, logName, CancellationToken.None);
+
+        /// <summary>
+        /// Make an authenticated request
+        /// </summary>
+        public async Task<T> MakeRequest<T>(IRestRequest restRequest, string logName, CancellationToken cancellationToken)
+        {
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipWorksWarehouse, logName);
+
+            if (authenticationToken.IsNullOrWhiteSpace())
+            {
+                // Get new token
+                GenericResult<TokenResponse> redirectTokenResult = await warehouseRemoteLoginWithToken.RemoteLoginWithToken()
+                    .ConfigureAwait(false);
+
+                if (redirectTokenResult.Failure)
+                {
+                    throw new TangoException("Unable to obtain a valid token to authenticate request.");
+                }
+
+                authenticationToken = redirectTokenResult.Value.token;
+                refreshToken = redirectTokenResult.Value.refreshToken;
+            }
+
+            IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
+
+            logEntry.LogRequest(restRequest, restClient, "json");
+
+            restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
+
+            var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest, cancellationToken).ConfigureAwait(false);
+
+            try
+            {
+                logEntry.LogResponse(restResponse, "json");
+
+                if (restResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    return restResponse.Data;
+                }
+
+                if (restResponse.StatusCode == HttpStatusCode.Forbidden)
+                {
+                    GenericResult<TokenResponse> redirectTokenResult = await warehouseRemoteLoginWithToken.RemoteLoginWithToken()
+                        .ConfigureAwait(false);
+
+                    if (redirectTokenResult.Failure)
+                    {
+                        throw new TangoException("Unable to obtain a valid token from redirectToken.");
+                    }
+
+                    restResponse = await ResendAction<T>(restRequest, restClient, redirectTokenResult);
+                }
+
+                if (restResponse.StatusCode == HttpStatusCode.OK)
+                {
+                    return restResponse.Data;
+                }
+
+                throw HubApiException.FromResponse(restResponse);
+            }
+            catch (Exception)
+            {
+                if (restResponse != null)
+                {
+                    logEntry.LogResponse(restResponse, "json");
+                }
+
+                throw;
+            }
+        }
+
+        /// <summary>
         /// Resend the action after getting a new auth token
         /// </summary>
         private async Task<IRestResponse> ResendAction(
+            IRestRequest restRequest,
+            IRestClient restClient,
+            GenericResult<TokenResponse> refreshTokenResult,
+            CancellationToken cancellationToken)
+        {
+            authenticationToken = refreshTokenResult.Value.token;
+
+            foreach (var param in restRequest.Parameters)
+            {
+                if (param.Name == "Authorization")
+                {
+                    param.Value = $"Bearer {authenticationToken}";
+                }
+            }
+
+            return await restClient.ExecuteTaskAsync(restRequest, cancellationToken).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Resend the action after getting a new auth token
+        /// </summary>
+        private async Task<IRestResponse<T>> ResendAction<T>(
             IRestRequest restRequest,
             IRestClient restClient,
             GenericResult<TokenResponse> refreshTokenResult)
@@ -121,7 +220,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
             }
 
-            return await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
+            return await restClient.ExecuteTaskAsync<T>(restRequest).ConfigureAwait(false);
         }
 
         /// <summary>

@@ -169,6 +169,53 @@ namespace Interapptive.Shared.Win32
         }
 
         /// <summary>
+        /// Get the T value of the given key
+        /// </summary>
+        public T GetValue<T>(string name, T defaultValue) where T : IConvertible
+        {
+            return GetValue((string) null, name, defaultValue);
+        }
+
+        /// <summary>
+        /// Get the T value of the given key
+        /// </summary>
+        public T GetValue<T>(string subkey, string name, T defaultValue) where T : IConvertible
+        {
+            using (RegistryKey key = OpenKey(subkey))
+            {
+                if (key == null)
+                {
+                    return defaultValue;
+                }
+
+                object value = key.GetValue(name);
+
+                return GetValue<T>(value, defaultValue);
+            }
+        }
+
+        /// <summary>
+        /// Get the T value of the given object where T is IConvertible.  
+        /// </summary>
+        public static T GetValue<T>(object value, T defaultValue) where T : IConvertible
+        {
+            // If it doesn't exist use the default
+            if (value == null)
+            {
+                return defaultValue;
+            }
+
+            // If its convertible, convert it
+            IConvertible convertible = value as IConvertible;
+            if (convertible != null)
+            {
+                return (T) Convert.ChangeType(value, typeof(T));
+            }
+
+            throw new InvalidCastException($"Could not cast '{value}' to type {typeof(T)}.");
+        }
+
+        /// <summary>
         /// Get the bool value of the given key
         /// </summary>
         public bool GetValue(string name, bool defaultValue)

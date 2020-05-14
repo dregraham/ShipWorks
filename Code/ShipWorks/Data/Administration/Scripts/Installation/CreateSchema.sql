@@ -8112,11 +8112,22 @@ CREATE TABLE [dbo].[ProductVariant]
 [CountryOfOrigin] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [FNSku] [nvarchar](300) NULL,
 [EAN] [nvarchar](30) NULL,
+[HubProductId] [uniqueidentifier] NULL,
+[HubVersion] [int] NULL,
+[HubSequence] [bigint] NULL
 )
 GO
 PRINT N'Creating primary key [PK_ProductVariant] on [dbo].[ProductVariant]'
 GO
 ALTER TABLE [dbo].[ProductVariant] ADD CONSTRAINT [PK_ProductVariant] PRIMARY KEY CLUSTERED  ([ProductVariantID])
+GO
+PRINT N'Creating index IX_ProductVariant_HubProductId'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ProductVariant_HubProductId] ON [dbo].[ProductVariant] ([HubProductId]) WHERE HubProductId IS NOT NULL
+GO
+PRINT N'Creating index IX_ProductVariant_HubSequence'
+GO
+CREATE UNIQUE INDEX [IX_ProductVariant_HubSequence] ON [dbo].[ProductVariant] ([HubSequence]) WHERE HubSequence IS NOT NULL
 GO
 PRINT N'Creating [dbo].[ProductVariantAlias]'
 GO
@@ -8125,7 +8136,7 @@ CREATE TABLE [dbo].[ProductVariantAlias]
 [ProductVariantAliasID] [bigint] NOT NULL IDENTITY(1203, 1000),
 [ProductVariantID] [bigint] NOT NULL,
 [AliasName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Sku] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [IsDefault] [bit] NOT NULL CONSTRAINT [DF_ProductVariantAlias_IsDefault] DEFAULT ((0))
 )
 GO
