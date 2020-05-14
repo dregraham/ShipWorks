@@ -98,6 +98,10 @@ namespace ShipWorks.Escalator
                 {
                     await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
                 }
+                else
+                {
+                    log.Info("Not updating. Auto update was disabled after the timer started.");
+                }
             };
 
             upgradeTimer.AutoReset = false;
