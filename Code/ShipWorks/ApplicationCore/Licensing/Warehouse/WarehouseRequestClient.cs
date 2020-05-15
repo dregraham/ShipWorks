@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -17,21 +18,20 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     public class WarehouseRequestClient : IInitializeForCurrentUISession, IWarehouseRequestClient
     {
         private readonly IWarehouseRemoteLoginWithToken warehouseRemoteLoginWithToken;
-        private readonly IWarehouseRefreshToken warehouseRefreshToken;
+        private readonly IConfigurationData configurationData;
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private string authenticationToken = string.Empty;
-        private string refreshToken = string.Empty;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WarehouseRequestClient(IWarehouseRemoteLoginWithToken warehouseRemoteLoginWithToken,
-            IWarehouseRefreshToken warehouseRefreshToken,
+            IConfigurationData configurationData,
             WebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             this.warehouseRemoteLoginWithToken = warehouseRemoteLoginWithToken;
+            this.configurationData = configurationData;
             this.webClientEnvironmentFactory = webClientEnvironmentFactory;
-            this.warehouseRefreshToken = warehouseRefreshToken;
         }
 
         /// <summary>
@@ -56,14 +56,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     }
 
                     authenticationToken = redirectTokenResult.Value.token;
-                    refreshToken = redirectTokenResult.Value.refreshToken;
                 }
 
                 IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
 
                 logEntry.LogRequest(restRequest, restClient, "json");
 
-                restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
+                restRequest
+                    .AddHeader("Authorization", $"Bearer {authenticationToken}")
+                    .AddHeader("warehouse-id", configurationData.FetchReadOnly().WarehouseID);
 
                 restResponse = await restClient.ExecuteTaskAsync(restRequest).ConfigureAwait(false);
                 logEntry.LogResponse(restResponse, "json");
@@ -129,7 +130,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
 
                 authenticationToken = redirectTokenResult.Value.token;
-                refreshToken = redirectTokenResult.Value.refreshToken;
             }
 
             IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
@@ -237,7 +237,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         public void EndSession()
         {
             authenticationToken = string.Empty;
-            refreshToken = string.Empty;
         }
 
         /// <summary>
