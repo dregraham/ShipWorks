@@ -136,7 +136,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
             logEntry.LogRequest(restRequest, restClient, "json");
 
-            restRequest.AddHeader("Authorization", $"Bearer {authenticationToken}");
+            restRequest
+                .AddHeader("Authorization", $"Bearer {authenticationToken}")
+                .AddHeader("warehouse-id", configurationData.FetchReadOnly().WarehouseID);
 
             var restResponse = await restClient.ExecuteTaskAsync<T>(restRequest, cancellationToken).ConfigureAwait(false);
 
