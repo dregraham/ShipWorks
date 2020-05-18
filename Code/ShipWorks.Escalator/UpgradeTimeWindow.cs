@@ -94,13 +94,21 @@ namespace ShipWorks.Escalator
 
             upgradeTimer.Elapsed += async (sender, e) =>
             {
-                if (!AutoUpdateSettings.IsAutoUpdateDisabled)
+                try
                 {
-                    await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+                    log.InfoFormat("Auto Update Enabled: {0}", AutoUpdateSettings.IsAutoUpdateDisabled);
+                    if (!AutoUpdateSettings.IsAutoUpdateDisabled)
+                    {
+                        await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+                    }
+                    else
+                    {
+                        log.Info("Not updating. Auto update was disabled after the timer started.");
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    log.Info("Not updating. Auto update was disabled after the timer started.");
+                    log.ErrorFormat("AutoUpdate Failed: {0}", ex.Message);
                 }
             };
 
