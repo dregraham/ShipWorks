@@ -16,5 +16,24 @@ namespace ShipWorks.Escalator
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
                 @"Interapptive\ShipWorks\Instances");
+
+        /// <summary>
+        /// Root path to all settings that are shared across all ShipWorks users and instances
+        /// </summary>
+        public static string SharedSettings
+        {
+            get
+            {
+                return Path.Combine(GetCommonSettingsPathDefault(), "Shared");
+            }
+        }
+
+        /// <summary>
+        /// Default implementation of the getCommonSettingsPath func
+        /// </summary>
+        private static string GetCommonSettingsPathDefault() =>
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                @"Interapptive\ShipWorks");
     }
 }
