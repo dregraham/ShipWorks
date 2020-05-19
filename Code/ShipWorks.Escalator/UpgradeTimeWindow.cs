@@ -127,7 +127,7 @@ namespace ShipWorks.Escalator
             var path = Path.Combine(EscalatorDataPath.SharedSettings, "DisableAutoUpdate.txt");
             try
             {
-                return File.Exists(path);
+                return !File.Exists(path);
             }
             catch (Exception ex)
             {
