@@ -7,6 +7,8 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Settings;
 
 namespace ShipWorks.Escalator
 {
@@ -92,10 +94,46 @@ namespace ShipWorks.Escalator
             upgradeTimer = new Timer(millisecondsToOpenWindow);
 
             upgradeTimer.Elapsed += async (sender, e) =>
-                await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+            {
+                try
+                {
+                    var autoUpdateEnabled = IsAutoUpdateEnabled();
+                    log.InfoFormat("Auto Update Enabled: {0}", autoUpdateEnabled);
+
+                    if (autoUpdateEnabled)
+                    {
+                        await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
+                    }
+                    else
+                    {
+                        log.Info("Not updating. Auto update was disabled after the timer started.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    log.ErrorFormat("Auto Update Failed: {0}", ex.ToString());
+                }
+            };
 
             upgradeTimer.AutoReset = false;
             upgradeTimer.Enabled = true;
+        }
+
+        /// <summary>
+        /// Check to see if the escalator should allow an update
+        /// </summary>
+        private bool IsAutoUpdateEnabled()
+        {
+            var path = Path.Combine(EscalatorDataPath.SharedSettings, "DisableAutoUpdate.txt");
+            try
+            {
+                return !File.Exists(path);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Failed to read file '{path}' in AutoUpdateEnabled", ex);
+                return false;
+            }
         }
 
         /// <summary>
