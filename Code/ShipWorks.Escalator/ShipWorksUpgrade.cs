@@ -32,7 +32,7 @@ namespace ShipWorks.Escalator
         public ShipWorksUpgrade(
             IUpdaterWebClient updaterWebClient,
             IShipWorksInstaller shipWorksInstaller,
-			IFileWriter fileWriter,
+            IFileWriter fileWriter,
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
@@ -122,7 +122,8 @@ namespace ShipWorks.Escalator
                     Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
 
                     ShipWorksRelease shipWorksRelease = await updaterWebClient
-                        .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+                       .GetVersionToDownload(tangoCustomerId, currentVersion).ConfigureAwait(false);
+
                     if (shipWorksRelease == null)
                     {
                         log.InfoFormat("New version not found for tango customer {0} running version {1}",

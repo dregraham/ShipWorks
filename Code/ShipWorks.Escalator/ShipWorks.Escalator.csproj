@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Configuration.Install" />
