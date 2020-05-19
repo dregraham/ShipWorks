@@ -97,10 +97,10 @@ namespace ShipWorks.Escalator
             {
                 try
                 {
-                    var autoUpdateDisabled = IsAutoUpdateDisabled();
-                    log.InfoFormat("Auto Update Enabled: {0}", autoUpdateDisabled);
+                    var autoUpdateEnabled = IsAutoUpdateEnabled();
+                    log.InfoFormat("Auto Update Enabled: {0}", autoUpdateEnabled);
 
-                    if (!autoUpdateDisabled)
+                    if (autoUpdateEnabled)
                     {
                         await shipWorksUpgrade.Upgrade(updateWindowData.TangoCustomerId);
                     }
@@ -109,7 +109,7 @@ namespace ShipWorks.Escalator
                         log.Info("Not updating. Auto update was disabled after the timer started.");
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     log.ErrorFormat("Auto Update Failed: {0}", ex.ToString());
                 }
@@ -122,16 +122,16 @@ namespace ShipWorks.Escalator
         /// <summary>
         /// Check to see if the escalator should allow an update
         /// </summary>
-        private bool IsAutoUpdateDisabled()
+        private bool IsAutoUpdateEnabled()
         {
             var path = Path.Combine(EscalatorDataPath.SharedSettings, "DisableAutoUpdate.txt");
             try
             {
-                return !File.Exists(path);
+                return File.Exists(path);
             }
             catch (Exception ex)
             {
-                log.Error($"Failed to read file '{path}' in LastAutoUpdateSucceeded", ex);
+                log.Error($"Failed to read file '{path}' in AutoUpdateEnabled", ex);
                 return false;
             }
         }

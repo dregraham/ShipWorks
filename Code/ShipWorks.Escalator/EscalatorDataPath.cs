@@ -29,7 +29,7 @@ namespace ShipWorks.Escalator
         }
 
         /// <summary>
-        /// Default implementation of the getCommonSettingsPath func
+        /// Gets the path to the default settings
         /// </summary>
         private static string GetCommonSettingsPathDefault() =>
             Path.Combine(
