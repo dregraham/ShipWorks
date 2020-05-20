@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Autofac;
 using Autofac.Extras.Moq;
 using ShipWorks.ApplicationCore;
@@ -19,7 +20,7 @@ namespace ShipWorks.Tests.Shared.Database
         /// <summary>
         /// Constructor
         /// </summary>
-        public DataContext(AutoMock mock, UserEntity user, ComputerEntity computer, IContainer container = null)
+        public DataContext(AutoMock mock, UserEntity user, ComputerEntity computer, string instancePath, IContainer container = null)
         {
             Mock = mock;
             User = user;
@@ -39,6 +40,8 @@ namespace ShipWorks.Tests.Shared.Database
                 .Save();
 
             Container = container ?? (IContainer) IoC.UnsafeGlobalLifetimeScope;
+
+            InstancePath = instancePath;
         }
 
         /// <summary>
@@ -77,6 +80,11 @@ namespace ShipWorks.Tests.Shared.Database
         public OrderEntity Order { get; private set; }
 
         /// <summary>
+        /// Path to the current instance folder
+        /// </summary>
+        public string InstancePath { get; private set; }
+
+        /// <summary>
         /// Set the default shipment type in the shipping settings
         /// </summary>
         public void SetDefaultShipmentType(ShipmentTypeCode defaultType)
@@ -99,6 +107,11 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public void Dispose()
         {
+            if (!string.IsNullOrWhiteSpace(InstancePath))
+            {
+                Directory.Delete(InstancePath, true);
+            }
+
             UserSession.Reset();
             Mock.Dispose();
             IoC.UnsafeGlobalLifetimeScope.Dispose();

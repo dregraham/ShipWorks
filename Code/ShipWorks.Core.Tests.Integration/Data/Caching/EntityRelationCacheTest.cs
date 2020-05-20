@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Autofac.Extras.Moq;
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.Data.Caching
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class EntityRelationCacheTest
+    public class EntityRelationCacheTest : IDisposable
     {
         private readonly DataContext context;
         private readonly Dictionary<EntityType, EntityTypeChangeVersion> entityTypeChangeVersions;
@@ -112,5 +113,7 @@ namespace ShipWorks.Tests.Data.Caching
             counter++;
             return new SqlAdapter();
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

@@ -173,6 +173,7 @@ namespace ShipWorks.Tests.Shared.Database.Stores.Platforms.ThreeDCart
         public void Dispose()
         {
             mock.Dispose();
+            context.Dispose();
         }
     }
 }

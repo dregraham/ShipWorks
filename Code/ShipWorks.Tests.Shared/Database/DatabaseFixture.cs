@@ -24,7 +24,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
-using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.Database.IntegrationDB;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
@@ -174,7 +173,7 @@ namespace ShipWorks.Tests.Shared.Database
             };
 
             configuration.Freeze();
-           
+
             return new SqlSessionScope(new SqlSession(configuration));
         }
 
@@ -265,6 +264,7 @@ namespace ShipWorks.Tests.Shared.Database
             try
             {
                 DataPath.Initialize();
+                SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
                 SqlSessionScope.ScopedSqlSession.Configuration.Save();
             }
             catch (IOException)
@@ -272,7 +272,7 @@ namespace ShipWorks.Tests.Shared.Database
                 // Just ignore if we get an IOException as we don't care about the running lock.
             }
 
-            return new DataContext(mock, context.Item1, context.Item2, container);
+            return new DataContext(mock, context.Item1, context.Item2, DataPath.InstanceRoot, container);
         }
 
         /// <summary>
@@ -326,13 +326,14 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
-            
+
             ShipWorksSession.Initialize(Guid.NewGuid());
 
             DataPath.Initialize();
+            SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
             SqlSessionScope.ScopedSqlSession.Configuration.Save();
 
-            return new DataContext(mock, context.Item1, context.Item2);
+            return new DataContext(mock, context.Item1, context.Item2, DataPath.InstanceRoot);
         }
 
         /// <summary>
