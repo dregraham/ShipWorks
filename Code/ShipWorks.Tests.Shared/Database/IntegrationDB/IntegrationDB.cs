@@ -163,7 +163,7 @@ END;
 
 
             sw.Stop();
-            Console.WriteLine("CreateDatabase completed in {0} ms.", sw.ElapsedMilliseconds);
+            Console.WriteLine($"CreateDatabase, {databaseName}, completed in {sw.ElapsedMilliseconds} ms.");
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ END",
             }
 
             sw.Stop();
-            Console.WriteLine("DeleteDatabase completed in {0} ms.", sw.ElapsedMilliseconds);
+            Console.WriteLine($"DeleteDatabase, {databaseName} completed in {sw.ElapsedMilliseconds} ms.");
         }
     }
 }
