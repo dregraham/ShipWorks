@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using Autofac;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.TangoRequests;
-using ShipWorks.Core.Messaging;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Messaging.Messages;
-using ShipWorks.Shipping;
 using ShipWorks.Startup;
 using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using ShipWorks.Tests.Shared.ExtensionMethods;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -23,7 +15,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class TangoLogShipmentProcessorTest
+    public class TangoLogShipmentProcessorTest : IDisposable
     {
         private readonly DataContext context;
         private TangoLogShipmentProcessor testObject;
@@ -68,5 +60,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 
             tangoLogShipmentRequest.Verify(c => c.LogShipment(It.IsAny<DbConnection>(), AnyStore, AnyShipment), Times.Once);
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

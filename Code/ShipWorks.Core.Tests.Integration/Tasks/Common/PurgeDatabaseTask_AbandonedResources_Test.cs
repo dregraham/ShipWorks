@@ -22,7 +22,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class PurgeDatabaseTask_AbandonedResources_Test
+    public class PurgeDatabaseTask_AbandonedResources_Test : IDisposable
     {
         private readonly DataContext context;
         private readonly PurgeDatabaseTask testObject;
@@ -196,5 +196,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 
         private byte[] CreateChecksum() =>
             Enumerable.Range(1, 30).Select(_ => (byte) random.Next(0, 255)).ToArray();
+
+        public void Dispose() => context.Dispose();
     }
 }

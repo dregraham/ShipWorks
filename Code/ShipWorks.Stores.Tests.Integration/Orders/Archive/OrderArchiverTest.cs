@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
     [Collection("Database collection")]
     [Trait("Category", "SmokeTest")]
     [Trait("Category", "OrderArchiveSmokeTest")]
-    public class OrderArchiverTest
+    public class OrderArchiverTest : IDisposable
     {
         private readonly DataContext context;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
@@ -658,5 +658,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                     break;
             }
         }
+
+        public void Dispose() => context.Dispose();
     }
 }
