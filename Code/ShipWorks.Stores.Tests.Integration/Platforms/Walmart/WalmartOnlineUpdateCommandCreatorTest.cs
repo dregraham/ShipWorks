@@ -44,7 +44,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Walmart
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Walmart) as WalmartOnlineUpdateInstanceCommands;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             webClient.Setup(x => x.UpdateShipmentDetails(It.IsAny<IWalmartStoreEntity>(), It.IsAny<orderShipment>(), AnyString))
                 .Returns(new Order

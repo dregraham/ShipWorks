@@ -63,7 +63,7 @@ namespace ShipWorks.Core.Tests.Integration.SingleScan
             {
                 File.Delete(Path.Combine(DataPath.InstanceSettings, "scanner.xml"));
                 Directory.Delete(DataPath.InstanceSettings);
-                Directory.Delete(DataPath.InstanceRoot);
+                Directory.Delete(DataPath.InstanceRoot, true);
             }
             catch (Exception)
             {

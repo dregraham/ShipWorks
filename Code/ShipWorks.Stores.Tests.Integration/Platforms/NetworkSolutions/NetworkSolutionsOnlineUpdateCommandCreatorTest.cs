@@ -15,7 +15,6 @@ using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
-using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.NetworkSolutions
 {
@@ -42,7 +41,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.NetworkSolutions
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.NetworkSolutions) as NetworkSolutionsOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<NetworkSolutionsStoreEntity>(StoreTypeCode.NetworkSolutions).Save();
 

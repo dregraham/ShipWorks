@@ -42,7 +42,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Ebay
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Ebay) as EbayOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<EbayStoreEntity>(StoreTypeCode.Ebay).Save();
 
