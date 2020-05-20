@@ -7,8 +7,6 @@ using Interapptive.Shared.AutoUpdate;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Settings;
 
 namespace ShipWorks.Escalator
 {
