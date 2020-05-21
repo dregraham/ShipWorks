@@ -181,7 +181,7 @@ namespace ShipWorks.Data
                 bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
             }
 
-            if (ConnectionSensitiveScope.IsActive && SqlSession.Current?.Configuration != null)
+            if (ConnectionSensitiveScope.IsActive || SqlSession.Current?.Configuration != null)
             {
                 return;
             }
