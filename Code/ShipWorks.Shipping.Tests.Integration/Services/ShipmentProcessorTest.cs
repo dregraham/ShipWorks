@@ -9,7 +9,6 @@ using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using System.Xml;
 using Autofac;
-using Interapptive.Shared.Business;
 using Interapptive.Shared.Tests.Filters;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -298,6 +297,134 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             var dialog = dialogCreator?.Invoke() as IShipmentTypeSetupWizard;
             Assert.IsType(expectedWizardType, dialog?.GetUnwrappedWizard());
+        }
+
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenTimeoutErrorIsReceived()
+        {
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            {
+                UspsTestHelpers.SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Throws(new WebException("There was an error", WebExceptionStatus.Timeout));
+
+                AccountInfoV41 accountInfo = new AccountInfoV41()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
+            });
+
+            webServiceFactory
+                .Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Container.Resolve<IShipmentProcessor>();
+
+            await ProcessShipment();
+
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
+        }
+
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenLabelIsBad()
+        {
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            {
+                UspsTestHelpers.SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Returns(new CreateIndiciumResult
+                    {
+                        Rate = new RateV33(),
+                        ImageData = new[] { new byte[] { 0x20, 0x20 } },
+                    });
+
+                AccountInfoV41 accountInfo = new AccountInfoV41()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
+            });
+
+            webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Container.Resolve<IShipmentProcessor>();
+
+            await ProcessShipment();
+
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("Parameter is not valid"))));
+        }
+
+        [Fact]
+        public async Task Process_ShowsErrorMessage_WhenServerReturns500()
+        {
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            {
+                XmlDocument details = new XmlDocument();
+                details.LoadXml("<error><details code=\"bar\" /></error>");
+
+                UspsTestHelpers.SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Throws(new SoapException("There was an error", new XmlQualifiedName("abc"), "actor", details));
+
+                AccountInfoV41 accountInfo = new AccountInfoV41()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
+            });
+
+            webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Container.Resolve<IShipmentProcessor>();
+
+            await ProcessShipment();
+
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("There was an error"))));
         }
 
         /// <summary>

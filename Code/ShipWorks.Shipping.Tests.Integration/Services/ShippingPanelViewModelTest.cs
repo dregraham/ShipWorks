@@ -35,6 +35,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     {
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
+        private IDisposable subscription;
 
         public ShippingPanelViewModelTest(DatabaseFixture db)
         {
@@ -70,6 +71,26 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
                 .Save();
 
             EditionManager.UpdateRestrictions();
+        }
+
+        [Fact]
+        public async Task CreateLabel_ReloadsShipment_WhenProcessingFails()
+        {
+            var testObject = context.Mock.Create<ShippingPanelViewModel>();
+            var source = new TaskCompletionSource<ShipmentChangedMessage>();
+
+            LoadOrderIntoViewModelWithShipment(testObject, shipment);
+
+            subscription = Messenger.Current.OfType<ShipmentChangedMessage>().Subscribe(x => source.SetResult(x));
+
+            testObject.CreateLabelCommand.Execute(null);
+
+            ShipmentChangedMessage message = null;
+            await Task.WhenAny(source.Task.ContinueWith(x => message = x.Result), Task.Delay(5000)).ConfigureAwait(false);
+
+            Assert.NotNull(message?.ShipmentAdapter?.Shipment);
+            Assert.Equal(testObject.ShipmentAdapter.Shipment.RowVersion,
+                message.ShipmentAdapter.Shipment.RowVersion);
         }
 
         [Fact]
@@ -145,6 +166,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
         public void Dispose()
         {
+            subscription?.Dispose();
             context?.Dispose();
         }
     }
