@@ -37,8 +37,7 @@ namespace ShipWorks.Tests.Shared.Carriers.Postal.Usps
                 System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic,
                 null, new object[] { results, null, false, null }, null, null);
 
-
-            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>()))
+            mock.Setup(x => x.CleanseAddressAsync(It.IsAny<object>(), It.IsAny<Address>(), It.IsAny<string>(), It.IsAny<object>()))
                 .Raises(x => x.CleanseAddressCompleted += null, eventArgs);
         }
     }
