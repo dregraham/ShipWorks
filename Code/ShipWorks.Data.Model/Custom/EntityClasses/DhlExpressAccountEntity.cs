@@ -1,10 +1,5 @@
-﻿using ShipWorks.Data.Model.Custom;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -37,7 +32,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Gets the shortened account description.
         /// </summary>
-        public string ShortAccountDescription => AccountNumber.ToString();
+        public string ShortAccountDescription => UspsAccountId != null ? Description : AccountNumber.ToString();
 
         /// <summary>
         /// Applies account to shipment

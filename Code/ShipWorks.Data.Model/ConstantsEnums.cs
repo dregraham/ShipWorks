@@ -10048,10 +10048,12 @@ namespace ShipWorks.Data.Model
 		FNSku,
 		///<summary>EAN. </summary>
 		EAN,
-		///<summary>FNSku_. </summary>
-		FNSku_,
-		///<summary>EAN_. </summary>
-		EAN_,
+		///<summary>HubProductId. </summary>
+		HubProductId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubSequence. </summary>
+		HubSequence,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -11682,6 +11684,8 @@ namespace ShipWorks.Data.Model
 		ShipmentDateCutoffJson,
 		///<summary>OrderLookupFieldLayout. </summary>
 		OrderLookupFieldLayout,
+		///<summary>UpsAllowNoDims. </summary>
+		UpsAllowNoDims,
 		/// <summary></summary>
 		AmountOfFields
 	}

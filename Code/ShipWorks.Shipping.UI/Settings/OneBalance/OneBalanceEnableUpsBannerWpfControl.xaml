@@ -16,7 +16,7 @@
             <Style TargetType="TextBlock" BasedOn="{StaticResource Grid.TextBlock.Label}" />
         </ResourceDictionary>
     </UserControl.Resources>
-    <StackPanel>
+    <StackPanel Background="#FFF4F4F4">
         <TextBlock Text="Save up to 62% off standard UPS label prices" Style="{StaticResource TextBlock.SectionHeader}"/>
         <Grid>
             <Grid.ColumnDefinitions>

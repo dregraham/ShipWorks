@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -22,8 +23,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Constructor
         /// </summary>
         public UpsOltLabelService(IUpsShipmentValidatorFactory upsShipmentValidatorFactory,
-            IUpsLabelClientFactory labelClientFactory)
-            : base(labelClientFactory)
+            IUpsLabelClientFactory labelClientFactory,
+            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository)
+            : base(labelClientFactory, settingsRepository)
         {
             this.upsShipmentValidatorFactory = upsShipmentValidatorFactory;
             this.labelClientFactory = labelClientFactory;

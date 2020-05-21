@@ -35,13 +35,14 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// <summary>
         /// Get the account from stamps
         /// </summary>
-        public GenericResult<IUspsAccountEntity> GetUspsAccount()
+        public GenericResult<IUspsAccountEntity> GetUspsAccount(ShipmentTypeCode shipmentTypeCode)
         {
             var accounts = uspsRepository.AccountsReadOnly;
 
             if (!accounts.Any())
             {
-                return new UspsException("You must have a USPS account to enable DHL Express from ShipWorks.");
+                return new UspsException($"Getting access to great rates with {EnumHelper.GetDescription(shipmentTypeCode)} from ShipWorks requires a Stamps.com account." +
+                    "\n\r\n\rPlease create a Stamps.com account in the USPS portion of Shipping Settings and try again.");
             }
 
             // If there's only one account it's a One Balance account

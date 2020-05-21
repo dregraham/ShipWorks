@@ -318,7 +318,6 @@ namespace ShipWorks.Shipping.Settings
                 upsControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
                 upsControl.Dock = DockStyle.Top;
-                upsControl.BackColor = Color.Transparent;
 
                 controlPanel.Controls.Add(upsControl);
 
@@ -326,7 +325,6 @@ namespace ShipWorks.Shipping.Settings
                 upsOneBalanceControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
 
                 upsOneBalanceControl.Dock = DockStyle.Top;
-                upsOneBalanceControl.BackColor = Color.Transparent;
 
                 controlPanel.Controls.Add(upsOneBalanceControl);
 

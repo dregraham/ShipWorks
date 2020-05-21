@@ -1,17 +1,15 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using System.Windows.Forms;
+using Autofac;
 using Divelements.SandGrid;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.Custom;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Settings;
-using System.Linq;
-using System.Windows.Forms;
-using System;
-using Autofac.Features.Indexed;
-using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Data.Model.Custom;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -21,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers
     [Component(RegistrationType.Self)]
     public partial class CarrierAccountManagerControl : UserControl
     {
-        private  ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
+        private ICarrierAccountRetrieverFactory carrierAccountRetrieverFactory;
         private long initialShipperID = -1;
         private bool initialized;
         private ShipmentTypeCode shipmentTypeCode;
@@ -70,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers
 
             foreach (ICarrierAccount shipper in repo.Accounts)
             {
-                GridRow row = new GridRow(new [] { shipper.AccountDescription });
+                GridRow row = new GridRow(new[] { shipper.AccountDescription });
                 sandGrid.Rows.Add(row);
                 row.Tag = shipper;
 

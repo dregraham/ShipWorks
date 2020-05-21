@@ -393,13 +393,19 @@ namespace Interapptive.Shared.Collections
         /// Inject a default value into the enumerable if it's empty or null
         /// </summary>
         public static IEnumerable<T> DefaultIfEmptyOrNull<T>(this IEnumerable<T> source) =>
-            source.DefaultIfEmptyOrNull(default(T));
+            source.DefaultIfEmptyOrNull(default);
 
         /// <summary>
         /// Inject a default value into the enumerable if it's empty or null
         /// </summary>
         public static IEnumerable<T> DefaultIfEmptyOrNull<T>(this IEnumerable<T> source, T defaultValue) =>
-            (source ?? Enumerable.Empty<T>()).DefaultIfEmpty(defaultValue);
+            source.EmptyIfNull().DefaultIfEmpty(defaultValue);
+
+        /// <summary>
+        /// Return an empty enumerable if source is null
+        /// </summary>
+        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) =>
+            source ?? Enumerable.Empty<T>();
 
         /// <summary>
         /// Perform a left join on an enumerable

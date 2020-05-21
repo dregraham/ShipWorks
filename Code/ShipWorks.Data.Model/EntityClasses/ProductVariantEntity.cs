@@ -481,9 +481,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("EAN", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("FNSku_", fieldHashtable);
+			_fieldsCustomProperties.Add("HubProductId", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("EAN_", fieldHashtable);
+			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubSequence", fieldHashtable);
 		}
 		#endregion
 
@@ -793,24 +795,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ProductVariantFieldIndex.EAN, value); }
 		}
 
-		/// <summary> The FNSku_ property of the Entity ProductVariant<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariant"."FNSku"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// <summary> The HubProductId property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."HubProductId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String FNSku_
+		public virtual Nullable<System.Guid> HubProductId
 		{
-			get { return (System.String)GetValue((int)ProductVariantFieldIndex.FNSku_, true); }
-			set	{ SetValue((int)ProductVariantFieldIndex.FNSku_, value); }
+			get { return (Nullable<System.Guid>)GetValue((int)ProductVariantFieldIndex.HubProductId, false); }
+			set	{ SetValue((int)ProductVariantFieldIndex.HubProductId, value); }
 		}
 
-		/// <summary> The EAN_ property of the Entity ProductVariant<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "ProductVariant"."EAN"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// <summary> The HubVersion property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."HubVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String EAN_
+		public virtual Nullable<System.Int32> HubVersion
 		{
-			get { return (System.String)GetValue((int)ProductVariantFieldIndex.EAN_, true); }
-			set	{ SetValue((int)ProductVariantFieldIndex.EAN_, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)ProductVariantFieldIndex.HubVersion, false); }
+			set	{ SetValue((int)ProductVariantFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubSequence property of the Entity ProductVariant<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ProductVariant"."HubSequence"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int64> HubSequence
+		{
+			get { return (Nullable<System.Int64>)GetValue((int)ProductVariantFieldIndex.HubSequence, false); }
+			set	{ SetValue((int)ProductVariantFieldIndex.HubSequence, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductBundleEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>

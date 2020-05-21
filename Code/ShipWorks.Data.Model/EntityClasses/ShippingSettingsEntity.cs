@@ -408,6 +408,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentDateCutoffJson", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("OrderLookupFieldLayout", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("UpsAllowNoDims", fieldHashtable);
 		}
 		#endregion
 
@@ -1024,6 +1026,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, value); }
+		}
+
+		/// <summary> The UpsAllowNoDims property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsAllowNoDims"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean UpsAllowNoDims
+		{
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

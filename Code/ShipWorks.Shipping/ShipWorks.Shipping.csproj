@@ -205,6 +205,7 @@
     <Compile Include="Carriers\Asendia\AsendiaDownloadedLabelData.cs" />
     <Compile Include="Carriers\Asendia\AsendiaException.cs" />
     <Compile Include="Carriers\Asendia\AsendiaLabelService.cs" />
+    <Compile Include="Carriers\Asendia\AsendiaManifestCreator.cs" />
     <Compile Include="Carriers\Asendia\AsendiaPackageAdapter.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentRequestFactory.cs" />
     <Compile Include="Carriers\Asendia\AsendiaShipmentType.cs" />
@@ -609,6 +610,7 @@
     <Compile Include="Services\Telemetry\UspsTelemetryMutator.cs" />
     <Compile Include="Settings\ConfigurationShipmentTypeSetupWizard.cs" />
     <Compile Include="Settings\ShipmentTypeSetupWizardFactory.cs" />
+    <Compile Include="ShipEngine\DTOs\CreateShipEngineAccount.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\Address.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\IUpsRegistrationRequestFactory.cs" />
     <Compile Include="ShipEngine\DTOs\Registration\UpsRegistrationRequest.cs" />

@@ -1,7 +1,9 @@
 ﻿using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -21,6 +23,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         public UpsOltLabelServiceTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
+            MockUpsShippingSettings();
 
             shipment = new ShipmentEntity()
             {
@@ -52,6 +55,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             testObject.Create(shipment);
 
             clientFactory.Verify(f => f.GetClient(shipment));
+        }
+
+        private void MockUpsShippingSettings()
+        {
+            var settingsRepositoryMock = mock.Mock<ICarrierSettingsRepository>();
+
+            var bar =
+                mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierSettingsRepository>>();
+
+            settingsRepositoryMock.Setup(x => x.GetShippingSettings()).Returns(
+                new ShippingSettingsEntity
+                {
+                    UpsAllowNoDims = false
+                });
+
+            bar.Setup(i => i[ShipmentTypeCode.UpsOnLineTools])
+                .Returns(settingsRepositoryMock.Object);
+
+            mock.Provide(bar.Object);
         }
     }
 }
