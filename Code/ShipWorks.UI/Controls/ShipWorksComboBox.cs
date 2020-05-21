@@ -12,7 +12,6 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class ShipWorksComboBox : ComboBox
     {
-        private static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
         private bool _suppressSelectionChangedUpdatesRebind = false;
 
         /// <summary>
@@ -32,11 +31,13 @@ namespace ShipWorks.UI.Controls
                typeof(ShipWorksComboBox),
                new PropertyMetadata((o, dp) =>
                {
-                   var comboBoxEx = o as ShipWorksComboBox;
-                   if (comboBoxEx == null)
+                   var comboBox = o as ShipWorksComboBox;
+                   if (comboBox == null)
+                   {
                        return;
-
-                   comboBoxEx.SetSelectedValueSuppressingChangeEventProcessing(dp.NewValue);
+                   }
+                      
+                   comboBox.SetSelectedValueSuppressingChangeEventProcessing(dp.NewValue);
                }));
 
         public ShipWorksComboBox()
