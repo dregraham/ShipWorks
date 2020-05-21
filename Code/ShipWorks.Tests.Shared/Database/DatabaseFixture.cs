@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -194,12 +195,31 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         public DataContext CreateDataContext(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
         {
-            DataContext dataContext = null;
-            SqlAdapterRetry<Exception> retry = new SqlAdapterRetry<Exception>(5, -6, "");
+            try
+            {
+                DataContext dataContext = null;
+                SqlAdapterRetry<Exception> retry = new SqlAdapterRetry<Exception>(5, -6, "");
 
-            retry.ExecuteWithRetry(() => dataContext = CreateDataContextInternal(initializeContainer, configureMock));
+                retry.ExecuteWithRetry(() => dataContext = CreateDataContextInternal(initializeContainer, configureMock));
 
-            return dataContext;
+                return dataContext;
+            }
+            catch (Exception ex)
+            {
+                StringBuilder msg = new StringBuilder();
+                msg.AppendLine(ex.Message);
+                msg.AppendLine(ex.StackTrace);
+
+                if (ex.InnerException != null)
+                {
+                    msg.AppendLine(ex.InnerException.Message);
+                    msg.AppendLine(ex.InnerException.StackTrace);
+                }
+
+                Console.WriteLine(msg.ToString()); 
+
+                throw;
+            }
         }
 
         /// <summary>

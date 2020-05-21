@@ -10,23 +10,13 @@
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\net46\*.tests.dll" />
 
-    <IntegrationAssemblies Include="Code\ShipWorks.Products.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Products.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Shipping.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Shipping.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Stores.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Stores.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Core.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Core.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Tests.Integration\bin\$(Configuration)\ShipWorks.Tests.Integration.dll" />
-    <!--
-    <IntegrationAssemblies Include="Code\ShipWorks.Products.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Products.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Shipping.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Shipping.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Stores.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Stores.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Core.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Core.Tests.Integration.dll" />
-    <IntegrationAssemblies Include="Code\ShipWorks.Tests.Integration\bin\$(Configuration)\ShipWorks.Tests.Integration.dll" />
-    -->
+    <IntegrationCommonAssemblies Include="Code\ShipWorks.Tests.Integration\bin\$(Configuration)\ShipWorks.Tests.Integration.dll" />
+    <IntegrationCommonAssemblies Include="Code\ShipWorks.Products.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Products.Tests.Integration.dll" />
+    <IntegrationCommonAssemblies Include="Code\ShipWorks.Core.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Core.Tests.Integration.dll" />
+    
+    <IntegrationShippingAssemblies Include="Code\ShipWorks.Shipping.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Shipping.Tests.Integration.dll" />
 
-    <!--
-    <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\*.tests.integration.dll" />
-    <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\net46\*.tests.integration.dll" />
-    -->
+    <IntegrationStoresAssemblies Include="Code\ShipWorks.Stores.Tests.Integration\bin\$(Configuration)\net46\ShipWorks.Stores.Tests.Integration.dll" />
 
     <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\*.specs.dll" />
     <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\net46\*.specs.dll" />
@@ -42,14 +32,41 @@
 
   <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
   		 If they are not run in parallel, some async tests will deadlock -->
-  <Target Name="Integration">
+  <Target Name="IntegrationCommon">
     <MakeDir Directories="TestResults;" />
-    <xunit Assemblies="@(IntegrationAssemblies)"
-      Xml="TestResults\integration.xml"
-      IncludeTraits="$(IncludeTraits)"
-      ParallelizeAssemblies="true"
-      ParallelizeTestCollections="true"
-      Reporter="verbose"/>
+    <xunit Assemblies="@(IntegrationCommonAssemblies)"
+           Xml="TestResults\integrationCommon.xml"
+           IncludeTraits="$(IncludeTraits)"
+           ParallelizeAssemblies="true"
+           ParallelizeTestCollections="true"
+           DiagnosticMessages="true"
+           Reporter="verbose"/>
+  </Target>
+
+  <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
+  		 If they are not run in parallel, some async tests will deadlock -->
+  <Target Name="IntegrationShipping">
+    <MakeDir Directories="TestResults;" />
+    <xunit Assemblies="@(IntegrationShippingAssemblies)"
+           Xml="TestResults\integrationShipping.xml"
+           IncludeTraits="$(IncludeTraits)"
+           ParallelizeAssemblies="true"
+           ParallelizeTestCollections="false"
+           DiagnosticMessages="true"
+           Reporter="verbose"/>
+  </Target>
+
+  <!-- We need the integration tests to run in parallel so that the correct synchronization context gets set.
+  		 If they are not run in parallel, some async tests will deadlock -->
+  <Target Name="IntegrationStores">
+    <MakeDir Directories="TestResults;" />
+    <xunit Assemblies="@(IntegrationStoresAssemblies)"
+           Xml="TestResults\integrationStores.xml"
+           IncludeTraits="$(IncludeTraits)"
+           ParallelizeAssemblies="true"
+           ParallelizeTestCollections="false"
+           DiagnosticMessages="true"
+           Reporter="verbose"/>
   </Target>
 
   <!-- We need the specs to run in parallel so that the correct synchronization context gets set.

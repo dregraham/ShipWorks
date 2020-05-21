@@ -335,7 +335,9 @@ Task("DeleteOldIntegrationTestRuns")
     .Does(() =>
 	{
 		LogStartMessage("delete old integration test runs");
-		DeleteFiles("./TestResults/integration.xml");
+		DeleteFiles("./TestResults/integrationCommon.xml");
+		DeleteFiles("./TestResults/integrationShipping.xml");
+		DeleteFiles("./TestResults/integrationStores.xml");
 		LogFinishedMessage("delete old integration test runs");
 	});
 
@@ -344,9 +346,23 @@ Task("DeleteOldIntegrationTestRuns")
 /// </summary>
 Task("TestIntegration")
     .IsDependentOn("DeleteOldIntegrationTestRuns")
+    .IsDependentOn("TestIntegrationCommon")
+    .IsDependentOn("TestIntegrationStores")
+    .IsDependentOn("TestIntegrationShipping")
+	.OnError(ex => 
+	{
+		LogException("Integration Shipping Error ", ex);
+		throw ex;
+	});
+
+/// <summary>
+/// Integration Tests
+/// </summary>
+Task("TestIntegrationCommon")
+    .IsDependentOn("DeleteOldIntegrationTestRuns")
     .Does(() =>
 	{
-		LogStartMessage("integration tests");
+		LogStartMessage("integration Common tests");
 
 		if (testCategory.ToLower() == string.Empty)
 		{
@@ -354,11 +370,101 @@ Task("TestIntegration")
 		}
 
 		verbosity = Verbosity.Verbose;
+		
 		var settings = CreateBuildSettings(configuration)
-					   .WithTarget("Integration");
+					   .WithTarget("IntegrationCommon");
 		MSBuild("./tests.msbuild", settings);
 		
-		LogFinishedMessage("integration tests");
+		LogFinishedMessage("integration Common tests");
+	})
+	.OnError(ex => 
+	{
+		LogException("Integration Shipping Error ", ex);
+		throw ex;
+	});
+
+/// <summary>
+/// Integration Tests
+/// </summary>
+Task("TestIntegrationStores")
+    .IsDependentOn("DeleteOldIntegrationTestRuns")
+    .Does(() =>
+	{
+		LogStartMessage("integration Stores tests");
+
+		if (testCategory.ToLower() == string.Empty)
+		{
+			testCategory = "ContinuousIntegration";
+		}
+
+		verbosity = Verbosity.Verbose;
+		
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("IntegrationStores");
+		try
+		{
+			MSBuild("./tests.msbuild", settings);
+		}
+		catch (Exception ex)
+		{
+			LogMessage($"Integration Stores Error {ex.Message}");
+			LogMessage($"Integration Stores Error {ex.StackTrace}");
+			if (ex.InnerException != null)
+			{
+				LogMessage($"Integration Stores Error {ex.InnerException.Message}");
+				LogMessage($"Integration Stores Error {ex.InnerException.StackTrace}");
+			}
+			throw;
+		}
+		
+		LogFinishedMessage("integration Stores tests");
+	})
+	.OnError(ex => 
+	{
+		LogException("Integration Shipping Error ", ex);
+		throw ex;
+	});
+
+/// <summary>
+/// Integration Tests
+/// </summary>
+Task("TestIntegrationShipping")
+    .IsDependentOn("DeleteOldIntegrationTestRuns")
+    .Does(() =>
+	{
+		LogStartMessage("integration Shipping tests");
+
+		if (testCategory.ToLower() == string.Empty)
+		{
+			testCategory = "ContinuousIntegration";
+		}
+
+		verbosity = Verbosity.Verbose;
+		
+		var settings = CreateBuildSettings(configuration)
+					   .WithTarget("IntegrationShipping");
+
+		try
+		{
+			MSBuild("./tests.msbuild", settings);
+		}
+		catch (Exception ex)
+		{
+			LogMessage($"Integration Shipping Error {ex.Message}");
+			LogMessage($"Integration Shipping Error {ex.StackTrace}");
+			if (ex.InnerException != null)
+			{
+				LogMessage($"Integration Shipping Error {ex.InnerException.Message}");
+				LogMessage($"Integration Shipping Error {ex.InnerException.StackTrace}");
+			}
+		}
+		
+		LogFinishedMessage("integration Shipping tests");
+	})
+	.OnError(ex => 
+	{
+		LogException("Integration Shipping Error ", ex);
+		throw ex;
 	});
 
 /// <summary>
@@ -679,6 +785,20 @@ void LogFinishedMessage(string msg)
 void LogMessage(string msg)
 {
 	Information("{0} at ({1})", msg, DateTime.Now.TimeOfDay.ToString());
+}
+
+/// <summary>
+/// Log an exception
+/// </summary>
+void LogException(string msg, Exception ex)
+{
+	LogMessage($"{msg} {ex.Message}");
+	LogMessage($"{msg} {ex.StackTrace}");
+	if (ex.InnerException != null)
+	{
+		LogMessage($"{msg} {ex.InnerException.Message}");
+		LogMessage($"{msg} {ex.InnerException.StackTrace}");
+	}
 }
 
 /// <summary>
