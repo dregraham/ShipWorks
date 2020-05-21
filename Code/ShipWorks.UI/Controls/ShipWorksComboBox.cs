@@ -12,7 +12,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class ShipWorksComboBox : ComboBox
     {
-        private bool _suppressSelectionChangedUpdatesRebind = false;
+        private bool suppressSelectionChangedUpdatesRebind = false;
 
         /// <summary>
         /// Dependency property for what value to use when selected value is null
@@ -42,7 +42,7 @@ namespace ShipWorks.UI.Controls
 
         public ShipWorksComboBox()
         {
-            SelectionChanged += ComboBoxEx_SelectionChanged;
+            SelectionChanged += ComboBoxSelectionChanged;
         }
 
         /// <summary>
@@ -126,12 +126,14 @@ namespace ShipWorks.UI.Controls
         /// <summary>
         /// Handle the selection changed event.
         /// </summary>
-        private void ComboBoxEx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBoxSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Avoid recursive stack overflow
-            if (_suppressSelectionChangedUpdatesRebind)
+            if (suppressSelectionChangedUpdatesRebind)
+            {
                 return;
-
+            }
+                
             if (e.AddedItems != null && e.AddedItems.Count > 0)
             {
                 if (SelectedValue == null)
@@ -151,12 +153,12 @@ namespace ShipWorks.UI.Controls
         {
             try
             {
-                _suppressSelectionChangedUpdatesRebind = true;
+                suppressSelectionChangedUpdatesRebind = true;
                 SelectedValue = newSelectedValue;
             }
             finally
             {
-                _suppressSelectionChangedUpdatesRebind = false;
+                suppressSelectionChangedUpdatesRebind = false;
             }
         }
     }
