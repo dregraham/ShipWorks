@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,21 +13,45 @@ namespace ShipWorks.UI.Controls
     public class ShipWorksComboBox : ComboBox
     {
         private static readonly PropertyMetadata existingMetadata = SelectedValueProperty.GetMetadata(typeof(Selector));
+        private bool _suppressSelectionChangedUpdatesRebind = false;
 
         /// <summary>
-        /// Message type dependency property
+        /// Dependency property for what value to use when selected value is null
         /// </summary>
         public static readonly DependencyProperty SelectedIndexWhenNullProperty =
             DependencyProperty.RegisterAttached("SelectedIndexWhenNull", typeof(RelativeIndex),
                 typeof(ShipWorksComboBox), new PropertyMetadata(RelativeIndex.None));
 
         /// <summary>
-        /// Static constructor
+        /// Proper selected value dependency property
         /// </summary>
-        static ShipWorksComboBox()
+        public static readonly DependencyProperty SelectedValueProperProperty =
+           DependencyProperty.RegisterAttached(
+               "SelectedValueProper",
+               typeof(object),
+               typeof(ShipWorksComboBox),
+               new PropertyMetadata((o, dp) =>
+               {
+                   var comboBoxEx = o as ShipWorksComboBox;
+                   if (comboBoxEx == null)
+                       return;
+
+                   comboBoxEx.SetSelectedValueSuppressingChangeEventProcessing(dp.NewValue);
+               }));
+
+        public ShipWorksComboBox()
         {
-            SelectedValueProperty.OverrideMetadata(typeof(ShipWorksComboBox),
-                new FrameworkPropertyMetadata(null, new CoerceValueCallback(HandleValueCoercion)));
+            SelectionChanged += ComboBoxEx_SelectionChanged;
+        }
+
+        /// <summary>
+        /// The correct value of selected property
+        /// </summary>
+        [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
+        public object SelectedValueProper
+        {
+            get { return (object) GetValue(SelectedValueProperProperty); }
+            set { SetValue(SelectedValueProperProperty, value); }
         }
 
         /// <summary>
@@ -40,30 +65,6 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public static void SetSelectedIndexWhenNull(DependencyObject d, RelativeIndex value) =>
             d.SetValue(SelectedIndexWhenNullProperty, value);
-
-        /// <summary>
-        /// Handle value coercion when the selected value of a combo box is changed
-        /// </summary>
-        private static object HandleValueCoercion(DependencyObject d, object value)
-        {
-            object newValue = existingMetadata.CoerceValueCallback(d, value);
-            ComboBox comboBox = (ComboBox) d;
-
-            if (WasValueCoercedToNull(value, newValue) || comboBox.SelectedItem == null)
-            {
-                SelectNewValue(comboBox);
-            }
-
-            return newValue;
-        }
-
-        /// <summary>
-        /// Was the value coerced to null instead of starting as null
-        /// </summary>
-        private static bool WasValueCoercedToNull(object value, object newValue)
-        {
-            return value != null && newValue == null;
-        }
 
         /// <summary>
         /// Select a new value if necessary
@@ -108,6 +109,54 @@ namespace ShipWorks.UI.Controls
             fieldInfo?.SetValue(this, null);
 
             base.OnIsKeyboardFocusWithinChanged(e);
+        }
+
+        /// <summary>
+        /// Updates the current selected item when the collection has changed.
+        /// </summary>
+        protected override void OnItemsChanged(System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            // Must re-apply value here because the combobox has a bug that 
+            // despite the fact that the binding still exists, it doesn't 
+            // re-evaluate and subsequently drops the binding on the change event
+            SetSelectedValueSuppressingChangeEventProcessing(SelectedValueProper);
+        }
+
+        /// <summary>
+        /// Handle the selection changed event.
+        /// </summary>
+        private void ComboBoxEx_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Avoid recursive stack overflow
+            if (_suppressSelectionChangedUpdatesRebind)
+                return;
+
+            if (e.AddedItems != null && e.AddedItems.Count > 0)
+            {
+                if (SelectedValue == null)
+                {
+                    SelectNewValue(this);
+                }
+                SelectedValueProper = SelectedValue;
+            }
+            // Do not apply the value if no items are selected (ie. the else)
+            // because that just passes on the null-value bug from the combobox
+        }
+
+        /// <summary>
+        /// Sets the selected value suppressing change event processing.
+        /// </summary>
+        private void SetSelectedValueSuppressingChangeEventProcessing(object newSelectedValue)
+        {
+            try
+            {
+                _suppressSelectionChangedUpdatesRebind = true;
+                SelectedValue = newSelectedValue;
+            }
+            finally
+            {
+                _suppressSelectionChangedUpdatesRebind = false;
+            }
         }
     }
 }
