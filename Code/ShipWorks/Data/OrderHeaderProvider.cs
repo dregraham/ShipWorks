@@ -167,52 +167,57 @@ namespace ShipWorks.Data
         /// </summary>
         private void AsyncLoadHeaders(object state)
         {
-            List<OrderHeader> newHeaders = new List<OrderHeader>();
-
-            ResultsetFields resultFields = new ResultsetFields(3);
-            resultFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
-            resultFields.DefineField(OrderFields.StoreID, 1, "StoreID", "");
-            resultFields.DefineField(OrderFields.IsManual, 2, "IsManual", "");
-
-            RelationPredicateBucket bucket = null;
-
-            if (lastOrderID > 0)
+            try
             {
-                bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
-            }
+                List<OrderHeader> newHeaders = new List<OrderHeader>();
 
-            if (ConnectionSensitiveScope.IsActive || SqlSession.Current?.Configuration != null)
-            {
-                return;
-            }
+                ResultsetFields resultFields = new ResultsetFields(3);
+                resultFields.DefineField(OrderFields.OrderID, 0, "OrderID", "");
+                resultFields.DefineField(OrderFields.StoreID, 1, "StoreID", "");
+                resultFields.DefineField(OrderFields.IsManual, 2, "IsManual", "");
 
-            using (SqlAdapter adapter = SqlAdapter.Create(false))
-            {
-                using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
+                RelationPredicateBucket bucket = null;
+
+                if (lastOrderID > 0)
                 {
-                    while (reader.Read())
+                    bucket = new RelationPredicateBucket(OrderFields.OrderID > lastOrderID);
+                }
+
+                if (ConnectionSensitiveScope.IsActive || SqlSession.Current?.Configuration == null)
+                {
+                    return;
+                }
+
+                using (SqlAdapter adapter = SqlAdapter.Create(false))
+                {
+                    using (IDataReader reader = adapter.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, 0, true))
                     {
-                        newHeaders.Add(new OrderHeader(reader.GetInt64(0), reader.GetInt64(1), reader.GetBoolean(2)));
+                        while (reader.Read())
+                        {
+                            newHeaders.Add(new OrderHeader(reader.GetInt64(0), reader.GetInt64(1), reader.GetBoolean(2)));
+                        }
+                    }
+                }
+
+                lock (headerCache)
+                {
+                    foreach (OrderHeader header in newHeaders)
+                    {
+                        headerCache[header.OrderID] = header;
+
+                        lastOrderID = Math.Max(header.OrderID, lastOrderID);
                     }
                 }
             }
-
-            lock (headerCache)
+            finally
             {
-                foreach (OrderHeader header in newHeaders)
+                lock (asyncBusyLock)
                 {
-                    headerCache[header.OrderID] = header;
+                    busyToken.Dispose();
+                    busyToken = null;
 
-                    lastOrderID = Math.Max(header.OrderID, lastOrderID);
+                    headersReadyEvent.Set();
                 }
-            }
-
-            lock (asyncBusyLock)
-            {
-                busyToken.Dispose();
-                busyToken = null;
-
-                headersReadyEvent.Set();
             }
         }
     }
