@@ -107,9 +107,16 @@ namespace ShipWorks.Tests.Shared.Database
         /// </summary>
         public void Dispose()
         {
-            if (!string.IsNullOrWhiteSpace(InstancePath))
+            try
             {
-                Directory.Delete(InstancePath, true);
+                if (!string.IsNullOrWhiteSpace(InstancePath) && Directory.Exists(InstancePath))
+                {
+                    Directory.Delete(InstancePath, true);
+                }
+            }
+            catch (Exception)
+            {
+                // Don't fail if we can't delete the instance folder for some reason
             }
 
             UserSession.Reset();
