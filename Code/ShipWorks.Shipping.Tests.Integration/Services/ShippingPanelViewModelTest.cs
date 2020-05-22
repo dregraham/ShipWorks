@@ -31,7 +31,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
     {
         private readonly DataContext context;
         private readonly ShipmentEntity shipment;
-        private IDisposable subscription;
 
         public ShippingPanelViewModelTest(DatabaseFixture db)
         {
@@ -162,7 +161,6 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
         public void Dispose()
         {
-            subscription?.Dispose();
             context?.Dispose();
         }
     }
