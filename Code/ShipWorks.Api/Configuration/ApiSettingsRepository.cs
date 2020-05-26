@@ -33,16 +33,9 @@ namespace ShipWorks.Api.Configuration
         {
             get
             {
-                if (fullPath.IsNullOrWhiteSpace())
+                if (fullPath.IsNullOrWhiteSpace() && !string.IsNullOrWhiteSpace(DataPath.InstanceSettings))
                 {
-                    try
-                    {
-                        fullPath = Path.Combine(DataPath.InstanceSettings, "apiSettings.xml");
-                    }
-                    catch
-                    {
-                        // Just continue.  DataPath isn't initialized during integration tests and this was throwing.
-                    }
+                    fullPath = Path.Combine(DataPath.InstanceSettings, "apiSettings.xml");
                 }
 
                 return fullPath;

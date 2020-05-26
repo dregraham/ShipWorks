@@ -212,11 +212,12 @@ namespace ShipWorks.Tests.Shared.Database
 
                 if (ex.InnerException != null)
                 {
-                    msg.AppendLine(ex.InnerException.Message);
-                    msg.AppendLine(ex.InnerException.StackTrace);
+                    var baseException = ex.GetBaseException();
+                    msg.AppendLine(baseException.Message);
+                    msg.AppendLine(baseException.StackTrace);
                 }
 
-                Console.WriteLine(msg.ToString()); 
+                Console.WriteLine(msg.ToString());
 
                 throw;
             }
