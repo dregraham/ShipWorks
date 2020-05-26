@@ -6,7 +6,9 @@ using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Moq;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.OrderMotion;
@@ -17,8 +19,6 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
 {
@@ -43,7 +43,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.OrderMotion
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.OrderMotion) as OrderMotionOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<OrderMotionStoreEntity>(StoreTypeCode.OrderMotion)
                 .Set(x => x.OrderMotionEmailAccountID, 999999)

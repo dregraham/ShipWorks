@@ -11,14 +11,14 @@ using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Orders.Combine;
 using ShipWorks.Stores.Platforms.GenericModule;
+using ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
-using ShipWorks.Stores.Platforms.GenericModule.OnlineUpdating;
-using ShipWorks.Stores.Orders.Combine;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdating
@@ -57,7 +57,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.GenericModule.OnlineUpdat
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.GenericModule) as GenericModuleOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<GenericModuleStoreEntity>(StoreTypeCode.GenericModule)
                 .Set(x => x.ModuleUrl, "https://shipworks.3dcartstores.com")

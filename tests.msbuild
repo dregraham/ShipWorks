@@ -9,8 +9,10 @@
   <ItemGroup>
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\net46\*.tests.dll" />
+
     <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\*.tests.integration.dll" />
     <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\net46\*.tests.integration.dll" />
+
     <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\*.specs.dll" />
     <SpecsAssemblies Include="Code\*.Specs\bin\$(Configuration)\net46\*.specs.dll" />
   </ItemGroup>
@@ -31,7 +33,8 @@
       Xml="TestResults\integration.xml"
       IncludeTraits="$(IncludeTraits)"
       ParallelizeAssemblies="true"
-      ParallelizeTestCollections="true" />
+      ParallelizeTestCollections="true"
+      Reporter="verbose"/>
   </Target>
 
   <!-- We need the specs to run in parallel so that the correct synchronization context gets set.

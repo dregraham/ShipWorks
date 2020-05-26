@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Linq;
 using ShipWorks.Data.Connection;
 using ShipWorks.Startup;
 using ShipWorks.Tests.Shared.Database;
 using Xunit;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Data.Common;
 
 namespace ShipWorks.Core.Tests.Integration.Data
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class EntitySeedTest
+    public class EntitySeedTest : IDisposable
     {
         private readonly DataContext context;
 
@@ -34,7 +33,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
                 cmd.CommandText = $@"
                     SELECT
                         CONVERT(INT, IDENT_SEED(TABLE_SCHEMA + '.' + TABLE_NAME)) AS Seed,
-	                    TABLE_NAME AS [Table]
+                        TABLE_NAME AS [Table]
                     FROM INFORMATION_SCHEMA.TABLES
                     WHERE OBJECTPROPERTY(OBJECT_ID(TABLE_SCHEMA + '.' + TABLE_NAME), 'TableHasIdentity') = 1
                       AND IDENT_SEED(TABLE_SCHEMA + '.' + TABLE_NAME) != 1
@@ -55,5 +54,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
             Assert.False(dups.Any(), string.Join(", ", dups.Select(g => $"{String.Join(",", g)}")));
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

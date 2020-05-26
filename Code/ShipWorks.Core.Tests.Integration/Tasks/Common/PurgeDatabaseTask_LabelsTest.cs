@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.UI;
@@ -28,7 +27,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class PurgeDatabaseTask_LabelsTest
+    public class PurgeDatabaseTask_LabelsTest : IDisposable
     {
         private readonly DataContext context;
         private int RetentionPeriodInDays = 30;
@@ -287,5 +286,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                 return sqlAdapter.FetchAsDataTable(countOrderQuery);
             }
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

@@ -127,6 +127,14 @@ namespace ShipWorks.Data.Connection
         }
 
         /// <summary>
+        /// Force the filename to be refetched
+        /// </summary>
+        public void RefetchSettingsFile()
+        {
+            filename = null;
+        }
+
+        /// <summary>
         /// Clear the configuration
         /// </summary>
         public void Clear()

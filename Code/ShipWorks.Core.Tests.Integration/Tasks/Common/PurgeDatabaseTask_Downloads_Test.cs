@@ -20,7 +20,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class PurgeDatabaseTask_Downloads_Test
+    public class PurgeDatabaseTask_Downloads_Test : IDisposable
     {
         private const int RetentionPeriodInDays = 180;
         private readonly DataContext context;
@@ -135,5 +135,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 
             return download;
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

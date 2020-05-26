@@ -294,8 +294,20 @@ namespace ShipWorks.Actions.Tasks.Common
             };
 
             // Wire up the handlers that will take care of logging output and errors
-            process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
-            process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
+            process.OutputDataReceived += (s, e) =>
+            {
+                if (commandLogWriter.BaseStream != null)
+                {
+                    commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
+                }
+            };
+            process.ErrorDataReceived += (s, e) =>
+            {
+                if (commandLogWriter.BaseStream != null)
+                {
+                    commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
+                }
+            };
 
             process.Start();
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Data.HashFunction.CityHash;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -28,7 +27,7 @@ namespace ShipWorks.Core.Tests.Integration.Data
     {
         private readonly DataContext context;
         private readonly ILifetimeScope lifetimeScope;
-        private static ExcludeIncludeFieldsList excludeDataFields = 
+        private static ExcludeIncludeFieldsList excludeDataFields =
             new ExcludeIncludeFieldsList((IList) new IEntityFieldCore[] { ResourceFields.Data, ResourceFields.Checksum });
         private static Random random = new Random();
 
@@ -113,24 +112,6 @@ namespace ShipWorks.Core.Tests.Integration.Data
 
             Assert.Equal(dataResourceRef1.ResourceID, dataResourceRef2.ResourceID);
             Assert.Equal(dataResourceRef1.Filename, dataResourceRef2.Filename);
-        }
-
-        [Fact]
-        public void HashTimings_AllCityHash()
-        {
-            ISqlAdapter adapter = SqlAdapter.Default;
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                long consumerId = (i * 1000) + 31;
-                DataResourceManager.CreateFromBytes(RandomBytes(35000), consumerId, $"test{consumerId}", false);
-            }
-
-            sw.Stop();
-            Debug.WriteLine($"Time to run when all CityHash: {sw.ElapsedMilliseconds}");
         }
 
         private ResourceEntity CreateSha256Resource(string textToHash, long consumerID)

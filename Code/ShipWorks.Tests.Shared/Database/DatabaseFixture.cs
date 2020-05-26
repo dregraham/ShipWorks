@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Extras.Moq;
@@ -24,7 +25,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Startup;
-using ShipWorks.Stores;
 using ShipWorks.Tests.Shared.Database.IntegrationDB;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using ShipWorks.Users;
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Shared.Database
             };
 
             configuration.Freeze();
-           
+
             return new SqlSessionScope(new SqlSession(configuration));
         }
 
@@ -195,12 +195,32 @@ namespace ShipWorks.Tests.Shared.Database
         /// in an exception, the context may not be disposed properly in the test itself.</remarks>
         public DataContext CreateDataContext(Action<IContainer> initializeContainer, Action<AutoMock> configureMock)
         {
-            DataContext dataContext = null;
-            SqlAdapterRetry<Exception> retry = new SqlAdapterRetry<Exception>(5, -6, "");
+            try
+            {
+                DataContext dataContext = null;
+                SqlAdapterRetry<Exception> retry = new SqlAdapterRetry<Exception>(5, -6, "");
 
-            retry.ExecuteWithRetry(() => dataContext = CreateDataContextInternal(initializeContainer, configureMock));
+                retry.ExecuteWithRetry(() => dataContext = CreateDataContextInternal(initializeContainer, configureMock));
 
-            return dataContext;
+                return dataContext;
+            }
+            catch (Exception ex)
+            {
+                StringBuilder msg = new StringBuilder();
+                msg.AppendLine(ex.Message);
+                msg.AppendLine(ex.StackTrace);
+
+                if (ex.InnerException != null)
+                {
+                    var baseException = ex.GetBaseException();
+                    msg.AppendLine(baseException.Message);
+                    msg.AppendLine(baseException.StackTrace);
+                }
+
+                Console.WriteLine(msg.ToString());
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -265,6 +285,7 @@ namespace ShipWorks.Tests.Shared.Database
             try
             {
                 DataPath.Initialize();
+                SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
                 SqlSessionScope.ScopedSqlSession.Configuration.Save();
             }
             catch (IOException)
@@ -272,7 +293,7 @@ namespace ShipWorks.Tests.Shared.Database
                 // Just ignore if we get an IOException as we don't care about the running lock.
             }
 
-            return new DataContext(mock, context.Item1, context.Item2, container);
+            return new DataContext(mock, context.Item1, context.Item2, DataPath.InstanceRoot, container);
         }
 
         /// <summary>
@@ -326,13 +347,14 @@ DROP PROCEDURE [dbo].[GetDatabaseGuid]";
 
             // This initializes all the other dependencies
             UserSession.InitializeForCurrentSession(ExecutionModeScope.Current);
-            
+
             ShipWorksSession.Initialize(Guid.NewGuid());
 
             DataPath.Initialize();
+            SqlSessionScope.ScopedSqlSession.Configuration.RefetchSettingsFile();
             SqlSessionScope.ScopedSqlSession.Configuration.Save();
 
-            return new DataContext(mock, context.Item1, context.Item2);
+            return new DataContext(mock, context.Item1, context.Item2, DataPath.InstanceRoot);
         }
 
         /// <summary>

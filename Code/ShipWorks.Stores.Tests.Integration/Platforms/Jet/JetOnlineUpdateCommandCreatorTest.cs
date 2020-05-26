@@ -10,14 +10,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Jet;
-using ShipWorks.Stores.Platforms.Jet.OnlineUpdating;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using System.Windows.Forms;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.Jet
 {
@@ -42,7 +40,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Jet
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Jet) as JetUpdateOnlineCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<JetStoreEntity>(StoreTypeCode.Jet)
                 .Set(x => x.ApiUser, "apiuser")

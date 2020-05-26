@@ -39,7 +39,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.SparkPay
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.SparkPay) as SparkPayOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<SparkPayStoreEntity>(StoreTypeCode.SparkPay).Save();
 

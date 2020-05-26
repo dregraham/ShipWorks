@@ -1,4 +1,10 @@
-﻿CREATE FUNCTION [dbo].[MonthToDays365] (@month int)
+﻿IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'MonthToDays365')
+	BEGIN
+		DROP FUNCTION [dbo].[MonthToDays365]
+	END
+GO
+
+CREATE FUNCTION [dbo].[MonthToDays365] (@month int)
 RETURNS int
 --WITH SCHEMABINDING
 AS
@@ -23,6 +29,12 @@ RETURN
 		ELSE 0
 	END
 END
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'MonthToDays366')
+	BEGIN
+		DROP FUNCTION [dbo].[MonthToDays366]
+	END
 GO
 
 CREATE FUNCTION [dbo].[MonthToDays366] (@month int)
@@ -52,6 +64,12 @@ RETURN
 END
 GO
 
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'MonthToDays')
+	BEGIN
+		DROP FUNCTION [dbo].[MonthToDays]
+	END
+GO
+
 CREATE FUNCTION [dbo].[MonthToDays] (@year int, @month int)
 RETURNS int
 --WITH SCHEMABINDING
@@ -68,6 +86,12 @@ RETURN
 END
 GO
 
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'TimeToTicks')
+	BEGIN
+		DROP FUNCTION [dbo].[TimeToTicks]
+	END
+GO
+
 CREATE FUNCTION [dbo].[TimeToTicks] (@hour int, @minute int, @second int)
 RETURNS bigint
 --WITH SCHEMABINDING
@@ -78,6 +102,12 @@ RETURN (((@hour * 3600) + CONVERT(bigint, @minute) * 60) + CONVERT(bigint, @seco
 END
 GO
 
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'DateToTicks')
+	BEGIN
+		DROP FUNCTION [dbo].[DateToTicks]
+	END
+GO
+
 CREATE FUNCTION [dbo].[DateToTicks] (@year int, @month int, @day int)
 RETURNS bigint
 --WITH SCHEMABINDING
@@ -86,6 +116,12 @@ AS
 BEGIN
 RETURN CONVERT(bigint, (((((((@year - 1) * 365) + ((@year - 1) / 4)) - ((@year - 1) / 100)) + ((@year - 1) / 400)) + dbo.MonthToDays(@year, @month - 1)) + @day) - 1) * 864000000000;
 END
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'GetTicksFromDateTime')
+	BEGIN
+		DROP FUNCTION [dbo].[GetTicksFromDateTime]
+	END
 GO
 
 CREATE FUNCTION [dbo].[GetTicksFromDateTime] (@d datetime)
@@ -100,6 +136,12 @@ RETURN
 	dbo.TimeToTicks(DATEPART(hh, @d), DATEPART(mi, @d), DATEPART(ss, @d)) +
 	(CONVERT(bigint, DATEPART(ms, @d)) * CONVERT(bigint,10000));
 END
+GO
+
+IF EXISTS (SELECT 1 FROM sys.objects WHERE type = 'FN' AND name = 'GetLocalTimezoneName')
+	BEGIN
+		DROP FUNCTION [dbo].[GetLocalTimezoneName]
+	END
 GO
 
 CREATE FUNCTION dbo.GetLocalTimezoneName()

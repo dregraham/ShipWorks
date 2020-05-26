@@ -23,7 +23,7 @@ var treatWarningsAsErrors = "true";
 var buildDir = "";
 var instanceID = "";
 var testCategory = "";
-var verbosity = Verbosity.Minimal;
+var verbosity = Verbosity.Quiet;
 
 if (target.Contains(":"))
 {
@@ -353,6 +353,7 @@ Task("TestIntegration")
 			testCategory = "ContinuousIntegration";
 		}
 
+		verbosity = Verbosity.Verbose;
 		var settings = CreateBuildSettings(configuration)
 					   .WithTarget("Integration");
 		MSBuild("./tests.msbuild", settings);

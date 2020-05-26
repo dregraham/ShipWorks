@@ -557,7 +557,7 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
 
             FilterTestingHelper.CalculateInitialCounts();
 
-            IEnumerable<ProcessShipmentResult> results = await ProcessShipment();
+            IEnumerable<ProcessShipmentResult> results = await ProcessShipment().ConfigureAwait(false);
 
             Assert.True(results.All(r => r.IsSuccessful), $"ProcessShipment failed with error: {results.First().Error?.Message}");
 

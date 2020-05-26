@@ -42,7 +42,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Sears
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Sears) as SearsOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<SearsStoreEntity>(StoreTypeCode.Sears).Save();
 

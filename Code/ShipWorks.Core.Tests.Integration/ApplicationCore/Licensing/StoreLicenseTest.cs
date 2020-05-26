@@ -16,7 +16,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class StoreLicenseTest
+    public class StoreLicenseTest : IDisposable
     {
         private readonly DataContext context;
         private StoreLicense testObject;
@@ -79,5 +79,7 @@ namespace ShipWorks.Core.Tests.Integration.ApplicationCore.Licensing
 
             context.Mock.Mock<IMessenger>().Verify(m => m.Send(It.IsAny<EnabledCarriersChangedMessage>(), It.IsAny<string>()), Times.Never);
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

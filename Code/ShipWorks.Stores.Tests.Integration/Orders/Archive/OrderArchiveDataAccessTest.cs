@@ -20,7 +20,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
     [Collection("Database collection")]
     [Trait("Category", "SmokeTest")]
     [Trait("Category", "ContinuousIntegration")]
-    public class OrderArchiveDataAccessTest
+    public class OrderArchiveDataAccessTest : IDisposable
     {
         private readonly DataContext context;
         private Mock<IAsyncMessageHelper> asyncMessageHelper;
@@ -302,5 +302,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Archive
                 "YahooProduct",
                 "YahooStore",
             };
+
+        public void Dispose() => context.Dispose();
     }
 }

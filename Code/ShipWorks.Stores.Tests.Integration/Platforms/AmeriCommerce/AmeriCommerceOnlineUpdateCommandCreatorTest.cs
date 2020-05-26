@@ -41,7 +41,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.AmeriCommerce
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.AmeriCommerce) as AmeriCommerceOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             webClient.Setup(x => x.UpdateOrderStatus(AnyLong, AnyInt)).Returns(Result.FromSuccess());
             webClient.Setup(x => x.UploadShipmentDetails(AnyLong, It.IsAny<ShipmentEntity>())).Returns(Result.FromSuccess());

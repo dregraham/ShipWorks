@@ -1,14 +1,9 @@
-﻿using Interapptive.Shared.Enums;
+﻿using System;
+using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
 using ShipWorks.Stores.Orders.Combine;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Stores.Platforms.GeekSeller;
-using ShipWorks.Stores.Platforms.GenericModule;
-using ShipWorks.Stores.Platforms.OpenSky;
-using ShipWorks.Stores.Platforms.ZenCart;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -17,7 +12,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class CombineOrderGatewayTest
+    public class CombineOrderGatewayTest : IDisposable
     {
         private readonly DataContext context;
 
@@ -68,7 +63,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             Assert.False(testObject.CanCombine(store, new[] { context.Order.OrderID }));
         }
-        
+
         [Theory]
         [InlineData(AmazonIsPrime.Yes, false, StoreTypeCode.GenericModule)]
         [InlineData(AmazonIsPrime.Yes, false, StoreTypeCode.GeekSeller)]
@@ -91,7 +86,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             Assert.Equal(expected, result);
         }
-        
+
         [Theory]
         [InlineData(false, true, StoreTypeCode.GenericModule)]
         [InlineData(false, true, StoreTypeCode.GeekSeller)]
@@ -231,5 +226,7 @@ namespace ShipWorks.Stores.Tests.Integration.Content
 
             Assert.Equal(expected, result);
         }
+
+        public void Dispose() => context.Dispose();
     }
 }
