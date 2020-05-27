@@ -14,7 +14,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Reflection;
 
 namespace DataVirtualization
@@ -125,7 +124,6 @@ namespace DataVirtualization
             if (!IsInUse)
             {
                 Data = null;
-                Trace.WriteLine("Cleaned up item " + EntityID);
             }
         }
 
