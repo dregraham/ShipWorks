@@ -15,7 +15,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Interapptive.Shared.Collections;
 
@@ -361,8 +360,6 @@ namespace DataVirtualization
 
                 var page = new DataPage<T>(pageIndex * pageSize, pageLength, ItemsProvider);
                 pages[pageIndex] = page;
-
-                Trace.WriteLine("Added page: " + pageIndex);
             }
             else
             {
