@@ -5,6 +5,7 @@ using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.UI;
 using Moq;
+using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Startup;
@@ -17,8 +18,6 @@ using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
-using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
 {
@@ -49,9 +48,11 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
                 webClient.Setup(wc => wc.GetShipment(AnyString)).Returns(CreateShipment("9"));
                 mock.Override<IMessageHelper>();
             });
-            
+
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.LemonStand) as LemonStandOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<LemonStandStoreEntity>(StoreTypeCode.LemonStand)
                 .Set(x => x.Token, "999999")
@@ -132,7 +133,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { normalOrder.OrderID, combinedOrder.OrderID });
 
             await commandCreator.OnUploadDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadShipmentDetails(AnyString, AnyString), Times.Exactly(3));
             webClient.Verify(x => x.UploadShipmentDetails("track-123", "10000"));
             webClient.Verify(x => x.UploadShipmentDetails("track-456", "50000"));
@@ -161,7 +162,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.LemonStand
             webClient.Verify(x => x.UploadShipmentDetails("track-456", "60000"), Times.Once);
             webClient.Verify(x => x.UploadShipmentDetails("track-789", "70000"), Times.Once);
         }
-        
+
         [Fact]
         public async Task UpdateOrderStatus_MakesOneWebRequest_WhenOrderIsNotCombined()
         {

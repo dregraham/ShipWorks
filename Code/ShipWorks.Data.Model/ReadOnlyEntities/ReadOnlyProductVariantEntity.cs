@@ -55,8 +55,9 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             CountryOfOrigin = source.CountryOfOrigin;
             FNSku = source.FNSku;
             EAN = source.EAN;
-            FNSku_ = source.FNSku_;
-            EAN_ = source.EAN_;
+            HubProductId = source.HubProductId;
+            HubVersion = source.HubVersion;
+            HubSequence = source.HubSequence;
             
             
             Product = (IProductEntity) source.Product?.AsReadOnly(objectMap);
@@ -186,18 +187,24 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public System.String EAN { get; }
-        /// <summary> The FNSku_ property of the Entity ProductVariant<br/><br/>
+        /// <summary> The HubProductId property of the Entity ProductVariant<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariant"."FNSku"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubProductId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String FNSku_ { get; }
-        /// <summary> The EAN_ property of the Entity ProductVariant<br/><br/>
+        public Nullable<System.Guid> HubProductId { get; }
+        /// <summary> The HubVersion property of the Entity ProductVariant<br/><br/>
         /// </summary>
-        /// <remarks>Mapped on table field: "ProductVariant"."EAN"<br/>
-        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        public System.String EAN_ { get; }
+        public Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubSequence property of the Entity ProductVariant<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "ProductVariant"."HubSequence"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> HubSequence { get; }
         
         
         public IProductEntity Product { get; }

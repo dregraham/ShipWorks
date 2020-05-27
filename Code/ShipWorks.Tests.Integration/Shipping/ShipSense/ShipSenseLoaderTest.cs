@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using Interapptive.Shared.Threading;
 using Moq;
 using ShipWorks.Shipping.Settings;
@@ -12,7 +13,7 @@ using Xunit;
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 {
     [Collection("Database collection")]
-    public class ShipSenseLoaderTest
+    public class ShipSenseLoaderTest : IDisposable
     {
         private ShipSenseLoader testObject;
         private readonly DataContext context;
@@ -41,5 +42,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 
             Assert.True(stopWatch.ElapsedMilliseconds < 5000);
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

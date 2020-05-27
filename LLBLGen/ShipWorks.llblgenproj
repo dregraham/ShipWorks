@@ -2425,11 +2425,12 @@
           <Field Name="CreatedDate" Type="datetime" FieldIndex="2" />
           <Field Name="DeclaredValue" Type="decimal" IsOptional="true" Precision="19" Scale="4" FieldIndex="15" />
           <Field Name="EAN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="18" />
-          <Field Name="EAN_" Type="string" IsOptional="true" MaxLength="30" FieldIndex="20" />
           <Field Name="FNSku" Type="string" IsOptional="true" MaxLength="300" FieldIndex="17" />
-          <Field Name="FNSku_" Type="string" IsOptional="true" MaxLength="300" FieldIndex="19" />
           <Field Name="HarmonizedCode" Type="string" IsOptional="true" MaxLength="20" FieldIndex="14" />
           <Field Name="Height" Type="decimal" IsOptional="true" Precision="10" Scale="2" FieldIndex="11" />
+          <Field Name="HubProductId" Type="guid" IsOptional="true" FieldIndex="19" />
+          <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="21" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="20" />
           <Field Name="ImageUrl" Type="string" IsOptional="true" MaxLength="500" FieldIndex="12" />
           <Field Name="IsActive" Type="bool" FieldIndex="4" />
           <Field Name="ISBN" Type="string" IsOptional="true" MaxLength="30" FieldIndex="7" />
@@ -2860,6 +2861,7 @@
           <Field Name="ShipSenseProcessedShipmentID" Type="long" FieldIndex="45" />
           <Field Name="ShipSenseUniquenessXml" Type="string" MaxLength="2147483647" FieldIndex="44" />
           <Field Name="UpsAccessKey" Type="string" IsOptional="true" MaxLength="50" FieldIndex="16" />
+          <Field Name="UpsAllowNoDims" Type="bool" FieldIndex="56" />
           <Field Name="UpsInsurancePennyOne" Type="bool" FieldIndex="18" />
           <Field Name="UpsInsuranceProvider" Type="int" FieldIndex="17" />
           <Field Name="UpsMailInnovationsEnabled" Type="bool" FieldIndex="40" />
@@ -4642,7 +4644,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-03-31T14:17:53.915753Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-05-13T18:21:53.1243274Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -8041,6 +8043,9 @@
                     <Field Name="CountryOfOrigin" Ordinal="17" IsOptional="true" DbType="12" Length="50" />
                     <Field Name="FNSku" Ordinal="18" IsOptional="true" DbType="12" Length="300" />
                     <Field Name="EAN" Ordinal="19" IsOptional="true" DbType="12" Length="30" />
+                    <Field Name="HubProductId" Ordinal="20" IsOptional="true" DbType="25" />
+                    <Field Name="HubVersion" Ordinal="21" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubSequence" Ordinal="22" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="ProductVariantAlias">
@@ -8712,6 +8717,7 @@
                     <Field Name="ShipmentDateCutoffJson" Ordinal="54" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="1000" />
                     <Field Name="ShipEngineApiKey" Ordinal="55" DbType="12" Length="50" />
                     <Field Name="OrderLookupFieldLayout" Ordinal="56" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="UpsAllowNoDims" Ordinal="57" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                   </Fields>
                 </Table>
                 <Table Name="ShipSenseKnowledgeBase">
@@ -9414,7 +9420,7 @@
                     <Field Name="RequireVerificationToShip" Ordinal="22" DbType="2" />
                     <Field Name="MinimizeRibbon" Ordinal="23" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
                     <Field Name="ShowQAToolbarBelowRibbon" Ordinal="24" HasDefaultValue="true" DefaultValue="(0)" DbType="2" />
-                    <Field Name="SingleScanConfirmationMode" Ordinal="25" DbType="8" Precision="10" />
+                    <Field Name="SingleScanConfirmationMode" Ordinal="25" HasDefaultValue="true" DefaultValue="(0)" DbType="8" Precision="10" />
                   </Fields>
                 </Table>
                 <Table Name="UspsAccount">
@@ -13373,11 +13379,12 @@
             <FieldMapping FieldName="CreatedDate" TargetFieldName="CreatedDate" />
             <FieldMapping FieldName="DeclaredValue" TargetFieldName="DeclaredValue" />
             <FieldMapping FieldName="EAN" TargetFieldName="EAN" />
-            <FieldMapping FieldName="EAN_" TargetFieldName="EAN" />
             <FieldMapping FieldName="FNSku" TargetFieldName="FNSku" />
-            <FieldMapping FieldName="FNSku_" TargetFieldName="FNSku" />
             <FieldMapping FieldName="HarmonizedCode" TargetFieldName="HarmonizedCode" />
             <FieldMapping FieldName="Height" TargetFieldName="Height" />
+            <FieldMapping FieldName="HubProductId" TargetFieldName="HubProductId" />
+            <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="ImageUrl" TargetFieldName="ImageUrl" />
             <FieldMapping FieldName="IsActive" TargetFieldName="IsActive" />
             <FieldMapping FieldName="ISBN" TargetFieldName="ISBN" />
@@ -13809,6 +13816,7 @@
             <FieldMapping FieldName="ShipSenseProcessedShipmentID" TargetFieldName="ShipSenseProcessedShipmentID" />
             <FieldMapping FieldName="ShipSenseUniquenessXml" TargetFieldName="ShipSenseUniquenessXml" />
             <FieldMapping FieldName="UpsAccessKey" TargetFieldName="UpsAccessKey" />
+            <FieldMapping FieldName="UpsAllowNoDims" TargetFieldName="UpsAllowNoDims" />
             <FieldMapping FieldName="UpsInsurancePennyOne" TargetFieldName="UpsInsurancePennyOne" />
             <FieldMapping FieldName="UpsInsuranceProvider" TargetFieldName="UpsInsuranceProvider" />
             <FieldMapping FieldName="UpsMailInnovationsEnabled" TargetFieldName="UpsMailInnovationsEnabled" />

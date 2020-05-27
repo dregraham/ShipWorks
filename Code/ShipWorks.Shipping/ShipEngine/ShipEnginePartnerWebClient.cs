@@ -1,13 +1,17 @@
-﻿using Interapptive.Shared.ComponentRegistration;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Interapptive.Shared;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Net;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ShipWorks.ApplicationCore.Logging;
-using System;
-using System.Net;
-using System.Threading.Tasks;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
+using ShipWorks.Shipping.ShipEngine.DTOs;
 
 namespace ShipWorks.Shipping.ShipEngine
 {
@@ -23,19 +27,26 @@ namespace ShipWorks.Shipping.ShipEngine
         private readonly IHttpRequestSubmitterFactory requestFactory;
         private readonly WebClientEnvironmentFactory webClientEnvironmentFactory;
         private readonly Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory;
+        private readonly ITangoWebClient tangoWebClient;
+        private readonly IDatabaseIdentifier databaseIdentifier;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public ShipEnginePartnerWebClient(IHttpRequestSubmitterFactory requestFactory,
                                           WebClientEnvironmentFactory webClientEnvironmentFactory,
                                           Func<ApiLogSource, string, IApiLogEntry> apiLogEntryFactory,
+                                          ITangoWebClient tangoWebClient,
+                                          IDatabaseIdentifier databaseIdentifier,
                                           Func<Type, ILog> logFactory)
         {
             this.requestFactory = requestFactory;
             this.webClientEnvironmentFactory = webClientEnvironmentFactory;
             this.apiLogEntryFactory = apiLogEntryFactory;
+            this.tangoWebClient = tangoWebClient;
+            this.databaseIdentifier = databaseIdentifier;
             log = logFactory(typeof(ShipEnginePartnerWebClient));
         }
 
@@ -44,7 +55,17 @@ namespace ShipWorks.Shipping.ShipEngine
         /// </summary>
         public async Task<string> CreateNewAccount()
         {
-            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(string.Empty, "application/json");
+            string customerId = tangoWebClient.GetTangoCustomerId();
+            var createShipEngineAccount = new CreateShipEngineAccount();
+
+            if (!string.IsNullOrEmpty(customerId))
+            {
+                createShipEngineAccount.ExternalAccountID = $"{customerId}-{databaseIdentifier.Get()}";
+            }
+
+            IHttpRequestSubmitter request = requestFactory.GetHttpTextPostRequestSubmitter(
+                JsonConvert.SerializeObject(createShipEngineAccount,
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore }), "application/json");
             request.Headers.Add("SW-originalRequestUrl", CreateAccountUrl);
             request.Uri = new Uri(webClientEnvironmentFactory.SelectedEnvironment.ProxyUrl + ProxyEndpoint);
 

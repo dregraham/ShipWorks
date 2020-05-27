@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Extensions
 {
@@ -245,5 +246,11 @@ namespace Interapptive.Shared.Extensions
             task.ContinueWith(t => t.Status == TaskStatus.Faulted ?
                 fallback(t.Exception) :
                 t.Result);
+
+        /// <summary>
+        /// Transforms a task to a Result
+        /// </summary>
+        public static Task<Result> ToResult<T>(this Task<T> task) =>
+            task.Map(x => Result.FromSuccess(), ex => Result.FromError(ex));
     }
 }

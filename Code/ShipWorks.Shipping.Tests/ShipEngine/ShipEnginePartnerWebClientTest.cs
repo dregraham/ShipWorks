@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task CreateNewAccount_ReturnsAccountID_FromResponse()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task CreateNewAccount_OriginalRequestUrlIsAddedToTheRequest()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task CreateNewAccount_ThrowsShipEngineException_WhenResponseDoesNotReturnJson()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())
@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
         public async Task CreateNewAccount_ThrowsShipEngineException_WhenWebExceptionEncountered()
         {
             var request = mock.FromFactory<IHttpRequestSubmitterFactory>()
-                .Mock(f => f.GetHttpTextPostRequestSubmitter(string.Empty, "application/json"));
+                .Mock(f => f.GetHttpTextPostRequestSubmitter(It.IsAny<string>(), "application/json"));
 
             var responseReader = mock.Mock<IHttpResponseReader>();
             responseReader.Setup(r => r.ReadResult())

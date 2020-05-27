@@ -41,7 +41,9 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.Shopify
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.Shopify) as ShopifyOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             webClient.Setup(x => x.GetShop())
                 .Returns(new ShopifyShopResponse { Shop = new ShopifyShop { PrimaryLocationID = 6 } });

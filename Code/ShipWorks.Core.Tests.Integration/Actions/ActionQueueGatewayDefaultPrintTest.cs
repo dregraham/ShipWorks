@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Moq;
@@ -20,7 +21,7 @@ namespace ShipWorks.Core.Tests.Integration.Actions
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class ActionQueueGatewayDefaultPrintTest
+    public class ActionQueueGatewayDefaultPrintTest : IDisposable
     {
         private readonly DataContext context;
         private Mock<IConfigurationEntity> config = new Mock<IConfigurationEntity>();
@@ -170,5 +171,6 @@ namespace ShipWorks.Core.Tests.Integration.Actions
             return entity.ActionQueueID;
         }
 
+        public void Dispose() => context.Dispose();
     }
 }

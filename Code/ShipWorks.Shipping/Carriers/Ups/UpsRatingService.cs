@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Ups;
@@ -28,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private readonly UpsShipmentType shipmentType;
         private readonly IUpsRateClientFactory rateClientFactory;
         private readonly IUpsShipEngineRatingService shipEngineRatingService;
+        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsRatingService"/> class.
@@ -38,13 +41,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
             UpsApiTransitTimeClient transitTimeClient,
             UpsShipmentType shipmentType,
             IUpsRateClientFactory rateClientFactory,
-            IUpsShipEngineRatingService shipEngineRatingService)
+            IUpsShipEngineRatingService shipEngineRatingService,
+            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository)
         {
             this.accountRepository = accountRepository;
             this.transitTimeClient = transitTimeClient;
             this.shipmentType = shipmentType;
             this.rateClientFactory = rateClientFactory;
             this.shipEngineRatingService = shipEngineRatingService;
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
@@ -257,20 +262,23 @@ namespace ShipWorks.Shipping.Carriers.UPS
             string exceptionMessage = string.Empty;
             int packageIndex = 1;
 
-            foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
+            if (!settingsRepository[ShipmentTypeCode.UpsOnLineTools].GetShippingSettings().UpsAllowNoDims)
             {
-                if (upsPackage.PackagingType == (int) UpsPackagingType.Custom && !DimensionsAreValid(upsPackage))
+                foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
                 {
-                    exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
+                    if (upsPackage.PackagingType == (int) UpsPackagingType.Custom && !DimensionsAreValid(upsPackage))
+                    {
+                        exceptionMessage += $"Package {packageIndex} has invalid dimensions.{Environment.NewLine}";
+                    }
+
+                    packageIndex++;
                 }
 
-                packageIndex++;
-            }
-
-            if (exceptionMessage.Length > 0)
-            {
-                exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
-                throw new InvalidPackageDimensionsException(exceptionMessage);
+                if (exceptionMessage.Length > 0)
+                {
+                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
+                    throw new InvalidPackageDimensionsException(exceptionMessage);
+                }
             }
         }
 

@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class RunCommandTask_WithInput_Test
+    public class RunCommandTask_WithInput_Test : IDisposable
     {
         private readonly ActionStepContext stepContext;
         private readonly string currentDirectory;
@@ -175,5 +175,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
                 .Take(count);
 
         private static string LatestLogFile() => LatestLogFiles(1).Single();
+
+        public void Dispose() => context.Dispose();
     }
 }

@@ -26,7 +26,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class PurgeDatabaseTask_OrdersTest
+    public class PurgeDatabaseTask_OrdersTest : IDisposable
     {
         private readonly DataContext context;
         private const int RetentionPeriodInDays = 30;
@@ -250,5 +250,7 @@ namespace ShipWorks.Core.Tests.Integration.Tasks.Common
                 return sqlAdapter.FetchAsDataTable(countOrderQuery);
             }
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

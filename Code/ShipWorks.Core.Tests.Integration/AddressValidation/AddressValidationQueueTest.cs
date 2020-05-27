@@ -48,12 +48,12 @@ namespace ShipWorks.Core.Tests.Integration.AddressValidation
                 .Set(x => testAddress.CopyTo(x.ShipPerson))
                 .Set(x => x.ShipAddressValidationStatus = (int) AddressValidationStatusType.Pending)
                 .Save();
-            
+
             Modify.Store(context.Store)
                 .Set(x => x.DomesticAddressValidationSetting = AddressValidationStoreSettingType.ValidateAndNotify)
                 .Set(x => x.Enabled = true)
                 .Save();
-                        
+
             await AddressValidationQueue.ValidatePendingOrdersAndShipments();
 
             using (SqlAdapter sqlAdapter = SqlAdapter.Create(false))
@@ -100,8 +100,6 @@ namespace ShipWorks.Core.Tests.Integration.AddressValidation
             }
         }
 
-        public void Dispose()
-        {
-        }
+        public void Dispose() => context.Dispose();
     }
 }

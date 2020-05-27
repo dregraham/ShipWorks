@@ -2780,8 +2780,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ProductVariantEntity", "CountryOfOrigin", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.CountryOfOrigin, 50, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "FNSku", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku, 300, 0, 0);
 			this.AddElementFieldInfo("ProductVariantEntity", "EAN", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN, 30, 0, 0);
-			this.AddElementFieldInfo("ProductVariantEntity", "FNSku_", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.FNSku_, 300, 0, 0);
-			this.AddElementFieldInfo("ProductVariantEntity", "EAN_", typeof(System.String), false, false, false, true,  (int)ProductVariantFieldIndex.EAN_, 30, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "HubProductId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)ProductVariantFieldIndex.HubProductId, 0, 0, 0);
+			this.AddElementFieldInfo("ProductVariantEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)ProductVariantFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("ProductVariantEntity", "HubSequence", typeof(Nullable<System.Int64>), false, false, false, true,  (int)ProductVariantFieldIndex.HubSequence, 0, 0, 19);
 		}
 		/// <summary>Inits ProductVariantAliasEntity's FieldInfo objects</summary>
 		private void InitProductVariantAliasEntityInfos()
@@ -3239,6 +3240,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipEngineApiKey", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipEngineApiKey, 50, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "ShipmentDateCutoffJson", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.ShipmentDateCutoffJson, 1000, 0, 0);
 			this.AddElementFieldInfo("ShippingSettingsEntity", "OrderLookupFieldLayout", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.OrderLookupFieldLayout, 2147483647, 0, 0);
+			this.AddElementFieldInfo("ShippingSettingsEntity", "UpsAllowNoDims", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsAllowNoDims, 0, 0, 0);
 		}
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's FieldInfo objects</summary>
 		private void InitShipSenseKnowledgebaseEntityInfos()

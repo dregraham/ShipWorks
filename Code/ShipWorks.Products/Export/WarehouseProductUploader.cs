@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.Custom;
+using ShipWorks.Products.Warehouse;
 
 namespace ShipWorks.Products.Export
 {
@@ -19,19 +19,16 @@ namespace ShipWorks.Products.Export
         private const int batchSize = 100;
 
         private readonly IProductCatalog productCatalog;
-        private readonly IUploadSkusToWarehouse uploadRequest;
-        private readonly IDatabaseIdentifier databaseIdentifier;
+        private readonly IWarehouseProductClient warehouseProductClient;
         private readonly ISqlAdapterFactory sqlAdapterFactory;
 
         public WarehouseProductUploader(
             IProductCatalog productCatalog,
-            IUploadSkusToWarehouse uploadRequest,
-            ISqlAdapterFactory sqlAdapterFactory,
-            IDatabaseIdentifier databaseIdentifier)
+            IWarehouseProductClient warehouseProductClient,
+            ISqlAdapterFactory sqlAdapterFactory)
         {
             this.sqlAdapterFactory = sqlAdapterFactory;
-            this.databaseIdentifier = databaseIdentifier;
-            this.uploadRequest = uploadRequest;
+            this.warehouseProductClient = warehouseProductClient;
             this.productCatalog = productCatalog;
         }
 
@@ -40,30 +37,43 @@ namespace ShipWorks.Products.Export
         /// </summary>
         public async Task Upload(ISingleItemProgressDialog progressItem)
         {
-            string databaseId = databaseIdentifier.Get().ToString();
             var progressUpdater = await CreateProgressUpdater(progressItem).ConfigureAwait(false);
 
-            GenericResult<bool> shouldContinue;
-            do
-            {
-                using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
-                {
-                    var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize).ConfigureAwait(false);
-                    var results = await uploadRequest.Upload(new SkusToUploadDto(skus, databaseId)).ConfigureAwait(false);
-
-                    if (results.Success)
-                    {
-                        await productCatalog.ResetNeedsWarehouseUploadFlag(sqlAdapter, skus).ConfigureAwait(false);
-                        progressUpdater.Update(batchSize);
-                    }
-
-                    shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
-                }
-            } while (shouldContinue.Match(x => x, ex => false));
+            var shouldContinue = await PerformUpload(progressItem, progressUpdater, false)
+                    .Bind(_ => PerformUpload(progressItem, progressUpdater, true))
+                    .ConfigureAwait(false);
 
             shouldContinue
                 .Do(x => progressItem.ProgressItem.Completed())
                 .OnFailure(progressItem.ProgressItem.Failed);
+        }
+
+        /// <summary>
+        /// Perform the upload to the Hub
+        /// </summary>
+        private async Task<GenericResult<bool>> PerformUpload(ISingleItemProgressDialog progressItem, IProgressUpdater progressUpdater, bool uploadBundles)
+        {
+            GenericResult<bool> shouldContinue;
+            using (ISqlAdapter sqlAdapter = sqlAdapterFactory.Create())
+            {
+                do
+                {
+                    var skus = await productCatalog.FetchProductVariantsForUploadToWarehouse(sqlAdapter, batchSize, uploadBundles).ConfigureAwait(false);
+                    var results = await warehouseProductClient.Upload(skus)
+                        .Do(x => x.ApplyTo(skus))
+                        .ToResult()
+                        .ConfigureAwait(false);
+
+                    if (results.Success)
+                    {
+                        await sqlAdapter.SaveEntityCollectionAsync(skus.ToEntityCollection(), false, true).ConfigureAwait(false);
+                        progressUpdater.Update(batchSize);
+                    }
+
+                    shouldContinue = results.Map(() => skus.Any() && !progressItem.Provider.CancelRequested);
+                } while (shouldContinue.Match(x => x, ex => false));
+            }
+            return shouldContinue;
         }
 
         /// <summary>

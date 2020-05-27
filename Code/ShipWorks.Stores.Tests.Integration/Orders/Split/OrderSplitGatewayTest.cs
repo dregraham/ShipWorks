@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
@@ -13,7 +14,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class OrderSplitGatewayTest
+    public class OrderSplitGatewayTest : IDisposable
     {
         private readonly DataContext context;
         private readonly ThreeDCartStoreEntity threeDCartStore;
@@ -188,5 +189,7 @@ namespace ShipWorks.Stores.Tests.Integration.Orders.Split
 
             return order;
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

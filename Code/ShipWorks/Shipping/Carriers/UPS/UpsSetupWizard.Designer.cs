@@ -35,13 +35,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpsSetupWizard));
             this.wizardPageWelcomeOlt = new ShipWorks.UI.Wizard.WizardPage();
             this.helpLink1 = new ShipWorks.ApplicationCore.Interaction.HelpLink();
-            this.labelWelcome2 = new System.Windows.Forms.Label();
             this.accountNumberPanel = new System.Windows.Forms.Panel();
             this.account = new System.Windows.Forms.TextBox();
             this.labelUpsAccount = new System.Windows.Forms.Label();
-            this.panelNewOrExisting = new System.Windows.Forms.Panel();
-            this.existingAccount = new System.Windows.Forms.RadioButton();
-            this.newAccount = new System.Windows.Forms.RadioButton();
             this.labelWelcome1 = new System.Windows.Forms.Label();
             this.wizardPageLicense = new ShipWorks.UI.Wizard.WizardPage();
             this.printAgreement = new System.Windows.Forms.Button();
@@ -95,7 +91,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.topPanel.SuspendLayout();
             this.wizardPageWelcomeOlt.SuspendLayout();
             this.accountNumberPanel.SuspendLayout();
-            this.panelNewOrExisting.SuspendLayout();
             this.wizardPageLicense.SuspendLayout();
             this.wizardPageAccount.SuspendLayout();
             this.wizardPageFinishOlt.SuspendLayout();
@@ -150,11 +145,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // 
             // wizardPageWelcomeOlt
             // 
-            this.wizardPageWelcomeOlt.Controls.Add(this.helpLink1);
-            this.wizardPageWelcomeOlt.Controls.Add(this.labelWelcome2);
-            this.wizardPageWelcomeOlt.Controls.Add(this.accountNumberPanel);
-            this.wizardPageWelcomeOlt.Controls.Add(this.panelNewOrExisting);
             this.wizardPageWelcomeOlt.Controls.Add(this.labelWelcome1);
+            this.wizardPageWelcomeOlt.Controls.Add(this.accountNumberPanel);
             this.wizardPageWelcomeOlt.Description = "Setup ShipWorks to work with your UPS account.";
             this.wizardPageWelcomeOlt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageWelcomeOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -166,33 +158,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
             this.wizardPageWelcomeOlt.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoWelcome);
             // 
-            // helpLink1
-            // 
-            this.helpLink1.AutoSize = true;
-            this.helpLink1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.helpLink1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.helpLink1.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink1.Location = new System.Drawing.Point(245, 21);
-            this.helpLink1.Name = "helpLink1";
-            this.helpLink1.Size = new System.Drawing.Size(65, 13);
-            this.helpLink1.TabIndex = 13;
-            this.helpLink1.Text = "Learn More.";
-            this.helpLink1.Url = "https://support.shipworks.com/hc/en-us/articles/360040291011";
-            // 
-            // labelWelcome2
-            // 
-            this.labelWelcome2.Location = new System.Drawing.Point(21, 47);
-            this.labelWelcome2.Name = "labelWelcome2";
-            this.labelWelcome2.Size = new System.Drawing.Size(516, 31);
-            this.labelWelcome2.TabIndex = 12;
-            this.labelWelcome2.Text = "Enable your free UPS from ShipWorks account today and start saving money on label" +
-    "s. Setting up your account is easy and only takes about a minute.";
-            // 
             // accountNumberPanel
             // 
             this.accountNumberPanel.Controls.Add(this.account);
             this.accountNumberPanel.Controls.Add(this.labelUpsAccount);
-            this.accountNumberPanel.Location = new System.Drawing.Point(61, 135);
+            this.accountNumberPanel.Location = new System.Drawing.Point(28, 45);
             this.accountNumberPanel.Name = "accountNumberPanel";
             this.accountNumberPanel.Size = new System.Drawing.Size(406, 50);
             this.accountNumberPanel.TabIndex = 11;
@@ -214,49 +184,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.labelUpsAccount.Size = new System.Drawing.Size(186, 13);
             this.labelUpsAccount.TabIndex = 7;
             this.labelUpsAccount.Text = "Enter Your UPS account number";
-            // 
-            // panelNewOrExisting
-            // 
-            this.panelNewOrExisting.Controls.Add(this.existingAccount);
-            this.panelNewOrExisting.Controls.Add(this.newAccount);
-            this.panelNewOrExisting.Location = new System.Drawing.Point(46, 76);
-            this.panelNewOrExisting.Name = "panelNewOrExisting";
-            this.panelNewOrExisting.Size = new System.Drawing.Size(458, 51);
-            this.panelNewOrExisting.TabIndex = 6;
-            // 
-            // existingAccount
-            // 
-            this.existingAccount.AutoSize = true;
-            this.existingAccount.Checked = true;
-            this.existingAccount.Location = new System.Drawing.Point(0, 31);
-            this.existingAccount.Name = "existingAccount";
-            this.existingAccount.Size = new System.Drawing.Size(230, 17);
-            this.existingAccount.TabIndex = 7;
-            this.existingAccount.TabStop = true;
-            this.existingAccount.Text = "Add my existing UPS account to ShipWorks";
-            this.existingAccount.UseVisualStyleBackColor = true;
-            this.existingAccount.CheckedChanged += new System.EventHandler(this.OnAccountOptionCheckChanged);
-            // 
-            // newAccount
-            // 
-            this.newAccount.AutoSize = true;
-            this.newAccount.Location = new System.Drawing.Point(0, 8);
-            this.newAccount.Name = "newAccount";
-            this.newAccount.Size = new System.Drawing.Size(335, 17);
-            this.newAccount.TabIndex = 6;
-            this.newAccount.TabStop = true;
-            this.newAccount.Text = "Create my free UPS from ShipWorks account now to start saving";
-            this.newAccount.UseVisualStyleBackColor = true;
-            this.newAccount.CheckedChanged += new System.EventHandler(this.OnAccountOptionCheckChanged);
-            // 
+            //
             // labelWelcome1
-            // 
-            this.labelWelcome1.Location = new System.Drawing.Point(21, 8);
+            //
+            this.labelWelcome1.Location = new System.Drawing.Point(25, 10);
             this.labelWelcome1.Name = "labelWelcome1";
             this.labelWelcome1.Size = new System.Drawing.Size(516, 26);
             this.labelWelcome1.TabIndex = 0;
-            this.labelWelcome1.Text = "ShipWorks offers savings up to 62% on UPS® Shipments, as well as waived fuel and r" +
-    "esidential surcharges, through ShipWorks One Balance.";
+            this.labelWelcome1.Text = "Add an existing UPS account to ShipWorks.";
             // 
             // wizardPageLicense
             // 
@@ -806,8 +741,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageWelcomeOlt.PerformLayout();
             this.accountNumberPanel.ResumeLayout(false);
             this.accountNumberPanel.PerformLayout();
-            this.panelNewOrExisting.ResumeLayout(false);
-            this.panelNewOrExisting.PerformLayout();
             this.wizardPageLicense.ResumeLayout(false);
             this.wizardPageLicense.PerformLayout();
             this.wizardPageAccount.ResumeLayout(false);
@@ -865,9 +798,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private System.Windows.Forms.CheckBox worldShipAgree2;
         private ShipWorks.ApplicationCore.Interaction.HelpLink linkWorldShipMaps;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private System.Windows.Forms.Panel panelNewOrExisting;
-        private System.Windows.Forms.RadioButton existingAccount;
-        private System.Windows.Forms.RadioButton newAccount;
         private System.Windows.Forms.TextBox account;
         private System.Windows.Forms.Label labelUpsAccount;
         private System.Windows.Forms.Label labelWsUpsAccountNumberLink;
@@ -885,7 +815,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private UI.Wizard.WizardPage wizardPageInvoiceAuthentication;
         private UpsInvoiceAuthorizationControl upsInvoiceAuthorizationControl;
         private System.Windows.Forms.Label invoiceAuthenticationInstructions;
-        private System.Windows.Forms.Label labelWelcome2;
         private System.Windows.Forms.Label upsTrademarkInfo;
         private ApplicationCore.Interaction.HelpLink helpLink1;
         private System.Windows.Forms.PictureBox upsFromShipWorksLogo;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
@@ -13,13 +12,11 @@ using ShipWorks.Startup;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.ThreeDCart;
 using ShipWorks.Stores.Platforms.ThreeDCart.OnlineUpdating;
-using ShipWorks.Stores.Platforms.ThreeDCart.Enums;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
 using Xunit.Abstractions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 {
@@ -54,12 +51,14 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
 
                 webClientFactory = mock.Override<Func<ThreeDCartStoreEntity, IThreeDCartSoapWebClient>>();
                 webClientFactory.Setup(x => x(It.IsAny<ThreeDCartStoreEntity>())).Returns(webClient.Object);
-                
+
                 mock.Override<IMessageHelper>();
             });
 
             menuContext = context.Mock.Mock<IMenuCommandExecutionContext>();
+#pragma warning disable S3215 // "interface" instances should not be cast to concrete types
             commandCreator = context.Mock.Container.ResolveKeyed<IOnlineUpdateCommandCreator>(StoreTypeCode.ThreeDCart) as ThreeDCartOnlineUpdateCommandCreator;
+#pragma warning restore S3215 // "interface" instances should not be cast to concrete types
 
             store = Create.Store<ThreeDCartStoreEntity>(StoreTypeCode.ThreeDCart)
                 .Set(x => x.StoreUrl, "https://shipworks.3dcartstores.com")
@@ -116,7 +115,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             webClient.Verify(x => x.UpdateOrderStatus(It.IsAny<long>(), It.IsAny<string>(), It.IsAny<int>()), Times.Once);
             webClient.Verify(x => x.UpdateOrderStatus(order.OrderNumber, order.OrderNumberComplete, statusProcessing), Times.Once);
         }
-        
+
         [Fact]
         public async Task UpdateOrderStatus_MakesTwoWebRequests_WhenOrderIsCombined()
         {
@@ -176,7 +175,7 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             menuContext.SetupGet(x => x.SelectedKeys).Returns(new[] { order.OrderID });
 
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
-            
+
             webClient.Verify(x => x.UploadOrderShipmentDetails(It.IsAny<ThreeDCartOnlineUpdatingOrderDetail>(), It.IsAny<long>(), It.IsAny<string>()), Times.Once);
             webClient.Verify(x => x.UploadOrderShipmentDetails(It.Is<ThreeDCartOnlineUpdatingOrderDetail>(od => IsMatchingShipmentUpload(od, order)), 200L, "track-123"), Times.Once);
         }
@@ -209,13 +208,13 @@ namespace ShipWorks.Stores.Tests.Integration.Platforms.ThreeDCart.OnlineUpdating
             await commandCreator.OnUploadShipmentDetails(menuContext.Object, store);
 
             webClient.Verify(x => x.UploadOrderShipmentDetails(It.IsAny<ThreeDCartOnlineUpdatingOrderDetail>(), It.IsAny<long>(), It.IsAny<string>()), Times.Exactly(2));
-            webClient.Verify(x => x.UploadOrderShipmentDetails(It.Is<ThreeDCartOnlineUpdatingOrderDetail>(od => 
-                                        IsMatchingShipmentUpload(od, 20, order.ThreeDCartOrderID, order.IsManual)), 
-                                        2000L, 
+            webClient.Verify(x => x.UploadOrderShipmentDetails(It.Is<ThreeDCartOnlineUpdatingOrderDetail>(od =>
+                                        IsMatchingShipmentUpload(od, 20, order.ThreeDCartOrderID, order.IsManual)),
+                                        2000L,
                                         "track-123"), Times.Once);
-            webClient.Verify(x => x.UploadOrderShipmentDetails(It.Is<ThreeDCartOnlineUpdatingOrderDetail>(od => 
-                                        IsMatchingShipmentUpload(od, 30, order.ThreeDCartOrderID, order.IsManual)), 
-                                        3000L, 
+            webClient.Verify(x => x.UploadOrderShipmentDetails(It.Is<ThreeDCartOnlineUpdatingOrderDetail>(od =>
+                                        IsMatchingShipmentUpload(od, 30, order.ThreeDCartOrderID, order.IsManual)),
+                                        3000L,
                                         "track-123"), Times.Once);
         }
 

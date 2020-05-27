@@ -179,6 +179,7 @@ namespace ShipWorks.Products.BundleEditor
                 {
                     ProductID = productVariant.ProductID,
                     ChildProductVariantID = productVariant.ProductVariantID,
+                    ChildVariant = productVariant,
                     Quantity = Quantity
                 };
 

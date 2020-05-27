@@ -7,6 +7,8 @@ namespace Interapptive.Shared.Utility
     /// </summary>
     public static class DateTimeExtensions
     {
+        private static readonly DateTime safeMinDateTime = new DateTime(1970, 1, 1, 0, 0, 0);
+
         /// <summary>
         /// Yesterdays date
         /// </summary>
@@ -61,6 +63,24 @@ namespace Interapptive.Shared.Utility
                 target += 7;
             }
             return value.AddDays(target - start);
+        }
+
+        /// <summary>
+        /// Gets the next day specified (if current day requested, returns the next one)
+        /// </summary>
+        public static DateTime ToSqlSafeDateTime(this DateTime value)
+        {
+            return ToSqlSafeDateTime(value, safeMinDateTime);
+        }
+
+        /// <summary>
+        /// Gets the next day specified (if current day requested, returns the next one)
+        /// </summary>
+        public static DateTime ToSqlSafeDateTime(this DateTime value, DateTime valueIfNotSafe)
+        {
+            return value >= safeMinDateTime ?
+                value :
+                valueIfNotSafe >= safeMinDateTime ? valueIfNotSafe : safeMinDateTime;
         }
     }
 }

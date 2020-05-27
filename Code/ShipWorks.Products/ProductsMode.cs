@@ -323,25 +323,8 @@ namespace ShipWorks.Products
         /// <summary>
         /// Add a product
         /// </summary>
-        private async Task AddProductAction()
-        {
-            ProductVariantEntity productVariant = new ProductVariantEntity()
-            {
-                Product = new ProductEntity()
-                {
-                    IsActive = true,
-                    IsBundle = false
-                }
-            };
-
-            productVariant.Aliases.Add(new ProductVariantAliasEntity()
-            {
-                AliasName = string.Empty,
-                IsDefault = true
-            });
-
-            await EditProduct(productVariant, "New Product").ConfigureAwait(true);
-        }
+        private async Task AddProductAction() =>
+            await EditProduct(ProductVariantEntity.Create(string.Empty, DateTime.UtcNow), "New Product").ConfigureAwait(true);
 
         /// <summary>
         /// Edit the given product
@@ -373,8 +356,8 @@ namespace ShipWorks.Products
             try
             {
                 await productCatalog
-                .SetActivation(new[] { entityId }, makeItActive)
-                .ConfigureAwait(false);
+                    .SetActivation(new[] { entityId }, makeItActive)
+                    .ConfigureAwait(true);
             }
             catch (Exception ex)
             {

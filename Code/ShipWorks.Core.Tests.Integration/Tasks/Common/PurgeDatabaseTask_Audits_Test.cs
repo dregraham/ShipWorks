@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.QuerySpec;
 using ShipWorks.Actions.Tasks.Common;
@@ -16,7 +15,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
 {
     [Collection("Database collection")]
     [Trait("Category", "ContinuousIntegration")]
-    public class PurgeDatabaseTask_Audits_Test
+    public class PurgeDatabaseTask_Audits_Test : IDisposable
     {
         private const int RetentionPeriodInDays = 180;
         private readonly DataContext context;
@@ -129,5 +128,7 @@ namespace ShipWorks.Tests.Shared.Database.Tasks
 
             return audit;
         }
+
+        public void Dispose() => context.Dispose();
     }
 }

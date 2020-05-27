@@ -45,7 +45,7 @@ namespace ShipWorks.OrderLookup.ScanPack
                     ProductVariantEntity product = null;
                     if (!string.IsNullOrWhiteSpace(item.SKU))
                     {
-                        product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCultureIgnoreCase)));
+                        product = products.FirstOrDefault(p => p.Aliases.Any(a => a.Sku.Equals(item.SKU, StringComparison.InvariantCulture)));
                     }
                     result.Add(CreateItem(product, item));
                 }

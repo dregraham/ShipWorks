@@ -1,7 +1,9 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -19,7 +21,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         public UpsLabelServiceTest()
         {
             mock = AutoMock.GetLoose();
+            MockUpsShippingSettings();
             testObject = mock.Create<UpsLabelService>();
+            
             shipment = new ShipmentEntity()
             {
                 InsuranceProvider = (int) InsuranceProvider.Carrier,
@@ -46,7 +50,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
         }
 
         [Fact]
-        public async Task UpsLabelServiceCreate_ThrowsInvalidPackageDimensionsException_WithZeroDimensions()
+        public async Task UpsLabelServiceCreate_ThrowsInvalidPackageDimensionsException_WithZeroDimensions_WhenUPSAllowNoDims_IsFalse()
         {
             shipment.Ups.Packages.Select(p => p.InsuranceValue = 0).ToList();
             InvalidPackageDimensionsException ex = await Assert.ThrowsAsync<InvalidPackageDimensionsException>(() => testObject.Create(shipment));
@@ -68,6 +72,25 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS
             testObject.Create(shipment);
 
             Assert.Equal(string.Empty, shipment.Ups.ReturnContents);
+        }
+
+        private void MockUpsShippingSettings()
+        {
+            var settingsRepositoryMock = mock.Mock<ICarrierSettingsRepository>();
+
+            var bar =
+                mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierSettingsRepository>>();
+
+            settingsRepositoryMock.Setup(x => x.GetShippingSettings()).Returns(
+                new ShippingSettingsEntity
+                {
+                    UpsAllowNoDims = false
+                });
+
+            bar.Setup(i => i[ShipmentTypeCode.UpsOnLineTools])
+                .Returns(settingsRepositoryMock.Object);
+
+            mock.Provide(bar.Object);
         }
     }
 }

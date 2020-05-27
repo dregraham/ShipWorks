@@ -2,29 +2,33 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.Ups;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
     /// <summary>
-    /// Base Label service used by both Ups Online Tools and Ups Worldship
+    /// Base Label service used by both Ups Online Tools and Ups WorldShip
     /// </summary>
     public class UpsLabelService : ILabelService
     {
         private readonly IUpsLabelClientFactory labelClientFactory;
+        private readonly IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsLabelService(IUpsLabelClientFactory labelClientFactory)
+        public UpsLabelService(IUpsLabelClientFactory labelClientFactory, 
+            IIndex<ShipmentTypeCode, ICarrierSettingsRepository> settingsRepository)
         {
             this.labelClientFactory = labelClientFactory;
+            this.settingsRepository = settingsRepository;
         }
 
         /// <summary>
@@ -42,8 +46,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
-            // Make sure package dimensions are valid.
-            ValidatePackageDimensions(shipment);
+            // Make sure package dimensions are valid if UPSAllowNoDims is false.
+            if (!settingsRepository[ShipmentTypeCode.UpsOnLineTools].GetShippingSettings().UpsAllowNoDims)
+            {
+                ValidatePackageDimensions(shipment);
+            }
+            
 
             ConfigureNewUpsPostalLabel(shipment, upsShipmentEntity, upsServiceType);
 
