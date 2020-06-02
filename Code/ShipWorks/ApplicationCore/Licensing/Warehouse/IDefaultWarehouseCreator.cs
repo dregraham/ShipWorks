@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
-using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -16,7 +12,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Creates a default warehouse if needed
         /// </summary>
-        Task<Result> Create(StoreEntity store);
+        Task<Result> Create(IStoreEntity store);
 
         /// <summary>
         /// Returns true if no linked warehouse and one needs to be created
