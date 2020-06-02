@@ -611,7 +611,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
         {
-            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success)
+            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value)
             {
                 labelDefaultWarehosue.Visible = true;
             }
@@ -633,7 +633,7 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success && !ValidateWarehouseAddress(store))
+            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value && !ValidateWarehouseAddress(store))
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -1106,7 +1106,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task CreateDefaultWarehouse(StoreEntity store)
         {
-            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success)
+            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value)
             {
                 var createResult = await defaultWarehouseCreator.Create(store);
 
