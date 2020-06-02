@@ -18,6 +18,7 @@ using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Setup;
 using ShipWorks.Data;
@@ -73,16 +74,20 @@ namespace ShipWorks.Stores.Management
         private bool wasStoreSelectionSkipped;
         private readonly ILicenseService licenseService;
         private readonly Func<IChannelLimitFactory> channelLimitFactory;
+        private readonly IDefaultWarehouseCreator defaultWarehouseCreator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public AddStoreWizard(ILifetimeScope scope, ILicenseService licenseService, Func<IChannelLimitFactory> channelLimitFactory)
+        public AddStoreWizard(ILifetimeScope scope, 
+            ILicenseService licenseService, 
+            Func<IChannelLimitFactory> channelLimitFactory, 
+            IDefaultWarehouseCreator defaultWarehouseCreator) 
         {
             this.scope = scope;
             this.licenseService = licenseService;
             this.channelLimitFactory = channelLimitFactory;
-
+            this.defaultWarehouseCreator = defaultWarehouseCreator;
             InitializeComponent();
         }
 
@@ -595,15 +600,20 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Stepping into the address page
         /// </summary>
-        private void OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
+        private async Task OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
         {
+            if(await defaultWarehouseCreator.NeedsDefaultWarehouse())
+            {
+                labelDefaultWarehosue.Visible = true;
+            }
+
             storeAddressControl.LoadStore(store);
         }
 
         /// <summary>
         /// Stepping next from the address page
         /// </summary>
-        private void OnStepNextAddress(object sender, WizardStepEventArgs e)
+        private async Task OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
             storeAddressControl.SaveToEntity(store);
 
@@ -613,6 +623,22 @@ namespace ShipWorks.Stores.Management
                 e.NextPage = CurrentPage;
                 return;
             }
+
+            if (await defaultWarehouseCreator.NeedsDefaultWarehouse() && !ValidateWarehouseAddress(store))
+            {
+                e.NextPage = CurrentPage;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Validate that the required warehouse filds are filled out
+        /// </summary>
+        /// <param name="store"></param>
+        /// <returns></returns>
+        private bool ValidateWarehouseAddress(StoreEntity store)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -1002,6 +1028,8 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
+                await CreateDefaultWarehouse(store);
+
                 if (store.WarehouseStoreID == null &&
                     SelectedStoreType.ShouldUseHub(store) &&
                     (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
@@ -1041,6 +1069,17 @@ namespace ShipWorks.Stores.Management
                 FilterLayoutContext.PopScope();
                 Cursor = DefaultCursor;
                 NextEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// Create a default warehouse if needed
+        /// </summary>
+        private async Task CreateDefaultWarehouse(StoreEntity store)
+        {
+            if(await defaultWarehouseCreator.NeedsDefaultWarehouse())
+            {
+                defaultWarehouseCreator.Create(store);
             }
         }
 

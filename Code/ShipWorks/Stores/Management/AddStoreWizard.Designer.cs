@@ -74,6 +74,7 @@ namespace ShipWorks.Stores.Management
             this.radioStartNumberLimit = new System.Windows.Forms.RadioButton();
             this.pictureBoxDownloadRange = new System.Windows.Forms.PictureBox();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelDefaultWarehosue = new System.Windows.Forms.Label();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.wizardPageActivationError = new ShipWorks.Stores.Management.ActivationErrorWizardPage();
             this.wizardPageUIMode = new ShipWorks.UI.Wizard.WizardPage();
@@ -117,7 +118,7 @@ namespace ShipWorks.Stores.Management
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageUIMode);
+            this.mainPanel.Controls.Add(this.wizardPageAddress);
             this.mainPanel.Size = new System.Drawing.Size(548, 500);
             // 
             // etchBottom
@@ -267,7 +268,6 @@ namespace ShipWorks.Stores.Management
             this.wizardPageFinished.Size = new System.Drawing.Size(548, 500);
             this.wizardPageFinished.TabIndex = 0;
             this.wizardPageFinished.Title = "Setup Complete";
-            this.wizardPageFinished.SteppingIntoAsync += OnSteppingIntoComplete;
             // 
             // wizardPageAlreadyActive
             // 
@@ -606,6 +606,7 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageAddress
             // 
+            this.wizardPageAddress.Controls.Add(this.labelDefaultWarehosue);
             this.wizardPageAddress.Controls.Add(this.storeAddressControl);
             this.wizardPageAddress.Description = "Enter the name and physical address of your online store.";
             this.wizardPageAddress.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -615,8 +616,18 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress.Size = new System.Drawing.Size(548, 500);
             this.wizardPageAddress.TabIndex = 0;
             this.wizardPageAddress.Title = "Store Information";
-            this.wizardPageAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAddress);
-            this.wizardPageAddress.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAddress);
+            this.wizardPageAddress.SteppingIntoAsync += this.OnSteppingIntoAddress;
+            // 
+            // labelDefaultWarehosue
+            // 
+            this.labelDefaultWarehosue.AutoSize = true;
+            this.labelDefaultWarehosue.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDefaultWarehosue.Location = new System.Drawing.Point(80, 296);
+            this.labelDefaultWarehosue.Name = "labelDefaultWarehosue";
+            this.labelDefaultWarehosue.Size = new System.Drawing.Size(315, 42);
+            this.labelDefaultWarehosue.TabIndex = 1;
+            this.labelDefaultWarehosue.Text = "We will utilize this address to setup your first warehouse\r\nship-from location on" +
+    " ShipWorks hub and link it to this \r\ndatabase.\r\n";
             // 
             // storeAddressControl
             // 
@@ -734,6 +745,7 @@ namespace ShipWorks.Stores.Management
             this.panelFirstOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDownloadRange)).EndInit();
             this.wizardPageAddress.ResumeLayout(false);
+            this.wizardPageAddress.PerformLayout();
             this.wizardPageUIMode.ResumeLayout(false);
             this.wizardPageUIMode.PerformLayout();
             this.ResumeLayout(false);
@@ -793,5 +805,6 @@ namespace ShipWorks.Stores.Management
         private Users.UIModeSelectionControl uiModeSelectionControl;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label uiModeInstructions;
+        private System.Windows.Forms.Label labelDefaultWarehosue;
     }
 }
