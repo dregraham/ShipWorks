@@ -206,9 +206,9 @@
             this.linkHubDoc.ForeColor = System.Drawing.Color.Blue;
             this.linkHubDoc.Location = new System.Drawing.Point(255, 48);
             this.linkHubDoc.Name = "linkHubDoc";
-            this.linkHubDoc.Size = new System.Drawing.Size(104, 13);
+            this.linkHubDoc.Size = new System.Drawing.Size(79, 13);
             this.linkHubDoc.TabIndex = 22;
-            this.linkHubDoc.Text = "ShipWorks Hub here";
+            this.linkHubDoc.Text = "ShipWorks Hub";
             this.linkHubDoc.Click += new System.EventHandler(this.OnLinkHubDock);
             // 
             // labelHubTitle
@@ -227,7 +227,7 @@
             this.labelHubBlurb.AutoSize = true;
             this.labelHubBlurb.Location = new System.Drawing.Point(14, 22);
             this.labelHubBlurb.Name = "labelHubBlurb";
-            this.labelHubBlurb.Size = new System.Drawing.Size(409, 52);
+            this.labelHubBlurb.Size = new System.Drawing.Size(404, 52);
             this.labelHubBlurb.TabIndex = 21;
             this.labelHubBlurb.Text = resources.GetString("labelHubBlurb.Text");
             // 
