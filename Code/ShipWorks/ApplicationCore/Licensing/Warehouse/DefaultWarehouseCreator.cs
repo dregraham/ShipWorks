@@ -96,7 +96,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
 
                 IConfigurationEntity configurationEntity = configurationData.FetchReadOnly();
-                if (string.IsNullOrWhiteSpace(configurationEntity.WarehouseID))
+                if (!string.IsNullOrWhiteSpace(configurationEntity.WarehouseID))
                 {
                     return GenericResult.FromError("Customer already has warehouse linked to this database", false);
                 }
