@@ -1,13 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.ApplicationCore.Settings.Warehouse;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
@@ -37,7 +35,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Creates a default warehouse in the hub and links it to the database
         /// </summary>
-        public async Task<Result> Create(StoreEntity store)
+        public async Task<Result> Create(IStoreEntity store)
         {
             try
             {
@@ -107,12 +105,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     return GenericResult.FromError("Failed to retrieve warehouses from hub", false);
                 }
 
-                if (!getWarehousesResult.Value.warehouses.None())
-                {
-                    return GenericResult.FromError("Customer already has warehouses in the hub", false);
-                }
-
-                return GenericResult.FromSuccess(true);
+                return getWarehousesResult.Value.count != 0 ?
+                    GenericResult.FromError("Customer already has warehouses in the hub", false) :
+                    GenericResult.FromSuccess(true);
             }
             catch (Exception)
             {
