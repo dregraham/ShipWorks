@@ -857,6 +857,7 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\DefaultWarehouseCreator.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\BundledProduct.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\LinkDatabaseDto.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\Product.cs" />
@@ -895,8 +896,6 @@
     <Compile Include="ApplicationCore\Settings\Api\IApiSettingsPage.cs" />
     <Compile Include="ApplicationCore\Settings\AutoUpdateSettings.cs" />
     <Compile Include="ApplicationCore\Settings\ISettingsPage.cs" />
-    <Compile Include="ApplicationCore\Settings\Warehouse\DefaultWarehouseCreator.cs" />
-    <Compile Include="ApplicationCore\Settings\Warehouse\IDefaultWarehouseCreator.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListDialog.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseListViewModel.cs" />
     <Compile Include="ApplicationCore\Settings\Warehouse\IWarehouseSettings.cs" />

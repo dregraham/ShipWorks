@@ -16,11 +16,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Creates a default warehouse if needed
         /// </summary>
-        Task Create(StoreEntity store);
+        Task<Result> Create(StoreEntity store);
 
         /// <summary>
         /// Returns true if no linked warehouse and one needs to be created
         /// </summary>
-        Task<bool> NeedsDefaultWarehouse();
+        Task<Result> NeedsDefaultWarehouse();
     }
 }
