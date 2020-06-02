@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.ApplicationCore.Settings.Warehouse;
@@ -13,6 +14,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// <summary>
     /// Creates a default warehouse for the user if needed
     /// </summary>
+    [Component]
     public class DefaultWarehouseCreator : IDefaultWarehouseCreator
     {
         private readonly ILicenseService licenseService;
