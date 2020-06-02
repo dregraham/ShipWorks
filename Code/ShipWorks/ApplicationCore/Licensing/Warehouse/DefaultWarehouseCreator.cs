@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
@@ -38,71 +39,86 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// </summary>
         public async Task<Result> Create(StoreEntity store)
         {
-            Result needsWarehouseResult = await NeedsDefaultWarehouse();
-            if (needsWarehouseResult.Failure)
+            try
             {
-                return needsWarehouseResult;
+                GenericResult<bool> needsWarehouseResult = await NeedsDefaultWarehouse();
+                if (needsWarehouseResult.Value == false)
+                {
+                    return needsWarehouseResult;
+                }
+
+                PersonAdapter storeAddress = store.Address;
+                Details warehouseDetails = new Details
+                {
+                    Name = DefaultWarehouseName,
+                    Street = storeAddress.StreetAll,
+                    City = storeAddress.City,
+                    State = storeAddress.StateProvCode,
+                    Zip = storeAddress.PostalCode
+                };
+
+                GenericResult<string> createWarehouseResult = await warehouseSettingsApi.Create(warehouseDetails);
+                if (createWarehouseResult.Failure)
+                {
+                    return Result.FromError("Failed to create default warehouse in the hub");
+                }
+
+                Result linkWarehouseResult = await warehouseSettingsApi.Link(createWarehouseResult.Value);
+                if (linkWarehouseResult.Failure)
+                {
+                    return Result.FromError("Failed to link default warehouse to this database");
+                }
+
+                configurationData.UpdateConfiguration(x =>
+                {
+                    x.WarehouseID = createWarehouseResult.Value;
+                    x.WarehouseName = DefaultWarehouseName;
+                });
+
+                return Result.FromSuccess();
             }
-
-            PersonAdapter storeAddress = store.Address;
-            Details warehouseDetails = new Details
+            catch (Exception)
             {
-                Name = DefaultWarehouseName,
-                Street = storeAddress.StreetAll,
-                City = storeAddress.City,
-                State = storeAddress.StateProvCode,
-                Zip = storeAddress.PostalCode
-            };
-
-            GenericResult<string> createWarehouseResult = await warehouseSettingsApi.Create(warehouseDetails);
-            if (createWarehouseResult.Failure)
-            {
-                return Result.FromError("Failed to create default warehouse in the hub");
+                return Result.FromError("An error occured while creating and linking the default warehouse in the hub");
             }
-
-            Result linkWarehouseResult = await warehouseSettingsApi.Link(createWarehouseResult.Value);
-            if (linkWarehouseResult.Failure)
-            {
-                return Result.FromError("Failed to link default warehouse to this database");
-            }
-
-            configurationData.UpdateConfiguration(x =>
-            {
-                x.WarehouseID = createWarehouseResult.Value;
-                x.WarehouseName = DefaultWarehouseName;
-            });
-
-            return Result.FromSuccess();
         }
 
         /// <summary>
         /// Check if a default warehouse needs to be created
         /// </summary>
-        public async Task<Result> NeedsDefaultWarehouse()
+        public async Task<GenericResult<bool>> NeedsDefaultWarehouse()
         {
-            if (!licenseService.IsHub)
+            try
             {
-                return Result.FromError("User does not have access to hub");
-            }
+                if (!licenseService.IsHub)
+                {
+                    return GenericResult.FromError("User does not have access to hub", false);
+                }
 
-            IConfigurationEntity configurationEntity = configurationData.FetchReadOnly();
-            if (string.IsNullOrWhiteSpace(configurationEntity.WarehouseID))
+                IConfigurationEntity configurationEntity = configurationData.FetchReadOnly();
+                if (string.IsNullOrWhiteSpace(configurationEntity.WarehouseID))
+                {
+                    return GenericResult.FromError("Customer already has warehouse linked to this database", false);
+                }
+
+                GenericResult<WarehouseListDto> getWarehousesResult = await warehouseSettingsApi.GetAllWarehouses();
+                if (getWarehousesResult.Failure)
+                {
+                    return GenericResult.FromError("Failed to retrieve warehouses from hub", false);
+                }
+
+                if (!getWarehousesResult.Value.warehouses.None())
+                {
+                    return GenericResult.FromError("Customer already has warehouses in the hub", false);
+                }
+
+                return GenericResult.FromSuccess(true);
+            }
+            catch (Exception)
             {
-                return Result.FromError("Customer already has warehouse linked to this database");
+                return GenericResult.FromError("An error occured while checking if a default warehouse is needed",
+                                               false);
             }
-
-            GenericResult<WarehouseListDto> getWarehousesResult = await warehouseSettingsApi.GetAllWarehouses();
-            if (getWarehousesResult.Failure)
-            {
-                return Result.FromError("Failed to retrieve warehouses from hub");
-            }
-
-            if (!getWarehousesResult.Value.warehouses.None())
-            {
-                return Result.FromError("Customer already has warehouses in the hub");
-            }
-
-            return Result.FromSuccess();
         }
     }
 }

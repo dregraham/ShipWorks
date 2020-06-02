@@ -21,6 +21,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         /// <summary>
         /// Returns true if no linked warehouse and one needs to be created
         /// </summary>
-        Task<Result> NeedsDefaultWarehouse();
+        Task<GenericResult<bool>> NeedsDefaultWarehouse();
     }
 }
