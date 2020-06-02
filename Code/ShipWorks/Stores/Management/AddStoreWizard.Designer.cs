@@ -616,18 +616,17 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAddress.Size = new System.Drawing.Size(548, 500);
             this.wizardPageAddress.TabIndex = 0;
             this.wizardPageAddress.Title = "Store Information";
-            this.wizardPageAddress.SteppingIntoAsync += this.OnSteppingIntoAddress;
             // 
             // labelDefaultWarehosue
             // 
             this.labelDefaultWarehosue.AutoSize = true;
-            this.labelDefaultWarehosue.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDefaultWarehosue.Location = new System.Drawing.Point(80, 296);
+            this.labelDefaultWarehosue.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDefaultWarehosue.Location = new System.Drawing.Point(95, 288);
             this.labelDefaultWarehosue.Name = "labelDefaultWarehosue";
-            this.labelDefaultWarehosue.Size = new System.Drawing.Size(315, 42);
+            this.labelDefaultWarehosue.Size = new System.Drawing.Size(267, 26);
             this.labelDefaultWarehosue.TabIndex = 1;
-            this.labelDefaultWarehosue.Text = "We will utilize this address to setup your first warehouse\r\nship-from location on" +
-    " ShipWorks hub and link it to this \r\ndatabase.\r\n";
+            this.labelDefaultWarehosue.Text = "We will set up your first warehouse ship-from location \r\nwith this address on Shi" +
+    "pWorks Hub.\r\n";
             // 
             // storeAddressControl
             // 

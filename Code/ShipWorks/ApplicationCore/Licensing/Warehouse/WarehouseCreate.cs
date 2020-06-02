@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -16,7 +17,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     /// <summary>
     /// Create warehouse
     /// </summary>
-    public class WarehouseCreate
+    [Component]
+    public class WarehouseCreate : IWarehouseCreate
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
 

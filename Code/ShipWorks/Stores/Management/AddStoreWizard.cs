@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Extensions;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
@@ -16,6 +17,7 @@ using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -89,6 +91,13 @@ namespace ShipWorks.Stores.Management
             this.channelLimitFactory = channelLimitFactory;
             this.defaultWarehouseCreator = defaultWarehouseCreator;
             InitializeComponent();
+
+            // wire up custom event handlers here because the designer keeps deleting them
+            wizardPageFinished.SteppingIntoAsync += OnSteppingIntoComplete;
+            wizardPageAddress.SteppingIntoAsync += OnSteppingIntoAddress;
+            wizardPageAddress.StepNextAsync += OnStepNextAddress;
+
+            labelDefaultWarehosue.Visible = false;
         }
 
         #region Wizard Creation
@@ -602,7 +611,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
         {
-            if(await defaultWarehouseCreator.NeedsDefaultWarehouse())
+            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success)
             {
                 labelDefaultWarehosue.Visible = true;
             }
@@ -624,7 +633,7 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            if (await defaultWarehouseCreator.NeedsDefaultWarehouse() && !ValidateWarehouseAddress(store))
+            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success && !ValidateWarehouseAddress(store))
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -638,7 +647,27 @@ namespace ShipWorks.Stores.Management
         /// <returns></returns>
         private bool ValidateWarehouseAddress(StoreEntity store)
         {
-            throw new NotImplementedException();
+            PersonAdapter storeAddress = store.Address;
+
+            var results = new List<Result>()
+            {
+                storeAddress.StreetAll.ValidateLength(30, 1, "The street address must not be empty."),
+                storeAddress.City.ValidateLength(30, 1, "The city must not be empty."),
+                storeAddress.PostalCode.ValidateLength(5, 5, "The postal code must be 5 numbers."),
+            };
+
+            if(!int.TryParse(storeAddress.PostalCode, out _))
+            {
+                results.Add(Result.FromError("The postal code must be a number."));
+            }
+
+            if(results.Any(r => r.Failure))
+            {
+                MessageHelper.ShowError(this, string.Join(Environment.NewLine, results.Where(r => r.Failure).Select(r => r.Message)));
+                return false;
+            } 
+
+            return true;
         }
 
         #endregion
@@ -1077,9 +1106,14 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task CreateDefaultWarehouse(StoreEntity store)
         {
-            if(await defaultWarehouseCreator.NeedsDefaultWarehouse())
+            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Success)
             {
-                defaultWarehouseCreator.Create(store);
+                var createResult = await defaultWarehouseCreator.Create(store);
+
+                if (createResult.Failure)
+                {
+                    MessageHelper.ShowError(this, $"An error occurred creating your default warehouse.{Environment.NewLine}{createResult.Message}");
+                }
             }
         }
 

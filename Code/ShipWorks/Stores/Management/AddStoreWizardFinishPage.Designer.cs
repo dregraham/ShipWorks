@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddStoreWizardFinishPage));
             this.label11 = new System.Windows.Forms.Label();
             this.linkGettingStarted = new ShipWorks.UI.Controls.LinkControl();
             this.label9 = new System.Windows.Forms.Label();
@@ -40,8 +41,14 @@
             this.label10 = new System.Windows.Forms.Label();
             this.addStoreWizardFinishPanel = new System.Windows.Forms.Panel();
             this.otherMessagingPanel = new System.Windows.Forms.Panel();
+            this.panelHubInfo = new System.Windows.Forms.Panel();
+            this.linkLaunchHub = new ShipWorks.UI.Controls.LinkControl();
+            this.linkHubDoc = new ShipWorks.UI.Controls.LinkControl();
+            this.labelHubTitle = new System.Windows.Forms.Label();
+            this.labelHubBlurb = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.otherMessagingPanel.SuspendLayout();
+            this.panelHubInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // label11
@@ -167,10 +174,68 @@
             this.otherMessagingPanel.Size = new System.Drawing.Size(499, 88);
             this.otherMessagingPanel.TabIndex = 26;
             // 
+            // panelHubInfo
+            // 
+            this.panelHubInfo.Controls.Add(this.linkLaunchHub);
+            this.panelHubInfo.Controls.Add(this.linkHubDoc);
+            this.panelHubInfo.Controls.Add(this.labelHubTitle);
+            this.panelHubInfo.Controls.Add(this.labelHubBlurb);
+            this.panelHubInfo.Location = new System.Drawing.Point(46, 246);
+            this.panelHubInfo.Name = "panelHubInfo";
+            this.panelHubInfo.Size = new System.Drawing.Size(499, 88);
+            this.panelHubInfo.TabIndex = 27;
+            // 
+            // linkLaunchHub
+            // 
+            this.linkLaunchHub.AutoSize = true;
+            this.linkLaunchHub.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkLaunchHub.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkLaunchHub.ForeColor = System.Drawing.Color.Blue;
+            this.linkLaunchHub.Location = new System.Drawing.Point(156, 61);
+            this.linkLaunchHub.Name = "linkLaunchHub";
+            this.linkLaunchHub.Size = new System.Drawing.Size(76, 13);
+            this.linkLaunchHub.TabIndex = 23;
+            this.linkLaunchHub.Text = "launch it here.";
+            this.linkLaunchHub.Click += new System.EventHandler(this.OnLinkLaunchHub);
+            // 
+            // linkHubDoc
+            // 
+            this.linkHubDoc.AutoSize = true;
+            this.linkHubDoc.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkHubDoc.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.linkHubDoc.ForeColor = System.Drawing.Color.Blue;
+            this.linkHubDoc.Location = new System.Drawing.Point(255, 48);
+            this.linkHubDoc.Name = "linkHubDoc";
+            this.linkHubDoc.Size = new System.Drawing.Size(104, 13);
+            this.linkHubDoc.TabIndex = 22;
+            this.linkHubDoc.Text = "ShipWorks Hub here";
+            this.linkHubDoc.Click += new System.EventHandler(this.OnLinkHubDock);
+            // 
+            // labelHubTitle
+            // 
+            this.labelHubTitle.AutoSize = true;
+            this.labelHubTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelHubTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
+            this.labelHubTitle.Location = new System.Drawing.Point(0, 1);
+            this.labelHubTitle.Name = "labelHubTitle";
+            this.labelHubTitle.Size = new System.Drawing.Size(92, 13);
+            this.labelHubTitle.TabIndex = 20;
+            this.labelHubTitle.Text = "ShipWorks Hub";
+            // 
+            // labelHubBlurb
+            // 
+            this.labelHubBlurb.AutoSize = true;
+            this.labelHubBlurb.Location = new System.Drawing.Point(14, 22);
+            this.labelHubBlurb.Name = "labelHubBlurb";
+            this.labelHubBlurb.Size = new System.Drawing.Size(409, 52);
+            this.labelHubBlurb.TabIndex = 21;
+            this.labelHubBlurb.Text = resources.GetString("labelHubBlurb.Text");
+            // 
             // AddStoreWizardFinishPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelHubInfo);
             this.Controls.Add(this.otherMessagingPanel);
             this.Controls.Add(this.addStoreWizardFinishPanel);
             this.Controls.Add(this.kryptonBorderEdge);
@@ -183,6 +248,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.otherMessagingPanel.ResumeLayout(false);
             this.otherMessagingPanel.PerformLayout();
+            this.panelHubInfo.ResumeLayout(false);
+            this.panelHubInfo.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -202,5 +269,10 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Panel addStoreWizardFinishPanel;
         private System.Windows.Forms.Panel otherMessagingPanel;
+        private System.Windows.Forms.Panel panelHubInfo;
+        private UI.Controls.LinkControl linkHubDoc;
+        private System.Windows.Forms.Label labelHubTitle;
+        private System.Windows.Forms.Label labelHubBlurb;
+        private UI.Controls.LinkControl linkLaunchHub;
     }
 }
