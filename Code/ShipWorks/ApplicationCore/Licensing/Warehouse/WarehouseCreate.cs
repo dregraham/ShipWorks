@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Net.RestSharp;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -21,13 +22,15 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     public class WarehouseCreate : IWarehouseCreate
     {
         private readonly IWarehouseRequestClient warehouseRequestClient;
+        private readonly IWarehouseRequestFactory warehouseRequestFactory;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseCreate(IWarehouseRequestClient warehouseRequestClient)
+        public WarehouseCreate(IWarehouseRequestClient warehouseRequestClient, IWarehouseRequestFactory warehouseRequestFactory)
         {
             this.warehouseRequestClient = warehouseRequestClient;
+            this.warehouseRequestFactory = warehouseRequestFactory;
         }
 
         /// <summary>
@@ -37,11 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             try
             {
-                IRestRequest request = new RestRequest(WarehouseEndpoints.Warehouses, Method.POST);
-                request.JsonSerializer = new RestSharpJsonNetSerializer();
-                request.RequestFormat = DataFormat.Json;
-                request.AddJsonBody(new ShipWorks.ApplicationCore.Licensing.Warehouse.DTO.Warehouse { details = warehouse });
-
+                IRestRequest request = warehouseRequestFactory.Create(WarehouseEndpoints.Warehouses, Method.POST, new ShipWorks.ApplicationCore.Licensing.Warehouse.DTO.Warehouse { details = warehouse });
                 var response = await warehouseRequestClient.MakeRequest(request, "CreateDefaultWarehouse").ConfigureAwait(false);
 
                 if (response.Success)
