@@ -659,7 +659,7 @@ namespace ShipWorks.Stores.Management
                 storeAddress.City.ValidateLength(30, 1, "The city must not be empty."),
             };
 
-            if(!Regex.IsMatch(storeAddress.PostalCode, "/^([0-9]{5})(-?([0-9]{4}))?$/"))
+            if(!Regex.IsMatch(storeAddress.PostalCode, "^([0-9]{5})(-?([0-9]{4}))?$"))
             {
                 results.Add(Result.FromError("The postal code you entered is not valid.")); 
             }
