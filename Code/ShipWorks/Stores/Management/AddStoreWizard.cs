@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
@@ -611,7 +613,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
         {
-            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value)
+            if((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value)
             {
                 labelDefaultWarehosue.Visible = true;
             }
@@ -633,7 +635,9 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value && !ValidateWarehouseAddress(store))
+            var shouldCreateDefaultWarehouse = (await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value;
+
+            if (shouldCreateDefaultWarehouse && !ValidateWarehouseAddress(store))
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -653,15 +657,14 @@ namespace ShipWorks.Stores.Management
             {
                 storeAddress.StreetAll.ValidateLength(30, 1, "The street address must not be empty."),
                 storeAddress.City.ValidateLength(30, 1, "The city must not be empty."),
-                storeAddress.PostalCode.ValidateLength(5, 5, "The postal code must be 5 numbers."),
             };
 
-            if(!int.TryParse(storeAddress.PostalCode, out _))
+            if(!Regex.IsMatch(storeAddress.PostalCode, "/^([0-9]{5})(-?([0-9]{4}))?$/"))
             {
-                results.Add(Result.FromError("The postal code must be a number."));
+                results.Add(Result.FromError("The postal code you entered is not valid.")); 
             }
 
-            if(results.Any(r => r.Failure))
+            if (results.Any(r => r.Failure))
             {
                 MessageHelper.ShowError(this, string.Join(Environment.NewLine, results.Where(r => r.Failure).Select(r => r.Message)));
                 return false;
@@ -1106,11 +1109,14 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task CreateDefaultWarehouse(StoreEntity store)
         {
-            var createResult = await defaultWarehouseCreator.Create(store).ConfigureAwait(true);
-
-            if (createResult.Failure)
+            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value)
             {
-                MessageHelper.ShowError(this, $"An error occurred creating your default warehouse.{Environment.NewLine}{createResult.Message}");
+                var createResult = await defaultWarehouseCreator.Create(store).ConfigureAwait(true);
+
+                if (createResult.Failure)
+                {
+                    MessageHelper.ShowError(this, $"An error occurred creating your default warehouse.{Environment.NewLine}{createResult.Message}");
+                }
             }
         }
 
