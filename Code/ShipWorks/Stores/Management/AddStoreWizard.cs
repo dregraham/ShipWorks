@@ -633,7 +633,7 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value && !ValidateWarehouseAddress(store))
+            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value && !ValidateWarehouseAddress(store))
             {
                 e.NextPage = CurrentPage;
                 return;
@@ -1057,7 +1057,7 @@ namespace ShipWorks.Stores.Management
                     return;
                 }
 
-                await CreateDefaultWarehouse(store);
+                await CreateDefaultWarehouse(store).ConfigureAwait(true);
 
                 if (store.WarehouseStoreID == null &&
                     SelectedStoreType.ShouldUseHub(store) &&
@@ -1106,14 +1106,11 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task CreateDefaultWarehouse(StoreEntity store)
         {
-            if((await defaultWarehouseCreator.NeedsDefaultWarehouse()).Value)
-            {
-                var createResult = await defaultWarehouseCreator.Create(store);
+            var createResult = await defaultWarehouseCreator.Create(store).ConfigureAwait(true);
 
-                if (createResult.Failure)
-                {
-                    MessageHelper.ShowError(this, $"An error occurred creating your default warehouse.{Environment.NewLine}{createResult.Message}");
-                }
+            if (createResult.Failure)
+            {
+                MessageHelper.ShowError(this, $"An error occurred creating your default warehouse.{Environment.NewLine}{createResult.Message}");
             }
         }
 

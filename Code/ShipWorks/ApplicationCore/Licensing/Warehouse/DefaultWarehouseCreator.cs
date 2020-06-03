@@ -39,7 +39,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         {
             try
             {
-                GenericResult<bool> needsWarehouseResult = await NeedsDefaultWarehouse();
+                GenericResult<bool> needsWarehouseResult = await NeedsDefaultWarehouse().ConfigureAwait(false);
                 if (needsWarehouseResult.Value == false)
                 {
                     return needsWarehouseResult;
@@ -55,13 +55,13 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     Zip = storeAddress.PostalCode
                 };
 
-                GenericResult<string> createWarehouseResult = await warehouseSettingsApi.Create(warehouseDetails);
+                GenericResult<string> createWarehouseResult = await warehouseSettingsApi.Create(warehouseDetails).ConfigureAwait(false);
                 if (createWarehouseResult.Failure)
                 {
                     return Result.FromError("Failed to create default warehouse in the hub");
                 }
 
-                Result linkWarehouseResult = await warehouseSettingsApi.Link(createWarehouseResult.Value);
+                Result linkWarehouseResult = await warehouseSettingsApi.Link(createWarehouseResult.Value).ConfigureAwait(false);
                 if (linkWarehouseResult.Failure)
                 {
                     return Result.FromError("Failed to link default warehouse to this database");
@@ -99,7 +99,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     return GenericResult.FromError("Customer already has warehouse linked to this database", false);
                 }
 
-                GenericResult<WarehouseListDto> getWarehousesResult = await warehouseSettingsApi.GetAllWarehouses();
+                GenericResult<WarehouseListDto> getWarehousesResult = await warehouseSettingsApi.GetAllWarehouses().ConfigureAwait(false);
                 if (getWarehousesResult.Failure)
                 {
                     return GenericResult.FromError("Failed to retrieve warehouses from hub", false);

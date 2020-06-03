@@ -40,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 IRestRequest request = new RestRequest(WarehouseEndpoints.Warehouses, Method.POST);
                 request.JsonSerializer = new RestSharpJsonNetSerializer();
                 request.RequestFormat = DataFormat.Json;
-                request.AddJsonBody(new { details = warehouse });
+                request.AddJsonBody(new ShipWorks.ApplicationCore.Licensing.Warehouse.DTO.Warehouse { details = warehouse });
 
                 var response = await warehouseRequestClient.MakeRequest(request, "CreateDefaultWarehouse").ConfigureAwait(false);
 

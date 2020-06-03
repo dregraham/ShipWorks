@@ -209,7 +209,7 @@
             this.linkHubDoc.Size = new System.Drawing.Size(79, 13);
             this.linkHubDoc.TabIndex = 22;
             this.linkHubDoc.Text = "ShipWorks Hub";
-            this.linkHubDoc.Click += new System.EventHandler(this.OnLinkHubDock);
+            this.linkHubDoc.Click += new System.EventHandler(this.OnLinkHubDoc);
             // 
             // labelHubTitle
             // 

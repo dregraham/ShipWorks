@@ -5,6 +5,7 @@ using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
@@ -60,15 +61,26 @@ namespace ShipWorks.Stores.Management
         {
             WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464752-ShipWorks-User-Manual", this);
         }
-
-        private void OnLinkHubDock(object sender, EventArgs e)
+        
+        /// <summary>
+        /// Open up the hub documentation
+        /// </summary>
+        private void OnLinkHubDoc(object sender, EventArgs e)
         {
-
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360029495931-The-ShipWorks-Hub", this);
         }
 
+        /// <summary>
+        /// Launch the hub
+        /// </summary>
         private void OnLinkLaunchHub(object sender, EventArgs e)
         {
-
+            string warehouseUrl;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                warehouseUrl = scope.Resolve<WebClientEnvironmentFactory>().SelectedEnvironment.WarehouseUrl;
+            }
+            WebHelper.OpenUrl(warehouseUrl, this);
         }
     }
 }
