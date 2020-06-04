@@ -50,6 +50,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // We have a scan form for an Endicia account, so we can obtain the scan form via the carrier API
             SCANResponse scanResponse = endiciaApiClient.GetScanForm(accountEntity, shipments);
 
+            //Endicia can return an error without throwing a WebException
+            if (!string.IsNullOrEmpty(scanResponse.ErrorMessage))
+            {
+                throw new EndiciaException(scanResponse.ErrorMessage);
+            }
+
             EndiciaScanFormEntity scanEntity = new EndiciaScanFormEntity();
             scanEntity.EndiciaAccountID = accountEntity.EndiciaAccountID;
             scanEntity.EndiciaAccountNumber = accountEntity.AccountNumber;
