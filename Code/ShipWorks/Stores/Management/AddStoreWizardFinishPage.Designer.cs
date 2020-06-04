@@ -54,10 +54,9 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(695, 160);
-            this.label11.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label11.Location = new System.Drawing.Point(278, 63);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(146, 34);
+            this.label11.Size = new System.Drawing.Size(58, 13);
             this.label11.TabIndex = 23;
             this.label11.Text = "is worth it.";
             // 
@@ -67,10 +66,9 @@
             this.linkGettingStarted.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkGettingStarted.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkGettingStarted.ForeColor = System.Drawing.Color.Blue;
-            this.linkGettingStarted.Location = new System.Drawing.Point(422, 160);
-            this.linkGettingStarted.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.linkGettingStarted.Location = new System.Drawing.Point(169, 63);
             this.linkGettingStarted.Name = "linkGettingStarted";
-            this.linkGettingStarted.Size = new System.Drawing.Size(282, 34);
+            this.linkGettingStarted.Size = new System.Drawing.Size(111, 13);
             this.linkGettingStarted.TabIndex = 22;
             this.linkGettingStarted.Text = "Getting Started Guide";
             this.linkGettingStarted.Click += new System.EventHandler(this.OnLinkGettingStartedGuide);
@@ -78,10 +76,9 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(35, 160);
-            this.label9.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label9.Location = new System.Drawing.Point(14, 63);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(412, 34);
+            this.label9.Size = new System.Drawing.Size(159, 13);
             this.label9.TabIndex = 21;
             this.label9.Text = "Manuals can be boring, but our ";
             // 
@@ -90,10 +87,9 @@
             this.label7.AutoSize = true;
             this.label7.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
-            this.label7.Location = new System.Drawing.Point(0, 107);
-            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label7.Location = new System.Drawing.Point(0, 42);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(205, 34);
+            this.label7.Size = new System.Drawing.Size(82, 13);
             this.label7.TabIndex = 20;
             this.label7.Text = "Get Educated";
             // 
@@ -103,28 +99,25 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.kryptonBorderEdge.Location = new System.Drawing.Point(75, 79);
-            this.kryptonBorderEdge.Margin = new System.Windows.Forms.Padding(8);
+            this.kryptonBorderEdge.Location = new System.Drawing.Point(30, 31);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1125, 3);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(450, 1);
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(65, 102);
-            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label6.Location = new System.Drawing.Point(26, 40);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(313, 34);
+            this.label6.Size = new System.Drawing.Size(123, 13);
             this.label6.TabIndex = 18;
             this.label6.Text = "Wondering what\'s next?";
             // 
             // pictureBox3
             // 
             this.pictureBox3.Image = global::ShipWorks.Properties.Resources.box_closed1;
-            this.pictureBox3.Location = new System.Drawing.Point(990, 41);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(8);
+            this.pictureBox3.Location = new System.Drawing.Point(396, 16);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(24, 24);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -133,10 +126,9 @@
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(35, 51);
-            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label5.Location = new System.Drawing.Point(14, 20);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(968, 51);
+            this.label5.Size = new System.Drawing.Size(387, 20);
             this.label5.TabIndex = 15;
             this.label5.Text = "When you\'re ready to ship, select an order and click the \"Ship Orders\" button:";
             // 
@@ -146,9 +138,8 @@
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
             this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(313, 34);
+            this.label1.Size = new System.Drawing.Size(124, 13);
             this.label1.TabIndex = 14;
             this.label1.Text = "Print Shipping Labels";
             // 
@@ -156,19 +147,17 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(65, 20);
-            this.label10.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label10.Location = new System.Drawing.Point(26, 8);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(294, 34);
+            this.label10.Size = new System.Drawing.Size(118, 13);
             this.label10.TabIndex = 10;
             this.label10.Text = "ShipWorks is ready!";
             // 
             // addStoreWizardFinishPanel
             // 
-            this.addStoreWizardFinishPanel.Location = new System.Drawing.Point(115, 168);
-            this.addStoreWizardFinishPanel.Margin = new System.Windows.Forms.Padding(8);
+            this.addStoreWizardFinishPanel.Location = new System.Drawing.Point(46, 66);
             this.addStoreWizardFinishPanel.Name = "addStoreWizardFinishPanel";
-            this.addStoreWizardFinishPanel.Size = new System.Drawing.Size(1248, 223);
+            this.addStoreWizardFinishPanel.Size = new System.Drawing.Size(499, 88);
             this.addStoreWizardFinishPanel.TabIndex = 25;
             // 
             // otherMessagingPanel
@@ -178,12 +167,11 @@
             this.otherMessagingPanel.Controls.Add(this.label5);
             this.otherMessagingPanel.Controls.Add(this.label11);
             this.otherMessagingPanel.Controls.Add(this.linkGettingStarted);
-            this.otherMessagingPanel.Controls.Add(this.label7);
             this.otherMessagingPanel.Controls.Add(this.label9);
-            this.otherMessagingPanel.Location = new System.Drawing.Point(115, 406);
-            this.otherMessagingPanel.Margin = new System.Windows.Forms.Padding(8);
+            this.otherMessagingPanel.Controls.Add(this.label7);
+            this.otherMessagingPanel.Location = new System.Drawing.Point(46, 160);
             this.otherMessagingPanel.Name = "otherMessagingPanel";
-            this.otherMessagingPanel.Size = new System.Drawing.Size(1248, 223);
+            this.otherMessagingPanel.Size = new System.Drawing.Size(499, 88);
             this.otherMessagingPanel.TabIndex = 26;
             // 
             // panelHubInfo
@@ -192,10 +180,9 @@
             this.panelHubInfo.Controls.Add(this.linkHubDoc);
             this.panelHubInfo.Controls.Add(this.labelHubTitle);
             this.panelHubInfo.Controls.Add(this.labelHubBlurb);
-            this.panelHubInfo.Location = new System.Drawing.Point(115, 624);
-            this.panelHubInfo.Margin = new System.Windows.Forms.Padding(8);
+            this.panelHubInfo.Location = new System.Drawing.Point(46, 246);
             this.panelHubInfo.Name = "panelHubInfo";
-            this.panelHubInfo.Size = new System.Drawing.Size(1248, 223);
+            this.panelHubInfo.Size = new System.Drawing.Size(499, 88);
             this.panelHubInfo.TabIndex = 27;
             // 
             // linkLaunchHub
@@ -204,10 +191,9 @@
             this.linkLaunchHub.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkLaunchHub.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkLaunchHub.ForeColor = System.Drawing.Color.Blue;
-            this.linkLaunchHub.Location = new System.Drawing.Point(498, 155);
-            this.linkLaunchHub.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.linkLaunchHub.Location = new System.Drawing.Point(199, 61);
             this.linkLaunchHub.Name = "linkLaunchHub";
-            this.linkLaunchHub.Size = new System.Drawing.Size(79, 34);
+            this.linkLaunchHub.Size = new System.Drawing.Size(33, 13);
             this.linkLaunchHub.TabIndex = 23;
             this.linkLaunchHub.Text = "here.";
             this.linkLaunchHub.Click += new System.EventHandler(this.OnLinkLaunchHub);
@@ -218,10 +204,9 @@
             this.linkHubDoc.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkHubDoc.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.linkHubDoc.ForeColor = System.Drawing.Color.Blue;
-            this.linkHubDoc.Location = new System.Drawing.Point(638, 122);
-            this.linkHubDoc.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.linkHubDoc.Location = new System.Drawing.Point(255, 48);
             this.linkHubDoc.Name = "linkHubDoc";
-            this.linkHubDoc.Size = new System.Drawing.Size(204, 34);
+            this.linkHubDoc.Size = new System.Drawing.Size(79, 13);
             this.linkHubDoc.TabIndex = 22;
             this.linkHubDoc.Text = "ShipWorks Hub";
             this.linkHubDoc.Click += new System.EventHandler(this.OnLinkHubDoc);
@@ -231,26 +216,24 @@
             this.labelHubTitle.AutoSize = true;
             this.labelHubTitle.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelHubTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(129)))), ((int)(((byte)(189)))));
-            this.labelHubTitle.Location = new System.Drawing.Point(0, 3);
-            this.labelHubTitle.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.labelHubTitle.Location = new System.Drawing.Point(0, 1);
             this.labelHubTitle.Name = "labelHubTitle";
-            this.labelHubTitle.Size = new System.Drawing.Size(231, 34);
+            this.labelHubTitle.Size = new System.Drawing.Size(92, 13);
             this.labelHubTitle.TabIndex = 20;
             this.labelHubTitle.Text = "ShipWorks Hub";
             // 
             // labelHubBlurb
             // 
             this.labelHubBlurb.AutoSize = true;
-            this.labelHubBlurb.Location = new System.Drawing.Point(35, 56);
-            this.labelHubBlurb.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.labelHubBlurb.Location = new System.Drawing.Point(14, 22);
             this.labelHubBlurb.Name = "labelHubBlurb";
-            this.labelHubBlurb.Size = new System.Drawing.Size(1040, 136);
+            this.labelHubBlurb.Size = new System.Drawing.Size(404, 52);
             this.labelHubBlurb.TabIndex = 21;
             this.labelHubBlurb.Text = resources.GetString("labelHubBlurb.Text");
             // 
             // AddStoreWizardFinishPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(15F, 33F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelHubInfo);
             this.Controls.Add(this.otherMessagingPanel);
@@ -259,9 +242,8 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label10);
             this.Description = "ShipWorks is ready to connect to your store.";
-            this.Margin = new System.Windows.Forms.Padding(8);
             this.Name = "AddStoreWizardFinishPage";
-            this.Size = new System.Drawing.Size(1370, 1147);
+            this.Size = new System.Drawing.Size(548, 452);
             this.Title = "Setup Complete";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.otherMessagingPanel.ResumeLayout(false);
