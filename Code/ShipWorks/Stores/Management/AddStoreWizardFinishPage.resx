@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="kryptonBorderEdge.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="labelHubBlurb.Text" xml:space="preserve">
+    <value>Manage your warehouse ship-from locations and other routing, view your order
+information, access data driven intelligence based on your shipping history, control
+your product inventory and more. Learn all about ShipWorks Hub  or, if you're 
+ready to get started you can launch it here.</value>
+  </data>
 </root>
