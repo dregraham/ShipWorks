@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     /// Used to retrieve the database identifier guid from sproc GetDatabaseGuid.
     /// </summary>
     [Component(SingleInstance = true)]
-    public class DatabaseIdentifier : IDatabaseIdentifier
+    public class DatabaseIdentifier : IDatabaseIdentifier, IInitializeForCurrentDatabase
     {
         private Guid databaseId = Guid.Empty;
 
@@ -52,6 +52,14 @@ namespace ShipWorks.ApplicationCore.Licensing
         public void Reset()
         {
             databaseId = Guid.Empty;
+        }
+
+        /// <summary>
+        /// Initialize for the current db
+        /// </summary>
+        public void InitializeForCurrentDatabase(ExecutionMode.ExecutionMode executionMode)
+        {
+            Reset();
         }
     }
 }
