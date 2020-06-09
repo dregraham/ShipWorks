@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -65,7 +68,21 @@ namespace ShipWorks.Products.Warehouse
             return await warehouseRequestClient
                 .MakeRequest<ChangeProductResponseData>(request, "Change Product")
                 .Map(dataFactory.CreateChangeProductResult)
+                .MapException(UpdateErrorMessageIfConflict)
                 .ConfigureAwait(true);
+        }
+
+        /// <summary>
+        /// If HubApiException is a conflict, return updated error message
+        /// </summary>
+        private Exception UpdateErrorMessageIfConflict(Exception ex)
+        {
+            if ((ex is HubApiException apiException) && apiException.StatusCode == HttpStatusCode.Conflict)
+            {
+                string errorMessage = "Your product data is in the process of syncing between ShipWorks Hub and your ShipWorks Desktop, please wait a few minutes and try again.";
+                return new HubApiException(errorMessage, apiException);
+            }
+            return ex;
         }
 
         /// <summary>
