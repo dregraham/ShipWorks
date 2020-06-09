@@ -13,7 +13,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     public class HubApiException : Exception
     {
         /// <summary>
-        /// Constructor to recreate exception with anotehr HubApiExecption
+        /// Constructor to recreate exception with another HubApiExecption
         /// </summary>
         public HubApiException(string message, HubApiException innerException) : base(message, innerException)
         {
