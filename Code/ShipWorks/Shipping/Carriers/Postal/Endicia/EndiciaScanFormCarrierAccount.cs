@@ -108,7 +108,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime() &
 
                 // Exclude first class envelopes
-                !(PostalShipmentFields.Service == (int) PostalServiceType.FirstClass & PostalShipmentFields.PackagingType == (int) PostalPackagingType.Envelope));
+                !(PostalShipmentFields.Service == (int) PostalServiceType.FirstClass &
+                    (PostalShipmentFields.PackagingType == (int) PostalPackagingType.Envelope |
+                        PostalShipmentFields.PackagingType == (int) PostalPackagingType.LargeEnvelope)));
 
             bucket.Relations.Add(PostalShipmentEntity.Relations.EndiciaShipmentEntityUsingShipmentID);
         }
