@@ -79,7 +79,7 @@ namespace ShipWorks.Products.Warehouse
         {
             if ((ex is HubApiException apiException) && apiException.StatusCode == HttpStatusCode.Conflict)
             {
-                string errorMessage = "Your product data is in the process of syncing between ShipWorks Hub and your ShipWorks Desktop, please wait a few minutes and try again.";
+                string errorMessage = "Product information is syncing with ShipWorks Hub. Please wait a few minutes and try again.";
                 return new HubApiException(errorMessage, apiException);
             }
             return ex;
