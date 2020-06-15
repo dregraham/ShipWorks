@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 submitter.Headers.Add($"Content-Type: application/json");
                 submitter.Headers.Add($"api-key: {await GetApiKey()}");
                 submitter.Verb = HttpVerb.Delete;
-                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{accountId}");
+                submitter.Uri = new Uri($"https://platform.shipengine.com/v1/connections/carriers/amazon_shipping_us/{accountId}");
 
                 // Delete request returns no content, this is not an error
                 submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
-                request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us/{amazonSwaAccount.ShipEngineCarrierId}/settings");
+                request.AddHeader("SW-originalRequestUrl", $"https://platform.shipengine.com/v1/connections/carriers/amazon_shipping_us/{amazonSwaAccount.ShipEngineCarrierId}/settings");
                 request.AddHeader("SW-originalRequestMethod", Method.PUT.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
-                request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/amazon_shipping_us");
+                request.AddHeader("SW-originalRequestUrl", $"https://platform.shipengine.com/v1/connections/carriers/amazon_shipping_us");
                 request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
@@ -528,7 +528,7 @@ namespace ShipWorks.Shipping.ShipEngine
             whoAmIRequest.Headers.Add($"Content-Type: application/json");
             whoAmIRequest.Headers.Add($"api-key: {await GetApiKey()}");
             whoAmIRequest.Verb = HttpVerb.Get;
-            whoAmIRequest.Uri = new Uri("https://api.shipengine.com/v1/environment/whoami");
+            whoAmIRequest.Uri = new Uri("https://platform.shipengine.com/v1/environment/whoami");
 
             EnumResult<HttpStatusCode> result =
                 whoAmIRequest.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "WhoAmI"), typeof(ShipEngineException));
@@ -612,7 +612,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 IRestRequest request = new RestRequest();
                 request.AddHeader("Content-Type", "application/json");
                 request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
-                request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/registration/ups");
+                request.AddHeader("SW-originalRequestUrl", "https://platform.shipengine.com/v1/registration/ups");
                 request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
                 request.Method = Method.POST;
                 request.RequestFormat = DataFormat.Json;
@@ -688,7 +688,7 @@ namespace ShipWorks.Shipping.ShipEngine
             IRestRequest request = new RestRequest();
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("SW-on-behalf-of", await GetApiKey().ConfigureAwait(false));
-            request.AddHeader("SW-originalRequestUrl", "https://api.shipengine.com/v1/manifests");
+            request.AddHeader("SW-originalRequestUrl", "https://platform.shipengine.com/v1/manifests");
             request.AddHeader("SW-originalRequestMethod", Method.POST.ToString());
             request.Method = Method.POST;
             request.RequestFormat = DataFormat.Json;

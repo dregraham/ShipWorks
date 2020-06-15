@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Tests.ShipEngine
 
             await testObject.CreateNewAccount();
 
-            request.Verify(r => r.Headers.Add("SW-originalRequestUrl", "https://api.shipengine.com/v1/partners/accounts"), Times.Once);
+            request.Verify(r => r.Headers.Add("SW-originalRequestUrl", "https://platform.shipengine.com/v1/partners/accounts"), Times.Once);
         }
 
         [Fact]

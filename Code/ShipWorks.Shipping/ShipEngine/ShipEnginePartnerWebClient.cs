@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component(SingleInstance = true)]
     public class ShipEnginePartnerWebClient : IShipEnginePartnerWebClient
     {
-        private const string CreateAccountUrl = "https://api.shipengine.com/v1/partners/accounts";
+        private const string CreateAccountUrl = "https://platform.shipengine.com/v1/partners/accounts";
         private const string ProxyEndpoint = "shipEngine";
 
         private readonly IHttpRequestSubmitterFactory requestFactory;
