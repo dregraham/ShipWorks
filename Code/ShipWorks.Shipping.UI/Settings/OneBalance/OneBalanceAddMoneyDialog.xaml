@@ -25,7 +25,7 @@
     </ui:InteropWindow.Resources>
     <StackPanel HorizontalAlignment="Center">
         <TextBlock TextWrapping="Wrap"  Margin="0,20,0,0">
-            Enter an amount to prepay for postage with your ShipWorks One Balance account.
+            Enter an amount to prepay for postage with your One Balance account.
             <Hyperlink NavigateUri="https://support.shipworks.com/hc/en-us/articles/360039872952" c:Link.OpenInBrowser="true">
                 Learn More
             </Hyperlink>
