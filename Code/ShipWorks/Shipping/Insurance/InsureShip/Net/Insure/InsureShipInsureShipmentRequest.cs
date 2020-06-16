@@ -87,6 +87,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("tracking_number", shipment.TrackingNumber);
             postData.Add("order_date", shipment.Order.OrderDate.ToString(CultureInfo.InvariantCulture));
             postData.Add("ship_date", shipment.ShipDate.ToString(CultureInfo.InvariantCulture));
+            postData.Add("email_timeout", "-1"); // This makes sure that InsureShip doesn't email our customers directly about a new policy
 
             AddAddress("shipping", shipment.ShipPerson, postData);
             AddAddress("billing", shipment.Order.BillPerson, postData);
