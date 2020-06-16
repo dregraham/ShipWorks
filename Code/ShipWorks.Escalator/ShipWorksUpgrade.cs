@@ -72,6 +72,7 @@ namespace ShipWorks.Escalator
                     }
                     else
                     {
+                        AutoUpdateTelemetryCollector.Start(Version.Parse(shipWorksRelease.ReleaseVersion));
                         Result installResult = await Install(shipWorksRelease, false).ConfigureAwait(false);
                         relaunchShipWorks = installResult.Failure;
 
@@ -142,6 +143,8 @@ namespace ShipWorks.Escalator
                     }
 
                     log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
+
+                    AutoUpdateTelemetryCollector.Start(releaseVersion);
 
                     Result installResult = await Install(shipWorksRelease, true).ConfigureAwait(false);
 
