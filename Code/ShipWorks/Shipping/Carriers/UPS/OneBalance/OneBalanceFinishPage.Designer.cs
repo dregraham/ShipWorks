@@ -79,7 +79,7 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(380, 65);
+            this.helpLink.Location = new System.Drawing.Point(330, 64);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(65, 13);
             this.helpLink.TabIndex = 6;
