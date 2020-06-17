@@ -3570,10 +3570,6 @@ namespace ShipWorks
                         "An error occurred while downloading.",
                         new DashboardActionMethod("[link]View Details[/link]", ShowDownloadLog));
                 }
-
-                // We always check for new server messages after a download error, since if there was a download problem
-                // it could be we put out a server message related to it.
-                DashboardManager.DownloadLatestServerMessages();
             }
             else
             {
