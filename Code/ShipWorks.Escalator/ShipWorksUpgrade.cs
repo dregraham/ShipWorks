@@ -24,6 +24,7 @@ namespace ShipWorks.Escalator
         private readonly IAutoUpdateStatusProvider autoUpdateStatusProvider;
         private readonly IShipWorksLauncher shipWorksLauncher;
         private readonly IFailedUpgradeFile failedUpgradeFile;
+        private readonly IServiceName serviceName;
         private const int MaxRetryCount = 3;
 
         /// <summary>
@@ -36,7 +37,8 @@ namespace ShipWorks.Escalator
             Func<Type, ILog> logFactory,
             IAutoUpdateStatusProvider autoUpdateStatusProvider,
             IShipWorksLauncher shipWorksLauncher,
-            IFailedUpgradeFile failedUpgradeFile)
+            IFailedUpgradeFile failedUpgradeFile,
+            IServiceName serviceName)
         {
             this.updaterWebClient = updaterWebClient;
             this.shipWorksInstaller = shipWorksInstaller;
@@ -44,6 +46,7 @@ namespace ShipWorks.Escalator
             this.autoUpdateStatusProvider = autoUpdateStatusProvider;
             this.shipWorksLauncher = shipWorksLauncher;
             this.failedUpgradeFile = failedUpgradeFile;
+            this.serviceName = serviceName;
             log = logFactory(typeof(ShipWorksUpgrade));
         }
 
@@ -72,7 +75,7 @@ namespace ShipWorks.Escalator
                     }
                     else
                     {
-                        AutoUpdateTelemetryCollector.Start(Version.Parse(shipWorksRelease.ReleaseVersion));
+                        AutoUpdateTelemetryCollector.Start(Version.Parse(shipWorksRelease.ReleaseVersion), serviceName.GetInstanceID());
                         Result installResult = await Install(shipWorksRelease, false).ConfigureAwait(false);
                         relaunchShipWorks = installResult.Failure;
 
@@ -144,7 +147,7 @@ namespace ShipWorks.Escalator
 
                     log.InfoFormat("New Version {0} found. Attempting upgrade.", shipWorksRelease.ReleaseVersion);
 
-                    AutoUpdateTelemetryCollector.Start(releaseVersion);
+                    AutoUpdateTelemetryCollector.Start(releaseVersion, serviceName.GetInstanceID());
 
                     Result installResult = await Install(shipWorksRelease, true).ConfigureAwait(false);
 
