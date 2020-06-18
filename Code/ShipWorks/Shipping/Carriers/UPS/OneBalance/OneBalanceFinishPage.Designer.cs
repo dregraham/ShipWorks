@@ -95,7 +95,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
-            this.Description = "You are now ready to use UPS with ShipWorks.";
+            this.Description = "You are now ready to use UPS from ShipWorks.";
             this.Name = "OneBalanceFinishPage";
             this.Size = new System.Drawing.Size(579, 474);
             this.Title = "Account Registration";
