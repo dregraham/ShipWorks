@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.ShipEngine
     [Component]
     public class ShipEngineApiFactory : IShipEngineApiFactory
     {
-        private string endpoint = "http://platform.shipengine.com/";
+        private readonly string endpoint = "http://platform.shipengine.com/";
 
         /// <summary>
         /// Create the CarrierAccountsApi
