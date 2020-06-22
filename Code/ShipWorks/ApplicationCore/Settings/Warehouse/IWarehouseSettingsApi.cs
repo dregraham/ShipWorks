@@ -21,6 +21,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         Task<Result> Link(string id);
 
         /// <summary>
+        /// Creates a warehouse on the hub and returns the id of the new warehouse
+        /// </summary>
+        Task<GenericResult<string>> Create(Details warehouse);
+
+        /// <summary>
         /// Upload products to the associated warehouse
         /// </summary>
         Task UploadProducts(ISingleItemProgressDialog progressItem);

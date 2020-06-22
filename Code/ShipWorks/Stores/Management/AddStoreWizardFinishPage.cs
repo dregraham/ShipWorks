@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.ApplicationCore.Licensing.WebClientEnvironments;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Management
@@ -28,26 +30,29 @@ namespace ShipWorks.Stores.Management
         {
             StoreEntity store = GetStore<StoreEntity>();
 
-            Control finishPageControl = CreateFinishPageControl(store.StoreTypeCode).Create(store);
-            addStoreWizardFinishPanel.Controls.Add(finishPageControl);
-            addStoreWizardFinishPanel.Size = finishPageControl.Size;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                Control finishPageControl = CreateFinishPageControl(store.StoreTypeCode, scope).Create(store);
 
-            otherMessagingPanel.Location = new Point(addStoreWizardFinishPanel.Location.X,
-                    addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
+                addStoreWizardFinishPanel.Controls.Add(finishPageControl);
+                addStoreWizardFinishPanel.Size = finishPageControl.Size;
+
+                otherMessagingPanel.Location = new Point(addStoreWizardFinishPanel.Location.X,
+                        addStoreWizardFinishPanel.Location.Y + addStoreWizardFinishPanel.Size.Height);
+
+                panelHubInfo.Location = new Point(otherMessagingPanel.Location.X,
+                    otherMessagingPanel.Location.Y + otherMessagingPanel.Size.Height);
+                panelHubInfo.Visible = scope.Resolve<ILicenseService>().IsHub;
+            }
         }
 
         /// <summary>
         /// Get the control to display at the top of the page
         /// </summary>
-        private IStoreWizardFinishPageControlFactory CreateFinishPageControl(StoreTypeCode storeTypeCode)
-        {
-            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
-            {
-                return scope.IsRegisteredWithKey<IStoreWizardFinishPageControlFactory>(storeTypeCode) ?
+        private IStoreWizardFinishPageControlFactory CreateFinishPageControl(StoreTypeCode storeTypeCode, ILifetimeScope scope) => 
+            scope.IsRegisteredWithKey<IStoreWizardFinishPageControlFactory>(storeTypeCode) ?
                     scope.ResolveKeyed<IStoreWizardFinishPageControlFactory>(storeTypeCode) :
                     scope.Resolve<IStoreWizardFinishPageControlFactory>();
-            }
-        }
 
         /// <summary>
         /// User clicked the link to open the getting started guide
@@ -55,6 +60,27 @@ namespace ShipWorks.Stores.Management
         private void OnLinkGettingStartedGuide(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("https://shipworks.zendesk.com/hc/en-us/articles/360022464752-ShipWorks-User-Manual", this);
+        }
+        
+        /// <summary>
+        /// Open up the hub documentation
+        /// </summary>
+        private void OnLinkHubDoc(object sender, EventArgs e)
+        {
+            WebHelper.OpenUrl("https://support.shipworks.com/hc/en-us/articles/360029495931-The-ShipWorks-Hub", this);
+        }
+
+        /// <summary>
+        /// Launch the hub
+        /// </summary>
+        private void OnLinkLaunchHub(object sender, EventArgs e)
+        {
+            string warehouseUrl;
+            using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+            {
+                warehouseUrl = scope.Resolve<WebClientEnvironmentFactory>().SelectedEnvironment.WarehouseUrl;
+            }
+            WebHelper.OpenUrl(warehouseUrl, this);
         }
     }
 }

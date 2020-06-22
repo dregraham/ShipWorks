@@ -1340,7 +1340,7 @@ namespace ShipWorks.Stores.Communication
         {
             if (string.IsNullOrEmpty(config.WarehouseID))
             {
-                throw new DownloadException("Could not download orders because this ShipWorks database is not currently linked to a warehouse in ShipWorks Hub");
+                throw new DownloadException("Link this database to a warehouse in ShipWorks Hub to download orders");
             }
 
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
