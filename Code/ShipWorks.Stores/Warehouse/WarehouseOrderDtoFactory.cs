@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Warehouse
         {
             if (string.IsNullOrEmpty(warehouseID.Value))
             {
-                throw new InvalidOperationException("Could not download orders because this ShipWorks database is not currently linked to a warehouse in ShipWorks Hub");
+                throw new InvalidOperationException("Link this database to a warehouse in ShipWorks Hub to download orders.");
             }
 
             var warehouseStoreID = store?.WarehouseStoreID;

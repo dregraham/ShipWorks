@@ -181,7 +181,7 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("Bermuda", "BM");
             countries.Add("Bhutan", "BT");
             countries.Add("Bolivia", "BO");
-            countries.Add("Bonaire", "BL");
+            countries.Add("Bonaire", "BQ");
             countries.Add("Bosnia", "BA");
             countries.Add("Botswana", "BW");
             countries.Add("Brazil", "BR");
@@ -311,7 +311,6 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("Nepal", "NP");
             countries.Add("Netherlands", "NL");
             countries.Add("Netherlands Antilles", "AN");
-            countries.Add("Neutral Zone", "NT");
             countries.Add("New Caledonia", "NC");
             countries.Add("New Zealand", "NZ");
             countries.Add("Nicaragua", "NI");
@@ -364,7 +363,7 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("South Georgia and South Sandwich Islands", "GS");
             countries.Add("Spain", "ES");
             countries.Add("Sri Lanka", "LK");
-            countries.Add("Saint Barthelemy", "NT");
+            countries.Add("Saint Barthelemy", "BL");
             countries.Add("Saint Christopher", "SW");
             countries.Add("Saint Eustatius", "EU");
             countries.Add("Saint John", "UV");
@@ -412,7 +411,6 @@ namespace Interapptive.Shared.Business.Geography
             countries.Add("Virgin Islands (British)", "VG");
             countries.Add("Virgin Islands (US)", "VI");
             countries.Add("Wallis and Futuna Islands", "WF");
-            countries.Add("Western Samoa", "WS");
             countries.Add("Yemen", "YE");
             countries.Add("Serbia", "RS");
             countries.Add("Zaire", "ZR");

@@ -17,14 +17,19 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         private readonly IWarehouseList warehouseListRequest;
         private readonly IWarehouseLink warehouseLink;
         private readonly IWarehouseProductUploader uploader;
+        private readonly IWarehouseCreate create;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, IWarehouseLink warehouseLink, IWarehouseProductUploader uploader)
+        public WarehouseSettingsApi(IWarehouseList warehouseListRequest, 
+            IWarehouseLink warehouseLink, 
+            IWarehouseProductUploader uploader, 
+            IWarehouseCreate create)
         {
             this.warehouseLink = warehouseLink;
             this.uploader = uploader;
+            this.create = create;
             this.warehouseListRequest = warehouseListRequest;
         }
 
@@ -37,6 +42,11 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         /// Link the warehouse with this instance of ShipWorks
         /// </summary>
         public Task<Result> Link(string id) => warehouseLink.Link(id);
+
+        /// <summary>
+        /// Creates a warehouse on the hub and returns the id of the new warehouse
+        /// </summary>
+        public Task<GenericResult<string>> Create(Details warehouse) => create.Create(warehouse);
 
         /// <summary>
         /// Upload products to the associated warehouse
