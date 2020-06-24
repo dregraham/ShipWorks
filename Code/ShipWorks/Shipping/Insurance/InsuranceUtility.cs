@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         public static string OnlineExcludedCountriesFile
         {
-            get { return "http://www.interapptive.com/insurance/insuranceExcludedCountries.xml"; }
+            get { return "https://www.interapptive.com/insurance/insuranceExcludedCountries.xml"; }
         }
 
         /// <summary>
