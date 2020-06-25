@@ -5118,9 +5118,6 @@
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardLocalMessageItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardTrialItem.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardOnlineVersionItem.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\ServerMessageFeedException.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\ServerMessageManager.cs" />
-    <Compile Include="ApplicationCore\Dashboard\Content\ServerMessageResponseAction.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\ShipWorksOnlineVersionChecker.cs" />
     <Compile Include="ApplicationCore\Interaction\DockingPanelContentHolder.cs">
       <SubType>UserControl</SubType>

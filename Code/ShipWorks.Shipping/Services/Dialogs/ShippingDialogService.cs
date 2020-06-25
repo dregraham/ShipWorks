@@ -12,7 +12,6 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Dashboard;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -157,10 +156,6 @@ namespace ShipWorks.Shipping.Services.Dialogs
             // We don't hear about deleted shipments until the heart beats, so we need to force this here to avoid
             // a pause reloading the shipping panel
             Program.MainForm.ForceHeartbeat(ApplicationCore.Enums.HeartbeatOptions.ChangesExpected);
-
-            // We always check for new server messages after shipping, since if there was a shipping problem
-            // it could be we put out a server message related to it.
-            DashboardManager.DownloadLatestServerMessages();
 
             messenger.Send(new OrderSelectionChangingMessage(this, message.Shipments.Select(x => x.OrderID).Distinct()));
         }
