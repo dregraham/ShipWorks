@@ -257,6 +257,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         if (disconnectResult.Failure)
                         {
                             MessageHelper.ShowError(this, $"An error occurred removing your USPS accont. {Environment.NewLine}{disconnectResult.Message}");
+                            return;
                         }
                     }
                 }

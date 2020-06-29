@@ -68,6 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                         if(result.Failure)
                         {
                             MessageHelper.ShowError(this, $"An error occurred updating password. {Environment.NewLine}{result.Message}");
+                            return;
                         }
                     }
                 }
