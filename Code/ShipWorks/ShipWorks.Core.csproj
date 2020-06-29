@@ -1309,6 +1309,7 @@
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
     <Compile Include="Shipping\Settings\IOneBalanceSetupWizard.cs" />
+    <Compile Include="Shipping\ShipEngine\IShipEngineWebClient.cs" />
     <Compile Include="Shipping\ShipmentIgnoreConcurrencyScope.cs" />
     <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />

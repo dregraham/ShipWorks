@@ -15,6 +15,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.ShipEngine;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -235,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Remove the selected account
         /// </summary>
-        private void OnRemove(object sender, EventArgs e)
+        private async void OnRemove(object sender, EventArgs e)
         {
             UspsAccountEntity account = (UspsAccountEntity) sandGrid.SelectedElements[0].Tag;
 
@@ -246,9 +247,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (result == DialogResult.OK)
             {
+                if (!string.IsNullOrWhiteSpace(account.ShipEngineCarrierId))
+                {
+                    using (ILifetimeScope scope = IoC.BeginLifetimeScope())
+                    {
+                        IShipEngineWebClient client = scope.Resolve<IShipEngineWebClient>();
+                        Result disconnectResult = await client.DisconnectStampsAccount(account.ShipEngineCarrierId);
+
+                        if (disconnectResult.Failure)
+                        {
+                            MessageHelper.ShowError(this, $"An error occurred removing your USPS accont. {Environment.NewLine}{disconnectResult.Message}");
+                        }
+                    }
+                }
+
                 UspsAccountManager.DeleteAccount(account);
                 LoadAccounts();
             }
+
+
         }
 
         /// <summary>
