@@ -625,6 +625,9 @@ namespace ShipWorks.Shipping.ShipEngine
             }
         }
 
+        /// <summary>
+        /// Update the given stamps account with the username and password
+        /// </summary>
         public async Task<Result> UpdateStampsAccount(string carrierId, string username, string password)
         {
             try

@@ -264,8 +264,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UspsAccountManager.DeleteAccount(account);
                 LoadAccounts();
             }
-
-
         }
 
         /// <summary>
