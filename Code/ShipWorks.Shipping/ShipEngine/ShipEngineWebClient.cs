@@ -611,7 +611,7 @@ namespace ShipWorks.Shipping.ShipEngine
                 submitter.Headers.Add($"Content-Type: application/json");
                 submitter.Headers.Add($"api-key: {await GetApiKey()}");
                 submitter.Verb = HttpVerb.Delete;
-                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/stamps_com/{accountId}");
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/stamps_com/{carrierId}");
 
                 // Delete request returns no content, this is not an error
                 submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent);
