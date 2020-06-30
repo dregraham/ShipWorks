@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private const string ApiAccessTokenUrlFormat = "{0}oauth/access_token?client_id={1}&client_secret={2}&code={3}";
 
         // Order URL formats
-        private const string ApiGetOrdersUrlFormat = "{0}orders.json";
+        private const string ApiGetOrdersUrlFormat = "{0}api/2020-04/orders.json";
         private const string ApiGetOrderUrlFormat = "{0}orders/{1}.json";
         private const string ApiGetOrderCountUrlFormat = "{0}orders/count.json";
         private const string ViewOrderUrlFormat = "{0}orders/{1}";
@@ -29,15 +29,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         private const string ApiFraudUrlFormat = "{0}orders/{1}/risks.json";
 
         // Shipment URL formats
-        private const string ApiFulfillmentsUrlFormat = "{0}orders/{1}/fulfillments.json";
+        private const string ApiFulfillmentsUrlFormat = "{0}api/2020-04/orders/{1}/fulfillments.json";
 
         // Shop URL Format
         private const string ShopUrlFormat = "{0}shop.json";
 
         // InventoryLevel URL Format
-        private const string InventoryLevelForItemsUrlFormat = "{0}inventory_levels.json?inventory_item_ids={1}";
-        private const string InventoryLevelForLocationsUrlFormat = "{0}inventory_levels.json?location_ids={1}";
-        private const string LocationsUrlFormat = "{0}locations.json";
+        private const string InventoryLevelForItemsUrlFormat = "{0}api/2020-04/inventory_levels.json?inventory_item_ids={1}";
+        private const string InventoryLevelForLocationsUrlFormat = "{0}api/2020-04/inventory_levels.json?location_ids={1}";
+        private const string LocationsUrlFormat = "{0}api/2020-04/locations.json";
 
         // Scopes we need
         private const string Scopes = "write_customers,write_orders,write_products,write_shipping,read_inventory";
