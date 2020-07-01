@@ -201,7 +201,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     do
                     {
                         ShopifyWebClientGetOrdersResult getOrdersResult = webClient.GetOrders(subRange.StartDate, subRange.EndDate, nextPageUrl);
-                        orders.AddRange(getOrdersResult.Orders);
+
+                        if (getOrdersResult.Orders?.Any() == true)
+                        {
+                            orders.AddRange(getOrdersResult.Orders);
+                        }
+
                         nextPageUrl = getOrdersResult.NextPageUrl;
                     } while (!nextPageUrl.IsNullOrWhiteSpace());
 
