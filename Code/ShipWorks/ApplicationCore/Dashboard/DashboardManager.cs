@@ -72,7 +72,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
         // Work ID for checking tango messages and checking the sw version
         private static Guid checkVersionWorkID;
-        private static Guid tangoMessageWorkID;
 
         // keep track of any local rating issues
         private static ILocalRateValidationResult validationResult;
@@ -106,9 +105,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             // Check for a new version of ShipWorks
             checkVersionWorkID = IdleWatcher.RegisterDatabaseDependentWork("DashboardVersionCheck", AsyncCheckShipWorksVersion, busyText, TimeSpan.FromHours(2));
-
-            // Check for updates from tango.  This will also be manually done at other important times, like after downloading or shipping.
-            tangoMessageWorkID = IdleWatcher.RegisterDatabaseDependentWork("DashboardMessagesCheck", AsyncCheckLatestServerMessages, busyText, TimeSpan.FromHours(.5));
 
             UpdateLayout();
 
@@ -147,7 +143,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             // Don't wait for idle - do these right away
             IdleWatcher.RunWorkNow(checkVersionWorkID);
-            IdleWatcher.RunWorkNow(tangoMessageWorkID);
         }
 
         /// <summary>
@@ -463,36 +458,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Initiate a check of the latest tango server messages
-        /// </summary>
-        public static void DownloadLatestServerMessages()
-        {
-            IdleWatcher.RunWorkNow(tangoMessageWorkID);
-        }
-
-        /// <summary>
-        /// Runs in the background to check the lastest messages from the interapptive server
-        /// </summary>
-        private static void AsyncCheckLatestServerMessages()
-        {
-            log.InfoFormat("Checking server messages...");
-
-            try
-            {
-                // First make sure we have all the latest messages
-                ServerMessageManager.CheckLatestServerMessages();
-
-                // When we're done with that, we'll need to refresh the UI
-                panel.BeginInvoke(new MethodInvoker(CheckForChanges));
-            }
-            catch (ServerMessageFeedException ex)
-            {
-                log.Error("Failed to read server message feed.", ex);
-                Debug.Fail(ex.Message, ex.ToString());
-            }
-        }
-
-        /// <summary>
         /// Check the database for any changes to server messages or other messages tha need displayed
         /// </summary>
         public static void CheckForChanges()
@@ -503,7 +468,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
                 return;
             }
 
-            CheckForServerMessageChanges();
             CheckForEmailChanges();
             CheckForActionChanges();
             CheckForSchedulerServiceStoppedChanges();
@@ -630,44 +594,6 @@ namespace ShipWorks.ApplicationCore.Dashboard
         }
 
         /// <summary>
-        /// Check for any changes in the database for server messages
-        /// </summary>
-        private static void CheckForServerMessageChanges()
-        {
-            // Check the database for any changes
-            ServerMessageManager.CheckDatabaseForChanges();
-
-            // Active messages are those that have not in some way been dismissed, and match the criteria of the current user and stores.
-            List<ServerMessageEntity> activeMessages = ServerMessageManager.ActiveMessages.ToList();
-
-            // Now we can get the list of messages that we need to display
-            foreach (ServerMessageEntity serverMessage in activeMessages)
-            {
-                DashboardServerMessageItem existing = dashboardItems.OfType<DashboardServerMessageItem>().Where(
-                    i => i.ServerMessage.ServerMessageID == serverMessage.ServerMessageID
-                    ).SingleOrDefault();
-
-                // If the message is already there we don't have to do anything
-                if (existing == null)
-                {
-                    DashboardServerMessageItem item = new DashboardServerMessageItem(serverMessage);
-                    AddDashboardItem(item);
-                }
-            }
-
-            // We also have to make sure we are no longer displaying messages that are no longer active
-            foreach (DashboardServerMessageItem displayedItem in dashboardItems.OfType<DashboardServerMessageItem>().ToList())
-            {
-                // See if this item we are displaying is still in the active list
-                if (!activeMessages.Exists(s => s.ServerMessageID == displayedItem.ServerMessage.ServerMessageID))
-                {
-                    // It's no longer active, so we've got to get rid of it.
-                    RemoveDashboardItem(displayedItem);
-                }
-            }
-        }
-
-        /// <summary>
         /// Check for any changes in the state of our email sending
         /// </summary>
         private static void CheckForEmailChanges()
@@ -758,7 +684,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
 
             if (UspsAccountManager.UspsAccountsReadOnly.Any(e => e.ShipEngineCarrierId != null))
             {
-                if(oneBalanceItem != null)
+                if (oneBalanceItem != null)
                 {
                     RemoveDashboardItem(oneBalanceItem);
                 }
@@ -771,7 +697,7 @@ namespace ShipWorks.ApplicationCore.Dashboard
         public static void ShowOneBalancePromo()
         {
             var oneBalanceItem = dashboardItems.OfType<DashboardOneBalancePromoItem>().SingleOrDefault();
-            if(oneBalanceItem == null)
+            if (oneBalanceItem == null)
             {
                 oneBalanceItem = new DashboardOneBalancePromoItem();
                 AddDashboardItem(oneBalanceItem);

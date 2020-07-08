@@ -14,7 +14,6 @@ using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Dashboard.Content;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.Core.Messaging;
@@ -161,8 +160,6 @@ namespace ShipWorks.Users
             EmailAccountManager.InitializeForCurrentSession();
             SearchManager.InitializeForCurrentSession();
 
-            ServerMessageManager.InitializeForCurrentUser();
-
             DownloadManager.InitializeForCurrentSession();
             FilterLayoutContext.InitializeForCurrentSession();
             FilterNodeColumnManager.InitializeForCurrentSession();
@@ -176,7 +173,7 @@ namespace ShipWorks.Users
             ShippingDefaultsRuleManager.InitializeForCurrentSession();
             ShippingPrintOutputManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
-            iParcelAccountManager.InitializeForCurrentSession();        
+            iParcelAccountManager.InitializeForCurrentSession();
 
             lifetimeScope?.Dispose();
             lifetimeScope = IoC.BeginLifetimeScope();
@@ -300,8 +297,12 @@ namespace ShipWorks.Users
                     {
                         switch (AuditBehaviorScope.ActiveState)
                         {
-                            case AuditState.Disabled: auditEnabledFlag = 'D'; break;
-                            case AuditState.NoDetails: auditEnabledFlag = 'P'; break;
+                            case AuditState.Disabled:
+                                auditEnabledFlag = 'D';
+                                break;
+                            case AuditState.NoDetails:
+                                auditEnabledFlag = 'P';
+                                break;
                         }
                     }
 
