@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Stores.Shopify
             List<long> list = new List<long> { 123, 456, 789 };
             string url = endpoints.InventoryLevelForItemsUrl(list);
 
-            Assert.Equal("https://test.myshopify.com/admin/inventory_levels.json?inventory_item_ids=123,456,789", url);
+            Assert.Equal("https://test.myshopify.com/admin/api/2020-04/inventory_levels.json?inventory_item_ids=123,456,789", url);
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Stores.Shopify
 
             string url = endpoints.InventoryLevelForLocationsUrl(new[] { 123L, 456L, 789L });
 
-            Assert.Equal("https://test.myshopify.com/admin/inventory_levels.json?location_ids=123,456,789", url);
+            Assert.Equal("https://test.myshopify.com/admin/api/2020-04/inventory_levels.json?location_ids=123,456,789", url);
         }
     }
 }

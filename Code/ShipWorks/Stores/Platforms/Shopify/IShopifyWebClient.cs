@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
-        List<JToken> GetOrders(DateTime startDate, DateTime endDate, int page = 1);
+        ShopifyWebClientGetOrdersResult GetOrders(DateTime startDate, DateTime endDate, string nextPageUrl);
 
         /// <summary>
         /// Get a shopify product by shopify Product Id

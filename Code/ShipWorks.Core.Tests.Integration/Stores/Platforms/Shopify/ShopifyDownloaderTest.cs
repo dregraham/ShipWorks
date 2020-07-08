@@ -60,15 +60,15 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
                                                      It.IsInRange(updatedAt, DateTime.MaxValue, Moq.Range.Inclusive)))
                     .Returns(7);
 
-                webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
-                    .Returns(new List<JToken> { orders[0], orders[1] })
-                    .Returns(new List<JToken> { orders[2], orders[3] })
-                    .Returns(new List<JToken> { orders[4], orders[5] })
-                    .Returns(new List<JToken> { orders[6] })
-                    .Returns(new List<JToken> { orders[0], orders[1] })
-                    .Returns(new List<JToken> { orders[2], orders[3] })
-                    .Returns(new List<JToken> { orders[4], orders[5] })
-                    .Returns(new List<JToken> { orders[6] });
+                webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[0], orders[1] }, NextPageUrl = "nextPage1"})
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[2], orders[3] }, NextPageUrl = "nextPage2" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[4], orders[5] }, NextPageUrl = "nextPage3" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[6] }, NextPageUrl = "" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[0], orders[1] }, NextPageUrl = "nextPage4" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[2], orders[3] }, NextPageUrl = "nextPage5" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[4], orders[5] }, NextPageUrl = "nextPage6" })
+                    .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[6] }, NextPageUrl = string.Empty });
 
                 webClient.Setup(w => w.GetProduct(It.IsAny<long>())).Returns(GetProduct);
                 mock.Provide(webClient);
@@ -145,12 +145,12 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
             int numberOfOrdersInDb;
             List<JToken> crashingPage = GetOrdersPageThatCrashes();
 
-            webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(new List<JToken> { orders[0], orders[1] })
-                .Returns(new List<JToken> { crashingPage[0], crashingPage[1] })
-                .Returns(new List<JToken> { orders[2], orders[3] })
-                .Returns(new List<JToken> { orders[4], orders[5] })
-                .Returns(new List<JToken> { orders[6] });
+            webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[0], orders[1] }, NextPageUrl = "nextPage7" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { crashingPage[0], crashingPage[1] }, NextPageUrl = "nextPage8" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[2], orders[3] }, NextPageUrl = "nextPage9" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[4], orders[5] }, NextPageUrl = "nextPage10" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[6] }, NextPageUrl = string.Empty });
 
             var testObject = context.Mock.Create<ShopifyDownloader>();
             testObject.OrdersPerPage = 2;
@@ -179,11 +179,11 @@ namespace ShipWorks.Core.Tests.Integration.Stores.Platforms.Shopify
             }
 
             // Setup to try again with good orders.
-            webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<int>()))
-                .Returns(new List<JToken> { orders[0], orders[1] })
-                .Returns(new List<JToken> { orders[2], orders[3] })
-                .Returns(new List<JToken> { orders[4], orders[5] })
-                .Returns(new List<JToken> { orders[6] });
+            webClient.SetupSequence(w => w.GetOrders(It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<string>()))
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[0], orders[1] }, NextPageUrl = "nextPage11" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[2], orders[3] }, NextPageUrl = "nextPage12" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[4], orders[5] }, NextPageUrl = "nextPage13" })
+                .Returns(new ShopifyWebClientGetOrdersResult() { Orders = new List<JToken> { orders[6] }, NextPageUrl = string.Empty });
 
             testObject = context.Mock.Create<ShopifyDownloader>();
             testObject.OrdersPerPage = 2;

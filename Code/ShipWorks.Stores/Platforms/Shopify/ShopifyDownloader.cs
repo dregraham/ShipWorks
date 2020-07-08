@@ -196,13 +196,19 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     }
 
                     List<JToken> orders = new List<JToken>();
+                    string nextPageUrl = string.Empty;
 
-                    // Go through each page determined by the date range to be necessary to get all of the orders
-                    for (int page = 1; page <= subRange.PageCount; page++)
+                    do
                     {
-                        List<JToken> pageOfOrders = webClient.GetOrders(subRange.StartDate, subRange.EndDate, page);
-                        orders.AddRange(pageOfOrders);
-                    }
+                        ShopifyWebClientGetOrdersResult getOrdersResult = webClient.GetOrders(subRange.StartDate, subRange.EndDate, nextPageUrl);
+
+                        if (getOrdersResult.Orders?.Any() == true)
+                        {
+                            orders.AddRange(getOrdersResult.Orders);
+                        }
+
+                        nextPageUrl = getOrdersResult.NextPageUrl;
+                    } while (!nextPageUrl.IsNullOrWhiteSpace());
 
                     // We have to import them in ascending order in case the user cancels, so our LastModified dates stay in order
                     orders = orders.OrderBy(o => o.GetValue<DateTime>("updated_at")).ToList();

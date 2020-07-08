@@ -240,8 +240,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 request.Variables.Add("updated_at_max", endDate.ToString("o"));
 
                 // Make the call and get the response
-                string count = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrderCount, progress);
-                JObject jsonCount = JObject.Parse(count);
+                var shopifyResponse = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrderCount, progress);
+                JObject jsonCount = JObject.Parse(shopifyResponse.Content);
 
                 int orderCount;
                 if (!int.TryParse(jsonCount["count"].ToString(), out orderCount))
@@ -276,8 +276,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
             try
             {
-                string orderAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrder, progress);
-                return JObject.Parse(orderAsString)["order"].ToObject<ShopifyOrder>();
+                var shopifyResponse = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrder, progress);
+                return JObject.Parse(shopifyResponse.Content)["order"].ToObject<ShopifyOrder>();
             }
             catch (JsonException ex)
             {
@@ -292,33 +292,36 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Make the call to Shopify to get a list of orders in the date range
         /// </summary>
         /// <returns>List of JToken orders, sorted by updated_at ascending</returns>
-        public List<JToken> GetOrders(DateTime startDate, DateTime endDate, int page = 1)
+        public ShopifyWebClientGetOrdersResult GetOrders(DateTime startDate, DateTime endDate, string nextPageUrl)
         {
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get };
-            request.Uri = new Uri(Endpoints.ApiGetOrdersUrl);
 
-            // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
-            request.Variables.Add("status", "any");
-            request.Variables.Add("financial_status", "any");
-            request.Variables.Add("fulfillment_status", "any");
-
-            // Set max results and page if provided
-            request.Variables.Add("limit", ShopifyConstants.ShopifyOrdersPerPage.ToString());
-
-            // Set page if specified
-            if (page > 1)
+            if (nextPageUrl.IsNullOrWhiteSpace())
             {
-                request.Variables.Add("page", page.ToString());
+                request.Uri = new Uri(Endpoints.ApiGetOrdersUrl);
+
+                // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
+                request.Variables.Add("status", "any");
+                request.Variables.Add("financial_status", "any");
+                request.Variables.Add("fulfillment_status", "any");
+
+                // Set max results and page if provided
+                request.Variables.Add("limit", ShopifyConstants.ShopifyOrdersPerPage.ToString());
+
+                // For times, Shopify provides the date offset, and that is needed to correctly query their orders, so use ToString("o")
+                request.Variables.Add("updated_at_min", startDate.ToString("o"));
+                request.Variables.Add("updated_at_max", endDate.ToString("o"));
+            }
+            else
+            {
+                request.Uri = new Uri(nextPageUrl);
             }
 
-            // For times, Shopify provides the date offset, and that is needed to correctly query their orders, so use ToString("o")
-            request.Variables.Add("updated_at_min", startDate.ToString("o"));
-            request.Variables.Add("updated_at_max", endDate.ToString("o"));
+            ShopifyWebClientGetOrdersResult result = new ShopifyWebClientGetOrdersResult();
+            ShopifyResponse shopifyResponse = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrders, progress);
+            nextPageUrl = shopifyResponse.NextPageUrl;
 
-            string ordersAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetOrders, progress);
-
-            JObject orderList = JObject.Parse(ordersAsString);
-            List<JToken> ordersToReturn = new List<JToken>();
+            JObject orderList = JObject.Parse(shopifyResponse.Content);
 
             if (orderList != null)
             {
@@ -327,11 +330,12 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 if (ordersToken != null && ordersToken.Count > 0)
                 {
                     // Sort the orders by update date ascending
-                    ordersToReturn = ordersToken.OrderBy(o => o["updated_at"]).ToList();
+                    result.Orders = ordersToken.OrderBy(o => o["updated_at"]);
+                    result.NextPageUrl = nextPageUrl;
                 }
             }
 
-            return ordersToReturn;
+            return result;
         }
 
         /// <summary>
@@ -361,8 +365,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
 
                     try
                     {
-                        string productAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetProduct, progress);
-                        product = JObject.Parse(productAsString)["product"].ToObject<ShopifyProduct>();
+                        var shopifyResponse = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetProduct, progress);
+                        product = JObject.Parse(shopifyResponse.Content)["product"].ToObject<ShopifyProduct>();
                     }
                     catch (ShopifyException ex)
                     {
@@ -404,9 +408,9 @@ namespace ShipWorks.Stores.Platforms.Shopify
             try
             {
                 HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter { Verb = HttpVerb.Get, Uri = new Uri(url) };
-                string fraudRisksAsString = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetFraud, progress);
+                var shopifyResponse = ProcessAuthenticatedRequest(request, ShopifyWebClientApiCall.GetFraud, progress);
 
-                return ParseFraudRisks(fraudRisksAsString) ?? Enumerable.Empty<JToken>();
+                return ParseFraudRisks(shopifyResponse.Content) ?? Enumerable.Empty<JToken>();
             }
             catch (JsonException ex)
             {
@@ -477,12 +481,15 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Process a request that requires authentication headers to be sent to Shopify
         /// </summary>
-        private string ProcessAuthenticatedRequest(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
+        private ShopifyResponse ProcessAuthenticatedRequest(HttpRequestSubmitter request, ShopifyWebClientApiCall action, IProgressReporter progressReporter)
         {
+            ShopifyResponse shopifyResponse = null;
             using (var reader = ProcessAuthenticatedRequestReader(request, action, progressReporter))
             {
-                return reader.ReadResult();
+                shopifyResponse = new ShopifyResponse(reader);
             }
+
+            return shopifyResponse;
         }
 
         /// <summary>
