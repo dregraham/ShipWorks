@@ -601,6 +601,84 @@ namespace ShipWorks.Shipping.ShipEngine
         }
 
         /// <summary>
+        /// Disconnect the given stamps account
+        /// </summary>
+        public async Task<Result> DisconnectStampsAccount(string carrierId)
+        {
+            try
+            {
+                HttpJsonVariableRequestSubmitter submitter = new HttpJsonVariableRequestSubmitter();
+                submitter.Headers.Add($"Content-Type: application/json");
+                submitter.Headers.Add($"api-key: {await GetApiKey()}");
+                submitter.Verb = HttpVerb.Delete;
+                submitter.Uri = new Uri($"https://api.shipengine.com/v1/connections/carriers/stamps_com/{carrierId}");
+
+                // Delete request returns no content, this is not an error
+                submitter.AllowHttpStatusCodes(HttpStatusCode.NoContent, HttpStatusCode.NotFound);
+
+                submitter.ProcessRequest(new ApiLogEntry(ApiLogSource.ShipEngine, "DisconnectStamps"), typeof(ShipEngineException));
+                return Result.FromSuccess();
+            }
+            catch (Exception ex)
+            {
+                return Result.FromError(ex);
+            }
+        }
+
+        /// <summary>
+        /// Update the given stamps account with the username and password
+        /// </summary>
+        public async Task<Result> UpdateStampsAccount(string carrierId, string username, string password)
+        {
+            try
+            {
+                StampsAccountInformationDTO updateRequest = new StampsAccountInformationDTO()
+                {
+                    Nickname = username,
+                    Username = username,
+                    Password = password
+                };
+
+                string accountId = await GetAccountID();
+
+                IRestClient restClient = new RestClient(ShipEngineProxyUrl);
+                IRestRequest request = new RestRequest();
+                request.AddHeader("Content-Type", "application/json");
+                request.AddHeader("SW-on-behalf-of", $"se-{accountId}");
+                request.AddHeader("SW-originalRequestUrl", $"https://api.shipengine.com/v1/connections/carriers/stamps_com/{carrierId}");
+                request.AddHeader("SW-originalRequestMethod", Method.PUT.ToString());
+                request.Method = Method.POST;
+                request.RequestFormat = DataFormat.Json;
+                request.JsonSerializer = new RestSharpJsonNetSerializer();
+
+                request.AddJsonBody(updateRequest);
+
+                ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.ShipEngine, "UpdateStamps");
+                logEntry.LogRequest(request, restClient, "txt");
+
+                IRestResponse response = await restClient.ExecuteTaskAsync(request).ConfigureAwait(false);
+
+                logEntry.LogResponse(response, "txt");
+
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    return Result.FromSuccess();
+                }
+                
+                JObject responseBody = JObject.Parse(response.Content);
+
+                JToken error = responseBody["errors"]?.FirstOrDefault() ?? responseBody["message"];
+
+                return GenericResult.FromError<string>(error.ToString());
+            }
+            catch (ApiException ex)
+            {
+                string error = GetErrorMessage(ex);
+                return Result.FromError(error);
+            }
+        }
+
+        /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
         public async Task<GenericResult<string>> RegisterUpsAccount(PersonAdapter person, string deviceIdentity)

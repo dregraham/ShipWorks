@@ -86,6 +86,16 @@ namespace ShipWorks.Shipping.ShipEngine
         Task<GenericResult<string>> ConnectStampsAccount(string username, string password);
 
         /// <summary>
+        /// Disconnect the given stamps.com account from the users ShipEngine account
+        /// </summary>
+        Task<Result> DisconnectStampsAccount(string carrierId);
+
+        /// <summary>
+        /// Update the given stamps.com account to the users ShipEngine account
+        /// </summary>
+        Task<Result> UpdateStampsAccount(string carrierId, string username, string password);
+
+        /// <summary>
         /// Register a UPS account with One Balance
         /// </summary>
         /// <param name="deviceIdentity">Identifier provided by IOvations software</param>

@@ -624,7 +624,6 @@
     <Compile Include="ShipEngine\IShipEngineRequestFactory.cs" />
     <Compile Include="ShipEngine\IShipEngineResourceDownloader.cs" />
     <Compile Include="ShipEngine\IShipEngineTrackingResultFactory.cs" />
-    <Compile Include="ShipEngine\IShipEngineWebClient.cs" />
     <Compile Include="ShipEngine\IUpsCredentials.cs" />
     <Compile Include="ShipEngine\ShipEngineApiFactory.cs" />
     <Compile Include="ShipEngine\ShipEngineApiKey.cs" />

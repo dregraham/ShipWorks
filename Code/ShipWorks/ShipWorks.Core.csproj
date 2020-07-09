@@ -1309,6 +1309,7 @@
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\IProcessShipmentsWorkflowFactory.cs" />
     <Compile Include="Shipping\Services\ProcessShipmentsWorkflow\ProcessShipmentsWorkflow.cs" />
     <Compile Include="Shipping\Settings\IOneBalanceSetupWizard.cs" />
+    <Compile Include="Shipping\ShipEngine\IShipEngineWebClient.cs" />
     <Compile Include="Shipping\ShipmentIgnoreConcurrencyScope.cs" />
     <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
@@ -1529,6 +1530,8 @@
     <Compile Include="Stores\Platforms\Odbc\Mapping\IOdbcStoreRepository.cs" />
     <Compile Include="Stores\Platforms\Rakuten\IRakutenStoreSetupControlViewModel.cs" />
     <Compile Include="Stores\Platforms\Rakuten\OnlineUpdating\IRakutenOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyResponse.cs" />
+    <Compile Include="Stores\Platforms\Shopify\DTOs\ShopifyWebClientGetOrdersResult.cs" />
     <Compile Include="Stores\Warehouse\StoreData\OdbcStore.cs" />
     <Compile Include="UI\BackgroundAsyncMessageHelper.cs" />
     <Compile Include="UI\Controls\IScanPack.cs" />
