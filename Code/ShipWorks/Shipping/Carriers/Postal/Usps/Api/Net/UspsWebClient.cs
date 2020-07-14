@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Services.Protocols;
+using System.Xml;
 using System.Xml.Linq;
 using Autofac;
 using Autofac.Features.OwnedInstances;
@@ -807,7 +808,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             using (ISwsimV90 webService = CreateWebService("ScanForm"))
             {
-                webService.CreateManifest
+                try
+                {
+                    webService.CreateManifest
                     (
                         GetCredentials(uspsAccountEntity),
                         ref transactionID,
@@ -823,6 +826,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         0, // NumberOfLabels (wsdl shows it as optional and default is 0)
                         out endOfDayManifests
                     );
+                }
+                catch (SoapException ex)
+                {
+                    IEnumerable<Guid> alreadyScanned = ex.Detail.ChildNodes.Cast<XmlNode>()
+                        .Where(x => x.Attributes["code"]?.Value == "00450D02")
+                        .Select(x => Guid.Parse(x.Attributes["context"]?.Value));
+
+                    if (alreadyScanned.Any())
+                    {
+                        var newTransactions = uspsTransactions.Except(alreadyScanned);
+
+                        webService.CreateManifest
+                        (
+                        GetCredentials(uspsAccountEntity),
+                        ref transactionID,
+                        newTransactions.ToArray(),
+                        null, // TrackingNumbers (not needed because we send the uspsTransactions)
+                        null, // ShipDate
+                        false, // ShipDateSpecified
+                        null, // PrintLayout
+                        CreateScanFormAddress(person),
+                        ImageType.Png,
+                        false, // Don't print instructions
+                        ManifestType.All,
+                        0, // NumberOfLabels (wsdl shows it as optional and default is 0)
+                        out endOfDayManifests
+                        );
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
+                }
             }
 
             StringBuilder innerXml = new StringBuilder();
