@@ -801,7 +801,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             List<string> trackingNumbers = uspsShipmentEntities.Select(s => s.PostalShipment.Shipment.TrackingNumber).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
             Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());
+            Address address = CreateScanFormAddress(person);
+            Credentials credentials = GetCredentials(uspsAccountEntity);
 
+            var endOfDayManifests = CreateScanFormWithRetry(uspsTransactions, address, credentials);
+
+            StringBuilder innerXml = new StringBuilder();
+            foreach (var item in endOfDayManifests)
+            {
+                innerXml.AppendLine($"<TransactionId>{item.ManifestId}</TransactionId><Url>{item.ManifestUrl}</Url>");
+            }
+            string responseXml = $"<ScanForm>{innerXml.ToString()}</ScanForm>";
+
+            XDocument response = XDocument.Parse(responseXml);
+
+            return response;
+        }
+
+        /// <summary>
+        /// Create a SCAN form, retrying if shipments have already been included on a previous SCAN form
+        /// </summary>
+        private EndOfDayManifest[] CreateScanFormWithRetry(List<Guid> uspsTransactions, Address address, Credentials credentials)
+        {
+            // We want to use the same transactionID for both calls since it's a retry
             string transactionID = Guid.NewGuid().ToString();
 
             EndOfDayManifest[] endOfDayManifests;
@@ -812,14 +834,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 {
                     webService.CreateManifest
                     (
-                        GetCredentials(uspsAccountEntity),
+                        credentials,
                         ref transactionID,
                         uspsTransactions.ToArray(),
                         null, // TrackingNumbers (not needed because we send the uspsTransactions)
                         null, // ShipDate
                         false, // ShipDateSpecified
                         null, // PrintLayout
-                        CreateScanFormAddress(person),
+                        address,
                         ImageType.Png,
                         false, // Don't print instructions
                         ManifestType.All,
@@ -829,7 +851,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
                 catch (SoapException ex)
                 {
-                    IEnumerable<Guid> alreadyScanned = ex.Detail.ChildNodes.Cast<XmlNode>()
+                    IEnumerable<Guid> alreadyScanned = ex.Detail?.ChildNodes?.Cast<XmlNode>()
                         .Where(x => x.Attributes["code"]?.Value == "00450D02")
                         .Select(x => Guid.Parse(x.Attributes["context"]?.Value));
 
@@ -839,14 +861,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                         webService.CreateManifest
                         (
-                        GetCredentials(uspsAccountEntity),
+                        credentials,
                         ref transactionID,
                         newTransactions.ToArray(),
                         null, // TrackingNumbers (not needed because we send the uspsTransactions)
                         null, // ShipDate
                         false, // ShipDateSpecified
                         null, // PrintLayout
-                        CreateScanFormAddress(person),
+                        address,
                         ImageType.Png,
                         false, // Don't print instructions
                         ManifestType.All,
@@ -861,16 +883,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
             }
 
-            StringBuilder innerXml = new StringBuilder();
-            foreach (var item in endOfDayManifests)
-            {
-                innerXml.AppendLine($"<TransactionId>{item.ManifestId}</TransactionId><Url>{item.ManifestUrl}</Url>");
-            }
-            string responseXml = $"<ScanForm>{innerXml.ToString()}</ScanForm>";
-
-            XDocument response = XDocument.Parse(responseXml);
-
-            return response;
+            return endOfDayManifests;
         }
 
         /// <summary>
