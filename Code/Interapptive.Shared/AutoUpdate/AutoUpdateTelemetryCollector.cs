@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Windows.Ink;
 using Interapptive.Shared.Metrics;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Collect auto update telemetry
     /// </summary>
-    public class AutoUpdateTelemetryCollector
+    public static class AutoUpdateTelemetryCollector
     {
         private static string tempPath = Path.Combine(Path.GetTempPath(), "ShipWorks/UpdateTelemetry.txt");
 
@@ -40,13 +39,13 @@ namespace Interapptive.Shared.AutoUpdate
         /// <returns></returns>
         private static AutoUpdateTelemetry? Load(Guid instance)
         {
-            if(File.Exists(tempPath))
+            if (File.Exists(tempPath))
             {
                 try
                 {
                     string data = File.ReadAllText(tempPath);
                     var telemetry = JsonConvert.DeserializeObject<AutoUpdateTelemetry>(data);
-                    if(telemetry.Instance == instance)
+                    if (telemetry.Instance == instance)
                     {
                         File.Delete(tempPath);
                         return telemetry;
