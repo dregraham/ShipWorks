@@ -10,7 +10,7 @@ namespace Interapptive.Shared.AutoUpdate
     /// <summary>
     /// Collect auto update telemetry
     /// </summary>
-    public class AutoUpdateTelemetryCollector
+    public static class AutoUpdateTelemetryCollector
     {
         /// <summary>
         /// Path to save telemetry file
