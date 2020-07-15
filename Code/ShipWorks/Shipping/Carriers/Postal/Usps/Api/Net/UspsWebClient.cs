@@ -879,7 +879,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     }
                     else
                     {
-                        throw ex;
+                        throw;
                     }
                 }
             }
