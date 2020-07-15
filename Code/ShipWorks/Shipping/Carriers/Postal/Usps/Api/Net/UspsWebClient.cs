@@ -64,6 +64,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private const int MaxCustomsSkuLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
 
+        // This is the error code Stamps gives us for shipments that have already been included on a SCAN form
+        private const string AlreadyScannedErrorCode = "00450D02";
+
         private readonly ILog log;
         private readonly IUspsWebServiceFactory webServiceFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> accountRepository;
@@ -850,7 +853,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 catch (SoapException ex)
                 {
                     IEnumerable<Guid> alreadyScanned = ex.Detail?.ChildNodes?.Cast<XmlNode>()
-                        .Where(x => x.Attributes["code"]?.Value == "00450D02")
+                        .Where(x => x.Attributes["code"]?.Value == AlreadyScannedErrorCode)
                         .Select(x => Guid.Parse(x.Attributes["context"]?.Value));
 
                     if (alreadyScanned.Any())
