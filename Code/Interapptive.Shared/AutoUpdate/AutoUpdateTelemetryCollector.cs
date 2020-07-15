@@ -12,8 +12,16 @@ namespace Interapptive.Shared.AutoUpdate
     /// </summary>
     public class AutoUpdateTelemetryCollector
     {
-        private static string tempPath = Path.Combine(Path.GetTempPath(), "ShipWorks/UpdateTelemetry.txt");
-
+        /// <summary>
+        /// Path to save telemetry file
+        /// </summary>
+        private static string GetTelemetryPath(Guid instance) =>
+            Path.Combine(Environment.GetFolderPath(
+                Environment.SpecialFolder.CommonApplicationData), 
+                "Interapptive\\ShipWorks\\Instances", 
+                instance.ToString("B") , 
+                "UpdateTelemetry.txt");
+        
         /// <summary>
         /// Start collecting telemetry
         /// </summary>
@@ -25,9 +33,8 @@ namespace Interapptive.Shared.AutoUpdate
                 data.Started = DateTime.UtcNow;
                 data.StartVersion = GetVersionString(Assembly.GetExecutingAssembly().GetName().Version);
                 data.TargetVersion = GetVersionString(targetVersion);
-                data.Instance = instance;
 
-                File.WriteAllText(tempPath, JsonConvert.SerializeObject(data));
+                File.WriteAllText(GetTelemetryPath(instance), JsonConvert.SerializeObject(data));
             }
             catch (Exception)
             {
@@ -40,17 +47,17 @@ namespace Interapptive.Shared.AutoUpdate
         /// <returns></returns>
         private static AutoUpdateTelemetry? Load(Guid instance)
         {
+            string tempPath = GetTelemetryPath(instance);
             if(File.Exists(tempPath))
             {
                 try
                 {
                     string data = File.ReadAllText(tempPath);
                     var telemetry = JsonConvert.DeserializeObject<AutoUpdateTelemetry>(data);
-                    if(telemetry.Instance == instance)
-                    {
-                        File.Delete(tempPath);
-                        return telemetry;
-                    }
+
+                    File.Delete(tempPath);
+
+                    return telemetry;
                 }
                 catch (Exception)
                 {
