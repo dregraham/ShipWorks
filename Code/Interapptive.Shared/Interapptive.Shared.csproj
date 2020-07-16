@@ -185,6 +185,8 @@
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
     <Compile Include="AutoUpdate\AutoUpdateStatusProvider.cs" />
+    <Compile Include="AutoUpdate\AutoUpdateTelemetryCollector.cs" />
+    <Compile Include="AutoUpdate\AutoUpdateTelemetry.cs" />
     <Compile Include="AutoUpdate\IAutoUpdateStatusProvider.cs" />
     <Compile Include="AutoUpdate\IShipWorksCommunicationBridge.cs" />
     <Compile Include="AutoUpdate\IShipWorksLauncher.cs" />

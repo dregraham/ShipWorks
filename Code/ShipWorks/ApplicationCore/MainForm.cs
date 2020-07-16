@@ -415,6 +415,8 @@ namespace ShipWorks
 
             SqlSession.Initialize();
 
+            AutoUpdateTelemetryCollector.CollectTelemetry(ShipWorksSession.InstanceID);
+
             if (AutoUpdate())
             {
                 Close();

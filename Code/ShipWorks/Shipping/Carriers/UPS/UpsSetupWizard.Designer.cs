@@ -296,7 +296,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete3);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete2);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete1);
-            this.wizardPageFinishOlt.Description = "You are now ready to use UPS with ShipWorks.";
+            this.wizardPageFinishOlt.Description = "You are now ready to use UPS from ShipWorks.";
             this.wizardPageFinishOlt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageFinishOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinishOlt.Location = new System.Drawing.Point(0, 0);

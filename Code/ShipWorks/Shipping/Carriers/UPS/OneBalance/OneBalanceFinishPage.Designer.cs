@@ -62,7 +62,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(325, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Add funds to your ShipWorks One Balance account to get started.";
+            this.label2.Text = "Add funds to your One Balance account to get started.";
             // 
             // label3
             // 
@@ -79,7 +79,7 @@
             this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.helpLink.ForeColor = System.Drawing.Color.Blue;
-            this.helpLink.Location = new System.Drawing.Point(380, 65);
+            this.helpLink.Location = new System.Drawing.Point(330, 64);
             this.helpLink.Name = "helpLink";
             this.helpLink.Size = new System.Drawing.Size(65, 13);
             this.helpLink.TabIndex = 6;
@@ -95,7 +95,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
-            this.Description = "You are now ready to use UPS with ShipWorks.";
+            this.Description = "You are now ready to use UPS from ShipWorks.";
             this.Name = "OneBalanceFinishPage";
             this.Size = new System.Drawing.Size(579, 474);
             this.Title = "Account Registration";

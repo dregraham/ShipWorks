@@ -284,7 +284,7 @@
             this.optionPageOneBalance.Margin = new System.Windows.Forms.Padding(0);
             this.optionPageOneBalance.Size = new System.Drawing.Size(566, 516);
             this.optionPageOneBalance.TabIndex = 3;
-            this.optionPageOneBalance.Text = "ShipWorks One Balance";
+            this.optionPageOneBalance.Text = "One Balance";
             this.optionPageOneBalance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             // 
             // ShippingSettingsDlg
