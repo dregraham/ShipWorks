@@ -856,7 +856,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         .Where(x => x.Attributes["code"]?.Value == AlreadyScannedErrorCode)
                         .Select(x => Guid.Parse(x.Attributes["context"]?.Value));
 
-                    if (alreadyScanned.Any())
+                    if (alreadyScanned?.Any() ?? false)
                     {
                         var newTransactions = uspsTransactions.Except(alreadyScanned);
 
