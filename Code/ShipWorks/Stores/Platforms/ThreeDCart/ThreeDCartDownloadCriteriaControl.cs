@@ -35,7 +35,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         /// </summary>
         public override int LoadDaysBack(StoreEntity store)
         {
-            return ((ThreeDCartStoreEntity) store).DownloadModifiedNumberOfDaysBack;
+            /// Return the min value between MaxDaysBack and DownloadModifiedNumberOfDaysBack
+            /// as the list varies between Hub and non-Hub customers. 
+            return Math.Min(MaxDaysBack, ((ThreeDCartStoreEntity) store).DownloadModifiedNumberOfDaysBack);
         }
 
         /// <summary>
