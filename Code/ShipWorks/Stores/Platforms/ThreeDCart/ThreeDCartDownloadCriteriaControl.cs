@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             {
                 using (var scope = IoC.BeginLifetimeScope())
                 {
-                    LicenseService licenseService = scope.Resolve<LicenseService>();
+                    ILicenseService licenseService = scope.Resolve<ILicenseService>();
 
                     return !licenseService.IsHub ? NonHubDaysBack : HubDaysBack;
                 }
