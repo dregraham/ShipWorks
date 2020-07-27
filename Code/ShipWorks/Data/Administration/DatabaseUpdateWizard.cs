@@ -13,6 +13,7 @@ using Autofac;
 using Interapptive.Shared;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -21,6 +22,7 @@ using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
@@ -909,8 +911,28 @@ namespace ShipWorks.Data.Administration
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // Either way before leaving this page we need the environment setup
-            UserSession.InitializeForCurrentSession(Program.ExecutionMode);
+            try
+            {
+                // Either way before leaving this page we need the environment setup
+                UserSession.InitializeForCurrentSession(Program.ExecutionMode);
+            }
+            // If the customer license can't be decrypted, ask the user to re-enter their credentials
+            catch (Exception ex) when (ex.HasExceptionType<EncryptionException>())
+            {
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    IDialog customerLicenseActivation;
+                    do
+                    {
+                        customerLicenseActivation = lifetimeScope.ResolveNamed<IDialog>("CustomerLicenseActivationDlg");
+                        customerLicenseActivation.LoadOwner(this);
+                        customerLicenseActivation.DataContext = lifetimeScope.Resolve<ICustomerLicenseActivartionDlgViewModel>();
+                    }
+                    while (!customerLicenseActivation.ShowDialog() ?? true);
+
+                    UserSession.InitializeForCurrentSession(Program.ExecutionMode);
+                }
+            }
         }
 
         #endregion

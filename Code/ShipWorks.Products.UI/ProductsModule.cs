@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Products.Warehouse;
 
@@ -16,10 +15,10 @@ namespace ShipWorks.Products.UI
         protected override void Load(ContainerBuilder builder)
         {
             builder.Register((c, _) =>
-                    c.Resolve<ILicenseService>().IsHub ?
-                        (IWarehouseProductClient) c.Resolve<WarehouseProductClient>() :
-                        c.Resolve<EcommerceWarehouseProductClient>())
-                .As<IWarehouseProductClient>();
+                c.Resolve<ILicenseService>().IsHub ?
+                    (IWarehouseProductClient) c.Resolve<WarehouseProductClient>() :
+                    c.Resolve<EcommerceWarehouseProductClient>())
+            .As<IWarehouseProductClient>();
         }
     }
 }
