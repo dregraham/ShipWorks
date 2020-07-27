@@ -354,7 +354,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "18009527784"
+                Phone = "13148215888"
             };
 
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = null };
@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "18009527784"
+                Phone = "13148215888"
             };
 
             UspsAccountEntity uspsAccount = new UspsAccountEntity() { Username = "foo", Password = "bar", ShipEngineCarrierId = "abcd" };
