@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Windows.Ink;
 using Interapptive.Shared.Metrics;
 using Newtonsoft.Json;
 
@@ -48,7 +47,7 @@ namespace Interapptive.Shared.AutoUpdate
         private static AutoUpdateTelemetry? Load(Guid instance)
         {
             string tempPath = GetTelemetryPath(instance);
-            if(File.Exists(tempPath))
+            if (File.Exists(tempPath))
             {
                 try
                 {
