@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
 
             if (account == null)
             {
-                return new UspsException("Unable to determine which USPS account to use. Please call ShipWorks support at 1-800-952-7784");
+                return new UspsException("Unable to determine which USPS account to use. Please call ShipWorks support at 1-314-821-5888");
             }
 
             return GenericResult.FromSuccess(account);

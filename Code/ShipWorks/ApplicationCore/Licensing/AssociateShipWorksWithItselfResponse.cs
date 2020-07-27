@@ -34,7 +34,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
                 ResponseType = AssociateShipWorksWithItselfResponseType.UnknownError;
                 Message = "An unknown error occurred. Please check that the information entered is correct and try again. " +
-                          "If you're are still experiencing problems, contact ShipWorks support at 1-800-952-7784. " +
+                          "If you're are still experiencing problems, contact ShipWorks support at 1-314-821-5888. " +
                           $"\nError message: {errorDescription}";
             }
         }

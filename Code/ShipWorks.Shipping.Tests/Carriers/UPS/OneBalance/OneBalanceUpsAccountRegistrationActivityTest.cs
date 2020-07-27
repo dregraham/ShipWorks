@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
         private readonly AutoMock mock;
         private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> uspsAccountRepo;
         private readonly Mock<IShipEngineWebClient> seWebClient;
-
         private readonly OneBalanceUpsAccountRegistrationActivity testObject;
 
         public OneBalanceUpsAccountRegistrationActivityTest()
@@ -57,7 +56,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should fail
@@ -87,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should succeed
@@ -120,7 +119,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should fail
@@ -150,7 +149,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should succeed
@@ -180,7 +179,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should succeed
@@ -210,7 +209,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "",
                 StateProvCode = "MO",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should fail
@@ -240,7 +239,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "",
                 CountryCode = "US",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should fail
@@ -270,7 +269,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
                 City = "St. Louis",
                 StateProvCode = "MO",
                 CountryCode = "",
-                Phone = "1-800-952-7784"
+                Phone = "1-314-821-5888"
             };
 
             // empty should fail
@@ -284,6 +283,35 @@ namespace ShipWorks.Shipping.Tests.Carriers.UPS.OneBalance
             upsAccount.CountryCode = "US";
             // 2 should succeed
             Assert.True((await testObject.Execute(upsAccount, AnyString)).Success);
+        }
+
+        [Fact]
+        public async Task Execute_ValidatesSupportPhoneNumberIsCorrect_WhenTooManyAccounts()
+        {
+            UpsAccountEntity upsAccount = new UpsAccountEntity()
+            {
+                FirstName = "Joe",
+                LastName = "Blow",
+                Company = "Foo Bar",
+                Street1 = "1 South Memorial Drive",
+                Street2 = "",
+                Street3 = "",
+                City = "St. Louis",
+                StateProvCode = "MO",
+                CountryCode = "US",
+                Phone = "1-314-821-5888"
+            };
+            uspsAccountRepo.SetupGet(r => r.Accounts).Returns(new[] 
+            { 
+                new UspsAccountEntity() { ShipEngineCarrierId = "1" }, 
+                new UspsAccountEntity() { ShipEngineCarrierId = "2" }
+            });
+
+            OneBalanceUpsAccountRegistrationActivity testObject2 = mock.Create<OneBalanceUpsAccountRegistrationActivity>();
+            var result = await testObject2.Execute(upsAccount, AnyString);
+
+            Assert.True(result.Failure);
+            Assert.True(result.Message.Contains("314-821-5888"));
         }
 
         [Fact]
