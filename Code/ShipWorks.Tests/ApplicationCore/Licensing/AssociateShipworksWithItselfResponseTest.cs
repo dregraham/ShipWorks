@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
             var response = new AssociateShipWorksWithItselfResponse(xml);
 
             Assert.Equal(AssociateShipWorksWithItselfResponseType.UnknownError, response.ResponseType);
+            Assert.True(response.Message.Contains("314-821-5888"));
         }
 
         [Fact]
