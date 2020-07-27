@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Security.Cryptography;
 using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
