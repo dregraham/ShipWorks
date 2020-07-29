@@ -50,6 +50,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         public override bool SupportsGetRates => true;
 
         /// <summary>
+        /// Indicates that this shipment type supports shipping from an account address
+        /// This is false for Best Rate since there is no account for Best Rate shipments
+        /// </summary>
+        public override bool SupportsAccountAsOrigin => false;
+
+        /// <summary>
         /// Create the UserControl used to handle best rate shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when

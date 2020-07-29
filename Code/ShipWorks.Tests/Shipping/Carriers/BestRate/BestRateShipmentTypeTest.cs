@@ -21,9 +21,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     public class BestRateShipmentTypeTest
     {
         private BestRateLabelService labelService;
-        
+
         private ShipmentEntity shipment;
-        
+
         private RateGroup rateGroupWithFooterWithAssociatedAmount;
         private RateGroup rateGroupWithFooterNotAssociatedWithAmount;
 
@@ -42,12 +42,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             };
 
             labelService = new BestRateLabelService();
-            
+
             mock = AutoMockExtensions.GetLooseThatReturnsMocks(); //AutoMock.GetFromRepository(new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock });
-            
+
             filterFactory = mock.Mock<IRateGroupFilterFactory>();
             filterFactory.Setup(f => f.CreateFilters(It.IsAny<ShipmentEntity>())).Returns(new List<IRateGroupFilter>());
-            
+
             InitializeFootnoteTests();
         }
 
@@ -68,14 +68,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [Fact]
+        public void SupportsAccountAsOrigin_ReturnsFalse()
+        {
+            BestRateShipmentType bestRateShipmentType = mock.Create<BestRateShipmentType>();
+
+            Assert.False(bestRateShipmentType.SupportsAccountAsOrigin);
+        }
+
+        [Fact]
         public void GetShipmentInsuranceProvider_ReturnsShipWorks_TwoBrokersWithAccountsAndShipWorksInsurance()
         {
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
             IBestRateShippingBroker broker = mock.Mock<IBestRateShippingBroker>().Object;
-            
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new [] { broker, broker });
-            
+
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new[] { broker, broker });
+
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
             Assert.Equal(InsuranceProvider.ShipWorks, bestRateShipmentType.GetShipmentInsuranceProvider(new ShipmentEntity()));
@@ -87,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.HasAccounts).Returns(true);
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
             IBestRateShippingBroker broker = mock.Mock<IBestRateShippingBroker>().Object;
-            
+
             mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new List<IBestRateShippingBroker> { broker, broker });
 
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
@@ -102,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             mock.Mock<IBestRateShippingBroker>().Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.Carrier);
             IBestRateShippingBroker broker = mock.Mock<IBestRateShippingBroker>().Object;
 
-            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new [] { broker });
+            mock.Mock<IBestRateShippingBrokerFactory>().Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>())).Returns(new[] { broker });
 
             var bestRateShipmentType = mock.Create<BestRateShipmentType>();
 
@@ -161,7 +169,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             associatedWithAmountFooterFootnoteFactory = new Mock<IRateFootnoteFactory>();
             associatedWithAmountFooterFootnoteFactory.Setup(f => f.CreateFootnote(null)).Returns(new FakeRateFootnoteControl(true));
-            
+
             rateGroupWithFooterWithAssociatedAmount = new RateGroup(new List<RateResult>
             {
                 new RateResult("result1", "2") { AmountFootnote = new Bitmap(1, 1), Tag = new BestRateResultTag() { ResultKey = "result1"}},
@@ -181,7 +189,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteFactory(notAssociatedWithAmountFooterFootnoteFactory.Object);
         }
         // IsCustomsRequierd has a hard dependency to the database, so these are no longer testable 
-        
+
         // Helper methods for creating rate results
         private RateResult CreateRateResult(string description, string days, decimal amount, string tagResultKey)
         {
@@ -196,7 +204,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             shipment = new ShipmentEntity
             {
                 Insurance = !insured,
-                BestRate = new BestRateShipmentEntity {Insurance = insured, InsuranceValue = insuranceValue }
+                BestRate = new BestRateShipmentEntity { Insurance = insured, InsuranceValue = insuranceValue }
             };
 
             BestRateShipmentType bestRateShipmentType = mock.Create<BestRateShipmentType>();
