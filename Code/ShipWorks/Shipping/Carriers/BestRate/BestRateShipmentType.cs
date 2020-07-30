@@ -9,7 +9,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -21,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     /// <summary>
     /// Best rate implementation of ShipmentType
     /// </summary>
-    public class 
+    public class
         BestRateShipmentType : ShipmentType
     {
         private readonly ILog log;
@@ -52,8 +51,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
         /// <summary>
         /// Indicates that this shipment type supports shipping from an account address
+        /// This is false for Best Rate since there is no account for Best Rate shipments
         /// </summary>
-        public override bool SupportsAccountAsOrigin => true;
+        public override bool SupportsAccountAsOrigin => false;
 
         /// <summary>
         /// Create the UserControl used to handle best rate shipments
