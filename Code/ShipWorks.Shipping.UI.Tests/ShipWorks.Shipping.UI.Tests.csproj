@@ -193,6 +193,7 @@
     <Compile Include="RatingPanel\ObservableRegistrations\RatesNotSupportedPipelineTest.cs" />
     <Compile Include="RatingPanel\ObservableRegistrations\OpenShippingDialogPipelineTest.cs" />
     <Compile Include="RatingPanel\RatingPanelViewModelTest.cs" />
+    <Compile Include="Settings\OneBalance\OneBalanceAccountHelperTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ApplyProfilePipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\CarrierConfiguredPipelineTest.cs" />
     <Compile Include="ShippingPanel\ObservableRegistrations\ChangeOriginAddressFromTypePipelineTest.cs" />

@@ -142,13 +142,29 @@ namespace ShipWorks.Shipping.Services
         public ICarrierShipmentAdapter ChangeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentEntity shipment)
         {
             var originalDimensions = GetOriginalDimensions(shipment);
+            var originalOriginID = shipment.OriginOriginID;
 
             shipment.ShipmentTypeCode = shipmentTypeCode;
             EnsureShipmentLoaded(shipment);
 
             ApplyDimensionsIfNecessary(shipment, originalDimensions);
+            ChangeOriginIfNecessary(shipment, originalOriginID);
 
             return shipmentAdapterFactory.Get(shipment);
+        }
+
+        /// <summary>
+        /// When switching to a new provider, change the origin if the new provider
+        /// doesn't support the currently selected one
+        /// </summary>
+        private static void ChangeOriginIfNecessary(ShipmentEntity shipment, long originalOriginID)
+        {
+            var supportedOrigins = ShipmentTypeManager.GetType(shipment).GetOrigins();
+
+            if (!supportedOrigins.Any(x => x.Value == originalOriginID))
+            {
+                shipment.OriginOriginID = 0;
+            }
         }
 
         /// <summary>
@@ -191,9 +207,9 @@ namespace ShipWorks.Shipping.Services
                 Height = (double) o.Height
             }).FirstOrDefault();
 
-            areDefaults = orderItemDims != null && 
-                          dimensions.All(x => x.DimsLength.IsEquivalentTo(orderItemDims.Length) && 
-                                              x.DimsWidth.IsEquivalentTo(orderItemDims.Width) && 
+            areDefaults = orderItemDims != null &&
+                          dimensions.All(x => x.DimsLength.IsEquivalentTo(orderItemDims.Length) &&
+                                              x.DimsWidth.IsEquivalentTo(orderItemDims.Width) &&
                                               x.DimsHeight.IsEquivalentTo(orderItemDims.Height));
 
             return areDefaults;

@@ -74,7 +74,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
             orderDto.ShippingTo.Recipient.Name = "Mirza Mulaosmanovic";
-            orderDto.ShippingTo.Recipient.PhoneNumber = "8009527784";
+            orderDto.ShippingTo.Recipient.PhoneNumber = "3148215888";
             orderDto.ShippingTo.Address.Address1 = "16204 Bay Harbour Ct";
             orderDto.ShippingTo.Address.Address2 = "suite 2000";
             orderDto.ShippingTo.Address.City = "Wildwood";
@@ -90,7 +90,7 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
             Assert.Equal("Wildwood", order.ShipCity);
             Assert.Equal("Mo", order.ShipStateProvCode);
             Assert.Equal("63040", order.ShipPostalCode);
-            Assert.Equal("8009527784", order.ShipPhone);
+            Assert.Equal("3148215888", order.ShipPhone);
             Assert.Equal("US", order.ShipCountryCode);
         }
 
@@ -99,13 +99,13 @@ namespace ShipWorks.Stores.Tests.Platforms.Jet
         {
             JetOrderDetailsResult orderDto = GetEmptyJetOrderDetailsResult();
             orderDto.Buyer.Name = "Mirza Mulaosmanovic";
-            orderDto.Buyer.PhoneNumber = "8009527784";
+            orderDto.Buyer.PhoneNumber = "3148215888";
 
             testObject.LoadOrder(order, orderDto, new JetStoreEntity());
 
             Assert.Equal("Mirza", order.BillFirstName);
             Assert.Equal("Mulaosmanovic", order.BillLastName);
-            Assert.Equal("8009527784", order.BillPhone);
+            Assert.Equal("3148215888", order.BillPhone);
         }
 
         [Fact]

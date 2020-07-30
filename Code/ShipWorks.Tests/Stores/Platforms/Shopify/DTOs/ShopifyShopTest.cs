@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Stores.Platforms.Shopify.DTOs
             Assert.Equal("63102", testObject.PostalCode);
             Assert.Equal("US", testObject.Country);
             Assert.Equal("support@ShipWorks.com", testObject.Email);
-            Assert.Equal("800-952-7784", testObject.Phone);
+            Assert.Equal("314-821-5888", testObject.Phone);
             Assert.Equal(49582922, testObject.PrimaryLocationID);
         }
 

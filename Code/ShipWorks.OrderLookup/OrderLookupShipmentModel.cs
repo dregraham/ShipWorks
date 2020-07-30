@@ -8,7 +8,6 @@ using System.Reactive.Disposables;
 using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Core.Messaging;
@@ -228,7 +227,7 @@ namespace ShipWorks.OrderLookup
             get => totalCost;
             set => handler.Set(nameof(TotalCost), ref totalCost, value, true);
         }
-        
+
         /// <summary>
         /// Invoked when a property on the order object changes
         /// </summary>
