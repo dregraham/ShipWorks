@@ -92,5 +92,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// The GuaranteedDelivery of the EbayOrder
         /// </summary>
         public bool GuaranteedDelivery { get; set; }
+
+        /// <summary>
+        /// The order-level property for marking an order as shipped
+        /// </summary>
+        public bool MyEbayShipped { get; set; }
     }
 }

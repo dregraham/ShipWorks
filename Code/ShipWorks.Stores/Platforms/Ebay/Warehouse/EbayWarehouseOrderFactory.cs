@@ -14,7 +14,7 @@ using ShipWorks.Warehouse.DTO.Orders;
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {
     /// <summary>
-    /// Ebay warehouse order factory
+    /// eBay warehouse order factory
     /// </summary>
     [KeyedComponent(typeof(IWarehouseOrderFactory), StoreTypeCode.Ebay)]
     public class EbayWarehouseOrderFactory : WarehouseOrderFactory
@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         }
 
         /// <summary>
-        /// Create an order entity with an Ebay identifier
+        /// Create an order entity with an eBay identifier
         /// </summary>
         protected override async Task<GenericResult<OrderEntity>> CreateStoreOrderEntity(IStoreEntity store, StoreType storeType, WarehouseOrder warehouseOrder)
         {
@@ -55,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         }
 
         /// <summary>
-        /// Load Ebay order details
+        /// Load eBay order details
         /// </summary>
         protected override void LoadStoreOrderDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
             }
 
             // If all items are shipped set the local status to shipped
-            if (warehouseOrder.Items.All(item =>
+            if (ebayWarehouseOrder.MyEbayShipped || warehouseOrder.Items.All(item =>
             {
                 var ebayItem = item.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();
                 return ebayItem.MyEbayShipped;
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         }
 
         /// <summary>
-        /// Load Ebay item details
+        /// Load eBay item details
         /// </summary>
         protected override void LoadStoreItemDetails(IStoreEntity store, OrderItemEntity itemEntity, WarehouseOrderItem warehouseItem)
         {
@@ -124,24 +124,18 @@ namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
         /// </summary>
         protected override void LoadAdditionalDetails(IStoreEntity store, OrderEntity orderEntity, WarehouseOrder warehouseOrder)
         {
-            // Make sure items are fetched
-            OrderUtility.PopulateOrderDetails(orderEntity);
+            var ebayWarehouseOrder = warehouseOrder.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseOrder>();
 
-            foreach (WarehouseOrderItem item in warehouseOrder.Items)
+            if (ebayWarehouseOrder.MyEbayShipped)
             {
-                var orderItem = orderEntity.OrderItems.FirstOrDefault(x => x.HubItemID == item.ID);
+                // Make sure items are fetched
+                OrderUtility.PopulateOrderDetails(orderEntity);
 
-                if (orderItem == null)
+                foreach (OrderItemEntity orderItem in orderEntity.OrderItems)
                 {
-                    // This should never happen
-                    log.Info("Skipping eBay warehouse item because no matching ID was found.");
-                    continue;
+                    var eBayOrderItem = (EbayOrderItemEntity) orderItem;
+                    eBayOrderItem.MyEbayShipped = true;
                 }
-
-                var eBayOrderItem = (EbayOrderItemEntity) orderItem;
-                var eBayWarehouseItem = item.AdditionalData[ebayEntryKey].ToObject<EbayWarehouseItem>();
-
-                eBayOrderItem.MyEbayShipped = eBayWarehouseItem.MyEbayShipped;
             }
         }
     }
