@@ -29,7 +29,6 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetOrders),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetOrderCount),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5), ShopifyWebClientApiCall.GetOrder),
-                    new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.IsRealShopifyShopUrlName),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10),  ShopifyWebClientApiCall.GetAccessToken),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(10), ShopifyWebClientApiCall.GetShop),
                     new RequestThrottleQuotaDefinition<ShopifyWebClientApiCall>(TimeSpan.FromSeconds(5),  ShopifyWebClientApiCall.GetProduct),
