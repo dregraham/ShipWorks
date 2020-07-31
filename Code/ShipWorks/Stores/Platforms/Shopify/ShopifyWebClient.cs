@@ -84,6 +84,16 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 //Get the response without throttle
                 AddAuthHeaderToRequest(requestSubmitter);
+                
+                // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
+                requestSubmitter.Variables.Add("status", "any");
+                requestSubmitter.Variables.Add("financial_status", "any");
+                requestSubmitter.Variables.Add("fulfillment_status", "any");
+
+                // For times, Shopify provides the date offset, and that is needed to correctly query their orders, so use ToString("o")
+                requestSubmitter.Variables.Add("updated_at_min", DateTime.UtcNow.ToString("o"));
+                requestSubmitter.Variables.Add("updated_at_max", DateTime.UtcNow.ToString("o"));
+
                 requestSubmitter.GetResponse();
             }
             catch (WebException ex)
