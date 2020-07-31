@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             }
 
             // future stories will handle multiple or no usps accounts
-            return Result.FromError("An error occurred activating your UPS from ShipWorks account. Please contact ShipWorks support at 1-800-952-7784 for assistance.");
+            return Result.FromError("An error occurred activating your UPS from ShipWorks account. Please contact ShipWorks support at 1-314-821-5888 for assistance.");
         }
 
         /// <summary>

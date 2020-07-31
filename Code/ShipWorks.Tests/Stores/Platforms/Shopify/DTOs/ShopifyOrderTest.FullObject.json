@@ -13,7 +13,7 @@
     "latitude": 38.6243492,
     "longitude": -90.1878902,
     "name": "Test Customer",
-    "phone": "800-952-7784",
+    "phone": "314-821-5888",
     "province": "Missouri",
     "province_code": "MO",
     "zip": "63102"
@@ -48,7 +48,7 @@
       "id": 5649043786,
       "last_name": "Customer",
       "name": "Test Customer",
-      "phone": "800-952-7784",
+      "phone": "314-821-5888",
       "province": "Missouri",
       "province_code": "MO",
       "zip": "63102"
@@ -149,7 +149,7 @@
     "latitude": 38.6243492,
     "longitude": -90.1878902,
     "name": "Test Customer",
-    "phone": "800-952-7784",
+    "phone": "314-821-5888",
     "province": "Missouri",
     "province_code": "MO",
     "zip": "63102"

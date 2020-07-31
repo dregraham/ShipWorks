@@ -382,6 +382,51 @@ namespace ShipWorks.Shipping.Tests.Integration.Services
             await ProcessShipment();
 
             messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("Parameter is not valid"))));
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("314-821-5888"))));
+        }
+
+        [Fact]
+        public async Task Process_ShowsCorrectCustomerSupportPhoneNumberInErrorMessage_WhenLabelIsBad()
+        {
+            Mock<IExtendedSwsimV90> webService = context.Mock.CreateMock<IExtendedSwsimV90>(w =>
+            {
+                UspsTestHelpers.SetupAddressValidationResponse(w);
+                w.Setup(x => x.CreateIndicium(It.IsAny<CreateIndiciumParameters>()))
+                    .Returns(new CreateIndiciumResult
+                    {
+                        Rate = new RateV33(),
+                        ImageData = new[] { new byte[] { 0x20, 0x20 } },
+                    });
+
+                AccountInfoV41 accountInfo = new AccountInfoV41()
+                {
+                    Terms = new Terms()
+                    {
+                        TermsAR = true,
+                        TermsSL = true,
+                        TermsGP = true
+                    }
+                };
+
+                w.Setup(x => x.GetAccountInfo(It.IsAny<Credentials>()))
+                    .Returns(new AccountInfoResult(accountInfo, new Address(), ""));
+            });
+
+            webServiceFactory.Setup(x => x.Create(It.IsAny<string>(), It.IsAny<LogActionType>()))
+                .Returns(webService);
+
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingSettings>().MarkAsConfigured(ShipmentTypeCode.Usps);
+            IoC.UnsafeGlobalLifetimeScope.Resolve<IShippingManager>().ChangeShipmentType(ShipmentTypeCode.Usps, shipment);
+
+            var account = Create.CarrierAccount<UspsAccountEntity, IUspsAccountEntity>().Save();
+            shipment.Postal.Usps.UspsAccountID = account.AccountId;
+            shipment.TotalWeight = 3;
+
+            testObject = context.Container.Resolve<IShipmentProcessor>();
+
+            await ProcessShipment();
+
+            messageHelper.Verify(m => m.ShowError(It.Is<string>(s => s.Contains("314-821-5888"))));
         }
 
         [Fact]

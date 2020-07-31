@@ -308,7 +308,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "W1T1JY")
                 .Set(x => x.CountryCode, "GB")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -329,7 +329,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "75001")
                 .Set(x => x.CountryCode, "FR")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -350,7 +350,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "113 49")
                 .Set(x => x.CountryCode, "SE")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -371,7 +371,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "28070")
                 .Set(x => x.CountryCode, "ES")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -392,7 +392,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "81-116")
                 .Set(x => x.CountryCode, "PL")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -413,7 +413,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "00184")
                 .Set(x => x.CountryCode, "IT")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -434,7 +434,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "")
                 .Set(x => x.PostalCode, "00630")
                 .Set(x => x.CountryCode, "FI")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -455,7 +455,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "AR")
                 .Set(x => x.PostalCode, "72601")
                 .Set(x => x.CountryCode, "US")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();
@@ -476,7 +476,7 @@ namespace ShipWorks.Tests.Shared.Database
                 .Set(x => x.StateProvCode, "ON")
                 .Set(x => x.PostalCode, "L5T1K6")
                 .Set(x => x.CountryCode, "CA")
-                .Set(x => x.Phone, "8009527784")
+                .Set(x => x.Phone, "3148215888")
                 .Set(x => x.Email, "support@shipworks.com")
                 .Set(x => x.Website, "www.shipworks.com")
                 .Save();

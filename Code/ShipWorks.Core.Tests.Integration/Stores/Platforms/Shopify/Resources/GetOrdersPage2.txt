@@ -98,7 +98,7 @@
 		"billing_address": {
 			"first_name": "Test",
 			"address1": "1 S Memorial Dr.",
-			"phone": "800-952-7784",
+			"phone": "314-821-5888",
 			"city": "Saint Louis",
 			"zip": "63102",
 			"province": "Missouri",
@@ -115,7 +115,7 @@
 		"shipping_address": {
 			"first_name": "Test",
 			"address1": "1 S Memorial Drive",
-			"phone": "800-952-7784",
+			"phone": "314-821-5888",
 			"city": "Saint Louis",
 			"zip": "63102",
 			"province": "Missouri",
@@ -211,7 +211,7 @@
 				"province": "Missouri",
 				"country": "United States",
 				"zip": "63102",
-				"phone": "800-952-7784",
+				"phone": "314-821-5888",
 				"name": "Test Customer",
 				"province_code": "MO",
 				"country_code": "US",
