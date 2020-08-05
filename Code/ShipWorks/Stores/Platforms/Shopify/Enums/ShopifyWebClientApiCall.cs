@@ -17,8 +17,6 @@ namespace ShipWorks.Stores.Platforms.Shopify.Enums
         GetOrder = 2,
         [Description("GetProduct")]
         GetProduct = 3,
-        [Description("IsRealShopifyShopUrlName")]
-        IsRealShopifyShopUrlName = 4,
         [Description("GetAccessToken")]
         GetAccessToken = 5,
         [Description("GetShop")]

@@ -72,48 +72,39 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
-        /// Determines if the given shop name is a valid shopify shop
+        /// Validate Authorization for getting orders in Shopify.
         /// </summary>
-        public static bool IsRealShopifyShopUrlName(string shopUrlName)
+        public void ValidateCredentials()
         {
             HttpVariableRequestSubmitter requestSubmitter = new HttpVariableRequestSubmitter();
             requestSubmitter.Verb = HttpVerb.Get;
+            requestSubmitter.Uri = new Uri(Endpoints.ApiGetOrderCountUrl);
 
             try
             {
-                requestSubmitter.Uri = new ShopifyEndpoints(shopUrlName).GetApiAuthorizeUrl();
-            }
-            catch (UriFormatException ex)
-            {
-                log.Warn("The specified shop name created an invalid URI", ex);
+                //Get the response without throttle
+                AddAuthHeaderToRequest(requestSubmitter);
+                
+                // We only want to filter by modified date, but Shopify excludes some of these statuses by default.  For example, status is defaulted to only return open orders.
+                requestSubmitter.Variables.Add("status", "any");
+                requestSubmitter.Variables.Add("financial_status", "any");
+                requestSubmitter.Variables.Add("fulfillment_status", "any");
 
-                return false;
-            }
+                // For times, Shopify provides the date offset, and that is needed to correctly query their orders, so use ToString("o")
+                requestSubmitter.Variables.Add("updated_at_min", DateTime.UtcNow.ToString("o"));
+                requestSubmitter.Variables.Add("updated_at_max", DateTime.UtcNow.ToString("o"));
 
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Shopify, "LoginPage");
-            logEntry.LogRequest(requestSubmitter);
-
-            try
-            {
-                RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ShopifyWebClientApiCall.IsRealShopifyShopUrlName, requestSubmitter, null);
-
-                using (IHttpResponseReader respReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest))
-                {
-                    string pageText = respReader.ReadResult();
-                    logEntry.LogResponse(pageText, "html");
-
-                    // Check the content of the page for the form action that goes to the auth login page.
-                    // If the content contains the html, it is the login page.
-                    bool isLoginPage = pageText.IndexOf("login", StringComparison.OrdinalIgnoreCase) > -1;
-
-                    return isLoginPage;
-                }
+                requestSubmitter.GetResponse();
             }
             catch (WebException ex)
             {
-                log.Error("Could not open shopify login page", ex);
+                HttpWebResponse webResponse = ex.Response as HttpWebResponse;
 
-                return false;
+                if (webResponse?.StatusCode == HttpStatusCode.Forbidden || webResponse?.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new ShopifyAuthorizationException("You do not have the correct permissions to perform this operation. \n" +
+                                                            " Try updating your Shopify token in the store manager", ex);
+                }
             }
         }
 
@@ -139,8 +130,8 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     string response = reader.ReadResult();
 
                     // Parse out the access token
-                    JObject accessTokenRensponse = JObject.Parse(response);
-                    return (string) accessTokenRensponse[ShopifyConstants.AccessTokenParamName];
+                    JObject accessTokenResponse = JObject.Parse(response);
+                    return (string) accessTokenResponse[ShopifyConstants.AccessTokenParamName];
                 }
             }
             catch (JsonException ex)
