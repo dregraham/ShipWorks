@@ -222,8 +222,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     var webClient = lifetimeScope.Resolve<IShopifyWebClient>(TypedParameter.From(store), TypedParameter.From<IProgressReporter>(null));
-                    var locations = webClient.GetLocations();
-                    var levels = webClient.GetInventoryLevelsForLocations(locations.Locations.Select(x => x.ID));
+                    webClient.ValidateCredentials();
                 }
             }
             catch (ShopifyAuthorizationException)

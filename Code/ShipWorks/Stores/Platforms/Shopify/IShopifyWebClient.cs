@@ -86,5 +86,10 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// Get all available locations
         /// </summary>
         ShopifyLocationsResponse GetLocations();
+
+        /// <summary>
+        /// Validate Authorization for getting orders in Shopify.
+        /// </summary>
+        void ValidateCredentials();
     }
 }
