@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
             var serviceType = serviceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key).FirstOrDefault();
             if(serviceType == null)
             {
-                serviceType = serviceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key).FirstOrDefault();
+                serviceType = internationalServiceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key).FirstOrDefault();
             }
 
             if (serviceType == null)
