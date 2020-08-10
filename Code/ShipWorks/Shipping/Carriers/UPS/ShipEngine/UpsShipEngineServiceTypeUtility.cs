@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
     /// </summary>
     public static class UpsShipEngineServiceTypeUtility
     {
-        private static Dictionary<UpsServiceType, string> serviceCodeMap = new Dictionary<UpsServiceType, string>()
+        private static readonly Dictionary<UpsServiceType, string> serviceCodeMap = new Dictionary<UpsServiceType, string>()
             {
                 { UpsServiceType.UpsGround, "ups_ground" },
                 { UpsServiceType.Ups3DaySelect, "ups_3_day_select" },
@@ -22,12 +22,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 { UpsServiceType.UpsNextDayAirAM, "ups_next_day_air_early_am" }
             };
 
-        private static Dictionary<UpsServiceType, string> internationalServiceCodeMap = new Dictionary<UpsServiceType, string>()
+        private static readonly Dictionary<UpsServiceType, string> internationalServiceCodeMap = new Dictionary<UpsServiceType, string>()
         {
             { UpsServiceType.UpsGround, "ups_ground_international" }
         };
 
-        private static Dictionary<UpsPackagingType, string> packageCodeMap = new Dictionary<UpsPackagingType, string>()
+        private static readonly Dictionary<UpsPackagingType, string> packageCodeMap = new Dictionary<UpsPackagingType, string>()
             {
                 { UpsPackagingType.Custom, "" },
                 { UpsPackagingType.Letter, "ups_letter" },
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         /// </summary>
         public static string GetServiceCode(UpsServiceType serviceType, string countryCode)
         {
-            string serviceCode = null;
+            string serviceCode;
 
             if (countryCode.Equals("US", System.StringComparison.OrdinalIgnoreCase))
             {
@@ -70,10 +70,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
         /// </summary>
         public static UpsServiceType GetServiceType(string serviceCode)
         {
-            var serviceType = serviceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key).FirstOrDefault();
-            if(serviceType == null)
+            var serviceType = serviceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key)
+                .Cast<UpsServiceType?>().FirstOrDefault();
+
+            if(!serviceType.HasValue)
             {
-                serviceType = internationalServiceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key).FirstOrDefault();
+                serviceType = internationalServiceCodeMap.Where(v => v.Value == serviceCode).Select(e => e.Key)
+                    .Cast<UpsServiceType?>()
+                    .FirstOrDefault();
             }
 
             if (serviceType == null)
@@ -81,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ShipEngine
                 throw new ShippingException($"{serviceCode} is not supported from UPS from ShipWorks. Select a different service and try again.");
             }
 
-            return serviceType;
+            return serviceType.Value;
         }
 
         /// <summary>
