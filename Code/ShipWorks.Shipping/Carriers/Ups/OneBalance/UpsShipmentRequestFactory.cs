@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
         /// Gets the api value for the UPS service
         /// </summary>
         protected override string GetServiceApiValue(ShipmentEntity shipment) =>
-            UpsShipEngineServiceTypeUtility.GetServiceCode((UpsServiceType) shipment.Ups.Service, shipment.ShipCountryCode);
+            UpsShipEngineServiceTypeUtility.GetServiceCode((UpsServiceType) shipment.Ups.Service, shipment.AdjustedShipCountryCode());
 
         /// <summary>
         /// Insurce the ups packages when the user has picked ups insurance

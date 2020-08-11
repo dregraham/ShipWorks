@@ -71,10 +71,11 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 RateShipmentResponse rateShipmentResponse = Task.Run(async () =>
                         await shipEngineWebClient.RateShipment(request, ApiLogSource.UPS).ConfigureAwait(false)).Result;
 
+                string countryCode = shipment.AdjustedShipCountryCode();
                 IEnumerable<string> availableServiceTypeApiCodes = shipmentType.GetAvailableServiceTypes()
                     .Cast<UpsServiceType>()
-                    .Where(serviceType => UpsShipEngineServiceTypeUtility.IsServiceSupported(serviceType, shipment.ShipCountryCode))
-                    .Select(serviceType => UpsShipEngineServiceTypeUtility.GetServiceCode(serviceType, shipment.ShipCountryCode));
+                    .Where(serviceType => UpsShipEngineServiceTypeUtility.IsServiceSupported(serviceType, countryCode))
+                    .Select(serviceType => UpsShipEngineServiceTypeUtility.GetServiceCode(serviceType, countryCode));
 
                 RateGroup rateGroup = rateGroupFactory.Create(rateShipmentResponse.RateResponse, ShipmentTypeCode.UpsOnLineTools, availableServiceTypeApiCodes);
 
