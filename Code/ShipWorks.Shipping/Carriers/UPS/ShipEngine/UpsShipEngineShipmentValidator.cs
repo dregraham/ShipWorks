@@ -22,18 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
             var validCountryCodes = new List<string> 
             { 
                 // USA
-                "US", 
+                "US",               
 
-                // American Samoa
-                "AS", 
-
-                // Guam
-                "GU", 
-
-                // Northern Maria Islands
-                "MP", 
-
-                // Marshal Islands
+                // Puerto Rico
                 "PR", 
 
                 // Virgin Islands
