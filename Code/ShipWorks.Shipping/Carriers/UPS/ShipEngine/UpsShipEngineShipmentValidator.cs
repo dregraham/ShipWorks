@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
@@ -25,10 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
                 "US",               
 
                 // Puerto Rico
-                "PR", 
-
-                // Virgin Islands
-                "VI"
+                "PR"
             };
 
             if(validCountryCodes.None(validCode => shipment.ShipCountryCode.Equals(validCode, System.StringComparison.OrdinalIgnoreCase)))
