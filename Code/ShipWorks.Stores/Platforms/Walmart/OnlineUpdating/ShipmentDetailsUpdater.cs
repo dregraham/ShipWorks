@@ -171,7 +171,8 @@ namespace ShipWorks.Stores.Platforms.Walmart.OnlineUpdating
                         status = orderLineStatusValueType.Shipped,
                         statusQuantity = new quantityType()
                         {
-                            amount = item.Quantity.ToString(CultureInfo.InvariantCulture)
+                            amount = item.Quantity.ToString(CultureInfo.InvariantCulture),
+                            unitOfMeasurement = "EACH"
                         },
                         trackingInfo = new trackingInfoType()
                         {
