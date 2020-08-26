@@ -1,16 +1,10 @@
 ﻿using System;
 using Autofac;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Startup;
-using ShipWorks.Tests.Shared;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
 using Xunit;
@@ -29,8 +23,6 @@ namespace ShipWorks.Core.Tests.Integration.Shipping.Insurance.InsureShip
         public InsureShipServiceTest(DatabaseFixture db)
         {
             context = db.CreateDataContext(x => ContainerInitializer.Initialize(x));
-
-
             adapter = new SqlAdapter(false);
         }
 
@@ -183,24 +175,19 @@ namespace ShipWorks.Core.Tests.Integration.Shipping.Insurance.InsureShip
         }
 
         [Theory]
-        [InlineData(false, 0, InsuranceProvider.Carrier, false, false)]
-        [InlineData(false, 50, InsuranceProvider.Carrier, false, false)]
-        [InlineData(false, 100, InsuranceProvider.Carrier, false, false)]
-        [InlineData(false, 100, InsuranceProvider.ShipWorks, false, false)]
-
-        [InlineData(true, 0, InsuranceProvider.Carrier, false, false)]
-        [InlineData(true, 50, InsuranceProvider.Carrier, false, false)]
-        [InlineData(true, 100, InsuranceProvider.Carrier, false, false)]
-        [InlineData(true, 100.01, InsuranceProvider.ShipWorks, false, true)]
-
-        [InlineData(true, 0, InsuranceProvider.Carrier, true, false)]
-        [InlineData(true, 50, InsuranceProvider.Carrier, true, false)]
-        [InlineData(true, 100, InsuranceProvider.Carrier, true, false)]
-        [InlineData(true, 100, InsuranceProvider.ShipWorks, true, false)]
-
-        [InlineData(true, 1, InsuranceProvider.ShipWorks, true, false)]
-        [InlineData(true, 50, InsuranceProvider.ShipWorks, true, false)]
-        public void IsInsuredByInsureShip_ReturnsTrue_AmazonSfp_WhenSwInsuranceAndValueOver100(bool insured, decimal insureValue, InsuranceProvider insuranceProvider, bool pennyOne, bool result)
+        [InlineData(false, 0, InsuranceProvider.Carrier, false)]
+        [InlineData(false, 50, InsuranceProvider.Carrier, false)]
+        [InlineData(false, 100, InsuranceProvider.Carrier, false)]
+        [InlineData(false, 100, InsuranceProvider.ShipWorks, false)]
+        [InlineData(true, 0, InsuranceProvider.Carrier, false)]
+        [InlineData(true, 50, InsuranceProvider.Carrier, false)]
+        [InlineData(true, 100, InsuranceProvider.Carrier, false)]
+        [InlineData(true, 100.01, InsuranceProvider.ShipWorks, true)]
+        [InlineData(true, 100, InsuranceProvider.ShipWorks, false)]
+        [InlineData(true, 1, InsuranceProvider.ShipWorks, false)]
+        [InlineData(true, 50, InsuranceProvider.ShipWorks, false)]
+        public void IsInsuredByInsureShip_ReturnsTrue_AmazonSfp_WhenSwInsuranceAndValueOver100(bool insured, decimal insureValue, 
+            InsuranceProvider insuranceProvider, bool result)
         {
             shipment = Create.Shipment(context.Order)
                 .AsAmazonSFP(p =>
