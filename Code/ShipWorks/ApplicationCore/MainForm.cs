@@ -46,6 +46,7 @@ using ShipWorks.ApplicationCore.Help;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
@@ -912,6 +913,12 @@ namespace ShipWorks
                 lifetimeScope => lifetimeScope.Resolve<IUpgradeResultsChecker>().ShowUpgradeNotificationIfNecessary(this, user))
                 .Do(x => { }, ex => Console.WriteLine(ex.Message))
                 .Forget();
+
+            UsingAsync(
+                IoC.BeginLifetimeScope(),
+                lifetimeScope => lifetimeScope.Resolve<ILicenseService>().IsHub ?
+                    lifetimeScope.Resolve<HubMigrator>().MigrateStores().ToTyped<Unit>() :
+                    Task.FromResult(Unit.Default));
         }
 
         /// <summary>
