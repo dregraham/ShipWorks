@@ -146,8 +146,18 @@ namespace ShipWorks.Shipping.Insurance
 
             if (shipment.InsurancePolicy == null)
             {
-                messageLabel.Text = "A claim must be submitted through the ShipWorks website. Go to ShipWorks.com and click \"My Account.\"";
+                insureShipQuestionsControl.Visible = false;
+                insuranceViewClaimControl.Visible = false;
+
+                ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                IInsuranceChoice insuranceChoice = shipmentType.GetParcelDetail(shipment, 0).Insurance;
+
+                messageLabel.Text = insuranceChoice.InsuranceValue > 100 ? 
+                    "A claim must be submitted through the ShipWorks website. Go to ShipWorks.com and click \"My Account.\"" :
+                    "The shipment was not insured.";
+
                 messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false;
             }
 

@@ -78,6 +78,11 @@ namespace ShipWorks.Shipping.Insurance
         /// </summary>
         private Result EnsureStoreExists(IStoreManager storeManager)
         {
+            if (shipment == null)
+            {
+                return Result.FromError("No insurance policy exists.");
+            }
+
             var storeEntity = storeManager.GetStoreReadOnly(shipment.Order.StoreID);
             if (storeEntity == null)
             {
