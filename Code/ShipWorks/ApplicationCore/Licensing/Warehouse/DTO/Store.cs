@@ -19,5 +19,10 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// The unique identifier for the store
         /// </summary>
         public string UniqueIdentifier { get; set; }
+
+        /// <summary>
+        /// The warehouse that migrated this store to the hub
+        /// </summary>
+        public string MigrationWarehouse { get; set; }
     }
 }

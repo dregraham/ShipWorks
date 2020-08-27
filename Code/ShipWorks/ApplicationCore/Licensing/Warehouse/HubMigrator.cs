@@ -75,7 +75,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                             foreach (StoreEntity store in storesToMigrate)
                             {
                                 progressDialog.ProgressItem.Detail = $"Store {index} of {totalStoresToMigrate}";
-                                Result result = await warehouseStoreClient.UploadStoreToWarehouse(store);
+                                Result result = await warehouseStoreClient.UploadStoreToWarehouse(store, false);
 
                                 if (result.Success)
                                 {

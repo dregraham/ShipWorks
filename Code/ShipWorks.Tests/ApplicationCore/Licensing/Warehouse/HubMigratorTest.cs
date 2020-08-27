@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             var testObject = mock.Create<HubMigrator>();
             await testObject.MigrateStores();
 
-            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store), Times.Once);
+            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store, false), Times.Once);
         }
 
         [Fact]
@@ -82,13 +82,13 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
             messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.Cancel);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store))
+            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
                 .ReturnsAsync(Result.FromSuccess());
 
             var testObject = mock.Create<HubMigrator>();
             await testObject.MigrateStores();
 
-            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store), Times.Never);
+            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store, false), Times.Never);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
             messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store))
+            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
                 .ReturnsAsync(Result.FromError("error"));
 
             var testObject = mock.Create<HubMigrator>();
@@ -139,7 +139,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
             messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store))
+            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
                 .ReturnsAsync(Result.FromError("error"));
 
             var testObject = mock.Create<HubMigrator>();
@@ -155,7 +155,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
             messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store))
+            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
                 .ReturnsAsync(Result.FromSuccess());
         }
 
