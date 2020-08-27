@@ -53,17 +53,27 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    foreach (StoreEntity store in storesToMigrate)
+                    using (var progressDialog =
+                        messageHelper.ShowProgressDialog("Migrating stores to Hub", "Migrating stores to Hub"))
                     {
-                        Result result = await warehouseStoreClient.UploadStoreToWarehouse(store);
+                        int index = 1;
+                        int totalStoresToMigrate = storesToMigrate.Count();
+                        progressDialog.ProgressItem.PercentComplete = 0;
 
-                        if (result.Success)
+                        foreach (StoreEntity store in storesToMigrate)
                         {
-                            storeManager.SaveStore(store);
-                        }
-                        else
-                        {
-                            storesThatFailedMigration.Add(store.StoreName);
+                            progressDialog.ProgressItem.Detail = $"Store {index} of {totalStoresToMigrate}";
+                            Result result = await warehouseStoreClient.UploadStoreToWarehouse(store);
+
+                            if (result.Success)
+                            {
+                                storeManager.SaveStore(store);
+                            }
+                            else
+                            {
+                                storesThatFailedMigration.Add(store.StoreName);
+                            }
+                            progressDialog.ProgressItem.PercentComplete = index / totalStoresToMigrate * 100;
                         }
                     }
 
