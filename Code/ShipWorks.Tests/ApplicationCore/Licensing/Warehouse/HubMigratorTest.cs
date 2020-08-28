@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
-using Interapptive.Shared.Utility;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Management;
 using ShipWorks.Tests.Shared;
+using ShipWorks.Users;
 using Xunit;
 using static ShipWorks.Tests.Shared.ExtensionMethods.ParameterShorteners;
 
@@ -23,8 +22,10 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
         private readonly Mock<StoreType> storeType;
         private readonly Mock<IStoreTypeManager> storeTypeManager;
         private readonly Mock<IMessageHelper> messageHelper;
-        private readonly Mock<IWarehouseStoreClient> warehouseStoreClient;
+        private readonly Mock<IConfigurationData> configurationData;
+        private readonly Mock<IUserSession> userSession;
         private readonly StoreEntity store;
+        private readonly IWin32Window owner;
 
         public HubMigratorTest()
         {
@@ -34,129 +35,75 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing.Warehouse
             storeType = mock.Mock<StoreType>();
             storeTypeManager = mock.Mock<IStoreTypeManager>();
             messageHelper = mock.Mock<IMessageHelper>();
-            warehouseStoreClient = mock.Mock<IWarehouseStoreClient>();
+            configurationData = mock.Mock<IConfigurationData>();
+            userSession = mock.Mock<IUserSession>();
             store = new StoreEntity();
+            owner = mock.Mock<IWin32Window>().Object;
         }
 
         [Fact]
-        public async Task MigrateStores_PromptsUserToMigrate_WhenThereAreStoresToMigrate()
+        public void MigrateStores_PromptsUserToMigrate_WhenTheyAreAdminAndHaveALinkedWarehouseAndThereAreStoresToMigrate()
         {
-            SetupSuccessfulMigration();
+            configurationData.Setup(x => x.FetchReadOnly()).Returns(new ConfigurationEntity {WarehouseID = "foo"});
+            userSession.Setup(x => x.User).Returns(new UserEntity() {IsAdmin = true});
+            storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
+            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
+            storeTypeManager.Setup(x => x.GetType(store))
+                .Returns(storeType);
+            messageHelper.Setup(x => x.ShowQuestion(It.IsAny<IWin32Window>(), AnyString)).Returns(DialogResult.Cancel);
 
             var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
+            testObject.MigrateStores(owner);
 
-            messageHelper.Verify(x => x.ShowQuestion(AnyString), Times.Once);
+            messageHelper.Verify(x => x.ShowQuestion(owner, AnyString), Times.Once);
         }
 
         [Fact]
-        public async Task MigrateStores_DoesNotPromptUser_WhenThereAreNoStoresToMigrate()
+        public void MigrateStores_DoesNotPromptUser_WhenThereIsNoWarehouseLinked()
         {
+            configurationData.Setup(x => x.FetchReadOnly()).Returns(new ConfigurationEntity {WarehouseID = null});
+            userSession.Setup(x => x.User).Returns(new UserEntity() {IsAdmin = true});
             storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
             storeType.Setup(x => x.ShouldUseHub(store)).Returns(false);
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
 
             var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
+            testObject.MigrateStores(owner);
 
-            messageHelper.Verify(x => x.ShowQuestion(AnyString), Times.Never);
+            messageHelper.Verify(x => x.ShowQuestion(owner, AnyString), Times.Never);
         }
 
         [Fact]
-        public async Task MigrateStores_PerformsMigration_WhenUserAnswersPromptWithOK()
+        public void MigrateStores_DoesNotPromptUser_WhenTheUserIsNotAnAdmin()
         {
-            SetupSuccessfulMigration();
-
-            var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
-
-            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store, false), Times.Once);
-        }
-
-        [Fact]
-        public async Task MigrateStores_DoesNotPerformMigration_WhenUserAnswersPromptWithCancel()
-        {
+            configurationData.Setup(x => x.FetchReadOnly()).Returns(new ConfigurationEntity {WarehouseID = "foo"});
+            userSession.Setup(x => x.User).Returns(new UserEntity() {IsAdmin = false});
             storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
-            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
+            storeType.Setup(x => x.ShouldUseHub(store)).Returns(false);
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
-            messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.Cancel);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
-                .ReturnsAsync(Result.FromSuccess());
 
             var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
+            testObject.MigrateStores(owner);
 
-            warehouseStoreClient.Verify(x => x.UploadStoreToWarehouse(store, false), Times.Never);
+            messageHelper.Verify(x => x.ShowQuestion(owner, AnyString), Times.Never);
         }
 
         [Fact]
-        public async Task MigrateStores_SavesStore_WhenStoreUploadsSuccessfully()
+        public void MigrateStores_DoesNotPromptUser_WhenThereAreNoStoresToMigrate()
         {
-            SetupSuccessfulMigration();
-
-            var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
-
-            storeManager.Verify(x => x.SaveStore(store), Times.Once);
-        }
-
-        [Fact]
-        public async Task MigrateStores_ShowsSuccessMessage_WhenStoreUploadsSuccessfully()
-        {
-            SetupSuccessfulMigration();
-
-            var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
-
-            messageHelper.Verify(x => x.ShowInformation(AnyString));
-        }
-
-
-        [Fact]
-        public async Task MigrateStores_DoesNotSaveStore_WhenStoreUploadFails()
-        {
+            configurationData.Setup(x => x.FetchReadOnly()).Returns(new ConfigurationEntity {WarehouseID = "foo"});
+            userSession.Setup(x => x.User).Returns(new UserEntity() {IsAdmin = true});
             storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
-            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
+            storeType.Setup(x => x.ShouldUseHub(store)).Returns(false);
             storeTypeManager.Setup(x => x.GetType(store))
                 .Returns(storeType);
-            messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
-                .ReturnsAsync(Result.FromError("error"));
 
             var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
+            testObject.MigrateStores(owner);
 
-            storeManager.Verify(x => x.SaveStore(store), Times.Never);
-        }
-
-        [Fact]
-        public async Task MigrateStores_ShowsErrorMessage_WhenStoreUploadFails()
-        {
-            storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
-            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
-            storeTypeManager.Setup(x => x.GetType(store))
-                .Returns(storeType);
-            messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
-                .ReturnsAsync(Result.FromError("error"));
-
-            var testObject = mock.Create<HubMigrator>();
-            await testObject.MigrateStores();
-
-            messageHelper.Verify(x => x.ShowError(AnyString));
-        }
-
-        private void SetupSuccessfulMigration()
-        {
-            storeManager.Setup(x => x.GetAllStores()).Returns(new List<StoreEntity> {store});
-            storeType.Setup(x => x.ShouldUseHub(store)).Returns(true);
-            storeTypeManager.Setup(x => x.GetType(store))
-                .Returns(storeType);
-            messageHelper.Setup(x => x.ShowQuestion(AnyString)).Returns(DialogResult.OK);
-            warehouseStoreClient.Setup(x => x.UploadStoreToWarehouse(store, false))
-                .ReturnsAsync(Result.FromSuccess());
+            messageHelper.Verify(x => x.ShowQuestion(owner, AnyString), Times.Never);
         }
 
         public void Dispose()
