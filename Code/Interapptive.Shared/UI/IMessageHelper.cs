@@ -48,6 +48,11 @@ namespace Interapptive.Shared.UI
         /// <summary>
         /// Show a yes/no question with the given text
         /// </summary>
+        DialogResult ShowQuestion(IWin32Window owner, string text);
+
+        /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
         DialogResult ShowQuestion(string text);
 
         /// <summary>

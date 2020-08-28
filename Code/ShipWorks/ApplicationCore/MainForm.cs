@@ -854,6 +854,14 @@ namespace ShipWorks
 
             UserEntity user = UserSession.User;
 
+            using (var lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.Resolve<ILicenseService>().IsHub)
+                {
+                    lifetimeScope.Resolve<HubMigrator>().MigrateStores(this);
+                }
+            }
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -862,7 +870,7 @@ namespace ShipWorks
 
             currentUserSettings.SetUIMode(UIMode.Batch);
 
-            //The Grid can be already initilized at this point. Make sure its clean.
+            //The Grid can be already initialized at this point. Make sure its clean.
             gridControl.Reset();
 
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
@@ -913,12 +921,6 @@ namespace ShipWorks
                 lifetimeScope => lifetimeScope.Resolve<IUpgradeResultsChecker>().ShowUpgradeNotificationIfNecessary(this, user))
                 .Do(x => { }, ex => Console.WriteLine(ex.Message))
                 .Forget();
-
-            UsingAsync(
-                IoC.BeginLifetimeScope(),
-                lifetimeScope => lifetimeScope.Resolve<ILicenseService>().IsHub ?
-                    lifetimeScope.Resolve<HubMigrator>().MigrateStores().ToTyped<Unit>() :
-                    Task.FromResult(Unit.Default));
         }
 
         /// <summary>
