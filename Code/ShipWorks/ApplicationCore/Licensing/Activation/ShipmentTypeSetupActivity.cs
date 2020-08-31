@@ -1,4 +1,5 @@
 ﻿using Autofac.Features.Indexed;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -7,6 +8,7 @@ using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation
 {
+    [Component]
     public class ShipmentTypeSetupActivity : IShipmentTypeSetupActivity
     {
         readonly IIndex<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
