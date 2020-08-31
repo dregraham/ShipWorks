@@ -23,6 +23,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// <summary>
         /// The warehouse that migrated this store to the hub
         /// </summary>
-        public byte[] MigrationWarehouse { get; set; }
+        public string MigrationWarehouse { get; set; }
     }
 }
