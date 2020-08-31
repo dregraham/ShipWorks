@@ -326,7 +326,7 @@ namespace ShipWorks.ApplicationCore.Licensing.TangoRequests
         /// </summary>
         private static void AddPolicyInformation(ShipmentEntity shipment, IHttpVariableRequestSubmitter postRequest, bool shipWorksInsured)
         {
-            if (shipWorksInsured)
+            if (shipWorksInsured && shipment.InsurancePolicy != null)
             {
                 postRequest.Variables.Add("policyNumber", shipment.InsurancePolicy.InsureShipPolicyID?.ToString().Truncate(20) ?? String.Empty);
                 postRequest.Variables.Add("policyRequestStats", shipment.InsurancePolicy.InsureShipStatus?.Truncate(50) ?? String.Empty);
