@@ -13524,6 +13524,8 @@ namespace ShipWorks.Data.Model
 		AcceptedFCMILetterWarning,
 		///<summary>ShipEngineCarrierId. </summary>
 		ShipEngineCarrierId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
