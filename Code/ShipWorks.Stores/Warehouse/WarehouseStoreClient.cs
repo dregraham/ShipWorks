@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Warehouse
                     Store storeDto = await GetStoreDtoFactory(store).Create(store).ConfigureAwait(false);
                     if (!isNew)
                     {
-                        storeDto.MigrationWarehouse = Guid.Parse(configurationData.FetchReadOnly().WarehouseID).ToString("D");
+                        storeDto.MigrationWarehouseId = Guid.Parse(configurationData.FetchReadOnly().WarehouseID).ToString("D");
                     }
                     request.AddJsonBody(storeDto);
 
