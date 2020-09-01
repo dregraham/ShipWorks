@@ -3834,6 +3834,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UspsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UspsAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("UspsAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UspsAccountFieldIndex.HubCarrierId, 0, 0, 0);
+			this.AddElementFieldInfo("UspsAccountEntity", "HubSequence", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UspsAccountFieldIndex.HubSequence, 0, 0, 19);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

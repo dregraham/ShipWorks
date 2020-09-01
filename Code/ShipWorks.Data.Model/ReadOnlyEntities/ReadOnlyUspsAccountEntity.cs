@@ -64,6 +64,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             AcceptedFCMILetterWarning = source.AcceptedFCMILetterWarning;
             ShipEngineCarrierId = source.ShipEngineCarrierId;
             HubVersion = source.HubVersion;
+            HubCarrierId = source.HubCarrierId;
+            HubSequence = source.HubSequence;
             
             
             
@@ -240,6 +242,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubCarrierId property of the Entity UspsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UspsAccount"."HubCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> HubCarrierId { get; }
+        /// <summary> The HubSequence property of the Entity UspsAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "UspsAccount"."HubSequence"<br/>
+        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int64> HubSequence { get; }
         
         
         
