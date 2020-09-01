@@ -854,13 +854,7 @@ namespace ShipWorks
 
             UserEntity user = UserSession.User;
 
-            using (var lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                if (lifetimeScope.Resolve<ILicenseService>().IsHub)
-                {
-                    lifetimeScope.Resolve<HubMigrator>().MigrateStores(this);
-                }
-            }
+            MigrateStoresToHub();
 
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
@@ -5471,6 +5465,27 @@ namespace ShipWorks
                 }
                 MessageHelper.ShowError(this, "An error occurred creating the Asendia manifest");
                 log.Error(result.Exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Kick off the HubMigrator
+        /// </summary>
+        private void MigrateStoresToHub()
+        {
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    if (lifetimeScope.Resolve<ILicenseService>().IsHub)
+                    {
+                        lifetimeScope.Resolve<HubMigrator>().MigrateStores(this);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to migrate stores to Hub", ex);
             }
         }
 

@@ -118,10 +118,11 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                         storesThatFailedMigration.Add(store.StoreName);
                     }
 
-                    storeProgress.PercentComplete = index / totalStoresToMigrate * 100;
+                    storeProgress.PercentComplete = 100 * index / totalStoresToMigrate;
                     index++;
                 }
 
+                storeProgress.Detail = "Done";
                 if (storesThatFailedMigration.Any())
                 {
                     string errorMessage = CreateStoreMigrationErrorMessage(storesThatFailedMigration);
