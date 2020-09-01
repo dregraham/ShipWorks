@@ -117,6 +117,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                     }
 
                     storeProgress.PercentComplete = index / totalStoresToMigrate * 100;
+                    index++;
                 }
 
                 if (storesThatFailedMigration.Any())
