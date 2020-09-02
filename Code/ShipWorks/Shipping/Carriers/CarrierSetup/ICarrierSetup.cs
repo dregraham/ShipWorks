@@ -2,8 +2,14 @@
 
 namespace ShipWorks.Shipping.CarrierSetup
 {
-    interface ICarrierSetup
+    /// <summary>
+    /// Setup carriers configurations downloaded from the Hub
+    /// </summary>
+    public interface ICarrierSetup
     {
+        /// <summary>
+        /// Setup the carrier with the given config
+        /// </summary>
         void Setup(CarrierConfigurationPayload config);
     }
 }
