@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Licensing;
@@ -10,6 +11,7 @@ namespace ShipWorks.Warehouse
     /// <summary>
     /// Class to import the configuration from Hub
     /// </summary>
+    [Component]
     public class HubConfigurationImporter : IInitializeForCurrentDatabase
     {
         private readonly ILicenseService licenseService;
