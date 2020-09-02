@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace ShipWorks.Warehouse.DTO.Configuration.ShippingSettings
 {
     [Obfuscation]
     public class UspsConfigurationAccount : CarrierConfigurationAccount
     {
+        public long AccountId { get; set; }
+
         public int ContractType { get; set; }
 
         public int GlobalPost { get; set; }
