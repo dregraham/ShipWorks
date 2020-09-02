@@ -3,6 +3,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
 
@@ -17,7 +18,7 @@ namespace ShipWorks.Warehouse
         private readonly ILicenseService licenseService;
         private readonly IHubCarrierConfigurator carrierConfigurator;
         private readonly IHubConfigurationWebClient webClient;
-        private readonly IConfigurationEntity configuration;
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
@@ -25,12 +26,12 @@ namespace ShipWorks.Warehouse
         public HubConfigurationImporter(ILicenseService licenseService,
             IHubCarrierConfigurator carrierConfigurator,
             IHubConfigurationWebClient webClient,
-            IConfigurationEntity configuration)
+            IConfigurationData configurationData)
         {
             this.licenseService = licenseService;
             this.carrierConfigurator = carrierConfigurator;
             this.webClient = webClient;
-            this.configuration = configuration;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace ShipWorks.Warehouse
         {
             if (licenseService.IsHub)
             {
+                IConfigurationEntity configuration = configurationData.FetchReadOnly();
                 var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
                 var hubConfig = task.Result;
 
