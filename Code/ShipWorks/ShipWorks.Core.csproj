@@ -1213,6 +1213,9 @@
     <Compile Include="Products\Import\FailedProductImportException.cs" />
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\ICarrierSetup.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\IHubCarrierConfigurator.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\UspsCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\Asendia\IAsendiaManifestCreator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\BestRate\IBestRateExcludedAccountRepository.cs" />
@@ -1544,6 +1547,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\WPF\WPFInterop.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\ConfigurationAddress.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\HubConfiguration.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
@@ -1556,6 +1561,10 @@
     <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponse.cs" />
     <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponses.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\CarrierConfigurationAccount.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\CarrierConfigurationPayload.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\CarrierConfiguration.cs" />
+    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\UspsConfigurationAccount.cs" />
     <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
     <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
     <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
