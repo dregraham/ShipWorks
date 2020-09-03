@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -13,7 +13,8 @@ namespace ShipWorks.Warehouse
     /// Class to import the configuration from Hub
     /// </summary>
     [Component]
-    public class HubConfigurationImporter : IInitializeForCurrentDatabase
+    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    public class HubConfigurationImporter : IInitializeForCurrentSession
     {
         private readonly ILicenseService licenseService;
         private readonly IHubCarrierConfigurator carrierConfigurator;
@@ -37,7 +38,7 @@ namespace ShipWorks.Warehouse
         /// <summary>
         /// Initialize for the currently logged on user
         /// </summary>
-        public void InitializeForCurrentDatabase(ExecutionMode executionMode)
+        public void InitializeForCurrentSession()
         {
             if (licenseService.IsHub)
             {

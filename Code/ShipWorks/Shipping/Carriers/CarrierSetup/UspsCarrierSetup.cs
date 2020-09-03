@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing;
@@ -9,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Warehouse.DTO.Configuration;
 using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
@@ -19,11 +22,15 @@ namespace ShipWorks.Shipping.CarrierSetup
     public class UspsCarrierSetup : ICarrierSetup
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
+        private readonly IShippingSettings shippingSettings;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
+
         public UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
+            IShippingSettings shippingSettings)
         {
             this.uspsAccountRepository = uspsAccountRepository;
+            this.shippingSettings = shippingSettings;
             this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
         }
 
@@ -32,17 +39,22 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// </summary>
         public void Setup(CarrierConfigurationPayload config)
         {
-            UspsConfigurationAccount account = config.Account as UspsConfigurationAccount;
+            var account = config.AdditionalData["account"].ToObject<UspsConfigurationAccount>();
 
-            UspsAccountEntity uspsAccount = new UspsAccountEntity
+            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.UspsAccountID == account.AccountId && x.HubVersion >= config.HubVersion))
             {
-                Username = account.Username,
-                Password = SecureText.Encrypt(account.Password, account.Username),
-                PendingInitialAccount = (int) UspsPendingAccountType.Existing,
-                CreatedDate = DateTime.UtcNow,
-            };
+                return;
+            }
 
-            uspsAccount.UspsAccountID = account.AccountId;
+            bool shouldMarkAsConfigured = uspsAccountRepository.AccountsReadOnly.None();
+
+            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(account.AccountId);
+
+            uspsAccount.Username = account.Username;
+            uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
+            uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+            uspsAccount.CreatedDate = DateTime.UtcNow;
+
             uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
 
             ConfigurationAddress accountAddress = config.Address;
@@ -74,6 +86,17 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccountRepository.Save(uspsAccount);
 
             shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account);
+
+            if (shouldMarkAsConfigured)
+            {
+                shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
+            }
         }
+
+        /// <summary>
+        /// Get an existing account entity, or create a new one if none exist with the given account ID
+        /// </summary>
+        private UspsAccountEntity GetOrCreateAccountEntity(long accountID) =>
+            uspsAccountRepository.GetAccount(accountID) ?? new UspsAccountEntity { UspsAccountID = accountID };
     }
 }

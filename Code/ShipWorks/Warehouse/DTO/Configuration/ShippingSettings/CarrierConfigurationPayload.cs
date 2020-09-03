@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ShipWorks.Warehouse.DTO.Configuration.ShippingSettings
 {
@@ -6,6 +9,10 @@ namespace ShipWorks.Warehouse.DTO.Configuration.ShippingSettings
     public class CarrierConfigurationPayload
     {
         public ConfigurationAddress Address { get; set; }
-        public CarrierConfigurationAccount Account { get; set; }
+
+        public int HubVersion { get; set; }
+
+        [JsonExtensionData]
+        public IDictionary<string, JToken> AdditionalData { get; set; }
     }
 }
