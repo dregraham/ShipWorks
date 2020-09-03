@@ -1301,6 +1301,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidValidator.cs" />
     <Compile Include="Shipping\IOneBalanceSettingsControlHost.cs" />
+    <Compile Include="Shipping\IShipmentPrintHelper.cs" />
     <Compile Include="Shipping\IShipmentTypeDataService.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShipmentShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\AmazonSWAShippingRestrictionType.cs" />
@@ -1315,6 +1316,7 @@
     <Compile Include="Shipping\Settings\IOneBalanceSetupWizard.cs" />
     <Compile Include="Shipping\ShipEngine\IShipEngineWebClient.cs" />
     <Compile Include="Shipping\ShipmentIgnoreConcurrencyScope.cs" />
+    <Compile Include="Shipping\ShipmentPrintHelperWrapper.cs" />
     <Compile Include="Shipping\ShipmentTypeDataServiceWrapper.cs" />
     <Compile Include="Shipping\ShipmentUpdateOperationResult.cs" />
     <Compile Include="Shipping\Policies\AmazonShippingPolicyTarget.cs" />
