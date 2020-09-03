@@ -97,7 +97,6 @@ using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Templates.Controls.DefaultPickListTemplate;
-using ShipWorks.Templates.Distribution;
 using ShipWorks.Templates.Emailing;
 using ShipWorks.Templates.Management;
 using ShipWorks.Templates.Printing;
@@ -873,9 +872,6 @@ namespace ShipWorks
             DashboardManager.OpenDashboard();
 
             archiveNotificationManager.ShowIfNecessary();
-
-            // Get all new\edited templates are installed
-            BuiltinTemplates.UpdateTemplates(this);
 
             // Update the Detail View UI
             UpdateDetailViewSettingsUI();

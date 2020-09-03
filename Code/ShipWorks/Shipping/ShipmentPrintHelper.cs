@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using log4net;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Filters;
@@ -17,6 +16,7 @@ using ShipWorks.Shipping.Carriers.UPS.CoreExtensions.Filters;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Settings.Printing;
 using ShipWorks.Templates;
+using ShipWorks.Templates.Distribution;
 
 namespace ShipWorks.Shipping
 {
@@ -88,12 +88,12 @@ namespace ShipWorks.Shipping
         /// 
         /// Specifying reinstallMissing = true will only re-create missing output groups.  No rules are deleted, only added.
         /// </summary>
-        public static void InstallDefaultRules(ShipmentTypeCode shipmentType, bool reinstallMissing, IWin32Window owner)
+        public static void InstallDefaultRules(ShipmentTypeCode shipmentType, bool reinstallMissing, IWin32Window owner, bool installInBackground = false)
         {
             // get the existing groups
             List<ShippingPrintOutputEntity> existingGroups = ShippingPrintOutputManager.GetOutputGroups(shipmentType);
 
-            // Cant be transacted, b\c if templates are mising we show ui and need to check TemplateManager for changes.
+            // Cant be transacted, b\c if templates are missing we show ui and need to check TemplateManager for changes.
             using (SqlAdapter adapter = new SqlAdapter())
             {
                 ShippingPrintOutputManager.CheckForChangesNeeded();
@@ -123,11 +123,11 @@ namespace ShipWorks.Shipping
                         // This is for the "Labels" output group
                         if (shipmentType == ShipmentTypeCode.PostalWebTools)
                         {
-                            CreateStandardLabelRules(labelsGroup, owner);
+                            CreateStandardLabelRules(labelsGroup, owner, installInBackground);
                         }
                         else
                         {
-                            CreateThermalStandardLabelRules(labelsGroup, owner);
+                            CreateThermalStandardLabelRules(labelsGroup, owner, installInBackground);
                         }
                     }
 
@@ -141,7 +141,7 @@ namespace ShipWorks.Shipping
                             invoiceGroup.ShipmentType = (int) shipmentType;
                             adapter.SaveAndRefetch(invoiceGroup);
 
-                            CreateCommercialInvoiceRules(invoiceGroup, owner);
+                            CreateCommercialInvoiceRules(invoiceGroup, owner, installInBackground);
                         }
                     }
                 }
@@ -167,11 +167,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the printing ruleset that just prints standard labels always
         /// </summary>
-        private static void CreateStandardLabelRules(ShippingPrintOutputEntity group, IWin32Window owner)
+        private static void CreateStandardLabelRules(ShippingPrintOutputEntity group, IWin32Window owner, bool installInBackground)
         {
             ShippingPrintOutputRuleEntity rule = new ShippingPrintOutputRuleEntity();
             rule.FilterNodeID = ShippingPrintOutputManager.FilterNodeAlwaysID;
-            rule.TemplateID = GetTemplateID(@"Labels\Standard", owner);
+            rule.TemplateID = GetTemplateID(@"Labels\Standard", owner, installInBackground);
             group.Rules.Add(rule);
 
             ShippingPrintOutputManager.SaveOutputGroup(group);
@@ -180,36 +180,16 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the printing ruleset that prints standard labels and thermal labels depending on label type
         /// </summary>
-        private static void CreateThermalStandardLabelRules(ShippingPrintOutputEntity group, IWin32Window owner)
+        private static void CreateThermalStandardLabelRules(ShippingPrintOutputEntity group, IWin32Window owner, bool installInBackground)
         {
             ShippingPrintOutputRuleEntity thermalRule = new ShippingPrintOutputRuleEntity();
             thermalRule.FilterNodeID = GetFilterNodeID(CreateFilterDefinitionThermal(), "Thermal");
-            thermalRule.TemplateID = GetTemplateID(@"Labels\Thermal", owner);
+            thermalRule.TemplateID = GetTemplateID(@"Labels\Thermal", owner, installInBackground);
             group.Rules.Add(thermalRule);
 
             ShippingPrintOutputRuleEntity standardRule = new ShippingPrintOutputRuleEntity();
             standardRule.FilterNodeID = ShippingPrintOutputManager.FilterNodeAlwaysID;
-            standardRule.TemplateID = GetTemplateID(@"Labels\Standard", owner);
-            group.Rules.Add(standardRule);
-
-            ShippingPrintOutputManager.SaveOutputGroup(group);
-        }
-
-        /// <summary>
-        /// Create the printing ruleset that prints UPS Return Shipments (those that aren't electronic).  
-        /// This won't be used until we find out many people are needing to configure the action and are calling support,
-        /// at which time we'll include a separate Print Output Group type specifically for returns.
-        /// </summary>
-        private static void CreateUPSReturnShipmentRules(ShippingPrintOutputEntity group, IWin32Window owner)
-        {
-            ShippingPrintOutputRuleEntity thermalRule = new ShippingPrintOutputRuleEntity();
-            thermalRule.FilterNodeID = GetFilterNodeID(CreateFilterDefinitionUPSPrintableReturn(true), "Thermal Return Labels");
-            thermalRule.TemplateID = GetTemplateID(@"Labels\Thermal", owner);
-            group.Rules.Add(thermalRule);
-
-            ShippingPrintOutputRuleEntity standardRule = new ShippingPrintOutputRuleEntity();
-            standardRule.FilterNodeID = GetFilterNodeID(CreateFilterDefinitionUPSPrintableReturn(false), "Standard Returns Labels");
-            standardRule.TemplateID = GetTemplateID(@"Labels\Standard", owner);
+            standardRule.TemplateID = GetTemplateID(@"Labels\Standard", owner, installInBackground);
             group.Rules.Add(standardRule);
 
             ShippingPrintOutputManager.SaveOutputGroup(group);
@@ -218,11 +198,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the printing ruleset that prints a commercial invoice depending on conditions
         /// </summary>
-        private static void CreateCommercialInvoiceRules(ShippingPrintOutputEntity group, IWin32Window owner)
+        private static void CreateCommercialInvoiceRules(ShippingPrintOutputEntity group, IWin32Window owner, bool installInBackground)
         {
             ShippingPrintOutputRuleEntity rule = new ShippingPrintOutputRuleEntity();
             rule.FilterNodeID = GetFilterNodeID(CreateFilterDefinitionInternational(), "International");
-            rule.TemplateID = GetTemplateID(@"Labels\Commercial Invoice", owner);
+            rule.TemplateID = GetTemplateID(@"Labels\Commercial Invoice", owner, installInBackground);
             group.Rules.Add(rule);
 
             ShippingPrintOutputManager.SaveOutputGroup(group);
@@ -272,13 +252,18 @@ namespace ShipWorks.Shipping
         /// Get the TemplateID of the template with the specified name.  If the template does not exist the user is asked if they want to select
         /// an existing template or create it automatically.  If they choose to create, its pulled from the builtin template distribution set.
         /// </summary>
-        private static long GetTemplateID(string fullName, IWin32Window owner)
+        private static long GetTemplateID(string fullName, IWin32Window owner, bool installInBackground)
         {
             // See if the template of the given name exists.  If it does, we'll assume its the one we are looking for - or one the user has edited to be what the want.  Either way, we're going to use it.
             TemplateEntity template = TemplateManager.Tree.FindTemplate(fullName);
             if (template != null)
             {
                 return template.TemplateID;
+            }
+
+            if (installInBackground)
+            {
+                return BuiltinTemplates.InstallTemplate(fullName, TemplateManager.Tree.CreateEditableClone()).TemplateID;
             }
 
             // Didn't find it, we have to let the user pick or create a new one

@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
@@ -12,8 +11,7 @@ namespace ShipWorks.Warehouse
     /// <summary>
     /// Class to import the configuration from Hub
     /// </summary>
-    [Component]
-    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    [Order(typeof(IInitializeForCurrentSession), 2)]
     public class HubConfigurationImporter : IInitializeForCurrentSession
     {
         private readonly ILicenseService licenseService;
@@ -43,7 +41,7 @@ namespace ShipWorks.Warehouse
             if (licenseService.IsHub)
             {
                 IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
+                var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(true));
                 var hubConfig = task.Result;
 
                 carrierConfigurator.Configure(hubConfig.CarrierConfigurations);

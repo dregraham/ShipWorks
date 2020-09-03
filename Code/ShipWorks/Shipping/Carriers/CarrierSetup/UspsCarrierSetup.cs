@@ -23,14 +23,17 @@ namespace ShipWorks.Shipping.CarrierSetup
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly IShippingSettings shippingSettings;
+        private readonly IShipmentPrintHelper printHelper;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
 
         public UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
-            IShippingSettings shippingSettings)
+            IShippingSettings shippingSettings,
+            IShipmentPrintHelper printHelper)
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.shippingSettings = shippingSettings;
+            this.printHelper = printHelper;
             this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
         }
 
@@ -41,20 +44,47 @@ namespace ShipWorks.Shipping.CarrierSetup
         {
             var account = config.AdditionalData["account"].ToObject<UspsConfigurationAccount>();
 
-            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.UspsAccountID == account.AccountId && x.HubVersion >= config.HubVersion))
+            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.Username == account.Username && x.HubVersion >= config.HubVersion))
             {
                 return;
             }
 
-            bool shouldMarkAsConfigured = uspsAccountRepository.AccountsReadOnly.None();
+            bool isFirstAccount = uspsAccountRepository.AccountsReadOnly.None();
 
-            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(account.AccountId);
+            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(account.Username);
 
-            uspsAccount.Username = account.Username;
+            if (uspsAccount.IsNew)
+            {
+                ConfigureNewAccount(uspsAccount, config, account);
+            }
+
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
-            uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
-            uspsAccount.CreatedDate = DateTime.UtcNow;
+            uspsAccount.HubVersion = config.HubVersion;
 
+            uspsAccountRepository.Save(uspsAccount);
+
+            if (isFirstAccount)
+            {
+                shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account);
+                shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
+                printHelper.InstallDefaultRules(ShipmentTypeCode.Usps);
+            }
+        }
+
+        /// <summary>
+        /// Get an existing account entity, or create a new one if none exist with the given account ID
+        /// </summary>
+        private UspsAccountEntity GetOrCreateAccountEntity(string username) =>
+            uspsAccountRepository.Accounts.FirstOrDefault(x => x.Username.Equals(username)) ?? new UspsAccountEntity { Username = username };
+
+        /// <summary>
+        /// Configure a new USPS account
+        /// </summary>
+        private void ConfigureNewAccount(UspsAccountEntity uspsAccount, CarrierConfigurationPayload config, UspsConfigurationAccount account)
+        {
+            uspsAccount.InitializeNullsToDefault();
+
+            uspsAccount.UspsAccountID = account.AccountId;
             uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
 
             ConfigurationAddress accountAddress = config.Address;
@@ -76,27 +106,12 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.Phone = accountAddress.Phone ?? string.Empty;
             uspsAccount.Email = account.Email ?? string.Empty;
             uspsAccount.Website = string.Empty;
+
             uspsAccount.UspsReseller = (int) UspsResellerType.None;
             uspsAccount.ContractType = account.ContractType;
             uspsAccount.CreatedDate = DateTime.UtcNow;
-            uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.Existing;
+            uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
             uspsAccount.GlobalPostAvailability = account.GlobalPost;
-
-            uspsAccount.InitializeNullsToDefault();
-            uspsAccountRepository.Save(uspsAccount);
-
-            shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account);
-
-            if (shouldMarkAsConfigured)
-            {
-                shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
-            }
         }
-
-        /// <summary>
-        /// Get an existing account entity, or create a new one if none exist with the given account ID
-        /// </summary>
-        private UspsAccountEntity GetOrCreateAccountEntity(long accountID) =>
-            uspsAccountRepository.GetAccount(accountID) ?? new UspsAccountEntity { UspsAccountID = accountID };
     }
 }
