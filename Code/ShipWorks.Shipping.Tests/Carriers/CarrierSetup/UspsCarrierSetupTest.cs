@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -23,8 +24,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         private readonly Mock<IShippingSettings> shippingSettings;
         private readonly Mock<IShipmentPrintHelper> printHelper;
         private readonly UspsCarrierSetup testObject;
+        private readonly CarrierConfigurationPayload payload;
 
-        private CarrierConfigurationPayload payload;
+        private readonly Guid carrierID = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
         public UspsCarrierSetupTest()
         {
@@ -33,7 +35,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             this.payload = new CarrierConfigurationPayload
             {
                 AdditionalData = JObject.Parse("{account: {username: \"user\", password: \"password\" } }"),
-                HubVersion = 1
+                HubVersion = 1,
+                HubCarrierId = carrierID
             };
 
             this.carrierAccountRepository = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
@@ -54,13 +57,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_Returns_WhenUsernameMatches_AndHubVersionIsEqual()
+        public void Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
             var accounts = new List<UspsAccountEntity>
             {
                 new UspsAccountEntity
                 {
-                    Username = "user",
+                    HubCarrierId = carrierID,
                     HubVersion = 1
                 }
             };
@@ -73,7 +76,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_ReturnsExistingAccount_WhenUsernameMatches()
+        public void Setup_ReturnsExistingAccount_WhenCarrierIDMatches()
         {
             var accounts = new List<UspsAccountEntity>
             {
@@ -81,7 +84,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 {
                     Username = "user",
                     FirstName = "blah",
-                    IsNew = false
+                    IsNew = false,
+                    HubCarrierId = carrierID
                 }
             };
 
