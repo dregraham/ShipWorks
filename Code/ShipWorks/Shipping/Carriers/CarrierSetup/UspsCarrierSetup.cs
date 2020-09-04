@@ -13,8 +13,8 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Warehouse.DTO.Configuration;
-using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.DTO;
+using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.CarrierSetup
 {

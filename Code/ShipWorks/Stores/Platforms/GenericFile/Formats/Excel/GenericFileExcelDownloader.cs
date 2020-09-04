@@ -10,7 +10,7 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Excel;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Excel
 {

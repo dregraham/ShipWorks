@@ -11,7 +11,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 {
@@ -92,7 +92,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
                 if (uploadResult.Success)
                 {
-                    ShipmentEntity shipmentToUpdate = new ShipmentEntity {LoggedShippedToHub = true};
+                    ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedShippedToHub = true };
                     sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
                         new RelationPredicateBucket(
                             new PredicateExpression(
@@ -150,7 +150,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
 
             if (uploadResult.Success)
             {
-                ShipmentEntity shipmentToUpdate = new ShipmentEntity {LoggedVoidToHub = true};
+                ShipmentEntity shipmentToUpdate = new ShipmentEntity { LoggedVoidToHub = true };
                 sqlAdapter.UpdateEntitiesDirectly(shipmentToUpdate,
                     new RelationPredicateBucket(
                         new PredicateExpression(

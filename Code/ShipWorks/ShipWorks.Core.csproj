@@ -1551,29 +1551,29 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\WPF\WPFInterop.cs" />
-    <Compile Include="Warehouse\DTO\Configuration\ConfigurationAddress.cs" />
-    <Compile Include="Warehouse\DTO\Configuration\HubConfiguration.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseGetOrdersResponse.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseImportDetails.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ConfigurationAddress.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
     <Compile Include="Users\UserManagerWrapper.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrder.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderCharge.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItem.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderItemAttribute.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderPaymentDetail.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseOrderNote.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponse.cs" />
-    <Compile Include="Warehouse\DTO\Orders\WarehouseUploadOrderResponses.cs" />
-    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\CarrierConfigurationPayload.cs" />
-    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\CarrierConfiguration.cs" />
-    <Compile Include="Warehouse\DTO\Configuration\ShippingSettings\UspsConfigurationAccount.cs" />
-    <Compile Include="Warehouse\HubConfigurationImporter.cs" />
-    <Compile Include="Warehouse\HubConfigurationWebClient.cs" />
-    <Compile Include="Warehouse\IHubConfigurationWebClient.cs" />
-    <Compile Include="Warehouse\IWarehouseOrderClient.cs" />
-    <Compile Include="Warehouse\IWarehouseOrderFactory.cs" />
-    <Compile Include="Warehouse\WarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrder.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrderCharge.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrderItem.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrderItemAttribute.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrderPaymentDetail.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseOrderNote.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseUploadOrderResponse.cs" />
+    <Compile Include="Warehouse\Orders\DTO\WarehouseUploadOrderResponses.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\CarrierConfigurationPayload.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\CarrierConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UspsConfigurationAccount.cs" />
+    <Compile Include="Warehouse\Configuration\HubConfigurationImporter.cs" />
+    <Compile Include="Warehouse\Configuration\HubConfigurationWebClient.cs" />
+    <Compile Include="Warehouse\Configuration\IHubConfigurationWebClient.cs" />
+    <Compile Include="Warehouse\Orders\IWarehouseOrderClient.cs" />
+    <Compile Include="Warehouse\Orders\IWarehouseOrderFactory.cs" />
+    <Compile Include="Warehouse\Orders\WarehouseOrderFactory.cs" />
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\CreateLabelTaskEditor.resx">
       <DependentUpon>CreateLabelTaskEditor.cs</DependentUpon>
     </EmbeddedResource>

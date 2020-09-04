@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.Warehouse.DTO.Configuration
+namespace ShipWorks.Warehouse.Configuration.DTO
 {
     [Obfuscation]
     public class ConfigurationAddress

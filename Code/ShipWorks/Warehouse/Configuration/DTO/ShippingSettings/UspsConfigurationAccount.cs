@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.Warehouse.DTO.Configuration.ShippingSettings
+namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
 {
     [Obfuscation]
     public class UspsConfigurationAccount

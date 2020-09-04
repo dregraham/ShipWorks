@@ -3,7 +3,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ShipWorks.Warehouse.DTO.Configuration.ShippingSettings
+namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
 {
     [Obfuscation]
     public class CarrierConfigurationPayload

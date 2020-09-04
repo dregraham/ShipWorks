@@ -1,4 +1,4 @@
-﻿using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
+﻿using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.CarrierSetup
 {

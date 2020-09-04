@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Warehouse.DTO.Configuration;
+using ShipWorks.Warehouse.Configuration.DTO;
 
-namespace ShipWorks.Warehouse
+namespace ShipWorks.Warehouse.Configuration
 {
     /// <summary>
     /// Web client for downloading configuration settings from the Hub

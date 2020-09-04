@@ -6,7 +6,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
 
-namespace ShipWorks.Warehouse
+namespace ShipWorks.Warehouse.Configuration
 {
     /// <summary>
     /// Class to import and apply the configuration from Hub

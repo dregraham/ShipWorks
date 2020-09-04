@@ -7,9 +7,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.Warehouse.DTO.Configuration;
+using ShipWorks.Warehouse.Configuration.DTO;
 
-namespace ShipWorks.Warehouse
+namespace ShipWorks.Warehouse.Configuration
 {
     /// <summary>
     /// Web client for downloading configuration settings from the Hub

@@ -10,7 +10,7 @@ using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup

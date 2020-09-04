@@ -2,7 +2,7 @@
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Shipping.CarrierSetup;
-using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.Carriers.CarrierSetup
 {

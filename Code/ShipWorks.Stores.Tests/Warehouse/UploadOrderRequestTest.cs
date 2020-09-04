@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using RestSharp;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores.Platforms.Odbc.Download;
 using ShipWorks.Stores.Warehouse;
 using ShipWorks.Tests.Shared;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Warehouse
@@ -65,7 +62,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         public async Task Submit_BatchIsPopulated_WhenAssignBatchIsTrue()
         {
             Assert.Null(testObject.Batch);
-            
+
             await testObject.Submit(orders, store, true);
 
             Assert.NotNull(testObject.Batch);
@@ -75,7 +72,7 @@ namespace ShipWorks.Stores.Tests.Warehouse
         public async Task Submit_BatchIsNull_WhenAssignBatchIsFalse()
         {
             Assert.Null(testObject.Batch);
-            
+
             await testObject.Submit(orders, store, false);
 
             Assert.Null(testObject.Batch);

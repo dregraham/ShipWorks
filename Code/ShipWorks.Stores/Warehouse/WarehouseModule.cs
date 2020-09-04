@@ -1,5 +1,5 @@
 using Autofac;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Warehouse
 {

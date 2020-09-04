@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
-namespace ShipWorks.Warehouse.DTO.Configuration
+namespace ShipWorks.Warehouse.Configuration.DTO
 {
     [Obfuscation]
     public class HubConfiguration
