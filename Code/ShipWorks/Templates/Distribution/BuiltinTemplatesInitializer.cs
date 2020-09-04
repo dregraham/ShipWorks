@@ -7,7 +7,7 @@ namespace ShipWorks.Templates.Distribution
     /// Wrapper class for BuiltinTemplates
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), 1)]
-    public class BuiltinTemplatesWrapper : IInitializeForCurrentSession
+    public class BuiltinTemplatesInitializer : IInitializeForCurrentSession
     {
         /// <summary>
         /// Initialize for the current session

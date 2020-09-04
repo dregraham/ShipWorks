@@ -88,22 +88,22 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
 
             ConfigurationAddress accountAddress = config.Address;
-            PersonName name = PersonName.Parse(accountAddress.FullName);
+            PersonName name = PersonName.Parse(accountAddress?.FullName ?? string.Empty);
 
             uspsAccount.FirstName = name.First;
             uspsAccount.MiddleName = name.Middle;
             uspsAccount.LastName = name.Last;
-            uspsAccount.Company = accountAddress.Company ?? string.Empty;
-            uspsAccount.Street1 = accountAddress.Street1 ?? string.Empty;
-            uspsAccount.Street2 = accountAddress.Street2 ?? string.Empty;
-            uspsAccount.City = accountAddress.City ?? string.Empty;
-            uspsAccount.StateProvCode = Geography.GetStateProvCode(accountAddress.State) ?? string.Empty;
+            uspsAccount.Company = accountAddress?.Company ?? string.Empty;
+            uspsAccount.Street1 = accountAddress?.Street1 ?? string.Empty;
+            uspsAccount.Street2 = accountAddress?.Street2 ?? string.Empty;
+            uspsAccount.City = accountAddress?.City ?? string.Empty;
+            uspsAccount.StateProvCode = Geography.GetStateProvCode(accountAddress?.State) ?? string.Empty;
 
-            uspsAccount.PostalCode = accountAddress.Zip ?? string.Empty;
-            uspsAccount.MailingPostalCode = accountAddress.Zip ?? string.Empty;
+            uspsAccount.PostalCode = accountAddress?.Zip ?? string.Empty;
+            uspsAccount.MailingPostalCode = accountAddress?.Zip ?? string.Empty;
 
-            uspsAccount.CountryCode = Geography.GetCountryCode(accountAddress.Country) ?? string.Empty;
-            uspsAccount.Phone = accountAddress.Phone ?? string.Empty;
+            uspsAccount.CountryCode = Geography.GetCountryCode(accountAddress?.Country ?? string.Empty);
+            uspsAccount.Phone = accountAddress?.Phone ?? string.Empty;
             uspsAccount.Email = account.Email ?? string.Empty;
             uspsAccount.Website = string.Empty;
 

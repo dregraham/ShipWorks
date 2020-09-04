@@ -180,6 +180,7 @@
     <Compile Include="Carriers\BestRate\BestRateShipmentAdapterTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShipmentPreProcessorTest.cs" />
     <Compile Include="Carriers\BestRate\BestRateShippingProfileApplicationStrategyTest.cs" />
+    <Compile Include="Carriers\CarrierSetup\UspsCarrierSetupTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
     <Compile Include="Carriers\DhlExpress\API\DhlExpressLabelClientFactoryTest.cs" />
     <Compile Include="Carriers\DhlExpress\API\ShipEngine\DhlExpressShipEngineRatingClientTest.cs" />

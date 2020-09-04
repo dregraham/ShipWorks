@@ -41,7 +41,7 @@ namespace ShipWorks.Warehouse
             if (licenseService.IsHub)
             {
                 IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(true));
+                var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
                 var hubConfig = task.Result;
 
                 carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
