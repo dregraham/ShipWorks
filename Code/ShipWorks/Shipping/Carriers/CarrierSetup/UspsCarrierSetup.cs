@@ -121,6 +121,7 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.CreatedDate = DateTime.UtcNow;
             uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
             uspsAccount.GlobalPostAvailability = account.GlobalPost;
+            uspsAccount.ShipEngineCarrierId = account.ShipEngineId;
         }
     }
 }
