@@ -18,6 +18,9 @@ using ShipWorks.Warehouse.DTO.Configuration.ShippingSettings;
 
 namespace ShipWorks.Shipping.CarrierSetup
 {
+    /// <summary>
+    /// Setup the USPS Carrier configuration downloaded from the Hub
+    /// </summary>
     [KeyedComponent(typeof(ICarrierSetup), ShipmentTypeCode.Usps)]
     public class UspsCarrierSetup : ICarrierSetup
     {
@@ -26,6 +29,9 @@ namespace ShipWorks.Shipping.CarrierSetup
         private readonly IShipmentPrintHelper printHelper;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             IShippingSettings shippingSettings,
@@ -38,7 +44,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         }
 
         /// <summary>
-        /// Creates a new usps account from data imported from the hub
+        /// Creates a new USPS account from data imported from the hub
         /// </summary>
         public void Setup(CarrierConfigurationPayload config)
         {

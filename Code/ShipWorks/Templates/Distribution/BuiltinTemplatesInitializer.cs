@@ -4,7 +4,7 @@ using ShipWorks.ApplicationCore;
 namespace ShipWorks.Templates.Distribution
 {
     /// <summary>
-    /// Wrapper class for BuiltinTemplates
+    /// Initializer for BuiltinTemplates
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), 1)]
     public class BuiltinTemplatesInitializer : IInitializeForCurrentSession

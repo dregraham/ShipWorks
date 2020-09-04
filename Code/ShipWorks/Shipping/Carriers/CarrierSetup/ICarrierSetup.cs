@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.CarrierSetup
 {
     /// <summary>
-    /// Setup carriers configurations downloaded from the Hub
+    /// Setup carrier configurations downloaded from the Hub
     /// </summary>
     public interface ICarrierSetup
     {

@@ -9,7 +9,7 @@ using ShipWorks.Shipping.Carriers.CarrierSetup;
 namespace ShipWorks.Warehouse
 {
     /// <summary>
-    /// Class to import the configuration from Hub
+    /// Class to import and apply the configuration from Hub
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), 2)]
     public class HubConfigurationImporter : IInitializeForCurrentSession
