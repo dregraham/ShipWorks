@@ -32,8 +32,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         // Logger
         private static readonly ILog log = LogManager.GetLogger(typeof(GenericFileXmlDownloader));
 
-        public IWarehouseOrderClient WarehouseOrderClient { get; }
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -46,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
             ILicenseService licenseService)
             : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, licenseService)
         {
-            WarehouseOrderClient = warehouseOrderClient;
+
         }
 
         /// <summary>
