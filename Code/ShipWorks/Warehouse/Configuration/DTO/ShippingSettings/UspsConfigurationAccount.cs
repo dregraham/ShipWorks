@@ -17,6 +17,6 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
 
         public int GlobalPost { get; set; }
 
-        public int ShipEngineId { get; set; }
+        public string ShipEngineId { get; set; }
     }
 }

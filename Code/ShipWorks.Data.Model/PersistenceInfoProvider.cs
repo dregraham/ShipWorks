@@ -4022,7 +4022,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
 		{
-			this.AddElementMapping("UspsAccountEntity", @"ShipWorksLocal", @"dbo", "UspsAccount", 30, 0);
+			this.AddElementMapping("UspsAccountEntity", @"ShipWorksLocal", @"dbo", "UspsAccount", 29, 0);
 			this.AddElementFieldMapping("UspsAccountEntity", "UspsAccountID", "UspsAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UspsAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("UspsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -4052,7 +4052,6 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UspsAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 26);
 			this.AddElementFieldMapping("UspsAccountEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
 			this.AddElementFieldMapping("UspsAccountEntity", "HubCarrierId", "HubCarrierId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 28);
-			this.AddElementFieldMapping("UspsAccountEntity", "HubSequence", "HubSequence", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 29);
 		}
 
 		/// <summary>Inits UspsProfileEntity's mappings</summary>

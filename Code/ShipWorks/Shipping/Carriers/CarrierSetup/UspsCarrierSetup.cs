@@ -50,14 +50,14 @@ namespace ShipWorks.Shipping.CarrierSetup
         {
             var account = config.AdditionalData["account"].ToObject<UspsConfigurationAccount>();
 
-            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.Username == account.Username && x.HubVersion >= config.HubVersion))
+            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierId && x.HubVersion >= config.HubVersion))
             {
                 return;
             }
 
             bool isFirstAccount = uspsAccountRepository.AccountsReadOnly.None();
 
-            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(account.Username);
+            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(config.HubCarrierId);
 
             if (uspsAccount.IsNew)
             {
@@ -66,6 +66,7 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
+            uspsAccount.HubCarrierId = config.HubCarrierId;
 
             uspsAccountRepository.Save(uspsAccount);
 
@@ -80,8 +81,8 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Get an existing account entity, or create a new one if none exist with the given account ID
         /// </summary>
-        private UspsAccountEntity GetOrCreateAccountEntity(string username) =>
-            uspsAccountRepository.Accounts.FirstOrDefault(x => x.Username.Equals(username)) ?? new UspsAccountEntity { Username = username };
+        private UspsAccountEntity GetOrCreateAccountEntity(Guid carrierID) =>
+            uspsAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierID) ?? new UspsAccountEntity { HubCarrierId = carrierID };
 
         /// <summary>
         /// Configure a new USPS account
@@ -90,8 +91,8 @@ namespace ShipWorks.Shipping.CarrierSetup
         {
             uspsAccount.InitializeNullsToDefault();
 
+            uspsAccount.Username = account.Username;
             uspsAccount.UspsAccountID = account.AccountId;
-            uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
 
             ConfigurationAddress accountAddress = config.Address;
             PersonName name = PersonName.Parse(accountAddress?.FullName ?? string.Empty);
@@ -112,6 +113,8 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.Phone = accountAddress?.Phone ?? string.Empty;
             uspsAccount.Email = account.Email ?? string.Empty;
             uspsAccount.Website = string.Empty;
+
+            uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
 
             uspsAccount.UspsReseller = (int) UspsResellerType.None;
             uspsAccount.ContractType = account.ContractType;

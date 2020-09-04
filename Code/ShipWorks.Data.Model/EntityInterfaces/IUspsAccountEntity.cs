@@ -195,12 +195,6 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         Nullable<System.Guid> HubCarrierId { get; }
-        /// <summary> The HubSequence property of the Entity UspsAccount<br/><br/>
-        /// </summary>
-        /// <remarks>Mapped on table field: "UspsAccount"."HubSequence"<br/>
-        /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-        Nullable<System.Int64> HubSequence { get; }
         
         
         

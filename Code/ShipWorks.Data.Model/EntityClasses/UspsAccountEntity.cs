@@ -354,8 +354,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("HubSequence", fieldHashtable);
 		}
 		#endregion
 
@@ -702,16 +700,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)UspsAccountFieldIndex.HubCarrierId, false); }
 			set	{ SetValue((int)UspsAccountFieldIndex.HubCarrierId, value); }
-		}
-
-		/// <summary> The HubSequence property of the Entity UspsAccount<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "UspsAccount"."HubSequence"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> HubSequence
-		{
-			get { return (Nullable<System.Int64>)GetValue((int)UspsAccountFieldIndex.HubSequence, false); }
-			set	{ SetValue((int)UspsAccountFieldIndex.HubSequence, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

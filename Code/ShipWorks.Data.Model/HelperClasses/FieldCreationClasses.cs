@@ -31592,11 +31592,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.HubCarrierId);}
 		}
-		/// <summary>Creates a new UspsAccountEntity.HubSequence field instance</summary>
-		public static EntityField2 HubSequence
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.HubSequence);}
-		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsProfileEntity</summary>

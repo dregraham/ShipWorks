@@ -3400,7 +3400,6 @@
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
           <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
           <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="28" />
-          <Field Name="HubSequence" Type="long" IsOptional="true" Precision="19" FieldIndex="29" />
           <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="27" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
@@ -14370,7 +14369,6 @@
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
             <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
             <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
-            <FieldMapping FieldName="HubSequence" TargetFieldName="HubSequence" />
             <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />

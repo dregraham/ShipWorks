@@ -13528,8 +13528,6 @@ namespace ShipWorks.Data.Model
 		HubVersion,
 		///<summary>HubCarrierId. </summary>
 		HubCarrierId,
-		///<summary>HubSequence. </summary>
-		HubSequence,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -5354,8 +5354,7 @@ CREATE TABLE [dbo].[UspsAccount]
 [AcceptedFCMILetterWarning] [bit] NOT NULL,
 [ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [HubVersion] [int] NULL,
-[HubCarrierId] [uniqueidentifier] NULL,
-[HubSequence] [bigint] NULL
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
