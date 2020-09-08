@@ -5,6 +5,7 @@ using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
@@ -37,7 +38,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             {
                 AdditionalData = JObject.Parse("{account: {username: \"user\", password: \"password\" } }"),
                 HubVersion = 1,
-                HubCarrierId = carrierID
+                HubCarrierId = carrierID,
+                RequestedLabelFormat = ThermalLanguage.None
             };
 
             this.carrierAccountRepository = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
@@ -108,7 +110,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         {
             testObject.Setup(payload);
 
-            shipmentTypeSetupActivity.Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account), Times.Once);
+            shipmentTypeSetupActivity
+                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
             shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.Usps), Times.Once);
             printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.Usps), Times.Once);
         }
@@ -131,7 +134,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             testObject.Setup(payload);
 
-            shipmentTypeSetupActivity.Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>()), Times.Never);
+            shipmentTypeSetupActivity
+                .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
             shippingSettings.Verify(x => x.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()), Times.Never);
             printHelper.Verify(x => x.InstallDefaultRules(It.IsAny<ShipmentTypeCode>()), Times.Never);
         }

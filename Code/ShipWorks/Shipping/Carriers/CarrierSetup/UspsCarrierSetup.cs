@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             if (isFirstAccount)
             {
-                shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account);
+                shipmentTypeSetupActivity.InitializeShipmentType(ShipmentTypeCode.Usps, ShipmentOriginSource.Account, false, config.RequestedLabelFormat);
                 shippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
                 printHelper.InstallDefaultRules(ShipmentTypeCode.Usps);
             }

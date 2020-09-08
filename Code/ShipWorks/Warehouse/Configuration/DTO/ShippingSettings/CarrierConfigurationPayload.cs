@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Common.IO.Hardware.Printers;
 
 namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
 {
@@ -26,6 +27,11 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// The hub carrier id
         ///</summary>
         public Guid HubCarrierId { get; set; }
+
+        /// <summary>
+        /// The requested label format
+        /// </summary>
+        public ThermalLanguage RequestedLabelFormat { get; set; }
 
         /// <summary>
         /// Additional carrier specific configuration data

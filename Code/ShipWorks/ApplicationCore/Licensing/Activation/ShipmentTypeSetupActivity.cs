@@ -1,5 +1,6 @@
 ﻿using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
@@ -27,18 +28,31 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         }
 
         /// <summary>
-        /// Sets usps as the default ShipmentType and sets up its origin address
+        /// Initializes a shipment type, creating a default profile and optionally setting it to default 
         /// </summary>
-        public void InitializeShipmentType(ShipmentTypeCode shipmentTypeCode, ShipmentOriginSource origin)
+        public void InitializeShipmentType(ShipmentTypeCode shipmentTypeCode,
+            ShipmentOriginSource origin,
+            bool forceSetDefault = true,
+            ThermalLanguage? requestedLabelFormat = null)
         {
-            shippingSettings.SetDefaultProvider(shipmentTypeCode);
+            var settings = shippingSettings.FetchReadOnly();
+
+            if (forceSetDefault || settings.DefaultShipmentTypeCode == ShipmentTypeCode.None)
+            {
+                shippingSettings.SetDefaultProvider(shipmentTypeCode);
+            }
 
             ShipmentType shipmentType = shipmentTypeFactory[shipmentTypeCode];
 
-            ShippingProfileEntity uspsProfile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
-            uspsProfile.OriginID = (int) origin;
+            ShippingProfileEntity profile = shippingProfileManager.GetOrCreatePrimaryProfile(shipmentType);
+            profile.OriginID = (int) origin;
 
-            shippingProfileManager.SaveProfile(uspsProfile);
+            if (requestedLabelFormat != null)
+            {
+                profile.RequestedLabelFormat = (int) requestedLabelFormat;
+            }
+
+            shippingProfileManager.SaveProfile(profile);
         }
     }
 }
