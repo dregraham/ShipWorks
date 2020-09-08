@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// </summary>
         public void Setup(CarrierConfigurationPayload config)
         {
-            var account = config.AdditionalData["account"].ToObject<UspsConfigurationAccount>();
+            var account = config.AdditionalData["account"].ToObject<UspsAccountConfiguration>();
 
             if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierId && x.HubVersion >= config.HubVersion))
             {
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Configure a new USPS account
         /// </summary>
-        private void ConfigureNewAccount(UspsAccountEntity uspsAccount, CarrierConfigurationPayload config, UspsConfigurationAccount account)
+        private void ConfigureNewAccount(UspsAccountEntity uspsAccount, CarrierConfigurationPayload config, UspsAccountConfiguration account)
         {
             uspsAccount.InitializeNullsToDefault();
 
