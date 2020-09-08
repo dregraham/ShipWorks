@@ -9,6 +9,9 @@ using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.ApplicationCore.Licensing.Activation
 {
+    /// <summary>
+    /// Activity for setting up a shipment type
+    /// </summary>
     [Component]
     public class ShipmentTypeSetupActivity : IShipmentTypeSetupActivity
     {
@@ -28,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Activation
         }
 
         /// <summary>
-        /// Initializes a shipment type, creating a default profile and optionally setting it to default 
+        /// Initializes a shipment type, creating a default profile and optionally setting the shipment type as default 
         /// </summary>
         public void InitializeShipmentType(ShipmentTypeCode shipmentTypeCode,
             ShipmentOriginSource origin,
