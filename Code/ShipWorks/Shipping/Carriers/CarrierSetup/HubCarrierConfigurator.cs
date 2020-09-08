@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac.Features.Indexed;
+using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
@@ -13,6 +16,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class HubCarrierConfigurator : IHubCarrierConfigurator
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierSetup> carrierSetupFactory;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -20,6 +24,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public HubCarrierConfigurator(IIndex<ShipmentTypeCode, ICarrierSetup> carrierSetupFactory)
         {
             this.carrierSetupFactory = carrierSetupFactory;
+            this.log = LogManager.GetLogger(typeof(HubCarrierConfigurator));
         }
 
         /// <summary>
@@ -29,7 +34,14 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         {
             foreach (var config in configs)
             {
-                carrierSetupFactory[config.TypeCode]?.Setup(config.Payload);
+                try
+                {
+                    carrierSetupFactory[config.TypeCode]?.Setup(config.Payload);
+                }
+                catch (Exception ex)
+                {
+                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription((ShipmentTypeCode) config.TypeCode)}: {ex.Message}", ex);
+                }
             }
         }
     }

@@ -101,5 +101,12 @@ namespace ShipWorks.ApplicationCore.Security
         /// </summary>
         public IEncryptionProvider CreateRakutenEncryptionProvider() =>
             new AesEncryptionProvider(cipherKeyFactory[CipherContext.Rakuten]);
+
+        /// <summary>
+        /// Creates the 
+        /// </summary>
+        /// <returns></returns>
+        public IEncryptionProvider CreateHubConfigEncryptionProvider() =>
+            new AesEncryptionProvider(cipherKeyFactory[CipherContext.HubConfig]);
     }
 }

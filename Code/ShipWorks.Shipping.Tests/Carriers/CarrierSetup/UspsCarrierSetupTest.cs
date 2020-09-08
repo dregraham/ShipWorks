@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -43,6 +44,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             this.shipmentTypeSetupActivity = mock.Mock<IShipmentTypeSetupActivity>();
             this.shippingSettings = mock.Mock<IShippingSettings>();
             this.printHelper = mock.Mock<IShipmentPrintHelper>();
+
+            var encryptionProvider = mock.Mock<IEncryptionProvider>();
+            encryptionProvider.Setup(x => x.Decrypt(It.IsAny<string>())).Returns("password");
+
+            mock.Mock<IEncryptionProviderFactory>().Setup(x => x.CreateHubConfigEncryptionProvider()).Returns(encryptionProvider);
 
             this.testObject = mock.Create<UspsCarrierSetup>();
         }
