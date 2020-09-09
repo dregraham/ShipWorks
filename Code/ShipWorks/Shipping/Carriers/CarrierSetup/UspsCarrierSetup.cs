@@ -28,7 +28,6 @@ namespace ShipWorks.Shipping.CarrierSetup
         private readonly IShippingSettings shippingSettings;
         private readonly IShipmentPrintHelper printHelper;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
-        private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
@@ -36,14 +35,12 @@ namespace ShipWorks.Shipping.CarrierSetup
         public UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper,
-            IEncryptionProviderFactory encryptionProviderFactory)
+            IShipmentPrintHelper printHelper)
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.shippingSettings = shippingSettings;
             this.printHelper = printHelper;
             this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
-            this.encryptionProvider = encryptionProviderFactory.CreateHubConfigEncryptionProvider();
         }
 
         /// <summary>
@@ -67,7 +64,7 @@ namespace ShipWorks.Shipping.CarrierSetup
                 ConfigureNewAccount(uspsAccount, config, account);
             }
 
-            uspsAccount.Password = SecureText.Encrypt(encryptionProvider.Decrypt(account.Password), account.Username);
+            uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
             uspsAccount.HubCarrierId = config.HubCarrierId;
 

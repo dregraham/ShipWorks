@@ -32,8 +32,5 @@ namespace ShipWorks.ApplicationCore.Security
 
         [Description("Rakuten Context")]
         Rakuten,
-
-        [Description("Hub Config Context")]
-        HubConfig,
     }
 }

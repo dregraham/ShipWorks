@@ -55,10 +55,5 @@
         /// Creates the Rakuten encryption provider.
         /// </summary>
         IEncryptionProvider CreateRakutenEncryptionProvider();
-
-        /// <summary>
-        /// Creates the Hub Config encryption provider.
-        /// </summary>
-        IEncryptionProvider CreateHubConfigEncryptionProvider();
     }
 }
