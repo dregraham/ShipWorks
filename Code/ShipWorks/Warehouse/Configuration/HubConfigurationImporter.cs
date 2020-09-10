@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration.Ordering;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
+using System.Linq;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -18,6 +22,7 @@ namespace ShipWorks.Warehouse.Configuration
         private readonly IHubCarrierConfigurator carrierConfigurator;
         private readonly IHubConfigurationWebClient webClient;
         private readonly IConfigurationData configurationData;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -25,12 +30,14 @@ namespace ShipWorks.Warehouse.Configuration
         public HubConfigurationImporter(ILicenseService licenseService,
             IHubCarrierConfigurator carrierConfigurator,
             IHubConfigurationWebClient webClient,
-            IConfigurationData configurationData)
+            IConfigurationData configurationData,
+             Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
             this.carrierConfigurator = carrierConfigurator;
             this.webClient = webClient;
             this.configurationData = configurationData;
+            log = logFactory(typeof(HubConfigurationImporter));
         }
 
         /// <summary>
@@ -40,11 +47,22 @@ namespace ShipWorks.Warehouse.Configuration
         {
             if (licenseService.IsHub)
             {
-                IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
-                var hubConfig = task.Result;
+                try
+                {
+                    IConfigurationEntity configuration = configurationData.FetchReadOnly();
+                    var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
+                    var hubConfig = task.Result;
 
-                carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                    carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                } 
+                catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
+                {
+                    log.Error("Error getting configuration", ex);
+                }
+                catch(WebException ex)
+                {
+                    log.Error("Error getting configuration", ex);
+                }
             }
         }
     }
