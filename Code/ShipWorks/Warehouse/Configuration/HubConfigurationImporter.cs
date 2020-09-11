@@ -50,10 +50,13 @@ namespace ShipWorks.Warehouse.Configuration
                 try
                 {
                     IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                    var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
-                    var hubConfig = task.Result;
+                    if(!string.IsNullOrEmpty(configuration.WarehouseID))
+                    {
+                        var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
+                        var hubConfig = task.Result;
 
-                    carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                        carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                    }
                 } 
                 catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
                 {
