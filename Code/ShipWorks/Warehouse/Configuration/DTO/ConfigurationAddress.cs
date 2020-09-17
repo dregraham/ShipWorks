@@ -1,0 +1,56 @@
+﻿using System.Reflection;
+
+namespace ShipWorks.Warehouse.Configuration.DTO
+{
+    /// <summary>
+    /// DTO for importing hub configuration addresses
+    /// </summary>
+    [Obfuscation]
+    public class ConfigurationAddress
+    {
+        /// <summary>
+        /// The full name of the person associated with the address
+        /// </summary>
+        public string FullName { get; set; }
+
+        /// <summary>
+        /// The address company
+        /// </summary>
+        public string Company { get; set; }
+
+        /// <summary>
+        /// The address street 1
+        /// </summary>
+        public string Street1 { get; set; }
+
+        /// <summary>
+        /// The address street 2
+        /// </summary>
+        public string Street2 { get; set; }
+
+        /// <summary>
+        /// The address City
+        /// </summary>
+        public string City { get; set; }
+
+        /// <summary>
+        /// The address state
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
+        /// The address zip
+        /// </summary>
+        public string Zip { get; set; }
+
+        /// <summary>
+        /// The address country
+        /// </summary>
+        public string Country { get; set; }
+
+        /// <summary>
+        /// The address phone
+        /// </summary>
+        public string Phone { get; set; }
+    }
+}

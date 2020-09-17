@@ -14,8 +14,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Warehouse;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Platforms.GenericFile
 {

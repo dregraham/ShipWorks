@@ -3399,6 +3399,8 @@
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="17" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
           <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="28" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="27" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
@@ -4644,7 +4646,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-05-13T18:21:53.1243274Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-01T13:29:37.9657322Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9453,6 +9455,9 @@
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
                     <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="HubVersion" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="29" IsOptional="true" DbType="25" />
+                    <Field Name="HubSequence" Ordinal="30" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -14363,6 +14368,8 @@
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
             <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ShipWorks.Warehouse.DTO.Orders
+namespace ShipWorks.Warehouse.Orders.DTO
 {
     /// <summary>
     /// Response from uploading an order

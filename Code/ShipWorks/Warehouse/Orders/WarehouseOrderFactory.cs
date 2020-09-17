@@ -11,9 +11,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
-namespace ShipWorks.Warehouse
+namespace ShipWorks.Warehouse.Orders
 {
     /// <summary>
     /// Base order loader for loading ShipWorks Warehouse orders
