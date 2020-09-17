@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
@@ -11,9 +9,9 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Warehouse.Configuration.DTO;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.CarrierSetup
@@ -27,6 +25,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly IShippingSettings shippingSettings;
         private readonly IShipmentPrintHelper printHelper;
+        private readonly IUspsWebClient webClient;
         private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
 
         /// <summary>
@@ -35,38 +34,45 @@ namespace ShipWorks.Shipping.CarrierSetup
         public UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper)
+            IShipmentPrintHelper printHelper,
+            Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory)
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.shippingSettings = shippingSettings;
             this.printHelper = printHelper;
+            this.webClient = uspsWebClientFactory(UspsResellerType.None);
             this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
         }
 
         /// <summary>
         /// Creates a new USPS account from data imported from the hub
         /// </summary>
-        public void Setup(CarrierConfigurationPayload config)
+        public void Setup(CarrierConfiguration config)
         {
-            var account = config.AdditionalData["account"].ToObject<UspsAccountConfiguration>();
+            var account = config.AdditionalData["usps"].ToObject<UspsAccountConfiguration>();
 
-            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierId && x.HubVersion >= config.HubVersion))
+            if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {
                 return;
             }
 
             bool isFirstAccount = uspsAccountRepository.AccountsReadOnly.None();
 
-            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(config.HubCarrierId);
+            UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
+
+            uspsAccount.Username = account.Username;
+            uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
 
             if (uspsAccount.IsNew)
             {
-                ConfigureNewAccount(uspsAccount, config, account);
+                webClient.PopulateUspsAccountEntity(uspsAccount);
+
+                uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
+                uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
             }
 
-            uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
-            uspsAccount.HubCarrierId = config.HubCarrierId;
+            uspsAccount.HubCarrierId = config.HubCarrierID;
 
             uspsAccountRepository.Save(uspsAccount);
 
@@ -83,45 +89,5 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// </summary>
         private UspsAccountEntity GetOrCreateAccountEntity(Guid carrierID) =>
             uspsAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierID) ?? new UspsAccountEntity { HubCarrierId = carrierID };
-
-        /// <summary>
-        /// Configure a new USPS account
-        /// </summary>
-        private void ConfigureNewAccount(UspsAccountEntity uspsAccount, CarrierConfigurationPayload config, UspsAccountConfiguration account)
-        {
-            uspsAccount.InitializeNullsToDefault();
-
-            uspsAccount.Username = account.Username;
-            uspsAccount.UspsAccountID = account.AccountId;
-
-            ConfigurationAddress accountAddress = config.Address;
-            PersonName name = PersonName.Parse(accountAddress?.FullName ?? string.Empty);
-
-            uspsAccount.FirstName = name.First;
-            uspsAccount.MiddleName = name.Middle;
-            uspsAccount.LastName = name.Last;
-            uspsAccount.Company = accountAddress?.Company ?? string.Empty;
-            uspsAccount.Street1 = accountAddress?.Street1 ?? string.Empty;
-            uspsAccount.Street2 = accountAddress?.Street2 ?? string.Empty;
-            uspsAccount.City = accountAddress?.City ?? string.Empty;
-            uspsAccount.StateProvCode = Geography.GetStateProvCode(accountAddress?.State) ?? string.Empty;
-
-            uspsAccount.PostalCode = accountAddress?.Zip ?? string.Empty;
-            uspsAccount.MailingPostalCode = accountAddress?.Zip ?? string.Empty;
-
-            uspsAccount.CountryCode = Geography.GetCountryCode(accountAddress?.Country ?? string.Empty);
-            uspsAccount.Phone = accountAddress?.Phone ?? string.Empty;
-            uspsAccount.Email = account.Email ?? string.Empty;
-            uspsAccount.Website = string.Empty;
-
-            uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount) ?? string.Empty;
-
-            uspsAccount.UspsReseller = (int) UspsResellerType.None;
-            uspsAccount.ContractType = account.ContractType;
-            uspsAccount.CreatedDate = DateTime.UtcNow;
-            uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
-            uspsAccount.GlobalPostAvailability = account.GlobalPost;
-            uspsAccount.ShipEngineCarrierId = account.ShipEngineId;
-        }
     }
 }

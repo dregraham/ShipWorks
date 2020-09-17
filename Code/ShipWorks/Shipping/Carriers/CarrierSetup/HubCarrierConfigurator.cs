@@ -36,11 +36,11 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             {
                 try
                 {
-                    carrierSetupFactory[config.TypeCode]?.Setup(config.Payload);
+                    carrierSetupFactory[config.CarrierType]?.Setup(config);
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription((ShipmentTypeCode) config.TypeCode)}: {ex.Message}", ex);
+                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription((ShipmentTypeCode) config.CarrierType)}: {ex.Message}", ex);
                 }
             }
         }
