@@ -29,11 +29,6 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         public string Street2 { get; set; }
 
         /// <summary>
-        /// The address street 3
-        /// </summary>
-        public string Street3 { get; set; }
-
-        /// <summary>
         /// The address City
         /// </summary>
         public string City { get; set; }
@@ -57,10 +52,5 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         /// The address phone
         /// </summary>
         public string Phone { get; set; }
-
-        /// <summary>
-        /// The customer's email
-        /// </summary>
-        public string Email { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Setup the carrier with the given config
         /// </summary>
-        void Setup(CarrierConfiguration config);
+        void Setup(CarrierConfigurationPayload config);
     }
 }

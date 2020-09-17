@@ -17,5 +17,30 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// The account password
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// The account email
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// The account id
+        /// </summary>
+        public long AccountId { get; set; }
+
+        /// <summary>
+        /// The account contract type
+        /// </summary>
+        public int ContractType { get; set; }
+
+        /// <summary>
+        /// The accounts global post availability
+        /// </summary>
+        public int GlobalPost { get; set; }
+
+        /// <summary>
+        /// The accounts ShipEngineId
+        /// </summary>
+        public string ShipEngineId { get; set; }
     }
 }

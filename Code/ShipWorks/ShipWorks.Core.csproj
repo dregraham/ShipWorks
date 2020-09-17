@@ -1565,6 +1565,7 @@
     <Compile Include="Warehouse\Orders\DTO\WarehouseOrderNote.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseUploadOrderResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseUploadOrderResponses.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\CarrierConfigurationPayload.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\CarrierConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UspsAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurationImporter.cs" />
