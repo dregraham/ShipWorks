@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Warehouse.Configuration.DTO;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.CarrierSetup
@@ -72,8 +71,6 @@ namespace ShipWorks.Shipping.CarrierSetup
                 uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
             }
 
-            UpdateAddress(uspsAccount, config.Address);
-
             uspsAccount.HubVersion = config.HubVersion;
             uspsAccount.HubCarrierId = config.HubCarrierID;
 
@@ -92,26 +89,5 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// </summary>
         private UspsAccountEntity GetOrCreateAccountEntity(Guid carrierID) =>
             uspsAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierID) ?? new UspsAccountEntity { HubCarrierId = carrierID };
-
-        /// <summary>
-        /// Update the account address with the one we got from the config
-        /// </summary>
-        private void UpdateAddress(UspsAccountEntity account, ConfigurationAddress address)
-        {
-            account.FirstName = string.IsNullOrEmpty(address.FirstName) ? account.FirstName : address.FirstName;
-            account.MiddleName = string.IsNullOrEmpty(address.MiddleName) ? account.MiddleName : address.MiddleName;
-            account.LastName = string.IsNullOrEmpty(address.LastName) ? account.LastName : address.LastName;
-            account.Company = string.IsNullOrEmpty(address.Company) ? account.Company : address.Company;
-            account.Street1 = string.IsNullOrEmpty(address.Street1) ? account.Street1 : address.Street1;
-            account.Street2 = string.IsNullOrEmpty(address.Street2) ? account.Street2 : address.Street2;
-            account.Street3 = string.IsNullOrEmpty(address.Street3) ? account.Street3 : address.Street3;
-            account.City = string.IsNullOrEmpty(address.City) ? account.City : address.City;
-            account.StateProvCode = string.IsNullOrEmpty(address.State) ? account.StateProvCode : address.State;
-            account.PostalCode = string.IsNullOrEmpty(address.Zip) ? account.PostalCode : address.Zip;
-            account.CountryCode = string.IsNullOrEmpty(address.Country) ? account.CountryCode : address.Country;
-            account.Phone = string.IsNullOrEmpty(address.Phone) ? account.Phone : address.Phone;
-            account.Email = string.IsNullOrEmpty(address.Email) ? account.Email : address.Email;
-
-        }
     }
 }

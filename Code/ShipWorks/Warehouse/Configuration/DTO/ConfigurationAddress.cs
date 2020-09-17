@@ -9,19 +9,9 @@ namespace ShipWorks.Warehouse.Configuration.DTO
     public class ConfigurationAddress
     {
         /// <summary>
-        /// The first name of the person associated with the address
+        /// The full name of the person associated with the address
         /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// The middle name of the person associated with the address
-        /// </summary>
-        public string MiddleName { get; set; }
-
-        /// <summary>
-        /// The last name of the person associated with the address
-        /// </summary>
-        public string LastName { get; set; }
+        public string FullName { get; set; }
 
         /// <summary>
         /// The address company
