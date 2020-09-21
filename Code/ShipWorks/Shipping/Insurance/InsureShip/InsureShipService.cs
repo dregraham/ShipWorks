@@ -49,12 +49,22 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         public bool IsInsuredByInsureShip(ShipmentEntity shipment)
         {
             ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
+            bool result = false;
 
-            return Enumerable.Range(0, shipmentType.GetParcelCount(shipment))
-                .Select(i => shipmentType.GetParcelDetail(shipment, i).Insurance)
-                .Any(choice => choice.Insured &&
-                    choice.InsuranceProvider == InsuranceProvider.ShipWorks &&
-                    choice.InsuranceValue > 0);
+            foreach (var i in Enumerable.Range(0, shipmentType.GetParcelCount(shipment)))
+            {
+                var choice = shipmentType.GetParcelDetail(shipment, i).Insurance;
+
+                if (choice.Insured && 
+                    choice.InsuranceProvider == InsuranceProvider.ShipWorks && 
+                    InsuranceUtility.GetInsuranceCost(shipment, choice.InsuranceValue).ShipWorks > 0)
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
     }
 }
