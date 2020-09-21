@@ -42,10 +42,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         {
             var account = config.AdditionalData["ups"].ToObject<UpsAccountConfiguration>();
 
-            if (upsAccountRepository.AccountsReadOnly.Any(x => x.))
-            {
-
-            }
         }
 
         /// <summary>
