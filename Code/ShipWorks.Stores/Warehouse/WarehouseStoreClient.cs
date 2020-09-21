@@ -11,6 +11,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Net;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Editions;
@@ -27,16 +28,18 @@ namespace ShipWorks.Stores.Warehouse
         private readonly ILicenseService licenseService;
         private readonly IWarehouseRequestClient warehouseRequestClient;
         private readonly IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories;
+        private readonly IConfigurationData configurationData;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public WarehouseStoreClient(ILicenseService licenseService, IWarehouseRequestClient warehouseRequestClient,
-                                    IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories)
+                                    IIndex<StoreTypeCode, IStoreDtoFactory> storeDtoFactories, IConfigurationData configurationData)
         {
             this.licenseService = licenseService;
             this.warehouseRequestClient = warehouseRequestClient;
             this.storeDtoFactories = storeDtoFactories;
+            this.configurationData = configurationData;
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace ShipWorks.Stores.Warehouse
         /// <summary>
         /// Upload the store to warehouse mode
         /// </summary>
-        public async Task<Result> UploadStoreToWarehouse(StoreEntity store)
+        public async Task<Result> UploadStoreToWarehouse(StoreEntity store, bool isNew)
         {
             try
             {
@@ -105,11 +108,15 @@ namespace ShipWorks.Stores.Warehouse
                     request.RequestFormat = DataFormat.Json;
 
                     Store storeDto = await GetStoreDtoFactory(store).Create(store).ConfigureAwait(false);
+                    if (!isNew)
+                    {
+                        storeDto.MigrationWarehouseId = Guid.Parse(configurationData.FetchReadOnly().WarehouseID).ToString("D");
+                    }
                     request.AddJsonBody(storeDto);
 
                     GenericResult<IRestResponse> response = await warehouseRequestClient
                         .MakeRequest(request, "Upload Store")
-                        .ConfigureAwait(true);
+                        .ConfigureAwait(false);
 
                     if (response.Failure)
                     {

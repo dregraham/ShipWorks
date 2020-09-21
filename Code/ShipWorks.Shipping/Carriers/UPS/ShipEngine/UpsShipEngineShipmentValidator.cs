@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -16,10 +19,20 @@ namespace ShipWorks.Shipping.Carriers.Ups.ShipEngine
         /// </summary>
         public Result ValidateShipment(ShipmentEntity shipment)
         {
-            if (!shipment.ShipCountryCode.Equals("US", System.StringComparison.OrdinalIgnoreCase))
+            // Country codes
+            var validCountryCodes = new List<string> 
+            { 
+                // USA
+                "US",               
+
+                // Puerto Rico
+                "PR"
+            };
+
+            if(validCountryCodes.None(validCode => shipment.ShipCountryCode.Equals(validCode, System.StringComparison.OrdinalIgnoreCase)))
             {
                 return Result.FromError("International shipments are not supported with this account.");
-            }
+            } 
 
             if (shipment.Ups.EmailNotifySender > 0 ||
                 shipment.Ups.EmailNotifyRecipient > 0 ||

@@ -23,7 +23,9 @@ namespace ShipWorks.Shipping.ShipEngine
         {
             List<RateResult> results = new List<RateResult>();
 
-            foreach (Rate apiRate in rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode)))
+            var ratesToAdd = rateResponse.Rates.Where(r => availableServiceTypeApiCodes.Contains(r.ServiceCode));
+
+            foreach (Rate apiRate in ratesToAdd)
             {
                 results.Add(GetRateResult(apiRate, shipmentType));
             }

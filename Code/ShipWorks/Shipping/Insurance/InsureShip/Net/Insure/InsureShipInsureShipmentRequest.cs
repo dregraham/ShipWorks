@@ -24,6 +24,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
         /// <summary>
         /// Initializes a new instance of the <see cref="InsureShipRequestBase"/> class.
         /// </summary>
+        /// <remarks>
+        /// We used to send carrier code which denoted Penny1. We aren't doing this anymore and relying on 
+        /// InsureShip to determine if Penny1 was used based on the coverage_amount (the amount we charged for insurance).
+        /// </remarks>
         public InsureShipInsureShipmentRequest(
             IInsureShipWebClient webClient,
             IShipmentTypeManager shipmentTypeManager,
@@ -77,12 +81,17 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("order_total", shipment.Order.OrderTotal.ToString("#0.##"));
             postData.Add("subtotal", insuredAmount.ToString("#0.##"));
             postData.Add("currency", "USD");
+
+            // This is the amount the customer was charged for insurance
             postData.Add("coverage_amount", insuranceUtility.GetInsuranceCost(shipment, insuredAmount).ShipWorks?.ToString("#0.##"));
             postData.Add("shipping_amount", shipment.ShipmentCost.ToString("#0.##"));
             postData.Add("order_number", InsureShipShipmentIdentifier.GetUniqueShipmentId(shipment));
             postData.Add("offer_id", "57611"); // This is the type of insurance coverage, and the value came from InsureShip
             postData.Add("email", shipment.ShipEmail);
             postData.Add("phone", shipment.ShipPhone);
+
+            // We used to send carrier code which denoted Penny1. We aren't doing this anymore and relying on 
+            // InsureShip to determine if Penny1 was used based on the coverage_amount (the amount we charged for insurance).
             postData.Add("carrier", shipmentType.ShipmentTypeName);
             postData.Add("tracking_number", shipment.TrackingNumber);
             postData.Add("order_date", shipment.Order.OrderDate.ToString(CultureInfo.InvariantCulture));

@@ -38,8 +38,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static string GetCountryCode(string name)
         {
-            string code;
-            if (countries.TryGetValue(name, out code))
+            if (countries.TryGetValue(name, out string code))
             {
                 return code;
             }

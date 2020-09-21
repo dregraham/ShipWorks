@@ -120,6 +120,11 @@ namespace ShipWorks.UI.Services
         }
 
         /// <summary>
+        /// Show a yes/no question with the given text
+        /// </summary>
+        public DialogResult ShowQuestion(IWin32Window owner, string text) => MessageHelper.ShowQuestion(owner, text);
+
+        /// <summary>
         /// Show a popup message
         /// </summary>
         public void ShowPopup(string message)

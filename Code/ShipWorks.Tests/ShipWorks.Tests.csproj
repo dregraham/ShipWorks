@@ -298,6 +298,7 @@
     <Compile Include="ApplicationCore\Licensing\LicenseServiceTest.cs" />
     <Compile Include="ApplicationCore\Licensing\StoreLicenseTest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DefaultWarehouseCreatorTest.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubMigratorTest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRequestFactoryTest.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseCreateTest.cs" />
     <Compile Include="ApplicationCore\Nudges\NudgeDeserializerTest.cs" />
