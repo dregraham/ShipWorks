@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         private readonly Mock<IShippingSettings> shippingSettings;
         private readonly Mock<IShipmentPrintHelper> printHelper;
         private readonly UspsCarrierSetup testObject;
-        private readonly CarrierConfigurationPayload payload;
+        private readonly CarrierConfiguration payload;
 
         private readonly Guid carrierID = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
@@ -33,11 +33,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            this.payload = new CarrierConfigurationPayload
+            this.payload = new CarrierConfiguration
             {
-                AdditionalData = JObject.Parse("{account: {username: \"user\", password: \"password\" } }"),
+                AdditionalData = JObject.Parse("{usps: {username: \"user\", password: \"password\" } }"),
                 HubVersion = 1,
-                HubCarrierId = carrierID,
+                HubCarrierID = carrierID,
                 RequestedLabelFormat = ThermalLanguage.None
             };
 
