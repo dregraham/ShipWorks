@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierID) ?? new UspsAccountEntity { HubCarrierId = carrierID };
 
         /// <summary>
-        /// Update the account address with the one we got from the config
+        /// Update the account address with the one we get from the hub
         /// </summary>
         private void UpdateAddress(UspsAccountEntity account, ConfigurationAddress address)
         {
