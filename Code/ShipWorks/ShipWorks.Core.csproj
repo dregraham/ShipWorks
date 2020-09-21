@@ -1216,6 +1216,7 @@
     <Compile Include="Shipping\Carriers\CarrierSetup\HubCarrierConfigurator.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\ICarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\IHubCarrierConfigurator.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\UpsCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\UspsCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\Asendia\IAsendiaManifestCreator.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateExcludedAccountRepository.cs" />
