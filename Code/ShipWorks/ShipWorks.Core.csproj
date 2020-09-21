@@ -1553,6 +1553,7 @@
     <Compile Include="UI\WPF\WPFInterop.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ConfigurationAddress.cs" />
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UpsAccountConfiguration.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
