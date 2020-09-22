@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Warehouse.Configuration.DTO;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.Carriers.CarrierSetup
@@ -14,12 +17,11 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     /// Setup the UPS carrier configuration downloaded from the hub
     /// </summary>
     [KeyedComponent(typeof(ICarrierSetup), ShipmentTypeCode.UpsOnLineTools)]
-    public class UpsCarrierSetup
+    public class UpsCarrierSetup : BaseCarrierSetup<UpsAccountEntity, IUpsAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly IShippingSettings shippingSettings;
-        private readonly IShipmentPrintHelper printHelper;
-        private readonly IShipmentTypeSetupActivity shipmentTypeSetupActivity;
+        private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
@@ -27,12 +29,13 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public UpsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper)
+            IShipmentPrintHelper printHelper,
+            IEncryptionProviderFactory encryptionProviderFactory) :
+            base(shipmentTypeSetupActivity, shippingSettings, printHelper, upsAccountRepository)
         {
-            this.shipmentTypeSetupActivity = shipmentTypeSetupActivity;
             this.upsAccountRepository = upsAccountRepository;
             this.shippingSettings = shippingSettings;
-            this.printHelper = printHelper;
+            this.encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("UPS");
         }
 
         /// <summary>
@@ -40,28 +43,43 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         public void Setup(CarrierConfiguration config)
         {
+            if (upsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
             var account = config.AdditionalData["ups"].ToObject<UpsAccountConfiguration>();
 
+            var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
+
+            upsAccount.AccountNumber = account.AccountNumber;
+
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+            settings.UpsAccessKey = encryptionProvider.Encrypt(account.AccessToken);
+            shippingSettings.Save(settings);
+
+            if (upsAccount.IsNew)
+            {
+                upsAccount.InvoiceAuth = false;
+                upsAccount.RateType = (int) UpsRateType.DailyPickup;
+                upsAccount.PromoStatus = 0;
+                upsAccount.LocalRatingEnabled = false;
+                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+            }
+
+            UpdateAddress(upsAccount, config.Address);
+
+            upsAccount.InitializeNullsToDefault();
+
+            upsAccountRepository.Save(upsAccount);
+
+            SetupDefaultsIfNeeded(ShipmentTypeCode.UpsOnLineTools, config.RequestedLabelFormat);
         }
 
         /// <summary>
-        /// Update the account address with the one we get from the hub
+        /// Get an existing account entity, or create a new one if none exist with the given account ID
         /// </summary>
-        private void UpdateAddress(UpsAccountEntity account, ConfigurationAddress address)
-        {
-            account.FirstName = string.IsNullOrEmpty(address.FirstName) ? account.FirstName : address.FirstName;
-            account.MiddleName = string.IsNullOrEmpty(address.MiddleName) ? account.MiddleName : address.MiddleName;
-            account.LastName = string.IsNullOrEmpty(address.LastName) ? account.LastName : address.LastName;
-            account.Company = string.IsNullOrEmpty(address.Company) ? account.Company : address.Company;
-            account.Street1 = string.IsNullOrEmpty(address.Street1) ? account.Street1 : address.Street1;
-            account.Street2 = string.IsNullOrEmpty(address.Street2) ? account.Street2 : address.Street2;
-            account.Street3 = string.IsNullOrEmpty(address.Street3) ? account.Street3 : address.Street3;
-            account.City = string.IsNullOrEmpty(address.City) ? account.City : address.City;
-            account.StateProvCode = string.IsNullOrEmpty(address.State) ? account.StateProvCode : address.State;
-            account.PostalCode = string.IsNullOrEmpty(address.Zip) ? account.PostalCode : address.Zip;
-            account.CountryCode = string.IsNullOrEmpty(address.Country) ? account.CountryCode : address.Country;
-            account.Phone = string.IsNullOrEmpty(address.Phone) ? account.Phone : address.Phone;
-            account.Email = string.IsNullOrEmpty(address.Email) ? account.Email : address.Email;
-        }
+        private UpsAccountEntity GetOrCreateAccountEntity(Guid carrierID) =>
+            upsAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierID) ?? new UpsAccountEntity { HubCarrierId = carrierID };
     }
 }
