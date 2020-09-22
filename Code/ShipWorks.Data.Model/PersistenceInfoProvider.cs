@@ -3701,7 +3701,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits UpsAccountEntity's mappings</summary>
 		private void InitUpsAccountEntityMappings()
 		{
-			this.AddElementMapping("UpsAccountEntity", @"ShipWorksLocal", @"dbo", "UpsAccount", 26, 0);
+			this.AddElementMapping("UpsAccountEntity", @"ShipWorksLocal", @"dbo", "UpsAccount", 28, 0);
 			this.AddElementFieldMapping("UpsAccountEntity", "UpsAccountID", "UpsAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("UpsAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("UpsAccountEntity", "Description", "Description", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -3728,6 +3728,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("UpsAccountEntity", "LocalRatingEnabled", "LocalRatingEnabled", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 23);
 			this.AddElementFieldMapping("UpsAccountEntity", "UpsRateTableID", "UpsRateTableID", true, "BigInt", 0, 19, 0, false, "", null, typeof(System.Int64), 24);
 			this.AddElementFieldMapping("UpsAccountEntity", "ShipEngineCarrierId", "ShipEngineCarrierId", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 25);
+			this.AddElementFieldMapping("UpsAccountEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 26);
+			this.AddElementFieldMapping("UpsAccountEntity", "HubCarrierId", "HubCarrierId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 27);
 		}
 
 		/// <summary>Inits UpsLetterRateEntity's mappings</summary>

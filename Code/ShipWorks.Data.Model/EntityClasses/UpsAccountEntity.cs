@@ -398,6 +398,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UpsRateTableID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -754,6 +758,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UpsAccountFieldIndex.ShipEngineCarrierId, true); }
 			set	{ SetValue((int)UpsAccountFieldIndex.ShipEngineCarrierId, value); }
+		}
+
+		/// <summary> The HubVersion property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."HubVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> HubVersion
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UpsAccountFieldIndex.HubVersion, false); }
+			set	{ SetValue((int)UpsAccountFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubCarrierId property of the Entity UpsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UpsAccount"."HubCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> HubCarrierId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)UpsAccountFieldIndex.HubCarrierId, false); }
+			set	{ SetValue((int)UpsAccountFieldIndex.HubCarrierId, value); }
 		}
 
 		/// <summary> Gets / sets related entity of type 'UpsRateTableEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>

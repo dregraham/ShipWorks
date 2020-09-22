@@ -3108,6 +3108,8 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="20" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="27" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="26" />
           <Field Name="InvoiceAuth" Type="bool" FieldIndex="7" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="10" />
           <Field Name="LocalRatingEnabled" Type="bool" FieldIndex="23" />
@@ -4646,7 +4648,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-01T13:29:37.9657322Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-22T14:36:48.6236223Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -9036,6 +9038,8 @@
                     <Field Name="LocalRatingEnabled" Ordinal="24" DbType="2" />
                     <Field Name="UpsRateTableID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="ShipEngineCarrierId" Ordinal="26" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="HubVersion" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="28" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="UpsLetterRate">
@@ -14076,6 +14080,8 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="InvoiceAuth" TargetFieldName="InvoiceAuth" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="LocalRatingEnabled" TargetFieldName="LocalRatingEnabled" />

@@ -30327,6 +30327,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.ShipEngineCarrierId);}
 		}
+		/// <summary>Creates a new UpsAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new UpsAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsLetterRateEntity</summary>

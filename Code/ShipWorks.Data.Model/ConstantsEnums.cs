@@ -12958,6 +12958,10 @@ namespace ShipWorks.Data.Model
 		UpsRateTableID,
 		///<summary>ShipEngineCarrierId. </summary>
 		ShipEngineCarrierId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
