@@ -58,6 +58,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Website = source.Website;
             Letterhead = source.Letterhead;
             Signature = source.Signature;
+            HubVersion = source.HubVersion;
+            HubCarrierId = source.HubCarrierId;
             
             
             
@@ -198,6 +200,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.String Signature { get; }
+        /// <summary> The HubVersion property of the Entity FedExAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExAccount"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubCarrierId property of the Entity FedExAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "FedExAccount"."HubCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> HubCarrierId { get; }
         
         
         

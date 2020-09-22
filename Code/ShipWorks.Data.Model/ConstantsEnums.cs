@@ -3780,6 +3780,10 @@ namespace ShipWorks.Data.Model
 		Letterhead,
 		///<summary>Signature. </summary>
 		Signature,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
