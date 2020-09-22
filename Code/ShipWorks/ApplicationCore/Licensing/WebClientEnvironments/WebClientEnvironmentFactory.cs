@@ -246,7 +246,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         {
             string username = "none";
             string password = "none";
-            if (tangoUrl.IndexOf("www.interapptive.com", StringComparison.InvariantCultureIgnoreCase) > 0)
+            if (tangoUrl.IndexOf(".interapptive.com", StringComparison.InvariantCultureIgnoreCase) > 0)
             {
                 username = encryptionProvider.Decrypt("C5NOiKdNaM/324R7sIjFUA==");
                 password = encryptionProvider.Decrypt("lavEgsQoKGM=");
