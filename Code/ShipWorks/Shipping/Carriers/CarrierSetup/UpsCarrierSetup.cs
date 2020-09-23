@@ -65,11 +65,10 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 upsAccount.PromoStatus = 0;
                 upsAccount.LocalRatingEnabled = false;
                 upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                upsAccount.InitializeNullsToDefault();
             }
 
             UpdateAddress(upsAccount, config.Address);
-
-            upsAccount.InitializeNullsToDefault();
 
             upsAccountRepository.Save(upsAccount);
 
