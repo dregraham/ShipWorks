@@ -58,6 +58,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             settings.UpsAccessKey = encryptionProvider.Encrypt(account.AccessToken);
             shippingSettings.Save(settings);
 
+            GetAddress(upsAccount, config.Address).CopyTo(upsAccount, string.Empty);
+
             if (upsAccount.IsNew)
             {
                 upsAccount.InvoiceAuth = false;
@@ -67,8 +69,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                 upsAccount.InitializeNullsToDefault();
             }
-
-            UpdateAddress(upsAccount, config.Address);
 
             upsAccountRepository.Save(upsAccount);
 
