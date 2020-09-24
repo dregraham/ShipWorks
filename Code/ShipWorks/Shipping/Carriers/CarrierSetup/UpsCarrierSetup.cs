@@ -6,7 +6,6 @@ using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
@@ -61,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             if (upsAccount.IsNew)
             {
                 upsAccount.InvoiceAuth = false;
-                upsAccount.RateType = (int) UpsRateType.DailyPickup;
+                upsAccount.RateType = (int) account.RateType;
                 upsAccount.PromoStatus = 0;
                 upsAccount.LocalRatingEnabled = false;
                 upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
