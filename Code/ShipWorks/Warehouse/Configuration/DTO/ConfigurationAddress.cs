@@ -9,9 +9,19 @@ namespace ShipWorks.Warehouse.Configuration.DTO
     public class ConfigurationAddress
     {
         /// <summary>
-        /// The full name of the person associated with the address
+        /// The first name of the person associated with the address
         /// </summary>
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+
+        /// <summary>
+        /// The middle name of the person associated with the address
+        /// </summary>
+        public string MiddleName { get; set; }
+
+        /// <summary>
+        /// The last name of the person associated with the address
+        /// </summary>
+        public string LastName { get; set; }
 
         /// <summary>
         /// The address company
@@ -27,6 +37,11 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         /// The address street 2
         /// </summary>
         public string Street2 { get; set; }
+
+        /// <summary>
+        /// The address street 3
+        /// </summary>
+        public string Street3 { get; set; }
 
         /// <summary>
         /// The address City
@@ -52,5 +67,10 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         /// The address phone
         /// </summary>
         public string Phone { get; set; }
+
+        /// <summary>
+        /// The customer's email
+        /// </summary>
+        public string Email { get; set; }
     }
 }
