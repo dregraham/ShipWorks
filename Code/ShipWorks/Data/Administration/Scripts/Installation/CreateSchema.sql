@@ -5491,7 +5491,9 @@ CREATE TABLE [dbo].[UpsAccount]
 [PromoStatus] [tinyint] NOT NULL,
 [LocalRatingEnabled] [bit] NOT NULL,
 [UpsRateTableID] [bigint] NULL,
-[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'

@@ -3527,6 +3527,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UpsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
+			this.AddElementFieldInfo("UpsAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("UpsAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UpsAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits UpsLetterRateEntity's FieldInfo objects</summary>
 		private void InitUpsLetterRateEntityInfos()
