@@ -4,7 +4,7 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
 {
     /// <summary>
-    /// DTO for importing ups account data from the hub
+    /// DTO for importing UPS account data from the hub
     /// </summary>
     [Obfuscation]
     public class UpsAccountConfiguration

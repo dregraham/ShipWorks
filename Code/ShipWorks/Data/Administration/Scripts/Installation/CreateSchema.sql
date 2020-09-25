@@ -4736,7 +4736,9 @@ CREATE TABLE [dbo].[FedExAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Letterhead] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
-[Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT ('')
+[Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'

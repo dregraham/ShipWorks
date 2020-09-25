@@ -8772,6 +8772,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.Signature);}
 		}
+		/// <summary>Creates a new FedExAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new FedExAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExEndOfDayCloseEntity</summary>

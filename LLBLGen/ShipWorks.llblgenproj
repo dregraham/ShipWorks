@@ -1078,6 +1078,8 @@
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="18" />
           <Field Name="FedExAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="23" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="22" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="9" />
           <Field Name="Letterhead" Type="string" MaxLength="2147483647" FieldIndex="20" />
           <Field Name="MeterNumber" Type="string" MaxLength="50" FieldIndex="5" />
@@ -4648,7 +4650,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-22T14:36:48.6236223Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-22T21:30:14.3227704Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5856,6 +5858,8 @@
                     <Field Name="Website" Ordinal="20" DbType="12" Length="50" />
                     <Field Name="Letterhead" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -12006,6 +12010,8 @@
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FedExAccountID" TargetFieldName="FedExAccountID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="Letterhead" TargetFieldName="Letterhead" />
             <FieldMapping FieldName="MeterNumber" TargetFieldName="MeterNumber" />
