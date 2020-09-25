@@ -53,22 +53,22 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Get the account address, using new values when possible
         /// </summary>
-        protected PersonAdapter GetAddress(ICarrierAccount account, ConfigurationAddress address)
+        protected PersonAdapter GetAddress(ConfigurationAddress address)
         {
             PersonAdapter newAddress = new PersonAdapter();
-            newAddress.FirstName = string.IsNullOrEmpty(address.FirstName) ? account.Address.FirstName : address.FirstName;
-            newAddress.MiddleName = string.IsNullOrEmpty(address.MiddleName) ? account.Address.MiddleName : address.MiddleName;
-            newAddress.LastName = string.IsNullOrEmpty(address.LastName) ? account.Address.LastName : address.LastName;
-            newAddress.Company = string.IsNullOrEmpty(address.Company) ? account.Address.Company : address.Company;
-            newAddress.Street1 = string.IsNullOrEmpty(address.Street1) ? account.Address.Street1 : address.Street1;
-            newAddress.Street2 = string.IsNullOrEmpty(address.Street2) ? account.Address.Street2 : address.Street2;
-            newAddress.Street3 = string.IsNullOrEmpty(address.Street3) ? account.Address.Street3 : address.Street3;
-            newAddress.City = string.IsNullOrEmpty(address.City) ? account.Address.City : address.City;
-            newAddress.StateProvCode = string.IsNullOrEmpty(address.State) ? account.Address.StateProvCode : address.State;
-            newAddress.PostalCode = string.IsNullOrEmpty(address.Zip) ? account.Address.PostalCode : address.Zip;
-            newAddress.CountryCode = string.IsNullOrEmpty(address.Country) ? account.Address.CountryCode : address.Country;
-            newAddress.Phone = string.IsNullOrEmpty(address.Phone) ? account.Address.Phone : address.Phone;
-            newAddress.Email = string.IsNullOrEmpty(address.Email) ? account.Address.Email : address.Email;
+            newAddress.FirstName = address.FirstName;
+            newAddress.MiddleName = address.MiddleName;
+            newAddress.LastName = address.LastName;
+            newAddress.Company = address.Company;
+            newAddress.Street1 = address.Street1;
+            newAddress.Street2 = address.Street2;
+            newAddress.Street3 = address.Street3;
+            newAddress.City = address.City;
+            newAddress.StateProvCode = address.State;
+            newAddress.PostalCode = address.Zip;
+            newAddress.CountryCode = address.Country;
+            newAddress.Phone = address.Phone;
+            newAddress.Email = address.Email;
             return newAddress;
         }
     }

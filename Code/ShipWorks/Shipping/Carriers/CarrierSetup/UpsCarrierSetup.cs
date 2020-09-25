@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             settings.UpsAccessKey = encryptionProvider.Encrypt(account.AccessToken);
             shippingSettings.Save(settings);
 
-            GetAddress(upsAccount, config.Address).CopyTo(upsAccount, string.Empty);
+            GetAddress(config.Address).CopyTo(upsAccount, string.Empty);
 
             if (upsAccount.IsNew)
             {

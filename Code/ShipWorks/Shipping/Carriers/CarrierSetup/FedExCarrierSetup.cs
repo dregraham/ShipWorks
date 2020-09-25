@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             fedExAccount.AccountNumber = account.AccountNumber;
 
-            GetAddress(fedExAccount, config.Address).CopyTo(fedExAccount, string.Empty);
+            GetAddress(config.Address).CopyTo(fedExAccount, string.Empty);
 
             if (fedExAccount.IsNew)
             {

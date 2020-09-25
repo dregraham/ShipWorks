@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.HubVersion = config.HubVersion;
             uspsAccount.HubCarrierId = config.HubCarrierID;
 
-            GetAddress(uspsAccount, config.Address).CopyTo(uspsAccount, string.Empty);
+            GetAddress(config.Address).CopyTo(uspsAccount, string.Empty);
 
             if (uspsAccount.IsNew)
             {
