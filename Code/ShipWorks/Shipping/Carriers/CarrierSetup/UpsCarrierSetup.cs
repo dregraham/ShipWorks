@@ -51,8 +51,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
-            upsAccount.AccountNumber = account.AccountNumber;
-
             ShippingSettingsEntity settings = shippingSettings.Fetch();
             settings.UpsAccessKey = encryptionProvider.Encrypt(account.AccessToken);
             shippingSettings.Save(settings);
@@ -61,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             if (upsAccount.IsNew)
             {
+                upsAccount.AccountNumber = account.AccountNumber;
                 upsAccount.InvoiceAuth = false;
                 upsAccount.RateType = (int) account.RateType;
                 upsAccount.PromoStatus = 0;

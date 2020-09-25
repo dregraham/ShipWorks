@@ -49,12 +49,11 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             var fedExAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
-            fedExAccount.AccountNumber = account.AccountNumber;
-
             GetAddress(config.Address).CopyTo(fedExAccount, string.Empty);
 
             if (fedExAccount.IsNew)
             {
+                fedExAccount.AccountNumber = account.AccountNumber;
                 fedExAccount.SmartPostHubList = "<Root />";
                 fedExAccount.SignatureRelease = string.Empty;
                 fedExAccount.Description = FedExAccountManager.GetDefaultDescription(fedExAccount);
