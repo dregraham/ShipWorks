@@ -7572,6 +7572,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.AcceptedFCMILetterWarning);}
 		}
+		/// <summary>Creates a new EndiciaAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new EndiciaAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaProfileEntity</summary>

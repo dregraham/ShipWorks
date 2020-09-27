@@ -3264,6 +3264,10 @@ namespace ShipWorks.Data.Model
 		ScanFormAddressSource,
 		///<summary>AcceptedFCMILetterWarning. </summary>
 		AcceptedFCMILetterWarning,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

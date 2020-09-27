@@ -16,3 +16,8 @@ ALTER TABLE [dbo].[FedExAccount] ADD
 [HubVersion] [int] NULL,
 [HubCarrierId] [uniqueidentifier] NULL
 GO
+PRINT N'Creating [dbo].[EndiciaAccount]'
+ALTER TABLE [dbo].[EndiciaAccount] ADD
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
+GO

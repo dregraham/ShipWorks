@@ -978,6 +978,8 @@
           <Field Name="EndiciaReseller" Type="int" FieldIndex="1" />
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="22" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="11" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="28" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="27" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="12" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="24" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="21" />
@@ -4650,7 +4652,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-22T21:30:14.3227704Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-27T21:49:59.8148093Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5724,6 +5726,8 @@
                     <Field Name="MailingPostalCode" Ordinal="25" DbType="12" Length="20" />
                     <Field Name="ScanFormAddressSource" Ordinal="26" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="27" DbType="2" />
+                    <Field Name="HubVersion" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="29" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaProfile">
@@ -11907,6 +11911,8 @@
             <FieldMapping FieldName="EndiciaReseller" TargetFieldName="EndiciaReseller" />
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
