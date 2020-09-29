@@ -11,11 +11,11 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// <summary>
         /// The Endicia account number
         /// </summary>
-        public string accountNumber { get; set; }
+        public string AccountNumber { get; set; }
 
         /// <summary>
         /// The Endicia passphrase
         /// </summary>
-        public string passphrase { get; set; }
+        public string Passphrase { get; set; }
     }
 }
