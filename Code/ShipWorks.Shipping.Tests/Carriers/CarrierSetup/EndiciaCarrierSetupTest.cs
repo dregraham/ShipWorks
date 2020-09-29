@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms.VisualStyles;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -21,30 +20,27 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
     {
         private readonly AutoMock mock;
         private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> carrierAccountRepository;
-        private readonly Mock<IShipmentTypeSetupActivity> shipmentTypeSetupActivity;
-        private readonly Mock<IShippingSettings> shippingSettings;
-        private readonly Mock<IShipmentPrintHelper> printHelper;
         private readonly CarrierConfiguration payload;
 
-        private readonly Guid carrierID = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
+        private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
         public EndiciaCarrierSetupTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
-            payload = new CarrierConfiguration()
+            payload = new CarrierConfiguration
             {
                 AdditionalData = JObject.Parse("{endicia: {accountNumber: \"account\", passphrase: \"passphrase\"}}"),
                 HubVersion = 2,
-                HubCarrierID = carrierID,
+                HubCarrierID = carrierId,
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress()
             };
 
             carrierAccountRepository = mock.Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
-            shipmentTypeSetupActivity = mock.Mock<IShipmentTypeSetupActivity>();
-            shippingSettings = mock.Mock<IShippingSettings>();
-            printHelper = mock.Mock<IShipmentPrintHelper>();
+            mock.Mock<IShipmentTypeSetupActivity>();
+            mock.Mock<IShippingSettings>();
+            mock.Mock<IShipmentPrintHelper>();
         }
 
         [Fact]
@@ -55,7 +51,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 new EndiciaAccountEntity
                 {
                     AccountNumber = "foo",
-                    HubCarrierId = carrierID,
+                    HubCarrierId = carrierId,
                     HubVersion = 2
                 }
             };
@@ -74,8 +70,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 new EndiciaAccountEntity
                 {
                     AccountNumber = "foo",
-                    HubCarrierId = carrierID,
-                    HubVersion = 1
+                    HubCarrierId = carrierId,
+                    HubVersion = 1, 
+                    IsNew = false
                 }
             };
 
