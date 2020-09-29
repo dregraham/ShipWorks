@@ -46,6 +46,7 @@ using ShipWorks.ApplicationCore.Help;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.ApplicationCore.MessageBoxes;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Settings;
@@ -852,6 +853,8 @@ namespace ShipWorks
 
             UserEntity user = UserSession.User;
 
+            MigrateStoresToHub();
+
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
 
@@ -860,7 +863,7 @@ namespace ShipWorks
 
             currentUserSettings.SetUIMode(UIMode.Batch);
 
-            //The Grid can be already initilized at this point. Make sure its clean.
+            //The Grid can be already initialized at this point. Make sure its clean.
             gridControl.Reset();
 
             // Display the appropriate UI mode for this user. Don't start heartbeat here, need other code to run first
@@ -5458,6 +5461,27 @@ namespace ShipWorks
                 }
                 MessageHelper.ShowError(this, "An error occurred creating the Asendia manifest");
                 log.Error(result.Exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Kick off the HubMigrator
+        /// </summary>
+        private void MigrateStoresToHub()
+        {
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    if (lifetimeScope.Resolve<ILicenseService>().IsHub)
+                    {
+                        lifetimeScope.Resolve<HubMigrator>().MigrateStores(this);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to migrate stores to Hub", ex);
             }
         }
 

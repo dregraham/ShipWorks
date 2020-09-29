@@ -1,0 +1,2 @@
+-- Forcing schema update
+GO

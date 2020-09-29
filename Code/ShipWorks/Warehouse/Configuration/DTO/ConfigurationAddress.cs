@@ -51,17 +51,17 @@ namespace ShipWorks.Warehouse.Configuration.DTO
         /// <summary>
         /// The address state
         /// </summary>
-        public string State { get; set; }
+        public string StateProvCode { get; set; }
 
         /// <summary>
         /// The address zip
         /// </summary>
-        public string Zip { get; set; }
+        public string PostalCode { get; set; }
 
         /// <summary>
         /// The address country
         /// </summary>
-        public string Country { get; set; }
+        public string CountryCode { get; set; }
 
         /// <summary>
         /// The address phone

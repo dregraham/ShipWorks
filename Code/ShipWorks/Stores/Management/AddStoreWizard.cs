@@ -1127,7 +1127,7 @@ namespace ShipWorks.Stores.Management
         {
             using (var innerScope = scope.BeginLifetimeScope())
             {
-                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store)
+                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store, true)
                     .ConfigureAwait(true);
                 if (result.Failure)
                 {

@@ -64,9 +64,9 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             newAddress.Street2 = address.Street2;
             newAddress.Street3 = address.Street3;
             newAddress.City = address.City;
-            newAddress.StateProvCode = address.State;
-            newAddress.PostalCode = address.Zip;
-            newAddress.CountryCode = address.Country;
+            newAddress.StateProvCode = address.StateProvCode;
+            newAddress.PostalCode = address.PostalCode;
+            newAddress.CountryCode = address.CountryCode;
             newAddress.Phone = address.Phone;
             newAddress.Email = address.Email;
             return newAddress;

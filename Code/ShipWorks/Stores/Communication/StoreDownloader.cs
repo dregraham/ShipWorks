@@ -20,6 +20,7 @@ using ShipWorks.Actions;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Enums;
 using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Settings;
 using ShipWorks.Common.Threading;
@@ -161,18 +162,23 @@ namespace ShipWorks.Stores.Communication
             this.downloadLogID = downloadLog.DownloadID;
             this.connection = connection;
 
-            if (Store.WarehouseStoreID == null)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
-                {
-                    await Download(trackedDurationEvent).ConfigureAwait(false);
+                ILicenseService licenseService = lifetimeScope.Resolve<ILicenseService>();
 
-                    CollectDownloadTelemetry(trackedDurationEvent);
+                if (licenseService.IsHub && Store.WarehouseStoreID != null)
+                {
+                    await DownloadWarehouseOrders(downloadLog.BatchID).ConfigureAwait(false);
                 }
-            }
-            else
-            {
-                await DownloadWarehouseOrders(downloadLog.BatchID).ConfigureAwait(false);
+                else
+                {
+                    using (TrackedDurationEvent trackedDurationEvent = new TrackedDurationEvent("Store.Order.Download"))
+                    {
+                        await Download(trackedDurationEvent).ConfigureAwait(false);
+
+                        CollectDownloadTelemetry(trackedDurationEvent);
+                    }
+                }
             }
         }
 
