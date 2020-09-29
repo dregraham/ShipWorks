@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             payload = new CarrierConfiguration()
             {
-                AdditionalData = JObject.Parse("{endicia: {accountNumber: \"account\", password: \"password\"}}"),
+                AdditionalData = JObject.Parse("{endicia: {accountNumber: \"account\", passphrase: \"passphrase\"}}"),
                 HubVersion = 2,
                 HubCarrierID = carrierID,
                 RequestedLabelFormat = ThermalLanguage.None,
