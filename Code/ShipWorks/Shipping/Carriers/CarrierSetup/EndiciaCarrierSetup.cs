@@ -4,6 +4,7 @@ using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
@@ -42,9 +43,27 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 return;
             }
 
-            var endiciaAccount = GetAccountEntity(config.HubCarrierID);
+            var additionalAccountInfo = config.AdditionalData["endicia"].ToObject<EndiciaAccountConfiguration>();
+
+            var endiciaAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             GetAddress(config.Address).CopyTo(endiciaAccount, string.Empty);
+
+            if (endiciaAccount.IsNew)
+            {
+                endiciaAccount.AccountNumber = additionalAccountInfo.AccountNumber;
+                endiciaAccount.ApiUserPassword = additionalAccountInfo.Passphrase;
+                endiciaAccount.CreatedByShipWorks = false;
+                endiciaAccount.EndiciaReseller = (int) EndiciaReseller.None;
+                endiciaAccount.SignupConfirmation = "";
+                endiciaAccount.WebPassword = "";
+                endiciaAccount.ApiInitialPassword = "";
+                endiciaAccount.AccountType = -1;
+                endiciaAccount.TestAccount = false;
+                endiciaAccount.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
+                endiciaAccount.AcceptedFCMILetterWarning = false;
+                EndiciaAccountManager.SaveAccount(endiciaAccount);
+            }
 
             endiciaAccountRepository.Save(endiciaAccount);
 
@@ -54,7 +73,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Get an existing Endicia account
         /// </summary>
-        private EndiciaAccountEntity GetAccountEntity(Guid carrierId) =>
-            endiciaAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId);
+        private EndiciaAccountEntity GetOrCreateAccountEntity(Guid carrierId) =>
+            endiciaAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId) 
+            ?? new EndiciaAccountEntity { HubCarrierId = carrierId };
     }
 }
