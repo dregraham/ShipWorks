@@ -57,8 +57,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 fedExAccount.SmartPostHubList = "<Root />";
                 fedExAccount.SignatureRelease = string.Empty;
                 fedExAccount.Description = FedExAccountManager.GetDefaultDescription(fedExAccount);
-                shippingClerk.RegisterAccount(fedExAccount);
                 fedExAccount.InitializeNullsToDefault();
+                shippingClerk.RegisterAccount(fedExAccount);
             }
 
             fedExAccountRepository.Save(fedExAccount);

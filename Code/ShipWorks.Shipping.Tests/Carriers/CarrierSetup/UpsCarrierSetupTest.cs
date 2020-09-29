@@ -47,8 +47,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                     Street1 = "1 Memorial Drive",
                     Street2 = "Suite 2000",
                     City = "St. Louis",
-                    State = "MO",
-                    Zip = "63102"
+                    StateProvCode = "MO",
+                    PostalCode = "63102"
                 },
             };
 
