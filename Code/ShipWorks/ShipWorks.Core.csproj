@@ -857,6 +857,7 @@
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByUserRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TangoRequests\TangoGetReleaseByVersionRequest.cs" />
     <Compile Include="ApplicationCore\Licensing\TokenResponse.cs" />
+    <Compile Include="ApplicationCore\Licensing\Warehouse\HubMigrator.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\WarehouseRequestFactory.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DefaultWarehouseCreator.cs" />
     <Compile Include="ApplicationCore\Licensing\Warehouse\DTO\BundledProduct.cs" />
