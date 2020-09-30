@@ -17,5 +17,10 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// The Endicia passphrase
         /// </summary>
         public string Passphrase { get; set; }
+
+        /// <summary>
+        /// The Endicia Signature
+        /// </summary>
+        public string Signature { get; set; }
     }
 }

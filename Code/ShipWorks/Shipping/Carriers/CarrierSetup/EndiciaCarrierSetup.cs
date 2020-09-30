@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 endiciaAccount.ApiUserPassword = additionalAccountInfo.Passphrase;
                 endiciaAccount.CreatedByShipWorks = false;
                 endiciaAccount.EndiciaReseller = (int) EndiciaReseller.None;
-                endiciaAccount.SignupConfirmation = "";
+                endiciaAccount.SignupConfirmation = additionalAccountInfo.Signature;
                 endiciaAccount.WebPassword = "";
                 endiciaAccount.ApiInitialPassword = "";
                 endiciaAccount.AccountType = -1;
