@@ -18,18 +18,20 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class EndiciaCarrierSetup : BaseCarrierSetup<EndiciaAccountEntity, IEndiciaAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public EndiciaCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity, 
+        public EndiciaCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
-            IShippingSettings shippingSettings, 
-            IShipmentPrintHelper printHelper, 
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository) 
+            IShippingSettings shippingSettings,
+            IShipmentPrintHelper printHelper,
+            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.endiciaAccountRepository = endiciaAccountRepository;
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -51,18 +53,27 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             if (endiciaAccount.IsNew)
             {
+                if (!string.IsNullOrEmpty(additionalAccountInfo.Signature))
+                {
+                    ShippingSettingsEntity settings = shippingSettings.Fetch();
+                    settings.EndiciaCustomsSigner = additionalAccountInfo.Signature;
+                    settings.EndiciaCustomsCertify = true;
+                    shippingSettings.Save(settings);
+                }
+
                 endiciaAccount.AccountNumber = additionalAccountInfo.AccountNumber;
                 endiciaAccount.ApiUserPassword = additionalAccountInfo.Passphrase;
                 endiciaAccount.CreatedByShipWorks = false;
                 endiciaAccount.EndiciaReseller = (int) EndiciaReseller.None;
-                endiciaAccount.SignupConfirmation = additionalAccountInfo.Signature;
-                endiciaAccount.WebPassword = "";
-                endiciaAccount.ApiInitialPassword = "";
+                endiciaAccount.WebPassword = string.Empty;
+                endiciaAccount.ApiInitialPassword = string.Empty;
+                endiciaAccount.SignupConfirmation = string.Empty;
                 endiciaAccount.AccountType = -1;
                 endiciaAccount.TestAccount = false;
                 endiciaAccount.ScanFormAddressSource = (int) EndiciaScanFormAddressSource.Provider;
                 endiciaAccount.AcceptedFCMILetterWarning = false;
-                EndiciaAccountManager.SaveAccount(endiciaAccount);
+                endiciaAccount.Description = EndiciaAccountManager.GetDefaultDescription(endiciaAccount);
+                endiciaAccount.InitializeNullsToDefault();
             }
 
             endiciaAccountRepository.Save(endiciaAccount);
@@ -74,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Get an existing Endicia account
         /// </summary>
         private EndiciaAccountEntity GetOrCreateAccountEntity(Guid carrierId) =>
-            endiciaAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId) 
+            endiciaAccountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId)
             ?? new EndiciaAccountEntity { HubCarrierId = carrierId };
     }
 }
