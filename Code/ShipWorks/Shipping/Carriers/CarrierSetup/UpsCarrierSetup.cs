@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             ShippingSettingsEntity settings = shippingSettings.Fetch();
-            settings.UpsAccessKey = encryptionProvider.Encrypt(account.AccessToken);
+            settings.UpsAccessKey = encryptionProvider.Encrypt(account.CustomerAccessNumber);
             shippingSettings.Save(settings);
 
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);

@@ -12,7 +12,7 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// <summary>
         /// The UPS access token
         /// </summary>
-        public string AccessToken { get; set; }
+        public string CustomerAccessNumber { get; set; }
 
         /// <summary>
         /// The UPS account number
