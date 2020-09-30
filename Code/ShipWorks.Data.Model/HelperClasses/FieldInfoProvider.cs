@@ -1195,6 +1195,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.MailingPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "ScanFormAddressSource", typeof(System.Int32), false, false, false, false,  (int)EndiciaAccountFieldIndex.ScanFormAddressSource, 0, 0, 10);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)EndiciaAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits EndiciaProfileEntity's FieldInfo objects</summary>
 		private void InitEndiciaProfileEntityInfos()

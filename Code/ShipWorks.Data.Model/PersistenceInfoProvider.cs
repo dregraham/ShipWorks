@@ -1220,7 +1220,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits EndiciaAccountEntity's mappings</summary>
 		private void InitEndiciaAccountEntityMappings()
 		{
-			this.AddElementMapping("EndiciaAccountEntity", @"ShipWorksLocal", @"dbo", "EndiciaAccount", 27, 0);
+			this.AddElementMapping("EndiciaAccountEntity", @"ShipWorksLocal", @"dbo", "EndiciaAccount", 29, 0);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "EndiciaAccountID", "EndiciaAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "EndiciaReseller", "EndiciaReseller", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 1);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "AccountNumber", "AccountNumber", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 2);
@@ -1248,6 +1248,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("EndiciaAccountEntity", "MailingPostalCode", "MailingPostalCode", false, "NVarChar", 20, 0, 0, false, "", null, typeof(System.String), 24);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "ScanFormAddressSource", "ScanFormAddressSource", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 25);
 			this.AddElementFieldMapping("EndiciaAccountEntity", "AcceptedFCMILetterWarning", "AcceptedFCMILetterWarning", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 26);
+			this.AddElementFieldMapping("EndiciaAccountEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 27);
+			this.AddElementFieldMapping("EndiciaAccountEntity", "HubCarrierId", "HubCarrierId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 28);
 		}
 
 		/// <summary>Inits EndiciaProfileEntity's mappings</summary>
