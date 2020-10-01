@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var fedExAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             GetAddress(config.Address).CopyTo(fedExAccount, string.Empty);
+            fedExAccount.HubVersion = config.HubVersion;
 
             if (fedExAccount.IsNew)
             {

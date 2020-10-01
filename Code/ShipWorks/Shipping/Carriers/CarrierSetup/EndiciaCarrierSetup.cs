@@ -50,6 +50,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var endiciaAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             GetAddress(config.Address).CopyTo(endiciaAccount, string.Empty);
+            endiciaAccount.HubVersion = config.HubVersion;
 
             if (endiciaAccount.IsNew)
             {
