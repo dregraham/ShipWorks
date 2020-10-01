@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Never);
-        }
+        }        
 
         [Fact]
         public void Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
@@ -82,6 +83,21 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.AccountNumber == "foo")), Times.Once);
+        }
+
+        [Fact]
+        public void Setup_SavesEncryptedPassphrase()
+        {
+            var accounts = new List<EndiciaAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            mock.Create<EndiciaCarrierSetup>().Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => SecureText.Decrypt(y.ApiUserPassword, "Endicia") == "passphrase")), Times.Once);
         }
     }
 }

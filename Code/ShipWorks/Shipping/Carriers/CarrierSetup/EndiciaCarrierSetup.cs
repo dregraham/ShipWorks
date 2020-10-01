@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }
 
                 endiciaAccount.AccountNumber = additionalAccountInfo.AccountNumber;
-                endiciaAccount.ApiUserPassword = additionalAccountInfo.Passphrase;
+                endiciaAccount.ApiUserPassword = SecureText.Encrypt(additionalAccountInfo.Passphrase, "Endicia");
                 endiciaAccount.CreatedByShipWorks = false;
                 endiciaAccount.EndiciaReseller = (int) EndiciaReseller.None;
                 endiciaAccount.WebPassword = string.Empty;
