@@ -56,11 +56,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             shippingSettings.Save(settings);
 
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);
+            upsAccount.HubVersion = config.HubVersion;
 
             if (upsAccount.IsNew)
             {
                 upsAccount.AccountNumber = account.AccountNumber;
-                upsAccount.InvoiceAuth = false;
+                upsAccount.InvoiceAuth = account.InvoiceAuth;
                 upsAccount.RateType = (int) account.RateType;
                 upsAccount.PromoStatus = 0;
                 upsAccount.LocalRatingEnabled = false;

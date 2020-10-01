@@ -23,5 +23,10 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// The UPS rate type
         /// </summary>
         public UpsRateType RateType { get; set; }
+
+        /// <summary>
+        /// Whether or not the customer entered invoice info
+        /// </summary>
+        public bool InvoiceAuth { get; set; }
     }
 }
