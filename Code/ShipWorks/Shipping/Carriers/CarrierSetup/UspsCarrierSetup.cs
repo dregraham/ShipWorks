@@ -57,17 +57,16 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.HubVersion = config.HubVersion;
             uspsAccount.HubCarrierId = config.HubCarrierID;
 
-            GetAddress(config.Address).CopyTo(uspsAccount, string.Empty);
-
             if (uspsAccount.IsNew)
             {
                 webClient.PopulateUspsAccountEntity(uspsAccount);
 
                 uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
                 uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+                uspsAccount.InitializeNullsToDefault();
             }
 
-            uspsAccount.InitializeNullsToDefault();
+            GetAddress(config.Address).CopyTo(uspsAccount, string.Empty);
 
             uspsAccountRepository.Save(uspsAccount);
 
