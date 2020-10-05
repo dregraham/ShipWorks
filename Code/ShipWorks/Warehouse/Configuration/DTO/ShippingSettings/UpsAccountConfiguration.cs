@@ -28,5 +28,15 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// Whether or not the customer entered invoice info
         /// </summary>
         public bool InvoiceAuth { get; set; }
+
+        /// <summary>
+        /// The customers generated username
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
+        /// The customers generated password
+        /// </summary>
+        public string Password { get; set; }
     }
 }

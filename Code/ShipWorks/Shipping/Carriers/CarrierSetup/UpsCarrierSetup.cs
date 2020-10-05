@@ -62,6 +62,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             {
                 upsAccount.AccountNumber = account.AccountNumber;
                 upsAccount.InvoiceAuth = account.InvoiceAuth;
+                upsAccount.UserID = account.UserId;
+                upsAccount.Password = account.Password;
                 upsAccount.RateType = (int) account.RateType;
                 upsAccount.PromoStatus = 0;
                 upsAccount.LocalRatingEnabled = false;
