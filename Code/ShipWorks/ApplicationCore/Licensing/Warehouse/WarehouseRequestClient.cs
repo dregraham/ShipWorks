@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using System.Net.Cache;
 using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
@@ -60,7 +59,6 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
                 }
 
                 IRestClient restClient = new RestClient(webClientEnvironmentFactory.SelectedEnvironment.WarehouseUrl);
-                restClient.CachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.NoCacheNoStore);
 
                 logEntry.LogRequest(restRequest, restClient, "json");
 
