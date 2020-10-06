@@ -1215,6 +1215,7 @@
     <Compile Include="Products\Import\IImportProductsResult.cs" />
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\BaseCarrierSetup.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\DhlCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\EndiciaCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\FedExCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\HubCarrierConfigurator.cs" />
@@ -1558,6 +1559,7 @@
     <Compile Include="UI\WPF\WPFInterop.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ConfigurationAddress.cs" />
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\DhlAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\EndiciaAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UpsAccountConfiguration.cs" />

@@ -53,6 +53,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             Email = source.Email;
             Phone = source.Phone;
             UspsAccountId = source.UspsAccountId;
+            HubVersion = source.HubVersion;
+            HubCarrierId = source.HubCarrierId;
             
             
             
@@ -163,6 +165,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
         public Nullable<System.Int64> UspsAccountId { get; }
+        /// <summary> The HubVersion property of the Entity DhlExpressAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressAccount"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubCarrierId property of the Entity DhlExpressAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "DhlExpressAccount"."HubCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> HubCarrierId { get; }
         
         
         

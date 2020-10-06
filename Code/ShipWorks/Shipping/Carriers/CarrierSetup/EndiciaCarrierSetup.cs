@@ -27,9 +27,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public EndiciaCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> endiciaAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper,
-            ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> accountRepository)
-            : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
+            IShipmentPrintHelper printHelper)
+            : base(shipmentTypeSetupActivity, shippingSettings, printHelper, endiciaAccountRepository)
         {
             this.endiciaAccountRepository = endiciaAccountRepository;
             this.shippingSettings = shippingSettings;

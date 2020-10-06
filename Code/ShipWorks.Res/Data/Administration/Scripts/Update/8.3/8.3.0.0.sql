@@ -26,3 +26,10 @@ ALTER TABLE [dbo].[EndiciaAccount] ADD [HubVersion] [int] NULL
 IF COL_LENGTH(N' [dbo].[EndiciaAccount]', N'HubCarrierId') IS NULL
 ALTER TABLE [dbo].[EndiciaAccount] ADD [HubCarrierId] [uniqueidentifier] NULL
 GO
+PRINT N'Altering [dbo].[DhlExpressAccount]'
+GO
+IF COL_LENGTH(N' [dbo].[DhlExpressAccount]', N'HubVersion') IS NULL
+ALTER TABLE [dbo].[DhlExpressAccount] ADD [HubVersion] [int] NULL
+IF COL_LENGTH(N' [dbo].[DhlExpressAccount]', N'HubCarrierId') IS NULL
+ALTER TABLE [dbo].[DhlExpressAccount] ADD [HubCarrierId] [uniqueidentifier] NULL
+GO
