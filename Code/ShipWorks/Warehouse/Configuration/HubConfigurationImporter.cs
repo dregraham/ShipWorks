@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration.Ordering;
@@ -8,7 +9,6 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
-using System.Linq;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -45,24 +45,24 @@ namespace ShipWorks.Warehouse.Configuration
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            if (licenseService.IsHub)
+            if (licenseService.IsHub && Program.ExecutionMode is ShipWorks.ApplicationCore.ExecutionMode.UserInterfaceExecutionMode)
             {
                 try
                 {
                     IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                    if(!string.IsNullOrEmpty(configuration.WarehouseID))
+                    if (!string.IsNullOrEmpty(configuration.WarehouseID))
                     {
                         var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
                         var hubConfig = task.Result;
 
                         carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
                     }
-                } 
+                }
                 catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
                 {
                     log.Error("Error getting configuration", ex);
                 }
-                catch(WebException ex)
+                catch (WebException ex)
                 {
                     log.Error("Error getting configuration", ex);
                 }
