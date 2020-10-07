@@ -5,6 +5,7 @@ using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
@@ -22,10 +23,10 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity, 
-            IShippingSettings shippingSettings, 
-            IShipmentPrintHelper printHelper, 
-            ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository) 
+        public OnTracCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
+            IShippingSettings shippingSettings,
+            IShipmentPrintHelper printHelper,
+            ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
@@ -47,9 +48,15 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
-            ontracAccount.Password = SecureText.Decrypt(additionalAccountInfo.Password, string.Empty);
+            ontracAccount.Password = SecureText.Encrypt(additionalAccountInfo.Password, additionalAccountInfo.AccountNumber.ToString());
 
             GetAddress(config.Address).CopyTo(ontracAccount, string.Empty);
+
+            if (ontracAccount.IsNew)
+            {
+                ontracAccount.Description = OnTracAccountManager.GetDefaultDescription(ontracAccount);
+                ontracAccount.InitializeNullsToDefault();
+            }
 
             accountRepository.Save(ontracAccount);
 
@@ -62,6 +69,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         private OnTracAccountEntity GetOrCreateAccountEntity(Guid carrierId) =>
             accountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId)
-            ?? new OnTracAccountEntity {HubCarrierId = carrierId};
+            ?? new OnTracAccountEntity { HubCarrierId = carrierId };
     }
 }
