@@ -58,5 +58,10 @@ namespace ShipWorks.Shipping.Settings
         /// Is the given shipment type configured
         /// </summary>
         bool IsConfigured(ShipmentTypeCode shipmentType);
+
+        /// <summary>
+        /// Mark the given shipment type as enabled in the Shipping Settings UI
+        /// </summary>
+        void MarkAsEnabled(ShipmentTypeCode shipmentType);
     }
 }

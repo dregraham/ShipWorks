@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             {
                 shipmentTypeSetupActivity.InitializeShipmentType(shipmentTypeCode, ShipmentOriginSource.Account, false, requestedLabelFormat);
                 shippingSettings.MarkAsConfigured(shipmentTypeCode);
+                shippingSettings.MarkAsEnabled(shipmentTypeCode);
                 printHelper.InstallDefaultRules(shipmentTypeCode);
             }
         }
