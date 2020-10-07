@@ -17,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class OnTracCarrierSetup : BaseCarrierSetup<OnTracAccountEntity, IOnTracAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository;
-        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
@@ -29,7 +28,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
-            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
