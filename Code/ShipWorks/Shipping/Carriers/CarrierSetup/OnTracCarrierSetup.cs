@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
-            ontracAccount.Password = additionalAccountInfo.password;
+            ontracAccount.Password = SecureText.Decrypt(additionalAccountInfo.Password, string.Empty);
 
             GetAddress(config.Address).CopyTo(ontracAccount, string.Empty);
 
