@@ -9,13 +9,13 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
     public class OnTracAccountConfiguration
     {
         /// <summary>
-        /// The OnTrac username
-        /// </summary>
-        public string Username { get; set; }
-
-        /// <summary>
         /// The OnTrac account number
         /// </summary>
         public int AccountNumber { get; set; }
+
+        /// <summary>
+        /// The Ontrac password
+        /// </summary>
+        public string password { get; set; }
     }
 }
