@@ -1,0 +1,63 @@
+﻿using System;
+using System.Linq;
+using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore.Licensing.Activation;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.CarrierSetup;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+
+namespace ShipWorks.Shipping.Carriers.CarrierSetup
+{
+    /// <summary>
+    /// Setup the OnTrac carrier configuration downloaded from the hub
+    /// </summary>
+    [KeyedComponent(typeof(ICarrierSetup), ShipmentTypeCode.OnTrac)]
+    public class OnTracCarrierSetup : BaseCarrierSetup<OnTracAccountEntity, IOnTracAccountEntity>, ICarrierSetup
+    {
+        private readonly ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository;
+        private readonly IShippingSettings shippingSettings;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public OnTracCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity, 
+            IShippingSettings shippingSettings, 
+            IShipmentPrintHelper printHelper, 
+            ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity> accountRepository) 
+            : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
+        {
+            this.accountRepository = accountRepository;
+            this.shippingSettings = shippingSettings;
+        }
+
+        /// <summary>
+        /// Setup an OnTrac account from data imported from the hub
+        /// </summary>
+        public void Setup(CarrierConfiguration config)
+        {
+            if (accountRepository.AccountsReadOnly.Any(x =>
+                x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
+            var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
+
+            GetAddress(config.Address).CopyTo(ontracAccount, string.Empty);
+
+            accountRepository.Save(ontracAccount);
+
+            SetupDefaultsIfNeeded(ShipmentTypeCode.OnTrac, config.RequestedLabelFormat);
+        }
+
+
+        /// <summary>
+        /// Get or create an OnTrac Account
+        /// </summary>
+        private OnTracAccountEntity GetOrCreateAccountEntity(Guid carrierId) =>
+            accountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId)
+            ?? new OnTracAccountEntity {HubCarrierId = carrierId};
+    }
+}
