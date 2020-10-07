@@ -14,8 +14,8 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         public int AccountNumber { get; set; }
 
         /// <summary>
-        /// The Ontrac password
+        /// The OnTrac password
         /// </summary>
-        public string password { get; set; }
+        public string Password { get; set; }
     }
 }
