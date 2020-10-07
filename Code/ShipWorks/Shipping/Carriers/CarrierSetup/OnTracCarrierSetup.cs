@@ -41,7 +41,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 return;
             }
 
+            var additionalAccountInfo = config.AdditionalData["ontrac"].ToObject<OnTracAccountConfiguration>();
+
             var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
+
+            ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
+            ontracAccount.Password = additionalAccountInfo.password;
 
             GetAddress(config.Address).CopyTo(ontracAccount, string.Empty);
 
