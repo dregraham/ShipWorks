@@ -1935,6 +1935,8 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="17" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="16" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="OnTracAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
@@ -4652,7 +4654,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-09-27T21:49:59.8148093Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-10-07T15:00:12.7342723Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -7450,6 +7452,8 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                    <Field Name="HubVersion" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="18" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracProfile">
@@ -12899,6 +12903,8 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
             <FieldMapping FieldName="OnTracAccountID" TargetFieldName="OnTracAccountID" SequenceToUse="SCOPE_IDENTITY()" />

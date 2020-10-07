@@ -2352,7 +2352,7 @@ namespace ShipWorks.Data.Model
 		/// <summary>Inits OnTracAccountEntity's mappings</summary>
 		private void InitOnTracAccountEntityMappings()
 		{
-			this.AddElementMapping("OnTracAccountEntity", @"ShipWorksLocal", @"dbo", "OnTracAccount", 16, 0);
+			this.AddElementMapping("OnTracAccountEntity", @"ShipWorksLocal", @"dbo", "OnTracAccount", 18, 0);
 			this.AddElementFieldMapping("OnTracAccountEntity", "OnTracAccountID", "OnTracAccountID", false, "BigInt", 0, 19, 0, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0);
 			this.AddElementFieldMapping("OnTracAccountEntity", "RowVersion", "RowVersion", false, "Timestamp", 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1);
 			this.AddElementFieldMapping("OnTracAccountEntity", "AccountNumber", "AccountNumber", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 2);
@@ -2369,6 +2369,8 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("OnTracAccountEntity", "CountryCode", "CountryCode", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 13);
 			this.AddElementFieldMapping("OnTracAccountEntity", "Email", "Email", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 14);
 			this.AddElementFieldMapping("OnTracAccountEntity", "Phone", "Phone", false, "NVarChar", 15, 0, 0, false, "", null, typeof(System.String), 15);
+			this.AddElementFieldMapping("OnTracAccountEntity", "HubVersion", "HubVersion", true, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 16);
+			this.AddElementFieldMapping("OnTracAccountEntity", "HubCarrierId", "HubCarrierId", true, "UniqueIdentifier", 0, 0, 0, false, "", null, typeof(System.Guid), 17);
 		}
 
 		/// <summary>Inits OnTracProfileEntity's mappings</summary>
