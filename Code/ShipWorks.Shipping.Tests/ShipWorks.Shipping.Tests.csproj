@@ -182,6 +182,7 @@
     <Compile Include="Carriers\BestRate\BestRateShippingProfileApplicationStrategyTest.cs" />
     <Compile Include="Carriers\CarrierSetup\EndiciaCarrierSetupTest.cs" />
     <Compile Include="Carriers\CarrierSetup\FedExCarrierSetupTest.cs" />
+    <Compile Include="Carriers\CarrierSetup\OnTracCarrierSetupTest.cs" />
     <Compile Include="Carriers\CarrierSetup\UpsCarrierSetupTest.cs" />
     <Compile Include="Carriers\CarrierSetup\UspsCarrierSetupTest.cs" />
     <Compile Include="Carriers\DefaultShipmentDateManipulator.cs" />
