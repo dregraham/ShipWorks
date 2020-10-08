@@ -1216,6 +1216,7 @@
     <Compile Include="Products\ProductSelectionChangedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\BaseCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\EndiciaCarrierSetup.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\Express1USPSCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\FedExCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\HubCarrierConfigurator.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\ICarrierSetup.cs" />
