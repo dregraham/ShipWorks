@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class DhlCarrierSetup : BaseCarrierSetup<DhlExpressAccountEntity, IDhlExpressAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
-        private readonly IShippingSettings shippingSettings;
+        private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
         /// Constructor
@@ -25,11 +26,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public DhlCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             IShippingSettings shippingSettings, 
             IShipmentPrintHelper printHelper, 
-            ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository) 
+            ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
+            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
-            this.shippingSettings = shippingSettings;
+            accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
         }
 
         /// <summary>
@@ -51,7 +53,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             if (dhlAccount.IsNew)
             {
-                dhlAccount.AccountNumber = additionalAccountInfo.AccountNumber;
+                dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
+                dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
             }
 
             accountRepository.Save(dhlAccount);

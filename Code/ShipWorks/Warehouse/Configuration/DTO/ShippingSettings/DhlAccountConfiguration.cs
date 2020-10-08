@@ -11,6 +11,6 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// <summary>
         /// The DHL account number
         /// </summary>
-        public long AccountNumber { get; set; }
+        public string AccountNumber { get; set; }
     }
 }
