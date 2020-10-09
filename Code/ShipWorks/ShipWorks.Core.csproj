@@ -1220,6 +1220,7 @@
     <Compile Include="Shipping\Carriers\CarrierSetup\HubCarrierConfigurator.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\ICarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\IHubCarrierConfigurator.cs" />
+    <Compile Include="Shipping\Carriers\CarrierSetup\OnTracCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\UpsCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\CarrierSetup\UspsCarrierSetup.cs" />
     <Compile Include="Shipping\Carriers\Asendia\IAsendiaManifestCreator.cs" />
@@ -1560,6 +1561,7 @@
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\EndiciaAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\FedExAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UpsAccountConfiguration.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />

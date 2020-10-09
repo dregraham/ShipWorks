@@ -4992,7 +4992,9 @@ CREATE TABLE [dbo].[OnTracAccount]
 [PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_OnTracAccount] on [dbo].[OnTracAccount]'

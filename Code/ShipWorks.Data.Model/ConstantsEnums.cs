@@ -8280,6 +8280,10 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Phone. </summary>
 		Phone,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

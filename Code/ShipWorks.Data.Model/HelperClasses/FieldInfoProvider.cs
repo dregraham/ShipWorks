@@ -2248,6 +2248,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OnTracAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Phone, 15, 0, 0);
+			this.AddElementFieldInfo("OnTracAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)OnTracAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("OnTracAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)OnTracAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits OnTracProfileEntity's FieldInfo objects</summary>
 		private void InitOnTracProfileEntityInfos()

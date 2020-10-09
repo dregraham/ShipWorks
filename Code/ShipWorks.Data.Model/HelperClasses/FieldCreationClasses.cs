@@ -19432,6 +19432,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.Phone);}
 		}
+		/// <summary>Creates a new OnTracAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new OnTracAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity OnTracProfileEntity</summary>
