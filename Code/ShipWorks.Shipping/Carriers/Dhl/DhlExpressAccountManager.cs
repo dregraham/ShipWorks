@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Dhl
     /// <summary>
     /// Manage Dhl Express Accounts
     /// </summary>
-    [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
+    [Order(typeof(IInitializeForCurrentSession), 1)]
     [Component(SingleInstance = true)]
     public class DhlExpressAccountManager : IInitializeForCurrentSession, ICheckForChangesNeeded
     {

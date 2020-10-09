@@ -5617,6 +5617,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.UspsAccountId);}
 		}
+		/// <summary>Creates a new DhlExpressAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new DhlExpressAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>

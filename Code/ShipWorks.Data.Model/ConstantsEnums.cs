@@ -2422,6 +2422,10 @@ namespace ShipWorks.Data.Model
 		Phone,
 		///<summary>UspsAccountId. </summary>
 		UspsAccountId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

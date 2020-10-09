@@ -32,4 +32,10 @@ IF COL_LENGTH(N' [dbo].[OnTracAccount]', N'HubVersion') IS NULL
 ALTER TABLE [dbo].OnTracAccount ADD [HubVersion] [int] NULL
 IF COL_LENGTH(N' [dbo].[OnTracAccount]', N'HubCarrierId') IS NULL
 ALTER TABLE [dbo].[OnTracAccount] ADD [HubCarrierId] [uniqueidentifier] NULL
+PRINT N'Altering [dbo].[DhlExpressAccount]'
+GO
+IF COL_LENGTH(N' [dbo].[DhlExpressAccount]', N'HubVersion') IS NULL
+ALTER TABLE [dbo].[DhlExpressAccount] ADD [HubVersion] [int] NULL
+IF COL_LENGTH(N' [dbo].[DhlExpressAccount]', N'HubCarrierId') IS NULL
+ALTER TABLE [dbo].[DhlExpressAccount] ADD [HubCarrierId] [uniqueidentifier] NULL
 GO

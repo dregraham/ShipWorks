@@ -58,12 +58,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         {
             PersonAdapter newAddress = new PersonAdapter();
             newAddress.FirstName = address.FirstName;
-            newAddress.MiddleName = address.MiddleName;
+            newAddress.MiddleName = address.MiddleName ?? string.Empty;
             newAddress.LastName = address.LastName;
             newAddress.Company = address.Company;
             newAddress.Street1 = address.Street1;
-            newAddress.Street2 = address.Street2;
-            newAddress.Street3 = address.Street3;
+            newAddress.Street2 = address.Street2 ?? string.Empty;
+            newAddress.Street3 = address.Street3 ?? string.Empty;
             newAddress.City = address.City;
             newAddress.StateProvCode = address.StateProvCode;
             newAddress.PostalCode = address.PostalCode;
