@@ -23,8 +23,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         private readonly AutoMock mock;
         private readonly Mock<ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>> carrierAccountRepository;
         private readonly CarrierConfiguration payload;
-        private readonly ICarrierAccountDescription accountDescription;
-
+        
         private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
         public DhlCarrierSetupTest()
