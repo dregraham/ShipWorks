@@ -55,7 +55,6 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.Username = account.Username;
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
-            uspsAccount.HubCarrierId = config.HubCarrierID;
 
             if (uspsAccount.IsNew)
             {

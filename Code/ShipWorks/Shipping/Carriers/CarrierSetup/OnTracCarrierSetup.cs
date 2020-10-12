@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var additionalAccountInfo = config.AdditionalData["ontrac"].ToObject<OnTracAccountConfiguration>();
 
             var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
+            ontracAccount.HubVersion = config.HubVersion;
 
             ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
             ontracAccount.Password = SecureText.Encrypt(additionalAccountInfo.Password, additionalAccountInfo.AccountNumber.ToString());
