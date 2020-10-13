@@ -47,25 +47,25 @@ namespace ShipWorks.Warehouse.Configuration
         {
             if (licenseService.IsHub)
             {
-                try
+                IConfigurationEntity configuration = configurationData.FetchReadOnly();
+                if (!string.IsNullOrEmpty(configuration.WarehouseID))
                 {
-                    IConfigurationEntity configuration = configurationData.FetchReadOnly();
-                    if (!string.IsNullOrEmpty(configuration.WarehouseID))
+                    Task.Run(async () =>
                     {
-                        Task.Run(async () =>
+                        try
                         {
                             var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
                             await carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
-                        });
-                    }
-                }
-                catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
-                {
-                    log.Error("Error getting configuration", ex);
-                }
-                catch (WebException ex)
-                {
-                    log.Error("Error getting configuration", ex);
+                        }
+                        catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
+                        {
+                            log.Error("Error getting configuration", ex);
+                        }
+                        catch (WebException ex)
+                        {
+                            log.Error("Error getting configuration", ex);
+                        }
+                    });
                 }
             }
         }
