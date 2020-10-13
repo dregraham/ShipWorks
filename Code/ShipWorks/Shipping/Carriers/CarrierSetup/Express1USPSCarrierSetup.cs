@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
@@ -23,7 +23,6 @@ namespace ShipWorks.Shipping.CarrierSetup
     public class Express1UspsCarrierSetup : BaseCarrierSetup<UspsAccountEntity, IUspsAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> express1AccountRepository;
-        private readonly IUspsWebClient webClient;
 
         /// <summary>
         /// Constructor
@@ -31,12 +30,10 @@ namespace ShipWorks.Shipping.CarrierSetup
         public Express1UspsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             IIndex<ShipmentTypeCode, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> accountRepositoryFactory,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper,
-            Func<UspsResellerType, IUspsWebClient> uspsWebClientFactory) :
+            IShipmentPrintHelper printHelper) :
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepositoryFactory[ShipmentTypeCode.Express1Usps])
         {
             this.express1AccountRepository = accountRepositoryFactory[ShipmentTypeCode.Express1Usps];
-            this.webClient = uspsWebClientFactory(UspsResellerType.Express1);
         }
 
         /// <summary>
@@ -57,20 +54,22 @@ namespace ShipWorks.Shipping.CarrierSetup
             express1Account.Password = SecureText.Encrypt(account.Password, account.Username);
             express1Account.HubVersion = config.HubVersion;
 
+            GetAddress(config.Address).CopyTo(express1Account, string.Empty);
+
             if (express1Account.IsNew)
             {
-                webClient.PopulateUspsAccountEntity(express1Account);
-
+                express1Account.UspsReseller = (int) UspsResellerType.Express1;
+                express1Account.ContractType = (int) UspsAccountContractType.NotApplicable;
                 express1Account.PendingInitialAccount = (int) UspsPendingAccountType.None;
                 express1Account.ShipEngineCarrierId = config.ShipEngineCarrierID;
+                express1Account.CreatedDate = DateTime.UtcNow;
+                express1Account.Description = UspsAccountManager.GetDefaultDescription(express1Account);
                 express1Account.InitializeNullsToDefault();
             }
 
-            GetAddress(config.Address).CopyTo(express1Account, string.Empty);
-
             express1AccountRepository.Save(express1Account);
 
-            SetupDefaultsIfNeeded(ShipmentTypeCode.Usps, config.RequestedLabelFormat);
+            SetupDefaultsIfNeeded(ShipmentTypeCode.Express1Usps, config.RequestedLabelFormat);
         }
 
         /// <summary>
