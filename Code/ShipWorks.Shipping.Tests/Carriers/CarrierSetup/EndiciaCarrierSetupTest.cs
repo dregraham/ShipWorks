@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
 using Moq;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
+        public async Task Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
             var accounts = new List<EndiciaAccountEntity>
             {
@@ -58,13 +59,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             };
 
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
-            mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Never);
-        }        
+        }
 
         [Fact]
-        public void Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
+        public async Task Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
         {
             var accounts = new List<EndiciaAccountEntity>
             {
@@ -72,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 {
                     AccountNumber = "foo",
                     HubCarrierId = carrierId,
-                    HubVersion = 1, 
+                    HubVersion = 1,
                     IsNew = false
                 }
             };
@@ -80,13 +81,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.AccountNumber == "foo")), Times.Once);
         }
 
         [Fact]
-        public void Setup_SavesEncryptedPassphrase()
+        public async Task Setup_SavesEncryptedPassphrase()
         {
             var accounts = new List<EndiciaAccountEntity>
             {
@@ -95,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => SecureText.Decrypt(y.ApiUserPassword, "Endicia") == "passphrase")), Times.Once);
         }

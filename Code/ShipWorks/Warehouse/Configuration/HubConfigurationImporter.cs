@@ -45,17 +45,18 @@ namespace ShipWorks.Warehouse.Configuration
         /// </summary>
         public void InitializeForCurrentSession()
         {
-            if (licenseService.IsHub && Program.ExecutionMode is ShipWorks.ApplicationCore.ExecutionMode.UserInterfaceExecutionMode)
+            if (licenseService.IsHub)
             {
                 try
                 {
                     IConfigurationEntity configuration = configurationData.FetchReadOnly();
                     if (!string.IsNullOrEmpty(configuration.WarehouseID))
                     {
-                        var task = Task.Run(async () => await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false));
-                        var hubConfig = task.Result;
-
-                        carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                        Task.Run(async () =>
+                        {
+                            var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
+                            await carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                        });
                     }
                 }
                 catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)

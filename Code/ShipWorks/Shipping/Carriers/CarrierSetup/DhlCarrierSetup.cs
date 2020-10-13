@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.Carriers.CarrierSetup
@@ -18,26 +22,30 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class DhlCarrierSetup : BaseCarrierSetup<DhlExpressAccountEntity, IDhlExpressAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
+        private readonly IShipEngineWebClient webClient;
         private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
         /// Constructor
         /// </summary>
+        [NDependIgnoreTooManyParams]
         public DhlCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             IShippingSettings shippingSettings,
             IShipmentPrintHelper printHelper,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
-            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
+            IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory,
+            IShipEngineWebClient webClient)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
+            this.webClient = webClient;
             accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
         }
 
         /// <summary>
         /// Setup a DHL account from data imported from the hub
         /// </summary>
-        public void Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config)
         {
             if (accountRepository.AccountsReadOnly.Any(x =>
                 x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
@@ -53,9 +61,17 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             if (dhlAccount.IsNew)
             {
-                dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
-                dhlAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
-                dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
+                GenericResult<string> connectAccountResult = await webClient.ConnectDhlAccount(additionalAccountInfo.AccountNumber);
+                if (connectAccountResult.Success)
+                {
+                    dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
+                    dhlAccount.ShipEngineCarrierId = connectAccountResult.Value;
+                    dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
+                }
+                else
+                {
+                    throw connectAccountResult.Exception;
+                }
             }
 
             accountRepository.Save(dhlAccount);

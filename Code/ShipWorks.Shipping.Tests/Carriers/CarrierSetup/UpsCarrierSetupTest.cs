@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -60,16 +61,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
 
         [Fact]
-        public void Setup_CreatesNewAccount_WhenNoPreviousUPSAccountsExist()
+        public async Task Setup_CreatesNewAccount_WhenNoPreviousUPSAccountsExist()
         {
             var testObject = mock.Create<UpsCarrierSetup>();
-            testObject.Setup(payload);
+            await testObject.Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<UpsAccountEntity>()), Times.Once);
         }
 
         [Fact]
-        public void Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
+        public async Task Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
             var accounts = new List<UpsAccountEntity>
             {
@@ -83,13 +84,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<UpsCarrierSetup>();
-            testObject.Setup(payload);
+            await testObject.Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<UpsAccountEntity>()), Times.Never);
         }
 
         [Fact]
-        public void Setup_ReturnsExistingAccount_WhenCarrierIDMatches()
+        public async Task Setup_ReturnsExistingAccount_WhenCarrierIDMatches()
         {
             var accounts = new List<UpsAccountEntity>
             {
@@ -106,16 +107,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<UpsCarrierSetup>();
-            testObject.Setup(payload);
+            await testObject.Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<UpsAccountEntity>(y => y.AccountNumber == "user")), Times.Once);
         }
 
         [Fact]
-        public void Setup_CallsInitializationMethods_WhenNoPreviousUPSAccountsExist()
+        public async Task Setup_CallsInitializationMethods_WhenNoPreviousUPSAccountsExist()
         {
             var testObject = mock.Create<UpsCarrierSetup>();
-            testObject.Setup(payload);
+            await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.UpsOnLineTools, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -124,7 +125,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_DoesNotCallInitilizationMethods_WhenPreviousUPSAccountsExist()
+        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousUPSAccountsExist()
         {
             var accounts = new List<UpsAccountEntity>
             {
@@ -140,7 +141,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<UpsCarrierSetup>();
-            testObject.Setup(payload);
+            await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);

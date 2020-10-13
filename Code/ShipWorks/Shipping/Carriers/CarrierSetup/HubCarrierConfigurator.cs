@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
@@ -30,13 +31,13 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Configure carriers
         /// </summary>
-        public void Configure(List<CarrierConfiguration> configs)
+        public async Task Configure(List<CarrierConfiguration> configs)
         {
             foreach (var config in configs)
             {
                 try
                 {
-                    carrierSetupFactory[config.CarrierType]?.Setup(config);
+                    await carrierSetupFactory[config.CarrierType]?.Setup(config);
                 }
                 catch (Exception ex)
                 {

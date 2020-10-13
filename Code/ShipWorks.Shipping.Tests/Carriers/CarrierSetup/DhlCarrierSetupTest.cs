@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
 using Moq;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         private readonly AutoMock mock;
         private readonly Mock<ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>> carrierAccountRepository;
         private readonly CarrierConfiguration payload;
-        
+
         private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
         public DhlCarrierSetupTest()
@@ -48,14 +49,14 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_Returns_WhenCarrierIdMatches_AndHubVersionIsEqual()
+        public async Task Setup_Returns_WhenCarrierIdMatches_AndHubVersionIsEqual()
         {
             var carrierDescription = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountDescription>>();
 
             carrierDescription.Setup(x => x[ShipmentTypeCode.DhlExpress])
                 .Returns(new DhlExpressAccountDescription());
             mock.Provide(carrierDescription.Object);
-            
+
             var accounts = new List<IDhlExpressAccountEntity>
             {
                 new DhlExpressAccountEntity
@@ -68,13 +69,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<DhlCarrierSetup>().Setup(payload);
+            await mock.Create<DhlCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<DhlExpressAccountEntity>()), Times.Never);
         }
 
         [Fact]
-        public void Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
+        public async Task Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
         {
             var carrierDescription = mock.MockRepository.Create<IIndex<ShipmentTypeCode, ICarrierAccountDescription>>();
 
@@ -88,16 +89,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 {
                     AccountNumber = 123,
                     HubCarrierId = carrierId,
-                    HubVersion = 1
+                    HubVersion = 1,
+                    IsNew = false
                 }
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<DhlCarrierSetup>().Setup(payload);
+            await mock.Create<DhlCarrierSetup>().Setup(payload);
 
-            carrierAccountRepository.Verify(x => 
+            carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<DhlExpressAccountEntity>(y => y.AccountNumber == 123)), Times.Once);
 
         }

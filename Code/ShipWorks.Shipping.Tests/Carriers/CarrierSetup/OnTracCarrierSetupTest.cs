@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.Security;
 using Moq;
@@ -45,7 +46,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public void Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
+        public async Task Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
             var accounts = new List<OnTracAccountEntity>
             {
@@ -57,17 +58,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 }
             };
 
-            carrierAccountRepository.Setup(x => 
+            carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload);
 
-            carrierAccountRepository.Verify(x => 
+            carrierAccountRepository.Verify(x =>
                 x.Save(It.IsAny<OnTracAccountEntity>()), Times.Never);
         }
 
         [Fact]
-        public void Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
+        public async Task Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
         {
             var accounts = new List<OnTracAccountEntity>
             {
@@ -79,20 +80,20 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 }
             };
 
-            carrierAccountRepository.Setup(x => 
+            carrierAccountRepository.Setup(x =>
                 x.Accounts).Returns(accounts);
 
-            carrierAccountRepository.Setup(x => 
+            carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload);
 
-            carrierAccountRepository.Verify(x => 
+            carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<OnTracAccountEntity>(y => y.AccountNumber == 123)), Times.Once);
         }
 
         [Fact]
-        public void Setup_SavesEncryptedPassword()
+        public async Task Setup_SavesEncryptedPassword()
         {
             var accounts = new List<OnTracAccountEntity>
             {
@@ -103,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<OnTracAccountEntity>(y =>

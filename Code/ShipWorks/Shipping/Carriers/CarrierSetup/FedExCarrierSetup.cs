@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
@@ -38,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Setup a FedEx account from data imported from the hub
         /// </summary>
-        public void Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config)
         {
             if (fedExAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {

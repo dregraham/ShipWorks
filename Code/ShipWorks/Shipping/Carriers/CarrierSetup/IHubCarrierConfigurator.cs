@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 
 namespace ShipWorks.Shipping.Carriers.CarrierSetup
@@ -11,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Configure carriers
         /// </summary>
-        void Configure(List<CarrierConfiguration> carrierConfigurations);
+        Task Configure(List<CarrierConfiguration> carrierConfigurations);
     }
 }

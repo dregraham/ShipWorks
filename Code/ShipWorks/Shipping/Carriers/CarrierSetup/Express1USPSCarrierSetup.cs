@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Creates a new Express1 USPS account from data imported from the hub
         /// </summary>
-        public void Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config)
         {
             if (express1AccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {
