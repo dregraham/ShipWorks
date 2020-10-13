@@ -24,8 +24,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Constructor
         /// </summary>
         public DhlCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
-            IShippingSettings shippingSettings, 
-            IShipmentPrintHelper printHelper, 
+            IShippingSettings shippingSettings,
+            IShipmentPrintHelper printHelper,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
             IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         public void Setup(CarrierConfiguration config)
         {
-            if (accountRepository.AccountsReadOnly.Any(x => 
+            if (accountRepository.AccountsReadOnly.Any(x =>
                 x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {
                 return;
@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             if (dhlAccount.IsNew)
             {
                 dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
+                dhlAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
                 dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
             }
 
@@ -66,6 +67,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         private DhlExpressAccountEntity GetOrCreateAccountEntity(Guid carrierId) =>
             accountRepository.Accounts.FirstOrDefault(x => x.HubCarrierId == carrierId)
-            ?? new DhlExpressAccountEntity {HubCarrierId = carrierId};
+            ?? new DhlExpressAccountEntity { HubCarrierId = carrierId };
     }
 }
