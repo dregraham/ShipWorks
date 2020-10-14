@@ -63,8 +63,8 @@ namespace ShipWorks.Shipping.CarrierSetup
                 if (!string.IsNullOrEmpty(account.Signature))
                 {
                     ShippingSettingsEntity settings = shippingSettings.Fetch();
-                    settings.EndiciaCustomsSigner = account.Signature;
-                    settings.EndiciaCustomsCertify = true;
+                    settings.Express1EndiciaCustomsSigner = account.Signature;
+                    settings.Express1EndiciaCustomsCertify = true;
                     shippingSettings.Save(settings);
                 }
 
