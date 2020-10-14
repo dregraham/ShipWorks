@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             this.payload = new CarrierConfiguration
             {
                 AdditionalData = JObject.Parse("{usps: {username: \"user\", password: \"password\" } }"),
-                HubVersion = 1,
+                HubVersion = 2,
                 HubCarrierID = carrierID,
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress(),
@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 new UspsAccountEntity
                 {
                     HubCarrierId = carrierID,
-                    HubVersion = 1
+                    HubVersion = 2
                 }
             };
 
@@ -191,6 +191,44 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             var testObject = mock.Create<UspsCarrierSetup>();
             await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
+        }
+
+        [Fact]
+        public async Task Setup_UpdatesHubVersion()
+        {
+            var accounts = new List<UspsAccountEntity>
+            {
+                new UspsAccountEntity
+                {
+                    IsNew = false,
+                    HubVersion = 0,
+                    HubCarrierId = carrierID,
+                }
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<UspsCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.HubVersion == 2)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_SetsHubCarrierID()
+        {
+            var accounts = new List<UspsAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<UspsCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.HubCarrierId == carrierID)), Times.Once);
         }
     }
 }

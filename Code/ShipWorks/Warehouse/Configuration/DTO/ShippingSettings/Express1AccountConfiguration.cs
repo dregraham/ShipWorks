@@ -17,5 +17,10 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
         /// The Express1 USPS password
         /// </summary>
         public string Password { get; set; }
+
+        /// <summary>
+        /// The Customs Signature
+        /// </summary>
+        public string Signature { get; set; }
     }
 }

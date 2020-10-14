@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Autofac.Features.Indexed;
-using Interapptive.Shared.Utility;
+using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -12,146 +11,161 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
-using ShipWorks.Shipping.Carriers.Dhl;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipEngine;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 {
-    public class DhlCarrierSetupTest
+    public class Express1EndiciaCarrierSetupTest
     {
         private readonly AutoMock mock;
-        private readonly Mock<ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>> carrierAccountRepository;
+        private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> carrierAccountRepository;
         private readonly CarrierConfiguration payload;
         private readonly Mock<IShipmentTypeSetupActivity> shipmentTypeSetupActivity;
         private readonly Mock<IShippingSettings> shippingSettings;
         private readonly Mock<IShipmentPrintHelper> printHelper;
-        private readonly Mock<IShipEngineWebClient> shipEngineWebClient;
 
         private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
-        public DhlCarrierSetupTest()
+        public Express1EndiciaCarrierSetupTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             payload = new CarrierConfiguration
             {
-                AdditionalData = JObject.Parse("{dhl: {accountNumber: 123, description: \"description\"}}"),
+                AdditionalData = JObject.Parse("{express1: {username: \"1234\", password: \"password\"}}"),
                 HubVersion = 2,
                 HubCarrierID = carrierId,
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress()
             };
 
-            carrierAccountRepository =
-                mock.Mock<ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity>>();
+            carrierAccountRepository = mock.Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
+
+            var factory = mock.CreateMock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>>();
+            factory.Setup(x => x[ShipmentTypeCode.Express1Endicia]).Returns(carrierAccountRepository.Object);
+            mock.Provide(factory.Object);
 
             this.shipmentTypeSetupActivity = mock.Mock<IShipmentTypeSetupActivity>();
             this.shippingSettings = mock.Mock<IShippingSettings>();
             this.printHelper = mock.Mock<IShipmentPrintHelper>();
-
-            var carrierDescription = mock.CreateMock<IIndex<ShipmentTypeCode, ICarrierAccountDescription>>();
-
-            carrierDescription.Setup(x => x[ShipmentTypeCode.DhlExpress])
-                .Returns(new DhlExpressAccountDescription());
-            mock.Provide(carrierDescription.Object);
-
-            shipEngineWebClient = mock.Mock<IShipEngineWebClient>();
-            shipEngineWebClient.Setup(x => x.ConnectDhlAccount(It.IsAny<string>())).Returns(Task.FromResult(GenericResult.FromSuccess<string>("test")));
         }
 
         [Fact]
-        public async Task Setup_Returns_WhenCarrierIdMatches_AndHubVersionIsEqual()
+        public async Task Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
-            var accounts = new List<IDhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
-                new DhlExpressAccountEntity
+                new EndiciaAccountEntity
                 {
-                    AccountNumber = 123,
+                    AccountNumber = "123",
                     HubCarrierId = carrierId,
-                    HubVersion = 2
+                    HubVersion = 2,
+                    EndiciaReseller = (int) EndiciaReseller.Express1
                 }
             };
 
-            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+            carrierAccountRepository.Setup(x =>
+                x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<DhlCarrierSetup>().Setup(payload);
+            await mock.Create<Express1EndiciaCarrierSetup>().Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.IsAny<DhlExpressAccountEntity>()), Times.Never);
+            carrierAccountRepository.Verify(x =>
+                x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Never);
         }
 
         [Fact]
         public async Task Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
-                new DhlExpressAccountEntity
+                new EndiciaAccountEntity
                 {
-                    AccountNumber = 123,
+                    AccountNumber = "123",
                     HubCarrierId = carrierId,
                     HubVersion = 1,
-                    IsNew = false
+                    EndiciaReseller = (int) EndiciaReseller.Express1,
+                    IsNew = false,
                 }
             };
 
-            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
-            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+            carrierAccountRepository.Setup(x =>
+                x.Accounts).Returns(accounts);
 
-            await mock.Create<DhlCarrierSetup>().Setup(payload);
+            carrierAccountRepository.Setup(x =>
+                x.AccountsReadOnly).Returns(accounts);
+
+            await mock.Create<Express1EndiciaCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x =>
-                x.Save(It.Is<DhlExpressAccountEntity>(y => y.AccountNumber == 123)), Times.Once);
-
+                x.Save(It.Is<EndiciaAccountEntity>(y => y.AccountNumber == "123")), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_CreatesNewAccount_WhenNoPreviousDhlAccountsExist()
+        public async Task Setup_SavesEncryptedPassword()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<DhlCarrierSetup>();
+            await mock.Create<Express1EndiciaCarrierSetup>().Setup(payload);
+
+            carrierAccountRepository.Verify(x =>
+                x.Save(It.Is<EndiciaAccountEntity>(y =>
+                    SecureText.Decrypt(y.ApiUserPassword, "Endicia") == "password")), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_CreatesNewAccount_WhenNoPreviousExpress1AccountsExist()
+        {
+            var accounts = new List<EndiciaAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<Express1EndiciaCarrierSetup>();
             await testObject.Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.IsAny<DhlExpressAccountEntity>()), Times.Once);
+            carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_CallsInitializationMethods_WhenNoPreviousDhlAccountsExist()
+        public async Task Setup_CallsInitializationMethods_WhenNoPreviousExpress1AccountsExist()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<DhlCarrierSetup>();
+            var testObject = mock.Create<Express1EndiciaCarrierSetup>();
             await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
-                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.DhlExpress, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
-            shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.DhlExpress), Times.Once);
-            printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.DhlExpress), Times.Once);
+                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Express1Endicia, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
+            shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.Express1Endicia), Times.Once);
+            printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.Express1Endicia), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousDhlAccountsExist()
+        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousExpress1AccountsExist()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
-                new DhlExpressAccountEntity
+                new EndiciaAccountEntity
                 {
-                    AccountNumber = 1234,
+                    AccountNumber = "123",
                     FirstName = "blah",
                     IsNew = false
                 }
@@ -160,7 +174,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<DhlCarrierSetup>();
+            var testObject = mock.Create<Express1EndiciaCarrierSetup>();
             await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
@@ -170,21 +184,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         }
 
         [Fact]
-        public async Task Setup_RethrowsShipEngineException_WhenWebClientCallFails()
-        {
-            shipEngineWebClient.Setup(x => x.ConnectDhlAccount(It.IsAny<string>())).Returns(Task.FromResult(GenericResult.FromError<string>(new WebException(), "test")));
-
-            var testObject = mock.Create<DhlCarrierSetup>();
-
-            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
-        }
-
-        [Fact]
         public async Task Setup_UpdatesHubVersion()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
-                new DhlExpressAccountEntity
+                new EndiciaAccountEntity
                 {
                     IsNew = false,
                     HubVersion = 0,
@@ -195,26 +199,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<DhlCarrierSetup>();
+            var testObject = mock.Create<Express1EndiciaCarrierSetup>();
             await testObject.Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubVersion == 2)), Times.Once);
+            carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
 
         [Fact]
         public async Task Setup_SetsHubCarrierID()
         {
-            var accounts = new List<DhlExpressAccountEntity>
+            var accounts = new List<EndiciaAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<DhlCarrierSetup>();
+            var testObject = mock.Create<Express1EndiciaCarrierSetup>();
             await testObject.Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
+            carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
         }
     }
 }
