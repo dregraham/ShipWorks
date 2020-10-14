@@ -47,11 +47,10 @@ namespace ShipWorks.Shipping.CarrierSetup
                 return;
             }
 
-            var account = config.AdditionalData["express1"].ToObject<Express1UspsAccountConfiguration>();
+            var account = config.AdditionalData["express1"].ToObject<Express1AccountConfiguration>();
 
             UspsAccountEntity express1Account = GetOrCreateAccountEntity(config.HubCarrierID);
 
-            express1Account.Username = account.Username;
             express1Account.Password = SecureText.Encrypt(account.Password, account.Username);
             express1Account.HubVersion = config.HubVersion;
 
@@ -59,7 +58,7 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             if (express1Account.IsNew)
             {
-                express1Account.UspsReseller = (int) UspsResellerType.Express1;
+                express1Account.Username = account.Username;
                 express1Account.ContractType = (int) UspsAccountContractType.NotApplicable;
                 express1Account.PendingInitialAccount = (int) UspsPendingAccountType.None;
                 express1Account.ShipEngineCarrierId = config.ShipEngineCarrierID;

@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly IShippingSettings shippingSettings;
-        private readonly IEncryptionProvider encryptionProvider;
 
         /// <summary>
         /// Constructor
@@ -29,13 +28,11 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public UpsCarrierSetup(IShipmentTypeSetupActivity shipmentTypeSetupActivity,
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             IShippingSettings shippingSettings,
-            IShipmentPrintHelper printHelper,
-            IEncryptionProviderFactory encryptionProviderFactory) :
+            IShipmentPrintHelper printHelper) :
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, upsAccountRepository)
         {
             this.upsAccountRepository = upsAccountRepository;
             this.shippingSettings = shippingSettings;
-            this.encryptionProvider = encryptionProviderFactory.CreateSecureTextEncryptionProvider("UPS");
         }
 
         /// <summary>
@@ -53,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
             ShippingSettingsEntity settings = shippingSettings.Fetch();
-            settings.UpsAccessKey = encryptionProvider.Encrypt(account.CustomerAccessNumber);
+            settings.UpsAccessKey = SecureText.Encrypt(account.CustomerAccessNumber, "UPS");
             shippingSettings.Save(settings);
 
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);

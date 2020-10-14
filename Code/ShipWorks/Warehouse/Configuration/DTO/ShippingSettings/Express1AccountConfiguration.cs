@@ -6,7 +6,7 @@ namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
     /// DTO for importing Express1 USPS account data from the hub
     /// </summary>
     [Obfuscation]
-    public class Express1UspsAccountConfiguration
+    public class Express1AccountConfiguration
     {
         /// <summary>
         /// The Express1 USPS username

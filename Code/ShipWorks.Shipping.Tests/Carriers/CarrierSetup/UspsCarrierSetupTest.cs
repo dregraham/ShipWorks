@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Licensing.Activation;
@@ -9,6 +11,8 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -52,6 +56,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         [Fact]
         public async Task Setup_CreatesNewAccount_WhenNoPreviousUSPSAccountsExist()
         {
+            var accounts = new List<UspsAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
             var testObject = mock.Create<UspsCarrierSetup>();
             await testObject.Setup(payload);
 
@@ -85,7 +96,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             {
                 new UspsAccountEntity
                 {
-                    Username = "user",
+                    Username = "username",
                     FirstName = "blah",
                     IsNew = false,
                     HubCarrierId = carrierID
@@ -98,12 +109,19 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             var testObject = mock.Create<UspsCarrierSetup>();
             await testObject.Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.Username == "user" && y.FirstName == "blah")), Times.Once);
+            carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.Username == "username" && y.FirstName == "blah")), Times.Once);
         }
 
         [Fact]
         public async Task Setup_CallsInitializationMethods_WhenNoPreviousUSPSAccountsExist()
         {
+            var accounts = new List<UspsAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
             var testObject = mock.Create<UspsCarrierSetup>();
             await testObject.Setup(payload);
 
@@ -136,6 +154,43 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
             shippingSettings.Verify(x => x.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()), Times.Never);
             printHelper.Verify(x => x.InstallDefaultRules(It.IsAny<ShipmentTypeCode>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Setup_SavesEncryptedPassphrase()
+        {
+            var accounts = new List<UspsAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            await mock.Create<UspsCarrierSetup>().Setup(payload);
+
+            carrierAccountRepository.Verify(x =>
+                x.Save(It.Is<UspsAccountEntity>(y =>
+                    SecureText.Decrypt(y.Password, y.Username) == "password")), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_RethrowsException_WhenWebClientCallFails()
+        {
+            var accounts = new List<UspsAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var webClient = mock.Mock<IUspsWebClient>();
+            webClient.Setup(x => x.PopulateUspsAccountEntity(It.IsAny<UspsAccountEntity>())).Throws(new WebException());
+
+            var factory = mock.CreateMock<Func<UspsResellerType, IUspsWebClient>>();
+            factory.Setup(x => x(It.IsAny<UspsResellerType>())).Returns(webClient.Object);
+
+            var testObject = mock.Create<UspsCarrierSetup>();
+            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
         }
     }
 }

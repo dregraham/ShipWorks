@@ -49,13 +49,13 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var ontracAccount = GetOrCreateAccountEntity(config.HubCarrierID);
             ontracAccount.HubVersion = config.HubVersion;
 
-            ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
             ontracAccount.Password = SecureText.Encrypt(additionalAccountInfo.Password, additionalAccountInfo.AccountNumber.ToString());
 
             GetAddress(config.Address).CopyTo(ontracAccount, string.Empty);
 
             if (ontracAccount.IsNew)
             {
+                ontracAccount.AccountNumber = additionalAccountInfo.AccountNumber;
                 ontracAccount.Description = OnTracAccountManager.GetDefaultDescription(ontracAccount);
                 ontracAccount.InitializeNullsToDefault();
             }

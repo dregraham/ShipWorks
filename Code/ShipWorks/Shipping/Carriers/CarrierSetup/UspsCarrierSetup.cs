@@ -53,14 +53,13 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             UspsAccountEntity uspsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
-            uspsAccount.Username = account.Username;
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
 
             if (uspsAccount.IsNew)
             {
+                uspsAccount.Username = account.Username;
                 webClient.PopulateUspsAccountEntity(uspsAccount);
-
                 uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
                 uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
                 uspsAccount.InitializeNullsToDefault();

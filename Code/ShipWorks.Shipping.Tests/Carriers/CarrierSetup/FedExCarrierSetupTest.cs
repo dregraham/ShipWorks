@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Moq;
 using Newtonsoft.Json.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Shared;
@@ -59,10 +62,16 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             this.printHelper = mock.Mock<IShipmentPrintHelper>();
         }
 
-
         [Fact]
         public async Task Setup_CreatesNewAccount_WhenNoPreviousFedExAccountsExist()
         {
+            var accounts = new List<FedExAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
             var testObject = mock.Create<FedExCarrierSetup>();
             await testObject.Setup(payload);
 
@@ -115,6 +124,13 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         [Fact]
         public async Task Setup_CallsInitializationMethods_WhenNoPreviousFedExAccountsExist()
         {
+            var accounts = new List<FedExAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
             var testObject = mock.Create<FedExCarrierSetup>();
             await testObject.Setup(payload);
 
@@ -147,6 +163,26 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
             shippingSettings.Verify(x => x.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()), Times.Never);
             printHelper.Verify(x => x.InstallDefaultRules(It.IsAny<ShipmentTypeCode>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task Setup_RethrowsException_WhenShippingClerkCallFails()
+        {
+            var accounts = new List<FedExAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var clerk = mock.Mock<IFedExShippingClerk>();
+            clerk.Setup(x => x.RegisterAccount(It.IsAny<EntityBase2>())).Throws(new WebException());
+
+            var factory = mock.Mock<IFedExShippingClerkFactory>();
+            factory.Setup(x => x.Create()).Returns(clerk.Object);
+
+            var testObject = mock.Create<FedExCarrierSetup>();
+            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
         }
     }
 }

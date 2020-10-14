@@ -12,6 +12,7 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Shared;
 using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
 using Xunit;
@@ -23,6 +24,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         private readonly AutoMock mock;
         private readonly Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>> carrierAccountRepository;
         private readonly CarrierConfiguration payload;
+        private readonly Mock<IShipmentTypeSetupActivity> shipmentTypeSetupActivity;
+        private readonly Mock<IShippingSettings> shippingSettings;
+        private readonly Mock<IShipmentPrintHelper> printHelper;
 
         private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
@@ -38,6 +42,10 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress()
             };
+
+            this.shipmentTypeSetupActivity = mock.Mock<IShipmentTypeSetupActivity>();
+            this.shippingSettings = mock.Mock<IShippingSettings>();
+            this.printHelper = mock.Mock<IShipmentPrintHelper>();
 
             carrierAccountRepository = mock.Mock<ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity>>();
             mock.Mock<IShipmentTypeSetupActivity>();
@@ -98,7 +106,69 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             await mock.Create<EndiciaCarrierSetup>().Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => SecureText.Decrypt(y.ApiUserPassword, "Endicia") == "passphrase")), Times.Once);
+            carrierAccountRepository.Verify(x =>
+                x.Save(It.Is<EndiciaAccountEntity>(y =>
+                    SecureText.Decrypt(y.ApiUserPassword, "Endicia") == "passphrase")), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_CreatesNewAccount_WhenNoPreviousEndiciaAccountsExist()
+        {
+            var accounts = new List<EndiciaAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<EndiciaCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_CallsInitializationMethods_WhenNoPreviousEndiciaAccountsExist()
+        {
+            var accounts = new List<EndiciaAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<EndiciaCarrierSetup>();
+            await testObject.Setup(payload);
+
+            shipmentTypeSetupActivity
+                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Endicia, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
+            shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.Endicia), Times.Once);
+            printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.Endicia), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousEndiciaAccountsExist()
+        {
+            var accounts = new List<EndiciaAccountEntity>
+            {
+                new EndiciaAccountEntity
+                {
+                    AccountNumber = "test",
+                    FirstName = "blah",
+                    IsNew = false
+                }
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<EndiciaCarrierSetup>();
+            await testObject.Setup(payload);
+
+            shipmentTypeSetupActivity
+                .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
+            shippingSettings.Verify(x => x.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()), Times.Never);
+            printHelper.Verify(x => x.InstallDefaultRules(It.IsAny<ShipmentTypeCode>()), Times.Never);
         }
     }
 }

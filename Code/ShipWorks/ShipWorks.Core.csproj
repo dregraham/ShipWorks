@@ -1563,7 +1563,7 @@
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\DhlAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\EndiciaAccountConfiguration.cs" />
-    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\Express1UspsAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\Express1AccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UpsAccountConfiguration.cs" />

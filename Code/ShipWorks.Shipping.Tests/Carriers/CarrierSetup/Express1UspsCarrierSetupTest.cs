@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
 using Interapptive.Shared.Security;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -10,7 +11,8 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Shared;
@@ -19,10 +21,10 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 {
-    public class OnTracCarrierSetupTest
+    public class Express1UspsCarrierSetupTest
     {
         private readonly AutoMock mock;
-        private readonly Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>> carrierAccountRepository;
+        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>> carrierAccountRepository;
         private readonly CarrierConfiguration payload;
         private readonly Mock<IShipmentTypeSetupActivity> shipmentTypeSetupActivity;
         private readonly Mock<IShippingSettings> shippingSettings;
@@ -30,20 +32,24 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
         private readonly Guid carrierId = new Guid("117CD221-EC30-41EB-BBB3-58E6097F45CC");
 
-        public OnTracCarrierSetupTest()
+        public Express1UspsCarrierSetupTest()
         {
             mock = AutoMockExtensions.GetLooseThatReturnsMocks();
 
             payload = new CarrierConfiguration
             {
-                AdditionalData = JObject.Parse("{ontrac: {accountNumber: 123, password: \"password\"}}"),
+                AdditionalData = JObject.Parse("{express1: {username: \"user\", password: \"password\"}}"),
                 HubVersion = 2,
                 HubCarrierID = carrierId,
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress()
             };
 
-            carrierAccountRepository = mock.Mock<ICarrierAccountRepository<OnTracAccountEntity, IOnTracAccountEntity>>();
+            carrierAccountRepository = mock.Mock<ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>();
+
+            var factory = mock.CreateMock<IIndex<ShipmentTypeCode, ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity>>>();
+            factory.Setup(x => x[ShipmentTypeCode.Express1Usps]).Returns(carrierAccountRepository.Object);
+            mock.Provide(factory.Object);
 
             this.shipmentTypeSetupActivity = mock.Mock<IShipmentTypeSetupActivity>();
             this.shippingSettings = mock.Mock<IShippingSettings>();
@@ -53,35 +59,37 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
         [Fact]
         public async Task Setup_Returns_WhenCarrierIDMatches_AndHubVersionIsEqual()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
-                new OnTracAccountEntity
+                new UspsAccountEntity
                 {
-                    AccountNumber = 123,
+                    Username = "username",
                     HubCarrierId = carrierId,
-                    HubVersion = 2
+                    HubVersion = 2,
+                    UspsReseller = (int) UspsResellerType.Express1
                 }
             };
 
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x =>
-                x.Save(It.IsAny<OnTracAccountEntity>()), Times.Never);
+                x.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
         }
 
         [Fact]
         public async Task Setup_ReturnsExistingAccount_WhenCarriedIdMatches()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
-                new OnTracAccountEntity
+                new UspsAccountEntity
                 {
-                    AccountNumber = 1234,
+                    Username = "username",
                     HubCarrierId = carrierId,
                     HubVersion = 1,
+                    UspsReseller = (int) UspsResellerType.Express1,
                     IsNew = false,
                 }
             };
@@ -92,72 +100,72 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x =>
-                x.Save(It.Is<OnTracAccountEntity>(y => y.AccountNumber == 1234)), Times.Once);
+                x.Save(It.Is<UspsAccountEntity>(y => y.Username == "username")), Times.Once);
         }
 
         [Fact]
         public async Task Setup_SavesEncryptedPassword()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
 
             carrierAccountRepository.Verify(x =>
-                x.Save(It.Is<OnTracAccountEntity>(y =>
-                    SecureText.Decrypt(y.Password, y.AccountNumber.ToString()) == "password")), Times.Once);
+                x.Save(It.Is<UspsAccountEntity>(y =>
+                    SecureText.Decrypt(y.Password, y.Username) == "password")), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_CreatesNewAccount_WhenNoPreviousOnTracAccountsExist()
+        public async Task Setup_CreatesNewAccount_WhenNoPreviousExpress1AccountsExist()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<OnTracCarrierSetup>();
+            var testObject = mock.Create<Express1UspsCarrierSetup>();
             await testObject.Setup(payload);
 
-            carrierAccountRepository.Verify(x => x.Save(It.IsAny<OnTracAccountEntity>()), Times.Once);
+            carrierAccountRepository.Verify(x => x.Save(It.IsAny<UspsAccountEntity>()), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_CallsInitializationMethods_WhenNoPreviousOnTracAccountsExist()
+        public async Task Setup_CallsInitializationMethods_WhenNoPreviousExpress1AccountsExist()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
             };
 
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<OnTracCarrierSetup>();
+            var testObject = mock.Create<Express1UspsCarrierSetup>();
             await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
-                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.OnTrac, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
-            shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.OnTrac), Times.Once);
-            printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.OnTrac), Times.Once);
+                .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Express1Usps, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
+            shippingSettings.Verify(x => x.MarkAsConfigured(ShipmentTypeCode.Express1Usps), Times.Once);
+            printHelper.Verify(x => x.InstallDefaultRules(ShipmentTypeCode.Express1Usps), Times.Once);
         }
 
         [Fact]
-        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousOnTracAccountsExist()
+        public async Task Setup_DoesNotCallInitilizationMethods_WhenPreviousExpress1AccountsExist()
         {
-            var accounts = new List<OnTracAccountEntity>
+            var accounts = new List<UspsAccountEntity>
             {
-                new OnTracAccountEntity
+                new UspsAccountEntity
                 {
-                    AccountNumber = 123,
+                    Username = "username",
                     FirstName = "blah",
                     IsNew = false
                 }
@@ -166,7 +174,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            var testObject = mock.Create<OnTracCarrierSetup>();
+            var testObject = mock.Create<Express1UspsCarrierSetup>();
             await testObject.Setup(payload);
 
             shipmentTypeSetupActivity
