@@ -178,5 +178,43 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
         }
+
+        [Fact]
+        public async Task Setup_UpdatesHubVersion()
+        {
+            var accounts = new List<DhlExpressAccountEntity>
+            {
+                new DhlExpressAccountEntity
+                {
+                    IsNew = false,
+                    HubVersion = 0,
+                    HubCarrierId = carrierId,
+                }
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<DhlCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubVersion == 2)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_SetsHubCarrierID()
+        {
+            var accounts = new List<DhlExpressAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<DhlCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
+        }
     }
 }

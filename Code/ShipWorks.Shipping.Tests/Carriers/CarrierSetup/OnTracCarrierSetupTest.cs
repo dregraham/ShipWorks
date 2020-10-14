@@ -174,5 +174,43 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             shippingSettings.Verify(x => x.MarkAsConfigured(It.IsAny<ShipmentTypeCode>()), Times.Never);
             printHelper.Verify(x => x.InstallDefaultRules(It.IsAny<ShipmentTypeCode>()), Times.Never);
         }
+
+        [Fact]
+        public async Task Setup_UpdatesHubVersion()
+        {
+            var accounts = new List<OnTracAccountEntity>
+            {
+                new OnTracAccountEntity
+                {
+                    IsNew = false,
+                    HubVersion = 0,
+                    HubCarrierId = carrierId,
+                }
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<OnTracCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<OnTracAccountEntity>(y => y.HubVersion == 2)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_SetsHubCarrierID()
+        {
+            var accounts = new List<OnTracAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<OnTracCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<OnTracAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
+        }
     }
 }

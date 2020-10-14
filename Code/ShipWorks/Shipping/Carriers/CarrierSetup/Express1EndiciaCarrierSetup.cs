@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.CarrierSetup
     public class Express1EndiciaCarrierSetup : BaseCarrierSetup<EndiciaAccountEntity, IEndiciaAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<EndiciaAccountEntity, IEndiciaAccountEntity> express1AccountRepository;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
@@ -35,6 +36,7 @@ namespace ShipWorks.Shipping.CarrierSetup
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepositoryFactory[ShipmentTypeCode.Express1Endicia])
         {
             this.express1AccountRepository = accountRepositoryFactory[ShipmentTypeCode.Express1Endicia];
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -58,6 +60,14 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             if (express1Account.IsNew)
             {
+                if (!string.IsNullOrEmpty(account.Signature))
+                {
+                    ShippingSettingsEntity settings = shippingSettings.Fetch();
+                    settings.EndiciaCustomsSigner = account.Signature;
+                    settings.EndiciaCustomsCertify = true;
+                    shippingSettings.Save(settings);
+                }
+
                 express1Account.AccountNumber = account.Username;
                 express1Account.CreatedByShipWorks = false;
                 express1Account.AccountType = (int) EndiciaAccountType.Standard;

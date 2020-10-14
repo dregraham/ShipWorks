@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             this.payload = new CarrierConfiguration
             {
                 AdditionalData = JObject.Parse("{fedex: {accountNumber: \"account\"} }"),
-                HubVersion = 1,
+                HubVersion = 2,
                 HubCarrierID = carrierID,
                 RequestedLabelFormat = ThermalLanguage.None,
                 Address = new Warehouse.Configuration.DTO.ConfigurationAddress
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
                 new FedExAccountEntity
                 {
                     HubCarrierId = carrierID,
-                    HubVersion = 1
+                    HubVersion = 2
                 }
             };
 
@@ -183,6 +183,44 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             var testObject = mock.Create<FedExCarrierSetup>();
             await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
+        }
+
+        [Fact]
+        public async Task Setup_UpdatesHubVersion()
+        {
+            var accounts = new List<FedExAccountEntity>
+            {
+                new FedExAccountEntity
+                {
+                    IsNew = false,
+                    HubVersion = 0,
+                    HubCarrierId = carrierID,
+                }
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<FedExCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<FedExAccountEntity>(y => y.HubVersion == 2)), Times.Once);
+        }
+
+        [Fact]
+        public async Task Setup_SetsHubCarrierID()
+        {
+            var accounts = new List<FedExAccountEntity>
+            {
+            };
+
+            carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
+            carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
+
+            var testObject = mock.Create<FedExCarrierSetup>();
+            await testObject.Setup(payload);
+
+            carrierAccountRepository.Verify(x => x.Save(It.Is<FedExAccountEntity>(y => y.HubCarrierId == carrierID)), Times.Once);
         }
     }
 }
