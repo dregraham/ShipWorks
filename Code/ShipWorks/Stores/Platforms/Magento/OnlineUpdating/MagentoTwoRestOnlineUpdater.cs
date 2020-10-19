@@ -7,7 +7,6 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Enums;
-using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -17,9 +16,6 @@ using ShipWorks.Data.Model.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Services;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Combine;
@@ -55,7 +51,7 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
             Func<MagentoStoreEntity, IMagentoTwoRestClient> webClientFactory,
             IDataProvider dataProvider,
             IIndex<StoreTypeCode, ICombineOrderSearchProvider<MagentoOrderSearchEntity>> combineOrderSearchProviderFactory,
-            Func<Type, ILog> logFactory, 
+            Func<Type, ILog> logFactory,
             ICarrierShipmentAdapterFactory shipmentAdapterFactory)
             : base(store)
         {
@@ -284,6 +280,13 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
         }
 
         /// <summary>
+        /// Get the magento item from the given list that corresponds with the passed in orderItem
+        /// </summary>
+        private Item GetMagentoItem(OrderItemEntity orderItem, IEnumerable<Item> magentoItems) =>
+            magentoItems.FirstOrDefault(x => x.ItemId.ToString() == orderItem.Code) ??
+            magentoItems.FirstOrDefault(x => x.Sku == orderItem.SKU || x.Name == orderItem.Name);
+
+        /// <summary>
         /// Get a list of (OrderItemEntity, Item) for use in generating an invoice or shipment
         /// </summary>
         private IEnumerable<(OrderItemEntity, Item)> GetItemsForInvoiceAndShipmentUpload(MagentoOrderEntity orderEntity, IEnumerable<Item> items, long originalOrderID)
@@ -294,22 +297,11 @@ namespace ShipWorks.Stores.Platforms.Magento.OnlineUpdating
                 adapter.FetchEntityCollection(orderEntity.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == orderEntity.OrderID));
             }
 
-            if (orderEntity.OrderItems?.Any(oi => !oi.IsManual) ?? false)
-            {
-                var query =
-                    from orderItemEntity in orderEntity.OrderItems
-                    from magentoItemDto in items
-                    where (orderItemEntity.OriginalOrderID == originalOrderID || orderItemEntity.OriginalOrderID == orderEntity.OrderID)
-                          &&
-                          (orderItemEntity.Code == magentoItemDto.ItemId.ToString() ||
-                           orderItemEntity.SKU == magentoItemDto.Sku ||
-                           orderItemEntity.Name == magentoItemDto.Name)
-                    select (OrderItem: orderItemEntity, MagentoItem: magentoItemDto);
-
-                return query;
-            }
-
-            return Enumerable.Empty<(OrderItemEntity, Item)>();
+            return orderEntity.OrderItems
+                .Where(orderItem => !orderItem.IsManual &&
+                    (orderItem.OriginalOrderID == originalOrderID || orderItem.OriginalOrderID == orderEntity.OrderID))
+                .Select(orderItem => (OrderItem: orderItem, MagentoItem: GetMagentoItem(orderItem, items)))
+                .Where(x => x.MagentoItem != null);
         }
 
         /// <summary>
