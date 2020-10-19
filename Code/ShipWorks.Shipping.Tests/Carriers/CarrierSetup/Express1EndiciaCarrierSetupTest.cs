@@ -11,6 +11,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Carriers.CarrierSetup;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
