@@ -13,7 +13,6 @@ using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.CarrierSetup;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Tests.Shared;
