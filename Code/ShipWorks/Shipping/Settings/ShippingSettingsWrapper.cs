@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Core.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -109,5 +109,15 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public bool IsConfigured(ShipmentTypeCode shipmentType) =>
             GetConfiguredTypes().Contains(shipmentType);
+
+        /// <summary>
+        /// Mark the given shipment type as enabled in the Shipping Settings UI
+        /// </summary>
+        public void MarkAsEnabled(ShipmentTypeCode shipmentType)
+        {
+            var settings = ShippingSettings.Fetch();
+            settings.ExcludedTypes = settings.ExcludedTypes.Where(x => x != shipmentType);
+            ShippingSettings.Save(settings);
+        }
     }
 }

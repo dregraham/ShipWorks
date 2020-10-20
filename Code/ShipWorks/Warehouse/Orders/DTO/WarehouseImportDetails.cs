@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShipWorks.Warehouse.DTO.Orders
+namespace ShipWorks.Warehouse.Orders.DTO
 {
     [Obfuscation]
     public class WarehouseImportDetails

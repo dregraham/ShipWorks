@@ -2422,6 +2422,10 @@ namespace ShipWorks.Data.Model
 		Phone,
 		///<summary>UspsAccountId. </summary>
 		UspsAccountId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3264,6 +3268,10 @@ namespace ShipWorks.Data.Model
 		ScanFormAddressSource,
 		///<summary>AcceptedFCMILetterWarning. </summary>
 		AcceptedFCMILetterWarning,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3780,6 +3788,10 @@ namespace ShipWorks.Data.Model
 		Letterhead,
 		///<summary>Signature. </summary>
 		Signature,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8272,6 +8284,10 @@ namespace ShipWorks.Data.Model
 		Email,
 		///<summary>Phone. </summary>
 		Phone,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -12958,6 +12974,10 @@ namespace ShipWorks.Data.Model
 		UpsRateTableID,
 		///<summary>ShipEngineCarrierId. </summary>
 		ShipEngineCarrierId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -13524,6 +13544,10 @@ namespace ShipWorks.Data.Model
 		AcceptedFCMILetterWarning,
 		///<summary>ShipEngineCarrierId. </summary>
 		ShipEngineCarrierId,
+		///<summary>HubVersion. </summary>
+		HubVersion,
+		///<summary>HubCarrierId. </summary>
+		HubCarrierId,
 		/// <summary></summary>
 		AmountOfFields
 	}

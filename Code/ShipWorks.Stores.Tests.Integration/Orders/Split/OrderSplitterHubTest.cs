@@ -19,7 +19,7 @@ using ShipWorks.Stores.Orders.Split;
 using ShipWorks.Stores.Orders.Split.Hub;
 using ShipWorks.Tests.Shared.Database;
 using ShipWorks.Tests.Shared.EntityBuilders;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 using Xunit;
 
 namespace ShipWorks.Stores.Tests.Integration.Orders.Split

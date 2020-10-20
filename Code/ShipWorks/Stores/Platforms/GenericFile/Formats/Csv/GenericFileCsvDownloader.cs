@@ -11,7 +11,7 @@ using ShipWorks.Data.Import.Spreadsheet.OrderSchema;
 using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericFile.Sources;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
 {
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Csv
         public GenericFileCsvDownloader(GenericFileStoreEntity store,
             Func<StoreEntity, GenericFileStoreType> getStoreType,
             IConfigurationData configurationData,
-            ISqlAdapterFactory sqlAdapterFactory, 
+            ISqlAdapterFactory sqlAdapterFactory,
             IWarehouseOrderClient warehouseOrderClient,
             ILicenseService licenseService)
             : base(store, getStoreType, configurationData, sqlAdapterFactory, warehouseOrderClient, licenseService)

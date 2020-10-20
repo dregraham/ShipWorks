@@ -4702,7 +4702,9 @@ CREATE TABLE [dbo].[EndiciaAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ScanFormAddressSource] [int] NOT NULL,
-[AcceptedFCMILetterWarning] [bit] NOT NULL
+[AcceptedFCMILetterWarning] [bit] NOT NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_EndiciaAccount] on [dbo].[EndiciaAccount]'
@@ -4736,7 +4738,9 @@ CREATE TABLE [dbo].[FedExAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Letterhead] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Letterhead] DEFAULT (''),
-[Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT ('')
+[Signature] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_FedExAccount_Signature] DEFAULT (''),
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExAccount] on [dbo].[FedExAccount]'
@@ -4988,7 +4992,9 @@ CREATE TABLE [dbo].[OnTracAccount]
 [PostalCode] [nvarchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_OnTracAccount] on [dbo].[OnTracAccount]'
@@ -5352,7 +5358,9 @@ CREATE TABLE [dbo].[UspsAccount]
 [PendingInitialAccount] [int] NOT NULL,
 [GlobalPostAvailability] [int] NOT NULL,
 [AcceptedFCMILetterWarning] [bit] NOT NULL,
-[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
@@ -5382,6 +5390,8 @@ CREATE TABLE [dbo].[DhlExpressAccount]
 [Email] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Phone] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsAccountId] [bigint] NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_DhlExpressAccount] on [dbo].[DhlExpressAccount]'
@@ -5489,7 +5499,9 @@ CREATE TABLE [dbo].[UpsAccount]
 [PromoStatus] [tinyint] NOT NULL,
 [LocalRatingEnabled] [bit] NOT NULL,
 [UpsRateTableID] [bigint] NULL,
-[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[ShipEngineCarrierId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[HubVersion] [int] NULL,
+[HubCarrierId] [uniqueidentifier] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsAccount] on [dbo].[UpsAccount]'
