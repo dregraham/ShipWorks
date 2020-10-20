@@ -39,7 +39,9 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Setup a FedEx account from data imported from the hub
         /// </summary>
+#pragma warning disable 1998
         public async Task Setup(CarrierConfiguration config)
+#pragma warning restore 1998
         {
             if (fedExAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {

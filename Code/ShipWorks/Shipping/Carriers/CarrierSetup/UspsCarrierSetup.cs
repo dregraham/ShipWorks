@@ -42,7 +42,9 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Creates a new USPS account from data imported from the hub
         /// </summary>
+#pragma warning disable 1998
         public async Task Setup(CarrierConfiguration config)
+#pragma warning restore 1998
         {
             if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
             {
