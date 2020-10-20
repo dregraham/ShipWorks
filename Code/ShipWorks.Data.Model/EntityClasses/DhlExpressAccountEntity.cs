@@ -330,6 +330,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Phone", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UspsAccountId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -556,6 +560,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)DhlExpressAccountFieldIndex.UspsAccountId, false); }
 			set	{ SetValue((int)DhlExpressAccountFieldIndex.UspsAccountId, value); }
+		}
+
+		/// <summary> The HubVersion property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."HubVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> HubVersion
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)DhlExpressAccountFieldIndex.HubVersion, false); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubCarrierId property of the Entity DhlExpressAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "DhlExpressAccount"."HubCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> HubCarrierId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressAccountFieldIndex.HubCarrierId, false); }
+			set	{ SetValue((int)DhlExpressAccountFieldIndex.HubCarrierId, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

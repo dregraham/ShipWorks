@@ -7,9 +7,8 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
-using ShipWorks.Warehouse;
-using ShipWorks.Warehouse.DTO.Orders;
-using ShipWorks.Stores.Platforms.Volusion;
+using ShipWorks.Warehouse.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
 {
@@ -47,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Volusion.Warehouse
         protected override void LoadOrderData(WarehouseOrder warehouseOrder, OrderEntity orderEntity)
         {
             base.LoadOrderData(warehouseOrder, orderEntity);
-            if(storeEntity != null)
+            if (storeEntity != null)
             {
                 var shippingMethods = new VolusionShippingMethods((VolusionStoreEntity) storeEntity);
                 if (int.TryParse(orderEntity.RequestedShipping, out int id))

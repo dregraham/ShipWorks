@@ -63,6 +63,8 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
             MailingPostalCode = source.MailingPostalCode;
             ScanFormAddressSource = source.ScanFormAddressSource;
             AcceptedFCMILetterWarning = source.AcceptedFCMILetterWarning;
+            HubVersion = source.HubVersion;
+            HubCarrierId = source.HubCarrierId;
             
             
             
@@ -233,6 +235,18 @@ namespace ShipWorks.Data.Model.ReadOnlyEntityClasses
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         public System.Boolean AcceptedFCMILetterWarning { get; }
+        /// <summary> The HubVersion property of the Entity EndiciaAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaAccount"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubCarrierId property of the Entity EndiciaAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "EndiciaAccount"."HubCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        public Nullable<System.Guid> HubCarrierId { get; }
         
         
         

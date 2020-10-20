@@ -70,6 +70,8 @@ namespace ShipWorks.Tests.Integration.Shared
                 UserSession.InitializeForCurrentDatabase(executionMode);
                 UspsAccountManager.InitializeForCurrentSession();
 
+                TemplateManager.InitializeForCurrentSession();
+
                 IEnumerable<IInitializeForCurrentSession> sessionInitializers = IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>();
                 foreach (IInitializeForCurrentSession service in sessionInitializers)
                 {
@@ -88,8 +90,6 @@ namespace ShipWorks.Tests.Integration.Shared
 
                 ShippingManager.InitializeForCurrentDatabase();
                 LogSession.Initialize();
-
-                TemplateManager.InitializeForCurrentSession();
             }
         }
 

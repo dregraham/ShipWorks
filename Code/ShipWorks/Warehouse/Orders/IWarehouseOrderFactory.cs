@@ -2,9 +2,9 @@ using System.Threading.Tasks;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
-namespace ShipWorks.Warehouse
+namespace ShipWorks.Warehouse.Orders
 {
     /// <summary>
     /// Order loader for loading ShipWorks Warehouse orders

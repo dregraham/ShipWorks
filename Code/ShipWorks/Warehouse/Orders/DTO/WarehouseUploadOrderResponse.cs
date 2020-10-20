@@ -2,7 +2,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace ShipWorks.Warehouse.DTO.Orders
+namespace ShipWorks.Warehouse.Orders.DTO
 {
     /// <summary>
     /// Response from uploading an order

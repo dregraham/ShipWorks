@@ -350,6 +350,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ScanFormAddressSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("AcceptedFCMILetterWarning", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -676,6 +680,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, true); }
 			set	{ SetValue((int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, value); }
+		}
+
+		/// <summary> The HubVersion property of the Entity EndiciaAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaAccount"."HubVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> HubVersion
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)EndiciaAccountFieldIndex.HubVersion, false); }
+			set	{ SetValue((int)EndiciaAccountFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubCarrierId property of the Entity EndiciaAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "EndiciaAccount"."HubCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> HubCarrierId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)EndiciaAccountFieldIndex.HubCarrierId, false); }
+			set	{ SetValue((int)EndiciaAccountFieldIndex.HubCarrierId, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

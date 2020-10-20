@@ -906,6 +906,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)DhlExpressAccountFieldIndex.Phone, 15, 0, 0);
 			this.AddElementFieldInfo("DhlExpressAccountEntity", "UspsAccountId", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DhlExpressAccountFieldIndex.UspsAccountId, 0, 0, 19);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)DhlExpressAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("DhlExpressAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)DhlExpressAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits DhlExpressPackageEntity's FieldInfo objects</summary>
 		private void InitDhlExpressPackageEntityInfos()
@@ -1195,6 +1197,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("EndiciaAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)EndiciaAccountFieldIndex.MailingPostalCode, 20, 0, 0);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "ScanFormAddressSource", typeof(System.Int32), false, false, false, false,  (int)EndiciaAccountFieldIndex.ScanFormAddressSource, 0, 0, 10);
 			this.AddElementFieldInfo("EndiciaAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)EndiciaAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("EndiciaAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)EndiciaAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits EndiciaProfileEntity's FieldInfo objects</summary>
 		private void InitEndiciaProfileEntityInfos()
@@ -1309,6 +1313,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("FedExAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Website, 50, 0, 0);
 			this.AddElementFieldInfo("FedExAccountEntity", "Letterhead", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Letterhead, 2147483647, 0, 0);
 			this.AddElementFieldInfo("FedExAccountEntity", "Signature", typeof(System.String), false, false, false, false,  (int)FedExAccountFieldIndex.Signature, 2147483647, 0, 0);
+			this.AddElementFieldInfo("FedExAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("FedExAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)FedExAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits FedExEndOfDayCloseEntity's FieldInfo objects</summary>
 		private void InitFedExEndOfDayCloseEntityInfos()
@@ -2244,6 +2250,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("OnTracAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.CountryCode, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Email, 50, 0, 0);
 			this.AddElementFieldInfo("OnTracAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)OnTracAccountFieldIndex.Phone, 15, 0, 0);
+			this.AddElementFieldInfo("OnTracAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)OnTracAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("OnTracAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)OnTracAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits OnTracProfileEntity's FieldInfo objects</summary>
 		private void InitOnTracProfileEntityInfos()
@@ -3527,6 +3535,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UpsAccountEntity", "LocalRatingEnabled", typeof(System.Boolean), false, false, false, false,  (int)UpsAccountFieldIndex.LocalRatingEnabled, 0, 0, 0);
 			this.AddElementFieldInfo("UpsAccountEntity", "UpsRateTableID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UpsAccountFieldIndex.UpsRateTableID, 0, 0, 19);
 			this.AddElementFieldInfo("UpsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UpsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
+			this.AddElementFieldInfo("UpsAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("UpsAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UpsAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits UpsLetterRateEntity's FieldInfo objects</summary>
 		private void InitUpsLetterRateEntityInfos()
@@ -3833,6 +3843,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			this.AddElementFieldInfo("UspsAccountEntity", "GlobalPostAvailability", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.GlobalPostAvailability, 0, 0, 10);
 			this.AddElementFieldInfo("UspsAccountEntity", "AcceptedFCMILetterWarning", typeof(System.Boolean), false, false, false, false,  (int)UspsAccountFieldIndex.AcceptedFCMILetterWarning, 0, 0, 0);
 			this.AddElementFieldInfo("UspsAccountEntity", "ShipEngineCarrierId", typeof(System.String), false, false, false, true,  (int)UspsAccountFieldIndex.ShipEngineCarrierId, 50, 0, 0);
+			this.AddElementFieldInfo("UspsAccountEntity", "HubVersion", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UspsAccountFieldIndex.HubVersion, 0, 0, 10);
+			this.AddElementFieldInfo("UspsAccountEntity", "HubCarrierId", typeof(Nullable<System.Guid>), false, false, false, true,  (int)UspsAccountFieldIndex.HubCarrierId, 0, 0, 0);
 		}
 		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
 		private void InitUspsProfileEntityInfos()

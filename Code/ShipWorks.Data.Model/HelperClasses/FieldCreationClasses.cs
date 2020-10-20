@@ -5617,6 +5617,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.UspsAccountId);}
 		}
+		/// <summary>Creates a new DhlExpressAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new DhlExpressAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(DhlExpressAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity DhlExpressPackageEntity</summary>
@@ -7572,6 +7582,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.AcceptedFCMILetterWarning);}
 		}
+		/// <summary>Creates a new EndiciaAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new EndiciaAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EndiciaAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity EndiciaProfileEntity</summary>
@@ -8771,6 +8791,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Signature
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.Signature);}
+		}
+		/// <summary>Creates a new FedExAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new FedExAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExAccountFieldIndex.HubCarrierId);}
 		}
 	}
 
@@ -19411,6 +19441,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Phone
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new OnTracAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new OnTracAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(OnTracAccountFieldIndex.HubCarrierId);}
 		}
 	}
 
@@ -30327,6 +30367,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.ShipEngineCarrierId);}
 		}
+		/// <summary>Creates a new UpsAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new UpsAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UpsAccountFieldIndex.HubCarrierId);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UpsLetterRateEntity</summary>
@@ -31581,6 +31631,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipEngineCarrierId
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.ShipEngineCarrierId);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.HubVersion field instance</summary>
+		public static EntityField2 HubVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.HubVersion);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.HubCarrierId field instance</summary>
+		public static EntityField2 HubCarrierId
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.HubCarrierId);}
 		}
 	}
 

@@ -6,7 +6,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Platforms.Odbc;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Warehouse
 {

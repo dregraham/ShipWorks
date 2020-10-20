@@ -238,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             StringBuilder description = new StringBuilder(descriptionBase);
 
-            if (account.Street1.Length > 0)
+            if (!string.IsNullOrEmpty(account.Street1))
             {
                 if (description.Length > 0)
                 {
@@ -248,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 description.Append(account.Street1);
             }
 
-            if (account.PostalCode.Length > 0)
+            if (!string.IsNullOrEmpty(account.PostalCode))
             {
                 if (description.Length > 0)
                 {
