@@ -11,7 +11,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -22,8 +21,8 @@ using ShipWorks.Stores.Platforms.Odbc.DataAccess;
 using ShipWorks.Stores.Platforms.Odbc.Loaders;
 using ShipWorks.Stores.Platforms.Odbc.Mapping;
 using ShipWorks.Stores.Warehouse.StoreData;
-using ShipWorks.Warehouse;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Platforms.Odbc.Download
 {
@@ -569,7 +568,7 @@ namespace ShipWorks.Stores.Platforms.Odbc.Download
             return odbcFieldMapEntry;
         }
 
-		/// <summary>
+        /// <summary>
         /// Removes order items from the order
         /// </summary>
         private void RemoveOrderItems(OrderEntity order)

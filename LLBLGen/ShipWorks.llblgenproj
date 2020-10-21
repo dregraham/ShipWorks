@@ -710,6 +710,8 @@
           <Field Name="DhlExpressAccountID" Type="long" IsReadOnly="true" Precision="19" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="18" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="17" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="Phone" Type="string" MaxLength="15" FieldIndex="15" />
@@ -978,6 +980,8 @@
           <Field Name="EndiciaReseller" Type="int" FieldIndex="1" />
           <Field Name="Fax" Type="string" MaxLength="35" FieldIndex="22" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="11" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="28" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="27" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="12" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="24" />
           <Field Name="Phone" Type="string" MaxLength="25" FieldIndex="21" />
@@ -1078,6 +1082,8 @@
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="18" />
           <Field Name="FedExAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="7" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="23" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="22" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="9" />
           <Field Name="Letterhead" Type="string" MaxLength="2147483647" FieldIndex="20" />
           <Field Name="MeterNumber" Type="string" MaxLength="50" FieldIndex="5" />
@@ -1931,6 +1937,8 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="4" />
           <Field Name="Email" Type="string" MaxLength="50" FieldIndex="14" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="17" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="16" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
           <Field Name="OnTracAccountID" Type="long" IsReadOnly="true" IsPrimaryKey="true" FieldIndex="0" />
@@ -3108,6 +3116,8 @@
           <Field Name="Description" Type="string" MaxLength="50" FieldIndex="2" />
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="20" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="8" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="27" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="26" />
           <Field Name="InvoiceAuth" Type="bool" FieldIndex="7" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="10" />
           <Field Name="LocalRatingEnabled" Type="bool" FieldIndex="23" />
@@ -3399,6 +3409,8 @@
           <Field Name="Email" Type="string" MaxLength="100" FieldIndex="17" />
           <Field Name="FirstName" Type="string" MaxLength="30" FieldIndex="5" />
           <Field Name="GlobalPostAvailability" Type="int" Precision="10" FieldIndex="24" />
+          <Field Name="HubCarrierId" Type="guid" IsOptional="true" FieldIndex="28" />
+          <Field Name="HubVersion" Type="int" IsOptional="true" Precision="10" FieldIndex="27" />
           <Field Name="LastName" Type="string" MaxLength="30" FieldIndex="7" />
           <Field Name="MailingPostalCode" Type="string" MaxLength="20" FieldIndex="19" />
           <Field Name="MiddleName" Type="string" MaxLength="30" FieldIndex="6" />
@@ -4644,7 +4656,7 @@
       <Catalogs>
         <Catalog Name="ShipWorksLocal">
           <Schemas>
-            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-05-13T18:21:53.1243274Z">
+            <Schema Name="dbo" SyncSource="2" LastSyncWithDatabase="2020-10-07T15:00:12.7342723Z">
               <Tables>
                 <Table Name="Action">
                   <PkConstraintName Name="PK_Action" />
@@ -5358,6 +5370,8 @@
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
                     <Field Name="UspsAccountId" Ordinal="17" IsOptional="true" DbType="0" Precision="19" />
+                    <Field Name="HubVersion" Ordinal="18" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="19" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="DhlExpressPackage">
@@ -5718,6 +5732,8 @@
                     <Field Name="MailingPostalCode" Ordinal="25" DbType="12" Length="20" />
                     <Field Name="ScanFormAddressSource" Ordinal="26" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="27" DbType="2" />
+                    <Field Name="HubVersion" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="29" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="EndiciaProfile">
@@ -5852,6 +5868,8 @@
                     <Field Name="Website" Ordinal="20" DbType="12" Length="50" />
                     <Field Name="Letterhead" Ordinal="21" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
                     <Field Name="Signature" Ordinal="22" HasDefaultValue="true" DefaultValue="''" DbType="12" Length="2147483647" />
+                    <Field Name="HubVersion" Ordinal="23" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="24" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="FedExEndOfDayClose">
@@ -7438,6 +7456,8 @@
                     <Field Name="CountryCode" Ordinal="14" DbType="12" Length="50" />
                     <Field Name="Email" Ordinal="15" DbType="12" Length="50" />
                     <Field Name="Phone" Ordinal="16" DbType="12" Length="15" />
+                    <Field Name="HubVersion" Ordinal="17" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="18" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="OnTracProfile">
@@ -9034,6 +9054,8 @@
                     <Field Name="LocalRatingEnabled" Ordinal="24" DbType="2" />
                     <Field Name="UpsRateTableID" Ordinal="25" IsOptional="true" DbType="0" Precision="19" />
                     <Field Name="ShipEngineCarrierId" Ordinal="26" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="HubVersion" Ordinal="27" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="28" IsOptional="true" DbType="25" />
                   </Fields>
                 </Table>
                 <Table Name="UpsLetterRate">
@@ -9453,6 +9475,9 @@
                     <Field Name="GlobalPostAvailability" Ordinal="25" DbType="8" Precision="10" />
                     <Field Name="AcceptedFCMILetterWarning" Ordinal="26" DbType="2" />
                     <Field Name="ShipEngineCarrierId" Ordinal="27" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="HubVersion" Ordinal="28" IsOptional="true" DbType="8" Precision="10" />
+                    <Field Name="HubCarrierId" Ordinal="29" IsOptional="true" DbType="25" />
+                    <Field Name="HubSequence" Ordinal="30" IsOptional="true" DbType="0" Precision="19" />
                   </Fields>
                 </Table>
                 <Table Name="UspsProfile">
@@ -11623,6 +11648,8 @@
             <FieldMapping FieldName="DhlExpressAccountID" TargetFieldName="DhlExpressAccountID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
@@ -11894,6 +11921,8 @@
             <FieldMapping FieldName="EndiciaReseller" TargetFieldName="EndiciaReseller" />
             <FieldMapping FieldName="Fax" TargetFieldName="Fax" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="Phone" TargetFieldName="Phone" />
@@ -11997,6 +12026,8 @@
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FedExAccountID" TargetFieldName="FedExAccountID" SequenceToUse="SCOPE_IDENTITY()" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="Letterhead" TargetFieldName="Letterhead" />
             <FieldMapping FieldName="MeterNumber" TargetFieldName="MeterNumber" />
@@ -12878,6 +12909,8 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />
             <FieldMapping FieldName="OnTracAccountID" TargetFieldName="OnTracAccountID" SequenceToUse="SCOPE_IDENTITY()" />
@@ -14071,6 +14104,8 @@
             <FieldMapping FieldName="Description" TargetFieldName="Description" />
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="InvoiceAuth" TargetFieldName="InvoiceAuth" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="LocalRatingEnabled" TargetFieldName="LocalRatingEnabled" />
@@ -14363,6 +14398,8 @@
             <FieldMapping FieldName="Email" TargetFieldName="Email" />
             <FieldMapping FieldName="FirstName" TargetFieldName="FirstName" />
             <FieldMapping FieldName="GlobalPostAvailability" TargetFieldName="GlobalPostAvailability" />
+            <FieldMapping FieldName="HubCarrierId" TargetFieldName="HubCarrierId" />
+            <FieldMapping FieldName="HubVersion" TargetFieldName="HubVersion" />
             <FieldMapping FieldName="LastName" TargetFieldName="LastName" />
             <FieldMapping FieldName="MailingPostalCode" TargetFieldName="MailingPostalCode" />
             <FieldMapping FieldName="MiddleName" TargetFieldName="MiddleName" />

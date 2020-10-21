@@ -11,8 +11,7 @@ using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Stores.Platforms.Odbc.Download;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Warehouse
 {

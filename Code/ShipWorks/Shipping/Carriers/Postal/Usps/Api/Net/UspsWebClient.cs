@@ -314,7 +314,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email, out string accountStatus, out DateAdvance dataAdvanceConfig, out string verificationPhoneNumber, out string verificationPhoneExtension);
 
                 account.UspsAccountID = accountInfo.AccountId;
-                account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
 
                 Address accountAddress = accountInfo.MeterPhysicalAddress ?? address;
 
@@ -330,6 +329,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 account.PostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
                 account.MailingPostalCode = accountAddress.ZIPCode ?? accountAddress.PostalCode ?? string.Empty;
+
+                account.Description = UspsAccountManager.GetDefaultDescription(account) ?? string.Empty;
 
                 account.CountryCode = Geography.GetCountryCode(accountAddress.Country) ?? string.Empty;
                 account.Phone = accountAddress.PhoneNumber ?? string.Empty;

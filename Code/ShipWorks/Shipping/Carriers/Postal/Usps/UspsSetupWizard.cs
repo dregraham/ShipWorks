@@ -831,7 +831,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     break;
 
                 case UspsPendingAccountType.Existing:
-                    e.NextPage = wizardPageOptions;
+                    // Only show options page if USPS hasn't been configured yet
+                    if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
+                    {
+                        e.NextPage = wizardPageOptions;
+                    }
                     break;
             }
         }
@@ -953,7 +957,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 default:
                     string message = string.IsNullOrWhiteSpace(response?.Message) ? "An unknown error occurred." : response.Message;
-                    Invoke((MethodInvoker) delegate { MessageHelper.ShowError(this, message); });
+                    Invoke((MethodInvoker) delegate
+                    { MessageHelper.ShowError(this, message); });
                     e.NextPage = CurrentPage;
                     break;
             }

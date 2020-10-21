@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Interapptive.Shared.Security
+﻿namespace Interapptive.Shared.Security
 {
     /// <summary>
-    /// An interface intended to provide encryption provider the appropriate initialization vectory 
+    /// An interface intended to provide encryption provider the appropriate initialization vector
     /// and key to perform encryption.
     /// </summary>
     public interface ICipherKey

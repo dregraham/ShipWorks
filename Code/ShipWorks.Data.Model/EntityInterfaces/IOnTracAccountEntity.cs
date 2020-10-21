@@ -117,6 +117,18 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.String Phone { get; }
+        /// <summary> The HubVersion property of the Entity OnTracAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OnTracAccount"."HubVersion"<br/>
+        /// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Int32> HubVersion { get; }
+        /// <summary> The HubCarrierId property of the Entity OnTracAccount<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "OnTracAccount"."HubCarrierId"<br/>
+        /// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        Nullable<System.Guid> HubCarrierId { get; }
         
         
         

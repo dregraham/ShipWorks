@@ -17,7 +17,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Orders.Split.Errors;
-using ShipWorks.Warehouse;
+using ShipWorks.Warehouse.Orders;
 using static Interapptive.Shared.Utility.Functional;
 
 namespace ShipWorks.Stores.Orders.Split.Hub
@@ -129,8 +129,8 @@ namespace ShipWorks.Stores.Orders.Split.Hub
 
             ItemsToReroute itemsToReroute = new ItemsToReroute()
             {
-                    FromWarehouseId = new Guid(configurationData.FetchReadOnly().WarehouseID).ToString("N"),
-                    Items = definition.ItemQuantities
+                FromWarehouseId = new Guid(configurationData.FetchReadOnly().WarehouseID).ToString("N"),
+                Items = definition.ItemQuantities
                         .Where(iq => iq.Value > 0)
                         .Select(iq =>
                             new ItemQuantity()
@@ -138,7 +138,7 @@ namespace ShipWorks.Stores.Orders.Split.Hub
                                 Id = itemValues[iq.Key],
                                 Quantity = iq.Value
                             }),
-                    Charges = definition.ChargeAmounts
+                Charges = definition.ChargeAmounts
                         .Where(c => c.Value != 0)
                         .Select(c =>
                             new OrderCharge()

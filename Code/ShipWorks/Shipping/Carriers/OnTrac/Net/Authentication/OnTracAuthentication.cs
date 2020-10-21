@@ -1,7 +1,7 @@
 ﻿using System;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.ZipResponse;
+using ShipWorks.Shipping.Carriers.OnTrac.Schemas.RateResponse;
 
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication
 {
@@ -35,22 +35,23 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication
         /// </summary>
         public void IsValidUser()
         {
-            // We are testing OnTrac credentials by requesting any zip codes that were added after
-            // 1/1/3000. There shouldn't be any, so No Zip Updates will be available. This is the request with 
-            // the least amount of overhead to test credentials according to OnTrac.
-            string requestUrl = $"{BaseUrlUsedToCallOnTrac}{AccountNumber}/zips?pw={OnTracPassword}&lastupdate=3000-1-1";
+            // We are testing OnTrac credentials by requesting rates. The zip code request we were previously 
+            // using no longer returns an error when called with bad credentials
+            string requestUrl = $"{BaseUrlUsedToCallOnTrac}{AccountNumber}/rates?pw={OnTracPassword}&packages=ID1;90210;90001;false;0.00;false;0;5;4X3X10;S;0;0";
 
             requestSubmitter.Uri = new Uri(requestUrl);
             requestSubmitter.Verb = HttpVerb.Get;
 
             try
             {
-                ExecuteLoggedRequest<OnTracZipResponse>(requestSubmitter);
+                ExecuteLoggedRequest<OnTracRateResponse>(requestSubmitter);
             }
             catch (OnTracException ex)
             {
-                // "No Zip Updates Available" is what we'd expect
-                if (!ex.Message.Contains("Updates"))
+                // "The specified account number and password are not correct." is what we'd expect if the credentials are bad
+                // We ignore other errors to ensure we don't prevent them from adding their account
+                // because of unrelated errors
+                if (ex.Message.ToLowerInvariant().Contains("password"))
                 {
                     throw;
                 }

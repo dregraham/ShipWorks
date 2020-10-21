@@ -8,8 +8,8 @@ using ShipWorks.Data.Import;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Stores.Content;
-using ShipWorks.Warehouse;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Platforms.Ebay.Warehouse
 {

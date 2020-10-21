@@ -350,6 +350,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AcceptedFCMILetterWarning", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("ShipEngineCarrierId", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubVersion", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("HubCarrierId", fieldHashtable);
 		}
 		#endregion
 
@@ -676,6 +680,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UspsAccountFieldIndex.ShipEngineCarrierId, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.ShipEngineCarrierId, value); }
+		}
+
+		/// <summary> The HubVersion property of the Entity UspsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."HubVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> HubVersion
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)UspsAccountFieldIndex.HubVersion, false); }
+			set	{ SetValue((int)UspsAccountFieldIndex.HubVersion, value); }
+		}
+
+		/// <summary> The HubCarrierId property of the Entity UspsAccount<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."HubCarrierId"<br/>
+		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Guid> HubCarrierId
+		{
+			get { return (Nullable<System.Guid>)GetValue((int)UspsAccountFieldIndex.HubCarrierId, false); }
+			set	{ SetValue((int)UspsAccountFieldIndex.HubCarrierId, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

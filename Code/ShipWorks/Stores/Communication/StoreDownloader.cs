@@ -36,8 +36,8 @@ using ShipWorks.Products;
 using ShipWorks.Shipping.ShipSense;
 using ShipWorks.Stores.Content;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Warehouse;
-using ShipWorks.Warehouse.DTO.Orders;
+using ShipWorks.Warehouse.Orders;
+using ShipWorks.Warehouse.Orders.DTO;
 
 namespace ShipWorks.Stores.Communication
 {
