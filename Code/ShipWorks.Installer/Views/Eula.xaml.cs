@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ShipWorks.Installer.Views
 {
@@ -21,6 +13,15 @@ namespace ShipWorks.Installer.Views
         public Eula()
         {
             InitializeComponent();
+
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "ShipWorks.Installer.License.rtf";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                eulaTextBox.Selection.Load(stream, DataFormats.Rtf);
+                eulaTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+            }
         }
     }
 }
