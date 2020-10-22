@@ -14,7 +14,7 @@
                 x:Key="Locator"
                 d:IsDataSource="True" />
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Padding" Value="5,2"/>
+                <Setter Property="Padding" Value="10,3"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

@@ -2,14 +2,13 @@
     x:Class="ShipWorks.Installer.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Main Window"
     Width="800"
-    Height="450"
+    Height="600"
     DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" 
@@ -17,8 +16,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" ></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Margin="10">
             <StackPanel.Resources>
