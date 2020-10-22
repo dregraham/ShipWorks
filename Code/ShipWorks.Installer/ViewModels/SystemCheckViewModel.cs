@@ -11,6 +11,8 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.Eula)
         {
             var result = systemCheckService.CheckSystem();
+            mainViewModel.CheckSystemResult = result;
+
             if (result.CpuMeetsRequirement &&
                 result.HddMeetsRequirement &&
                 result.OsMeetsRequirement &&
@@ -33,7 +35,7 @@ namespace ShipWorks.Installer.ViewModels
 
         private void MoveToWarn()
         {
-            mainViewModel.WarningVisibility = Visibility.Visible;
+            mainViewModel.WarningIcon = EFontAwesomeIcon.Solid_ExclamationTriangle;
             navigationService.NavigateTo(NavigationPageType.Warning);
         }
 

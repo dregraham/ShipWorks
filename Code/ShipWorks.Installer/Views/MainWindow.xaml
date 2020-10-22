@@ -33,6 +33,7 @@
             <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}"/>
             <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}"/>
             <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}"/>
+            <c:NavigationOption Text="Warning" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.FailedRequirements }" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.WarningIcon}"/>
             <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
         </StackPanel>
         <Button VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
