@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -12,8 +12,8 @@ namespace ShipWorks.Installer.ViewModels
 
         protected override void NextExecute()
         {
-            mainViewModel.InstallDatabaseVisibility = Visibility.Visible;
-            mainViewModel.InstallationFinishedVisibility = Visibility.Visible;
+            mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            mainViewModel.InstallationIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
 

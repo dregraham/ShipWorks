@@ -13,9 +13,8 @@
                 xmlns:vm="clr-namespace:ShipWorks.Installer.ViewModels"
                 x:Key="Locator"
                 d:IsDataSource="True" />
-
-            <Style TargetType="Window">
-                <Setter Property="FontSize" Value="28" />
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Padding" Value="5,2"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

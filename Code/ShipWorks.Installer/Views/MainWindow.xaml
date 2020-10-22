@@ -5,6 +5,7 @@
     xmlns:command="http://www.galasoft.ch/mvvmlight"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+    xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Main Window"
     Width="800"
@@ -16,56 +17,26 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" ></ColumnDefinition>
+            <ColumnDefinition Width="auto" ></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox Width="175" Grid.Column="0" BorderThickness="0" HorizontalAlignment="Left">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="System Check "/></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="EULA Agreement " /></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaFinishedVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="Install Path"/></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathFinishedVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="Login"/></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginFinishedVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="Installation"/></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationFinishedVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock><Run Text="  - Location Configuration "/></TextBlock>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="  - Install ShipWorks "/>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="  - Install Database "/>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Use ShipWorks"/>
-                <Border Width="10"/>
-                <TextBlock Text="&#xE10B;" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksVisibility}" Foreground="Green" FontFamily="Segoe MDL2 Assets" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="13"/>
-            </StackPanel>
-        </ListBox>
+        <StackPanel Margin="10">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type c:NavigationOption}">
+                    <Setter Property="Margin" Value="0,10,0,0"/>
+                </Style>
+            </StackPanel.Resources>
+            <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
+            <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
+            <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
+            <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}"/>
+            <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}"/>
+            <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}"/>
+            <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}"/>
+            <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}"/>
+            <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
+        </StackPanel>
+        <Button VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
         <Frame Grid.Column="1"
             x:Name="MainFrame"
             HorizontalAlignment="Stretch"

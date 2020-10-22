@@ -1,4 +1,4 @@
-﻿using System.Windows;
+﻿using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -12,7 +12,7 @@ namespace ShipWorks.Installer.ViewModels
 
         protected override void NextExecute()
         {
-            mainViewModel.LoginFinishedVisibility = Visibility.Visible;
+            mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
 

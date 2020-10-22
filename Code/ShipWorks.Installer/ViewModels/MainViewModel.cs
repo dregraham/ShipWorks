@@ -1,6 +1,6 @@
-﻿using GalaSoft.MvvmLight;
+﻿using FontAwesome5;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Windows;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -9,142 +9,89 @@ namespace ShipWorks.Installer.ViewModels
     {
         private RelayCommand _loadedCommand;
         private INavigationService<NavigationPageType> _navigationService;
-        private Visibility eulaFinishedVisibility = Visibility.Hidden;
-        private Visibility installPathFinishedVisibility = Visibility.Hidden;
-        private Visibility loginFinishedVisibility = Visibility.Hidden;
-        private Visibility installationFinishedVisibility = Visibility.Hidden;
-        private Visibility systemCheckVisibility = Visibility.Hidden;
-        private Visibility locationConfigVisibility = Visibility.Hidden;
-        private Visibility installShipworksVisibility = Visibility.Hidden;
-        private Visibility installDatabaseVisibility = Visibility.Hidden;
-        private Visibility upgradeShipWorksVisibility = Visibility.Hidden;
-        private Visibility warningVisibility = Visibility.Hidden;
-        private Visibility useShipWorksVisibility = Visibility.Hidden;
+        private EFontAwesomeIcon eulaIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon installPathIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon loginIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon installationIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon systemCheckIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon locationConfigIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon installShipworksIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon installDatabaseIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon upgradeShipWorksIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon warningIcon = EFontAwesomeIcon.None;
+        private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
 
         public MainViewModel(INavigationService<NavigationPageType> navigationService)
         {
             _navigationService = navigationService;
         }
 
-        public Visibility EulaFinishedVisibility
+        public EFontAwesomeIcon EulaIcon
         {
-            get { return eulaFinishedVisibility; }
-
-            set
-            {
-                eulaFinishedVisibility = value;
-                RaisePropertyChanged(nameof(EulaFinishedVisibility));
-            }
+            get => eulaIcon;
+            set => Set(ref eulaIcon, value);
         }
 
-        public Visibility InstallPathFinishedVisibility
+        public EFontAwesomeIcon InstallPathIcon
         {
-            get { return installPathFinishedVisibility; }
-
-            set
-            {
-                installPathFinishedVisibility = value;
-                RaisePropertyChanged(nameof(InstallPathFinishedVisibility));
-            }
+            get => installPathIcon;
+            set => Set(ref installPathIcon, value);
         }
 
-        public Visibility LoginFinishedVisibility
+        public EFontAwesomeIcon LoginIcon
         {
-            get { return loginFinishedVisibility; }
-
-            set
-            {
-                loginFinishedVisibility = value;
-                RaisePropertyChanged(nameof(LoginFinishedVisibility));
-            }
+            get => loginIcon;
+            set => Set(ref loginIcon, value);
         }
 
-        public Visibility InstallationFinishedVisibility
+        public EFontAwesomeIcon InstallationIcon
         {
-            get { return installationFinishedVisibility; }
+            get => installationIcon;
 
-            set
-            {
-                installationFinishedVisibility = value;
-                RaisePropertyChanged(nameof(InstallationFinishedVisibility));
-            }
+            set => Set(ref installationIcon, value);
         }
 
-        public Visibility SystemCheckVisibility
+        public EFontAwesomeIcon SystemCheckIcon
         {
-            get { return systemCheckVisibility; }
-
-            set
-            {
-                systemCheckVisibility = value;
-                RaisePropertyChanged(nameof(SystemCheckVisibility));
-            }
+            get => systemCheckIcon;
+            set => Set(ref systemCheckIcon, value);
         }
 
-        public Visibility LocationConfigVisibility
+        public EFontAwesomeIcon LocationConfigIcon
         {
-            get { return locationConfigVisibility; }
+            get => locationConfigIcon;
 
-            set
-            {
-                locationConfigVisibility = value;
-                RaisePropertyChanged(nameof(LocationConfigVisibility));
-            }
+            set => Set(ref locationConfigIcon, value);
         }
 
-        public Visibility InstallShipworksVisibility
+        public EFontAwesomeIcon InstallShipworksIcon
         {
-            get { return installShipworksVisibility; }
-
-            set
-            {
-                installShipworksVisibility = value;
-                RaisePropertyChanged(nameof(InstallShipworksVisibility));
-            }
+            get => installShipworksIcon;
+            set => Set(ref installShipworksIcon, value);
         }
 
-        public Visibility InstallDatabaseVisibility
+        public EFontAwesomeIcon InstallDatabaseIcon
         {
-            get { return installDatabaseVisibility; }
-
-            set
-            {
-                installDatabaseVisibility = value;
-                RaisePropertyChanged(nameof(InstallDatabaseVisibility));
-            }
+            get => installDatabaseIcon;
+            set => Set(ref installDatabaseIcon, value);
         }
 
-        public Visibility UpgradeShipWorksVisibility
+        public EFontAwesomeIcon UpgradeShipWorksIcon
         {
-            get { return upgradeShipWorksVisibility; }
-
-            set
-            {
-                upgradeShipWorksVisibility = value;
-                RaisePropertyChanged(nameof(UpgradeShipWorksVisibility));
-            }
+            get => upgradeShipWorksIcon;
+            set => Set(ref upgradeShipWorksIcon, value);
         }
 
-        public Visibility WarningVisibility
+        public EFontAwesomeIcon WarningIcon
         {
-            get { return warningVisibility; }
-
-            set
-            {
-                warningVisibility = value;
-                RaisePropertyChanged(nameof(WarningVisibility));
-            }
+            get => warningIcon;
+            set => Set(ref warningIcon, value);
         }
 
-        public Visibility UseShipWorksVisibility
+        public EFontAwesomeIcon UseShipWorksIcon
         {
-            get { return useShipWorksVisibility; }
-
-            set
-            {
-                useShipWorksVisibility = value;
-                RaisePropertyChanged(nameof(UseShipWorksVisibility));
-            }
+            get => useShipWorksIcon;
+            set => Set(ref useShipWorksIcon, value);
         }
     }
 }
