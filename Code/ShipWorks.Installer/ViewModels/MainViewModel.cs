@@ -20,10 +20,22 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon upgradeShipWorksIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon warningIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
+        private SystemCheckResult checkSystemResult;
 
         public MainViewModel(INavigationService<NavigationPageType> navigationService)
         {
             _navigationService = navigationService;
+        }
+
+        public SystemCheckResult CheckSystemResult
+        {
+            get { return checkSystemResult; }
+
+            set
+            {
+                checkSystemResult = value;
+                RaisePropertyChanged(nameof(CheckSystemResult));
+            }
         }
 
         public EFontAwesomeIcon EulaIcon

@@ -40,7 +40,7 @@ namespace ShipWorks.Installer
 
         private void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
-            services.AddScoped<ISampleService, SampleService>();
+            services.AddScoped<ISystemCheckService, SystemCheckService>();
 
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
 

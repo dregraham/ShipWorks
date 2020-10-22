@@ -5,15 +5,41 @@ namespace ShipWorks.Installer.ViewModels
 {
     public class SystemCheckViewModel : InstallerViewModelBase
     {
-        public SystemCheckViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
+        public SystemCheckViewModel(MainViewModel mainViewModel, 
+            INavigationService<NavigationPageType> navigationService, 
+            ISystemCheckService systemCheckService) :
             base(mainViewModel, navigationService, NavigationPageType.Eula)
         {
+            var result = systemCheckService.CheckSystem();
+            if (result.CpuMeetsRequirement &&
+                result.HddMeetsRequirement &&
+                result.OsMeetsRequirement &&
+                result.RamMeetsRequirement)
+            {
+                MoveNext();
+            }
+            else
+            {
+                mainViewModel.CheckSystemResult = result;
+                MoveToWarn();
+            }
+        }
+
+        private void MoveNext()
+        {
+            mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            navigationService.NavigateTo(NextPage);
+        }
+
+        private void MoveToWarn()
+        {
+            mainViewModel.WarningVisibility = Visibility.Visible;
+            navigationService.NavigateTo(NavigationPageType.Warning);
         }
 
         protected override void NextExecute()
         {
-            mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            navigationService.NavigateTo(NextPage);
+            MoveNext();
         }
 
         protected override bool NextCanExecute()
