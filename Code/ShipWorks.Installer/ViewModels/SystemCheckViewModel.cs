@@ -1,6 +1,7 @@
 ﻿using System.Timers;
 using System.Windows;
 using FontAwesome5;
+using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
