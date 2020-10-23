@@ -12,7 +12,7 @@ namespace ShipWorks.Installer.ViewModels
         private string installPath;
 
         public InstallPathViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
-            base(mainViewModel, navigationService, NavigationPageType.Login)
+            base(mainViewModel, navigationService, NavigationPageType.UpgradeShipWorks)
         {
             BrowseCommand = new RelayCommand(Browse);
         }
@@ -22,7 +22,10 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override void NextExecute()
         {
-            mainViewModel.IsFreshInstall = true;
+            if (mainViewModel.NavBarState == Enums.NavBarState.NewInstall)
+            {
+                NextPage = NavigationPageType.Login;
+            }
             mainViewModel.InstallPathIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
             InstallPath = "C:\\Program Files\\ShipWorks";

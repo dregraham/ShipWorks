@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using FontAwesome5;
 using GalaSoft.MvvmLight;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 
@@ -24,7 +25,7 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon warningIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
         private InstallSettings installSettings;
-        private bool isFreshInstall;
+        private NavBarState navBarState;
 
         /// <summary>
         /// Constructor
@@ -33,7 +34,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
-            IsFreshInstall = false;
+            NavBarState = NavBarState.Initial;
         }
 
         /// <summary>
@@ -65,10 +66,10 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Whether this is a new installation or an upgrade
         /// </summary>
-        public bool IsFreshInstall
+        public NavBarState NavBarState
         {
-            get => isFreshInstall;
-            set => Set(ref isFreshInstall, value);
+            get => navBarState;
+            set => Set(ref navBarState, value);
         }
 
         /// <summary>

@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:converters="clr-namespace:ShipWorks.Installer.ValueConverters"
+    xmlns:enums="clr-namespace:ShipWorks.Installer.Enums"
     Title="Main Window"
     Width="800"
     Height="600"
@@ -18,6 +20,7 @@
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:NavBarStateToVisibilityConverter x:Key="NavBarVisibilityConverter" />
     </Window.Resources>
 
     <Grid>
@@ -36,11 +39,12 @@
                     <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
                     <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
                     <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
-                    <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" Visibility="{Binding Path=IsFreshInstall, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" Visibility="{Binding Path=IsFreshInstall, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" Visibility="{Binding Path=IsFreshInstall, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" Visibility="{Binding Path=IsFreshInstall, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=IsFreshInstall, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <c:NavigationOption Text="Upgrade ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UpgradeShipWorksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.Upgrade}}"/>
+                    <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                    <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                    <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                    <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                    <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
                     <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
                 </StackPanel>
                 <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
