@@ -11,7 +11,7 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.Eula)
         {
             var result = systemCheckService.CheckSystem();
-            mainViewModel.CheckSystemResult = result;
+            mainViewModel.InstallSettings.CheckSystemResult = result;
 
             if (result.CpuMeetsRequirement &&
                 result.HddMeetsRequirement &&
@@ -22,7 +22,7 @@ namespace ShipWorks.Installer.ViewModels
             }
             else
             {
-                mainViewModel.CheckSystemResult = result;
+                mainViewModel.InstallSettings.CheckSystemResult = result;
                 MoveToWarn();
             }
         }

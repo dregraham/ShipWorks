@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Installer.Services
+﻿using ShipWorks.Installer.Models;
+
+namespace ShipWorks.Installer.Services
 {
     /// <summary>
     /// Class for checking system requirements

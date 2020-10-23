@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Installer.Services
+﻿namespace ShipWorks.Installer.Models
 {
     /// <summary>
     /// Check the system results

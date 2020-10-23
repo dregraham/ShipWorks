@@ -1,15 +1,17 @@
 ﻿using System.Windows;
 using FontAwesome5;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    /// <summary>
+    /// Main view model
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        private RelayCommand _loadedCommand;
-        private INavigationService<NavigationPageType> _navigationService;
+        private readonly INavigationService<NavigationPageType> navigationService;
         private EFontAwesomeIcon eulaIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon installPathIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon loginIcon = EFontAwesomeIcon.None;
@@ -21,22 +23,24 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon upgradeShipWorksIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon warningIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
-        private SystemCheckResult checkSystemResult;
+        private InstallSettings installSettings;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainViewModel(INavigationService<NavigationPageType> navigationService)
         {
-            _navigationService = navigationService;
+            this.navigationService = navigationService;
+            InstallSettings = new InstallSettings();
         }
 
-        public SystemCheckResult CheckSystemResult
+        /// <summary>
+        /// The current install settings
+        /// </summary>
+        public InstallSettings InstallSettings
         {
-            get { return checkSystemResult; }
-
-            set
-            {
-                checkSystemResult = value;
-                RaisePropertyChanged(nameof(CheckSystemResult));
-            }
+            get => installSettings;
+            set => Set(ref installSettings, value);
         }
 
         /// <summary>
@@ -46,34 +50,46 @@ namespace ShipWorks.Installer.ViewModels
         {
             get
             {
-                return CheckSystemResult == null ||
-                       (CheckSystemResult.RamMeetsRequirement &&
-                        CheckSystemResult.CpuMeetsRequirement &&
-                        CheckSystemResult.HddMeetsRequirement &&
-                        CheckSystemResult.OsMeetsRequirement)
+                return InstallSettings.CheckSystemResult == null ||
+                       (InstallSettings.CheckSystemResult.RamMeetsRequirement &&
+                        InstallSettings.CheckSystemResult.CpuMeetsRequirement &&
+                        InstallSettings.CheckSystemResult.HddMeetsRequirement &&
+                        InstallSettings.CheckSystemResult.OsMeetsRequirement)
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             }
         }
 
+        /// <summary>
+        /// Eula icon
+        /// </summary>
         public EFontAwesomeIcon EulaIcon
         {
             get => eulaIcon;
             set => Set(ref eulaIcon, value);
         }
 
+        /// <summary>
+        /// Install Path icon
+        /// </summary>
         public EFontAwesomeIcon InstallPathIcon
         {
             get => installPathIcon;
             set => Set(ref installPathIcon, value);
         }
 
+        /// <summary>
+        /// Login icon
+        /// </summary>
         public EFontAwesomeIcon LoginIcon
         {
             get => loginIcon;
             set => Set(ref loginIcon, value);
         }
 
+        /// <summary>
+        /// Installation icon
+        /// </summary>
         public EFontAwesomeIcon InstallationIcon
         {
             get => installationIcon;
@@ -81,12 +97,18 @@ namespace ShipWorks.Installer.ViewModels
             set => Set(ref installationIcon, value);
         }
 
+        /// <summary>
+        /// System check icon
+        /// </summary>
         public EFontAwesomeIcon SystemCheckIcon
         {
             get => systemCheckIcon;
             set => Set(ref systemCheckIcon, value);
         }
 
+        /// <summary>
+        /// Location Config icon
+        /// </summary>
         public EFontAwesomeIcon LocationConfigIcon
         {
             get => locationConfigIcon;
@@ -94,30 +116,45 @@ namespace ShipWorks.Installer.ViewModels
             set => Set(ref locationConfigIcon, value);
         }
 
+        /// <summary>
+        /// Install ShipWorks icon
+        /// </summary>
         public EFontAwesomeIcon InstallShipworksIcon
         {
             get => installShipworksIcon;
             set => Set(ref installShipworksIcon, value);
         }
 
+        /// <summary>
+        /// Install Database icon
+        /// </summary>
         public EFontAwesomeIcon InstallDatabaseIcon
         {
             get => installDatabaseIcon;
             set => Set(ref installDatabaseIcon, value);
         }
 
+        /// <summary>
+        /// Upgrade ShipWorks icon
+        /// </summary>
         public EFontAwesomeIcon UpgradeShipWorksIcon
         {
             get => upgradeShipWorksIcon;
             set => Set(ref upgradeShipWorksIcon, value);
         }
 
+        /// <summary>
+        /// Warning icon
+        /// </summary>
         public EFontAwesomeIcon WarningIcon
         {
             get => warningIcon;
             set => Set(ref warningIcon, value);
         }
 
+        /// <summary>
+        /// Use ShipWorks icon
+        /// </summary>
         public EFontAwesomeIcon UseShipWorksIcon
         {
             get => useShipWorksIcon;

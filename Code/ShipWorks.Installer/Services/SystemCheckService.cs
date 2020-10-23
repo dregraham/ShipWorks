@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
 {
