@@ -6,16 +6,11 @@
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="System Check"
-    Width="300"
-    Height="300"
     d:DesignHeight="300"
     d:DesignWidth="300"
     DataContext="{Binding Path=SystemCheckViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="System Check" />
-            <Button Command="{Binding NextCommand}" Content="Next" />
-        </StackPanel>
+        <TextBlock Text="Checking your system..." HorizontalAlignment="Center"/>
     </Grid>
 </Page>

@@ -1,18 +1,33 @@
-﻿using FontAwesome5;
+﻿using System.Timers;
+using System.Windows;
+using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
     public class SystemCheckViewModel : InstallerViewModelBase
     {
-        public SystemCheckViewModel(MainViewModel mainViewModel, 
-            INavigationService<NavigationPageType> navigationService, 
+        public SystemCheckViewModel(MainViewModel mainViewModel,
+            INavigationService<NavigationPageType> navigationService,
             ISystemCheckService systemCheckService) :
             base(mainViewModel, navigationService, NavigationPageType.Eula)
         {
             var result = systemCheckService.CheckSystem();
             mainViewModel.InstallSettings.CheckSystemResult = result;
 
+            //Wait for a second because this can happen so fast that the screen will flash
+            Timer t = new Timer()
+            {
+                Interval = 1000,
+                AutoReset = false,
+            };
+
+            t.Elapsed += (object sender, ElapsedEventArgs e) => Application.Current.Dispatcher.Invoke(() => ProcessResult(result));
+            t.Start();
+        }
+
+        private void ProcessResult(SystemCheckResult result)
+        {
             if (result.CpuMeetsRequirement &&
                 result.HddMeetsRequirement &&
                 result.OsMeetsRequirement &&
