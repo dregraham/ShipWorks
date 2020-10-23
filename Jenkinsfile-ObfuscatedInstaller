@@ -18,7 +18,7 @@ pipeline {
 			steps {
 				echo "Build on ${NODE_NAME}"
 				bat "cake build:public_installer[${params.versionNumber.trim()}]"
-				bat 'dotnet publish Code\ShipWorks.Installer\ShipWorks.Installer.csproj -p:PublishSingleFile=true --self-contained false --runtime win-x64 --framework netcoreapp3.1 --output Artifacts\Installer'
+				bat 'dotnet publish Code/ShipWorks.Installer/ShipWorks.Installer.csproj -p:PublishSingleFile=true --self-contained false --runtime win-x64 --framework netcoreapp3.1 --output Artifacts/Installer'
 				archiveArtifacts artifacts: 'Artifacts/Distribute/*.*,Artifacts/Logs/*.*', fingerprint: true
 			}
 		}
