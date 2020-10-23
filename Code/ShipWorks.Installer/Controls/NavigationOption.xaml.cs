@@ -11,16 +11,22 @@ namespace ShipWorks.Installer.Controls
     public partial class NavigationOption : UserControl
     {
         public static readonly DependencyProperty IconProperty =
-     DependencyProperty.Register(nameof(Icon), typeof(EFontAwesomeIcon),
-     typeof(NavigationOption), new FrameworkPropertyMetadata(OnIconChanged));
+             DependencyProperty.Register(nameof(Icon), typeof(EFontAwesomeIcon),
+             typeof(NavigationOption), new FrameworkPropertyMetadata(OnIconChanged));
 
         private string text;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public NavigationOption()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Text to display
+        /// </summary>
         public string Text
         {
             get { return text; }
@@ -31,6 +37,9 @@ namespace ShipWorks.Installer.Controls
             }
         }
 
+        /// <summary>
+        /// Icon to use
+        /// </summary>
         public EFontAwesomeIcon Icon
         {
             get => (EFontAwesomeIcon) GetValue(IconProperty);
@@ -38,6 +47,9 @@ namespace ShipWorks.Installer.Controls
 
         }
 
+        /// <summary>
+        /// Handle icon changed
+        /// </summary>
         private static void OnIconChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
             NavigationOption control = source as NavigationOption;
@@ -53,6 +65,5 @@ namespace ShipWorks.Installer.Controls
                 control.CurrentIcon.Foreground = Brushes.Green;
             }
         }
-
     }
 }

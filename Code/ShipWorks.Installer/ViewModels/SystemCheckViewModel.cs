@@ -6,8 +6,14 @@ using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    /// <summary>
+    /// View model for system check
+    /// </summary>
     public class SystemCheckViewModel : InstallerViewModelBase
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SystemCheckViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
             ISystemCheckService systemCheckService) :
@@ -27,42 +33,61 @@ namespace ShipWorks.Installer.ViewModels
             t.Start();
         }
 
+        /// <summary>
+        /// Process the result
+        /// </summary>
         private void ProcessResult(SystemCheckResult result)
         {
-            if (result.CpuMeetsRequirement &&
-                result.HddMeetsRequirement &&
-                result.OsMeetsRequirement &&
-                result.RamMeetsRequirement)
+            mainViewModel.InstallSettings.CheckSystemResult = result;
+
+            if (NextCanExecute())
             {
                 MoveNext();
             }
             else
             {
-                mainViewModel.InstallSettings.CheckSystemResult = result;
                 MoveToWarn();
             }
         }
 
+        /// <summary>
+        /// Move to the next page
+        /// </summary>
         private void MoveNext()
         {
             mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
 
+        /// <summary>
+        /// Move to the warning page
+        /// </summary>
         private void MoveToWarn()
         {
             mainViewModel.WarningIcon = EFontAwesomeIcon.Solid_ExclamationTriangle;
             navigationService.NavigateTo(NavigationPageType.Warning);
         }
 
+        /// <summary>
+        /// NextExecute command handler
+        /// </summary>
         protected override void NextExecute()
         {
             MoveNext();
         }
 
+        /// <summary>
+        /// CanNextExecute handler
+        /// </summary>
         protected override bool NextCanExecute()
         {
-            return true;
+            var checkSystemResult = mainViewModel.InstallSettings?.CheckSystemResult;
+
+            return checkSystemResult != null &&
+                   checkSystemResult.CpuMeetsRequirement &&
+                   checkSystemResult.HddMeetsRequirement &&
+                   checkSystemResult.OsMeetsRequirement &&
+                   checkSystemResult.RamMeetsRequirement;
         }
     }
 }
