@@ -21,7 +21,7 @@
                 <Setter Property="FontFamily" Value="Roboto"/>
             </Style>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.Installer;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

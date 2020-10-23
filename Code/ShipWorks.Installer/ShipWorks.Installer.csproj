@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <None Remove="License.rtf" />
+    <None Remove="Styles\BlueSteel\Roboto-Regular.ttf" />
+    <None Remove="Styles\BlueSteel\RobotoFontLicense.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,10 +20,16 @@
     <PackageReference Include="FontAwesome5" Version="2.0.8" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+    <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj" />
+    <Resource Include="Styles\BlueSteel\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\BlueSteel\RobotoFontLicense.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +47,66 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Styles\BlueSteel\BlueSteelStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\CheckBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\ComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\DatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\EditableComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\ErrorTemplates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\BlackColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\BlueColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\SilverColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\DatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\ExpanderStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\GridStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ErrorTemplates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\GlobalStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Shapes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Sizes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Controls\WaitSpinner.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\SystemCheck.xaml">
       <SubType>Designer</SubType>
     </Page>
