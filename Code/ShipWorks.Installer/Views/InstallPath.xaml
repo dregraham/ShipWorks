@@ -7,24 +7,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Install Path"
     d:DesignHeight="450"
-    d:DesignWidth="300"
+    d:DesignWidth="400"
     DataContext="{Binding Path=InstallPathViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <Grid>
         <StackPanel Margin="10">
             <TextBlock>Install Path:</TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBox Width="300"/>
-                <Button Margin="10,0,0,0" Padding="5,2">Browse</Button>
+                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}"/>
+                <Button Style="{StaticResource SmallButton}" Margin="10,0,0,0" Padding="5,2">Browse</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <CheckBox/>
+                <CheckBox Style="{StaticResource FormCheckBox}"/>
                 <TextBlock Margin="10,0,0,0" Text="Create Desktop Shortcut"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Margin="10,0" Command="{Binding NextCommand}">Next</Button>
-            <Button IsCancel="True">Cancel</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0" Command="{Binding NextCommand}">Next</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </Page>

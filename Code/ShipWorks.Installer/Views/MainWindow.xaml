@@ -12,35 +12,46 @@
     DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" 
-    Loaded="Window_Loaded">
+    Loaded="Window_Loaded"
+    BorderBrush="LightGray"
+    BorderThickness="0,1,0,0">
 
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Margin="10">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type c:NavigationOption}">
-                    <Setter Property="Margin" Value="0,10,0,0"/>
-                </Style>
-            </StackPanel.Resources>
-            <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
-            <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
-            <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
-            <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}"/>
-            <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}"/>
-            <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}"/>
-            <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}"/>
-            <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}"/>
-            <c:NavigationOption Text="Warning" Visibility="{Binding Source={StaticResource Locator}, Path=MainViewModel.FailedRequirements }" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.WarningIcon}"/>
-            <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
-        </StackPanel>
-        <Button VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
+        <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" MinWidth="225">
+            <Grid>
+                <StackPanel Margin="10">
+                    <StackPanel.Resources>
+                        <Style TargetType="{x:Type c:NavigationOption}">
+                            <Setter Property="Margin" Value="0,10,0,0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
+                    <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
+                    <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
+                    <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}"/>
+                    <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}"/>
+                    <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}"/>
+                    <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}"/>
+                    <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}"/>
+                    <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
+                </StackPanel>
+                <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
+            </Grid>
+        </Border>
+        <TextBlock Style="{StaticResource Header}" Text="Install ShipWorks" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="0,10">
+            <TextBlock.TextDecorations>
+                <TextDecoration/>
+            </TextBlock.TextDecorations>
+        </TextBlock>
         <Frame Grid.Column="1"
             x:Name="MainFrame"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            NavigationUIVisibility="Hidden" />
+            NavigationUIVisibility="Hidden" 
+            Margin="10,50,10,0"/>
     </Grid>
 </Window>

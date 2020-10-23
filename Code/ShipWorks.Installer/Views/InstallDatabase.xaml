@@ -5,17 +5,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.shipworks.com/ui"
     Title="InstallDatabase"
-    Width="300"
-    Height="300"
     d:DesignHeight="300"
     d:DesignWidth="300"
     DataContext="{Binding Path=InstallDatabaseViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <Grid>
         <StackPanel>
-            <TextBlock Text="InstallDatabase" />
-            <Button Command="{Binding NextCommand}" Content="Next" />
+            <TextBlock Text="Installing SQL directories..." />
+            <ui:WaitSpinner BorderBrush="{x:Null}" HorizontalAlignment="Left" Margin="100,10"/>
+            <TextBlock Text="Your database instance can go up to 10GB in size, so you don't need to worry about running our of space any time soon." TextWrapping="Wrap" Margin="0,10"/>
+            <TextBlock Text="It just Works." Margin="0,10"/>
+            <Button Command="{Binding NextCommand}" Content="Next" Margin="0,100,0,0"/>
         </StackPanel>
     </Grid>
 </Page>

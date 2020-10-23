@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShipWorks.UI\ShipWorks.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Views\SystemCheck.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
