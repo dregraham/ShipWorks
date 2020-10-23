@@ -24,6 +24,7 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon warningIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
         private InstallSettings installSettings;
+        private bool isFreshInstall;
 
         /// <summary>
         /// Constructor
@@ -32,6 +33,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
+            IsFreshInstall = false;
         }
 
         /// <summary>
@@ -58,6 +60,15 @@ namespace ShipWorks.Installer.ViewModels
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             }
+        }
+
+        /// <summary>
+        /// Whether this is a new installation or an upgrade
+        /// </summary>
+        public bool IsFreshInstall
+        {
+            get => isFreshInstall;
+            set => Set(ref isFreshInstall, value);
         }
 
         /// <summary>

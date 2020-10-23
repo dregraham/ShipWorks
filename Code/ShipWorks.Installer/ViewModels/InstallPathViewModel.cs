@@ -12,6 +12,7 @@ namespace ShipWorks.Installer.ViewModels
 
         protected override void NextExecute()
         {
+            mainViewModel.IsFreshInstall = true;
             mainViewModel.InstallPathIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
