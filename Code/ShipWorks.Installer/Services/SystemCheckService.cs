@@ -69,6 +69,15 @@ namespace ShipWorks.Installer.Services
         }
 
         /// <summary>
+        /// Checks a drive letter to see if it meets the minimum size requirements
+        /// </summary>
+        /// <param name="driveLetter"></param>
+        /// <returns></returns>
+        public bool DriveMeetsRequirements(string driveLetter) =>
+            (System.IO.DriveInfo.GetDrives().First(d => d.Name == driveLetter).AvailableFreeSpace / bytesInGigaByte) > 20;
+
+
+        /// <summary>
         /// Call WMIC and return its output
         /// </summary>
         /// <param name="query"></param>

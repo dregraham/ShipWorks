@@ -4,26 +4,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+    xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Install Path"
     d:DesignHeight="450"
     d:DesignWidth="400"
     DataContext="{Binding Path=InstallPathViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
+    
+    <Page.Resources>
+        <convert:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+        <convert:IsEmptyConverter x:Key="IsEmptyConverter"/>
+    </Page.Resources>
+    
     <Grid>
         <StackPanel Margin="10">
             <TextBlock>Install Path:</TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}"/>
+                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" IsEnabled="False"/>
                 <Button Style="{StaticResource SmallButton}" Command="{Binding BrowseCommand}" Margin="10,0,0,0" Padding="5,2">Browse</Button>
             </StackPanel>
+            <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource StringToVisibilityConverter}}" Margin="0,5,0,0"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                 <CheckBox Style="{StaticResource FormCheckBox}"/>
                 <TextBlock Margin="10,0,0,0" Text="Create Desktop Shortcut"/>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0" Command="{Binding NextCommand}">Next</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0" Command="{Binding NextCommand}" IsEnabled="{Binding Error, Converter={StaticResource IsEmptyConverter}}">Next</Button>
             <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
