@@ -516,7 +516,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 "FR", // France
                 "DE", // Germany
                 "GI", // Gibralter
-                "HL", // Hong Kong
+                "HK", // Hong Kong
                 "IS", // Iceland
                 "ID", // Indonesia
                 "IL", // Israel
