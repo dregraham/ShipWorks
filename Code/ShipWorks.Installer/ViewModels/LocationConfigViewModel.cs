@@ -1,8 +1,10 @@
-﻿using FontAwesome5;
+﻿using System.Reflection;
+using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    [Obfuscation]
     public class LocationConfigViewModel : InstallerViewModelBase
     {
         public LocationConfigViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :

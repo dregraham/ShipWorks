@@ -1,10 +1,13 @@
-﻿using GalaSoft.MvvmLight;
+﻿using System.Reflection;
+using GalaSoft.MvvmLight;
+
 
 namespace ShipWorks.Installer.Models
 {
     /// <summary>
     /// DTO for current install settings
     /// </summary>
+    [Obfuscation]
     public class InstallSettings : ObservableObject
     {
         private SystemCheckResult checkSystemResult;

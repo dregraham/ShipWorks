@@ -23,7 +23,6 @@
         /// <summary>
         /// Description why CPU didn't meet requirements
         /// </summary>
-
         public string CpuDescription { get; set; }
 
         /// <summary>
@@ -34,7 +33,6 @@
         /// <summary>
         /// Description why HDD didn't meet requirements
         /// </summary>
-
         public string HddDescription { get; set; }
 
         /// <summary>
@@ -45,7 +43,14 @@
         /// <summary>
         /// Description why OS didn't meet requirements
         /// </summary>
-
         public string OsDescription { get; set; }
+
+        /// <summary>
+        /// All of the requirements have been met
+        /// </summary>
+        public bool AllRequirementsMet => (RamMeetsRequirement &&
+                                           CpuMeetsRequirement &&
+                                           HddMeetsRequirement &&
+                                           OsMeetsRequirement);
     }
 }

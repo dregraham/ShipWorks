@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
@@ -8,6 +9,7 @@ using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    [Obfuscation]
     public class InstallPathViewModel : InstallerViewModelBase
     {
         private string installPath;

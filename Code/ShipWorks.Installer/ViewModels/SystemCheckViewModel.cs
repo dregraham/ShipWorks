@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System.Reflection;
+using System.Timers;
 using System.Windows;
 using FontAwesome5;
 using ShipWorks.Installer.Models;
@@ -9,6 +10,7 @@ namespace ShipWorks.Installer.ViewModels
     /// <summary>
     /// View model for system check
     /// </summary>
+    [Obfuscation]
     public class SystemCheckViewModel : InstallerViewModelBase
     {
         /// <summary>
@@ -82,12 +84,7 @@ namespace ShipWorks.Installer.ViewModels
         protected override bool NextCanExecute()
         {
             var checkSystemResult = mainViewModel.InstallSettings?.CheckSystemResult;
-
-            return checkSystemResult != null &&
-                   checkSystemResult.CpuMeetsRequirement &&
-                   checkSystemResult.HddMeetsRequirement &&
-                   checkSystemResult.OsMeetsRequirement &&
-                   checkSystemResult.RamMeetsRequirement;
+            return checkSystemResult != null && checkSystemResult.AllRequirementsMet;
         }
     }
 }

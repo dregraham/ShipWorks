@@ -12,9 +12,8 @@
     d:DesignWidth="400"
     DataContext="{Binding Path=InstallPathViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
-    
+
     <Page.Resources>
-        <convert:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
         <convert:IsEmptyConverter x:Key="IsEmptyConverter"/>
     </Page.Resources>
     
@@ -25,7 +24,7 @@
                 <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" properties:TextBoxBehavior.OnLostFocus="{Binding ValidatePathCommand}" />
                 <Button Style="{StaticResource SmallButton}" Command="{Binding BrowseCommand}" Margin="10,0,0,0" Padding="5,2">Browse</Button>
             </StackPanel>
-            <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource StringToVisibilityConverter}}" Margin="0,5,0,0"/>
+            <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource IsEmptyConverter}}" Margin="0,5,0,0"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                 <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}">
                     <Label VerticalAlignment="Center" Content="Create Desktop Shortcut" />

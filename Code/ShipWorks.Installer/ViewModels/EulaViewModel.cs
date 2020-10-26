@@ -1,21 +1,35 @@
-﻿using FontAwesome5;
+﻿using System.Reflection;
+using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    [Obfuscation]
     public class EulaViewModel : InstallerViewModelBase
     {
+        /// <summary>
+        /// View Model for the Eula page
+        /// </summary>
+        /// <param name="mainViewModel"></param>
+        /// <param name="navigationService"></param>
         public EulaViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
             base(mainViewModel, navigationService, NavigationPageType.InstallPath)
         {
         }
 
+        /// <summary>
+        /// Trigger navigation to the next wizard page
+        /// </summary>
         protected override void NextExecute()
         {
             mainViewModel.EulaIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
 
+        /// <summary>
+        /// Determines if this page is complete and we can move on
+        /// </summary>
+        /// <returns></returns>
         protected override bool NextCanExecute()
         {
             return true;

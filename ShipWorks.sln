@@ -118,6 +118,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Api.Tests", "Code
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipWorks.Installer", "Code\ShipWorks.Installer\ShipWorks.Installer.csproj", "{7086ACED-C86E-4AAF-BBA4-33C9C2D187C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Installer.Tests", "Code\ShipWorks.Installer.Tests\ShipWorks.Installer.Tests.csproj", "{CA95C49C-06A5-4D74-84FC-5177AFF98284}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (No Analyzers)|Any CPU = Debug (No Analyzers)|Any CPU
@@ -1781,6 +1783,46 @@ Global
 		{7086ACED-C86E-4AAF-BBA4-33C9C2D187C7}.Release|Win32.Build.0 = Release|Any CPU
 		{7086ACED-C86E-4AAF-BBA4-33C9C2D187C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{7086ACED-C86E-4AAF-BBA4-33C9C2D187C7}.Release|x86.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Any CPU.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Win32.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|Win32.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|x86.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (No Analyzers)|x86.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Win32.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|Win32.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|x86.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug (x86)|x86.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|Win32.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|Win32.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|x86.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release (x86)|x86.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Win32.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|Win32.Build.0 = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1810,6 +1852,7 @@ Global
 		{8DC4B15A-64E0-49BD-A92B-1F19C64B8A59} = {08F267EF-3888-428F-B52D-6AECF17550A1}
 		{4B01AF3D-39C7-4FF5-9A3F-3B4ED79A8A43} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
 		{1093EF5F-C7D3-47B8-AF41-BB225AD96802} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
+		{CA95C49C-06A5-4D74-84FC-5177AFF98284} = {A3D2E92E-1D80-4D89-A59B-D89E5AA0C7D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA9D5847-243D-4778-BE03-6909765E2C21}

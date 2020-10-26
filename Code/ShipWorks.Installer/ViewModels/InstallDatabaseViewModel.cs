@@ -1,8 +1,10 @@
-﻿using FontAwesome5;
+﻿using System.Reflection;
+using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    [Obfuscation]
     public class InstallDatabaseViewModel : InstallerViewModelBase
     {
         public InstallDatabaseViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :

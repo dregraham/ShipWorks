@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using ShipWorks.Installer.Models;
 
@@ -10,11 +9,16 @@ namespace ShipWorks.Installer.Services
     /// </summary>
     public class SystemCheckService : ISystemCheckService
     {
-        private const long windows10MinVersion = 14393;
         private const int windows2012R2MinVersion = 9600;
         private const long bytesInGigaByte = 1024 * 1024 * 1024;
         private const long minRamInKb = 4194304;
         private const int minSpaceInGb = 20;
+        private ISystemInfoService systemInfo;
+
+        public SystemCheckService(ISystemInfoService systemInfo)
+        {
+            this.systemInfo = systemInfo;
+        }
 
         /// <summary>
         /// Check the system requirements
@@ -23,16 +27,71 @@ namespace ShipWorks.Installer.Services
         {
             SystemCheckResult result = new SystemCheckResult();
 
-            var osDescParts = System.Runtime.InteropServices.RuntimeInformation.OSDescription.Split('.');
+            try
+            {
+                CheckOS(result);
+            }
+            catch
+            {
+                result.OsMeetsRequirement = false;
+                result.OsDescription = "Failed to read Operating System Version.";
+            }
 
-            if (long.TryParse(osDescParts[2], out long windowsVersion) && windowsVersion < windows2012R2MinVersion)
+            try
+            {
+                CheckCPU(result);
+            }
+            catch
+            {
+                result.CpuMeetsRequirement = false;
+                result.CpuDescription = "Failed to validate CPU speed and core count.";
+            }
+
+            try
+            {
+                CheckHDD(result);
+            }
+            catch
+            {
+                result.HddMeetsRequirement = false;
+                result.HddDescription = "Failed to validate available disk space.";
+            }
+
+            try
+            {
+                CheckRAM(result);
+            }
+            catch
+            {
+                result.RamMeetsRequirement = false;
+                result.RamDescription = "Failed to validate RAM size.";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks that the OS is a supported varsion
+        /// </summary>
+        /// <param name="result"></param>
+        private void CheckOS(SystemCheckResult result)
+        {
+            var osDescParts = systemInfo.GetOsDescription().Split('.');
+
+            if ((long.TryParse(osDescParts[2], out long windowsVersion) && windowsVersion < windows2012R2MinVersion))
             {
                 result.OsMeetsRequirement = false;
                 result.OsDescription = $"ShipWorks requires Windows 10 Version 1607 (and newer) or Windows Server 2012 R2 (and newer).";
             }
+        }
 
-            // Check CPU
-            var cpuLines = GetWmicOutput("CPU get MaxClockSpeed, NumberOfCores /Value").Split("\n");
+        /// <summary>
+        /// Checks that the CPU has sufficient clock speed and number of cores
+        /// </summary>
+        /// <param name="result"></param>
+        private void CheckCPU(SystemCheckResult result)
+        {
+            var cpuLines = systemInfo.GetCPUInfo().Split("\n");
             if (int.TryParse(cpuLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var cpuMaxSpeed) &&
                 cpuMaxSpeed < 1500)
             {
@@ -47,36 +106,46 @@ namespace ShipWorks.Installer.Services
                 result.CpuMeetsRequirement = false;
                 result.CpuDescription = $"ShipWorks requires at least 2 processor cores.";
             }
+        }
 
-            // Check data storage
-            result.HddMeetsRequirement = System.IO.DriveInfo.GetDrives()
+        /// <summary>
+        /// Checks that the HDD has sufficient available space
+        /// </summary>
+        /// <param name="result"></param>
+        private void CheckHDD(SystemCheckResult result)
+        {
+            var drives = systemInfo.GetDriveInfo();
+            result.HddMeetsRequirement = systemInfo.GetDriveInfo()
                 .Any(d => (d.AvailableFreeSpace / bytesInGigaByte) > 20);
 
             if (!result.HddMeetsRequirement)
             {
                 result.HddDescription = $"ShipWorks requires at least 20 GB of free storage.";
             }
+        }
 
-            // Get and check RAM
-            var memoryLines = GetWmicOutput("OS get TotalVisibleMemorySize /Value").Split("\n");
+        /// <summary>
+        /// Checks that the system has sufficient RAM
+        /// </summary>
+        /// <param name="result"></param>
+        private void CheckRAM(SystemCheckResult result)
+        {
+            var memoryLines = systemInfo.GetRamInfo().Split("\n");
             var totalMemoryText = memoryLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1];
             if (long.TryParse(totalMemoryText, out var totalMemory) && totalMemory < minRamInKb)
             {
                 result.RamMeetsRequirement = false;
                 result.RamDescription = $"ShipWorks requires at least 2 processor cores.";
             }
-
-            return result;
         }
 
         /// <summary>
         /// Checks a drive letter to see if it meets the minimum size requirements
         /// </summary>
         /// <param name="driveLetter"></param>
-        /// <returns></returns>
         public bool DriveMeetsRequirements(string driveLetter)
         {
-            var freeSpace = System.IO.DriveInfo.GetDrives().FirstOrDefault(d => d.Name.Equals(driveLetter, StringComparison.OrdinalIgnoreCase))?.AvailableFreeSpace;
+            var freeSpace = systemInfo.GetDriveInfo().FirstOrDefault(d => d.Name.Equals(driveLetter, StringComparison.OrdinalIgnoreCase))?.AvailableFreeSpace;
 
             if (freeSpace == null)
             {
@@ -84,29 +153,6 @@ namespace ShipWorks.Installer.Services
             }
 
             return freeSpace / bytesInGigaByte > minSpaceInGb;
-        }
-
-        /// <summary>
-        /// Call WMIC and return its output
-        /// </summary>
-        /// <param name="query"></param>
-        /// <param name="redirectStandardOutput"></param>
-        private string GetWmicOutput(string query, bool redirectStandardOutput = true)
-        {
-            var info = new ProcessStartInfo("wmic")
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                CreateNoWindow = true,
-                Arguments = query,
-                RedirectStandardOutput = redirectStandardOutput
-            };
-
-            var output = "";
-            using (var process = Process.Start(info))
-            {
-                output = process.StandardOutput.ReadToEnd();
-            }
-            return output.Trim();
         }
     }
 }

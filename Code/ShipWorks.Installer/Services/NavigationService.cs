@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace ShipWorks.Installer.Services
 {
-    public class NavigationService<T> : INavigationService<T>, INotifyPropertyChanged
+    public class NavigationService<T> : INavigationService<T>, INotifyPropertyChanged where T : Enum
     {
         /// <summary>
         /// The xaml x:Name used by the frame the NavigationService will use for pages.
@@ -31,14 +31,12 @@ namespace ShipWorks.Installer.Services
         /// </summary>
         private string currentPageKey;
 
+        /// <summary>
+        /// Controls navigation between the pages of the setup wizard
+        /// </summary>
+        /// <param name="frameName"></param>
         public NavigationService(string frameName = "MainFrame")
         {
-            //better make sure an Enum type is used for our generic
-            var t = typeof(T);
-            if (!t.IsEnum)
-            {
-                throw new InvalidOperationException(t.ToString() + " is not a valid Type.  Must be an enum.");
-            }
             pagesByKey = new Dictionary<string, Uri>();
             historic = new List<string>();
             this.frameName = frameName;
@@ -70,31 +68,15 @@ namespace ShipWorks.Installer.Services
         public object Parameter { get; private set; }
 
         /// <summary>
-        /// Add or alter a page by providing the name of the page as and path.
-        /// </summary>
-        /// <param name="navigationPage"></param>
-        /// <param name="pagePath">
-        /// Assumes Views are in ../Views folder and follow MVVM Naming convention Name.xaml when null.
-        /// </param>
-        public void ConfigurePage(T navigationPage, Uri pagePath = null)
-        {
-            ConfigurePage(navigationPage.ToString(), pagePath);
-        }
-
-        /// <summary>
         /// Add or alter a page by providing the name of the page as a string and path.
         /// </summary>
         /// <param name="pageKey"></param>
         /// <param name="pagePath">
         /// Assumes Views are in ../Views folder and follow MVVM Naming convention Name.xaml when null.
         /// </param>
-        public void ConfigurePage(string pageKey, Uri pagePath = null)
-
+        public void ConfigurePage(string pageKey)
         {
-            if (pagePath == null)
-            {
-                pagePath = new Uri(String.Join("", new string[] { "../Views/", pageKey, ".xaml" }), UriKind.Relative);
-            }
+            var pagePath = new Uri(String.Join("", new string[] { "../Views/", pageKey, ".xaml" }), UriKind.Relative);
 
             lock (pagesByKey)
             {
@@ -117,15 +99,13 @@ namespace ShipWorks.Installer.Services
         {
             foreach (var value in Enum.GetNames(typeof(T)))
             {
-                ConfigurePage(value, null);
+                ConfigurePage(value);
             }
         }
 
         /// <summary>
         /// Add or alter a page
         /// </summary>
-        /// <param name="navigationPage"></param>
-        /// <param name="pagePath"></param>
         public void GoBack()
         {
             if (historic.Count > 1)
@@ -138,7 +118,7 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Navigate to a page defined by enum
         /// </summary>
-        /// <param name="pageKey"></param>
+        /// <param name="navigationPage"></param>
         public void NavigateTo(T navigationPage)
         {
             NavigateTo(navigationPage.ToString(), null);

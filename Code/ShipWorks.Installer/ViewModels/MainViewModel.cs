@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using FontAwesome5;
 using GalaSoft.MvvmLight;
 using ShipWorks.Installer.Enums;
@@ -10,6 +11,7 @@ namespace ShipWorks.Installer.ViewModels
     /// <summary>
     /// Main view model
     /// </summary>
+    [Obfuscation]
     public class MainViewModel : ViewModelBase
     {
         private readonly INavigationService<NavigationPageType> navigationService;
@@ -54,10 +56,7 @@ namespace ShipWorks.Installer.ViewModels
             get
             {
                 return InstallSettings.CheckSystemResult == null ||
-                       (InstallSettings.CheckSystemResult.RamMeetsRequirement &&
-                        InstallSettings.CheckSystemResult.CpuMeetsRequirement &&
-                        InstallSettings.CheckSystemResult.HddMeetsRequirement &&
-                        InstallSettings.CheckSystemResult.OsMeetsRequirement)
+                       InstallSettings.CheckSystemResult.AllRequirementsMet
                     ? Visibility.Collapsed
                     : Visibility.Visible;
             }
