@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.ViewModels;
 using ShipWorks.Installer.Views;
@@ -41,6 +41,7 @@ namespace ShipWorks.Installer
         private void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             services.AddScoped<ISystemCheckService, SystemCheckService>();
+            services.AddScoped<IRegistryService, RegistryService>();
 
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
 
