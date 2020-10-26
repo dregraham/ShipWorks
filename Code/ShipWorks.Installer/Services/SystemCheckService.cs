@@ -14,6 +14,7 @@ namespace ShipWorks.Installer.Services
         private const int windows2012R2MinVersion = 9600;
         private const long bytesInGigaByte = 1024 * 1024 * 1024;
         private const long minRamInKb = 4194304;
+        private const int minSpaceInGb = 20;
 
         /// <summary>
         /// Check the system requirements
@@ -73,9 +74,17 @@ namespace ShipWorks.Installer.Services
         /// </summary>
         /// <param name="driveLetter"></param>
         /// <returns></returns>
-        public bool DriveMeetsRequirements(string driveLetter) =>
-            (System.IO.DriveInfo.GetDrives().First(d => d.Name == driveLetter).AvailableFreeSpace / bytesInGigaByte) > 20;
+        public bool DriveMeetsRequirements(string driveLetter)
+        {
+            var freeSpace = System.IO.DriveInfo.GetDrives().FirstOrDefault(d => d.Name.Equals(driveLetter, StringComparison.OrdinalIgnoreCase))?.AvailableFreeSpace;
 
+            if (freeSpace == null)
+            {
+                return false;
+            }
+
+            return freeSpace / bytesInGigaByte > minSpaceInGb;
+        }
 
         /// <summary>
         /// Call WMIC and return its output

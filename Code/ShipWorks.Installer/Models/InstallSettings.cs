@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
-using GalaSoft.MvvmLight;
-using ShipWorks.Installer.Services;
+﻿using GalaSoft.MvvmLight;
 
 namespace ShipWorks.Installer.Models
 {
@@ -13,6 +8,8 @@ namespace ShipWorks.Installer.Models
     public class InstallSettings : ObservableObject
     {
         private SystemCheckResult checkSystemResult;
+        private string installPath;
+        private bool createShortcut;
 
         /// <summary>
         /// Results from system check
@@ -21,6 +18,24 @@ namespace ShipWorks.Installer.Models
         {
             get => checkSystemResult;
             set => Set(ref checkSystemResult, value);
+        }
+
+        /// <summary>
+        /// The installation path
+        /// </summary>
+        public string InstallPath
+        {
+            get => installPath;
+            set => Set(ref installPath, value);
+        }
+
+        /// <summary>
+        /// Whether or not to create a shortcut on the desktop
+        /// </summary>
+        public bool CreateShortcut
+        {
+            get => createShortcut;
+            set => Set(ref createShortcut, value);
         }
     }
 }

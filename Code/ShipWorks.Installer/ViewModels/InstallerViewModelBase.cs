@@ -1,7 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System.Windows;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -11,7 +10,7 @@ namespace ShipWorks.Installer.ViewModels
         protected readonly MainViewModel mainViewModel;
         protected readonly INavigationService<NavigationPageType> navigationService;
 
-        public InstallerViewModelBase(MainViewModel mainViewModel, 
+        public InstallerViewModelBase(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
             NavigationPageType nextPage)
         {
