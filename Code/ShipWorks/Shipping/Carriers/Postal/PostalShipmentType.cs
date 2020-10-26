@@ -502,13 +502,37 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected virtual List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
         {
-            // Allowable country codes include Australia, Belgium, Brazil, Canada, Croatia, Denmark, Estonia, Finland,
-            // France, Germany, Gibraltar, Great Britain, Hungary, Northern Ireland, Israel, Italy, Latvia, Lithuania, Luxembourg, Malaysia,
-            // Malta, Netherlands, New Zealand, Portugal, Singapore, Spain, Switzerland
+            // Countries taken from this list on 10/26/2020:
+            // https://faq.usps.com/s/article/Electronic-USPS-Delivery-Confirmation-International
             List<string> eligibleCountryCodes = new List<string>
             {
-                "AU", "BE", "BR", "CA", "HR", "DK", "FR", "DE", "GB", "NB", "IL", "NL", "NZ", "ES", "CH",
-                "EE", "FI", "GI", "HU", "IT", "LV", "LT", "LU", "MY", "MT", "PT", "SG"
+                "AU", // Australia
+                "BE", // Belgium
+                "CA", // Canada 
+                "HR", // Croatia
+                "CY", // Cyprus
+                "DK", // Denmark 
+                "EE", // Estonia
+                "FR", // France
+                "DE", // Germany
+                "GI", // Gibralter
+                "HL", // Hong Kong
+                "IS", // Iceland
+                "ID", // Indonesia
+                "IL", // Israel
+                "JP", // Japan
+                "LT", // Lithuania
+                "LU", // Luxumbourg
+                "MY", // Malaysia
+                "NL", // Netherlands
+                "NZ", // New Zealand
+                "PL", // Poland
+                "PT", // Portugal
+                "SG", // Singapore
+                "TH", // Thailand
+                "GB", // Great Britain
+                "UK", // United Kingdom
+                "NB", // Northern Ireland
             };
 
             return eligibleCountryCodes;
