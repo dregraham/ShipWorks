@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:ShipWorks.Installer.AttachedProperties"
     Title="Install Path"
     d:DesignHeight="450"
     d:DesignWidth="400"
@@ -21,13 +22,14 @@
         <StackPanel Margin="10">
             <TextBlock>Install Path:</TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" IsEnabled="False"/>
+                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" properties:TextBoxBehavior.OnLostFocus="{Binding ValidatePathCommand}" />
                 <Button Style="{StaticResource SmallButton}" Command="{Binding BrowseCommand}" Margin="10,0,0,0" Padding="5,2">Browse</Button>
             </StackPanel>
             <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource StringToVisibilityConverter}}" Margin="0,5,0,0"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <CheckBox Style="{StaticResource FormCheckBox}"/>
-                <TextBlock Margin="10,0,0,0" Text="Create Desktop Shortcut"/>
+                <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}">
+                    <Label VerticalAlignment="Center" Content="Create Desktop Shortcut" />
+                </CheckBox>
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
