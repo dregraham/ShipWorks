@@ -32,7 +32,8 @@
             </StackPanel>
         </StackPanel>
         <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
-            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0" Command="{Binding NextCommand}" IsEnabled="{Binding Error, Converter={StaticResource IsEmptyConverter}}">Next</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}">Back</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0,20,0" Command="{Binding NextCommand}" IsEnabled="{Binding Error, Converter={StaticResource IsEmptyConverter}}">Next</Button>
             <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
