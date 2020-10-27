@@ -14,6 +14,13 @@ namespace ShipWorks.Installer.Services
         private DriveInfo driveInfo;
 
         /// <summary>
+        /// Empty constructor for IOC
+        /// </summary>
+        public DriveInfoWrapper()
+        {
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="driveInfo"></param>

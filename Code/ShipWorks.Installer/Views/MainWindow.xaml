@@ -47,7 +47,7 @@
                     <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
                     <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
                 </StackPanel>
-                <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10">Need Help? Contact Us</Button>
+                <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10" Command="{Binding HelpCommand}">Need Help? Contact Us</Button>
             </Grid>
         </Border>
         <TextBlock Style="{StaticResource Header}" Text="Install ShipWorks" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="0,10">

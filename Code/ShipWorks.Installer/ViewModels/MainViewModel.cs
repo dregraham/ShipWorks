@@ -1,8 +1,11 @@
 ﻿using System.Reflection;
 using System.Windows;
+using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using ShipWorks.Installer.Enums;
+using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 
@@ -37,7 +40,13 @@ namespace ShipWorks.Installer.ViewModels
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
             NavBarState = NavBarState.Initial;
+            HelpCommand = new RelayCommand(OpenHelpPage);
         }
+
+        /// <summary>
+        /// Command for help button click
+        /// </summary>
+        public ICommand HelpCommand { get; }
 
         /// <summary>
         /// The current install settings
@@ -171,5 +180,12 @@ namespace ShipWorks.Installer.ViewModels
             get => useShipWorksIcon;
             set => Set(ref useShipWorksIcon, value);
         }
+
+        /// <summary>
+        /// Command handler for opening the help page
+        /// </summary>
+        private void OpenHelpPage() => ProcessExtension.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new");
+
+
     }
 }
