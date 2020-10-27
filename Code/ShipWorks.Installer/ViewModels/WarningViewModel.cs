@@ -1,25 +1,30 @@
 ﻿using System.Reflection;
-using FontAwesome5;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    /// <summary>
+    /// View Model for the warning view
+    /// </summary>
     [Obfuscation]
     public class WarningViewModel : InstallerViewModelBase
     {
+        private string warning;
+        /// <summary>
+        /// Constructo
+        /// </summary>
+        /// <param name="mainViewModel"></param>
+        /// <param name="navigationService"></param>
         public WarningViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
         {
+            Warning = "There was a problem installing ShipWorks.";
         }
 
-        protected override void NextExecute()
+        public string Warning
         {
-            mainViewModel.WarningIcon = EFontAwesomeIcon.Regular_CheckCircle;
-        }
-
-        protected override bool NextCanExecute()
-        {
-            return false;
+            get => warning;
+            set => Set(ref warning, value);
         }
     }
 }

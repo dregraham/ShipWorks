@@ -66,7 +66,8 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private void MoveToWarn()
         {
-            mainViewModel.WarningIcon = EFontAwesomeIcon.Solid_ExclamationTriangle;
+            mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+            mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
             navigationService.NavigateTo(NavigationPageType.Warning);
         }
 
