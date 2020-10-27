@@ -22,6 +22,7 @@
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.Installer;component/Styles/BlueSteel/BlueSteelStyle.xaml" />
+                <ResourceDictionary Source="/ShipWorks.Installer;component/Themes/Controls/WaitSpinner.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
