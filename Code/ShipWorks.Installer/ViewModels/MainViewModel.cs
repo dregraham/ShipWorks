@@ -1,9 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Models;
@@ -18,6 +20,7 @@ namespace ShipWorks.Installer.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private readonly INavigationService<NavigationPageType> navigationService;
+        private readonly ILog log;
         private EFontAwesomeIcon eulaIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon installPathIcon = EFontAwesomeIcon.None;
         private EFontAwesomeIcon loginIcon = EFontAwesomeIcon.None;
@@ -35,8 +38,12 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel(INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService)
+        public MainViewModel(INavigationService<NavigationPageType> navigationService,
+            IInnoSetupService innoSetupService,
+            Func<Type, ILog> logFactory)
         {
+            log = logFactory(typeof(MainViewModel));
+            log.Info("Beginning Installation");
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
             NavBarState = NavBarState.Initial;

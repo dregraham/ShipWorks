@@ -3,9 +3,11 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using GalaSoft.MvvmLight;
+using log4net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.ViewModels;
 using ShipWorks.Installer.Views;
@@ -47,6 +49,13 @@ namespace ShipWorks.Installer
             services.AddScoped<IInnoSetupService, InnoSetupService>();
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
 
+            services.AddTransient((provider) =>
+            {
+                return new Func<Type, ILog>(
+                    (type) => LogManager.GetLogger(type)
+                );
+            });
+
             // Register all ViewModels.
             var viewModelsToAdd = Assembly
                 .GetEntryAssembly()?
@@ -65,6 +74,7 @@ namespace ShipWorks.Installer
 
         protected override async void OnStartup(StartupEventArgs e)
         {
+            Logger.Setup();
             await host.StartAsync();
 
             var window = ServiceProvider.GetRequiredService<MainWindow>();
