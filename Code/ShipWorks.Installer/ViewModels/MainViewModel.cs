@@ -35,12 +35,13 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public MainViewModel(INavigationService<NavigationPageType> navigationService)
+        public MainViewModel(INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService)
         {
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
             NavBarState = NavBarState.Initial;
             HelpCommand = new RelayCommand(OpenHelpPage);
+            innoSetupService.DownloadInstaller(InstallSettings);
         }
 
         /// <summary>

@@ -41,12 +41,10 @@ namespace ShipWorks.Installer
         private void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
             services.AddScoped<IDriveInfo, DriveInfoWrapper>();
-
             services.AddScoped<ISystemInfoService, SystemInfoWrapperService>();
-
             services.AddScoped<ISystemCheckService, SystemCheckService>();
             services.AddScoped<IRegistryService, RegistryService>();
-
+            services.AddScoped<IInnoSetupService, InnoSetupService>();
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
 
             // Register all ViewModels.

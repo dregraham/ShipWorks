@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using GalaSoft.MvvmLight;
-
+using ShipWorks.Installer.Enums;
 
 namespace ShipWorks.Installer.Models
 {
@@ -30,5 +30,15 @@ namespace ShipWorks.Installer.Models
         /// Whether or not to create a shortcut on the desktop
         /// </summary>
         public bool CreateShortcut { get; set; }
+
+        /// <summary>
+        /// Whether or not the INNO setup installer has finished downloading
+        /// </summary>
+        public bool InnoSetupDownloaded { get; set; } = false;
+
+        /// <summary>
+        /// The type of error that occurred during installation
+        /// </summary>
+        public InstallError Error { get; set; } = InstallError.None;
     }
 }
