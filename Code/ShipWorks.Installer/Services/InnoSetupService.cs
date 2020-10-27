@@ -13,9 +13,13 @@ namespace ShipWorks.Installer.Services
     public class InnoSetupService : IInnoSetupService
     {
         private const string InnoSetupInstallerURL = "https://prod-sw-downloads-app.s3.amazonaws.com/ShipWorksInstaller.exe";
+        private readonly string InnoSetupDownloadPath = $"{Path.GetTempPath()}ShipWorksInstaller.exe";
         private readonly ILog log;
         private InstallSettings installSettings;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public InnoSetupService(Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(InnoSetupService));
@@ -32,7 +36,8 @@ namespace ShipWorks.Installer.Services
 
             try
             {
-                client.DownloadFileAsync(new Uri(InnoSetupInstallerURL), $"{Path.GetTempPath()}\\ShipWorksInstaller.exe");
+                log.Info("Beginning download of background installer.");
+                client.DownloadFileAsync(new Uri(InnoSetupInstallerURL), InnoSetupDownloadPath);
             }
             catch (Exception ex)
             {
@@ -51,6 +56,7 @@ namespace ShipWorks.Installer.Services
                 return;
             }
 
+            log.Info($"Background installer downloaded to {InnoSetupDownloadPath}");
             installSettings.InnoSetupDownloaded = true;
         }
 

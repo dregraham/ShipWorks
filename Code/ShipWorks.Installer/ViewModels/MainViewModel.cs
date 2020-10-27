@@ -43,7 +43,7 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory)
         {
             log = logFactory(typeof(MainViewModel));
-            log.Info("Beginning Installation");
+            log.Info("Installer loaded");
             this.navigationService = navigationService;
             InstallSettings = new InstallSettings();
             NavBarState = NavBarState.Initial;
