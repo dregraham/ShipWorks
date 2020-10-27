@@ -16,5 +16,6 @@
         UpgradeShipWorks = 90,
         Warning = 100,
         UseShipWorks = 110,
+        DatabaseConfig = 120,
     }
 }

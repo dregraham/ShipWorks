@@ -15,5 +15,6 @@ namespace ShipWorks.Installer.ViewModels
         public UpgradeShipWorksViewModel UpgradeShipWorksViewModel => App.ServiceProvider.GetRequiredService<UpgradeShipWorksViewModel>();
         public WarningViewModel WarningViewModel => App.ServiceProvider.GetRequiredService<WarningViewModel>();
         public UseShipWorksViewModel UseShipWorksViewModel => App.ServiceProvider.GetRequiredService<UseShipWorksViewModel>();
+        public DatabaseConfigViewModel DatabaseConfigViewModel => App.ServiceProvider.GetRequiredService<DatabaseConfigViewModel>();
     }
 }
