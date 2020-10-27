@@ -15,6 +15,10 @@ namespace ShipWorks.Installer.Services
         private const int minSpaceInGb = 20;
         private ISystemInfoService systemInfo;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="systemInfo"></param>
         public SystemCheckService(ISystemInfoService systemInfo)
         {
             this.systemInfo = systemInfo;

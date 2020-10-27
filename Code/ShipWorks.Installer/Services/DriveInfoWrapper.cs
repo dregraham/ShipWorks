@@ -3,20 +3,15 @@ using System.Linq;
 
 namespace ShipWorks.Installer.Services
 {
+    /// <summary>
+    /// Wrapper class for System.IO.DriveInfo
+    /// </summary>
     public class DriveInfoWrapper : IDriveInfo
     {
         /// <summary>
         /// Wrapper class for System.IO.DriveInfo
         /// </summary>
         private DriveInfo driveInfo;
-
-        /// <summary>
-        /// Empty constructor for testing
-        /// </summary>
-        public DriveInfoWrapper()
-        {
-
-        }
 
         /// <summary>
         /// Constructor

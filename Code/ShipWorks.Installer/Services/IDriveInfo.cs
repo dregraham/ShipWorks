@@ -1,5 +1,8 @@
 ﻿namespace ShipWorks.Installer.Services
 {
+    /// <summary>
+    /// Interface for DriveInfoWrapper
+    /// </summary>
     public interface IDriveInfo
     {
         /// <summary>
