@@ -48,7 +48,7 @@
         </TextBlock>
 
         <StackPanel Margin="10" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-            <Button Style="{StaticResource SmallSecondaryButton}" Margin="0,0,10,0">Back</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}" Margin="0,0,10,0">Back</Button>
             <Button Style="{StaticResource SmallSecondaryButton}">Cancel</Button>
         </StackPanel>
     </Grid>

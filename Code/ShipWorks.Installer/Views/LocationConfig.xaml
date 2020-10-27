@@ -29,10 +29,10 @@
                 <TextBlock Text="Don't install SQL / connect to my own database" Margin="10,0,0,0"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">
-            <Button Style="{StaticResource SmallSecondaryButton}">Back</Button>
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">
+            <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
             <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0,20,0" Command="{Binding NextCommand}" IsDefault="True">Next</Button>
-            <Button Style="{StaticResource SmallSecondaryButton}" Margin="10" IsCancel="True">Cancel</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </Page>
