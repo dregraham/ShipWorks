@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
@@ -13,15 +14,18 @@ namespace ShipWorks.Installer.Services
         private const long bytesInGigaByte = 1024 * 1024 * 1024;
         private const long minRamInKb = 4194304;
         private const int minSpaceInGb = 20;
+        private const int minCpuSpeed = 1500;
+        private const int minCpuCores = 2;
         private ISystemInfoService systemInfo;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="systemInfo"></param>
-        public SystemCheckService(ISystemInfoService systemInfo)
+        public SystemCheckService(ISystemInfoService systemInfo, Func<Type, ILog> logFactory)
         {
             this.systemInfo = systemInfo;
+            log = logFactory(typeof(SystemCheckService));
         }
 
         /// <summary>
@@ -29,14 +33,17 @@ namespace ShipWorks.Installer.Services
         /// </summary>
         public SystemCheckResult CheckSystem()
         {
+            log.Info("Beginning system check");
+
             SystemCheckResult result = new SystemCheckResult();
 
             try
             {
                 CheckOS(result);
             }
-            catch
+            catch (Exception ex)
             {
+                log.Error("Failed to get Windows version", ex);
                 result.OsMeetsRequirement = false;
                 result.OsDescription = "Failed to read Operating System Version.";
             }
@@ -45,8 +52,9 @@ namespace ShipWorks.Installer.Services
             {
                 CheckCPU(result);
             }
-            catch
+            catch (Exception ex)
             {
+                log.Error("Failed to get CPU info", ex);
                 result.CpuMeetsRequirement = false;
                 result.CpuDescription = "Failed to validate CPU speed and core count.";
             }
@@ -55,8 +63,9 @@ namespace ShipWorks.Installer.Services
             {
                 CheckHDD(result);
             }
-            catch
+            catch (Exception ex)
             {
+                log.Error("Failed to get HDD info", ex);
                 result.HddMeetsRequirement = false;
                 result.HddDescription = "Failed to validate available disk space.";
             }
@@ -65,8 +74,9 @@ namespace ShipWorks.Installer.Services
             {
                 CheckRAM(result);
             }
-            catch
+            catch (Exception ex)
             {
+                log.Error("Failed to get RAM info", ex);
                 result.RamMeetsRequirement = false;
                 result.RamDescription = "Failed to validate RAM size.";
             }
@@ -80,12 +90,26 @@ namespace ShipWorks.Installer.Services
         /// <param name="result"></param>
         private void CheckOS(SystemCheckResult result)
         {
-            var osDescParts = systemInfo.GetOsDescription().Split('.');
+            log.Info("Checking Windows version");
 
-            if ((long.TryParse(osDescParts[2], out long windowsVersion) && windowsVersion < windows2012R2MinVersion))
+            var osDescription = systemInfo.GetOsDescription();
+
+            log.Info($"Got OS description: {osDescription}");
+
+            var osDescParts = osDescription.Split('.');
+
+            if (long.TryParse(osDescParts[2], out long windowsVersion))
             {
-                result.OsMeetsRequirement = false;
-                result.OsDescription = $"ShipWorks requires Windows 10 Version 1607 (and newer) or Windows Server 2012 R2 (and newer).";
+                log.Info($"Got Windows version {windowsVersion}, minimum version is {windows2012R2MinVersion}");
+                if (windowsVersion < windows2012R2MinVersion)
+                {
+                    result.OsMeetsRequirement = false;
+                    result.OsDescription = $"ShipWorks requires Windows 10 Version 1607 (and newer) or Windows Server 2012 R2 (and newer).";
+                }
+            }
+            else
+            {
+                log.Error("Unable to parse Windows version");
             }
         }
 
@@ -95,20 +119,43 @@ namespace ShipWorks.Installer.Services
         /// <param name="result"></param>
         private void CheckCPU(SystemCheckResult result)
         {
-            var cpuLines = systemInfo.GetCPUInfo().Split("\n");
-            if (int.TryParse(cpuLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var cpuMaxSpeed) &&
-                cpuMaxSpeed < 1500)
+            log.Info("Checking CPU");
+
+            var cpuInfo = systemInfo.GetCPUInfo();
+
+            log.Info($"Got CPU Info: {cpuInfo}");
+
+            var cpuLines = cpuInfo.Split("\n");
+
+            if (int.TryParse(cpuLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var cpuMaxSpeed))
             {
-                result.CpuMeetsRequirement = false;
-                result.CpuDescription = $"ShipWorks requires at a minimum 1.5 GHz processor.";
+                log.Info($"Got CPU max speed of {cpuMaxSpeed}, minimum required is {minCpuSpeed}");
+
+                if (cpuMaxSpeed < minCpuSpeed)
+                {
+                    result.CpuMeetsRequirement = false;
+                    result.CpuDescription = $"ShipWorks requires at a minimum 1.5 GHz processor.";
+                }
+            }
+            else
+            {
+                log.Error("Unable to parse CPU speed");
             }
 
             if (result.CpuMeetsRequirement &&
-                int.TryParse(cpuLines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var numberOfCores) &&
-                numberOfCores < 2)
+                int.TryParse(cpuLines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var numberOfCores))
             {
-                result.CpuMeetsRequirement = false;
-                result.CpuDescription = $"ShipWorks requires at least 2 processor cores.";
+                log.Info($"Got {numberOfCores} CPU cores, minimum is {minCpuCores}");
+
+                if (numberOfCores < minCpuCores)
+                {
+                    result.CpuMeetsRequirement = false;
+                    result.CpuDescription = $"ShipWorks requires at least 2 processor cores.";
+                }
+            }
+            else
+            {
+                log.Error("Unable to parse CPU cores");
             }
         }
 
@@ -118,12 +165,19 @@ namespace ShipWorks.Installer.Services
         /// <param name="result"></param>
         private void CheckHDD(SystemCheckResult result)
         {
+            log.Info("Checking drives");
             var drives = systemInfo.GetDriveInfo();
-            result.HddMeetsRequirement = systemInfo.GetDriveInfo()
-                .Any(d => (d.AvailableFreeSpace / bytesInGigaByte) > 20);
+
+            string driveString = string.Join('\n', drives.Select(x => $"Name: {x.Name}, Free space: {x.AvailableFreeSpace / bytesInGigaByte}GB"));
+
+            log.Info($"Got drive info, minimum free space required is {minSpaceInGb}GB: {driveString}");
+
+            result.HddMeetsRequirement = drives
+                .Any(d => (d.AvailableFreeSpace / bytesInGigaByte) > minSpaceInGb);
 
             if (!result.HddMeetsRequirement)
             {
+                log.Error("No drives meet minimum space requirement");
                 result.HddDescription = $"ShipWorks requires at least 20 GB of free storage.";
             }
         }
@@ -134,12 +188,28 @@ namespace ShipWorks.Installer.Services
         /// <param name="result"></param>
         private void CheckRAM(SystemCheckResult result)
         {
-            var memoryLines = systemInfo.GetRamInfo().Split("\n");
+            log.Info("Checking system RAM");
+
+            var ramInfo = systemInfo.GetRamInfo();
+
+            log.Info($"Got RAM info: {ramInfo}");
+
+            var memoryLines = ramInfo.Split("\n");
+
             var totalMemoryText = memoryLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1];
-            if (long.TryParse(totalMemoryText, out var totalMemory) && totalMemory < minRamInKb)
+
+            if (long.TryParse(totalMemoryText, out var totalMemory))
             {
-                result.RamMeetsRequirement = false;
-                result.RamDescription = $"ShipWorks requires at least 2 processor cores.";
+                log.Info($"Got total RAM of {totalMemory}Kb, minimum is {minRamInKb}Kb");
+                if (totalMemory < minRamInKb)
+                {
+                    result.RamMeetsRequirement = false;
+                    result.RamDescription = $"ShipWorks requires at least 2 processor cores.";
+                }
+            }
+            else
+            {
+                log.Error("Unable to parse RAM info");
             }
         }
 
@@ -149,7 +219,11 @@ namespace ShipWorks.Installer.Services
         /// <param name="driveLetter"></param>
         public bool DriveMeetsRequirements(string driveLetter)
         {
+            log.Info($"Checking free space on drive {driveLetter}");
+
             var freeSpace = systemInfo.GetDriveInfo().FirstOrDefault(d => d.Name.Equals(driveLetter, StringComparison.OrdinalIgnoreCase))?.AvailableFreeSpace;
+
+            log.Info($"Got {freeSpace / bytesInGigaByte}GB free space, minimum is {minSpaceInGb}GB");
 
             if (freeSpace == null)
             {

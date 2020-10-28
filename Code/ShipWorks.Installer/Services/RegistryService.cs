@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using log4net;
 using Microsoft.Win32;
 
 namespace ShipWorks.Installer.Services
@@ -8,17 +10,44 @@ namespace ShipWorks.Installer.Services
     /// </summary>
     public class RegistryService : IRegistryService
     {
+        private readonly ILog log;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public RegistryService(Func<Type, ILog> logFactory)
+        {
+            log = logFactory(typeof(RegistryService));
+        }
+
         /// <summary>
         /// Get the last-used installation path if there is one, or the default path if not
         /// </summary>
         public string GetInstallPath()
         {
+            log.Info("Getting install path");
             var shipWorksKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Interapptive\\ShipWorks");
             var lastInstanceId = (string) shipWorksKey.GetValue("LastInstalledInstanceID", null);
+
+            if (lastInstanceId != null)
+            {
+                log.Info($"Found previous instance ID: {lastInstanceId}");
+            }
+
             var instancesKey = shipWorksKey.OpenSubKey("Instances");
             var previousInstallPaths = instancesKey.GetValueNames();
 
-            return previousInstallPaths.FirstOrDefault(x => ((string) instancesKey.GetValue(x, null)) == lastInstanceId) ?? "C:\\Program Files\\ShipWorks";
+            var previousPath = previousInstallPaths.FirstOrDefault(x => ((string) instancesKey.GetValue(x, string.Empty)) == lastInstanceId);
+
+            if (previousPath != null)
+            {
+                log.Info($"Got previous installation path: {previousPath}");
+                return previousPath;
+            }
+
+            log.Info($"Could not find previous installation path, using default");
+
+            return "C:\\Program Files\\ShipWorks";
         }
     }
 }

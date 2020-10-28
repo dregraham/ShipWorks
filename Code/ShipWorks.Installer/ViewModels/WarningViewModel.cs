@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -11,16 +12,17 @@ namespace ShipWorks.Installer.ViewModels
     {
         private string warning;
         /// <summary>
-        /// Constructo
+        /// Constructor
         /// </summary>
-        /// <param name="mainViewModel"></param>
-        /// <param name="navigationService"></param>
         public WarningViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
         {
             Warning = "There was a problem installing ShipWorks.";
         }
 
+        /// <summary>
+        /// The warning message to show
+        /// </summary>
         public string Warning
         {
             get => warning;

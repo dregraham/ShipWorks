@@ -9,6 +9,10 @@ namespace ShipWorks.Installer.Services
     public class SystemInfoWrapperService : ISystemInfoService
     {
         private readonly IDriveInfo driveInfo;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public SystemInfoWrapperService(IDriveInfo driveInfo)
         {
             this.driveInfo = driveInfo;

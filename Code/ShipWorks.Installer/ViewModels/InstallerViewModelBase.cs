@@ -2,6 +2,7 @@
 using System.Reflection;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -48,7 +49,7 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
-        /// Determines if the the NextCommand can execute
+        /// Determines if the NextCommand can execute
         /// </summary>
         protected virtual bool NextCanExecute()
         {

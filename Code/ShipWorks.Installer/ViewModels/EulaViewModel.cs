@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using FontAwesome5;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -10,8 +11,6 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// View Model for the Eula page
         /// </summary>
-        /// <param name="mainViewModel"></param>
-        /// <param name="navigationService"></param>
         public EulaViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
             base(mainViewModel, navigationService, NavigationPageType.InstallPath)
         {
@@ -29,7 +28,6 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Determines if this page is complete and we can move on
         /// </summary>
-        /// <returns></returns>
         protected override bool NextCanExecute()
         {
             return true;

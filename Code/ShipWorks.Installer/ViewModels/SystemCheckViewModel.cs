@@ -2,6 +2,7 @@
 using System.Timers;
 using System.Windows;
 using FontAwesome5;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 

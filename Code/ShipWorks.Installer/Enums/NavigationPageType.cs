@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Installer.ViewModels
+﻿namespace ShipWorks.Installer.Enums
 {
     /// <summary>
     /// An Enum to define the pages used in the navigation service.

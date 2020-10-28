@@ -7,6 +7,7 @@ using log4net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.ViewModels;

@@ -1,33 +1,45 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
+using log4net;
 using Ookii.Dialogs.Wpf;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
 {
+    /// <summary>
+    /// View model for the installation path selection page
+    /// </summary>
     [Obfuscation]
     public class InstallPathViewModel : InstallerViewModelBase
     {
         private string installPath;
         private ISystemCheckService systemCheckService;
         private readonly IRegistryService registryService;
+        private readonly ILog log;
         private string error;
         private bool createShortcut;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public InstallPathViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
             ISystemCheckService systemCheckService,
-            IRegistryService registryService) :
+            IRegistryService registryService,
+            Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UpgradeShipWorks)
         {
             BrowseCommand = new RelayCommand(Browse);
             ValidatePathCommand = new RelayCommand(() => ValidatePath());
             this.systemCheckService = systemCheckService;
             this.registryService = registryService;
+            log = logFactory(typeof(InstallPathViewModel));
             InstallPath = registryService.GetInstallPath();
             ValidatePath();
         }
@@ -104,11 +116,13 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private void Browse()
         {
+            log.Info("Opening install path file browser");
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
             dialog.SelectedPath = InstallPath;
             dialog.ShowDialog();
             if (!string.IsNullOrWhiteSpace(dialog.SelectedPath))
             {
+                log.Info($"User selected path: {dialog.SelectedPath}");
                 InstallPath = dialog.SelectedPath;
             }
             ValidatePath();
@@ -119,6 +133,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private bool ValidatePath()
         {
+            log.Info($"Validating path {InstallPath}");
             string driveLetter = Path.GetPathRoot(InstallPath);
             if (!systemCheckService.DriveMeetsRequirements(driveLetter))
             {
@@ -135,11 +150,14 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private bool PathContainsShipWorks()
         {
+            log.Info($"Checking path {InstallPath} for existing ShipWorks installation");
             if (Directory.Exists(InstallPath))
             {
+                log.Info("Found existing ShipWorks installation");
                 return Directory.GetFiles(InstallPath).Any(f => f == Path.Combine(InstallPath, "ShipWorks.exe"));
             }
 
+            log.Info("Could not find existing ShipWorks installation");
             return false;
         }
     }

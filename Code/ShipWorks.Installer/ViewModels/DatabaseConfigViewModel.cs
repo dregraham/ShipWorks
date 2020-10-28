@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using FontAwesome5;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 
@@ -16,6 +17,9 @@ namespace ShipWorks.Installer.ViewModels
         private List<string> networkLocations;
         private string selectedNetworkLocation;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DatabaseConfigViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks)
         {

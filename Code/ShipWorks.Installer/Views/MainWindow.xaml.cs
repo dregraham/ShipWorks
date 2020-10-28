@@ -1,6 +1,6 @@
 ﻿using System.Windows;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
-using ShipWorks.Installer.ViewModels;
 
 namespace ShipWorks.Installer.Views
 {
