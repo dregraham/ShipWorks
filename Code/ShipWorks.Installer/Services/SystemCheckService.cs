@@ -204,7 +204,7 @@ namespace ShipWorks.Installer.Services
                 if (totalMemory < minRamInKb)
                 {
                     result.RamMeetsRequirement = false;
-                    result.RamDescription = $"ShipWorks requires at least 2 processor cores.";
+                    result.RamDescription = $"ShipWorks requires at least {minRamInKb}Kb RAM.";
                 }
             }
             else
