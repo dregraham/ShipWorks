@@ -1,10 +1,14 @@
-﻿using Moq;
+﻿using System;
+using log4net;
+using Moq;
 using Xunit;
 
 namespace ShipWorks.Installer.Services.Tests
 {
     public class SystemCheckServiceTests
     {
+        private readonly Func<Type, ILog> logFactory = new Func<Type, ILog>((type) => LogManager.GetLogger(type));
+
         [Theory]
         [InlineData("Microsoft Windows 10.0.14393", true)]
         [InlineData("Windows Server 2012 R2.0.9600", true)]
@@ -14,7 +18,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetOsDescription()).Returns(osVersion);
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             Assert.Equal(result.OsMeetsRequirement, expectedResult);
         }
@@ -29,7 +33,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetCPUInfo()).Returns(cpuInfo);
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             Assert.Equal(result.CpuMeetsRequirement, expectedResult);
         }
@@ -42,7 +46,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetRamInfo()).Returns(ramInfo);
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             Assert.Equal(result.RamMeetsRequirement, expectedResult);
         }
@@ -57,7 +61,7 @@ namespace ShipWorks.Installer.Services.Tests
             driveInfo.Setup(d => d.AvailableFreeSpace).Returns(driveSpace);
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetDriveInfo()).Returns(new IDriveInfo[] { driveInfo.Object });
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             Assert.Equal(result.HddMeetsRequirement, expectedResult);
         }
@@ -67,7 +71,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetRamInfo()).Throws(new System.Exception("Test Exception"));
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             systemInfo.Verify(s => s.GetOsDescription());
             systemInfo.Verify(s => s.GetDriveInfo());
@@ -80,7 +84,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetCPUInfo()).Throws(new System.Exception("Test Exception"));
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             systemInfo.Verify(s => s.GetRamInfo());
             systemInfo.Verify(s => s.GetDriveInfo());
@@ -93,7 +97,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetDriveInfo()).Throws(new System.Exception("Test Exception"));
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             systemInfo.Verify(s => s.GetCPUInfo());
             systemInfo.Verify(s => s.GetRamInfo());
@@ -106,7 +110,7 @@ namespace ShipWorks.Installer.Services.Tests
         {
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetRamInfo()).Throws(new System.Exception("Test Exception"));
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.CheckSystem();
             systemInfo.Verify(s => s.GetRamInfo());
             systemInfo.Verify(s => s.GetDriveInfo());
@@ -134,7 +138,7 @@ namespace ShipWorks.Installer.Services.Tests
             var systemInfo = new Mock<ISystemInfoService>();
             systemInfo.Setup(s => s.GetDriveInfo()).Returns(new IDriveInfo[] { driveCInfo.Object, driveDInfo.Object });
 
-            var service = new SystemCheckService(systemInfo.Object);
+            var service = new SystemCheckService(systemInfo.Object, logFactory);
             var result = service.DriveMeetsRequirements(driveLetter);
 
             Assert.Equal(result, expectedResult);

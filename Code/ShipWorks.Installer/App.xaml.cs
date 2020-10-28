@@ -50,7 +50,7 @@ namespace ShipWorks.Installer
             services.AddScoped<IInnoSetupService, InnoSetupService>();
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
 
-            services.AddTransient((provider) =>
+            services.AddSingleton((provider) =>
             {
                 return new Func<Type, ILog>(
                     (type) => LogManager.GetLogger(type)
