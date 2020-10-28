@@ -1,26 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using ShipWorks.Installer.ViewModels;
 
 namespace ShipWorks.Installer.Views
 {
     /// <summary>
-    /// Interaction logic for Eula.xaml
+    /// Interaction logic for Login.xaml
     /// </summary>
     public partial class Login : Page
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public Login()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Event handler for password changing
+        /// </summary>
+        private void OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            { ((LoginViewModel) DataContext).Password = ((PasswordBox) sender).Password; }
         }
     }
 }

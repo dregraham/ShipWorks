@@ -17,7 +17,18 @@
         <Setter Property="FontFamily" Value="/ShipWorks.Installer;component/Styles/BlueSteel/#Roboto"/>
         <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
     </Style>
-
+    <Style x:Key="BlueSteelPasswordBox" TargetType="{x:Type PasswordBox}">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Height" Value="28"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Foreground" Value="{StaticResource ControlTextColor}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+        <Setter Property="Background" Value="{StaticResource InputControlBackgroundGradient}"/>
+        <Setter Property="FontFamily" Value="/ShipWorks.Installer;component/Styles/BlueSteel/#Roboto"/>
+        <Setter Property="attachedProperties:SelectTextOnFocus.Enabled" Value="True"/>
+    </Style>
     <Style x:Key="FormTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource BlueSteelTextBox}">
         <Setter Property="Margin" Value="10 0 0 10"/>
     </Style>

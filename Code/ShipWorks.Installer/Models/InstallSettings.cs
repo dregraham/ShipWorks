@@ -40,5 +40,10 @@ namespace ShipWorks.Installer.Models
         /// The type of error that occurred during installation
         /// </summary>
         public InstallError Error { get; set; } = InstallError.None;
+
+        /// <summary>
+        /// The token for authorizing Hub requests
+        /// </summary>
+        public HubToken Token { get; set; }
     }
 }

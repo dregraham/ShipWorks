@@ -7,6 +7,7 @@ using log4net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ShipWorks.Installer.Api;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Services;
@@ -49,6 +50,8 @@ namespace ShipWorks.Installer
             services.AddScoped<IRegistryService, RegistryService>();
             services.AddScoped<IInnoSetupService, InnoSetupService>();
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
+            services.AddScoped<IHubApiClient, HubApiClient>();
+            services.AddScoped<IHubService, HubService>();
 
             services.AddSingleton((provider) =>
             {
