@@ -14,6 +14,7 @@ namespace ShipWorks.Installer.ViewModels
     {
         private string username;
         private string password;
+        private string error;
         private readonly IHubService hubService;
 
         /// <summary>
@@ -46,17 +47,33 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
+        /// The error message
+        /// </summary>
+        public string Error
+        {
+            get => error;
+            set => Set(ref error, value);
+        }
+
+        /// <summary>
         /// Login to the hub
         /// </summary>
         private async void Login()
         {
+            if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
+            {
+                Error = "Please enter a username and password";
+                return;
+            }
+
             try
             {
+                Error = null;
                 await hubService.Login(mainViewModel.InstallSettings, Username, Password);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Set error message
+                Error = ex.Message;
                 return;
             }
             mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;

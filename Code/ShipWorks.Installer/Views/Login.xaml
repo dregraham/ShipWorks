@@ -6,11 +6,17 @@
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
+    xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
     Title="Login"
     d:DesignHeight="300"
     d:DesignWidth="300"
     DataContext="{Binding Path=LoginViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <convert:IsEmptyConverter x:Key="IsEmptyConverter"/>
+    </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -47,6 +53,8 @@
                 I forgot my password
             </Hyperlink>
         </TextBlock>
+
+        <TextBlock Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource IsEmptyConverter}}" Grid.Column="2" Grid.Row="6" HorizontalAlignment="Center" />
 
         <StackPanel Margin="10" Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}" Margin="0,0,10,0">Back</Button>
