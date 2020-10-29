@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using log4net;
 using log4net.Appender;
 using log4net.Config;
@@ -13,11 +14,15 @@ namespace ShipWorks.Installer.Logging
     /// </summary>
     public class Logger
     {
+
         /// <summary>
         /// Setup the logger
         /// </summary>
         public static void Setup()
         {
+            string logFolder = Path.Combine(Path.GetTempPath(), "ShipWorks.Installer");
+            System.IO.Directory.CreateDirectory(logFolder);
+
             Hierarchy hierarchy = (Hierarchy) LogManager.GetRepository();
 
             PatternLayout patternLayout = new PatternLayout();
@@ -26,12 +31,12 @@ namespace ShipWorks.Installer.Logging
 
             FileAppender fileAppender = new FileAppender();
             fileAppender.AppendToFile = true;
-            fileAppender.File = $"ShipWorksInstaller_{DateTime.Now:yyyyMMddHHmmss}.log";
+            fileAppender.File = Path.Combine(logFolder, $"ShipWorksInstaller_{DateTime.Now:yyyyMMddHHmmss}.log");
             fileAppender.Layout = patternLayout;
             fileAppender.ActivateOptions();
             hierarchy.Root.AddAppender(fileAppender);
 
-            hierarchy.Root.Level = Level.Info;
+            hierarchy.Root.Level = Level.All;
             BasicConfigurator.Configure(hierarchy);
         }
     }
