@@ -5,6 +5,9 @@ using log4net;
 
 namespace ShipWorks.Installer.Sql
 {
+    /// <summary>
+    /// Contains information and methods for connecting to a sql server
+    /// </summary>
     public class SqlSession : ISqlSession
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
@@ -33,6 +36,9 @@ namespace ShipWorks.Installer.Sql
             Configuration = new SqlSessionConfiguration(configuration);
         }
 
+        /// <summary>
+        /// The configuration for this session
+        /// </summary>
         public SqlSessionConfiguration Configuration { get; set; }
 
         /// <summary>

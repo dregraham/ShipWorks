@@ -7,6 +7,9 @@ using log4net;
 
 namespace ShipWorks.Installer.Sql
 {
+    /// <summary>
+    /// Helper class for communicating with a sql server
+    /// </summary>
     public class SqlUtility : ISqlUtility
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SqlUtility));

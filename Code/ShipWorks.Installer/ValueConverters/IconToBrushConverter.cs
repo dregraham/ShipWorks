@@ -6,6 +6,9 @@ using FontAwesome5;
 
 namespace ShipWorks.Installer.ValueConverters
 {
+    /// <summary>
+    /// Converts an EFontAwesomeIcon into it coresponding brush
+    /// </summary>
     public class IconToBrushConverter : IValueConverter
     {
         /// <summary>
