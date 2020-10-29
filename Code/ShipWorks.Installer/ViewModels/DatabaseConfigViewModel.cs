@@ -6,6 +6,7 @@ using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
 using log4net;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.Sql;
