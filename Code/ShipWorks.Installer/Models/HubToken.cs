@@ -14,5 +14,10 @@
         /// The refresh token
         /// </summary>
         public string RefreshToken { get; set; }
+
+        /// <summary>
+        /// Customer license key
+        /// </summary>
+        public string CustomerLicenseKey { get; set; }
     }
 }

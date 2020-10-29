@@ -36,7 +36,8 @@ namespace ShipWorks.Installer.Services
                 settings.Token = new HubToken
                 {
                     Token = token.token,
-                    RefreshToken = token.refreshToken
+                    RefreshToken = token.refreshToken,
+                    CustomerLicenseKey = token.CustomerLicenseKey
                 };
             }
             catch (UnauthorizedAccessException ex)
