@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using ShipWorks.Installer.ViewModels;
+﻿using System.Windows.Controls;
 
 namespace ShipWorks.Installer.Views
 {
@@ -15,15 +13,6 @@ namespace ShipWorks.Installer.Views
         public Login()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Event handler for password changing
-        /// </summary>
-        private void OnPasswordChanged(object sender, RoutedEventArgs e)
-        {
-            if (DataContext != null)
-            { ((LoginViewModel) DataContext).Password = ((PasswordBox) sender).Password; }
         }
     }
 }

@@ -11,6 +11,9 @@ namespace ShipWorks.Installer.Controls
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register(
            "Password", typeof(string), typeof(BindablePasswordBox), new PropertyMetadata(default(string)));
 
+        /// <summary>
+        /// The password
+        /// </summary>
         public string Password
         {
             get { return (string) GetValue(PasswordProperty); }
@@ -26,7 +29,7 @@ namespace ShipWorks.Installer.Controls
         }
 
         /// <summary>
-        /// Event handler
+        /// Event handler to set the password
         /// </summary>
         private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
         {
@@ -34,7 +37,7 @@ namespace ShipWorks.Installer.Controls
         }
 
         /// <summary>
-        /// Event handler
+        /// Event handler to give focus to the password box
         /// </summary>
         private void BindablePasswordBox_OnGotFocus(object sender, RoutedEventArgs e)
         {

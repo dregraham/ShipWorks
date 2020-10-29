@@ -82,6 +82,7 @@ namespace ShipWorks.Installer.ViewModels
 
         /// <summary>
         /// Command handler for the NextCommand
+        /// Call Login as a separate async function to prevent blocking the UI
         /// </summary>
         protected override void NextExecute() => Login();
 
