@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Artifacts\**" />
+    <EmbeddedResource Remove="Artifacts\**" />
+    <None Remove="Artifacts\**" />
+    <Page Remove="Artifacts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="License.rtf" />
     <None Remove="Resources\loading_spinner.png" />
     <None Remove="Styles\BlueSteel\Roboto-Regular.ttf" />

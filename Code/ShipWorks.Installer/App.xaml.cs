@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ShipWorks.Installer.Api;
 using ShipWorks.Installer.Enums;
+using ShipWorks.Installer.Environments;
 using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.ViewModels;
@@ -52,6 +53,7 @@ namespace ShipWorks.Installer
             services.AddScoped<INavigationService<NavigationPageType>, NavigationService<NavigationPageType>>();
             services.AddScoped<IHubApiClient, HubApiClient>();
             services.AddScoped<IHubService, HubService>();
+            services.AddScoped<IWebClientEnvironmentFactory, WebClientEnvironmentFactory>();
 
             services.AddSingleton((provider) =>
             {

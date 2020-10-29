@@ -17,6 +17,17 @@ namespace ShipWorks.Installer.ViewModels
         private readonly IHubService hubService;
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public LoginViewModel(MainViewModel mainViewModel,
+            INavigationService<NavigationPageType> navigationService,
+            IHubService hubService) :
+            base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
+        {
+            this.hubService = hubService;
+        }
+
+        /// <summary>
         /// The Hub username
         /// </summary>
         public string Username
@@ -32,17 +43,6 @@ namespace ShipWorks.Installer.ViewModels
         {
             get => password;
             set => Set(ref password, value);
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public LoginViewModel(MainViewModel mainViewModel,
-            INavigationService<NavigationPageType> navigationService,
-            IHubService hubService) :
-            base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
-        {
-            this.hubService = hubService;
         }
 
         /// <summary>

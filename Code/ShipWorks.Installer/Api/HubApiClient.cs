@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShipWorks.Installer.Api.DTO;
+using ShipWorks.Installer.Environments;
 
 namespace ShipWorks.Installer.Api
 {
@@ -15,17 +16,17 @@ namespace ShipWorks.Installer.Api
     /// </summary>
     public class HubApiClient : IHubApiClient
     {
-        private const string HubEndpointBase = "http://localhost:4100/";
         private const string LoginEndpoint = "api/auth/login";
-
+        private readonly WebClientEnvironment webClientEnvironment;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubApiClient(Func<Type, ILog> logFactory)
+        public HubApiClient(Func<Type, ILog> logFactory, IWebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             log = logFactory(typeof(HubApiClient));
+            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
         }
 
         /// <summary>
@@ -40,7 +41,7 @@ namespace ShipWorks.Installer.Api
 
             restRequest.AddJsonBody(new { username, password });
 
-            var restClient = new RestClient(HubEndpointBase);
+            var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
 
             IRestResponse restResponse = await restClient.ExecuteAsync(restRequest)
                 .ConfigureAwait(false);
