@@ -25,7 +25,7 @@
                 <TextBlock Text="Advanced Options"/>
             </Border>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                <CheckBox Style="{StaticResource FormCheckBox}"/>
+                <CheckBox Style="{StaticResource FormCheckBox}" IsChecked="{Binding OwnDbChecked}"/>
                 <TextBlock Text="Don't install SQL / connect to my own database" Margin="10,0,0,0"/>
             </StackPanel>
         </StackPanel>

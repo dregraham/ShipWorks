@@ -37,6 +37,11 @@ namespace ShipWorks.Installer.Models
         public bool InnoSetupDownloaded { get; set; } = false;
 
         /// <summary>
+        /// The db connection string
+        /// </summary>
+        public string ConnectionString { get; set; }
+
+        /// <summary>
         /// The type of error that occurred during installation
         /// </summary>
         public InstallError Error { get; set; } = InstallError.None;

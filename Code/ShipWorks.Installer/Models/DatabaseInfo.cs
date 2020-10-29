@@ -11,18 +11,18 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// The status of the db
+        /// The username used to connect to the database
         /// </summary>
-        public string Status { get; set; }
+        public string Username { get; set; }
 
         /// <summary>
-        /// The last activity time and user
+        /// The password used to connect to the database
         /// </summary>
-        public string LastActivity { get; set; }
+        public string Password { get; set; }
 
         /// <summary>
-        /// The latest order number and date
+        /// The server instance to connect to
         /// </summary>
-        public string LatestOrder { get; set; }
+        public string ServerInstance { get; set; }
     }
 }

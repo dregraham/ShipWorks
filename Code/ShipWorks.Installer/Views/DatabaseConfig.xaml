@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:ShipWorks.Installer.Views"
       xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
+      xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
       xmlns:fa5="http://schemas.fontawesome.com/icons/"
       DataContext="{Binding Path=DatabaseConfigViewModel, Source={StaticResource Locator}}"
       mc:Ignorable="d" 
@@ -12,19 +13,24 @@
       Title="DatabaseConfig">
     <Page.Resources>
         <convert:PercentageConverter x:Key="PercentageConverter"/>
+        <convert:IconToBrushConverter x:Key="IconToBrushConverter"/>
     </Page.Resources>
     <Grid>
         <StackPanel>
             <TextBlock Style="{StaticResource Header}" Text="Where is your database running?"/>
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <ComboBox Style="{StaticResource FormComboBox}" 
-                          ItemsSource="{Binding NetworkLocations}"
-                          SelectedItem="{Binding SelectedNetworkLocation}" 
-                          Width="250" 
-                          Margin="0,0,0,10"/>
-                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0">
-                    Dont see it?
-                    <Hyperlink>
+            <StackPanel Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Style="{StaticResource BlueSteelTextBox}" 
+                             Text="{Binding ServerInstance}"
+                             Width="250"
+                             Margin="0,0,20,0"/>
+                    <Button Style="{StaticResource SmallButton}" Command="{Binding ConnectCommand}">
+                        Connect
+                    </Button>
+                </StackPanel>
+                <TextBlock VerticalAlignment="Center" Margin="0,10,0,0">
+                    Don't know?
+                    <Hyperlink Command="{Binding HelpCommand}">
                         Don't worry, we can help
                     </Hyperlink>
                 </TextBlock>
@@ -33,44 +39,38 @@
             <StackPanel Orientation="Horizontal">
                 <fa5:FontAwesome x:Name="CurrentIcon"
                          FontSize="15"
-                         Icon="Solid_CheckCircle" 
-                         Foreground="Green" 
+                         Icon="{Binding ConnectionIcon}" 
+                         Foreground="{Binding ConnectionIcon, Converter={StaticResource IconToBrushConverter}}" 
                          Grid.Column="1" 
                          VerticalAlignment="Center"/>
-                <TextBlock Style="{StaticResource FieldLabel}" Text="Connected to '{Database}' using the '{sa}' account" VerticalAlignment="Center" Margin="10,0"/>
-                <TextBlock VerticalAlignment="Center">
-                    <Hyperlink>
-                        Change
-                    </Hyperlink>
-                </TextBlock>
+                <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding SelectedText}" VerticalAlignment="Center" Margin="10,0"/>
             </StackPanel>
-            <ListView MinHeight="150" Margin="0,20" ItemsSource="{Binding Databases}" x:Name="DatabaseView">
+            <ListView Height="150" Margin="0,10,0,20" ItemsSource="{Binding Databases}" x:Name="DatabaseView" SelectedItem="{Binding SelectedDatabase}">
+                <ListView.Resources>
+                    <DataTemplate x:Key="Name">
+                        <TextBlock HorizontalAlignment="Left" 
+                        Text="{Binding XPath=@DatabaseName}"/>
+                    </DataTemplate>
+                </ListView.Resources>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" 
+                        <GridViewColumn Header="Database" DisplayMemberBinding="{Binding DatabaseName}" 
                                         Width="{Binding 
                                         Converter={StaticResource PercentageConverter}, 
                                         ElementName=DatabaseView, 
                                         Path=ActualWidth, 
-                                        ConverterParameter=0.2}"/>
-                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}"                                        
-                                        Width="{Binding 
+                                        ConverterParameter=.90}">
+                            <GridViewColumn.HeaderContainerStyle>
+                                <Style TargetType="{x:Type GridViewColumnHeader}">
+                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                                    <Setter Property="Width" Value="{Binding 
                                         Converter={StaticResource PercentageConverter}, 
                                         ElementName=DatabaseView, 
                                         Path=ActualWidth, 
-                                        ConverterParameter=0.2}"/>
-                        <GridViewColumn Header="Last Activity" DisplayMemberBinding="{Binding LastActivity}"
-                                        Width="{Binding 
-                                        Converter={StaticResource PercentageConverter}, 
-                                        ElementName=DatabaseView, 
-                                        Path=ActualWidth, 
-                                        ConverterParameter=0.35}"/>
-                        <GridViewColumn Header="Latest Order" DisplayMemberBinding="{Binding LatestOrder}"
-                                        Width="{Binding 
-                                        Converter={StaticResource PercentageConverter}, 
-                                        ElementName=DatabaseView, 
-                                        Path=ActualWidth, 
-                                        ConverterParameter=0.23}"/>
+                                        ConverterParameter=1}" />
+                                </Style>
+                            </GridViewColumn.HeaderContainerStyle>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -85,18 +85,18 @@
                 </Grid.RowDefinitions>
                 <StackPanel>
                     <TextBlock Text="Username" Style="{StaticResource Header}"/>
-                    <TextBox Style="{StaticResource BlueSteelTextBox}"/>
+                    <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Username}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="0,10">
                     <TextBlock Text="Password" Style="{StaticResource Header}"/>
-                    <TextBox Style="{StaticResource BlueSteelTextBox}"/>
+                    <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Password}"/>
                 </StackPanel>
-                <Button Style="{StaticResource SmallButton}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Margin="50,10">Test</Button>
+                <Button Style="{StaticResource SmallButton}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Margin="50,10" Command="{Binding TestCommand}">Test</Button>
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
-            <Button Style="{StaticResource SmallSecondaryButton}">Back</Button>
-            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0,20,0">Next</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" Command="{Binding NextCommand}" Margin="10,0,20,0" IsEnabled="{Binding NextEnabled}">Next</Button>
             <Button Style="{StaticResource SmallSecondaryButton}">Cancel</Button>
         </StackPanel>
     </Grid>

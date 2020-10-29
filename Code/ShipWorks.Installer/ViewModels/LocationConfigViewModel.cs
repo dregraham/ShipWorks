@@ -11,6 +11,8 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class LocationConfigViewModel : InstallerViewModelBase
     {
+        private bool ownDbChecked;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -22,8 +24,21 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Command handler for the NextCommand
         /// </summary>
+        public bool OwnDbChecked
+        {
+            get => ownDbChecked;
+            set => Set(ref ownDbChecked, value);
+        }
+
+        /// <summary>
+        /// Trigger navigation to the next wizard page
+        /// </summary>
         protected override void NextExecute()
         {
+            if (OwnDbChecked)
+            {
+                NextPage = NavigationPageType.DatabaseConfig;
+            }
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
@@ -12,6 +13,7 @@ using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Environments;
 using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Services;
+using ShipWorks.Installer.Sql;
 using ShipWorks.Installer.ViewModels;
 using ShipWorks.Installer.Views;
 
@@ -30,6 +32,7 @@ namespace ShipWorks.Installer
                     .ConfigureAppConfiguration((context, builder) =>
                     {
                         // Add other configuration files...
+                        DbProviderFactories.RegisterFactory("System.Data.SqlClient", System.Data.SqlClient.SqlClientFactory.Instance);
                     }).ConfigureServices((context, services) =>
                     {
                         ConfigureServices(context.Configuration, services);
@@ -45,6 +48,9 @@ namespace ShipWorks.Installer
 
         private void ConfigureServices(IConfiguration configuration, IServiceCollection services)
         {
+            services.AddScoped<ISqlSession, SqlSession>();
+            services.AddScoped<ISqlUtility, SqlUtility>();
+            services.AddScoped<ISqlServerLookupService, SqlServerLookupService>();
             services.AddScoped<IDriveInfo, DriveInfoWrapper>();
             services.AddScoped<ISystemInfoService, SystemInfoWrapperService>();
             services.AddScoped<ISystemCheckService, SystemCheckService>();
