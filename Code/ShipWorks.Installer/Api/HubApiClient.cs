@@ -52,7 +52,7 @@ namespace ShipWorks.Installer.Api
             {
                 if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    throw new UnauthorizedAccessException("The username or password is incorrect");
+                    throw new UnauthorizedAccessException("Incorrect username or password entered. Please try again.");
                 }
 
                 if (restResponse.ErrorException != null)
