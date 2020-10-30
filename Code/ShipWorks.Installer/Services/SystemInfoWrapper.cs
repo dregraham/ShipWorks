@@ -1,5 +1,7 @@
 ﻿
+using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace ShipWorks.Installer.Services
 {
@@ -45,7 +47,7 @@ namespace ShipWorks.Installer.Services
         /// <param name="redirectStandardOutput"></param>
         private string GetWmicOutput(string query, bool redirectStandardOutput = true)
         {
-            var info = new ProcessStartInfo("wmic")
+            var info = new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "System32\\Wbem\\WMIC.exe"))
             {
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true,

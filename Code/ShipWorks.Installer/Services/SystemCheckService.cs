@@ -168,17 +168,34 @@ namespace ShipWorks.Installer.Services
             log.Info("Checking drives");
             var drives = systemInfo.GetDriveInfo();
 
-            string driveString = string.Join('\n', drives.Select(x => $"Name: {x.Name}, Free space: {x.AvailableFreeSpace / bytesInGigaByte}GB"));
+            string driveString = string.Join('\n', drives.Select(x => $"Name: {x.Name}, Free space: {GetAvailibleFreeSpace(x) / bytesInGigaByte}GB"));
 
             log.Info($"Got drive info, minimum free space required is {minSpaceInGb}GB: {driveString}");
 
             result.HddMeetsRequirement = drives
-                .Any(d => (d.AvailableFreeSpace / bytesInGigaByte) > minSpaceInGb);
+                .Any(d => (GetAvailibleFreeSpace(d) / bytesInGigaByte) > minSpaceInGb);
 
             if (!result.HddMeetsRequirement)
             {
                 log.Error("No drives meet minimum space requirement");
                 result.HddDescription = $"ShipWorks requires at least 20 GB of free storage.";
+            }
+        }
+
+        /// <summary>
+        /// Gets the available free space of the drive and
+        /// handles any errors that might occur
+        /// </summary>
+        private long GetAvailibleFreeSpace(IDriveInfo drive)
+        {
+            try
+            {
+                return drive.AvailableFreeSpace;
+            }
+            catch (Exception ex)
+            {
+                log.Info($"An error occured getting available space for drive ${drive.Name}: ${ex.Message}");
+                return 0;
             }
         }
 
