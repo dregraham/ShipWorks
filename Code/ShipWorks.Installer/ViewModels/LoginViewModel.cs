@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Windows.Input;
 using FontAwesome5;
 using log4net;
 using ShipWorks.Installer.Enums;
@@ -16,6 +17,7 @@ namespace ShipWorks.Installer.ViewModels
         private string username;
         private string password;
         private string error;
+        private bool loggingIn = false;
         private readonly IHubService hubService;
         private readonly ILog log;
 
@@ -73,7 +75,11 @@ namespace ShipWorks.Installer.ViewModels
             try
             {
                 Error = null;
-                await hubService.Login(mainViewModel.InstallSettings, Username, Password);
+                Mouse.OverrideCursor = Cursors.Wait;
+                loggingIn = true;
+
+                // Needs ConfigureAwait(true) in order to set the mouse cursor in the finally block
+                await hubService.Login(mainViewModel.InstallSettings, Username, Password).ConfigureAwait(true);
 
                 // If the customer's trial has ended, send them to the warnings page
                 if (mainViewModel.InstallSettings.Token.RecurlyTrialEndDate < DateTime.UtcNow)
@@ -90,6 +96,11 @@ namespace ShipWorks.Installer.ViewModels
                 Error = ex.Message;
                 return;
             }
+            finally
+            {
+                loggingIn = false;
+                Mouse.OverrideCursor = Cursors.Arrow;
+            }
             mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
@@ -105,7 +116,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override bool NextCanExecute()
         {
-            return true;
+            return !loggingIn;
         }
     }
 }
