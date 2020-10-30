@@ -1,4 +1,5 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 
 namespace ShipWorks.Installer.Api.DTO
 {
@@ -27,6 +28,11 @@ namespace ShipWorks.Installer.Api.DTO
         /// Customer license key
         /// </summary>
         public string CustomerLicenseKey { get; set; }
+
+        /// <summary>
+        /// The end date of the customer's trial
+        /// </summary>
+        public DateTime RecurlyTrialEndDate { get; set; }
 
         /// <summary>
         /// An error

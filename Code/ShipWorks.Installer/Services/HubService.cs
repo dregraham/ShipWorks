@@ -37,7 +37,8 @@ namespace ShipWorks.Installer.Services
                 {
                     Token = token.token,
                     RefreshToken = token.refreshToken,
-                    CustomerLicenseKey = token.CustomerLicenseKey
+                    CustomerLicenseKey = token.CustomerLicenseKey,
+                    RecurlyTrialEndDate = token.RecurlyTrialEndDate,
                 };
             }
             catch (UnauthorizedAccessException ex)

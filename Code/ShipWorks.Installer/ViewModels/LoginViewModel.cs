@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
@@ -16,16 +17,19 @@ namespace ShipWorks.Installer.ViewModels
         private string password;
         private string error;
         private readonly IHubService hubService;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public LoginViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
-            IHubService hubService) :
+            IHubService hubService,
+            Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
         {
             this.hubService = hubService;
+            log = logFactory(typeof(LoginViewModel));
         }
 
         /// <summary>
@@ -70,6 +74,16 @@ namespace ShipWorks.Installer.ViewModels
             {
                 Error = null;
                 await hubService.Login(mainViewModel.InstallSettings, Username, Password);
+
+                // If the customer's trial has ended, send them to the warnings page
+                if (mainViewModel.InstallSettings.Token.RecurlyTrialEndDate < DateTime.UtcNow)
+                {
+                    log.Error($"The customer's trial has expired. End date was {mainViewModel.InstallSettings.Token.RecurlyTrialEndDate} UTC.");
+                    mainViewModel.InstallSettings.Error = InstallError.Unknown;
+                    mainViewModel.LoginIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                    navigationService.NavigateTo(NavigationPageType.Warning);
+                    return;
+                }
             }
             catch (Exception ex)
             {
