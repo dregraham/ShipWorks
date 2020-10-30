@@ -88,7 +88,7 @@ namespace ShipWorks.Installer.ViewModels
             get => installPath;
             set
             {
-                value = value.EndsWith('\\') ? value : value + "\\";
+                value = value.EndsWith('\\') || value.EndsWith('/') ? value : value + "\\";
                 Set(ref installPath, value);
             }
         }
