@@ -88,7 +88,8 @@ namespace ShipWorks.Installer.ViewModels
             get => installPath;
             set
             {
-                value = value.EndsWith('\\') || value.EndsWith('/') ? value : value + "\\";
+                var pathWithBackslashes = value.Replace('/', '\\');
+                value = pathWithBackslashes.EndsWith('\\') ? pathWithBackslashes : pathWithBackslashes + "\\";
                 Set(ref installPath, value);
             }
         }
