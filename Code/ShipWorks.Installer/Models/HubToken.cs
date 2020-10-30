@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ShipWorks.Installer.Models
+﻿namespace ShipWorks.Installer.Models
 {
     /// <summary>
     /// Token for logging into the Hub
@@ -21,10 +19,5 @@ namespace ShipWorks.Installer.Models
         /// Customer license key
         /// </summary>
         public string CustomerLicenseKey { get; set; }
-
-        /// <summary>
-        /// The end date of the customer's trial
-        /// </summary>
-        public DateTime RecurlyTrialEndDate { get; set; }
     }
 }
