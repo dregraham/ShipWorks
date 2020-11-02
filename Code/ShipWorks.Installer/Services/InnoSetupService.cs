@@ -3,8 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 using log4net;
 using ShipWorks.Installer.Environments;
+using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
@@ -79,7 +81,7 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Call Inno installer to install ShipWorks
         /// </summary>
-        public void InstallShipWorks(InstallSettings installSettings)
+        public async Task InstallShipWorks(InstallSettings installSettings)
         {
             InstallSettings = installSettings;
 
@@ -95,7 +97,7 @@ namespace ShipWorks.Installer.Services
 
             try
             {
-                RunSetup(installSettings.InstallPath);
+                await RunSetup(installSettings.InstallPath);
             }
             catch (Exception ex)
             {
@@ -107,8 +109,11 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Run ShipWorks setup
         /// </summary>
-        private void RunSetup(string installLocation)
+        private async Task RunSetup(string installLocation)
         {
+            // Kill any ShipWorks instances that are running
+            KillShipWorks();
+
             string logFolder = Path.Combine(Path.GetTempPath(), "InnoShipWorksInstaller");
             System.IO.Directory.CreateDirectory(logFolder);
             string logFileName = Path.Combine(logFolder, "InnoInstaller.log");
@@ -130,7 +135,8 @@ namespace ShipWorks.Installer.Services
             using (Process proc = Process.Start(start))
             {
                 log.Info("Waiting for Inno Install Process to finish");
-                proc.WaitForExit();
+                await proc.WaitForExitAsync();
+
                 log.Info("Inno Install Process finished.");
                 exitCode = proc.ExitCode;
                 log.InfoFormat("Inno Install Process exit code {0}", exitCode);
@@ -141,5 +147,18 @@ namespace ShipWorks.Installer.Services
                 InstallSettings.Error = Enums.InstallError.InstallShipWorks;
             }
         }
+
+        /// <summary>
+        /// Kill any instance of Shipworks UI running.
+        /// </summary>
+        private void KillShipWorks()
+        {
+            foreach (Process process in Process.GetProcessesByName("shipworks"))
+            {
+                log.Info($"Killing ShipWorks processes.");
+                process?.Kill();
+            }
+        }
+
     }
 }

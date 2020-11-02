@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
@@ -9,27 +12,30 @@ namespace ShipWorks.Installer.ViewModels
     /// View model for the Install ShipWorks page
     /// </summary>
     [Obfuscation]
-    public class InstallShipworksViewModel : InstallerViewModelBase
+    public class InstallShipWorksViewModel : InstallerViewModelBase
     {
-        private readonly IInnoSetupService innoSetupService;
+        private IInnoSetupService innoSetupService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstallShipworksViewModel(MainViewModel mainViewModel, 
-            INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService) :
+        public InstallShipWorksViewModel(MainViewModel mainViewModel, 
+            INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService,
+            Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.InstallDatabase)
         {
             this.innoSetupService = innoSetupService;
-            innoSetupService.InstallShipWorks(mainViewModel.InstallSettings);
         }
 
         /// <summary>
         /// Command handler for the NextCommand
         /// </summary>
-        protected override void NextExecute()
+        protected override async Task NextExecuteAsync()
         {
             mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
+
+            await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
+
             navigationService.NavigateTo(NextPage);
         }
 

@@ -14,9 +14,11 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
+        public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService, 
+               IInnoSetupService innoSetupService) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
         {
+            innoSetupService.InstallShipWorks(mainViewModel.InstallSettings);
         }
 
         /// <summary>
@@ -25,6 +27,7 @@ namespace ShipWorks.Installer.ViewModels
         protected override void NextExecute()
         {
             mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            navigationService.NavigateTo(NextPage);
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override bool NextCanExecute()
         {
-            return true;
+            return false;
         }
     }
 }

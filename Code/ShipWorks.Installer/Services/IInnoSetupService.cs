@@ -1,4 +1,5 @@
-﻿using ShipWorks.Installer.Models;
+﻿using System.Threading.Tasks;
+using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Call Inno installer to install ShipWorks
         /// </summary>
-        void InstallShipWorks(InstallSettings installSettings);
+        Task InstallShipWorks(InstallSettings installSettings);
     }
 }

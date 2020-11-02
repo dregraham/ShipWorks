@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
+using ShipWorks.Installer.Utilities;
 
 namespace ShipWorks.Installer.ViewModels
 {
@@ -15,6 +18,7 @@ namespace ShipWorks.Installer.ViewModels
     {
         protected readonly MainViewModel mainViewModel;
         protected readonly INavigationService<NavigationPageType> navigationService;
+        private readonly ILog log;
 
         public InstallerViewModelBase(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
@@ -39,6 +43,19 @@ namespace ShipWorks.Installer.ViewModels
         /// Command for going to the previous page
         /// </summary>
         public RelayCommand BackCommand => new RelayCommand(navigationService.GoBack);
+
+        /// <summary>
+        /// Command for going to the next page
+        /// </summary>
+        public IAsyncCommand NextCommandAsync => new AsyncCommand(NextExecuteAsync, NextCanExecute, log);
+
+        /// <summary>
+        /// Command handler for the NextCommand
+        /// </summary>
+        protected virtual Task NextExecuteAsync()
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Command handler for the NextCommand

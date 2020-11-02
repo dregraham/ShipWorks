@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
@@ -26,7 +28,8 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public LoginViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
-            IHubService hubService) :
+            IHubService hubService,
+            Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
         {
             this.hubService = hubService;
@@ -74,7 +77,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Login to the hub
         /// </summary>
-        private async void Login()
+        private async Task Login()
         {
             if (string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password))
             {
@@ -107,9 +110,11 @@ namespace ShipWorks.Installer.ViewModels
 
         /// <summary>
         /// Command handler for the NextCommand
-        /// Call Login as a separate async function to prevent blocking the UI
         /// </summary>
-        protected override void NextExecute() => Login();
+        protected override async Task NextExecuteAsync()
+        {
+            await Login().ConfigureAwait(true);
+        }
 
         /// <summary>
         /// Determines if the NextCommand can execute
