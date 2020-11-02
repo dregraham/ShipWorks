@@ -21,6 +21,7 @@
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="Foreground" Value="#4a4a4a"/>
+                <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
             </Style>
             <Style x:Key="Header" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="FontWeight" Value="Bold"/>
@@ -106,7 +107,7 @@
             <StackPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource RightSection}">
                 <StackPanel Style="{StaticResource SectionHeader}">
                     <Image Style="{StaticResource SmallImage}" Source="{StaticResource Product}" />
-                    <TextBlock Text="Create A Filter" Style="{StaticResource Link}"/>
+                    <TextBlock Text="Create a Filter" Style="{StaticResource Link}"/>
                 </StackPanel>
                 <TextBlock Text="Create a filter to find and display orders that meet criteria that you decide upon." Style="{StaticResource Details}"/>                
             </StackPanel>
