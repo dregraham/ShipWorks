@@ -2,7 +2,9 @@
 using System.Reflection;
 using System.Windows.Input;
 using FontAwesome5;
+using GalaSoft.MvvmLight.Command;
 using ShipWorks.Installer.Enums;
+using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -28,7 +30,19 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
         {
             this.hubService = hubService;
+            NoAccountCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://registration.shipworks.com/WebRegistration/#!&p=create-account"));
+            ForgotPasswordCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://www.interapptive.com/account/forgotpassword.php"));
         }
+
+        /// <summary>
+        /// Opens a web browser when the no account link is clicked
+        /// </summary>
+        public ICommand NoAccountCommand { get; }
+
+        /// <summary>
+        /// Opens a web browser when the forgot password link is clicked
+        /// </summary>
+        public ICommand ForgotPasswordCommand { get; }
 
         /// <summary>
         /// The Hub username
