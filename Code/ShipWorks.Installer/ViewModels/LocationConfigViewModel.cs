@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
@@ -18,16 +21,18 @@ namespace ShipWorks.Installer.ViewModels
         private Warehouse selectedWarehouse = new Warehouse { Details = new Details { Name = "Loading Warehouses..." } };
         private ObservableCollection<Warehouse> warehouseList = new ObservableCollection<Warehouse>();
         private readonly IHubService hubService;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public LocationConfigViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
-            IHubService hubService) :
+            IHubService hubService,
+            Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks)
         {
-            WarehouseList.Add(SelectedWarehouse);
+            log = logFactory(typeof(LocationConfigViewModel));
             this.hubService = hubService;
             GetWarehouseList();
         }
@@ -55,9 +60,29 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public async void GetWarehouseList()
         {
-            var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token);
-            WarehouseList = new ObservableCollection<Warehouse>(response.warehouses);
-            SelectedWarehouse = WarehouseList.FirstOrDefault() ?? SelectedWarehouse;
+            var warehouses = new List<Warehouse>(){
+                new Warehouse
+                {
+                    Details = new Details
+                    {
+                        Name = "None"
+                    }
+                }
+                };
+            try
+            {
+                var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token);
+                warehouses.AddRange(response.warehouses);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+            finally
+            {
+                WarehouseList = new ObservableCollection<Warehouse>(warehouses);
+                SelectedWarehouse = WarehouseList.FirstOrDefault() ?? SelectedWarehouse;
+            }
         }
 
         /// <summary>
@@ -78,6 +103,7 @@ namespace ShipWorks.Installer.ViewModels
             {
                 NextPage = NavigationPageType.DatabaseConfig;
             }
+            mainViewModel.InstallSettings.Warehouse = SelectedWarehouse;
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }

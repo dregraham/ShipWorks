@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using GalaSoft.MvvmLight;
+using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
 
 namespace ShipWorks.Installer.Models
@@ -40,6 +41,11 @@ namespace ShipWorks.Installer.Models
         /// The db connection string
         /// </summary>
         public string ConnectionString { get; set; }
+
+        /// <summary>
+        /// The warehouse that we should pull config data from
+        /// </summary>
+        public Warehouse Warehouse { get; set; }
 
         /// <summary>
         /// The type of error that occurred during installation
