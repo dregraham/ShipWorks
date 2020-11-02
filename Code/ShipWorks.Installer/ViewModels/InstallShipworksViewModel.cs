@@ -14,7 +14,8 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class InstallShipWorksViewModel : InstallerViewModelBase
     {
-        private IInnoSetupService innoSetupService;
+        private readonly IInnoSetupService innoSetupService;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -25,6 +26,9 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.InstallDatabase)
         {
             this.innoSetupService = innoSetupService;
+            log = logFactory(typeof(UpgradeShipWorksViewModel));
+
+            log.Info("Upgrade ShipWorks screen displayed.");
         }
 
         /// <summary>
@@ -34,7 +38,10 @@ namespace ShipWorks.Installer.ViewModels
         {
             mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
 
+            log.Info("Starting Inno setup for install.");
             await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
+
+            log.Info("Finished Inno setup for install.");
 
             navigationService.NavigateTo(NextPage);
         }

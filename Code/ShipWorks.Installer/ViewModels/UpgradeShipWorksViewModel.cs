@@ -1,5 +1,8 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
+using System.Threading.Tasks;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
@@ -11,22 +14,34 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class UpgradeShipWorksViewModel : InstallerViewModelBase
     {
+        private readonly IInnoSetupService innoSetupService;
+        private readonly ILog log;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService, 
-               IInnoSetupService innoSetupService) :
+               IInnoSetupService innoSetupService, Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
         {
-            innoSetupService.InstallShipWorks(mainViewModel.InstallSettings);
+            this.innoSetupService = innoSetupService;
+            log = logFactory(typeof(UpgradeShipWorksViewModel));
+
+            log.Info("Upgrade ShipWorks screen displayed.");
         }
 
         /// <summary>
         /// Command handler for the NextCommand
         /// </summary>
-        protected override void NextExecute()
+        protected override async Task NextExecuteAsync()
         {
             mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Regular_CheckCircle;
+
+            log.Info("Starting Inno setup for upgrade.");
+            await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
+            
+            log.Info("Finished Inno setup for upgrade.");
+
             navigationService.NavigateTo(NextPage);
         }
 
@@ -35,7 +50,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override bool NextCanExecute()
         {
-            return false;
+            return true;
         }
     }
 }
