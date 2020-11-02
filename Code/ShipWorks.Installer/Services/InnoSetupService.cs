@@ -159,6 +159,5 @@ namespace ShipWorks.Installer.Services
                 process?.Kill();
             }
         }
-
     }
 }
