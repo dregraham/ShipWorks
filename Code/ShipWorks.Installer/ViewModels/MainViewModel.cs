@@ -192,7 +192,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Command handler for opening the help page
         /// </summary>
-        private void OpenHelpPage() => ProcessExtension.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new");
+        private void OpenHelpPage() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new");
 
 
     }
