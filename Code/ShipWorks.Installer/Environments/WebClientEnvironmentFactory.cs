@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using log4net;
 using ShipWorks.Installer.Utilities;
 
@@ -14,8 +13,10 @@ namespace ShipWorks.Installer.Environments
     {
         // Logger
         private readonly ILog log;
+        private const string InnoSetupInstallerProductionUrl = "https://prod-sw-downloads-app.s3.amazonaws.com/ShipWorksInstaller.exe";
         private const string EnvironmentSelectedName = "EnvironmentSelectedName";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
+        private const string EnvironmentOtherInnoInstallerUrl = "EnvironmentOtherInnoInstallerUrl";
         private List<WebClientEnvironment> environments;
 
         /// <summary>
@@ -58,12 +59,13 @@ namespace ShipWorks.Installer.Environments
 
             string selectedEnvironmentName = InterapptiveOnly.Registry.GetValue(EnvironmentSelectedName, "");
             string otherWarehouseUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherWarehouseUrl, "");
+            string innoInstallerUrl = InterapptiveOnly.Registry.GetValue(EnvironmentOtherInnoInstallerUrl, "");
 
             environments = new List<WebClientEnvironment>
             {
                 CreateProductionEnvironment(),
-                CreateLocalhostEnvironment(),
-                CreateOtherEnvironment(otherWarehouseUrl)
+                CreateLocalhostEnvironment(innoInstallerUrl),
+                CreateOtherEnvironment(otherWarehouseUrl, innoInstallerUrl)
             };
 
             SelectedEnvironment = Environments.FirstOrDefault(env => env.Name == selectedEnvironmentName);
@@ -97,30 +99,33 @@ namespace ShipWorks.Installer.Environments
             {
                 Name = "Production",
                 WarehouseUrl = "https://hub.shipworks.com/",
+                InnoInstallerUrl = InnoSetupInstallerProductionUrl
             };
         }
 
         /// <summary>
         /// Create a localhost environment
         /// </summary>
-        private WebClientEnvironment CreateLocalhostEnvironment()
+        private WebClientEnvironment CreateLocalhostEnvironment(string innoInstallerUrl)
         {
             return new WebClientEnvironment()
             {
                 Name = "Localhost",
                 WarehouseUrl = "http://localhost:4001/",
+                InnoInstallerUrl = string.IsNullOrWhiteSpace(innoInstallerUrl) ? InnoSetupInstallerProductionUrl : innoInstallerUrl
             };
         }
 
         /// <summary>
         /// Create an "other" environment
         /// </summary>
-        private WebClientEnvironment CreateOtherEnvironment(string warehouseUrl)
+        private WebClientEnvironment CreateOtherEnvironment(string warehouseUrl, string innoInstallerUrl)
         {
             return new WebClientEnvironment()
             {
                 Name = "Other",
                 WarehouseUrl = warehouseUrl,
+                InnoInstallerUrl = innoInstallerUrl
             };
         }
     }

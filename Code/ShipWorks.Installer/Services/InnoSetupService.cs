@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Net;
 using log4net;
+using ShipWorks.Installer.Environments;
 using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
@@ -12,36 +13,41 @@ namespace ShipWorks.Installer.Services
     /// </summary>
     public class InnoSetupService : IInnoSetupService
     {
-        private const string InnoSetupInstallerURL = "https://prod-sw-downloads-app.s3.amazonaws.com/ShipWorksInstaller.exe";
-        private readonly string InnoSetupDownloadPath = $"{Path.GetTempPath()}ShipWorksInstaller.exe";
+        private string innoSetupDownloadPath = $"{Path.GetTempPath()}ShipWorksInstaller.exe";
         private readonly ILog log;
-        private InstallSettings installSettings;
+        private readonly WebClientEnvironment webClientEnvironment;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InnoSetupService(Func<Type, ILog> logFactory)
+        public InnoSetupService(Func<Type, ILog> logFactory, IWebClientEnvironmentFactory webClientEnvironmentFactory)
         {
             log = logFactory(typeof(InnoSetupService));
+            webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
         }
+
+        /// <summary>
+        /// Install settings
+        /// </summary>
+        private InstallSettings InstallSettings { get; set; }
 
         /// <summary>
         /// Download the INNO Setup installer
         /// </summary>
         public void DownloadInstaller(InstallSettings installSettings)
         {
-            this.installSettings = installSettings;
+            InstallSettings = installSettings;
             WebClient client = new WebClient();
             client.DownloadFileCompleted += new AsyncCompletedEventHandler(OnDownloadComplete);
 
             try
             {
                 log.Info("Beginning download of background installer.");
-                client.DownloadFileAsync(new Uri(InnoSetupInstallerURL), InnoSetupDownloadPath);
+                client.DownloadFileAsync(new Uri(webClientEnvironment.InnoInstallerUrl), innoSetupDownloadPath);
             }
             catch (Exception ex)
             {
-                HandleErrors(ex);
+                HandleDownloadErrors(ex);
             }
         }
 
@@ -52,21 +58,21 @@ namespace ShipWorks.Installer.Services
         {
             if (e.Error != null)
             {
-                HandleErrors(e.Error);
+                HandleDownloadErrors(e.Error);
                 return;
             }
 
-            log.Info($"Background installer downloaded to {InnoSetupDownloadPath}");
-            installSettings.InnoSetupDownloaded = true;
+            log.Info($"Background installer downloaded to {innoSetupDownloadPath}");
+            InstallSettings.InnoSetupDownloaded = true;
         }
 
         /// <summary>
         /// Handle errors from downloading the installer
         /// </summary>
-        private void HandleErrors(Exception ex)
+        private void HandleDownloadErrors(Exception ex)
         {
             log.Error("An error occurred downloading the background installer.", ex);
-            installSettings.Error = Enums.InstallError.ShipWorks;
+            InstallSettings.Error = Enums.InstallError.ShipWorks;
         }
     }
 }
