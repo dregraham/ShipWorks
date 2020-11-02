@@ -69,7 +69,7 @@ namespace ShipWorks.Installer.ViewModels
                         Name = "None"
                     }
                 }
-                };
+            };
             try
             {
                 var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token);
@@ -82,7 +82,7 @@ namespace ShipWorks.Installer.ViewModels
             finally
             {
                 WarehouseList = new ObservableCollection<Warehouse>(warehouses);
-                SelectedWarehouse = WarehouseList.FirstOrDefault() ?? SelectedWarehouse;
+                SelectedWarehouse = WarehouseList.FirstOrDefault();
             }
         }
 
