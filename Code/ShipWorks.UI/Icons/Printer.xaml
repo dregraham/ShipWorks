@@ -1,0 +1,58 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ShipWorks.UI.Icons">
+    <DrawingImage x:Key="Printer">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#FFEFEFEF" Geometry="M73.8264468 0.186525875 C86.0314129 -1.68126712 99.1111376 10.76604 101.596563 24.6350999 C104.081988 38.5041599 96.1675053 53.7392177 87.4754589 65.8519947 C78.7834126 77.9647717 69.6192742 86.9273903 57.5253887 93.0186257 C45.4315031 99.109861 30.5467208 102.315774 20.4522836 96.7681504 C10.3578464 91.2205264 5.27591516 76.9054264 2.27674262 63.510284 C-0.722429927 50.1151417 -1.58330353 37.6399571 4.88713353 32.9844134 C11.3575706 28.3288696 25.1593183 31.3953955 37.7114108 24.8302425 C50.2635033 18.2650895 61.6214808 2.06825763 73.8264468 0.186525875 Z"/>
+                <GeometryDrawing Brush="#FFE0E0E0">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FF4D4D4D" Thickness="1.296" StartLineCap="Round" EndLineCap="Round"/>
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="21.6993214 32.5054884 57.0413571 18.5300426" RadiusX="4.779" RadiusY="4.779" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFF">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FF4D4D4D" Thickness="1.5552"/>
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="11.3724 48.5758884 77.6952 39.4700936" RadiusX="4.779" RadiusY="4.779" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFF">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FFE0E0E0" Thickness="1.0368" LineJoin="Miter"/>
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="12.6684 49.8718884 75.1032 36.8780936" RadiusX="4.779" RadiusY="4.779" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFF7799">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="23.4 56.6" RadiusX="1.7" RadiusY="1.7"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FF008AFF">
+                    <GeometryDrawing.Geometry>
+                        <EllipseGeometry Center="29.5 56.6" RadiusX="1.7" RadiusY="1.7"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Brush="#FFFFFFFF">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FF4D4D4D" Thickness="1.296" LineJoin="Miter"/>
+                    </GeometryDrawing.Pen>
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="21.6993214 63.1820841 57.0413571 35.0747234" RadiusX="4.779" RadiusY="4.779" />
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+                <GeometryDrawing Geometry="M 32.2698214 73.6534884 69.5298214 73.6534884 M 32.2698214 80.5963455 69.5298214 80.5963455 M 32.2698214 87.5392027 69.5298214 87.5392027">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="#FFEEB700" Thickness="1.5552" StartLineCap="Round" EndLineCap="Round"/>
+                    </GeometryDrawing.Pen>
+                </GeometryDrawing>                
+            </DrawingGroup>            
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>

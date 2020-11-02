@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ShipWorks.UI.Icons">
+    <DrawingImage x:Key="List">
+        <DrawingImage.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M2,4 C0.8954305,4 0,3.1045695 0,2 C0,0.8954305 0.8954305,0 2,0 C3.1045695,0 4,0.8954305 4,2 C4,2.53043298 3.78928632,3.03914081 3.41421356,3.41421356 C3.03914081,3.78928632 2.53043298,4 2,4 Z"/>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M21.9375,3 L7.0625,3 C6.47569745,3 6,2.55228475 6,2 C6,1.44771525 6.47569745,1 7.0625,1 L21.9375,1 C22.5243025,1 23,1.44771525 23,2 C23,2.55228475 22.5243025,3 21.9375,3 Z"/>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M2,11 C0.8954305,11 0,10.1045695 0,9 C0,7.8954305 0.8954305,7 2,7 C3.1045695,7 4,7.8954305 4,9 C4,10.1045695 3.1045695,11 2,11 Z"/>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M21.9375,10 L7.0625,10 C6.47569745,10 6,9.55228475 6,9 C6,8.44771525 6.47569745,8 7.0625,8 L21.9375,8 C22.5243025,8 23,8.44771525 23,9 C23,9.55228475 22.5243025,10 21.9375,10 Z"/>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M2,17 C0.8954305,17 0,16.1045695 0,15 C0,13.8954305 0.8954305,13 2,13 C3.1045695,13 4,13.8954305 4,15 C4,16.1045695 3.1045695,17 2,17 Z"/>
+                <GeometryDrawing Brush="#4D4D4D" Geometry="F1 M21.9375,16 L7.0625,16 C6.47569745,16 6,15.5522847 6,15 C6,14.4477153 6.47569745,14 7.0625,14 L21.9375,14 C22.5243025,14 23,14.4477153 23,15 C23,15.5522847 22.5243025,16 21.9375,16 Z"/>                
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+</ResourceDictionary>
