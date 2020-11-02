@@ -118,13 +118,7 @@ namespace ShipWorks.Installer.Api
             {
                 if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    // When we're first logging in, we can't refresh the token
-                    if (typeof(T) == typeof(TokenResponse))
-                    {
-                        throw new UnauthorizedAccessException("Incorrect username or password entered. Please try again.");
-                    }
-
-                    // TODO: Refresh token
+                    throw new UnauthorizedAccessException("Incorrect username or password entered. Please try again.");
                 }
 
                 if (restResponse.ErrorException != null)
