@@ -11,7 +11,7 @@ namespace ShipWorks.Installer.Sql
     /// </summary>
     public class SqlSession : ISqlSession
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
+        private readonly ILog log = LogManager.GetLogger(typeof(SqlSession));
 
         /// <summary>
         /// Static constructor

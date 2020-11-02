@@ -19,12 +19,10 @@ namespace ShipWorks.Installer.Sql
         /// </summary>
         public string DefaultInstanceName => "MSSQLSERVER";
 
-
         /// <summary>
         /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
         public string ShipWorksSaPassword => "ShipW@rks1";
-
 
         /// <summary>
         /// See if we can figure out the credentials necessary to connect to the given instance.  If provided, the configuration given in firstTry will be attempted first

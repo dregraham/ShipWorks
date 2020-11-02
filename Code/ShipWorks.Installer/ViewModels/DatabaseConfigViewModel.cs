@@ -28,8 +28,8 @@ namespace ShipWorks.Installer.ViewModels
         private bool nextEnabled;
         private int selectedDatabaseIndex;
         private EFontAwesomeIcon connectionIcon;
-        private ISqlServerLookupService sqlLookup;
-        private ILog log;
+        private readonly ISqlServerLookupService sqlLookup;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -82,11 +82,14 @@ namespace ShipWorks.Installer.ViewModels
             get => serverInstance;
             set
             {
-                Set(ref serverInstance, value);
+                Set(ref serverInstance, value.ToUpperInvariant());
                 ListDatabases();
             }
         }
 
+        /// <summary>
+        /// The index of the currently selected databse
+        /// </summary>
         public int SelectedDatabaseIndex
         {
             get => selectedDatabaseIndex;
@@ -103,12 +106,12 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// The currently selected database
         /// </summary>
-        public SqlSessionConfiguration SelectedDatabase
+        private SqlSessionConfiguration SelectedDatabase
         {
             get => selectedDatabase;
             set
             {
-                Set(ref selectedDatabase, value);
+                selectedDatabase = value;
                 Username = value.Username;
                 Password = value.Password;
                 TestConnection();
