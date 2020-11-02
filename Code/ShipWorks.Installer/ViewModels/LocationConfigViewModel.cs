@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using FontAwesome5;
 using log4net;
 using ShipWorks.Installer.Api.DTO;
@@ -34,7 +35,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             log = logFactory(typeof(LocationConfigViewModel));
             this.hubService = hubService;
-            GetWarehouseList();
+            _ = GetWarehouseList();
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Get the list of warehouses from the Hub
         /// </summary>
-        public async void GetWarehouseList()
+        public async Task GetWarehouseList()
         {
             var warehouses = new List<Warehouse>(){
                 new Warehouse
