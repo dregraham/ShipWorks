@@ -19,5 +19,13 @@ namespace ShipWorks.Installer.Views
 
             navService.NavigateTo("SystemCheck");
         }
+
+        /// <summary>
+        /// Event handler to focus on the main grid when the window is clicked
+        /// </summary>
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            mainGrid.Focus();
+        }
     }
 }

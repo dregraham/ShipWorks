@@ -16,14 +16,16 @@
     mc:Ignorable="d" 
     Loaded="Window_Loaded"
     BorderBrush="LightGray"
-    BorderThickness="0,1,0,0">
+    BorderThickness="0,1,0,0"
+    Focusable="True"
+    MouseDown="Window_MouseDown">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:NavBarStateToVisibilityConverter x:Key="NavBarVisibilityConverter" />
     </Window.Resources>
 
-    <Grid>
+    <Grid Name="mainGrid" Focusable="True">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
             <ColumnDefinition Width="*"/>
