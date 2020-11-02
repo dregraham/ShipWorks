@@ -34,7 +34,7 @@ namespace ShipWorks.Installer.Services
 
             sqlSession.Configuration = config;
             // Start the background task to try to log in and figure out the background databases...
-            SqlSessionConfiguration configuration = await Task.Run(() => sqlUtility.DetermineCredentials(serverInstance, config)).ConfigureAwait(true);
+            SqlSessionConfiguration configuration = await sqlUtility.DetermineCredentials(serverInstance, config).ConfigureAwait(true);
             sqlSession.Configuration = configuration;
             IEnumerable<string> databases = null;
 
@@ -59,7 +59,7 @@ namespace ShipWorks.Installer.Services
         public async Task<bool> TestConnection(SqlSessionConfiguration config)
         {
             sqlSession.Configuration = config;
-            return await Task.Run(sqlSession.CanConnect).ConfigureAwait(true);
+            return await sqlSession.CanConnect().ConfigureAwait(true);
         }
     }
 }

@@ -45,7 +45,7 @@
                          VerticalAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding ConnectionStatusText}" VerticalAlignment="Center" Margin="10,0"/>
             </StackPanel>
-            <ListView Height="150" Margin="0,10,0,20" ItemsSource="{Binding Databases}" x:Name="DatabaseView" SelectedItem="{Binding SelectedDatabase}">
+            <ListView Height="150" Margin="0,10,0,20" ItemsSource="{Binding Databases}" x:Name="DatabaseView" SelectedIndex="{Binding SelectedDatabaseIndex}">
                 <ListView.Resources>
                     <DataTemplate x:Key="Name">
                         <TextBlock HorizontalAlignment="Left" 

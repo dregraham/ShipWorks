@@ -22,7 +22,7 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// See if we can figure out the credentials necessary to connect to the given instance.  If provided, the configuration given in firstTry will be attempted first
         /// </summary>
-        SqlSessionConfiguration DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null);
+        Task<SqlSessionConfiguration> DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null);
 
         /// <summary>
         /// Get all of the details about all of the databases on the instance of the connection
@@ -37,6 +37,6 @@ namespace ShipWorks.Installer.Sql
         /// does not do this! http://support.microsoft.com/kb/309544
         ///
         /// </summary>
-        bool ValidateOpenConnection(DbConnection con);
+        Task<bool> ValidateOpenConnection(DbConnection con);
     }
 }

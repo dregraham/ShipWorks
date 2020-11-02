@@ -26,6 +26,7 @@ namespace ShipWorks.Installer.ViewModels
         private string username;
         private string password;
         private bool nextEnabled;
+        private int selectedDatabaseIndex;
         private EFontAwesomeIcon connectionIcon;
         private ISqlServerLookupService sqlLookup;
         private ILog log;
@@ -44,6 +45,8 @@ namespace ShipWorks.Installer.ViewModels
             TestCommand = new RelayCommand(TestConnection);
             HelpCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
             ConnectCommand = new RelayCommand(ListDatabases);
+            username = string.Empty;
+            password = string.Empty;
             NextEnabled = false;
         }
 
@@ -81,6 +84,19 @@ namespace ShipWorks.Installer.ViewModels
             {
                 Set(ref serverInstance, value);
                 ListDatabases();
+            }
+        }
+
+        public int SelectedDatabaseIndex
+        {
+            get => selectedDatabaseIndex;
+            set
+            {
+                Set(ref selectedDatabaseIndex, value);
+                if (value > -1)
+                {
+                    SelectedDatabase = Databases.ToArray()[value];
+                }
             }
         }
 
@@ -126,14 +142,17 @@ namespace ShipWorks.Installer.ViewModels
             set
             {
                 Set(ref username, value);
-                SelectedDatabase.Username = value;
-                if (!string.IsNullOrEmpty(value))
+                if (SelectedDatabase != null)
                 {
-                    SelectedDatabase.WindowsAuth = false;
-                }
-                else
-                {
-                    SelectedDatabase.WindowsAuth = true;
+                    SelectedDatabase.Username = value;
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        SelectedDatabase.WindowsAuth = false;
+                    }
+                    else
+                    {
+                        SelectedDatabase.WindowsAuth = true;
+                    }
                 }
             }
         }
@@ -147,14 +166,17 @@ namespace ShipWorks.Installer.ViewModels
             set
             {
                 Set(ref password, value);
-                SelectedDatabase.Password = value;
-                if (!string.IsNullOrEmpty(value))
+                if (SelectedDatabase != null)
                 {
-                    SelectedDatabase.WindowsAuth = false;
-                }
-                else
-                {
-                    SelectedDatabase.WindowsAuth = true;
+                    SelectedDatabase.Password = value;
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        SelectedDatabase.WindowsAuth = false;
+                    }
+                    else
+                    {
+                        SelectedDatabase.WindowsAuth = true;
+                    }
                 }
             }
         }
@@ -202,14 +224,14 @@ namespace ShipWorks.Installer.ViewModels
             };
             try
             {
-                Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty);
-                SelectedDatabase = Databases.FirstOrDefault();
+                Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty, Username, Password);
+                SelectedDatabaseIndex = 0;
                 NextEnabled = true;
             }
             catch (Exception ex)
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                ConnectionStatusText = $"An error attempting to connect to '{ServerInstance}'";
+                ConnectionStatusText = $"An error occured attempting to connect to '{ServerInstance}'";
                 NextEnabled = false;
                 log.Error(ex.Message);
             }
@@ -233,7 +255,6 @@ namespace ShipWorks.Installer.ViewModels
                 ConnectionStatusText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
                 NextEnabled = false;
             }
-
         }
     }
 }

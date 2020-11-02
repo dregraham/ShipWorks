@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Installer.Sql
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// Returns a flag indicating if a connection can be made to SQL Server.
         /// </summary>
-        bool CanConnect();
+        Task<bool> CanConnect();
 
         /// <summary>
         /// Open a connection using the current properties of the SqlSession
@@ -26,11 +27,11 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        bool TestConnection();
+        Task<bool> TestConnection();
 
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        bool TestConnection(TimeSpan timeout);
+        Task<bool> TestConnection(TimeSpan timeout);
     }
 }

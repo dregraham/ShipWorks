@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 using log4net;
 
 namespace ShipWorks.Installer.Sql
@@ -56,11 +57,11 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// Returns a flag indicating if a connection can be made to SQL Server.
         /// </summary>
-        public bool CanConnect()
+        public async Task<bool> CanConnect()
         {
             try
             {
-                return TestConnection();
+                return await TestConnection();
             }
             catch (SqlException ex)
             {
@@ -72,15 +73,15 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public bool TestConnection()
+        public async Task<bool> TestConnection()
         {
-            return TestConnection(TimeSpan.FromSeconds(10));
+            return await TestConnection(TimeSpan.FromSeconds(10));
         }
 
         /// <summary>
         /// Tries to connect to SQL Server.  Throws an exception on failure.
         /// </summary>
-        public bool TestConnection(TimeSpan timeout)
+        public async Task<bool> TestConnection(TimeSpan timeout)
         {
             SqlConnectionStringBuilder csb = new SqlConnectionStringBuilder(Configuration.GetConnectionString());
             csb.ConnectTimeout = (int) timeout.TotalSeconds;
@@ -89,7 +90,7 @@ namespace ShipWorks.Installer.Sql
             {
                 con.Open();
                 SqlUtility sqlUtil = new SqlUtility();
-                var result = sqlUtil.ValidateOpenConnection(con);
+                var result = await sqlUtil.ValidateOpenConnection(con);
                 con.Close();
                 return result;
             }

@@ -17,23 +17,19 @@ namespace ShipWorks.Installer.Sql
         /// <summary>
         /// The name given to the special default instance of sql server
         /// </summary>
-        public string DefaultInstanceName
-        {
-            get { return "MSSQLSERVER"; }
-        }
+        public string DefaultInstanceName => "MSSQLSERVER";
+
 
         /// <summary>
         /// The default password ShipWorks uses for sa when it installs new SQL instances
         /// </summary>
-        public string ShipWorksSaPassword
-        {
-            get { return "ShipW@rks1"; }
-        }
+        public string ShipWorksSaPassword => "ShipW@rks1";
+
 
         /// <summary>
         /// See if we can figure out the credentials necessary to connect to the given instance.  If provided, the configuration given in firstTry will be attempted first
         /// </summary>
-        public SqlSessionConfiguration DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null)
+        public async Task<SqlSessionConfiguration> DetermineCredentials(string instance, SqlSessionConfiguration firstTry = null)
         {
             List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
 
@@ -68,7 +64,7 @@ namespace ShipWorks.Installer.Sql
                     config.DatabaseName = "";
 
                     SqlSession session = new SqlSession(config);
-                    session.TestConnection(TimeSpan.FromSeconds(3));
+                    await session.TestConnection(TimeSpan.FromSeconds(3));
 
                     return config;
                 }
@@ -89,7 +85,7 @@ namespace ShipWorks.Installer.Sql
         /// does not do this! http://support.microsoft.com/kb/309544
         ///
         /// </summary>
-        public bool ValidateOpenConnection(DbConnection con)
+        public async Task<bool> ValidateOpenConnection(DbConnection con)
         {
             if (con == null)
             {
@@ -119,7 +115,7 @@ namespace ShipWorks.Installer.Sql
                 ";
             try
             {
-                cmd.ExecuteNonQuery();
+                await cmd.ExecuteNonQueryAsync();
                 return true;
             }
             catch
