@@ -811,6 +811,11 @@ namespace ShipWorks
                 return;
             }
 
+            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled))
+            {
+                QueueLogonAction(ShowQuickStart);
+            }
+
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
@@ -823,8 +828,6 @@ namespace ShipWorks
 
                     return;
                 }
-
-                QueueLogonAction(ShowSetupGuide);
             }
             else
             {
@@ -1526,15 +1529,14 @@ namespace ShipWorks
         public void QueueLogonAction(Action action) => logonActions.Enqueue(action);
 
         /// <summary>
-        /// Show the New User Experience dialog
+        /// Show the Quick Start dialog
         /// </summary>
-        public void ShowSetupGuide()
+        public void ShowQuickStart()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ISetupGuide setupGuide = lifetimeScope.Resolve<ISetupGuide>();
-                setupGuide.LoadOwner(this);
-                setupGuide.ShowDialog();
+                IQuickStart quickStart = lifetimeScope.Resolve<IQuickStart>();
+                quickStart.ShowDialog();
             }
         }
 
