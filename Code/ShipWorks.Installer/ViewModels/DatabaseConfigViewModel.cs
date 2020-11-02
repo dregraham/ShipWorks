@@ -45,7 +45,7 @@ namespace ShipWorks.Installer.ViewModels
             this.sqlLookup = sqlLookup;
             this.log = logFactory(typeof(DatabaseConfigViewModel));
             TestCommand = new AsyncCommand(TestConnection);
-            HelpCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
+            HelpCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
             ConnectCommand = new AsyncCommand(ListDatabases);
             username = string.Empty;
             password = string.Empty;
