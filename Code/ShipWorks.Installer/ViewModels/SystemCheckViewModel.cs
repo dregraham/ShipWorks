@@ -20,7 +20,7 @@ namespace ShipWorks.Installer.ViewModels
         public SystemCheckViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
             ISystemCheckService systemCheckService) :
-            base(mainViewModel, navigationService, NavigationPageType.DatabaseConfig)
+            base(mainViewModel, navigationService, NavigationPageType.Eula)
         {
             var result = systemCheckService.CheckSystem();
             mainViewModel.InstallSettings.CheckSystemResult = result;
