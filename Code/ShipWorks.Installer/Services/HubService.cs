@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using log4net;
 using ShipWorks.Installer.Api;
+using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
@@ -43,6 +44,23 @@ namespace ShipWorks.Installer.Services
             catch (UnauthorizedAccessException ex)
             {
                 throw ex;
+            }
+            catch (Exception ex)
+            {
+                log.Error("An error occurred on login", ex);
+                throw new Exception("An unknown error occurred");
+            }
+        }
+
+        /// <summary>
+        /// Login to the Hub and save the token
+        /// </summary>
+        public async Task<WarehouseList> GetWarehouseList(HubToken token)
+        {
+            log.Info($"Getting list of warehouses");
+            try
+            {
+                return await apiClient.GetWarehouseList(token);
             }
             catch (Exception ex)
             {

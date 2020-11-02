@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Environments;
+using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Api
 {
@@ -17,6 +18,7 @@ namespace ShipWorks.Installer.Api
     public class HubApiClient : IHubApiClient
     {
         private const string LoginEndpoint = "api/auth/login";
+        private const string WarehousesEndpoint = "api/warehouses";
         private readonly WebClientEnvironment webClientEnvironment;
         private readonly ILog log;
 
@@ -41,43 +43,28 @@ namespace ShipWorks.Installer.Api
 
             restRequest.AddJsonBody(new { username, password });
 
-            var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
-
-            IRestResponse restResponse = await restClient.ExecuteAsync(restRequest)
-                .ConfigureAwait(false);
-
-            LogLoginCalls(restClient, restRequest, restResponse);
-
-            if (!restResponse.IsSuccessful)
-            {
-                if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    throw new UnauthorizedAccessException("Incorrect username or password entered. Please try again.");
-                }
-
-                if (restResponse.ErrorException != null)
-                {
-                    throw restResponse.ErrorException;
-                }
-
-                throw new WebException("An unknown error occurred");
-            }
-
-            // De-serialize the result
-            TokenResponse requestResult = JsonConvert.DeserializeObject<TokenResponse>(restResponse.Content,
-                new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Auto,
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-
-            return requestResult;
+            return await MakeRequest<TokenResponse>(restRequest, "Login").ConfigureAwait(false);
         }
 
         /// <summary>
-        /// Log the login call, redacting sensitive information
+        /// Get list of warehouses
         /// </summary>
-        private void LogLoginCalls(IRestClient client, IRestRequest request, IRestResponse response)
+        public async Task<WarehouseList> GetWarehouseList(HubToken token)
+        {
+            RestRequest restRequest = new RestRequest(WarehousesEndpoint, Method.GET)
+            {
+                RequestFormat = DataFormat.Json
+            };
+
+            restRequest.AddHeader("Authorization", $"Bearer {token.Token}");
+
+            return await MakeRequest<WarehouseList>(restRequest, "Get Warehouses");
+        }
+
+        /// <summary>
+        /// Log hub calls, redacting sensitive information
+        /// </summary>
+        private void Log(IRestClient client, IRestRequest request, IRestResponse response, string title)
         {
             var requestToLog = new
             {
@@ -97,7 +84,10 @@ namespace ShipWorks.Installer.Api
             };
 
             var jsonRequest = JToken.FromObject(requestToLog);
-            jsonRequest["parameters"][0]["value"]["password"] = "REDACTED";
+            if (jsonRequest.SelectToken("parameters[0].value.password") != null)
+            {
+                jsonRequest["parameters"][0]["value"]["password"] = "REDACTED";
+            }
 
             var responseToLog = new
             {
@@ -109,7 +99,49 @@ namespace ShipWorks.Installer.Api
                 errorMessage = response.ErrorMessage,
             };
 
-            log.Info($"Login Call:\nRequest: {jsonRequest}\nResponse: {JsonConvert.SerializeObject(responseToLog)}");
+            log.Info($"{title}:\nRequest: {jsonRequest}\nResponse: {JToken.FromObject(responseToLog)}");
+        }
+
+        /// <summary>
+        /// Make a request to the Hub
+        /// </summary>
+        private async Task<T> MakeRequest<T>(IRestRequest request, string logTitle)
+        {
+            var restClient = new RestClient(webClientEnvironment.WarehouseUrl);
+
+            IRestResponse restResponse = await restClient.ExecuteAsync(request)
+                .ConfigureAwait(false);
+
+            Log(restClient, request, restResponse, logTitle);
+
+            if (!restResponse.IsSuccessful)
+            {
+                if (restResponse.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    // When we're first logging in, we can't refresh the token
+                    if (typeof(T) == typeof(TokenResponse))
+                    {
+                        throw new UnauthorizedAccessException("Incorrect username or password entered. Please try again.");
+                    }
+
+                    // TODO: Refresh token
+                }
+
+                if (restResponse.ErrorException != null)
+                {
+                    throw restResponse.ErrorException;
+                }
+
+                throw new WebException("An unknown error occurred");
+            }
+
+            // De-serialize the result
+            return JsonConvert.DeserializeObject<T>(restResponse.Content,
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore
+                });
         }
     }
 }
