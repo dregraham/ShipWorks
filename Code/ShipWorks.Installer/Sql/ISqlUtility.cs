@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace ShipWorks.Installer.Sql
 {
+    /// <summary>
+    /// Interface for SqlUtility
+    /// </summary>
     public interface ISqlUtility
     {
         /// <summary>

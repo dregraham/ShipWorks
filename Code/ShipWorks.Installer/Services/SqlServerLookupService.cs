@@ -12,8 +12,8 @@ namespace ShipWorks.Installer.Services
     /// </summary>
     public class SqlServerLookupService : ISqlServerLookupService
     {
-        ISqlSession sqlSession;
-        ISqlUtility sqlUtility;
+        private readonly ISqlSession sqlSession;
+        private readonly ISqlUtility sqlUtility;
         public SqlServerLookupService(ISqlSession sqlSession, ISqlUtility sqlUtility)
         {
             this.sqlSession = sqlSession;

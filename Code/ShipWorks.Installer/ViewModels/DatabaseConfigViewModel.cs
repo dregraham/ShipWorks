@@ -22,7 +22,7 @@ namespace ShipWorks.Installer.ViewModels
         private IEnumerable<SqlSessionConfiguration> databases;
         private string serverInstance;
         private SqlSessionConfiguration selectedDatabase;
-        private string selectedText;
+        private string connectionStatusText;
         private string username;
         private string password;
         private bool nextEnabled;
@@ -102,10 +102,10 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// The text to display above the database grid
         /// </summary>
-        public string SelectedText
+        public string ConnectionStatusText
         {
-            get => selectedText;
-            set => Set(ref selectedText, value);
+            get => connectionStatusText;
+            set => Set(ref connectionStatusText, value);
         }
 
         /// <summary>
@@ -174,6 +174,7 @@ namespace ShipWorks.Installer.ViewModels
         protected override void NextExecute()
         {
             mainViewModel.InstallSettings.ConnectionString = SelectedDatabase.GetConnectionString();
+            log.Info(mainViewModel.InstallSettings.ConnectionString);
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
@@ -183,7 +184,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override bool NextCanExecute()
         {
-            return true;
+            return NextEnabled;
         }
 
         /// <summary>
@@ -191,7 +192,7 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private async void ListDatabases()
         {
-            SelectedText = "Searching for databases...";
+            ConnectionStatusText = "Searching for databases...";
             Databases = new List<SqlSessionConfiguration>
             {
                 new SqlSessionConfiguration
@@ -208,7 +209,7 @@ namespace ShipWorks.Installer.ViewModels
             catch (Exception ex)
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                SelectedText = $"An error attempting to connect to '{ServerInstance}'";
+                ConnectionStatusText = $"An error attempting to connect to '{ServerInstance}'";
                 NextEnabled = false;
                 log.Error(ex.Message);
             }
@@ -223,13 +224,13 @@ namespace ShipWorks.Installer.ViewModels
             if (await sqlLookup.TestConnection(SelectedDatabase))
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_CheckCircle;
-                SelectedText = $"Connected to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
+                ConnectionStatusText = $"Connected to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
                 NextEnabled = true;
             }
             else
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                SelectedText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
+                ConnectionStatusText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
                 NextEnabled = false;
             }
 

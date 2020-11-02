@@ -4,6 +4,9 @@ using ShipWorks.Installer.Sql;
 
 namespace ShipWorks.Installer.Services
 {
+    /// <summary>
+    /// Interface for SqlServerLookup
+    /// </summary>
     public interface ISqlServerLookupService
     {
         /// <summary>

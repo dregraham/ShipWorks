@@ -17,7 +17,6 @@ namespace ShipWorks.Installer.ValueConverters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
             (EFontAwesomeIcon) value == EFontAwesomeIcon.Solid_ExclamationCircle ? Brushes.Red : Brushes.Green;
 
-
         /// <summary>
         /// Converting back is not supported
         /// </summary>
