@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
@@ -10,6 +11,7 @@ using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.Sql;
+using ShipWorks.Installer.Utilities;
 
 namespace ShipWorks.Installer.ViewModels
 {
@@ -42,9 +44,9 @@ namespace ShipWorks.Installer.ViewModels
         {
             this.sqlLookup = sqlLookup;
             this.log = logFactory(typeof(DatabaseConfigViewModel));
-            TestCommand = new RelayCommand(TestConnection);
-            HelpCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
-            ConnectCommand = new RelayCommand(ListDatabases);
+            TestCommand = new AsyncCommand(TestConnection);
+            HelpCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
+            ConnectCommand = new AsyncCommand(ListDatabases);
             username = string.Empty;
             password = string.Empty;
             NextEnabled = false;
@@ -83,7 +85,7 @@ namespace ShipWorks.Installer.ViewModels
             set
             {
                 Set(ref serverInstance, value.ToUpperInvariant());
-                ListDatabases();
+                _ = ListDatabases();
             }
         }
 
@@ -114,7 +116,7 @@ namespace ShipWorks.Installer.ViewModels
                 selectedDatabase = value;
                 Username = value.Username;
                 Password = value.Password;
-                TestConnection();
+                _ = TestConnection();
             }
         }
 
@@ -215,7 +217,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Lists out all of the databases found on the provided ServerInstance
         /// </summary>
-        private async void ListDatabases()
+        private async Task ListDatabases()
         {
             ConnectionStatusText = "Searching for databases...";
             Databases = new List<SqlSessionConfiguration>
@@ -243,7 +245,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Tests a connection to a db
         /// </summary>
-        private async void TestConnection()
+        private async Task TestConnection()
         {
             string account = SelectedDatabase.WindowsAuth ? "Windows Auth" : SelectedDatabase.Username;
             if (await sqlLookup.TestConnection(SelectedDatabase))
