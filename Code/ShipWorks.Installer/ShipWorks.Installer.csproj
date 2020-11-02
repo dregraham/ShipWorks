@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <None Remove="License.rtf" />
-    <None Remove="Resources\loading_spinner.png" />
     <None Remove="Styles\BlueSteel\Roboto-Regular.ttf" />
     <None Remove="Styles\BlueSteel\RobotoFontLicense.txt" />
   </ItemGroup>
@@ -36,9 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\loading_spinner.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Styles\BlueSteel\Roboto-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -117,9 +113,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles\Sizes.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Themes\Controls\WaitSpinner.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SystemCheck.xaml">
