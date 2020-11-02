@@ -10,8 +10,11 @@ namespace ShipWorks.Installer.Enums
         None,
         SystemCheck,
 
+        [Description("There was a problem downloading the ShipWorks installer.")]
+        DownloadingShipWorks,
+
         [Description("There was a problem installing ShipWorks.")]
-        ShipWorks,
+        InstallShipWorks,
 
         [Description("There was a problem installing or connecting to your database.")]
         Database,

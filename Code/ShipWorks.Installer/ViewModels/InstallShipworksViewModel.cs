@@ -11,12 +11,17 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class InstallShipworksViewModel : InstallerViewModelBase
     {
+        private readonly IInnoSetupService innoSetupService;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstallShipworksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
+        public InstallShipworksViewModel(MainViewModel mainViewModel, 
+            INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService) :
             base(mainViewModel, navigationService, NavigationPageType.InstallDatabase)
         {
+            this.innoSetupService = innoSetupService;
+            innoSetupService.InstallShipWorks(mainViewModel.InstallSettings);
         }
 
         /// <summary>

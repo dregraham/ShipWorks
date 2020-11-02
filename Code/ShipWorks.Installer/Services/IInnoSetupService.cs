@@ -11,5 +11,10 @@ namespace ShipWorks.Installer.Services
         /// Download the INNO Setup installer
         /// </summary>
         void DownloadInstaller(InstallSettings installSettings);
+
+        /// <summary>
+        /// Call Inno installer to install ShipWorks
+        /// </summary>
+        void InstallShipWorks(InstallSettings installSettings);
     }
 }

@@ -206,3 +206,4 @@ results/
 launchSettings.json
 Code/ShipWorks.Ranorex.Tests/SmokeTest/SmokeTest/Reports/
 Code/ShipWorks.Ranorex.Tests/WebAutomation/OrderCreation/OrderCreation/Reports/
+InnoSetup.iss

@@ -26,7 +26,7 @@
             </StackPanel>
             <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource IsEmptyConverter}}" Margin="0,5,0,0"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}">
+                <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}" IsChecked="{Binding CreateShortcut, Mode=TwoWay}">
                     <Label VerticalAlignment="Center" Content="Create Desktop Shortcut" />
                 </CheckBox>
             </StackPanel>
