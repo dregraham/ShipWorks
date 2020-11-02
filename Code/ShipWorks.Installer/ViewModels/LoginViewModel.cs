@@ -30,7 +30,7 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
         {
             this.hubService = hubService;
-            NoAccountCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://registration.shipworks.com/WebRegistration/#!&p=create-account"));
+            NoAccountCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://www.shipworks.com/step1/"));
             ForgotPasswordCommand = new RelayCommand(() => ProcessExtension.StartWebProcess("https://www.interapptive.com/account/forgotpassword.php"));
         }
 
