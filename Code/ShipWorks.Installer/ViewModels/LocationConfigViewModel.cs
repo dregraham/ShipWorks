@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using FontAwesome5;
 using log4net;
 using ShipWorks.Installer.Api.DTO;
@@ -81,8 +82,13 @@ namespace ShipWorks.Installer.ViewModels
             }
             finally
             {
-                WarehouseList = new ObservableCollection<Warehouse>(warehouses);
-                SelectedWarehouse = WarehouseList.FirstOrDefault();
+                // Update synchronously on the UI thread to prevent the WarehouseList assignment
+                // from resetting SelectedWarehouse to null after we set it
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    WarehouseList = new ObservableCollection<Warehouse>(warehouses);
+                    SelectedWarehouse = WarehouseList.FirstOrDefault();
+                });
             }
         }
 
