@@ -10,12 +10,19 @@
       DataContext="{Binding Path=DatabaseConfigViewModel, Source={StaticResource Locator}}"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="800"
+      x:Name="DatabaseConfigPage"
       Title="DatabaseConfig">
     <Page.Resources>
         <convert:PercentageConverter x:Key="PercentageConverter"/>
         <convert:IconToBrushConverter x:Key="IconToBrushConverter"/>
+        <convert:BooleanToVisibilityConverter x:Key="VisiblityConverter"/>
     </Page.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock Style="{StaticResource Header}" Text="Where is your database running?"/>
             <StackPanel Margin="0,0,0,20">
@@ -35,6 +42,12 @@
                     </Hyperlink>
                 </TextBlock>
             </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Visibility="{Binding ShowCredentialInput, Converter={StaticResource VisiblityConverter}}">
+                <TextBlock Text="Username" Style="{StaticResource Header}"/>
+                <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Username}" Width="150"/>
+                <TextBlock Text="Password" Style="{StaticResource Header}" Margin="0,10,0,0"/>
+                <c:BindablePasswordBox Password="{Binding Password}" Width="150" Margin="0,0,0,20"/>
+            </StackPanel>
             <TextBlock Style="{StaticResource Header}" Text="Select your ShipWorks database"/>
             <StackPanel Orientation="Horizontal">
                 <fa5:FontAwesome x:Name="CurrentIcon"
@@ -45,56 +58,37 @@
                          VerticalAlignment="Center"/>
                 <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding ConnectionStatusText}" VerticalAlignment="Center" Margin="10,0"/>
             </StackPanel>
-            <ListView Height="150" Margin="0,10,0,20" ItemsSource="{Binding Databases}" x:Name="DatabaseView" SelectedIndex="{Binding SelectedDatabaseIndex}">
-                <ListView.Resources>
-                    <DataTemplate x:Key="Name">
-                        <TextBlock HorizontalAlignment="Left" 
+        </StackPanel>
+        <ListView ItemsSource="{Binding Databases}" Grid.Row="1" x:Name="DatabaseView" SelectedIndex="{Binding SelectedDatabaseIndex}" Margin="0,10">
+            <ListView.Resources>
+                <DataTemplate x:Key="Name">
+                    <TextBlock HorizontalAlignment="Left" 
                         Text="{Binding XPath=@DatabaseName}"/>
-                    </DataTemplate>
-                </ListView.Resources>
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Database" DisplayMemberBinding="{Binding DatabaseName}" 
+                </DataTemplate>
+            </ListView.Resources>
+            <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Database" DisplayMemberBinding="{Binding DatabaseName}" 
                                         Width="{Binding 
                                         Converter={StaticResource PercentageConverter}, 
                                         ElementName=DatabaseView, 
                                         Path=ActualWidth, 
                                         ConverterParameter=.90}">
-                            <GridViewColumn.HeaderContainerStyle>
-                                <Style TargetType="{x:Type GridViewColumnHeader}">
-                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                    <Setter Property="Width" Value="{Binding 
+                    <GridViewColumn.HeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="Width" Value="{Binding 
                                         Converter={StaticResource PercentageConverter}, 
                                         ElementName=DatabaseView, 
                                         Path=ActualWidth, 
                                         ConverterParameter=1}" />
-                                </Style>
-                            </GridViewColumn.HeaderContainerStyle>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel>
-                    <TextBlock Text="Username" Style="{StaticResource Header}"/>
-                    <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Username}"/>
-                </StackPanel>
-                <StackPanel Grid.Row="1" Margin="0,10">
-                    <TextBlock Text="Password" Style="{StaticResource Header}"/>
-                    <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Password}"/>
-                </StackPanel>
-                <Button Style="{StaticResource SmallButton}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Margin="50,10" Command="{Binding TestCommand}">Test</Button>
-            </Grid>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
+                        </Style>
+                    </GridViewColumn.HeaderContainerStyle>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Grid.Row="2" HorizontalAlignment="Right" Margin="10">
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
             <Button Style="{StaticResource SmallPrimaryButton}" 
                     Command="{Binding NextCommand}" 

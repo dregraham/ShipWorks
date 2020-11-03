@@ -29,6 +29,7 @@ namespace ShipWorks.Installer.ViewModels
         private string password;
         private bool nextEnabled;
         private int selectedDatabaseIndex;
+        private bool showCredentialInput;
         private EFontAwesomeIcon connectionIcon;
         private readonly ISqlServerLookupService sqlLookup;
         private readonly ILog log;
@@ -43,18 +44,14 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks, logFactory(typeof(DatabaseConfigViewModel)))
         {
             this.sqlLookup = sqlLookup;
-            TestCommand = new AsyncCommand(TestConnection);
+            this.log = logFactory(typeof(DatabaseConfigViewModel));
             HelpCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
             ConnectCommand = new AsyncCommand(ListDatabases);
             username = string.Empty;
             password = string.Empty;
+            showCredentialInput = false;
             NextEnabled = false;
         }
-
-        /// <summary>
-        /// Command to test a db connection
-        /// </summary>
-        public ICommand TestCommand { get; }
 
         /// <summary>
         /// Command to open a web browser to the db help article
@@ -195,6 +192,15 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
+        /// Whether or not we need to display inputs for credentials
+        /// </summary>
+        public bool ShowCredentialInput
+        {
+            get => showCredentialInput;
+            set => Set(ref showCredentialInput, value);
+        }
+
+        /// <summary>
         /// Trigger navigation to the next wizard page
         /// </summary>
         protected override void NextExecute()
@@ -233,6 +239,7 @@ namespace ShipWorks.Installer.ViewModels
             {
                 Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty, Username, Password);
                 NextEnabled = false;
+                ShowCredentialInput = false;
             }
             catch (Exception ex)
             {
@@ -260,6 +267,7 @@ namespace ShipWorks.Installer.ViewModels
                 ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                 ConnectionStatusText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
                 NextEnabled = false;
+                ShowCredentialInput = true;
             }
         }
     }
