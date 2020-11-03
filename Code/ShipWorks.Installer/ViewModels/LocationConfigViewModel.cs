@@ -72,7 +72,7 @@ namespace ShipWorks.Installer.ViewModels
             };
             try
             {
-                var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token);
+                var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token).ConfigureAwait(false);
                 warehouses.AddRange(response.warehouses);
             }
             catch (Exception ex)
