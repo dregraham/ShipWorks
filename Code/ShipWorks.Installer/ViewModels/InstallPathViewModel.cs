@@ -35,11 +35,13 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UpgradeShipWorks)
         {
+            log = logFactory(typeof(InstallPathViewModel));
+            log.Info($"Starting InstallPathViewModel");
+
             BrowseCommand = new RelayCommand(Browse);
             ValidatePathCommand = new RelayCommand(() => ValidatePath());
             this.systemCheckService = systemCheckService;
             this.registryService = registryService;
-            log = logFactory(typeof(InstallPathViewModel));
             InstallPath = registryService.GetInstallPath();
             ValidatePath();
         }
@@ -61,6 +63,11 @@ namespace ShipWorks.Installer.ViewModels
             mainViewModel.InstallPathIcon = EFontAwesomeIcon.Regular_CheckCircle;
             mainViewModel.InstallSettings.InstallPath = InstallPath;
             mainViewModel.InstallSettings.CreateShortcut = CreateShortcut;
+
+            log.Info($"NextExecute: InstallPath: {InstallPath}");
+            log.Info($"NextExecute: CreateShortcut: {CreateShortcut}");
+            log.Info($"NextExecute: NextPage: {NextPage}");
+
             navigationService.NavigateTo(NextPage);
         }
 
