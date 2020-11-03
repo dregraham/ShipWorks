@@ -33,6 +33,7 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks)
         {
+            WarehouseList.Add(SelectedWarehouse);
             log = logFactory(typeof(LocationConfigViewModel));
             this.hubService = hubService;
             _ = GetWarehouseList();
