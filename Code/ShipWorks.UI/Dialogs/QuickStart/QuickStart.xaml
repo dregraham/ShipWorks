@@ -90,7 +90,6 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
             <Image Grid.Row="0" Grid.Column="0" Style="{StaticResource LargeImage}" Source="{StaticResource Store}" />
             <Image Grid.Row="0" Grid.Column="1" Style="{StaticResource LargeImage}" Source="{StaticResource Printer}" Margin="50 0 0 26" />
             <StackPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource LeftSection}">
