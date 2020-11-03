@@ -280,7 +280,6 @@
     <Compile Include="Dialogs\QuickStart\QuickStart.xaml.cs">
       <DependentUpon>QuickStart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\QuickStart\QuickStartViewModel.cs" />
     <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
       <DependentUpon>MainOptions.xaml</DependentUpon>
     </Compile>
