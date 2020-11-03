@@ -110,8 +110,11 @@ namespace ShipWorks.Installer.ViewModels
             {
                 NextPage = NavigationPageType.DatabaseConfig;
             }
+            else
+            {
+                mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            }
             mainViewModel.InstallSettings.Warehouse = SelectedWarehouse;
-            mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }
 

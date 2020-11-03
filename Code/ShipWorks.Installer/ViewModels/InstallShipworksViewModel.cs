@@ -15,7 +15,6 @@ namespace ShipWorks.Installer.ViewModels
     public class InstallShipWorksViewModel : InstallerViewModelBase
     {
         private readonly IInnoSetupService innoSetupService;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
