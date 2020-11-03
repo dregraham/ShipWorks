@@ -20,7 +20,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstallShipWorksViewModel(MainViewModel mainViewModel, 
+        public InstallShipWorksViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService, IInnoSetupService innoSetupService,
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.InstallDatabase)
@@ -29,6 +29,7 @@ namespace ShipWorks.Installer.ViewModels
             log = logFactory(typeof(UpgradeShipWorksViewModel));
 
             log.Info("Upgrade ShipWorks screen displayed.");
+            _ = NextExecuteAsync();
         }
 
         /// <summary>
@@ -40,8 +41,12 @@ namespace ShipWorks.Installer.ViewModels
 
             log.Info("Starting Inno setup for install.");
             await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
-
             log.Info("Finished Inno setup for install.");
+
+            if (mainViewModel.InstallSettings.Error != InstallError.None)
+            {
+                NextPage = NavigationPageType.Warning;
+            }
 
             navigationService.NavigateTo(NextPage);
         }
