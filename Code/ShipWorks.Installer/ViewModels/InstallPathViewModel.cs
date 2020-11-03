@@ -33,9 +33,8 @@ namespace ShipWorks.Installer.ViewModels
             ISystemCheckService systemCheckService,
             IRegistryService registryService,
             Func<Type, ILog> logFactory) :
-            base(mainViewModel, navigationService, NavigationPageType.UpgradeShipWorks)
+            base(mainViewModel, navigationService, NavigationPageType.UpgradeShipWorks, logFactory(typeof(InstallPathViewModel)))
         {
-            log = logFactory(typeof(InstallPathViewModel));
             log.Info($"Starting InstallPathViewModel");
 
             BrowseCommand = new RelayCommand(Browse);

@@ -1,7 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Timers;
 using System.Windows;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
@@ -19,8 +21,9 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public SystemCheckViewModel(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
-            ISystemCheckService systemCheckService) :
-            base(mainViewModel, navigationService, NavigationPageType.Eula)
+            ISystemCheckService systemCheckService,
+            Func<Type, ILog> logFactory) :
+            base(mainViewModel, navigationService, NavigationPageType.Eula, logFactory(typeof(SystemCheckViewModel)))
         {
             var result = systemCheckService.CheckSystem();
             mainViewModel.InstallSettings.CheckSystemResult = result;

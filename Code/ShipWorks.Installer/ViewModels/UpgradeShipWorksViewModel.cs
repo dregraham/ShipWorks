@@ -22,11 +22,9 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService, 
                IInnoSetupService innoSetupService, Func<Type, ILog> logFactory) :
-            base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
+            base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(UpgradeShipWorksViewModel)))
         {
             this.innoSetupService = innoSetupService;
-            log = logFactory(typeof(UpgradeShipWorksViewModel));
-
             log.Info("Upgrade ShipWorks screen displayed.");
         }
 

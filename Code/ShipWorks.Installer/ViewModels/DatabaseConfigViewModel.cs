@@ -40,10 +40,9 @@ namespace ShipWorks.Installer.ViewModels
             INavigationService<NavigationPageType> navigationService,
             ISqlServerLookupService sqlLookup,
             Func<Type, ILog> logFactory) :
-            base(mainViewModel, navigationService, NavigationPageType.InstallShipworks)
+            base(mainViewModel, navigationService, NavigationPageType.InstallShipworks, logFactory(typeof(DatabaseConfigViewModel)))
         {
             this.sqlLookup = sqlLookup;
-            this.log = logFactory(typeof(DatabaseConfigViewModel));
             TestCommand = new AsyncCommand(TestConnection);
             HelpCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
             ConnectCommand = new AsyncCommand(ListDatabases);

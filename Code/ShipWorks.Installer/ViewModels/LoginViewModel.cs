@@ -30,7 +30,7 @@ namespace ShipWorks.Installer.ViewModels
             INavigationService<NavigationPageType> navigationService,
             IHubService hubService,
             Func<Type, ILog> logFactory) :
-            base(mainViewModel, navigationService, NavigationPageType.LocationConfig)
+            base(mainViewModel, navigationService, NavigationPageType.LocationConfig, logFactory(typeof(LoginViewModel)))
         {
             this.hubService = hubService;
             NoAccountCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://www.shipworks.com/step1/"));

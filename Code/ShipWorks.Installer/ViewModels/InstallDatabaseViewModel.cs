@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
@@ -14,8 +16,9 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstallDatabaseViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
-            base(mainViewModel, navigationService, NavigationPageType.UseShipWorks)
+        public InstallDatabaseViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService,
+            Func<Type, ILog> logFactory) :
+            base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(InstallDatabaseViewModel)))
         {
         }
 

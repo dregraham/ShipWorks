@@ -18,12 +18,13 @@ namespace ShipWorks.Installer.ViewModels
     {
         protected readonly MainViewModel mainViewModel;
         protected readonly INavigationService<NavigationPageType> navigationService;
-        private readonly ILog log;
+        protected readonly ILog log;
 
         public InstallerViewModelBase(MainViewModel mainViewModel,
             INavigationService<NavigationPageType> navigationService,
-            NavigationPageType nextPage)
+            NavigationPageType nextPage, ILog log)
         {
+            this.log = log;
             this.navigationService = navigationService;
             this.mainViewModel = mainViewModel;
             NextPage = nextPage;

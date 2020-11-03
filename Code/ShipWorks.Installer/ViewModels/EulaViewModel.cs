@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using FontAwesome5;
+using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 
@@ -11,8 +13,9 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// View Model for the Eula page
         /// </summary>
-        public EulaViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService) :
-            base(mainViewModel, navigationService, NavigationPageType.InstallPath)
+        public EulaViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService,
+            Func<Type, ILog> logFactory) :
+            base(mainViewModel, navigationService, NavigationPageType.InstallPath, logFactory(typeof(EulaViewModel)))
         {
         }
 
