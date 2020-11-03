@@ -149,6 +149,26 @@ namespace ShipWorks.Installer.ViewModels
                 return false;
             }
 
+            try
+            {
+                bool alreadyExists = Directory.Exists(InstallPath);
+
+                // Use this to validate the install path
+                // If the folder already exists, CreateDirectory doesn't do anything
+                Directory.CreateDirectory(InstallPath);
+
+                if (!alreadyExists)
+                {
+                    Directory.Delete(InstallPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                Error = "The path entered is invalid.";
+                return false;
+            }
+
             Error = null;
             return true;
         }
