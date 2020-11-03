@@ -96,7 +96,13 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
-            <Button Style="{StaticResource SmallPrimaryButton}" Command="{Binding NextCommand}" Margin="10,0,20,0" IsEnabled="{Binding NextEnabled}">Next</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" 
+                    Command="{Binding NextCommand}" 
+                    Margin="10,0,20,0" 
+                    IsEnabled="{Binding NextEnabled}"
+                    IsDefault="True">
+                Next
+            </Button>
             <Button Style="{StaticResource SmallSecondaryButton}">Cancel</Button>
         </StackPanel>
     </Grid>

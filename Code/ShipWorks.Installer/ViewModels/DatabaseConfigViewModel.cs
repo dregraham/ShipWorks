@@ -207,11 +207,14 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
-        /// Determines if this page is complete and we can move on
+        /// Determines if this page is complete and we can move on.
+        /// In this instance returning the actual value is fighting the buttons
+        /// enabled property. So just return true here and we'll handle this by 
+        /// enabling the button our selves
         /// </summary>
         protected override bool NextCanExecute()
         {
-            return NextEnabled;
+            return true;
         }
 
         /// <summary>
@@ -230,8 +233,7 @@ namespace ShipWorks.Installer.ViewModels
             try
             {
                 Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty, Username, Password);
-                SelectedDatabaseIndex = 0;
-                NextEnabled = true;
+                NextEnabled = false;
             }
             catch (Exception ex)
             {
