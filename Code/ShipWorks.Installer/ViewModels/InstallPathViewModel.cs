@@ -21,7 +21,6 @@ namespace ShipWorks.Installer.ViewModels
         private string installPath;
         private ISystemCheckService systemCheckService;
         private readonly IRegistryService registryService;
-        private readonly ILog log;
         private string error;
         private bool createShortcut;
 
