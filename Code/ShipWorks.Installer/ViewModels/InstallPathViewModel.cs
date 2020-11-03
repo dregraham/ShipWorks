@@ -162,11 +162,14 @@ namespace ShipWorks.Installer.ViewModels
                     Directory.Delete(InstallPath);
                 }
             }
+            catch (Exception ex) when (ex is ArgumentException || ex is IOException)
+            {
+                Error = "The path entered is invalid.";
+                return false;
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
-                Error = "The path entered is invalid.";
-                return false;
             }
 
             Error = null;
