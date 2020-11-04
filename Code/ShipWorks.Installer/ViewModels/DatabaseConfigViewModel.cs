@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
@@ -32,7 +33,6 @@ namespace ShipWorks.Installer.ViewModels
         private bool showCredentialInput;
         private EFontAwesomeIcon connectionIcon;
         private readonly ISqlServerLookupService sqlLookup;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -44,9 +44,14 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks, logFactory(typeof(DatabaseConfigViewModel)))
         {
             this.sqlLookup = sqlLookup;
-            this.log = logFactory(typeof(DatabaseConfigViewModel));
             HelpCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/articles/360022462812"));
-            ConnectCommand = new AsyncCommand(ListDatabases);
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+            ConnectCommand = new AsyncCommand(async () =>
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+            {
+                Mouse.OverrideCursor = Cursors.Wait;
+                _ = Task.Run(() => ListDatabases());
+            });
             username = string.Empty;
             password = string.Empty;
             showCredentialInput = false;
@@ -73,20 +78,16 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
-        /// The list of network locations to display
+        /// The database server to connect to
         /// </summary>
         public string ServerInstance
         {
             get => serverInstance;
-            set
-            {
-                Set(ref serverInstance, value.ToUpperInvariant());
-                _ = ListDatabases();
-            }
+            set => Set(ref serverInstance, value.ToUpperInvariant());
         }
 
         /// <summary>
-        /// The index of the currently selected databse
+        /// The index of the currently selected database
         /// </summary>
         public int SelectedDatabaseIndex
         {
@@ -228,25 +229,31 @@ namespace ShipWorks.Installer.ViewModels
         private async Task ListDatabases()
         {
             ConnectionStatusText = "Searching for databases...";
-            Databases = new List<SqlSessionConfiguration>
-            {
-                new SqlSessionConfiguration
-                {
-                    DatabaseName = "Searching for databases...."
-                }
-            };
+            ConnectionIcon = EFontAwesomeIcon.None;
+            Databases = null;
             try
             {
-                Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty, Username, Password);
+                Databases = await sqlLookup.GetDatabases(ServerInstance ?? string.Empty, Username, Password).ConfigureAwait(true);
                 NextEnabled = false;
                 ShowCredentialInput = false;
+                ConnectionStatusText = null;
             }
             catch (Exception ex)
             {
-                ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                ConnectionStatusText = $"An error occured attempting to connect to '{ServerInstance}'";
-                NextEnabled = false;
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                    ConnectionStatusText = $"An error occurred attempting to connect to '{ServerInstance}'";
+                    NextEnabled = false;
+                });
                 log.Error(ex.Message);
+            }
+            finally
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Mouse.OverrideCursor = null;
+                });
             }
         }
 
@@ -255,17 +262,17 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private async Task TestConnection()
         {
-            string account = SelectedDatabase.WindowsAuth ? "Windows Auth" : SelectedDatabase.Username;
+            string account = SelectedDatabase.WindowsAuth ? "Windows Auth" : $"the '{SelectedDatabase.Username}' account";
             if (await sqlLookup.TestConnection(SelectedDatabase))
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_CheckCircle;
-                ConnectionStatusText = $"Connected to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
+                ConnectionStatusText = $"Connected to '{SelectedDatabase.DatabaseName}' using {account}";
                 NextEnabled = true;
             }
             else
             {
                 ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                ConnectionStatusText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using the '{account}' account";
+                ConnectionStatusText = $"Failed to connect to '{SelectedDatabase.DatabaseName}' using {account}";
                 NextEnabled = false;
                 ShowCredentialInput = true;
             }

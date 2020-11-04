@@ -90,7 +90,7 @@ namespace ShipWorks.Installer.Sql
             {
                 con.Open();
                 SqlUtility sqlUtil = new SqlUtility();
-                var result = await sqlUtil.ValidateOpenConnection(con);
+                var result = await sqlUtil.ValidateOpenConnection(con).ConfigureAwait(false);
                 con.Close();
                 return result;
             }

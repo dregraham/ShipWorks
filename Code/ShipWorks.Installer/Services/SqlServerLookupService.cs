@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using ShipWorks.Installer.Sql;
 
@@ -34,19 +35,22 @@ namespace ShipWorks.Installer.Services
 
             sqlSession.Configuration = config;
             // Start the background task to try to log in and figure out the background databases...
-            SqlSessionConfiguration configuration = await sqlUtility.DetermineCredentials(serverInstance, config).ConfigureAwait(true);
+            SqlSessionConfiguration configuration = await sqlUtility.DetermineCredentials(serverInstance, config).ConfigureAwait(false);
             sqlSession.Configuration = configuration;
-            IEnumerable<string> databases = null;
 
-            if (configuration != null)
+            if (configuration == null)
             {
-                using (DbConnection con = sqlSession.OpenConnection())
-                {
-                    databases = await sqlUtility.GetDatabaseDetails(con).ConfigureAwait(true);
-                }
+                throw new AuthenticationException($"Could not find instance {serverInstance}");
             }
 
-            return databases.Select(d =>
+            IEnumerable<string> databases = null;
+
+            using (DbConnection con = sqlSession.OpenConnection())
+            {
+                databases = await sqlUtility.GetDatabaseDetails(con).ConfigureAwait(false);
+            }
+
+            return databases?.Select(d =>
             new SqlSessionConfiguration(configuration)
             {
                 DatabaseName = d
@@ -59,7 +63,7 @@ namespace ShipWorks.Installer.Services
         public async Task<bool> TestConnection(SqlSessionConfiguration config)
         {
             sqlSession.Configuration = config;
-            return await sqlSession.CanConnect().ConfigureAwait(true);
+            return await sqlSession.CanConnect().ConfigureAwait(false);
         }
     }
 }
