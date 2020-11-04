@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using Autofac.Features.OwnedInstances;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -474,6 +475,37 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForLicenseDependentChanges();
             CheckForOneBalanceChanges();
             ValidateLocalRates();
+            CheckQuickStartNeeded();
+        }
+
+        /// <summary>
+        /// If no store set up, show quick start
+        /// </summary>
+        private static void CheckQuickStartNeeded()
+        {
+            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled))
+            {
+                var quickStart =
+                    new DashboardLocalMessageItem("QuickStart",
+                        DashboardMessageImageType.LightBulb,
+                        "Quick Start",
+                        "Finish setting up ShipWorks.",
+                        new DashboardActionMethod("[link]Quick Start[/link]", ShowQuickStart))
+                    { ShowTime = false };
+
+                AddDashboardItem(quickStart);
+            }
+        }
+
+        /// <summary>
+        /// Show the dialog
+        /// </summary>
+        private static void ShowQuickStart()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<IQuickStart>().ShowDialog();
+            }
         }
 
         /// <summary>
