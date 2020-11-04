@@ -20,10 +20,10 @@ namespace ShipWorks.Installer.ViewModels
     public class LocationConfigViewModel : InstallerViewModelBase
     {
         private bool ownDbChecked;
+        private bool finishedLoading = false;
         private Warehouse selectedWarehouse = new Warehouse { Details = new Details { Name = "Loading Warehouses..." } };
         private ObservableCollection<Warehouse> warehouseList = new ObservableCollection<Warehouse>();
         private readonly IHubService hubService;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -58,6 +58,15 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
+        /// Flag to check if we are still loading the warehouse list
+        /// </summary>
+        public bool FinishedLoading
+        {
+            get => finishedLoading;
+            set => Set(ref finishedLoading, value);
+        }
+
+        /// <summary>
         /// Get the list of warehouses from the Hub
         /// </summary>
         public async Task GetWarehouseList()
@@ -88,6 +97,7 @@ namespace ShipWorks.Installer.ViewModels
                 {
                     WarehouseList = new ObservableCollection<Warehouse>(warehouses);
                     SelectedWarehouse = WarehouseList.FirstOrDefault();
+                    FinishedLoading = true;
                 });
             }
         }
