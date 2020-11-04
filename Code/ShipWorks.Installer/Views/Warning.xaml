@@ -14,12 +14,12 @@
         <StackPanel>
             <TextBlock Text="Oops! ShipWorks had a problem installing:"/>
             <TextBlock Text="{Binding Warning}" Margin="0,10"/>
-            <TextBlock TextWrapping="Wrap">
-            Please contact a ShipWorks representative at 999-999-9999 or via our 
-            <Hyperlink>
+            <TextBlock TextWrapping="Wrap" Margin="0,20">
+            Please contact a ShipWorks representative at 314-455-6370 or via our 
+            <Hyperlink Command="{Binding OpenWebsiteCommand}">
                 website
             </Hyperlink>
-            to resolve this issue
+            to resolve this issue.
             </TextBlock>
         </StackPanel>
         <Button Style="{StaticResource SmallSecondaryButton}" 
