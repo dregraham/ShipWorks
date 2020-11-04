@@ -10,6 +10,7 @@ using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
+using ShipWorks.Installer.Views;
 
 namespace ShipWorks.Installer.ViewModels
 {
@@ -87,6 +88,11 @@ namespace ShipWorks.Installer.ViewModels
             get => navBarState;
             set => Set(ref navBarState, value);
         }
+
+        /// <summary>
+        /// Reference to the main window
+        /// </summary>
+        public bool IsClosing { get; set; }
 
         /// <summary>
         /// Eula icon
@@ -194,6 +200,14 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private void OpenHelpPage() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new");
 
-
+        /// <summary>
+        /// Shows a confirmation dialog before closing the window
+        /// </summary>
+        public bool Close(bool needsWindowClose)
+        {
+            IsClosing = needsWindowClose;
+            var dlg = new CancelConfirmationDialog();
+            return dlg.ShowDialog() ?? false;
+        }
     }
 }

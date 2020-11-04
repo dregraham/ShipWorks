@@ -46,6 +46,11 @@ namespace ShipWorks.Installer.ViewModels
         public RelayCommand BackCommand => new RelayCommand(navigationService.GoBack);
 
         /// <summary>
+        /// Command for canceling the dialog
+        /// </summary>
+        public RelayCommand CancelCommand => new RelayCommand(CancelExecute);
+
+        /// <summary>
         /// Command for going to the next page
         /// </summary>
         public IAsyncCommand NextCommandAsync => new AsyncCommand(NextExecuteAsync, NextCanExecute, log);
@@ -72,6 +77,17 @@ namespace ShipWorks.Installer.ViewModels
         protected virtual bool NextCanExecute()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Command handler for the cancel command
+        /// </summary>
+        public void CancelExecute()
+        {
+            if (!mainViewModel.IsClosing)
+            {
+                mainViewModel.Close(false);
+            }
         }
     }
 }

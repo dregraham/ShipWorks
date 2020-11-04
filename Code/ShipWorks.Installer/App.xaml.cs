@@ -81,7 +81,7 @@ namespace ShipWorks.Installer
             }
 
             // Register all the Windows of the applications.
-            services.AddTransient<MainWindow>();
+            services.AddSingleton<MainWindow>();
         }
 
         protected override async void OnStartup(StartupEventArgs e)

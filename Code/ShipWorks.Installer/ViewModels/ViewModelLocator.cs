@@ -66,5 +66,10 @@ namespace ShipWorks.Installer.ViewModels
         /// Database Config View Model
         /// </summary>
         public DatabaseConfigViewModel DatabaseConfigViewModel => App.ServiceProvider.GetRequiredService<DatabaseConfigViewModel>();
+
+        /// <summary>
+        /// Cancel Confirmation Dialog View Model
+        /// </summary>
+        public CancelConfirmationDialogViewModel CancelConfirmationDialogViewModel => App.ServiceProvider.GetRequiredService<CancelConfirmationDialogViewModel>();
     }
 }

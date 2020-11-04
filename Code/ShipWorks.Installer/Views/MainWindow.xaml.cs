@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
+using ShipWorks.Installer.ViewModels;
 
 namespace ShipWorks.Installer.Views
 {
@@ -26,6 +27,15 @@ namespace ShipWorks.Installer.Views
         private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             mainGrid.Focus();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var viewModel = this.DataContext as MainViewModel;
+            if (!viewModel.IsClosing)
+            {
+                e.Cancel = !viewModel.Close(true);
+            }
         }
     }
 }

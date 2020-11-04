@@ -97,7 +97,7 @@
                     IsDefault="True">
                 Next
             </Button>
-            <Button Style="{StaticResource SmallSecondaryButton}">Cancel</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
     </Grid>
 </Page>

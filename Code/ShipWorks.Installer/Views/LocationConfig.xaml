@@ -34,7 +34,7 @@
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
             <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0,20,0" Command="{Binding NextCommand}" IsEnabled="{Binding FinishedLoading}" IsDefault="True">Next</Button>
-            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True">Cancel</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
     </Grid>
 </Page>

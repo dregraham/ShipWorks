@@ -18,7 +18,7 @@
     BorderBrush="LightGray"
     BorderThickness="0,1,0,0"
     Focusable="True"
-    MouseDown="Window_MouseDown" IsTabStop="False">
+    MouseDown="Window_MouseDown" IsTabStop="False" Closing="Window_Closing">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />

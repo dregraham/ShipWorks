@@ -35,7 +35,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">
             <Button Style="{StaticResource SmallPrimaryButton}" Margin="10" Command="{Binding NextCommand}" IsDefault="True">I Accept</Button>
-            <Button Style="{StaticResource SmallSecondaryButton}" Margin="10" IsCancel="True">Cancel</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" Margin="10" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
     </Grid>
 </Page>
