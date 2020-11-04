@@ -33,7 +33,7 @@
             <Style x:Key="Subheader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
                 <Setter Property="HorizontalAlignment" Value="Center"/>
             </Style>
-            <Style x:Key="Button" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
+            <Style x:Key="ButtonText" TargetType="{x:Type TextBlock}">
                 <Setter Property="Foreground" Value="#0078d7"/>
                 <Setter Property="FontSize" Value="18"/>
                 <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
@@ -52,8 +52,7 @@
                 <Setter Property="Height" Value="100"/>
                 <Setter Property="Width" Value="100"/>
                 <Setter Property="HorizontalAlignment" Value="Left"/>
-                <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
-                <Setter Property="Margin" Value="0 0 0 26"/>
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>                
             </Style>
             <Style x:Key="SmallImage" TargetType="{x:Type Image}">
                 <Setter Property="Height" Value="24"/>
@@ -62,9 +61,15 @@
                 <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
                 <Setter Property="Margin" Value="0 0 10 0"/>
             </Style>
-            <Style x:Key="SectionHeader" TargetType="{x:Type StackPanel}">
+            <Style x:Key="SectionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
                 <Setter Property="Margin" Value="0 0 0 11"/>
+            </Style>
+            <Style x:Key="SectionHeader" TargetType="{x:Type StackPanel}">
                 <Setter Property="Orientation" Value="Horizontal"/>
+            </Style>
+            <Style x:Key="ImageButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Margin" Value="0 0 0 26"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -90,43 +95,59 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Image Grid.Row="0" Grid.Column="0" Style="{StaticResource LargeImage}" Source="{StaticResource Store}" />
-            <Image Grid.Row="0" Grid.Column="1" Style="{StaticResource LargeImage}" Source="{StaticResource Printer}" Margin="50 0 0 26" />
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource ImageButton}" Click="OnClickAddStore">
+                <Image Style="{StaticResource LargeImage}" Source="{StaticResource Store}" />
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" Margin="50 0 0 26" Style="{StaticResource ImageButton}" >
+                <Image Style="{StaticResource LargeImage}" Source="{StaticResource Printer}" />
+            </Button>
             <StackPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource LeftSection}">
-                <Button Content="Connect a Store" Style="{StaticResource Button}" Margin="0 0 0 11" Click="OnClickAddStore"/>
+                <Button Style="{StaticResource SectionButton}" Click="OnClickAddStore">
+                    <TextBlock Text="Connect a Store" Style="{StaticResource ButtonText}" />
+                </Button>
                 <TextBlock Text="Add a new marketplace, file, or ODBC connection to import orders from." Style="{StaticResource Details}"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Style="{StaticResource RightSection}">
-                <Button Content="Setup Default Printers" Style="{StaticResource Button}" Margin="0 0 0 11"/>
+                <Button Style="{StaticResource SectionButton}">
+                    <TextBlock Text="Setup Default Printers" Style="{StaticResource ButtonText}" />
+                </Button>
                 <TextBlock Text="Setup your default thermal or standard printers to use with ShipWorks." Style="{StaticResource Details}"/>
             </StackPanel>
             <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="-52 0 -52 35" Background="#dededd"/>
             <StackPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource LeftSection}">
-                <StackPanel Style="{StaticResource SectionHeader}">
-                    <Image Style="{StaticResource SmallImage}" Source="{StaticResource List}" />
-                    <Button Content="Setup Automated Shipping Rules" Style="{StaticResource Button}" Click="OnClickShippingRules"/>
-                </StackPanel>                
+                <Button Style="{StaticResource SectionButton}" Click="OnClickShippingRules">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource List}" />
+                        <TextBlock Text="Setup Automated Shipping Rules" Style="{StaticResource ButtonText}" />
+                    </StackPanel>
+                </Button>                               
                 <TextBlock Text="Configure rules to ensure your shipments are processed with the correct settings every time." Style="{StaticResource Details}"/>
             </StackPanel>
             <StackPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource RightSection}">
-                <StackPanel Style="{StaticResource SectionHeader}">
-                    <Image Style="{StaticResource SmallImage}" Source="{StaticResource Product}" />
-                    <Button Content="Create a Filter" Style="{StaticResource Button}" Click="OnClickFilters"/>
-                </StackPanel>
+                <Button Style="{StaticResource SectionButton}" Click="OnClickFilters">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Product}" />
+                        <TextBlock Text="Create a Filter" Style="{StaticResource ButtonText}"/>
+                    </StackPanel>
+                </Button>
                 <TextBlock Text="Create a filter to find and display orders that meet criteria that you decide upon." Style="{StaticResource Details}"/>                
             </StackPanel>
             <StackPanel Grid.Row="4" Grid.Column="0" Style="{StaticResource LeftSection}">
-                <StackPanel Style="{StaticResource SectionHeader}">
-                    <Image Style="{StaticResource SmallImage}" Source="{StaticResource Configuration}" />
-                    <Button Content="Customize Templates" Style="{StaticResource Button}" Click="OnClickTemplates"/>
-                </StackPanel>                
+                <Button Style="{StaticResource SectionButton}" Click="OnClickTemplates">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Configuration}" />
+                        <TextBlock Text="Customize Templates" Style="{StaticResource ButtonText}"/>
+                    </StackPanel>
+                </Button>                             
                 <TextBlock Text="Customize your templates to ensure proper formatting and brand placement." Style="{StaticResource Details}"/>
             </StackPanel>
-            <StackPanel Grid.Row="4" Grid.Column="1" Style="{StaticResource RightSection}">                
-                <StackPanel Style="{StaticResource SectionHeader}">
-                    <Image Style="{StaticResource SmallImage}" Source="{StaticResource Management}" VerticalAlignment="Center"/>
-                    <Button Content="Setup Inventory Management" Style="{StaticResource Button}" Click="OnClickInventory"/>
-                </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="1" Style="{StaticResource RightSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickInventory">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Management}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Setup Inventory Management" Style="{StaticResource ButtonText}" />
+                    </StackPanel>
+                </Button>
                 <TextBlock Text="Setup your inventory through The Hub to track product levels." Style="{StaticResource Details}"/>
             </StackPanel>
         </Grid>
