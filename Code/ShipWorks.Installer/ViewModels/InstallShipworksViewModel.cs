@@ -35,15 +35,18 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override async Task NextExecuteAsync()
         {
-            mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
-
             log.Info("Starting Inno setup for install.");
             await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
             log.Info("Finished Inno setup for install.");
 
             if (mainViewModel.InstallSettings.Error != InstallError.None)
             {
+                mainViewModel.InstallationIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                 NextPage = NavigationPageType.Warning;
+            }
+            else
+            {
+                mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
             }
 
             navigationService.NavigateTo(NextPage);

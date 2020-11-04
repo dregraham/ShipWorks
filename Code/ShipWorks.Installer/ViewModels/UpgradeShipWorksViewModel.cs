@@ -15,17 +15,17 @@ namespace ShipWorks.Installer.ViewModels
     public class UpgradeShipWorksViewModel : InstallerViewModelBase
     {
         private readonly IInnoSetupService innoSetupService;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService, 
+        public UpgradeShipWorksViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService,
                IInnoSetupService innoSetupService, Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(UpgradeShipWorksViewModel)))
         {
             this.innoSetupService = innoSetupService;
             log.Info("Upgrade ShipWorks screen displayed.");
+            _ = NextExecuteAsync();
         }
 
         /// <summary>
@@ -33,12 +33,21 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         protected override async Task NextExecuteAsync()
         {
-            mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Regular_CheckCircle;
-
             log.Info("Starting Inno setup for upgrade.");
             await innoSetupService.InstallShipWorks(mainViewModel.InstallSettings).ConfigureAwait(true);
-            
+
             log.Info("Finished Inno setup for upgrade.");
+
+            if (mainViewModel.InstallSettings.Error != InstallError.None)
+            {
+                mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                NextPage = NavigationPageType.Warning;
+            }
+            else
+            {
+                mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            }
 
             navigationService.NavigateTo(NextPage);
         }
