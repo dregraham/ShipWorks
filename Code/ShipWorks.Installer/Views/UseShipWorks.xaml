@@ -11,9 +11,14 @@
     DataContext="{Binding Path=UseShipWorksViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel HorizontalAlignment="Center">
-            <TextBlock Text="Congrats! You've installed ShipWorks."  HorizontalAlignment="Center"/>
-            <Button Style="{StaticResource LargePrimaryButton}" Command="{Binding NextCommand}" Content="Launch ShipWorks" Margin="0,50"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1">
+            <TextBlock Style="{StaticResource Header}" Text="Congrats! You've installed ShipWorks."  HorizontalAlignment="Center"/>
+            <Button Style="{StaticResource LargePrimaryButton}" Command="{Binding NextCommand}" Content="Launch ShipWorks" Margin="0,20"/>
         </StackPanel>
     </Grid>
 </Page>
