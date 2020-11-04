@@ -40,9 +40,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Warehouse
             GenericResult<OrderEntity> result = await orderElementFactory
                 .CreateOrder(new AmazonOrderIdentifier(amazonOrderID)).ConfigureAwait(false);
 
-            result.Value.ChangeOrderNumber(amazonOrderID);
-
-            if (result.Failure)
+            if (result.Success)
+            {
+                result.Value.ChangeOrderNumber(amazonOrderID);
+            } 
+            else
             {
                 log.InfoFormat("Skipping order '{0}': {1}.", amazonOrderID, result.Message);
             }

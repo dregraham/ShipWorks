@@ -56,7 +56,7 @@ namespace ShipWorks.ApplicationCore.Licensing.WebClientEnvironments
         private void Load()
         {
             // If we are a production release, only allow Production environment.
-            if (Assembly.GetExecutingAssembly().GetName().Version.Major != 0)
+            if (!InterapptiveOnly.IsInterapptiveUser && Assembly.GetExecutingAssembly().GetName().Version.Major != 0)
             {
                 SelectedEnvironment = CreateProductionEnvironment();
                 environments = new List<WebClientEnvironment>
