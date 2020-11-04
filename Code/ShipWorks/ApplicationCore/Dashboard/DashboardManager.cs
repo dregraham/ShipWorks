@@ -495,9 +495,10 @@ namespace ShipWorks.ApplicationCore.Dashboard
                         "Quick Start",
                         "Finish setting up ShipWorks.",
                         new DashboardActionMethod("[link]Quick Start[/link]", ShowQuickStart))
-                    { ShowTime = false, CanUserDismiss = false };
+                    { ShowTime = false };
 
                 AddDashboardItem(quickStart);
+                quickStart.DashboardBar.CanUserDismiss = false;
             }
             
             if(existingDashboardItem != null && !shouldShow)
