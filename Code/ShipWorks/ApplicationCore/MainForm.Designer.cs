@@ -249,6 +249,8 @@ namespace ShipWorks
             this.buttonEmailMessages = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkDownload = new Divelements.SandRibbon.RibbonChunk();
             this.buttonDownload = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
+            this.ribbonChunkQuickStart= new Divelements.SandRibbon.RibbonChunk();
+            this.buttonQuickStart = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonChunkPickList = new Divelements.SandRibbon.RibbonChunk();
             this.buttonPickList = new ShipWorks.UI.Controls.SandRibbon.RibbonButton();
             this.ribbonTabGridOutput = new Divelements.SandRibbon.RibbonTab();
@@ -2339,6 +2341,7 @@ namespace ShipWorks
             this.ribbonChunkPickList,
             this.ribbonChunkManageEmail,
             this.ribbonChunkDownload,
+            this.ribbonChunkQuickStart,
             });
             this.ribbonTabGridViewHome.Location = new System.Drawing.Point(1, 53);
             this.ribbonTabGridViewHome.Manager = this.ribbonManager;
@@ -2498,6 +2501,25 @@ namespace ShipWorks
             this.buttonDownload.Text = "Download";
             this.buttonDownload.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
             this.buttonDownload.Activate += new System.EventHandler(this.OnDownloadOrders);
+            //
+            // ribbonChunkQuickStart
+            //
+            this.ribbonChunkQuickStart.FurtherOptions = false;
+            this.ribbonChunkQuickStart.ItemJustification = Divelements.SandRibbon.ItemJustification.Near;
+            this.ribbonChunkQuickStart.Items.AddRange(new Divelements.SandRibbon.WidgetBase[] {
+                this.buttonQuickStart});
+            this.ribbonChunkQuickStart.QuickAccessKey = " ";
+            this.ribbonChunkQuickStart.Text = "Quick Start";
+            //
+            // buttonDownload
+            //
+            this.buttonQuickStart.Guid = new System.Guid("83184C65-03F7-4D9D-9901-9C2EFA53FCAE");
+            this.buttonQuickStart.Image = global::ShipWorks.Properties.Resources.window_gear;
+            this.buttonQuickStart.Padding = new Divelements.SandRibbon.WidgetEdges(3, 2, 4, 14);
+            this.buttonQuickStart.QuickAccessKey = "Q";
+            this.buttonQuickStart.Text = "Quick Start";
+            this.buttonQuickStart.TextContentRelation = Divelements.SandRibbon.TextContentRelation.Underneath;
+            this.buttonQuickStart.Activate += new System.EventHandler((sender, e) => this.ShowQuickStart());
             //
             // ribbonChunkPickList
             //
@@ -3487,6 +3509,8 @@ namespace ShipWorks
         private ComponentFactory.Krypton.Toolkit.KryptonManager kryptonManager;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkDownload;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonDownload;
+        private Divelements.SandRibbon.RibbonChunk ribbonChunkQuickStart;
+        private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonQuickStart;
         private Divelements.SandRibbon.RibbonChunk ribbonChunkPickList;
         private ShipWorks.UI.Controls.SandRibbon.RibbonButton buttonPickList;
         private RibbonMainMenuItem mainMenuItemOptions;
