@@ -6,16 +6,14 @@
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="UseShipWorks"
-    Width="300"
-    Height="300"
     d:DesignHeight="300"
     d:DesignWidth="300"
     DataContext="{Binding Path=UseShipWorksViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel>
-            <TextBlock Text="UseShipWorks" />
-            <Button Command="{Binding NextCommand}" Content="Next" />
+        <StackPanel HorizontalAlignment="Center">
+            <TextBlock Text="Congrats! You've installed ShipWorks."  HorizontalAlignment="Center"/>
+            <Button Style="{StaticResource LargePrimaryButton}" Command="{Binding NextCommand}" Content="Launch ShipWorks" Margin="0,50"/>
         </StackPanel>
     </Grid>
 </Page>
