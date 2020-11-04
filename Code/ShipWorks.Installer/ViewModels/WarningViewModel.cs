@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
@@ -18,14 +17,6 @@ namespace ShipWorks.Installer.ViewModels
     public class WarningViewModel : InstallerViewModelBase
     {
         private string warning;
-        private readonly Dictionary<InstallError, string> errorMessages = new Dictionary<InstallError, string>()
-        {
-            { InstallError.SystemCheck, "You don't meet the minimum system requirments:" },
-            { InstallError.DownloadingShipWorks, "There was a problem downloading ShipWorks." },
-            { InstallError.Database, "There was a problem installing or connecting to your database." },
-            { InstallError.InstallShipWorks, "There was a problem installing ShipWorks." },
-            { InstallError.Unknown, "An unknown error occured."  }
-        };
 
         /// <summary>
         /// Constructor
@@ -36,7 +27,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             OpenWebsiteCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new"));
 
-            var message = errorMessages[mainViewModel.InstallSettings.Error];
+            var message = mainViewModel.InstallSettings.Error.GetDescription();
             if (mainViewModel.InstallSettings.Error == InstallError.SystemCheck)
             {
                 message += BuildSystemCheckMessage(mainViewModel.InstallSettings.CheckSystemResult);
