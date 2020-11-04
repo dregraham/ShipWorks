@@ -102,7 +102,7 @@ namespace ShipWorks.Installer.ViewModels
             finally
             {
                 loggingIn = false;
-                Mouse.OverrideCursor = Cursors.Arrow;
+                Mouse.OverrideCursor = null;
             }
             mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
