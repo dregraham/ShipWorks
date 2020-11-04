@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Autofac.Features.OwnedInstances;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -483,10 +484,12 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         private static void CheckQuickStartNeeded()
         {
-            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled))
+            const string identifier = "QuickStart";
+            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled) && 
+                dashboardItems.OfType<DashboardLocalMessageItem>().None(i=>i.Identifier == identifier))
             {
                 var quickStart =
-                    new DashboardLocalMessageItem("QuickStart",
+                    new DashboardLocalMessageItem(identifier,
                         DashboardMessageImageType.LightBulb,
                         "Quick Start",
                         "Finish setting up ShipWorks.",
