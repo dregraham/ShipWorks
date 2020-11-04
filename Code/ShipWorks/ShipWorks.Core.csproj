@@ -927,6 +927,7 @@
     <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />
     <Compile Include="Common\Threading\IBackgroundExecutor.cs" />
+    <Compile Include="Data\Administration\IQuickStart.cs" />
     <Compile Include="Data\Administration\ISqlSchemaUpdater.cs" />
     <Compile Include="ApplicationCore\MainGridHeaderViewModel.cs" />
     <Compile Include="Data\Administration\IUpdateService.cs" />
