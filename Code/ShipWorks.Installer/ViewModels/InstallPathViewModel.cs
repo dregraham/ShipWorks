@@ -139,6 +139,12 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         private bool ValidatePath()
         {
+            if (PathContainsShipWorks())
+            {
+                Error = null;
+                return true;
+            }
+
             log.Info($"Validating path {InstallPath}");
             string driveLetter = Path.GetPathRoot(InstallPath);
             if (!systemCheckService.DriveMeetsRequirements(driveLetter))
