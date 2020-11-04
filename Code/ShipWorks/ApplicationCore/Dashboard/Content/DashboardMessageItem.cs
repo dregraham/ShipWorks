@@ -42,6 +42,20 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         public bool ShowTime { get; set; } = true;
 
         /// <summary>
+        /// Should we allow this to be dismissed
+        /// </summary>
+        public bool CanUserDismiss { get; set; } = true;
+
+        /// <summary>
+        /// Initialize the item with given bar
+        /// </summary>
+        public override void Initialize(DashboardBar dashboardBar)
+        {
+            base.Initialize(dashboardBar);
+            dashboardBar.CanUserDismiss = CanUserDismiss;
+        }
+
+        /// <summary>
         /// Format the secondary text to display to include the timestamp
         /// </summary>
         protected string FormatSecondaryText(string text)

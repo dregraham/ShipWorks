@@ -485,8 +485,9 @@ namespace ShipWorks.ApplicationCore.Dashboard
         private static void CheckQuickStartNeeded()
         {
             const string identifier = "QuickStart";
-            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled) && 
-                dashboardItems.OfType<DashboardLocalMessageItem>().None(i=>i.Identifier == identifier))
+            var existingDashboardItem = dashboardItems.OfType<DashboardLocalMessageItem>().SingleOrDefault(i => i.Identifier == identifier);
+            var shouldShow = !StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled);
+            if (existingDashboardItem == null && shouldShow)
             {
                 var quickStart =
                     new DashboardLocalMessageItem(identifier,
@@ -494,9 +495,14 @@ namespace ShipWorks.ApplicationCore.Dashboard
                         "Quick Start",
                         "Finish setting up ShipWorks.",
                         new DashboardActionMethod("[link]Quick Start[/link]", ShowQuickStart))
-                    { ShowTime = false };
+                    { ShowTime = false, CanUserDismiss = false };
 
                 AddDashboardItem(quickStart);
+            }
+            
+            if(existingDashboardItem != null && !shouldShow)
+            {
+                RemoveDashboardItem(existingDashboardItem);
             }
         }
 
