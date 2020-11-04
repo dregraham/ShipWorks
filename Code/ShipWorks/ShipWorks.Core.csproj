@@ -794,6 +794,7 @@
     <Compile Include="Api\IApiPortRegistrationService.cs" />
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\AutoUpgradeFailureSubmitter.cs" />
+    <Compile Include="AutoInstall\DTO\AutoInstallShipWorksDto.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpdateWindowCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\GetUpgradeLockCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
@@ -801,6 +802,7 @@
     <Compile Include="ApplicationCore\CommandLineOptions\DatabaseUpgradeBackupManager.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegisterApiPortCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UninstallShipWorksCommandLineOption.cs" />
+    <Compile Include="ApplicationCore\CommandLineOptions\AutoInstallShipWorksCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\UpgradeDatabaseSchemaCommandLineOption.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashDetailsDialog.xaml.cs">
       <DependentUpon>CrashDetailsDialog.xaml</DependentUpon>
@@ -923,6 +925,8 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="AutoInstall\AutoInstaller.cs" />
+    <Compile Include="AutoInstall\AutoInstallerExitCodes.cs" />
     <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
     <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />

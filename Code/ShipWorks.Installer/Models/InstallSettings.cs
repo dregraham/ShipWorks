@@ -53,6 +53,11 @@ namespace ShipWorks.Installer.Models
         public InstallError Error { get; set; } = InstallError.None;
 
         /// <summary>
+        /// If an installation error occurred, this is the message
+        /// </summary>
+        public string AutoInstallErrorMessage { get; set; }
+
+        /// <summary>
         /// The token for authorizing Hub requests
         /// </summary>
         public HubToken Token { get; set; }
