@@ -31,7 +31,7 @@ namespace ShipWorks.Installer.Sql
         {
             List<SqlSessionConfiguration> configsToTry = new List<SqlSessionConfiguration>();
 
-            // If firstTry was given, and we are connecting to the same instance it represents, use it's config first as it will likely work.
+            // If firstTry was given, and we are connecting to the same instance it represents, use its config first as it will likely work.
             if ((firstTry != null) &&
                 (firstTry.WindowsAuth || !string.IsNullOrWhiteSpace(firstTry.Username)) &&
                 (firstTry.ServerInstance == instance))
@@ -62,7 +62,7 @@ namespace ShipWorks.Installer.Sql
                     config.DatabaseName = "";
 
                     SqlSession session = new SqlSession(config);
-                    await session.TestConnection(TimeSpan.FromSeconds(3));
+                    await session.TestConnection(TimeSpan.FromSeconds(3)).ConfigureAwait(false);
 
                     return config;
                 }
@@ -140,7 +140,21 @@ namespace ShipWorks.Installer.Sql
                 }
             }
 
-            return names;
+            List<string> shipWorksDBs = new List<string>();
+
+            foreach (string name in names)
+            {
+                con.ChangeDatabase(name);
+
+                var command = con.CreateCommand();
+                command.CommandText = "SELECT COALESCE(OBJECT_ID('GetSchemaVersion'), 0)";
+                if ((int) await command.ExecuteScalarAsync().ConfigureAwait(false) > 0)
+                {
+                    shipWorksDBs.Add(name);
+                }
+            }
+
+            return shipWorksDBs;
         }
     }
 }
