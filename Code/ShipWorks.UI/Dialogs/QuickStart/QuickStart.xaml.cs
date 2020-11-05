@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Autofac;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
@@ -17,14 +18,11 @@ namespace ShipWorks.UI.Dialogs.QuickStart
     /// </summary>
     public partial class QuickStart : IQuickStart
     {
-        private readonly IWin32Window owner;
-
         /// <summary>
         /// ctor
         /// </summary>
         public QuickStart(IWin32Window owner) : base(owner, null, false)
         {
-            this.owner = owner;
             InitializeComponent();
         }
 
@@ -33,7 +31,7 @@ namespace ShipWorks.UI.Dialogs.QuickStart
         /// </summary>
         private void OnClickAddStore(object sender, RoutedEventArgs e)
         {
-            AddStoreWizard.RunWizard(owner, OpenedFromSource.QuickStart);
+            AddStoreWizard.RunWizard(this, OpenedFromSource.QuickStart);
         }
 
         /// <summary>
@@ -79,6 +77,14 @@ namespace ShipWorks.UI.Dialogs.QuickStart
         private void OnClickInventory(object sender, RoutedEventArgs e)
         {
             WebHelper.OpenUrl("https://hub.shipworks.com/products", this);
+        }
+
+        /// <summary>
+        /// Close handler
+        /// </summary>
+        private void Close(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
