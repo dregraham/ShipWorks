@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using FontAwesome5;
 using log4net;
 using ShipWorks.Installer.Enums;
@@ -29,14 +30,18 @@ namespace ShipWorks.Installer.ViewModels
             {
                 exitCode = await shipWorksCommandLineService.AutoInstallShipWorks(mainViewModel.InstallSettings);
 
-                if (exitCode == 0)
+                Application.Current.Dispatcher.Invoke(() =>
                 {
-                    navigationService.NavigateTo(NextPage);
-                    return;
-                }
+                    if (exitCode == 0)
+                    {
+                        mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
+                        navigationService.NavigateTo(NextPage);
+                        return;
+                    }
 
-                mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                navigationService.NavigateTo(NavigationPageType.Warning);
+                    mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                    navigationService.NavigateTo(NavigationPageType.Warning);
+                });
             });
         }
 
