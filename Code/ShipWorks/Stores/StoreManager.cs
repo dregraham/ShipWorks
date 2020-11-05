@@ -62,6 +62,9 @@ namespace ShipWorks.Stores
             StatusPresetManager.InitializeForCurrentSession();
 
             storeSynchronizer = new TableSynchronizer<StoreEntity>();
+            readOnlyCollection = storeSynchronizer.EntityCollection
+                        .Where(s => s.SetupComplete).Select(x => x.AsReadOnly()).ToReadOnly();
+
             uniqueStoreTypes = new List<StoreType>();
             instanceStoreTypes = new List<StoreType>();
 
