@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <DrawingImage x:Key="Store">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <DrawingImage x:Key="Store" presentationOptions:Freeze="True">
         <DrawingImage.Drawing>
             <DrawingGroup>
                 <GeometryDrawing Brush="#FFEFEFEF" Geometry="M78.6415589 18.3036979 C89.9815589 26.9382979 103.719159 35.7996979 106.375959 47.3340979 C109.032759 58.8684979 100.722159 73.0920979 89.3821589 82.4394979 C78.0421589 91.7868979 63.8509589 96.2418979 48.0883589 97.7970979 C32.3257589 99.3522979 15.0403589 97.9590979 7.81515892 88.6116979 C0.589958923 79.2642979 3.34395892 61.9950979 6.43815892 47.7714979 C9.53235892 33.5478979 12.9181589 22.4670979 20.1595589 13.8324979 C27.4009589 5.19789787 38.4979589 -0.974302135 48.4933589 0.127297865 C58.4887589 1.22889787 67.3339589 9.71769787 78.6415589 18.3036979 Z"/>

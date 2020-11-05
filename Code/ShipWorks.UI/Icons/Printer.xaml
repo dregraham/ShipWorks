@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <DrawingImage x:Key="Printer">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+    <DrawingImage x:Key="Printer" presentationOptions:Freeze="True">
         <DrawingImage.Drawing>
             <DrawingGroup>
                 <GeometryDrawing Brush="#FFEFEFEF" Geometry="M73.8264468 0.186525875 C86.0314129 -1.68126712 99.1111376 10.76604 101.596563 24.6350999 C104.081988 38.5041599 96.1675053 53.7392177 87.4754589 65.8519947 C78.7834126 77.9647717 69.6192742 86.9273903 57.5253887 93.0186257 C45.4315031 99.109861 30.5467208 102.315774 20.4522836 96.7681504 C10.3578464 91.2205264 5.27591516 76.9054264 2.27674262 63.510284 C-0.722429927 50.1151417 -1.58330353 37.6399571 4.88713353 32.9844134 C11.3575706 28.3288696 25.1593183 31.3953955 37.7114108 24.8302425 C50.2635033 18.2650895 61.6214808 2.06825763 73.8264468 0.186525875 Z"/>
