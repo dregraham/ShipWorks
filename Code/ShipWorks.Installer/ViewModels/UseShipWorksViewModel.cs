@@ -20,6 +20,7 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(UseShipWorksViewModel)))
         {
+            mainViewModel.InstallSettings.NeedsRollback = false;
         }
 
         /// <summary>
