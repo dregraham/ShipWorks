@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using FontAwesome5;
 using log4net;
 using ShipWorks.Installer.Enums;
@@ -41,6 +42,11 @@ namespace ShipWorks.Installer.ViewModels
 
             log.Info($"UseShipWorksViewModel.NextExecute Starting {start.FileName}.");
             Process.Start(start);
+
+            // Sleep for a second so that ShipWorks can start
+            Thread.Sleep(1000);
+
+            System.Windows.Application.Current.Shutdown();
         }
 
         /// <summary>

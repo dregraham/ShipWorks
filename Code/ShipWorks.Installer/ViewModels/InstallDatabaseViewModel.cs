@@ -23,7 +23,6 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(InstallDatabaseViewModel)))
         {
-
             var exitCode = 0;
 
             Task.Run(async () =>
