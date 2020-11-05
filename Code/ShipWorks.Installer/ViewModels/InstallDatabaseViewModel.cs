@@ -35,32 +35,16 @@ namespace ShipWorks.Installer.ViewModels
                     if (exitCode == 0)
                     {
                         mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
+                        mainViewModel.InstallSettings.NeedsRollback = false;
                         navigationService.NavigateTo(NextPage);
                         return;
                     }
 
                     mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                    mainViewModel.InstallSettings.Error = InstallError.Database;
                     navigationService.NavigateTo(NavigationPageType.Warning);
                 });
             });
-        }
-
-        /// <summary>
-        /// Command handler for the NextCommand
-        /// </summary>
-        protected override void NextExecute()
-        {
-            mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            mainViewModel.InstallationIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            navigationService.NavigateTo(NextPage);
-        }
-
-        /// <summary>
-        /// Determines if the NextCommand can execute
-        /// </summary>
-        protected override bool NextCanExecute()
-        {
-            return false;
         }
     }
 }

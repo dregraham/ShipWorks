@@ -206,6 +206,14 @@ namespace ShipWorks.Installer.ViewModels
         public bool Close(bool needsWindowClose)
         {
             IsClosing = needsWindowClose;
+
+            if (!installSettings.NeedsRollback ||
+                (installSettings.Error == InstallError.None &&
+                navigationService.CurrentPageKey == NavigationPageType.UseShipWorks.ToString()))
+            {
+                return true;
+            }
+
             var dlg = new CancelConfirmationDialog();
             return dlg.ShowDialog() ?? false;
         }
