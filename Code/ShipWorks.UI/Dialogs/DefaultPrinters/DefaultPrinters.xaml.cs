@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ShipWorks.UI.Dialogs.QuickStart
+namespace ShipWorks.UI.Dialogs.DefaultPrinters
 {
     /// <summary>
     /// Interaction logic for DefaultPrinters.xaml
