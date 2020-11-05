@@ -11,7 +11,7 @@
         Title="Exit Setup" Height="200" Width="400" WindowStyle="ToolWindow" Closed="ExitSetupDlg_Closed" Closing="ExitSetupDlg_Closing" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <convert:BooleanToVisibilityConverter x:Key="VisiblityConverter"/>
-        <convert:InverseBooleanToVisibilityConverter x:Key="InverseVisibilytConverter"/>
+        <convert:InverseBooleanToVisibilityConverter x:Key="InverseVisibilityConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -34,9 +34,9 @@
                          VerticalAlignment="Center" 
                          Spin="True"
                          SpinDuration="1.5"/>
-            <TextBlock Text="Rolling back changes. Please wait..."/>
+            <TextBlock Text="Rolling back changes. Please wait..." Margin="0,10"/>
         </StackPanel>
-        <StackPanel Grid.Column="1" Visibility="{Binding Loading, Converter={StaticResource InverseVisiblityConverter}}">
+        <StackPanel Grid.Column="1" Visibility="{Binding Loading, Converter={StaticResource InverseVisibilityConverter}}">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Margin" Value="0,10,0,0"/>
@@ -46,7 +46,7 @@
             <TextBlock Text="You may run Setup again at another time to complete the installation." TextWrapping="Wrap"/>
             <TextBlock Text="Exit Setup?"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="10" Visibility="{Binding Loading, Converter={StaticResource InverseVisiblityConverter}}">
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="10" Visibility="{Binding Loading, Converter={StaticResource InverseVisibilityConverter}}">
             <Button Style="{StaticResource SmallPrimaryButton}" Margin="0,0,10,0" Command="{Binding YesCommand }" CommandParameter="{Binding ElementName=ExitSetupDlg}">Yes</Button>
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding NoCommand}" CommandParameter="{Binding ElementName=ExitSetupDlg}">No</Button>
         </StackPanel>
