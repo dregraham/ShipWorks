@@ -73,5 +73,10 @@ namespace ShipWorks.Installer.Models
         /// </summary>
         [JsonIgnore]
         public string TangoPassword { get; set; }
+
+        /// <summary>
+        /// Whether or not we need to run INNO uninstaller when exiting
+        /// </summary>
+        public bool NeedsRollback { get; set; } = false;
     }
 }

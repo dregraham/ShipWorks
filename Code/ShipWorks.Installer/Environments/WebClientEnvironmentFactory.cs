@@ -125,7 +125,7 @@ namespace ShipWorks.Installer.Environments
             {
                 Name = "Other",
                 WarehouseUrl = warehouseUrl,
-                InnoInstallerUrl = innoInstallerUrl
+                InnoInstallerUrl = string.IsNullOrWhiteSpace(innoInstallerUrl) ? InnoSetupInstallerProductionUrl : innoInstallerUrl
             };
         }
     }

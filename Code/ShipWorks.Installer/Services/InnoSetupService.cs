@@ -19,14 +19,18 @@ namespace ShipWorks.Installer.Services
         private string innoSetupDownloadPath = $"{Path.GetTempPath()}ShipWorksInstaller.exe";
         private readonly ILog log;
         private readonly WebClientEnvironment webClientEnvironment;
+        private readonly IRegistryService registryService;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public InnoSetupService(Func<Type, ILog> logFactory, IWebClientEnvironmentFactory webClientEnvironmentFactory)
+        public InnoSetupService(Func<Type, ILog> logFactory,
+            IWebClientEnvironmentFactory webClientEnvironmentFactory,
+            IRegistryService registryService)
         {
             log = logFactory(typeof(InnoSetupService));
             webClientEnvironment = webClientEnvironmentFactory.SelectedEnvironment;
+            this.registryService = registryService;
         }
 
         /// <summary>
@@ -131,7 +135,7 @@ namespace ShipWorks.Installer.Services
             int exitCode;
 
             log.Info("Starting Inno Install Process");
-            
+
             using (Process proc = Process.Start(start))
             {
                 log.Info("Waiting for Inno Install Process to finish");
@@ -157,6 +161,41 @@ namespace ShipWorks.Installer.Services
             {
                 log.Info($"Killing ShipWorks processes.");
                 process?.Kill();
+            }
+        }
+
+        /// <summary>
+        /// Silently run the INNO uninstaller
+        /// </summary>
+        public async Task RunUninstaller()
+        {
+            // Kill any ShipWorks instances that are running
+            KillShipWorks();
+
+            string logFolder = Path.Combine(Path.GetTempPath(), "InnoShipWorksUninstaller");
+            Directory.CreateDirectory(logFolder);
+            string logFileName = Path.Combine(logFolder, "InnoInstaller.log");
+
+            ProcessStartInfo start = new ProcessStartInfo
+            {
+                FileName = registryService.GetUninstallerPath(),
+                Arguments = $"/VERYSILENT /LOG=\"{logFileName}\"",
+            };
+
+            log.InfoFormat("Command to run [{0} {1}]", start.FileName, start.Arguments);
+
+            int exitCode;
+
+            log.Info("Starting Uninstaller");
+
+            using (Process proc = Process.Start(start))
+            {
+                log.Info("Waiting for the uninstaller to finish");
+                await proc.WaitForExitAsync();
+
+                log.Info("Uninstaller finished.");
+                exitCode = proc.ExitCode;
+                log.InfoFormat("Uninstaller exited with code {0}", exitCode);
             }
         }
     }

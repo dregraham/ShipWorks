@@ -17,5 +17,10 @@ namespace ShipWorks.Installer.Services
         /// Call Inno installer to install ShipWorks
         /// </summary>
         Task InstallShipWorks(InstallSettings installSettings);
+
+        /// <summary>
+        /// Silently run the INNO uninstaller
+        /// </summary>
+        Task RunUninstaller();
     }
 }

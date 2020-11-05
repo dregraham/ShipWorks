@@ -47,6 +47,7 @@ namespace ShipWorks.Installer.ViewModels
             else
             {
                 mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
+                mainViewModel.InstallSettings.NeedsRollback = true;
             }
 
             navigationService.NavigateTo(NextPage);
