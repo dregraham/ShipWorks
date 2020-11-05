@@ -25,7 +25,8 @@
         <Button Style="{StaticResource SmallSecondaryButton}" 
                 Margin="10"
                 VerticalAlignment="Bottom" 
-                HorizontalAlignment="Right">
+                HorizontalAlignment="Right"
+                Command="{Binding CancelCommand}">
             Close
         </Button>
     </Grid>
