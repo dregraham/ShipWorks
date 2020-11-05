@@ -35,6 +35,7 @@ namespace ShipWorks.AutoInstall
         private const string AutoInstallShipWorksFileName = "AutoInstallShipWorks.config";
         private string configFilePath = string.Empty;
         private bool createdDatabase = false;
+        private bool databasePreSelected = false;
         private string errorMessage = string.Empty;
         private AutoInstallShipWorksDto autoInstallShipWorksConfig;
 
@@ -138,12 +139,18 @@ namespace ShipWorks.AutoInstall
         /// </summary>
         private async Task PerformCreation(SqlSession sqlSession, string email, string password)
         {
+            log.Info("PerformCreation starting");
+
+            if (databasePreSelected)
+            {
+                log.Info($"PerformCreation exiting because a database was provided, {sqlSession.Configuration.DatabaseName}");
+                return;
+            }
+
             using (var sqlSessionScope = new SqlSessionScope(sqlSession))
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
-                    log.Info("PerformCreation starting");
-
                     // Setup for activating and creating a user.
                     var uspsAccountManager = scope.Resolve<IUspsAccountManager>();
                     var shippingSettings = scope.Resolve<IShippingSettings>();
@@ -189,7 +196,8 @@ namespace ShipWorks.AutoInstall
         {
             string sqlUsername = string.Empty;
             string sqlPassword = string.Empty;
-            string sqlServerName;
+            string sqlServerName = string.Empty;
+            string databaseName = string.Empty;
             bool windowsAuth;
 
             log.Info($"ConfigureSqlSession starting for connectionString {autoInstallShipWorksConfig.ConnectionString}.");
@@ -198,15 +206,19 @@ namespace ShipWorks.AutoInstall
             {
                 sqlServerName = "(LocalDB)\\MSSQLLocalDB";
                 windowsAuth = true;
+                databasePreSelected = false;
             }
             else
             {
                 var connectionStringBuilder = new SqlConnectionStringBuilder(autoInstallShipWorksConfig.ConnectionString);
                 sqlServerName = connectionStringBuilder.DataSource;
+                databaseName = connectionStringBuilder.InitialCatalog;
                 sqlUsername = connectionStringBuilder.UserID;
                 sqlPassword = connectionStringBuilder.Password;
                 windowsAuth = connectionStringBuilder.Authentication == SqlAuthenticationMethod.ActiveDirectoryIntegrated ||
                               string.IsNullOrWhiteSpace(sqlUsername) || string.IsNullOrWhiteSpace(sqlPassword);
+
+                databasePreSelected = !string.IsNullOrWhiteSpace(databaseName);
             }
 
             // before doing anything make sure we can not connect to the database 
@@ -228,14 +240,14 @@ namespace ShipWorks.AutoInstall
             newConfig.Username = sqlUsername;
             newConfig.Password = sqlPassword;
             newConfig.WindowsAuth = windowsAuth;
-            newConfig.DatabaseName = "master";
+            newConfig.DatabaseName = string.IsNullOrWhiteSpace(databaseName) ? "master" : databaseName;
 
             // Create a new SqlSession with updated config
             SqlSession newSqlSession = new SqlSession(newConfig);
 
             if (!newSqlSession.TestConnection())
             {
-                SetExitInfo(AutoInstallerExitCodes.InstallFailed, "Unable to connect to LocalDB.");
+                SetExitInfo(AutoInstallerExitCodes.InstallFailed, $"Unable to connect to {sqlServerName}.{databaseName}.");
                 return null;
             }
 
@@ -291,6 +303,13 @@ namespace ShipWorks.AutoInstall
         private void CreateDatabase(SqlSession sqlSession)
         {
             log.Info("CreateDatabase starting.");
+
+            if (databasePreSelected)
+            {
+                log.Info($"CreateDatabase NOT creating database as one was provided, {sqlSession.Configuration.DatabaseName}");
+                return;
+            }
+
             sqlSession.Configuration.DatabaseName = string.Empty;
 
             try

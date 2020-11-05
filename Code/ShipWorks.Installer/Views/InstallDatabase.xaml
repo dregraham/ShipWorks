@@ -14,7 +14,7 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel>
-            <TextBlock Text="Installing SQL directories..." />
+            <TextBlock Text="Setting up database..." />
             <fa5:FontAwesome Icon="Solid_Spinner"
                          FontSize="40"
                          Foreground="#2A67AB" 
