@@ -4,10 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:fa5="http://schemas.fontawesome.com/icons/"
+        xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
         mc:Ignorable="d"
         x:Name="ExitSetupDlg"
         DataContext="{Binding Path=CancelConfirmationDialogViewModel, Source={StaticResource Locator}}"
         Title="Exit Setup" Height="200" Width="400" WindowStyle="ToolWindow" Closed="ExitSetupDlg_Closed" Closing="ExitSetupDlg_Closing" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <convert:BooleanToVisibilityConverter x:Key="VisiblityConverter"/>
+        <convert:InverseBooleanToVisibilityConverter x:Key="InverseVisibilityConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
@@ -21,7 +26,17 @@
                          Icon="Solid_QuestionCircle" 
                          Foreground="#2A67AB"  
                          Margin="10"/>
-        <StackPanel Grid.Column="1">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2" Visibility="{Binding Loading, Converter={StaticResource VisiblityConverter}}">
+            <fa5:FontAwesome Icon="Solid_Spinner"
+                         FontSize="40"
+                         Foreground="#2A67AB" 
+                         Grid.Column="1" 
+                         VerticalAlignment="Center" 
+                         Spin="True"
+                         SpinDuration="1.5"/>
+            <TextBlock Text="Rolling back changes. Please wait..." Margin="0,10"/>
+        </StackPanel>
+        <StackPanel Grid.Column="1" Visibility="{Binding Loading, Converter={StaticResource InverseVisibilityConverter}}">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Margin" Value="0,10,0,0"/>
@@ -31,7 +46,7 @@
             <TextBlock Text="You may run Setup again at another time to complete the installation." TextWrapping="Wrap"/>
             <TextBlock Text="Exit Setup?"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="10">
+        <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="10" Visibility="{Binding Loading, Converter={StaticResource InverseVisibilityConverter}}">
             <Button Style="{StaticResource SmallPrimaryButton}" Margin="0,0,10,0" Command="{Binding YesCommand }" CommandParameter="{Binding ElementName=ExitSetupDlg}">Yes</Button>
             <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding NoCommand}" CommandParameter="{Binding ElementName=ExitSetupDlg}">No</Button>
         </StackPanel>

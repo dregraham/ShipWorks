@@ -15,7 +15,6 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class UseShipWorksViewModel : InstallerViewModelBase
     {
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -24,7 +23,7 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(UseShipWorksViewModel)))
         {
-            log = logFactory(typeof(UseShipWorksViewModel));
+            mainViewModel.InstallSettings.NeedsRollback = false;
             log.Info("UseShipWorksViewModel starting.");
         }
 

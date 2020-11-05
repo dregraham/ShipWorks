@@ -26,7 +26,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             this.innoSetupService = innoSetupService;
 
-            log.Info("Upgrade ShipWorks screen displayed.");
+            log.Info("Install ShipWorks screen displayed.");
             _ = NextExecuteAsync();
         }
 

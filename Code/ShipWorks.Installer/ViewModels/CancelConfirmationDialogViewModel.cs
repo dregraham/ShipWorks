@@ -17,6 +17,7 @@ namespace ShipWorks.Installer.ViewModels
         MainViewModel mainViewModel;
         private readonly IInnoSetupService innoSetupService;
         private readonly ILog log;
+        private bool loading;
 
         /// <summary>
         /// Constructor
@@ -46,6 +47,15 @@ namespace ShipWorks.Installer.ViewModels
         public ICommand NoCommand { get; }
 
         /// <summary>
+        /// Whether or not we are performing a rollback
+        /// </summary>
+        public bool Loading
+        {
+            get => loading;
+            set => Set(ref loading, value);
+        }
+
+        /// <summary>
         /// The result of the dialog
         /// </summary>
         public bool? DialogResult { get; private set; }
@@ -67,6 +77,7 @@ namespace ShipWorks.Installer.ViewModels
         {
             if (mainViewModel.InstallSettings.NeedsRollback)
             {
+                Loading = true;
                 try
                 {
                     await innoSetupService.RunUninstaller().ConfigureAwait(false);
@@ -74,6 +85,10 @@ namespace ShipWorks.Installer.ViewModels
                 catch (Exception ex)
                 {
                     log.Error("Error rolling back changes", ex);
+                }
+                finally
+                {
+                    Loading = false;
                 }
             }
 
