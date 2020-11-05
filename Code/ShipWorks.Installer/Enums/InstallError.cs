@@ -8,6 +8,8 @@ namespace ShipWorks.Installer.Enums
     public enum InstallError
     {
         None,
+
+        [Description("You don't meet the minimum system requirements:")]
         SystemCheck,
 
         [Description("There was a problem downloading the ShipWorks installer.")]
