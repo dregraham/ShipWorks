@@ -39,5 +39,11 @@ namespace ShipWorks.Templates
         /// </summary>
         public IEnumerable<TemplateEntity> FetchPickListTemplates() =>
 			TemplateManager.FetchPickListTemplates();
+
+        /// <summary>
+        /// Load the computer specific settings for the template
+        /// </summary>
+        public TemplateComputerSettingsEntity GetComputerSettings(TemplateEntity template) =>
+            TemplateHelper.GetComputerSettings(template);
     }
 }
