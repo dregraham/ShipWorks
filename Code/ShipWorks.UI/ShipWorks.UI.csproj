@@ -277,6 +277,10 @@
       <DependentUpon>Popup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\Popup\PopupViewModel.cs" />
+    <Compile Include="Dialogs\QuickStart\DefaultPrinters.xaml.cs">
+      <DependentUpon>DefaultPrinters.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\QuickStart\IDefaultPrinters.cs" />
     <Compile Include="Dialogs\QuickStart\QuickStart.xaml.cs">
       <DependentUpon>QuickStart.xaml</DependentUpon>
     </Compile>
@@ -445,6 +449,10 @@
     </Page>
     <Page Include="Dialogs\AboutShipWorks\AboutShipWorksDialog.xaml" />
     <Page Include="Dialogs\Popup\Popup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\QuickStart\DefaultPrinters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
