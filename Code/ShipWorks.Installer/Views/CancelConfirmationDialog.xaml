@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         x:Name="ExitSetupDlg"
         DataContext="{Binding Path=CancelConfirmationDialogViewModel, Source={StaticResource Locator}}"
-        Title="Exit Setup" Height="200" Width="400" WindowStyle="ToolWindow" Closed="ExitSetupDlg_Closed" Closing="ExitSetupDlg_Closing">
+        Title="Exit Setup" Height="200" Width="400" WindowStyle="ToolWindow" Closed="ExitSetupDlg_Closed" Closing="ExitSetupDlg_Closing" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>

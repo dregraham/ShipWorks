@@ -14,6 +14,8 @@ namespace ShipWorks.Installer.Views
         public CancelConfirmationDialog()
         {
             InitializeComponent();
+            var vm = this.DataContext as CancelConfirmationDialogViewModel;
+            this.Owner = vm.Owner;
         }
 
         /// <summary>

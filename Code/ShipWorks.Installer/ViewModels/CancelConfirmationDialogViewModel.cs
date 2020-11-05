@@ -12,7 +12,6 @@ namespace ShipWorks.Installer.ViewModels
     public class CancelConfirmationDialogViewModel : ViewModelBase
     {
         MainViewModel mainViewModel;
-        MainWindow mainWindow;
 
         /// <summary>
         /// Constructor
@@ -20,7 +19,7 @@ namespace ShipWorks.Installer.ViewModels
         public CancelConfirmationDialogViewModel(MainViewModel mainViewModel, MainWindow mainWindow)
         {
             this.mainViewModel = mainViewModel;
-            this.mainWindow = mainWindow;
+            Owner = mainWindow;
             NoCommand = new RelayCommand<Window>((Window dlg) => dlg.Close());
             YesCommand = new RelayCommand<Window>(ConfirmClose);
             DialogResult = false;
@@ -42,6 +41,11 @@ namespace ShipWorks.Installer.ViewModels
         public bool? DialogResult { get; private set; }
 
         /// <summary>
+        /// The window that owns this dialog
+        /// </summary>
+        public MainWindow Owner { get; private set; }
+
+        /// <summary>
         /// Sets the IsClosing property of the main view model
         /// </summary>
         public void SetClosing(bool value) => mainViewModel.IsClosing = value;
@@ -54,7 +58,7 @@ namespace ShipWorks.Installer.ViewModels
             if (!mainViewModel.IsClosing)
             {
                 mainViewModel.IsClosing = true;
-                mainWindow.Close();
+                Owner.Close();
             }
             DialogResult = true;
             dlg.Close();
