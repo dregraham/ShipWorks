@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using GalaSoft.MvvmLight;
+using Newtonsoft.Json;
 using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
 
@@ -61,5 +62,16 @@ namespace ShipWorks.Installer.Models
         /// The token for authorizing Hub requests
         /// </summary>
         public HubToken Token { get; set; }
+
+        /// <summary>
+        /// The tango email address to use
+        /// </summary>
+        public string TangoEmail { get; set; }
+
+        /// <summary>
+        /// The tango password to use
+        /// </summary>
+        [JsonIgnore]
+        public string TangoPassword { get; set; }
     }
 }

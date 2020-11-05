@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
     /// </summary>
     public class AutoInstallShipWorksCommandLineOption : ICommandLineCommandHandler
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoInstallShipWorksCommandLineOption));
 
         /// <summary>
         /// The CommandName that can be sent to ShipWorks.exe

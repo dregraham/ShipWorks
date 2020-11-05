@@ -60,6 +60,7 @@ namespace ShipWorks.Installer
             services.AddScoped<IHubApiClient, HubApiClient>();
             services.AddScoped<IHubService, HubService>();
             services.AddScoped<IWebClientEnvironmentFactory, WebClientEnvironmentFactory>();
+            services.AddScoped<IShipWorksCommandLineService, ShipWorksCommandLineService>();
 
             services.AddSingleton((provider) =>
             {

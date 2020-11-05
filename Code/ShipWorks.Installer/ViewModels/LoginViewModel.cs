@@ -104,6 +104,10 @@ namespace ShipWorks.Installer.ViewModels
                 loggingIn = false;
                 Mouse.OverrideCursor = null;
             }
+
+            mainViewModel.InstallSettings.TangoEmail = Username;
+            mainViewModel.InstallSettings.TangoPassword = Password;
+
             mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;
             navigationService.NavigateTo(NextPage);
         }

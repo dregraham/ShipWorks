@@ -17,9 +17,11 @@ namespace ShipWorks.Installer.ViewModels
         /// Constructor
         /// </summary>
         public InstallDatabaseViewModel(MainViewModel mainViewModel, INavigationService<NavigationPageType> navigationService,
+            IShipWorksCommandLineService shipWorksCommandLineService,
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(InstallDatabaseViewModel)))
         {
+            shipWorksCommandLineService.AutoInstallShipWorks(mainViewModel.InstallSettings);
         }
 
         /// <summary>

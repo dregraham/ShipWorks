@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
@@ -29,8 +31,9 @@ namespace ShipWorks.AutoInstall
     /// </summary>
     public class AutoInstaller
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UpgradeDatabaseSchemaCommandLineOption));
+        private static readonly ILog log = LogManager.GetLogger(typeof(AutoInstaller));
         private const string AutoInstallShipWorksFileName = "AutoInstallShipWorks.config";
+        private string configFilePath = string.Empty;
         private bool createdDatabase = false;
         private string errorMessage = string.Empty;
         private AutoInstallShipWorksDto autoInstallShipWorksConfig;
@@ -58,20 +61,14 @@ namespace ShipWorks.AutoInstall
                     return;
                 }
 
-                if (!File.Exists(@"AutoInstallShipWorks.config"))
+                configFilePath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), AutoInstallShipWorksFileName);
+                if (!File.Exists(configFilePath))
                 {
-                    SetExitInfo(AutoInstallerExitCodes.InstallFailed, "AutoInstallShipWorks.config was not found.");
+                    SetExitInfo(AutoInstallerExitCodes.InstallFailed, $"{configFilePath} was not found.");
                     return;
                 }
 
-                string autoInstallShipWorksJson = File.ReadAllText(AutoInstallShipWorksFileName);
-                autoInstallShipWorksConfig = JsonConvert.DeserializeObject<AutoInstallShipWorksDto>(autoInstallShipWorksJson);
-
-                if (autoInstallShipWorksConfig == null)
-                {
-                    SetExitInfo(AutoInstallerExitCodes.InstallFailed, $"{AutoInstallShipWorksFileName} failed to parse.");
-                    return;
-                }
+                GetAutoInstallConfig();
 
                 var email = autoInstallShipWorksConfig.TangoEmail;
 
@@ -91,6 +88,7 @@ namespace ShipWorks.AutoInstall
 
                 if (sqlSession == null)
                 {
+                    SetExitInfo(AutoInstallerExitCodes.InstallFailed, "sqlSession is null");
                     return;
                 }
 
@@ -111,6 +109,31 @@ namespace ShipWorks.AutoInstall
         }
 
         /// <summary>
+        /// Load the config
+        /// </summary>
+        private void GetAutoInstallConfig()
+        {
+            try
+            {
+                string autoInstallShipWorksJson = File.ReadAllText(configFilePath);
+                autoInstallShipWorksConfig = JsonConvert.DeserializeObject<AutoInstallShipWorksDto>(autoInstallShipWorksJson);
+            }
+            catch (Exception ex)
+            {
+                log.Error($"Exception in GetAutoInstallConfig.  ", ex);
+                throw;
+            }
+
+            if (autoInstallShipWorksConfig == null)
+            {
+                string msg = $"{configFilePath} failed to parse.";
+                log.Error($"Exception in GetAutoInstallConfig.  {msg}");
+                SetExitInfo(AutoInstallerExitCodes.InstallFailed, msg);
+                throw new ArgumentException(msg);
+            }
+        }
+
+        /// <summary>
         /// Perform the work of creating the db, etc...
         /// </summary>
         private async Task PerformCreation(SqlSession sqlSession, string email, string password)
@@ -119,6 +142,8 @@ namespace ShipWorks.AutoInstall
             {
                 using (ILifetimeScope scope = IoC.BeginLifetimeScope())
                 {
+                    log.Info("PerformCreation starting");
+
                     // Setup for activating and creating a user.
                     var uspsAccountManager = scope.Resolve<IUspsAccountManager>();
                     var shippingSettings = scope.Resolve<IShippingSettings>();
@@ -128,10 +153,13 @@ namespace ShipWorks.AutoInstall
                     uspsAccountManager.InitializeForCurrentSession();
                     shippingSettings.InitializeForCurrentDatabase();
 
+                    log.Info("PerformCreation attempting Activate");
                     activationService.Activate(email, password);
 
+                    log.Info("PerformCreation attempting CreateUser");
                     userManager.CreateUser(email, password, true);
 
+                    log.Info("PerformCreation attempting SaveLastUser");
                     // Save last user so that auto login works.
                     UserSession.SaveLastUser(email, password, true);
 
@@ -140,6 +168,7 @@ namespace ShipWorks.AutoInstall
                     if (!string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.Warehouse.ID) &&
                         string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.Warehouse.Details.ShipWorksDatabaseId))
                     {
+                        log.Info("PerformCreation attempting Warehouse Link");
                         var warehouseLinker = scope.Resolve<IWarehouseLink>();
                         var linkResult = await warehouseLinker.Link(autoInstallShipWorksConfig.Warehouse.ID).ConfigureAwait(false);
 
@@ -162,7 +191,9 @@ namespace ShipWorks.AutoInstall
             string sqlPassword = string.Empty;
             string sqlServerName;
             bool windowsAuth;
-            string email;
+
+            log.Info($"ConfigureSqlSession starting for connectionString {autoInstallShipWorksConfig.ConnectionString}.");
+
             if (string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.ConnectionString))
             {
                 sqlServerName = "(LocalDB)\\MSSQLLocalDB";
@@ -181,15 +212,23 @@ namespace ShipWorks.AutoInstall
             // before doing anything make sure we can not connect to the database 
             SqlSession.Initialize();
 
-            var newConfig = new SqlSessionConfiguration(SqlSession.Current.Configuration)
+            SqlSessionConfiguration newConfig;
+            if (SqlSession.IsConfigured)
             {
-                ServerInstance = sqlServerName,
-                Username = sqlUsername,
-                Password = sqlPassword,
-                WindowsAuth = windowsAuth,
-                DatabaseName = "master"
-            };
+                log.Info($"ConfigureSqlSession SqlSession.IsConfigured is true.");
+                newConfig = new SqlSessionConfiguration(SqlSession.Current.Configuration);
+            }
+            else
+            {
+                log.Info($"ConfigureSqlSession SqlSession.IsConfigured is FALSE.");
+                newConfig = new SqlSessionConfiguration();
+            }
 
+            newConfig.ServerInstance = sqlServerName;
+            newConfig.Username = sqlUsername;
+            newConfig.Password = sqlPassword;
+            newConfig.WindowsAuth = windowsAuth;
+            newConfig.DatabaseName = "master";
 
             // Create a new SqlSession with updated config
             SqlSession newSqlSession = new SqlSession(newConfig);
@@ -210,12 +249,18 @@ namespace ShipWorks.AutoInstall
         {
             try
             {
-                autoInstallShipWorksConfig.AutoInstallErrorMessage = errorMessage;
-                string autoInstallShipWorksConfigJson = JsonConvert.SerializeObject(autoInstallShipWorksConfig);
-                File.WriteAllText(AutoInstallShipWorksFileName, autoInstallShipWorksConfigJson);
+                if (autoInstallShipWorksConfig != null)
+                {
+                    log.Info($"SaveAutoConfigToDisk with errorMessage: {errorMessage}.");
+
+                    autoInstallShipWorksConfig.AutoInstallErrorMessage = errorMessage;
+                    string autoInstallShipWorksConfigJson = JsonConvert.SerializeObject(autoInstallShipWorksConfig);
+                    File.WriteAllText(configFilePath, autoInstallShipWorksConfigJson);
+                }
             }
             catch (Exception ex)
             {
+                SetExitInfo(AutoInstallerExitCodes.Unknown, $"Error saving config to disk: ${ex.Message}");
                 log.Error(ex);
             }
         }
@@ -225,6 +270,7 @@ namespace ShipWorks.AutoInstall
         /// </summary>
         private static AutoInstallerExitCodes InstallLocalDb()
         {
+            log.Info("InstallLocalDb starting.");
             using (ILifetimeScope scope = IoC.BeginLifetimeScope())
             {
                 ISqlInstallerRepository sqlInstallerRepository = scope.Resolve<ISqlInstallerRepository>();
@@ -232,6 +278,9 @@ namespace ShipWorks.AutoInstall
 
                 SqlServerInstaller installer = new SqlServerInstaller(sqlInstallerRepository, clrHelper);
                 installer.InstallLocalDb(true);
+
+
+                log.Info($"InstallLocalDb installer.LastExitCode: {installer.LastExitCode}.");
                 return installer.LastExitCode == 0 ? AutoInstallerExitCodes.Success : AutoInstallerExitCodes.LocalDbInstallFailed;
             }
         }
@@ -241,6 +290,7 @@ namespace ShipWorks.AutoInstall
         /// </summary>
         private void CreateDatabase(SqlSession sqlSession)
         {
+            log.Info("CreateDatabase starting.");
             sqlSession.Configuration.DatabaseName = string.Empty;
 
             try
@@ -248,11 +298,13 @@ namespace ShipWorks.AutoInstall
                 // Since we installed it, we can do this without asking
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
+                    log.Info("CreateDatabase attempting EnableClr.");
                     SqlUtility.EnableClr(con);
                 }
 
                 using (DbConnection con = sqlSession.OpenConnection())
                 {
+                    log.Info("CreateDatabase attempting CreateDatabase.");
                     ShipWorksDatabaseUtility.CreateDatabase(ShipWorksDatabaseUtility.AutomaticDatabaseName, con);
 
                     sqlSession.Configuration.DatabaseName = ShipWorksDatabaseUtility.AutomaticDatabaseName;
@@ -260,11 +312,13 @@ namespace ShipWorks.AutoInstall
                     createdDatabase = true;
                 }
 
+                log.Info("CreateDatabase attempting ClearAllPools.");
                 // Without this the next connection didn't always work...
                 SqlConnection.ClearAllPools();
 
                 using (SqlSessionScope scope = new SqlSessionScope(sqlSession))
                 {
+                    log.Info("CreateDatabase attempting CreateSchemaAndData.");
                     ShipWorksDatabaseUtility.CreateSchemaAndData();
                 }
             }
@@ -283,13 +337,16 @@ namespace ShipWorks.AutoInstall
         /// </summary>
         private void DropPendingDatabase(SqlSession sqlSession)
         {
+            log.Info("DropPendingDatabase starting.");
             if (!createdDatabase)
             {
+                log.Info("DropPendingDatabase createdDatabase is false, skipping.");
                 return;
             }
 
             try
             {
+                log.Info("DropPendingDatabase attempting DropDatabase.");
                 ShipWorksDatabaseUtility.DropDatabase(sqlSession, ShipWorksDatabaseUtility.AutomaticDatabaseName);
             }
             catch (SqlException ex)
@@ -309,6 +366,7 @@ namespace ShipWorks.AutoInstall
         /// </summary>
         private void SetExitInfo(AutoInstallerExitCodes exitCode, string errorMsg = "")
         {
+            log.Info($"SetExitInfo with exitCode: {exitCode}, errorMsg: {errorMsg}");
             Environment.ExitCode = (int) exitCode;
             errorMessage = errorMsg;
         }
