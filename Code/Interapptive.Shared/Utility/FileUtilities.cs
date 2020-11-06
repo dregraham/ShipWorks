@@ -17,7 +17,7 @@ namespace Interapptive.Shared.Utility
         }
 
         /// <summary>
-        /// Determines if a file exists at any location on the environment PATH variable
+        /// Get full path of a file based on PATH environment variable
         /// </summary>
         public static string GetFullPath(string fileName)
         {

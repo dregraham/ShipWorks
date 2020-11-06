@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using log4net;
 using ShipWorks.Installer.Environments;
 using ShipWorks.Installer.Extensions;
+using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Models;
 
 namespace ShipWorks.Installer.Services
@@ -118,9 +119,7 @@ namespace ShipWorks.Installer.Services
             // Kill any ShipWorks instances that are running
             KillShipWorks();
 
-            string logFolder = Path.Combine(Path.GetTempPath(), "InnoShipWorksInstaller");
-            System.IO.Directory.CreateDirectory(logFolder);
-            string logFileName = Path.Combine(logFolder, "InnoInstaller.log");
+            string logFileName = Logger.GetInnoSetupInstallLogName();
 
             var createIconCommand = InstallSettings.CreateShortcut ? "/MERGETASKS=\"desktopicon\"" : "/MERGETASKS=\"!desktopicon\"";
 
@@ -172,9 +171,7 @@ namespace ShipWorks.Installer.Services
             // Kill any ShipWorks instances that are running
             KillShipWorks();
 
-            string logFolder = Path.Combine(Path.GetTempPath(), "InnoShipWorksUninstaller");
-            Directory.CreateDirectory(logFolder);
-            string logFileName = Path.Combine(logFolder, "InnoInstaller.log");
+            string logFileName = Logger.GetInnoSetupUninstallLogName();
 
             ProcessStartInfo start = new ProcessStartInfo
             {

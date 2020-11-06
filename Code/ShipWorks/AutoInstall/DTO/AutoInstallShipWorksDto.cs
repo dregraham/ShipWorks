@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.AutoInstall.DTO
 {
+    /// <summary>
+    /// Auto install shipworks config DTO
+    /// </summary>
     [Obfuscation(StripAfterObfuscation = false)]
     public class AutoInstallShipWorksDto
     {
@@ -57,24 +60,45 @@ namespace ShipWorks.AutoInstall.DTO
     [Obfuscation(StripAfterObfuscation = false)]
     public class Details
     {
+        /// <summary>
+        /// The zip
+        /// </summary>
         [JsonProperty("zip")]
         public string Zip { get; set; }
 
+        /// <summary>
+        /// The city
+        /// </summary>
         [JsonProperty("city")]
         public string City { get; set; }
 
+        /// <summary>
+        /// The street
+        /// </summary>
         [JsonProperty("street")]
         public string Street { get; set; }
 
+        /// <summary>
+        /// The customer tango id
+        /// </summary>
         [JsonProperty("customerID")]
         public int CustomerId { get; set; }
 
+        /// <summary>
+        /// The name
+        /// </summary>
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        /// <summary>
+        /// The warehouse ID
+        /// </summary>
         [JsonProperty("id")]
         public string ID { get; set; }
 
+        /// <summary>
+        /// The state
+        /// </summary>
         [JsonProperty("state")]
         public string State { get; set; }
 
