@@ -9,6 +9,7 @@ using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Management;
+using ShipWorks.UI.Dialogs.DefaultPrinters;
 
 namespace ShipWorks.UI.Dialogs.QuickStart
 {
@@ -34,6 +35,18 @@ namespace ShipWorks.UI.Dialogs.QuickStart
         private void OnClickAddStore(object sender, RoutedEventArgs e)
         {
             AddStoreWizard.RunWizard(owner, OpenedFromSource.QuickStart);
+        }
+
+        /// <summary>
+        /// Open click setup printers
+        /// </summary>
+        private void OnClickSetupPrinters(object sender, RoutedEventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IDefaultPrinters defaultPrintersDialog = lifetimeScope.Resolve<IDefaultPrinters>();
+                defaultPrintersDialog.ShowDialog();
+            }
         }
 
         /// <summary>

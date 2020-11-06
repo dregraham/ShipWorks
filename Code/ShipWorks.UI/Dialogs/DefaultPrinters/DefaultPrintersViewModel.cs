@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
@@ -21,10 +20,11 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
     /// <summary>
     /// Viewmodel for selecting default printers
     /// </summary>
+    [Component(RegistrationType.Self)]
     public class DefaultPrintersViewModel : ViewModelBase
     {
         private readonly ITemplateManager templateManager;
-        private readonly ISqlAdapter adapter;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
         private readonly IPrintUtility printUtility;
         private readonly IMessageHelper messageHelper;
         private bool overrideExistingPrinters;
@@ -43,7 +43,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// </summary>
         public DefaultPrintersViewModel(
             ITemplateManager templateManager, 
-            ISqlAdapter adapter, 
+            ISqlAdapterFactory sqlAdapterFactory,
             IPrintUtility printUtility, 
             IMessageHelper messageHelper)
         {
@@ -51,7 +51,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
 
             SetDefaults = new RelayCommand(async () => SetDefaultsAction().ConfigureAwait(true));
             this.templateManager = templateManager;
-            this.adapter = adapter;
+            this.sqlAdapterFactory = sqlAdapterFactory;
             this.printUtility = printUtility;
             this.messageHelper = messageHelper;
             LoadPrinters();
@@ -88,7 +88,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         }
 
         /// <summary>
-        /// Thermal printername
+        /// Thermal printer name
         /// </summary>
         [Obfuscation]
         public string ThermalPrinterName
@@ -216,27 +216,33 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         public async Task SetDefaultsAction()
         {
             var templates = templateManager.AllTemplates;
-            foreach (var template in templates)
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                var computerSettings = templateManager.GetComputerSettings(template);
-                if (ShouldSkip(computerSettings))
+                foreach (var template in templates)
                 {
-                    continue;
+                    var computerSettings = templateManager.GetComputerSettings(template);
+                    if (ShouldSkip(computerSettings))
+                    {
+                        continue;
+                    }
+
+                    if (template.Type == (int) TemplateType.Thermal)
+                    {
+                        computerSettings.PrinterName = ThermalPrinterName;
+                        computerSettings.PaperSource = ThermalPaperSource;
+                    }
+                    else
+                    {
+                        computerSettings.PrinterName = StandardPrinterName;
+                        computerSettings.PaperSource = StandardPaperSource;
+                    }
+
+                    await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
                 }
 
-                if (template.Type == (int) TemplateType.Thermal)
-                {
-                    computerSettings.PrinterName = ThermalPrinterName;
-                    computerSettings.PaperSource = ThermalPaperSource;
-                }
-                else
-                {
-                    computerSettings.PrinterName = StandardPrinterName;
-                    computerSettings.PaperSource = StandardPaperSource;
-                }
-                await adapter.SaveEntityAsync(computerSettings);
+                adapter.Commit();
             }
-            adapter.Commit();
         }
 
         /// <summary>

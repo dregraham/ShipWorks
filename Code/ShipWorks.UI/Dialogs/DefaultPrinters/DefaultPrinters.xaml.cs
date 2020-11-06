@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows.Forms;
+using Interapptive.Shared.ComponentRegistration;
 
 namespace ShipWorks.UI.Dialogs.DefaultPrinters
 {
@@ -19,7 +8,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
     /// </summary>
     public partial class DefaultPrinters : IDefaultPrinters
     {
-        public DefaultPrinters()
+        public DefaultPrinters(IWin32Window owner, DefaultPrintersViewModel viewModel) : base(owner, viewModel, false)
         {
             InitializeComponent();
         }
