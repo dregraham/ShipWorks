@@ -245,6 +245,7 @@ namespace ShipWorks.Installer.ViewModels
                     ConnectionIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                     ConnectionStatusText = $"An error occurred attempting to connect to '{ServerInstance}'";
                     NextEnabled = false;
+                    ShowCredentialInput = true;
                 });
                 log.Error(ex.Message);
             }
