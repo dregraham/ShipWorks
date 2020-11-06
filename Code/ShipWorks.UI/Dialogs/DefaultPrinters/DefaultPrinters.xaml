@@ -57,8 +57,8 @@
             <ComboBox Grid.Row="1" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
                       SelectedValue="{Binding StandardPrinterName}"
-                      DisplayMemberPath="Key"
-                      SelectedValuePath="Value"/>
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value" />
             <Button Grid.Row="1" Grid.Column="2"
                     Content="Use Default"
                     Style="{StaticResource UseDefaultButton}" />
@@ -68,8 +68,8 @@
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding StandardPaperSources}"
                       SelectedValue="{Binding StandardPaperSource}"
-                      DisplayMemberPath="Key"
-                      SelectedValuePath="Value"/>
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"/>
             <!-- Thermal printer section -->
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Text="Thermal printer"
@@ -80,8 +80,8 @@
             <ComboBox Grid.Row="5" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
                       SelectedValue="{Binding ThermalPrinterName}"
-                      DisplayMemberPath="Key"
-                      SelectedValuePath="Value"/>
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"/>
             <Button Grid.Row="5" Grid.Column="2"
                     Content="Use Default"
                     Style="{StaticResource UseDefaultButton}"/>
@@ -91,8 +91,8 @@
             <ComboBox Grid.Row="6" Grid.Column="1"
                       ItemsSource="{Binding ThermalPaperSources}"
                       SelectedValue="{Binding ThermalPaperSource}"
-                      DisplayMemberPath="Key"
-                      SelectedValuePath="Value"/>
+                      SelectedValuePath="Key"
+                      DisplayMemberPath="Value"/>
             <!-- Overwrite checkbox -->
             <CheckBox Grid.Row="7" Grid.Column="1"
                       Content="Overwrite configured templates"
