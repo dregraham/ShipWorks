@@ -24,7 +24,7 @@ namespace ShipWorks.Installer.ViewModels
     {
         private bool ownDbChecked;
         private bool finishedLoading = false;
-        private Warehouse selectedWarehouse = new Warehouse { Details = new Details { Name = "Loading Warehouses..." } };
+        private Warehouse selectedWarehouse;
         private ObservableCollection<Warehouse> warehouseList = new ObservableCollection<Warehouse>();
         private readonly IHubService hubService;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Installer.ViewModels
             OpenWebsiteCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://shipworks.zendesk.com/hc/en-us/articles/360022647251"));
             WarehouseList.Add(SelectedWarehouse);
             this.hubService = hubService;
-            _ = GetWarehouseList();
+            navigationService.Navigated += OnNavigated;
         }
 
         /// <summary>
@@ -80,6 +80,10 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public async Task GetWarehouseList()
         {
+            SelectedWarehouse = new Warehouse { Details = new Details { Name = "Loading Warehouses..." } };
+
+            WarehouseList = new ObservableCollection<Warehouse> { SelectedWarehouse };
+
             var warehouses = new List<Warehouse>(){
                 new Warehouse
                 {
@@ -89,6 +93,7 @@ namespace ShipWorks.Installer.ViewModels
                     }
                 }
             };
+
             try
             {
                 var response = await hubService.GetWarehouseList(mainViewModel.InstallSettings.Token).ConfigureAwait(false);
@@ -108,6 +113,17 @@ namespace ShipWorks.Installer.ViewModels
                     SelectedWarehouse = WarehouseList.FirstOrDefault();
                     FinishedLoading = true;
                 });
+            }
+        }
+
+        /// <summary>
+        /// Event handler when navigating to this page
+        /// </summary>
+        private void OnNavigated(object sender, NavigatedEventArgs e)
+        {
+            if (e.NavigatedPage == NavigationPageType.LocationConfig.ToString())
+            {
+                _ = GetWarehouseList();
             }
         }
 

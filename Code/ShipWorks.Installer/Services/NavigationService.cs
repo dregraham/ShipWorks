@@ -158,7 +158,23 @@ namespace ShipWorks.Installer.Services
                     historic.Add(pageKey);
                     CurrentPageKey = pageKey;
                 }
+
+                OnNavigated(new NavigatedEventArgs(CurrentPageKey));
             }
+        }
+
+        /// <summary>
+        /// Event that's triggered on navigation
+        /// </summary>
+        public event EventHandler<NavigatedEventArgs> Navigated;
+
+        /// <summary>
+        /// Invoke the navigated event
+        /// </summary>
+        private void OnNavigated(NavigatedEventArgs e)
+        {
+            EventHandler<NavigatedEventArgs> handler = Navigated;
+            handler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -204,5 +220,24 @@ namespace ShipWorks.Installer.Services
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+    }
+
+    /// <summary>
+    /// Event args for the Navigated event
+    /// </summary>
+    public class NavigatedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public NavigatedEventArgs(string page)
+        {
+            NavigatedPage = page;
+        }
+
+        /// <summary>
+        /// The page we navigated to
+        /// </summary>
+        public string NavigatedPage { get; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Installer.Services
+﻿using System;
+
+namespace ShipWorks.Installer.Services
 {
     /// <summary>
     /// A navigation service built on top of MVVMLight's implementation that is more friendly toward WPF
@@ -16,5 +18,10 @@
         /// </summary>
         /// <param name="navigationPage"></param>
         void NavigateTo(T navigationPage);
+
+        /// <summary>
+        /// Event that's triggered on navigation
+        /// </summary>
+        event EventHandler<NavigatedEventArgs> Navigated;
     }
 }
