@@ -38,9 +38,9 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks, logFactory(typeof(LocationConfigViewModel)))
         {
             OpenWebsiteCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://shipworks.zendesk.com/hc/en-us/articles/360022647251"));
-            WarehouseList.Add(SelectedWarehouse);
             this.hubService = hubService;
             navigationService.Navigated += OnNavigated;
+            _ = GetWarehouseList();
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace ShipWorks.Installer.ViewModels
         /// </summary>
         public async Task GetWarehouseList()
         {
+            FinishedLoading = false;
             SelectedWarehouse = new Warehouse { Details = new Details { Name = "Loading Warehouses..." } };
-
             WarehouseList = new ObservableCollection<Warehouse> { SelectedWarehouse };
 
             var warehouses = new List<Warehouse>(){
