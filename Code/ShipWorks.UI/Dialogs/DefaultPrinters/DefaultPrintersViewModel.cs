@@ -98,7 +98,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             {
                 Set(ref thermalPrinterName, value);
                 ThermalPaperSources = GetPaperSources(value);
-                ThermalPaperSource = ThermalPaperSources.First().Key;
+                ThermalPaperSource = ThermalPaperSources.FirstOrDefault().Key;
                 ThermalPaperSourceEnabled = ThermalPaperSources.Count > 1;
             }
         }
@@ -167,7 +167,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
                 Set(ref standardPrinterName, value);
                 StandardPaperSources = GetPaperSources(value);
 
-                StandardPaperSource = standardPaperSources.First().Key;
+                StandardPaperSource = StandardPaperSources.FirstOrDefault().Key;
                 StandardPaperSourceEnabled = StandardPaperSources.Count > 1;
             }
         }
