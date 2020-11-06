@@ -55,6 +55,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             this.printUtility = printUtility;
             this.messageHelper = messageHelper;
             LoadPrinters();
+            ThermalPrinterName = default;
+            StandardPrinterName = default;
         }
 
         /// <summary>
@@ -103,12 +105,17 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
 
         private ObservableCollection<KeyValuePair<int, string>> GetPaperSources(string printerName)
         {
-            IPrinterSetting printerSettings = PrinterSettingFactory.GetPrinterSettings(printerName);
+            if (string.IsNullOrWhiteSpace(printerName))
+            {
+                return new ObservableCollection<KeyValuePair<int, string>>() { new KeyValuePair<int, string>((int) PaperSourceKind.AutomaticFeed, "") };
+            }
+
+            IPrinterSetting printerSettings = printUtility.GetPrinterSettings(printerName);
 
             if (!printerSettings.IsValid)
             {
                 messageHelper.ShowError(string.Format("The printer settings of the selected printer, '{0}', are invalid.  Please check your printer settings in Windows.", printerName));
-                return new ObservableCollection<KeyValuePair<int, string>>() { new KeyValuePair<int, string>((int) PaperSourceKind.AutomaticFeed, "Invalid Printer") };
+                return new ObservableCollection<KeyValuePair<int, string>>() { new KeyValuePair<int, string>((int) PaperSourceKind.AutomaticFeed, "") };
             }
 
             var paperSources = new ObservableCollection<KeyValuePair<int, string>>();
