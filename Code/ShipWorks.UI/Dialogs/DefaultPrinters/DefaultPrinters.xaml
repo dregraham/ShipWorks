@@ -17,6 +17,13 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DisablableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource DisabledTextColor}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}"/>            
             <Style x:Key="UseDefaultButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
                 <Setter Property="Margin" Value="10 0 0 10"/>
@@ -64,12 +71,15 @@
                     Style="{StaticResource UseDefaultButton}" />
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource FieldLabel}"/>
+                       Style="{StaticResource DisablableText}"
+                       IsEnabled="{Binding StandardPaperSourceEnabled}"
+                       />
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding StandardPaperSources}"
                       SelectedValue="{Binding StandardPaperSource}"
                       SelectedValuePath="Key"
-                      DisplayMemberPath="Value"/>
+                      DisplayMemberPath="Value"
+                      IsEnabled="{Binding StandardPaperSourceEnabled}"/>
             <!-- Thermal printer section -->
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Text="Thermal printer"
@@ -87,12 +97,14 @@
                     Style="{StaticResource UseDefaultButton}"/>
             <TextBlock Grid.Row="6" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource FieldLabel}"/>
+                       Style="{StaticResource DisablableText}"
+                       IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <ComboBox Grid.Row="6" Grid.Column="1"
                       ItemsSource="{Binding ThermalPaperSources}"
                       SelectedValue="{Binding ThermalPaperSource}"
                       SelectedValuePath="Key"
-                      DisplayMemberPath="Value"/>
+                      DisplayMemberPath="Value"
+                      IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <!-- Overwrite checkbox -->
             <CheckBox Grid.Row="7" Grid.Column="1"
                       Content="Overwrite configured templates"
