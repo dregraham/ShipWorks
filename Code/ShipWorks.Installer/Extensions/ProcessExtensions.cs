@@ -21,6 +21,14 @@ namespace ShipWorks.Installer.Extensions
         }
 
         /// <summary>
+        /// Open Windows Explorer to given folder
+        /// </summary>
+        public static void OpenFolder(string folderPath)
+        {
+            Process.Start(new ProcessStartInfo("explorer", folderPath));
+        }
+
+        /// <summary>
         /// Wait for a process to exit asynchronously
         /// </summary>
         public static async Task<int> WaitForExitAsync(this Process process, CancellationToken cancellationToken = default)

@@ -25,6 +25,10 @@
         <converters:NavBarStateToVisibilityConverter x:Key="NavBarVisibilityConverter" />
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="F2" Command="{Binding Path=OpenLogFolderCommand}"></KeyBinding>
+    </Window.InputBindings>
+
     <Grid Name="mainGrid" Focusable="True" KeyboardNavigation.IsTabStop="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />

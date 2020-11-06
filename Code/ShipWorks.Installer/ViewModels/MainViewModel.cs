@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
+using ShipWorks.Installer.Logging;
 using ShipWorks.Installer.Models;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.Views;
@@ -49,6 +50,7 @@ namespace ShipWorks.Installer.ViewModels
             InstallSettings = new InstallSettings();
             NavBarState = NavBarState.Initial;
             HelpCommand = new RelayCommand(OpenHelpPage);
+            OpenLogFolderCommand = new RelayCommand(OpenLogFolder);
             innoSetupService.DownloadInstaller(InstallSettings);
         }
 
@@ -56,6 +58,11 @@ namespace ShipWorks.Installer.ViewModels
         /// Command for help button click
         /// </summary>
         public ICommand HelpCommand { get; }
+
+        /// <summary>
+        /// Command for opening log folder in Windows Explorer
+        /// </summary>
+        public ICommand OpenLogFolderCommand { get; }
 
         /// <summary>
         /// The current install settings
@@ -199,6 +206,14 @@ namespace ShipWorks.Installer.ViewModels
         /// Command handler for opening the help page
         /// </summary>
         private void OpenHelpPage() => ProcessExtensions.StartWebProcess("https://support.shipworks.com/hc/en-us/requests/new");
+
+        /// <summary>
+        /// Command handler for opening the help page
+        /// </summary>
+        private void OpenLogFolder()
+        {
+            ProcessExtensions.OpenFolder(Logger.LogFolder);
+        }
 
         /// <summary>
         /// Shows a confirmation dialog before closing the window
