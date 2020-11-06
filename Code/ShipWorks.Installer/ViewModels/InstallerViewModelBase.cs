@@ -43,7 +43,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Command for going to the previous page
         /// </summary>
-        public RelayCommand BackCommand => new RelayCommand(navigationService.GoBack);
+        public RelayCommand BackCommand => new RelayCommand(BackExecute);
 
         /// <summary>
         /// Command for canceling the dialog
@@ -77,6 +77,14 @@ namespace ShipWorks.Installer.ViewModels
         protected virtual bool NextCanExecute()
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Command handler for the back command
+        /// </summary>
+        protected virtual void BackExecute()
+        {
+            navigationService.GoBack();
         }
 
         /// <summary>

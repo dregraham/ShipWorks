@@ -23,6 +23,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:NavBarStateToVisibilityConverter x:Key="NavBarVisibilityConverter" />
+        <converters:NavigationPageTypeToFontWeightConverter x:Key="PageToFontWeight"/>
         <Style x:Key="WindowMainPanelStyle" TargetType="{x:Type Border}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
@@ -54,16 +55,74 @@
                                     <Setter Property="Margin" Value="0,10,0,0"/>
                                 </Style>
                             </StackPanel.Resources>
-                            <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
-                            <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
-                            <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
-                            <c:NavigationOption Text="Upgrade ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UpgradeShipWorksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.Upgrade}}"/>
-                            <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                            <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                            <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                            <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                            <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                            <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
+                            <c:NavigationOption Text="System Check" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}" 
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.SystemCheck}}"/>
+                            <c:NavigationOption Text="EULA" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.Eula}}"/>
+                            <c:NavigationOption Text="Install Path" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.InstallPath}}"/>
+                            <c:NavigationOption Text="Upgrade ShipWorks" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UpgradeShipWorksIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.Upgrade}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.UpgradeShipWorks}}"/>
+                            <c:NavigationOption Text="Login" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.Login}}"/>
+                            <c:NavigationOption Text="Installation" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.Installation}}"/>
+                            <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.LocationConfig}}"/>
+                            <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.InstallShipworks}}"/>
+                            <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" 
+                                                Visibility="{Binding Path=NavBarState, 
+                                                             Converter={StaticResource NavBarVisibilityConverter}, 
+                                                             ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.InstallDatabase}}"/>
+                            <c:NavigationOption Text="Use ShipWorks" 
+                                                Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"
+                                                FontWeight="{Binding CurrentPage, 
+                                                             Converter={StaticResource PageToFontWeight}, 
+                                                             ConverterParameter={x:Static enums:NavigationPageType.UseShipWorks}}"/>
                         </StackPanel>
                         <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10" Command="{Binding HelpCommand}" IsTabStop="False">Need Help? Contact Us</Button>
                     </Grid>

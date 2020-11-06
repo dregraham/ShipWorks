@@ -36,6 +36,7 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
         private InstallSettings installSettings;
         private NavBarState navBarState;
+        private NavigationPageType currentPage;
 
         /// <summary>
         /// Constructor
@@ -52,6 +53,7 @@ namespace ShipWorks.Installer.ViewModels
             HelpCommand = new RelayCommand(OpenHelpPage);
             OpenLogFolderCommand = new RelayCommand(OpenLogFolder);
             innoSetupService.DownloadInstaller(InstallSettings);
+            CurrentPage = NavigationPageType.SystemCheck;
         }
 
         /// <summary>
@@ -71,6 +73,15 @@ namespace ShipWorks.Installer.ViewModels
         {
             get => installSettings;
             set => Set(ref installSettings, value);
+        }
+
+        /// <summary>
+        /// The current page
+        /// </summary>
+        public NavigationPageType CurrentPage
+        {
+            get => currentPage;
+            set => Set(ref currentPage, value);
         }
 
         /// <summary>

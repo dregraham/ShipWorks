@@ -65,7 +65,7 @@ namespace ShipWorks.Installer.ViewModels
             log.Info($"NextExecute: InstallPath: {InstallPath}");
             log.Info($"NextExecute: CreateShortcut: {CreateShortcut}");
             log.Info($"NextExecute: NextPage: {NextPage}");
-
+            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
@@ -74,6 +74,16 @@ namespace ShipWorks.Installer.ViewModels
         /// Can go to next page
         /// </summary>
         protected override bool NextCanExecute() => ValidatePath();
+
+        /// <summary>
+        /// Go to the previous page
+        /// </summary>
+        protected override void BackExecute()
+        {
+            base.BackExecute();
+            mainViewModel.EulaIcon = EFontAwesomeIcon.None;
+            mainViewModel.CurrentPage = NavigationPageType.Eula;
+        }
 
         /// <summary>
         /// Command for opening a file dialog

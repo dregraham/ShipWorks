@@ -209,6 +209,7 @@ namespace ShipWorks.Installer.ViewModels
             mainViewModel.InstallSettings.ConnectionString = SelectedDatabase.GetConnectionString();
             log.Info(mainViewModel.InstallSettings.ConnectionString);
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
+            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
@@ -221,6 +222,15 @@ namespace ShipWorks.Installer.ViewModels
         protected override bool NextCanExecute()
         {
             return true;
+        }
+
+        /// <summary>
+        /// Command handler for the back command
+        /// </summary>
+        protected override void BackExecute()
+        {
+            base.BackExecute();
+            mainViewModel.LocationConfigIcon = EFontAwesomeIcon.None;
         }
 
         /// <summary>

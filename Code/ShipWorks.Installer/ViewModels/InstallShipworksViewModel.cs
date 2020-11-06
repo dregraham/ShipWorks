@@ -42,6 +42,7 @@ namespace ShipWorks.Installer.ViewModels
             if (mainViewModel.InstallSettings.Error != InstallError.None)
             {
                 mainViewModel.InstallationIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
+                mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                 NextPage = NavigationPageType.Warning;
             }
             else
@@ -49,7 +50,7 @@ namespace ShipWorks.Installer.ViewModels
                 mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
                 mainViewModel.InstallSettings.NeedsRollback = true;
             }
-
+            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
