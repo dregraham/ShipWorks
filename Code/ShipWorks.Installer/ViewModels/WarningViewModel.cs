@@ -35,7 +35,11 @@ namespace ShipWorks.Installer.ViewModels
             Warning = message;
         }
 
+        /// <summary>
+        /// Command to open a website
+        /// </summary>
         public ICommand OpenWebsiteCommand { get; }
+
         /// <summary>
         /// The warning message to show
         /// </summary>

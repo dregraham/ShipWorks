@@ -5,10 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using FontAwesome5;
+using GalaSoft.MvvmLight.Command;
 using log4net;
 using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
+using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
 
 namespace ShipWorks.Installer.ViewModels
@@ -34,10 +37,16 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory) :
             base(mainViewModel, navigationService, NavigationPageType.InstallShipworks, logFactory(typeof(LocationConfigViewModel)))
         {
+            OpenWebsiteCommand = new RelayCommand(() => ProcessExtensions.StartWebProcess("https://shipworks.zendesk.com/hc/en-us/articles/360022647251"));
             WarehouseList.Add(SelectedWarehouse);
             this.hubService = hubService;
             _ = GetWarehouseList();
         }
+
+        /// <summary>
+        /// Command to open a website
+        /// </summary>
+        public ICommand OpenWebsiteCommand { get; }
 
         /// <summary>
         /// The list of warehouses
