@@ -16,6 +16,7 @@ using ShipWorks.ApplicationCore.CommandLineOptions;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.AutoInstall.DTO;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.SqlServerSetup;
 using ShipWorks.Data.Administration.SqlServerSetup.SqlInstallationFiles;
@@ -156,6 +157,7 @@ namespace ShipWorks.AutoInstall
                     var shippingSettings = scope.Resolve<IShippingSettings>();
                     var activationService = scope.Resolve<ICustomerLicenseActivationService>();
                     var userManager = scope.Resolve<IUserService>();
+                    var configurationData = scope.Resolve<IConfigurationData>();
 
                     uspsAccountManager.InitializeForCurrentSession();
                     shippingSettings.InitializeForCurrentDatabase();
@@ -171,9 +173,11 @@ namespace ShipWorks.AutoInstall
                     UserSession.SaveLastUser(email, password, true);
 
                     // If a warehouse id is provided AND the warehouse does not have a ShipWorks db already associated,
+                    // and this database doesn't have a warehouse linked,
                     // link the warehouse
                     if (!string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.Warehouse.ID) &&
-                        string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.Warehouse.Details.ShipWorksDatabaseId))
+                        string.IsNullOrWhiteSpace(autoInstallShipWorksConfig.Warehouse.Details.ShipWorksDatabaseId) &&
+                        string.IsNullOrWhiteSpace(configurationData.FetchReadOnly().WarehouseID))
                     {
                         log.Info("PerformCreation attempting Warehouse Link");
                         var warehouseLinker = scope.Resolve<IWarehouseLink>();
@@ -182,7 +186,14 @@ namespace ShipWorks.AutoInstall
                         if (linkResult.Failure)
                         {
                             SetExitInfo(AutoInstallerExitCodes.InstallFailed, $"Linking warehouse failed. {linkResult.Message}");
+                            return;
                         }
+
+                        configurationData.UpdateConfiguration(x =>
+                        {
+                            x.WarehouseID = autoInstallShipWorksConfig.Warehouse.ID;
+                            x.WarehouseName = autoInstallShipWorksConfig.Warehouse.Details?.Name;
+                        });
                     }
                 }
             }

@@ -16,7 +16,6 @@ namespace ShipWorks.Installer.ViewModels
     [Obfuscation]
     public class UseShipWorksViewModel : InstallerViewModelBase
     {
-
         /// <summary>
         /// Constructor
         /// </summary>
