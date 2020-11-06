@@ -8,8 +8,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:ShipWorks.Installer.AttachedProperties"
     Title="Install Path"
-    d:DesignHeight="450"
-    d:DesignWidth="400"
+    d:DesignHeight="600"
+    d:DesignWidth="575"
     DataContext="{Binding Path=InstallPathViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
@@ -19,6 +19,11 @@
     
     <Grid>
         <StackPanel Margin="10">
+            <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Install Path" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+                <TextBlock.TextDecorations>
+                    <TextDecoration/>
+                </TextBlock.TextDecorations>
+            </TextBlock>
             <TextBlock>Install Path:</TextBlock>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" properties:TextBoxBehavior.OnLostFocus="{Binding ValidatePathCommand}" />

@@ -40,16 +40,12 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <c:MainTitleBar x:Name="TitleBar" Margin="0,0,-1,0"/>
+            <c:MainTitleBar x:Name="TitleBar"/>
             <Grid Name="mainGrid" Focusable="True" KeyboardNavigation.IsTabStop="False" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto" />
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="75"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
                 <Border MinWidth="225" Background="#FF252525" Grid.RowSpan="2">
                     <Grid>
                         <StackPanel Margin="10">
@@ -72,11 +68,6 @@
                         <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10" Command="{Binding HelpCommand}" IsTabStop="False">Need Help? Contact Us</Button>
                     </Grid>
                 </Border>
-                <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Install ShipWorks" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
-                    <TextBlock.TextDecorations>
-                        <TextDecoration/>
-                    </TextBlock.TextDecorations>
-                </TextBlock>
                 <Frame Grid.Column="1"
                        Grid.Row="1"
                        x:Name="MainFrame"

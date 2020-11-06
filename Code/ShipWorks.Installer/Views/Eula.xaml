@@ -8,7 +8,7 @@
     xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
     Title="EULA"
     d:DesignHeight="600"
-    d:DesignWidth="300"
+    d:DesignWidth="575"
     DataContext="{Binding Path=EulaViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d"
     x:Name="EulaPage">
@@ -21,6 +21,11 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel>
+            <TextBlock Style="{StaticResource Header}" Text="License Agreement" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+                <TextBlock.TextDecorations>
+                    <TextDecoration/>
+                </TextBlock.TextDecorations>
+            </TextBlock>
             <TextBlock Text="EULA" FontSize="20"/>
             <TextBlock Text="Accept our EULA:" FontSize="15" Margin="0,10,0,0"/>
             <RichTextBox  Margin="0,20,0,0" 
@@ -30,7 +35,7 @@
                                     Converter={StaticResource PercentageConverter}, 
                                     ElementName=EulaPage, 
                                     Path=ActualHeight, 
-                                    ConverterParameter=.75}"
+                                    ConverterParameter=.65}"
                           x:Name="eulaTextBox" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">

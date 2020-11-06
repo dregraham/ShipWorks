@@ -12,6 +12,11 @@
     mc:Ignorable="d">
     <Grid>
         <StackPanel>
+            <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Warning" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+                <TextBlock.TextDecorations>
+                    <TextDecoration/>
+                </TextBlock.TextDecorations>
+            </TextBlock>
             <TextBlock Text="Oops! ShipWorks had a problem installing:"/>
             <TextBlock Text="{Binding Warning}" Margin="0,10"/>
             <TextBlock TextWrapping="Wrap" Margin="0,20">
