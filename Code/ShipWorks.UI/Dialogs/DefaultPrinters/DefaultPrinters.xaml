@@ -1,34 +1,40 @@
 ﻿<ui:InteropWindow xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
-    x:Class="ShipWorks.UI.Dialogs.DefaultPrinters.DefaultPrinters"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShipWorks.UI.Dialogs.QuickStart"
-        mc:Ignorable="d"
-        Title="Default Printers" Height="450" Width="400">
+                  x:Class="ShipWorks.UI.Dialogs.DefaultPrinters.DefaultPrinters"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  mc:Ignorable="d"
+                  Title="Default Printers"
+                  SizeToContent="WidthAndHeight">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ButtonStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="Subheader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-            </Style>
-            <Style x:Key="SectionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
-                <Setter Property="Margin" Value="10 0 0 11"/>
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}"/>            
+            <Style x:Key="UseDefaultButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
+                <Setter Property="Margin" Value="10 0 0 10"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid Margin="{StaticResource StandardPaddingFull}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Please select the printer to use when printing the following formats:" Style="{StaticResource Subheader}" />
-        <Grid Grid.Row="1">
+        <TextBlock Grid.Row="0" Text="Please select the default printer to use when printing the following formats:" />
+        <Grid Grid.Row="1" Margin="{StaticResource StandardPaddingTopAndBottom}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -36,26 +42,32 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Format:" />
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="Standard" />
-            <TextBlock Grid.Row="1" Grid.Column="0" Text="Printer:" />
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
-                <TextBlock Text="None Selected"/>
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource SectionButton}">
-                        <Hyperlink>Use Default</Hyperlink>
-                    </Button>
-                    <Button Style="{StaticResource SectionButton}">
-                        <Hyperlink>Choose</Hyperlink>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
+            <!-- Standard printer section -->
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Standard printer" Style="{StaticResource Header}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Printer:" Style="{StaticResource FieldLabel}"/>
+            <ComboBox Grid.Row="1" Grid.Column="1" />
+            <Button Grid.Row="1" Grid.Column="2" Content="Use Default" Style="{StaticResource UseDefaultButton}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Source:" Style="{StaticResource FieldLabel}"/>
+            <ComboBox Grid.Row="2" Grid.Column="1"/>
+            <!-- Thermal printer section -->
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Thermal printer" Style="{StaticResource Header}" />
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Printer:" Style="{StaticResource FieldLabel}"/>
+            <ComboBox Grid.Row="5" Grid.Column="1"/>
+            <Button Grid.Row="5" Grid.Column="2" Content="Use Default" Style="{StaticResource UseDefaultButton}"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="Source:" Style="{StaticResource FieldLabel}"/>
+            <ComboBox Grid.Row="6" Grid.Column="1"/>
+            <!-- Overwrite checkbox -->
+            <CheckBox Grid.Row="7" Grid.Column="1" Content="Overwrite configured templates" Margin="10 0 0 0"/>
         </Grid>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Content="OK" />
-            <Button Content="Cancel" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Cancel" 
+                    Style="{StaticResource SmallSecondaryButton}" 
+                    IsCancel="True" 
+                    Margin="{StaticResource StandardPaddingRight}"/>
+            <Button Content="Ok" Style="{StaticResource SmallPrimaryButton}" IsDefault="True"/>
         </StackPanel>
     </Grid>
 </ui:InteropWindow>
