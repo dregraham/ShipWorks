@@ -49,7 +49,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         {
             printers = new ObservableCollection<KeyValuePair<string, string>>();
 
-            SetDefaults = new RelayCommand(async () => SetDefaultsAction().ConfigureAwait(true));
+            SetDefaults = new RelayCommand<IDialog>(async dialog => SetDefaultsAction(dialog).ConfigureAwait(true));
             this.templateManager = templateManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.printUtility = printUtility;
@@ -213,7 +213,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// Loops through all the printers setting their name and source
         /// </summary>
         /// <returns></returns>
-        public async Task SetDefaultsAction()
+        public async Task SetDefaultsAction(IDialog dialog)
         {
             var templates = templateManager.AllTemplates;
 
@@ -243,6 +243,9 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
 
                 adapter.Commit();
             }
+
+            dialog.DialogResult = true;
+            dialog.Close();
         }
 
         /// <summary>
@@ -258,5 +261,4 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             return !string.IsNullOrWhiteSpace(computerSettings.PrinterName);
         }
     }
-
 }

@@ -7,7 +7,8 @@
                   xmlns:local="clr-namespace:ShipWorks.UI.Dialogs.DefaultPrinters"
                   mc:Ignorable="d"
                   Title="Default Printers"
-                  SizeToContent="WidthAndHeight"
+                  SizeToContent="Height"
+                  Width="550"
                   d:DataContext="{d:DesignInstance local:DefaultPrintersViewModel}">
     <Window.Resources>
         <ResourceDictionary>
@@ -17,14 +18,16 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="DisablableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
+            <Style x:Key="DisableableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Foreground" Value="{StaticResource DisabledTextColor}"/>
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}"/>            
+            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}">
+                <Setter Property="Width" Value="300"/>
+            </Style>
             <Style x:Key="UseDefaultButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
                 <Setter Property="Margin" Value="10 0 0 10"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -51,7 +54,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <!-- Standard printer section -->
@@ -71,7 +74,7 @@
                     Style="{StaticResource UseDefaultButton}" />
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource DisablableText}"
+                       Style="{StaticResource DisableableText}"
                        IsEnabled="{Binding StandardPaperSourceEnabled}"
                        />
             <ComboBox Grid.Row="2" Grid.Column="1"
@@ -97,7 +100,7 @@
                     Style="{StaticResource UseDefaultButton}"/>
             <TextBlock Grid.Row="6" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource DisablableText}"
+                       Style="{StaticResource DisableableText}"
                        IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <ComboBox Grid.Row="6" Grid.Column="1"
                       ItemsSource="{Binding ThermalPaperSources}"
@@ -121,7 +124,9 @@
             <Button Content="Ok"
                     Style="{StaticResource SmallPrimaryButton}"
                     IsDefault="True"
-                    Command="{Binding SetDefaults}"/>
+                    Command="{Binding SetDefaults}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+            </Button>
         </StackPanel>
     </Grid>
 </ui:InteropWindow>
