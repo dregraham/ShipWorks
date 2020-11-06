@@ -8,64 +8,83 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converters="clr-namespace:ShipWorks.Installer.ValueConverters"
     xmlns:enums="clr-namespace:ShipWorks.Installer.Enums"
-    Title="Main Window"
+    Title="Install ShipWorks"
     Width="800"
     Height="600"
     DataContext="{Binding Source={StaticResource Locator}, Path=MainViewModel}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" 
     Loaded="Window_Loaded"
-    BorderBrush="LightGray"
-    BorderThickness="0,1,0,0"
     Focusable="True"
-    MouseDown="Window_MouseDown" IsTabStop="False" Closing="Window_Closing">
-
+    MouseDown="Window_MouseDown" IsTabStop="False" Closing="Window_Closing" StateChanged="Window_StateChanged" WindowStyle="None">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}"/>
+    </WindowChrome.WindowChrome>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converters:NavBarStateToVisibilityConverter x:Key="NavBarVisibilityConverter" />
+        <Style x:Key="WindowMainPanelStyle" TargetType="{x:Type Border}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=WindowState}" Value="Maximized">
+                    <Setter Property="Margin" Value="6,6,6,0" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-
     <Window.InputBindings>
         <KeyBinding Key="F2" Command="{Binding Path=OpenLogFolderCommand}"></KeyBinding>
     </Window.InputBindings>
-
-    <Grid Name="mainGrid" Focusable="True" KeyboardNavigation.IsTabStop="False">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Border BorderBrush="LightGray" BorderThickness="0,0,1,0" MinWidth="225">
-            <Grid>
-                <StackPanel Margin="10">
-                    <StackPanel.Resources>
-                        <Style TargetType="{x:Type c:NavigationOption}">
-                            <Setter Property="Margin" Value="0,10,0,0"/>
-                        </Style>
-                    </StackPanel.Resources>
-                    <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
-                    <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
-                    <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
-                    <c:NavigationOption Text="Upgrade ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UpgradeShipWorksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.Upgrade}}"/>
-                    <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                    <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                    <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                    <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                    <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
-                    <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
-                </StackPanel>
-                <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10" Command="{Binding HelpCommand}" IsTabStop="False">Need Help? Contact Us</Button>
+    <Border Style="{StaticResource WindowMainPanelStyle}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <c:MainTitleBar x:Name="TitleBar" Margin="0,0,-1,0"/>
+            <Grid Name="mainGrid" Focusable="True" KeyboardNavigation.IsTabStop="False" Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border MinWidth="225" Background="#FF252525" Grid.RowSpan="2">
+                    <Grid>
+                        <StackPanel Margin="10">
+                            <StackPanel.Resources>
+                                <Style TargetType="{x:Type c:NavigationOption}">
+                                    <Setter Property="Margin" Value="0,10,0,0"/>
+                                </Style>
+                            </StackPanel.Resources>
+                            <c:NavigationOption Text="System Check" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}"/>
+                            <c:NavigationOption Text="EULA" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"/>
+                            <c:NavigationOption Text="Install Path" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"/>
+                            <c:NavigationOption Text="Upgrade ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UpgradeShipWorksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.Upgrade}}"/>
+                            <c:NavigationOption Text="Login" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LoginIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                            <c:NavigationOption Text="Installation" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallationIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                            <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.LocationConfigIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                            <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallShipworksIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                            <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallDatabaseIcon}" Visibility="{Binding Path=NavBarState, Converter={StaticResource NavBarVisibilityConverter}, ConverterParameter={x:Static enums:NavBarState.NewInstall}}"/>
+                            <c:NavigationOption Text="Use ShipWorks" Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"/>
+                        </StackPanel>
+                        <Button Style="{StaticResource SmallButton}" VerticalAlignment="Bottom" Margin="10" Command="{Binding HelpCommand}" IsTabStop="False">Need Help? Contact Us</Button>
+                    </Grid>
+                </Border>
+                <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Install ShipWorks" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+                    <TextBlock.TextDecorations>
+                        <TextDecoration/>
+                    </TextBlock.TextDecorations>
+                </TextBlock>
+                <Frame Grid.Column="1"
+                       Grid.Row="1"
+                       x:Name="MainFrame"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       NavigationUIVisibility="Hidden" 
+                       Margin="10,10,10,0" IsTabStop="False"/>
             </Grid>
-        </Border>
-        <TextBlock Style="{StaticResource Header}" Text="Install ShipWorks" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" Margin="0,10">
-            <TextBlock.TextDecorations>
-                <TextDecoration/>
-            </TextBlock.TextDecorations>
-        </TextBlock>
-        <Frame Grid.Column="1"
-            x:Name="MainFrame"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            NavigationUIVisibility="Hidden" 
-            Margin="10,50,10,0" IsTabStop="False"/>
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

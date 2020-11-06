@@ -222,9 +222,9 @@ namespace ShipWorks.Installer.ViewModels
         {
             IsClosing = needsWindowClose;
 
-            if (!installSettings.NeedsRollback ||
-                (installSettings.Error == InstallError.None &&
-                navigationService.CurrentPageKey == NavigationPageType.UseShipWorks.ToString()))
+            if ((installSettings.Error == InstallError.None &&
+                navigationService.CurrentPageKey == NavigationPageType.UseShipWorks.ToString()) ||
+                navigationService.CurrentPageKey == NavigationPageType.Warning.ToString())
             {
                 return true;
             }

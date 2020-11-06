@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>shipworks.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <None Remove="License.rtf" />
+    <None Remove="shipworks.ico" />
     <None Remove="Styles\BlueSteel\Roboto-Regular.ttf" />
     <None Remove="Styles\BlueSteel\RobotoFontLicense.txt" />
   </ItemGroup>
@@ -36,6 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="shipworks.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Styles\BlueSteel\Roboto-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

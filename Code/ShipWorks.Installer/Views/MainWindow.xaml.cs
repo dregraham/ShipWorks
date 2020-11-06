@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using ShipWorks.Installer.Behaviors;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Services;
 using ShipWorks.Installer.ViewModels;
@@ -9,6 +10,7 @@ namespace ShipWorks.Installer.Views
     {
         public MainWindow()
         {
+            new WindowChromeLoadedBehavior().Attach(this);
             InitializeComponent();
         }
 
@@ -36,6 +38,11 @@ namespace ShipWorks.Installer.Views
             {
                 e.Cancel = !viewModel.Close(true);
             }
+        }
+
+        private void Window_StateChanged(object sender, System.EventArgs e)
+        {
+            TitleBar.RefreshMaximizeRestoreButton();
         }
     }
 }
