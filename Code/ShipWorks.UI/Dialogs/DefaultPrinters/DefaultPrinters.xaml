@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ButtonStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ComboBoxStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="DisableableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
@@ -27,7 +28,7 @@
             </Style>
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}">
                 <Setter Property="Width" Value="300"/>
-            </Style>
+            </Style>            
             <Style x:Key="UseDefaultButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
                 <Setter Property="Margin" Value="10 0 0 10"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -40,8 +41,8 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="Please select the default printer to use when printing the following formats:" />
-        <Grid Grid.Row="1" Margin="{StaticResource StandardPaddingTopAndBottom}">
+        <TextBlock Grid.Row="0" Text="Please select the default printer to use when printing the following formats:" Style="{StaticResource StandardText}" />
+        <Grid Grid.Row="1" Margin="15 10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -112,21 +113,23 @@
             <CheckBox Grid.Row="7" Grid.Column="1"
                       Content="Overwrite configured templates"
                       Margin="10 0 0 0"
-                      IsChecked="{Binding OverrideExistingPrinters}"/>
+                      IsChecked="{Binding OverrideExistingPrinters}"
+                      Style="{StaticResource FormCheckBox}"/>
         </Grid>
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+        <UniformGrid Grid.Row="2"
+                     Columns="2" Rows="1"
+                     HorizontalAlignment="Right">
             <Button Content="Cancel" 
                     Style="{StaticResource SmallSecondaryButton}" 
-                    IsCancel="True" 
-                    Margin="{StaticResource StandardPaddingRight}"/>
+                    IsCancel="True"
+                    Margin="0 0 5 0"/>
             <Button Content="Ok"
                     Style="{StaticResource SmallPrimaryButton}"
                     IsDefault="True"
                     Command="{Binding SetDefaults}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                    Margin="5 0 0 0">
             </Button>
-        </StackPanel>
+        </UniformGrid>
     </Grid>
 </ui:InteropWindow>
