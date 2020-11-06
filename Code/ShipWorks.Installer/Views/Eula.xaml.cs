@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using ShipWorks.Installer.Extensions;
 
 namespace ShipWorks.Installer.Views
 {
@@ -35,12 +36,12 @@ namespace ShipWorks.Installer.Views
         /// </summary>
         private void HandleHyperlinkClick(object inSender, RoutedEventArgs inArgs)
         {
-                Hyperlink link = inArgs.Source as Hyperlink;
-                if (link != null)
-                {
-                    OpenUrl(link.NavigateUri.ToString());
-                    inArgs.Handled = true;
-                }
+            Hyperlink link = inArgs.Source as Hyperlink;
+            if (link != null)
+            {
+                OpenUrl(link.NavigateUri.ToString());
+                inArgs.Handled = true;
+            }
         }
 
         /// <summary>
@@ -58,15 +59,7 @@ namespace ShipWorks.Installer.Views
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     url = url.Replace("&", "^&");
-                    Process.Start(new ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                {
-                    Process.Start("xdg-open", url);
-                }
-                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-                {
-                    Process.Start("open", url);
+                    ProcessExtensions.StartWebProcess(url);
                 }
                 else
                 {
