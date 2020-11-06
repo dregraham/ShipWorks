@@ -23,6 +23,11 @@ namespace ShipWorks.Templates
             TemplateManager.Tree;
 
         /// <summary>
+        /// Gets all the templates
+        /// </summary>
+        public IList<TemplateEntity> AllTemplates => Tree.AllTemplates;
+
+        /// <summary>
         /// Ensure the given template is configured
         /// </summary>
         public bool EnsureTemplateConfigured(IWin32Window owner, TemplateEntity template) =>
