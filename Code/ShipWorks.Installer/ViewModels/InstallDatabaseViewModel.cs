@@ -24,7 +24,7 @@ namespace ShipWorks.Installer.ViewModels
             base(mainViewModel, navigationService, NavigationPageType.UseShipWorks, logFactory(typeof(InstallDatabaseViewModel)))
         {
             var exitCode = 0;
-
+            log.Info("Beginning database installation");
             Task.Run(async () =>
             {
                 exitCode = await shipWorksCommandLineService.AutoInstallShipWorks(mainViewModel.InstallSettings);
@@ -43,6 +43,7 @@ namespace ShipWorks.Installer.ViewModels
                     mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                     mainViewModel.CurrentPage = NavigationPageType.UseShipWorks;
                     mainViewModel.InstallSettings.Error = InstallError.Database;
+                    mainViewModel.InstallSettings.NeedsRollback = false;
                     navigationService.NavigateTo(NavigationPageType.Warning);
                 });
             });

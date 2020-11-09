@@ -24,7 +24,6 @@ namespace ShipWorks.Installer.ViewModels
     {
         private bool ownDbChecked;
         private bool finishedLoading = false;
-        private bool isCheckBoxEnabled;
         private Warehouse selectedWarehouse;
         private ObservableCollection<Warehouse> warehouseList = new ObservableCollection<Warehouse>();
         private readonly IHubService hubService;
