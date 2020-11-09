@@ -196,10 +196,11 @@ namespace ShipWorks.Installer.ViewModels
         private bool PathContainsShipWorks()
         {
             log.Info($"Checking path {InstallPath} for existing ShipWorks installation");
-            if (Directory.Exists(InstallPath))
+            if (Directory.Exists(InstallPath) &&
+                Directory.GetFiles(InstallPath).Any(f => f == Path.Combine(InstallPath, "ShipWorks.exe")))
             {
                 log.Info("Found existing ShipWorks installation");
-                return Directory.GetFiles(InstallPath).Any(f => f == Path.Combine(InstallPath, "ShipWorks.exe"));
+                return true;
             }
 
             log.Info("Could not find existing ShipWorks installation");
