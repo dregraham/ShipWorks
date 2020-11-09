@@ -235,12 +235,13 @@ namespace ShipWorks.Installer.ViewModels
 
             if ((installSettings.Error == InstallError.None &&
                 navigationService.CurrentPageKey == NavigationPageType.UseShipWorks.ToString()) ||
-                navigationService.CurrentPageKey == NavigationPageType.Warning.ToString())
+                (!installSettings.NeedsRollback &&
+                navigationService.CurrentPageKey == NavigationPageType.Warning.ToString()))
             {
                 return true;
             }
 
-            var dlg = new CancelConfirmationDialog();
+            var dlg = new CancelConfirmationDialog(navigationService);
             return dlg.ShowDialog() ?? false;
         }
     }

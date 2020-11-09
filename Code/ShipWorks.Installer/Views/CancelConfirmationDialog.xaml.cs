@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using GalaSoft.MvvmLight.Views;
+using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.ViewModels;
 
 namespace ShipWorks.Installer.Views
@@ -8,14 +10,22 @@ namespace ShipWorks.Installer.Views
     /// </summary>
     public partial class CancelConfirmationDialog : Window
     {
+        private readonly INavigationService navigationService;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public CancelConfirmationDialog()
+        public CancelConfirmationDialog(INavigationService navigationService)
         {
             InitializeComponent();
             var vm = this.DataContext as CancelConfirmationDialogViewModel;
             this.Owner = vm.Owner;
+            this.navigationService = navigationService;
+
+            if (navigationService.CurrentPageKey == NavigationPageType.Warning.ToString())
+            {
+                vm.ConfirmClose(this);
+            }
         }
 
         /// <summary>

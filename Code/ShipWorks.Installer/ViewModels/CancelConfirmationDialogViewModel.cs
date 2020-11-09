@@ -28,8 +28,8 @@ namespace ShipWorks.Installer.ViewModels
             Func<Type, ILog> logFactory)
         {
             this.mainViewModel = mainViewModel;
-            Owner = mainWindow;
             this.innoSetupService = innoSetupService;
+            Owner = mainWindow;
             NoCommand = new RelayCommand<Window>((Window dlg) => dlg.Close());
             YesCommand = new RelayCommand<Window>(ConfirmClose);
             DialogResult = false;
@@ -73,7 +73,7 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Confirms the close, does any rollbacks that are needed and closes the window
         /// </summary>
-        private async void ConfirmClose(Window dlg)
+        public async void ConfirmClose(Window dlg)
         {
             if (mainViewModel.InstallSettings.NeedsRollback)
             {
