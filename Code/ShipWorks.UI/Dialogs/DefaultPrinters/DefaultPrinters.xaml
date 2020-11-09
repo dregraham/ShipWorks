@@ -67,8 +67,7 @@
                        Style="{StaticResource FieldLabel}"/>
             <ComboBox Grid.Row="1" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
-                      SelectedValue="{Binding StandardPrinterName}"
-                      SelectedValuePath="Key"
+                      SelectedItem="{Binding SelectedStandardPrinter}"
                       DisplayMemberPath="Value" />
             <Button Grid.Row="1" Grid.Column="2"
                     Content="Use Default"
@@ -80,8 +79,7 @@
                        />
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding StandardPaperSources}"
-                      SelectedValue="{Binding StandardPaperSource}"
-                      SelectedValuePath="Key"
+                      SelectedItem="{Binding SelectedStandardPaperSource}"
                       DisplayMemberPath="Value"
                       IsEnabled="{Binding StandardPaperSourceEnabled}"/>
             <!-- Thermal printer section -->
@@ -93,8 +91,7 @@
                        Style="{StaticResource FieldLabel}"/>
             <ComboBox Grid.Row="5" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
-                      SelectedValue="{Binding ThermalPrinterName}"
-                      SelectedValuePath="Key"
+                      SelectedItem="{Binding SelectedThermalPrinter}"
                       DisplayMemberPath="Value"/>
             <Button Grid.Row="5" Grid.Column="2"
                     Content="Use Default"
@@ -105,8 +102,7 @@
                        IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <ComboBox Grid.Row="6" Grid.Column="1"
                       ItemsSource="{Binding ThermalPaperSources}"
-                      SelectedValue="{Binding ThermalPaperSource}"
-                      SelectedValuePath="Key"
+                      SelectedItem="{Binding SelectedThermalPaperSource}"
                       DisplayMemberPath="Value"
                       IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <!-- Overwrite checkbox -->

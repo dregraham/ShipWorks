@@ -28,10 +28,10 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         private readonly IPrintUtility printUtility;
         private readonly IMessageHelper messageHelper;
         private bool overrideExistingPrinters;
-        private string thermalPrinterName;
-        private int thermalPaperSource;
-        private string standardPrinterName;
-        private int standardPaperSource;
+        private KeyValuePair<string, string> selectedThermalPrinter;
+        private KeyValuePair<int, string> selectedThermalPaperSource;
+        private KeyValuePair<string, string> selectedStandardPrinter;
+        private KeyValuePair<int, string> selectedStandardPaperSource;
         private ObservableCollection<KeyValuePair<string, string>> printers;
         private bool thermalPaperSourceEnabled = false;
         private bool standardPaperSourceEnable = false;
@@ -55,20 +55,111 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             this.printUtility = printUtility;
             this.messageHelper = messageHelper;
             LoadPrinters();
-            ThermalPrinterName = default;
-            StandardPrinterName = default;
+            SelectedThermalPrinter = default;
+            SelectedStandardPrinter = default;
         }
 
         /// <summary>
-        /// Load the printers collection
+        /// List of printers that are setup on the machine
         /// </summary>
-        private void LoadPrinters()
+        [Obfuscation]
+        public ObservableCollection<KeyValuePair<string, string>> Printers
         {
-            printers.Add(new KeyValuePair<string, string>(default, "(Select a Printer)"));
-            foreach (var printer in printUtility.InstalledPrinters)
+            get => printers;
+            set => Set(ref printers, value);
+        }
+
+        /// <summary>
+        /// Standard printername
+        /// </summary>
+        [Obfuscation]
+        public KeyValuePair<string, string> SelectedStandardPrinter
+        {
+            get => selectedStandardPrinter;
+            set
             {
-                printers.Add(new KeyValuePair<string, string>(printer, printer));
+                Set(ref selectedStandardPrinter, value);
+                StandardPaperSources = GetPaperSources(value.Key);
+
+                StandardPaperSourceEnabled = StandardPaperSources.Count > 1;
+                SelectedStandardPaperSource = StandardPaperSources.FirstOrDefault();
             }
+        }
+
+        /// <summary>
+        /// Standard Paper Sources for selected printer
+        /// </summary>
+        [Obfuscation]
+        public ObservableCollection<KeyValuePair<int, string>> StandardPaperSources
+        {
+            get => standardPaperSources;
+            set => Set(ref standardPaperSources, value);
+        }
+
+        /// <summary>
+        /// Standard paper source
+        /// </summary>
+        [Obfuscation]
+        public KeyValuePair<int, string> SelectedStandardPaperSource
+        {
+            get => selectedStandardPaperSource;
+            set => Set(ref selectedStandardPaperSource, value);
+        }
+
+        /// <summary>
+        /// Is ThermalPapersource enabled
+        /// </summary>
+        [Obfuscation]
+        public bool StandardPaperSourceEnabled
+        {
+            get => standardPaperSourceEnable;
+            set => Set(ref standardPaperSourceEnable, value);
+        }
+
+        /// <summary>
+        /// Thermal printer name
+        /// </summary>
+        [Obfuscation]
+        public KeyValuePair<string, string> SelectedThermalPrinter
+        {
+            get => selectedThermalPrinter;
+            set
+            {
+                Set(ref selectedThermalPrinter, value);
+                ThermalPaperSources = GetPaperSources(value.Key);
+                SelectedThermalPaperSource = ThermalPaperSources.FirstOrDefault();
+                ThermalPaperSourceEnabled = ThermalPaperSources.Count > 1;
+            }
+        }
+
+        /// <summary>
+        /// Paper sources for the selected thermal printer
+        /// </summary>
+        [Obfuscation]
+        public ObservableCollection<KeyValuePair<int, string>> ThermalPaperSources
+        {
+            get => thermalPaperSources;
+            set => Set(ref thermalPaperSources, value);
+        }
+
+        /// <summary>
+        /// Thermal papersource
+        /// </summary>
+        [Obfuscation]
+        public KeyValuePair<int, string> SelectedThermalPaperSource
+        {
+            get => selectedThermalPaperSource;
+            set => Set(ref selectedThermalPaperSource, value);
+        }
+
+        /// <summary>
+        /// Is ThermalPapersource enabled
+        /// </summary>
+        [Obfuscation]
+        public bool ThermalPaperSourceEnabled
+        {
+            get => thermalPaperSourceEnabled;
+            set => Set(ref thermalPaperSourceEnabled, value);
         }
 
         /// <summary>
@@ -88,21 +179,46 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         }
 
         /// <summary>
-        /// Thermal printer name
+        /// Loops through all the printers setting their name and source
         /// </summary>
-        [Obfuscation]
-        public string ThermalPrinterName
+        public async Task SetDefaultsAction(IDialog dialog)
         {
-            get => thermalPrinterName;
-            set
+            var templates = templateManager.AllTemplates;
+
+            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
             {
-                Set(ref thermalPrinterName, value);
-                ThermalPaperSources = GetPaperSources(value);
-                ThermalPaperSource = ThermalPaperSources.FirstOrDefault().Key;
-                ThermalPaperSourceEnabled = ThermalPaperSources.Count > 1;
+                foreach (var template in templates)
+                {
+                    var computerSettings = templateManager.GetComputerSettings(template);
+                    if (ShouldSkip(computerSettings))
+                    {
+                        continue;
+                    }
+
+                    if (template.Type == (int) TemplateType.Thermal)
+                    {
+                        computerSettings.PrinterName = SelectedThermalPrinter.Key;
+                        computerSettings.PaperSource = SelectedThermalPaperSource.Key;
+                    }
+                    else
+                    {
+                        computerSettings.PrinterName = SelectedStandardPrinter.Key;
+                        computerSettings.PaperSource = SelectedStandardPaperSource.Key;
+                    }
+
+                    await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
+                }
+
+                adapter.Commit();
             }
+
+            dialog.DialogResult = true;
+            dialog.Close();
         }
 
+        /// <summary>
+        /// Get a collection of paper sources for the given printer
+        /// </summary>
         private ObservableCollection<KeyValuePair<int, string>> GetPaperSources(string printerName)
         {
             if (string.IsNullOrWhiteSpace(printerName))
@@ -127,125 +243,16 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             return paperSources;
         }
 
-        [Obfuscation]
-        public ObservableCollection<KeyValuePair<int, string>> ThermalPaperSources
-        {
-            get => thermalPaperSources;
-            set => Set(ref thermalPaperSources, value);
-        }
-
         /// <summary>
-        /// Thermal papersource
+        /// Load the printers collection
         /// </summary>
-        [Obfuscation]
-        public int ThermalPaperSource
+        private void LoadPrinters()
         {
-            get => thermalPaperSource;
-            set => Set(ref thermalPaperSource, value);
-        }
-
-        /// <summary>
-        /// Is ThermalPapersource enabled
-        /// </summary>
-        [Obfuscation]
-        public bool ThermalPaperSourceEnabled
-        {
-            get => thermalPaperSourceEnabled;
-            set => Set(ref thermalPaperSourceEnabled, value);
-        }
-
-
-        /// <summary>
-        /// Standard printername
-        /// </summary>
-        [Obfuscation]
-        public string StandardPrinterName
-        {
-            get => standardPrinterName;
-            set
+            printers.Add(new KeyValuePair<string, string>(default, "(Select a Printer)"));
+            foreach (var printer in printUtility.InstalledPrinters)
             {
-                Set(ref standardPrinterName, value);
-                StandardPaperSources = GetPaperSources(value);
-
-                StandardPaperSource = StandardPaperSources.FirstOrDefault().Key;
-                StandardPaperSourceEnabled = StandardPaperSources.Count > 1;
+                printers.Add(new KeyValuePair<string, string>(printer, printer));
             }
-        }
-
-        /// <summary>
-        /// Standard paper source
-        /// </summary>
-        [Obfuscation]
-        public int StandardPaperSource
-        {
-            get => standardPaperSource;
-            set => Set(ref standardPaperSource, value);
-        }
-
-        /// <summary>
-        /// Standard Paper Sources for selected printer
-        /// </summary>
-        [Obfuscation]
-        public ObservableCollection<KeyValuePair<int, string>> StandardPaperSources
-        {
-            get => standardPaperSources;
-            set => Set(ref standardPaperSources, value);
-        }
-
-        /// <summary>
-        /// Is ThermalPapersource enabled
-        /// </summary>
-        [Obfuscation]
-        public bool StandardPaperSourceEnabled
-        {
-            get => standardPaperSourceEnable;
-            set => Set(ref standardPaperSourceEnable, value);
-        }
-
-        [Obfuscation]
-        public ObservableCollection<KeyValuePair<string, string>> Printers
-        {
-            get => printers;
-            set => Set(ref printers, value);
-        }
-
-        /// <summary>
-        /// Loops through all the printers setting their name and source
-        /// </summary>
-        /// <returns></returns>
-        public async Task SetDefaultsAction(IDialog dialog)
-        {
-            var templates = templateManager.AllTemplates;
-
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
-            {
-                foreach (var template in templates)
-                {
-                    var computerSettings = templateManager.GetComputerSettings(template);
-                    if (ShouldSkip(computerSettings))
-                    {
-                        continue;
-                    }
-
-                    if (template.Type == (int) TemplateType.Thermal)
-                    {
-                        computerSettings.PrinterName = ThermalPrinterName;
-                        computerSettings.PaperSource = ThermalPaperSource;
-                    }
-                    else
-                    {
-                        computerSettings.PrinterName = StandardPrinterName;
-                        computerSettings.PaperSource = StandardPaperSource;
-                    }
-
-                    await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
-                }
-
-                adapter.Commit();
-            }
-
-            dialog.DialogResult = true;
-            dialog.Close();
         }
 
         /// <summary>
