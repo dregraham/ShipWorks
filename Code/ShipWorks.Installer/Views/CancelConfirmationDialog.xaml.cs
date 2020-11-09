@@ -33,7 +33,14 @@ namespace ShipWorks.Installer.Views
         private void ExitSetupDlg_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var vm = this.DataContext as CancelConfirmationDialogViewModel;
-            this.DialogResult = vm.DialogResult;
+            if (!vm.Loading)
+            {
+                this.DialogResult = vm.DialogResult;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
         }
     }
 }
