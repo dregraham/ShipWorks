@@ -78,8 +78,8 @@ namespace ShipWorks.Installer.Services
 
                 var instancesKey = shipWorksRegistryKey.OpenSubKey("Instances");
                 var previousInstallPaths = instancesKey.GetValueNames();
-
-                var instanceID = previousInstallPaths.FirstOrDefault(x => CleanPath(x).Equals(CleanPath(installPath), StringComparison.OrdinalIgnoreCase));
+                var previousPath = previousInstallPaths.FirstOrDefault(x => CleanPath(x).Equals(CleanPath(installPath), StringComparison.OrdinalIgnoreCase));
+                string instanceID = (string) instancesKey.GetValue(previousPath, null);
 
                 if (instanceID != null)
                 {
