@@ -11,11 +11,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
+using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Printing;
+using Cursor = System.Windows.Forms.Cursor;
+using Cursors = System.Windows.Forms.Cursors;
 
 namespace ShipWorks.UI.Dialogs.DefaultPrinters
 {
@@ -39,7 +42,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         private bool standardPaperSourceEnable = false;
         private ObservableCollection<KeyValuePair<int, string>> thermalPaperSources;
         private ObservableCollection<KeyValuePair<int, string>> standardPaperSources;
-        Lazy<IPrinterSetting> defaultPrinter;
+        private readonly Lazy<IPrinterSetting> defaultPrinter;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -48,7 +52,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             ITemplateManager templateManager,
             ISqlAdapterFactory sqlAdapterFactory,
             IPrintUtility printUtility,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            Func<Type, ILog> logFactory)
         {
             printers = new ObservableCollection<KeyValuePair<string, string>>();
 
@@ -62,7 +67,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             LoadPrinters();
             SelectedThermalPrinter = default;
             SelectedStandardPrinter = default;
-            defaultPrinter = new Lazy<IPrinterSetting>(() => printUtility.GetDefaultPrinterSettings());
+            defaultPrinter = new Lazy<IPrinterSetting>(printUtility.GetDefaultPrinterSettings);
+            log = logFactory(typeof(DefaultPrintersViewModel));
         }
 
         /// <summary>
@@ -71,6 +77,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// <param name="forThermal">Set thermal else standard</param>
         private async Task SetAsDefaultAction(bool forThermal)
         {
+            Cursor.Current = Cursors.WaitCursor;
+
             if (forThermal)
             {
                 SelectedThermalPrinter = Printers.SingleOrDefault(p => p.Key == defaultPrinter.Value.PrinterName);
@@ -219,37 +227,47 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// </summary>
         public async Task SetDefaultsAction(IDialog dialog)
         {
-            var templates = templateManager.AllTemplates;
-
-            using (ISqlAdapter adapter = sqlAdapterFactory.Create())
+            try
             {
-                foreach (var template in templates)
+                Cursor.Current = Cursors.WaitCursor;
+
+                var templates = templateManager.AllTemplates;
+
+                using (ISqlAdapter adapter = sqlAdapterFactory.Create())
                 {
-                    var computerSettings = templateManager.GetComputerSettings(template);
-                    if (ShouldSkip(template, computerSettings))
+                    foreach (var template in templates)
                     {
-                        continue;
+                        var computerSettings = templateManager.GetComputerSettings(template);
+                        if (ShouldSkip(template, computerSettings))
+                        {
+                            continue;
+                        }
+
+                        if (template.Type == (int) TemplateType.Thermal)
+                        {
+                            computerSettings.PrinterName = SelectedThermalPrinter.Key;
+                            computerSettings.PaperSource = SelectedThermalPaperSource.Key;
+                        }
+                        else
+                        {
+                            computerSettings.PrinterName = SelectedStandardPrinter.Key;
+                            computerSettings.PaperSource = SelectedStandardPaperSource.Key;
+                        }
+
+                        await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
                     }
 
-                    if (template.Type == (int) TemplateType.Thermal)
-                    {
-                        computerSettings.PrinterName = SelectedThermalPrinter.Key;
-                        computerSettings.PaperSource = SelectedThermalPaperSource.Key;
-                    }
-                    else
-                    {
-                        computerSettings.PrinterName = SelectedStandardPrinter.Key;
-                        computerSettings.PaperSource = SelectedStandardPaperSource.Key;
-                    }
-
-                    await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
+                    adapter.Commit();
                 }
 
-                adapter.Commit();
+                dialog.DialogResult = true;
+                dialog.Close();
             }
-
-            dialog.DialogResult = true;
-            dialog.Close();
+            catch (Exception e)
+            {
+                log.Error(e);
+                messageHelper.ShowError("An error occured setting the default printer");
+            }
         }
 
         /// <summary>

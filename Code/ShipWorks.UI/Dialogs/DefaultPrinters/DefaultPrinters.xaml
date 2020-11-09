@@ -8,7 +8,7 @@
                   mc:Ignorable="d"
                   Title="Default Printers"
                   SizeToContent="Height"
-                  Width="550"
+                  Width="500"
                   d:DataContext="{d:DesignInstance local:DefaultPrintersViewModel}">
     <Window.Resources>
         <ResourceDictionary>
@@ -18,20 +18,23 @@
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/TextBlockStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/CheckBoxStyle.xaml"/>
                 <ResourceDictionary Source="/ShipWorks.UI;component/Styles/Sizes.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-            <Style x:Key="DisableableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
-                <Style.Triggers>
-                    <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Foreground" Value="{StaticResource DisabledTextColor}"/>
-                    </Trigger>
-                </Style.Triggers>
-            </Style>
+            </ResourceDictionary.MergedDictionaries>            
             <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource FormComboBox}">
                 <Setter Property="Width" Value="300"/>
             </Style>            
             <Style x:Key="UseDefaultButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
                 <Setter Property="Margin" Value="10 0 0 10"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="Label" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
+                <Setter Property="Margin" Value="15 0 0 10"/>
+            </Style>
+            <Style x:Key="DisableableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Label}">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Foreground" Value="{StaticResource DisabledTextColor}"/>
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </Window.Resources>
@@ -59,16 +62,16 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
             <!-- Standard printer section -->
-            <TextBlock Grid.Row="0" Grid.Column="0"
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                        Text="Standard printer"
                        Style="{StaticResource Header}" />
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Text="Printer:"
-                       Style="{StaticResource FieldLabel}"/>
+                       Style="{StaticResource Label}"/>
             <ComboBox Grid.Row="1" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
                       SelectedItem="{Binding SelectedStandardPrinter}"
-                      DisplayMemberPath="Value" />
+                      DisplayMemberPath="Value"/>
             <Button Grid.Row="1" Grid.Column="2"
                     Content="Use Default"
                     Style="{StaticResource UseDefaultButton}"
@@ -84,12 +87,12 @@
                       DisplayMemberPath="Value"
                       IsEnabled="{Binding StandardPaperSourceEnabled}"/>
             <!-- Thermal printer section -->
-            <TextBlock Grid.Row="4" Grid.Column="0"
+            <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                        Text="Thermal printer"
                        Style="{StaticResource Header}" />
             <TextBlock Grid.Row="5" Grid.Column="0"
                        Text="Printer:"
-                       Style="{StaticResource FieldLabel}"/>
+                       Style="{StaticResource Label}"/>
             <ComboBox Grid.Row="5" Grid.Column="1"
                       ItemsSource="{Binding Printers}"
                       SelectedItem="{Binding SelectedThermalPrinter}"
