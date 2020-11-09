@@ -34,7 +34,6 @@ namespace ShipWorks.Installer.ViewModels
                     if (exitCode == 0)
                     {
                         mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
-                        mainViewModel.InstallSettings.NeedsRollback = false;
                         mainViewModel.CurrentPage = NavigationPageType.UseShipWorks;
                         navigationService.NavigateTo(NextPage);
                         return;

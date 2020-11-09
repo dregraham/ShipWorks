@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using log4net;
 using Microsoft.Win32;
 
@@ -67,21 +69,51 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Get the path to the INNO uninstaller
         /// </summary>
-        public string GetUninstallerPath()
+        public string GetUninstallerPath(string installPath)
         {
             log.Info("Getting uninstaller path");
             try
             {
-                var lastInstanceID = GetLastInstanceID();
-                var uninstallKey = Registry.LocalMachine.OpenSubKey($"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{lastInstanceID}_is1");
-                var path = (string) uninstallKey.GetValue("UninstallString", null);
+                string uninstallPath = null;
 
-                if (path != null)
+                var instancesKey = shipWorksRegistryKey.OpenSubKey("Instances");
+                var previousInstallPaths = instancesKey.GetValueNames();
+
+                var instanceID = previousInstallPaths.FirstOrDefault(x => CleanPath(x).Equals(CleanPath(installPath), StringComparison.OrdinalIgnoreCase));
+
+                if (instanceID != null)
                 {
-                    log.Info($"Got uninstaller path: {path}");
+                    var uninstallKey = Registry.LocalMachine.OpenSubKey($"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{instanceID}_is1");
+                    uninstallPath = (string) uninstallKey.GetValue("UninstallString", null);
+
+                    if (uninstallPath != null)
+                    {
+                        log.Info($"Got uninstaller path: {uninstallPath}");
+                        return uninstallPath;
+                    }
                 }
 
-                return path;
+                // Inno creates the uninstaller with a filename of "uninsXXX.exe"
+                // where XXX is a number that gets incremented whenever a new
+                // version of the installer is run in an existing installation directory
+                for (int i = 0; i < 1000; i++)
+                {
+                    var possiblePath = $"{installPath}Uninstall\\unins{i:D3}.exe";
+                    if (File.Exists(possiblePath))
+                    {
+                        uninstallPath = possiblePath;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (uninstallPath != null)
+                {
+                    log.Info($"Got uninstaller path: {uninstallPath}");
+                    return uninstallPath;
+                }
             }
             catch (Exception)
             {
@@ -106,6 +138,16 @@ namespace ShipWorks.Installer.Services
             }
 
             return lastInstanceID;
+        }
+
+        /// <summary>
+        /// Normalize a file path for comparison
+        /// </summary>
+        private string CleanPath(string path)
+        {
+            var pathWithBackslashes = path.Replace('/', '\\');
+            var cleanPath = Regex.Replace(pathWithBackslashes, "\\+", "\\");
+            return cleanPath.EndsWith('\\') ? cleanPath : cleanPath + "\\";
         }
     }
 }

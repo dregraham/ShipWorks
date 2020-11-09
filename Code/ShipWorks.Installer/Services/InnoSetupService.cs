@@ -166,8 +166,15 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Silently run the INNO uninstaller
         /// </summary>
-        public async Task RunUninstaller()
+        public async Task RunUninstaller(string installPath)
         {
+            string uninstallPath = registryService.GetUninstallerPath(installPath);
+
+            if (uninstallPath == null)
+            {
+                throw new FileNotFoundException("Could not find uninstaller path");
+            }
+
             // Kill any ShipWorks instances that are running
             KillShipWorks();
 
@@ -175,7 +182,7 @@ namespace ShipWorks.Installer.Services
 
             ProcessStartInfo start = new ProcessStartInfo
             {
-                FileName = registryService.GetUninstallerPath(),
+                FileName = uninstallPath,
                 Arguments = $"/VERYSILENT /LOG=\"{logFileName}\"",
             };
 

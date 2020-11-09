@@ -21,6 +21,6 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Silently run the INNO uninstaller
         /// </summary>
-        Task RunUninstaller();
+        Task RunUninstaller(string installPath);
     }
 }

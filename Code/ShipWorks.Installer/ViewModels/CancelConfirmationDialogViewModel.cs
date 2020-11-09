@@ -80,7 +80,7 @@ namespace ShipWorks.Installer.ViewModels
                 Loading = true;
                 try
                 {
-                    await innoSetupService.RunUninstaller().ConfigureAwait(false);
+                    await innoSetupService.RunUninstaller(mainViewModel.InstallSettings.InstallPath).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

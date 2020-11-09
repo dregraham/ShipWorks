@@ -13,6 +13,6 @@
         /// <summary>
         /// Get the path to the INNO uninstaller
         /// </summary>
-        string GetUninstallerPath();
+        string GetUninstallerPath(string installPath);
     }
 }
