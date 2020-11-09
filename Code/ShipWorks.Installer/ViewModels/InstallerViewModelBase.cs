@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using log4net;
@@ -94,7 +95,12 @@ namespace ShipWorks.Installer.ViewModels
         {
             if (!mainViewModel.IsClosing)
             {
-                mainViewModel.Close(false);
+                var shouldClose = mainViewModel.Close(false);
+
+                if (shouldClose)
+                {
+                    Application.Current.MainWindow.Close();
+                }
             }
         }
     }
