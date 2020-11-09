@@ -269,7 +269,7 @@ namespace ShipWorks.Installer.Sql
                 // Have to make sure the password is stripped
                 if (!windowsAuth)
                 {
-                    logCsb.Password = "";
+                    logCsb.Password = "REDACTED";
                 }
 
                 log.Info(string.Format("ConnectionString: {0}", logCsb));

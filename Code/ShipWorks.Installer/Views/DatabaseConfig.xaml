@@ -51,7 +51,7 @@
                 <TextBlock Text="Username" Style="{StaticResource Header}"/>
                 <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Username}" Width="150"/>
                 <TextBlock Text="Password" Style="{StaticResource Header}" Margin="0,10,0,0"/>
-                <c:BindablePasswordBox Password="{Binding Password}" Width="150" Margin="0,0,0,20"/>
+                <c:BindablePasswordBox Password="{Binding Password, Mode=OneWayToSource}" Width="150" Margin="0,0,0,20"/>
             </StackPanel>
             <TextBlock Style="{StaticResource Header}" Text="Select your ShipWorks database"/>
             <StackPanel Orientation="Horizontal">
