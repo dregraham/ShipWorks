@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -38,6 +39,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         private bool standardPaperSourceEnable = false;
         private ObservableCollection<KeyValuePair<int, string>> thermalPaperSources;
         private ObservableCollection<KeyValuePair<int, string>> standardPaperSources;
+        Lazy<IPrinterSetting> defaultPrinter;
 
         /// <summary>
         /// Constructor
@@ -51,8 +53,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             printers = new ObservableCollection<KeyValuePair<string, string>>();
 
             SetDefaults = new RelayCommand<IDialog>(async dialog => SetDefaultsAction(dialog).ConfigureAwait(true));
-            SetStandardAsDefault = new RelayCommand(() => SetAsDefaultAction(false));
-            SetThermalAsDefault = new RelayCommand(() => SetAsDefaultAction(true));
+            SetStandardAsDefault = new RelayCommand(async () => SetAsDefaultAction(false));
+            SetThermalAsDefault = new RelayCommand(async () => SetAsDefaultAction(true));
             this.templateManager = templateManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.printUtility = printUtility;
@@ -60,25 +62,25 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             LoadPrinters();
             SelectedThermalPrinter = default;
             SelectedStandardPrinter = default;
+            defaultPrinter = new Lazy<IPrinterSetting>(() => printUtility.GetDefaultPrinterSettings());
         }
 
         /// <summary>
         /// Set printer as the default. 
         /// </summary>
         /// <param name="forThermal">Set thermal else standard</param>
-        private void SetAsDefaultAction(bool forThermal)
+        private async Task SetAsDefaultAction(bool forThermal)
         {
-            var defaultSettings = printUtility.GetDefaultPrinterSettings();
-            if(forThermal)
+            if (forThermal)
             {
-                SelectedThermalPrinter = Printers.SingleOrDefault(p => p.Key == defaultSettings.PrinterName);
-                SelectedThermalPaperSource = ThermalPaperSources.SingleOrDefault(s=>s.Key==defaultSettings.PaperSource.RawKind);
+                SelectedThermalPrinter = Printers.SingleOrDefault(p => p.Key == defaultPrinter.Value.PrinterName);
+                SelectedThermalPaperSource = ThermalPaperSources.SingleOrDefault(s => s.Key == defaultPrinter.Value.PaperSource.RawKind);
             }
             else
             {
-                SelectedStandardPrinter = Printers.SingleOrDefault(p => p.Key == defaultSettings.PrinterName);
-                SelectedStandardPaperSource = StandardPaperSources.SingleOrDefault(s => s.Key == defaultSettings.PaperSource.RawKind);
-            }            
+                SelectedStandardPrinter = Printers.SingleOrDefault(p => p.Key == defaultPrinter.Value.PrinterName);
+                SelectedStandardPaperSource = StandardPaperSources.SingleOrDefault(s => s.Key == defaultPrinter.Value.PaperSource.RawKind);
+            }
         }
 
         /// <summary>
@@ -269,7 +271,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             }
 
             var paperSources = new ObservableCollection<KeyValuePair<int, string>>();
-            foreach(var source in printerSettings.PaperSources.Cast<PaperSource>().ToList())
+            foreach (var source in printerSettings.PaperSources.Cast<PaperSource>().ToList())
             {
                 paperSources.Add(new KeyValuePair<int, string>(source.RawKind, source.SourceName));
             }
@@ -286,7 +288,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             foreach (var printer in printUtility.InstalledPrinters)
             {
                 printers.Add(new KeyValuePair<string, string>(printer, printer));
-            }            
+            }
         }
 
         /// <summary>
