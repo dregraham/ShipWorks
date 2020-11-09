@@ -5,11 +5,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:ShipWorks.Installer.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
     Title="LocationConfig"
     d:DesignHeight="600"
     d:DesignWidth="575"
     DataContext="{Binding Path=LocationConfigViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
+
+    <Page.Resources>
+        <convert:WarehouseTypeToBooleanConverter x:Key="WarehouseTypeToBooleanConverter" />
+    </Page.Resources>
 
     <Grid>
         <StackPanel>
@@ -20,7 +25,7 @@
             </TextBlock>
             <TextBlock Style="{StaticResource Header}" Text="Select your desired warehouse for this installation:" />
             <TextBlock Text="Selecting your warehouse links it with your database, for faster setup across multiple sites."  TextWrapping="Wrap" FontSize="10" Margin="0,10,0,0"/>
-            <ComboBox Style="{StaticResource FormComboBox}" Margin="0,10,0,0" Width="200" HorizontalAlignment="Left" ItemsSource="{Binding Path=WarehouseList}" DisplayMemberPath="Details.Name" SelectedItem="{Binding SelectedWarehouse, Mode=TwoWay}"/>
+            <ComboBox Style="{StaticResource FormComboBox}" Margin="0,10,0,0" Width="200" HorizontalAlignment="Left" ItemsSource="{Binding Path=WarehouseList}" DisplayMemberPath="Details.Name" SelectedItem="{Binding SelectedWarehouse, Mode=TwoWay}" x:Name="WarehouseSelection"/>
             <TextBlock Margin="0,20,0,0">
                 Need to enable remote connections? 
                 <Hyperlink Command="{Binding OpenWebsiteCommand}">
@@ -30,8 +35,9 @@
             <Border BorderBrush="Black" BorderThickness="0,0,0,1" Margin="0,20,0,0">
                 <TextBlock Text="Advanced Options"/>
             </Border>
-            <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}" IsChecked="{Binding OwnDbChecked}" Margin="10,10,0,0">
-                <Label VerticalAlignment="Center" Content="Don't install SQL / connect to my own database" Margin="0,1,0,0" />
+            <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}" IsChecked="{Binding OwnDbChecked, Mode=TwoWay}" Margin="10,10,0,0"
+                IsEnabled="{Binding Converter={StaticResource WarehouseTypeToBooleanConverter}, ElementName=WarehouseSelection, Path=SelectedItem}">
+                <Label VerticalAlignment="Center" Content="Manually configure SQL" Margin="0,1,0,0" />
             </CheckBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">
