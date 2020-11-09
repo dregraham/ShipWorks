@@ -20,5 +20,10 @@ namespace ShipWorks.Common.IO.Hardware.Printers
         /// Otherwise a new one will be created, cached and returned.
         /// </summary>
         IPrinterSetting GetPrinterSettings(string printerName);
+
+        /// <summary>
+        /// Get the default printer settings
+        /// </summary>
+        IPrinterSetting GetDefaultPrinterSettings();
     }
 }

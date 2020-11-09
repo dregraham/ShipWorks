@@ -71,7 +71,8 @@
                       DisplayMemberPath="Value" />
             <Button Grid.Row="1" Grid.Column="2"
                     Content="Use Default"
-                    Style="{StaticResource UseDefaultButton}" />
+                    Style="{StaticResource UseDefaultButton}"
+                    Command="{Binding SetStandardAsDefault}"/>
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="Source:"
                        Style="{StaticResource DisableableText}"
@@ -95,7 +96,8 @@
                       DisplayMemberPath="Value"/>
             <Button Grid.Row="5" Grid.Column="2"
                     Content="Use Default"
-                    Style="{StaticResource UseDefaultButton}"/>
+                    Style="{StaticResource UseDefaultButton}"
+                    Command="{Binding SetThermalAsDefault}"/>
             <TextBlock Grid.Row="6" Grid.Column="0"
                        Text="Source:"
                        Style="{StaticResource DisableableText}"

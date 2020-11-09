@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.Linq;
@@ -42,14 +43,16 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// Constructor
         /// </summary>
         public DefaultPrintersViewModel(
-            ITemplateManager templateManager, 
+            ITemplateManager templateManager,
             ISqlAdapterFactory sqlAdapterFactory,
-            IPrintUtility printUtility, 
+            IPrintUtility printUtility,
             IMessageHelper messageHelper)
         {
             printers = new ObservableCollection<KeyValuePair<string, string>>();
 
             SetDefaults = new RelayCommand<IDialog>(async dialog => SetDefaultsAction(dialog).ConfigureAwait(true));
+            SetStandardAsDefault = new RelayCommand(() => SetAsDefaultAction(false));
+            SetThermalAsDefault = new RelayCommand(() => SetAsDefaultAction(true));
             this.templateManager = templateManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.printUtility = printUtility;
@@ -57,6 +60,25 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             LoadPrinters();
             SelectedThermalPrinter = default;
             SelectedStandardPrinter = default;
+        }
+
+        /// <summary>
+        /// Set printer as the default. 
+        /// </summary>
+        /// <param name="forThermal">Set thermal else standard</param>
+        private void SetAsDefaultAction(bool forThermal)
+        {
+            var defaultSettings = printUtility.GetDefaultPrinterSettings();
+            if(forThermal)
+            {
+                SelectedThermalPrinter = Printers.SingleOrDefault(p => p.Key == defaultSettings.PrinterName);
+                SelectedThermalPaperSource = ThermalPaperSources.SingleOrDefault(s=>s.Key==defaultSettings.PaperSource.RawKind);
+            }
+            else
+            {
+                SelectedStandardPrinter = Printers.SingleOrDefault(p => p.Key == defaultSettings.PrinterName);
+                SelectedStandardPaperSource = StandardPaperSources.SingleOrDefault(s => s.Key == defaultSettings.PaperSource.RawKind);
+            }            
         }
 
         /// <summary>
@@ -169,6 +191,18 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         public ICommand SetDefaults { get; }
 
         /// <summary>
+        /// Command to set the thermal as default
+        /// </summary>
+        [Obfuscation]
+        public ICommand SetThermalAsDefault { get; }
+
+        /// <summary>
+        /// Command to set the standard pritner to default
+        /// </summary>
+        [Obfuscation]
+        public ICommand SetStandardAsDefault { get; }
+
+        /// <summary>
         /// When true, overrides default printers when SetDefaults is called
         /// </summary>
         [Obfuscation]
@@ -190,7 +224,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
                 foreach (var template in templates)
                 {
                     var computerSettings = templateManager.GetComputerSettings(template);
-                    if (ShouldSkip(computerSettings))
+                    if (ShouldSkip(template, computerSettings))
                     {
                         continue;
                     }
@@ -252,17 +286,27 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             foreach (var printer in printUtility.InstalledPrinters)
             {
                 printers.Add(new KeyValuePair<string, string>(printer, printer));
-            }
+            }            
         }
 
         /// <summary>
         /// Should this printer be overriden
         /// </summary>
-        private bool ShouldSkip(TemplateComputerSettingsEntity computerSettings)
+        private bool ShouldSkip(TemplateEntity template, TemplateComputerSettingsEntity computerSettings)
         {
             if (OverrideExistingPrinters)
             {
                 return false;
+            }
+
+            if (template.Type == (int) TemplateType.Thermal && SelectedThermalPrinter.Key == null)
+            {
+                return true;
+            }
+
+            if (template.Type != (int) TemplateType.Thermal && SelectedStandardPrinter.Key == null)
+            {
+                return true;
             }
 
             return !string.IsNullOrWhiteSpace(computerSettings.PrinterName);
