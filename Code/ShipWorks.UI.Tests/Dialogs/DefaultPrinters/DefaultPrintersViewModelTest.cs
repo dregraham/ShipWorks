@@ -131,7 +131,7 @@ namespace ShipWorks.UI.Tests.Dialogs.DefaultPrinters
 
             Assert.Equal("ThermalName", configuredThermal.ComputerSettings.First().PrinterName);
             Assert.Equal("StandardName", configuredStandard.ComputerSettings.First().PrinterName);
-            sqlAdapter.Verify(a => a.SaveEntityAsync(It.IsAny<TemplateComputerSettingsEntity>()), Times.Exactly(2));
+            sqlAdapter.Verify(a => a.SaveAndRefetchAsync(It.IsAny<TemplateEntity>()), Times.Exactly(2));
         }
 
         [Fact]
@@ -143,7 +143,7 @@ namespace ShipWorks.UI.Tests.Dialogs.DefaultPrinters
 
             Assert.Equal("printer2", configuredThermal.ComputerSettings.First().PrinterName);
             Assert.Equal("printer2", configuredStandard.ComputerSettings.First().PrinterName);
-            sqlAdapter.Verify(a => a.SaveEntityAsync(It.IsAny<TemplateComputerSettingsEntity>()), Times.Exactly(4));
+            sqlAdapter.Verify(a => a.SaveAndRefetchAsync(It.IsAny<TemplateEntity>()), Times.Exactly(4));
         }
 
         [Fact]
