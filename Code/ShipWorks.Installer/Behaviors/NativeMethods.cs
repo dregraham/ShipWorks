@@ -8,15 +8,27 @@ namespace ShipWorks.Installer.Behaviors
         public const int WM_NCCALCSIZE = 0x83;
         public const int WM_NCPAINT = 0x85;
 
+        /// <summary>
+        /// Wrapper for the Windows Kernel32.LoadLibrary method
+        /// </summary>
         [DllImport("kernel32", SetLastError = true)]
         private static extern IntPtr LoadLibrary(string lpFileName);
 
+        /// <summary>
+        /// Wrapper for the Windows Desktop Window Manager DwmIsCompositionEnabled method
+        /// </summary>
         [DllImport("dwmapi.dll", PreserveSig = false)]
         public static extern bool DwmIsCompositionEnabled();
 
+        /// <summary>
+        /// Wrapper for the Windows Kernal32.GetProcAddress method
+        /// </summary>
         [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
+        /// <summary>
+        /// Struct representing Windows margin values
+        /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct MARGINS
         {
@@ -28,6 +40,9 @@ namespace ShipWorks.Installer.Behaviors
 
         private delegate int DwmExtendFrameIntoClientAreaDelegate(IntPtr hwnd, ref MARGINS margins);
 
+        /// <summary>
+        /// Extends the window client area into the non-client frame of the window
+        /// </summary>
         public static int DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS margins)
         {
             var hModule = LoadLibrary("dwmapi");
@@ -49,6 +64,9 @@ namespace ShipWorks.Installer.Behaviors
             return delegateForFunctionPointer(hwnd, ref margins);
         }
 
+        /// <summary>
+        /// Determines if the Windows Desktop Window Manager api is available
+        /// </summary>
         public static bool IsDwmAvailable()
         {
             if (LoadLibrary("dwmapi") == IntPtr.Zero)
@@ -58,6 +76,9 @@ namespace ShipWorks.Installer.Behaviors
             return true;
         }
 
+        /// <summary>
+        /// Int pointer values for Dwm api actions
+        /// </summary>
         internal enum WVR
         {
             ALIGNTOP = 0x0010,

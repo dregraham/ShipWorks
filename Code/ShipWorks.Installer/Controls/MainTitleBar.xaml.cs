@@ -17,11 +17,17 @@ namespace ShipWorks.Installer.Controls
             RefreshMaximizeRestoreButton();
         }
 
+        /// <summary>
+        /// Event handler for the minimize button click
+        /// </summary>
         private void OnMinimizeButtonClick(object sender, RoutedEventArgs e)
         {
             mainWindow.WindowState = WindowState.Minimized;
         }
 
+        /// <summary>
+        /// Event handler for the maximize button click
+        /// </summary>
         private void OnMaximizeRestoreButtonClick(object sender, RoutedEventArgs e)
         {
             if (mainWindow.WindowState == WindowState.Maximized)
@@ -37,11 +43,17 @@ namespace ShipWorks.Installer.Controls
             }
         }
 
+        /// <summary>
+        /// Event handler for the close button click
+        /// </summary>
         private void OnCloseButtonClick(object sender, RoutedEventArgs e)
         {
             mainWindow.Close();
         }
 
+        /// <summary>
+        /// Refreshes the state of the min max button
+        /// </summary>
         public void RefreshMaximizeRestoreButton()
         {
             if (mainWindow != null && mainWindow.WindowState == WindowState.Maximized)
@@ -56,6 +68,10 @@ namespace ShipWorks.Installer.Controls
             }
         }
 
+        /// <summary>
+        /// Gets the dimension of the screen the attached window is 
+        /// currently displayed on
+        /// </summary>
         private System.Windows.Forms.Screen GetScreenDims(Window window)
         {
             WindowInteropHelper windowInteropHelper = new WindowInteropHelper(window);

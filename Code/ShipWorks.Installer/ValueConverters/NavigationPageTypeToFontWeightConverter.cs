@@ -14,11 +14,8 @@ namespace ShipWorks.Installer.ValueConverters
         /// <summary>
         /// Convert from NavigationPageType to FontWeight
         /// </summary>
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var w = (NavigationPageType)value == (NavigationPageType)parameter ? FontWeights.Bold : FontWeights.Normal;
-            return w;
-        }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) =>
+                      (NavigationPageType) value == (NavigationPageType) parameter ? FontWeights.Bold : FontWeights.Normal;
 
         /// <summary>
         /// Convert from NavigationPageType to FontWeight
