@@ -289,7 +289,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             }
 
             var paperSources = new ObservableCollection<KeyValuePair<int, string>>();
-            foreach (var source in printerSettings.PaperSources.Cast<PaperSource>().ToList())
+            foreach (var source in printerSettings.PaperSources.Cast<System.Drawing.Printing.PaperSource>().ToList())
             {
                 paperSources.Add(new KeyValuePair<int, string>(source.RawKind, source.SourceName));
             }
