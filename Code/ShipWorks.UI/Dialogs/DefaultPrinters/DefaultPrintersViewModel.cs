@@ -254,7 +254,9 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
                             computerSettings.PaperSource = SelectedStandardPaperSource.Key;
                         }
 
-                        await adapter.SaveEntityAsync(computerSettings).ConfigureAwait(true);
+                        template.IsDirty = true;
+
+                        await adapter.SaveAndRefetchAsync(template).ConfigureAwait(true);
                     }
 
                     adapter.Commit();
