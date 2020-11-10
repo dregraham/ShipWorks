@@ -36,6 +36,9 @@ namespace ShipWorks.UI.Dialogs.QuickStart
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Whether or not this dialog should show
+        /// </summary>
         public bool ShouldShow => storeManager.GetEnabledStores().All(x => x.StoreTypeCode == StoreTypeCode.Manual) ||
                                   templateManager.AllTemplates.All(
                                       x => string.IsNullOrWhiteSpace(
