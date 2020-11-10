@@ -97,10 +97,13 @@ namespace ShipWorks.Installer.ViewModels
         }
 
         /// <summary>
-        /// Reference to the main window
+        /// Whether or not the window is in the process of closing
         /// </summary>
         public bool IsClosing { get; set; }
 
+        /// <summary>
+        /// Exposes the navigation service so we can bind to its CurrentPageKey
+        /// </summary>
         public INavigationService<NavigationPageType> NavigationService => navigationService;
 
         /// <summary>
