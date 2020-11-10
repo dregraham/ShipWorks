@@ -61,11 +61,11 @@ namespace ShipWorks.Installer.Sql
                 return;
             }
 
-            this.serverInstance = warehouse.Details.SQLConfig.Server.Instance;
-            this.databaseName = warehouse.Details.SQLConfig.Server.Database;
-            this.username = warehouse.Details.SQLConfig.Credentials.Username;
-            this.password = warehouse.Details.SQLConfig.Credentials.Password;
-            this.windowsAuth = warehouse.Details.SQLConfig.Credentials.WindowsAuth;
+            this.serverInstance = warehouse.Details.SQLConfig.SQLSession.Server.Instance;
+            this.databaseName = warehouse.Details.SQLConfig.SQLSession.Server.Database;
+            this.username = warehouse.Details.SQLConfig.SQLSession.Credentials.Username;
+            this.password = warehouse.Details.SQLConfig.SQLSession.Credentials.Password;
+            this.windowsAuth = warehouse.Details.SQLConfig.SQLSession.Credentials.WindowsAuth;
         }
 
         /// <summary>

@@ -69,11 +69,19 @@ namespace ShipWorks.Installer.Api.DTO
         /// The SQL configuration for this warehouse
         /// </summary>
         [JsonProperty("sqlConfig")]
-        public SQLSession SQLConfig { get; set; }
+        public SQLConfig SQLConfig { get; set; }
     }
 
     /// <summary>
     /// A warehouse's SQL configuration
+    /// </summary>
+    public class SQLConfig
+    {
+        public SQLSession SQLSession { get; set; }
+    }
+
+    /// <summary>
+    /// The SQL Session information for a warehouse
     /// </summary>
     public class SQLSession
     {
