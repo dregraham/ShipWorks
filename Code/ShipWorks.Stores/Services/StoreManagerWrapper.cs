@@ -2,19 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Autofac;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
-using RestSharp;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.ApplicationCore.Licensing.Warehouse;
-using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
-using ShipWorks.Common.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Editions;
-using ShipWorks.Stores.Warehouse;
 using ShipWorks.Users.Security;
 
 namespace ShipWorks.Stores.Services
@@ -107,5 +99,15 @@ namespace ShipWorks.Stores.Services
         /// </summary>
         public IEnumerable<StoreType> GetUniqueStoreTypes() =>
             StoreManager.GetUniqueStoreTypes();
+
+        /// <summary>
+        /// Gets the number of setup stores in the database.
+        /// </summary>
+        public int GetDatabaseStoreCount() => StoreManager.GetDatabaseStoreCount();
+
+        /// <summary>
+        /// Save the specified store, Translating known exceptions
+        /// </summary>
+        public async Task SaveStoreAsync(StoreEntity store) => await StoreManager.SaveStoreAsync(store);
     }
 }

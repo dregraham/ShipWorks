@@ -22,17 +22,21 @@ namespace ShipWorks.Stores.Platforms.Manual
         private readonly IWarehouseSettingsApi warehouseSettingsApi;
         private readonly IConfigurationData configurationData;
         private readonly ILicenseService licenseService;
+        private readonly ISqlAdapterFactory sqlAdapterFactory;
+        private readonly IStoreManager storeManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public CreateDefaultStoreActivity(IStoreTypeManager storeTypeManager, IWarehouseSettingsApi warehouseSettingsApi, 
-            IConfigurationData configurationData, ILicenseService licenseService)
+            IConfigurationData configurationData, ILicenseService licenseService, ISqlAdapterFactory sqlAdapterFactory, IStoreManager storeManager)
         {
             this.storeTypeManager = storeTypeManager;
             this.warehouseSettingsApi = warehouseSettingsApi;
             this.configurationData = configurationData;
             this.licenseService = licenseService;
+            this.sqlAdapterFactory = sqlAdapterFactory;
+            this.storeManager = storeManager;
         }
 
         /// <summary>
@@ -73,22 +77,20 @@ namespace ShipWorks.Stores.Platforms.Manual
                     address.Website = "";
 
                     // Save the store
-                    await StoreManager.SaveStoreAsync(store);
+                    await storeManager.SaveStoreAsync(store).ConfigureAwait(false);
                     store.CompleteSetup();
 
-                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
-                    {
-                        // Create the default presets
-                        CreateDefaultStatusPreset(store, StatusPresetTarget.Order, sqlAdapter);
-                        CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, sqlAdapter);
+                    var sqlAdapter = sqlAdapterFactory.Create();
 
-                        // Create the default filters
-                        StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                        storeFilterRepository.Save(true);
+                    // Create the default presets
+                    CreateDefaultStatusPreset(store, StatusPresetTarget.Order, sqlAdapter);
+                    CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, sqlAdapter);
 
-                        StoreManager.SaveStore(store, sqlAdapter);
-                        sqlAdapter.Commit();
-                    }
+                    // Create the default filters
+                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+                    storeFilterRepository.Save(true);
+
+                    storeManager.SaveStore(store);
                 }
             }
         }
