@@ -19,17 +19,17 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Stores previous page history
         /// </summary>
-        private readonly List<string> historic;
+        private readonly List<T> historic;
 
         /// <summary>
         /// Stores the current pages
         /// </summary>
-        private readonly Dictionary<string, Uri> pagesByKey;
+        private readonly Dictionary<T, Uri> pagesByKey;
 
         /// <summary>
         /// Backing variable for <see cref="CurrentPageKey"/>
         /// </summary>
-        private string currentPageKey;
+        private T currentPageKey;
 
         /// <summary>
         /// Controls navigation between the pages of the setup wizard
@@ -37,8 +37,8 @@ namespace ShipWorks.Installer.Services
         /// <param name="frameName"></param>
         public NavigationService(string frameName = "MainFrame")
         {
-            pagesByKey = new Dictionary<string, Uri>();
-            historic = new List<string>();
+            pagesByKey = new Dictionary<T, Uri>();
+            historic = new List<T>();
             this.frameName = frameName;
 
             ConfigurePages();
@@ -49,12 +49,12 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// Contains the key to the current page. Uses INPC.
         /// </summary>
-        public string CurrentPageKey
+        public T CurrentPageKey
         {
             get { return currentPageKey; }
             private set
             {
-                if (currentPageKey != value)
+                if (!EqualityComparer<T>.Default.Equals(currentPageKey, value))
                 {
                     currentPageKey = value;
                     NotifyPropertyChanged();
@@ -74,9 +74,9 @@ namespace ShipWorks.Installer.Services
         /// <param name="pagePath">
         /// Assumes Views are in ../Views folder and follow MVVM Naming convention Name.xaml when null.
         /// </param>
-        public void ConfigurePage(string pageKey)
+        public void ConfigurePage(T pageKey)
         {
-            var pagePath = new Uri(String.Join("", new string[] { "../Views/", pageKey, ".xaml" }), UriKind.Relative);
+            var pagePath = new Uri(String.Join("", new string[] { "../Views/", Enum.GetName(typeof(T), pageKey), ".xaml" }), UriKind.Relative);
 
             lock (pagesByKey)
             {
@@ -97,9 +97,9 @@ namespace ShipWorks.Installer.Services
         /// </summary>
         public void ConfigurePages()
         {
-            foreach (var value in Enum.GetNames(typeof(T)))
+            foreach (var value in Enum.GetValues(typeof(T)))
             {
-                ConfigurePage(value);
+                ConfigurePage((T)value);
             }
         }
 
@@ -111,7 +111,12 @@ namespace ShipWorks.Installer.Services
             if (historic.Count > 1)
             {
                 historic.RemoveAt(historic.Count - 1);
-                NavigateTo(historic.Last(), null);
+                //Stash the new last page then remove it since
+                //Navigate to will add it again so we don't get duplicate
+                //pages in historic
+                var lastPage = historic.Last();
+                historic.RemoveAt(historic.Count - 1);
+                NavigateTo(lastPage);
             }
         }
 
@@ -121,26 +126,17 @@ namespace ShipWorks.Installer.Services
         /// <param name="navigationPage"></param>
         public void NavigateTo(T navigationPage)
         {
-            NavigateTo(navigationPage.ToString(), null);
+            NavigateTo(navigationPage, null);
         }
-
-        /// <summary>
-        /// Navigate to page using page name
-        /// </summary>
-        /// <param name="pageKey"></param>
-        public void NavigateTo(string pageKey)
-        {
-            NavigateTo(pageKey, null);
-        }
-
+ 
         /// <summary>
         /// Navigate to page using page name, passing a parameter
         /// </summary>
         /// <param name="pageKey"></param>
         /// <param name="parameter"></param>
-        public void NavigateTo(string pageKey, object parameter)
+        public void NavigateTo(T pageKey, object parameter)
         {
-            if (pageKey != CurrentPageKey)
+            if (!EqualityComparer<T>.Default.Equals(CurrentPageKey, pageKey))
             {
                 lock (pagesByKey)
                 {
@@ -159,21 +155,21 @@ namespace ShipWorks.Installer.Services
                     CurrentPageKey = pageKey;
                 }
 
-                OnNavigated(new NavigatedEventArgs(CurrentPageKey));
+                OnNavigated(new NavigatedEventArgs<T>(CurrentPageKey));
             }
         }
 
         /// <summary>
         /// Event that's triggered on navigation
         /// </summary>
-        public event EventHandler<NavigatedEventArgs> Navigated;
+        public event EventHandler<NavigatedEventArgs<T>> Navigated;
 
         /// <summary>
         /// Invoke the navigated event
         /// </summary>
-        private void OnNavigated(NavigatedEventArgs e)
+        private void OnNavigated(NavigatedEventArgs<T> e)
         {
-            EventHandler<NavigatedEventArgs> handler = Navigated;
+            EventHandler<NavigatedEventArgs<T>> handler = Navigated;
             handler?.Invoke(this, e);
         }
 
@@ -225,12 +221,12 @@ namespace ShipWorks.Installer.Services
     /// <summary>
     /// Event args for the Navigated event
     /// </summary>
-    public class NavigatedEventArgs : EventArgs
+    public class NavigatedEventArgs<T> : EventArgs
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public NavigatedEventArgs(string page)
+        public NavigatedEventArgs(T page)
         {
             NavigatedPage = page;
         }
@@ -238,6 +234,6 @@ namespace ShipWorks.Installer.Services
         /// <summary>
         /// The page we navigated to
         /// </summary>
-        public string NavigatedPage { get; }
+        public T NavigatedPage { get; }
     }
 }

@@ -109,7 +109,6 @@ namespace ShipWorks.Installer.ViewModels
             mainViewModel.InstallSettings.TangoPassword = Password;
 
             mainViewModel.LoginIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
@@ -136,7 +135,6 @@ namespace ShipWorks.Installer.ViewModels
         {
             base.BackExecute();
             mainViewModel.InstallPathIcon = EFontAwesomeIcon.None;
-            mainViewModel.CurrentPage = NavigationPageType.InstallPath;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace ShipWorks.Installer.Views
                 App.ServiceProvider.GetService(typeof(INavigationService<NavigationPageType>)) as
                     INavigationService<NavigationPageType>;
 
-            navService.NavigateTo("SystemCheck");
+            navService.NavigateTo(NavigationPageType.SystemCheck);
         }
 
         /// <summary>

@@ -127,9 +127,9 @@ namespace ShipWorks.Installer.ViewModels
         /// <summary>
         /// Event handler when navigating to this page
         /// </summary>
-        private void OnNavigated(object sender, NavigatedEventArgs e)
+        private void OnNavigated(object sender, NavigatedEventArgs<NavigationPageType> e)
         {
-            if (e.NavigatedPage == NavigationPageType.LocationConfig.ToString())
+            if (e.NavigatedPage == NavigationPageType.LocationConfig)
             {
                 _ = GetWarehouseList();
             }
@@ -157,7 +157,6 @@ namespace ShipWorks.Installer.ViewModels
             {
                 mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
                 NextPage = NavigationPageType.InstallShipworks;
-                mainViewModel.CurrentPage = NextPage;
             }
 
             mainViewModel.InstallSettings.Warehouse = SelectedWarehouse;
@@ -179,7 +178,6 @@ namespace ShipWorks.Installer.ViewModels
         {
             base.BackExecute();
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.None;
-            mainViewModel.CurrentPage = NavigationPageType.Login;
         }
     }
 }

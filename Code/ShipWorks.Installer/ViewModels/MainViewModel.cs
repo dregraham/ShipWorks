@@ -36,7 +36,6 @@ namespace ShipWorks.Installer.ViewModels
         private EFontAwesomeIcon useShipWorksIcon = EFontAwesomeIcon.None;
         private InstallSettings installSettings;
         private NavBarState navBarState;
-        private NavigationPageType currentPage;
 
         /// <summary>
         /// Constructor
@@ -53,7 +52,6 @@ namespace ShipWorks.Installer.ViewModels
             HelpCommand = new RelayCommand(OpenHelpPage);
             OpenLogFolderCommand = new RelayCommand(OpenLogFolder);
             innoSetupService.DownloadInstaller(InstallSettings);
-            CurrentPage = NavigationPageType.SystemCheck;
         }
 
         /// <summary>
@@ -73,15 +71,6 @@ namespace ShipWorks.Installer.ViewModels
         {
             get => installSettings;
             set => Set(ref installSettings, value);
-        }
-
-        /// <summary>
-        /// The current page
-        /// </summary>
-        public NavigationPageType CurrentPage
-        {
-            get => currentPage;
-            set => Set(ref currentPage, value);
         }
 
         /// <summary>
@@ -111,6 +100,8 @@ namespace ShipWorks.Installer.ViewModels
         /// Reference to the main window
         /// </summary>
         public bool IsClosing { get; set; }
+
+        public INavigationService<NavigationPageType> NavigationService => navigationService;
 
         /// <summary>
         /// Eula icon
@@ -234,9 +225,9 @@ namespace ShipWorks.Installer.ViewModels
             IsClosing = needsWindowClose;
 
             if ((installSettings.Error == InstallError.None &&
-                navigationService.CurrentPageKey == NavigationPageType.UseShipWorks.ToString()) ||
+                navigationService.CurrentPageKey == NavigationPageType.UseShipWorks) ||
                 (!installSettings.NeedsRollback &&
-                navigationService.CurrentPageKey == NavigationPageType.Warning.ToString()))
+                navigationService.CurrentPageKey == NavigationPageType.Warning))
             {
                 return true;
             }

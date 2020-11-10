@@ -5,12 +5,17 @@ namespace ShipWorks.Installer.Services
     /// <summary>
     /// A navigation service built on top of MVVMLight's implementation that is more friendly toward WPF
     /// </summary>
-    public interface INavigationService<T> : GalaSoft.MvvmLight.Views.INavigationService
+    public interface INavigationService<T>
     {
         /// <summary>
         /// Optional parameter
         /// </summary>
         object Parameter { get; }
+
+        /// <summary>
+        /// Contains the key to the current page. Uses INPC.
+        /// </summary>
+        T CurrentPageKey { get; }
 
         /// <summary>
         /// Instructs navigation service to display a new page corresponding to the given key,
@@ -20,8 +25,13 @@ namespace ShipWorks.Installer.Services
         void NavigateTo(T navigationPage);
 
         /// <summary>
+        /// Add or alter a page
+        /// </summary>
+        void GoBack();
+
+        /// <summary>
         /// Event that's triggered on navigation
         /// </summary>
-        event EventHandler<NavigatedEventArgs> Navigated;
+        event EventHandler<NavigatedEventArgs<T>> Navigated;
     }
 }

@@ -57,17 +57,17 @@
                             </StackPanel.Resources>
                             <c:NavigationOption Text="System Check" 
                                                 Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.SystemCheckIcon}" 
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.SystemCheck}}"/>
                             <c:NavigationOption Text="EULA" 
                                                 Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.EulaIcon}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.Eula}}"/>
                             <c:NavigationOption Text="Install Path" 
                                                 Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.InstallPathIcon}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.InstallPath}}"/>
                             <c:NavigationOption Text="Upgrade ShipWorks" 
@@ -75,7 +75,7 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.Upgrade}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey,
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.UpgradeShipWorks}}"/>
                             <c:NavigationOption Text="Login" 
@@ -83,7 +83,7 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey,
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.Login}}"/>
                             <c:NavigationOption Text="Installation" 
@@ -91,7 +91,7 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.Installation}}"/>
                             <c:NavigationOption Text="- Location Configuration" Margin="20,0,0,0" 
@@ -99,7 +99,7 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.LocationConfig}}"/>
                             <c:NavigationOption Text="- Install ShipWorks" Margin="20,0,0,0" 
@@ -107,7 +107,7 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey,
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.InstallShipworks}}"/>
                             <c:NavigationOption Text="- Install Database" Margin="20,0,0,0" 
@@ -115,12 +115,12 @@
                                                 Visibility="{Binding Path=NavBarState, 
                                                              Converter={StaticResource NavBarVisibilityConverter}, 
                                                              ConverterParameter={x:Static enums:NavBarState.NewInstall}}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey, 
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.InstallDatabase}}"/>
                             <c:NavigationOption Text="Use ShipWorks" 
                                                 Icon="{Binding Source={StaticResource Locator}, Path=MainViewModel.UseShipWorksIcon}"
-                                                FontWeight="{Binding CurrentPage, 
+                                                FontWeight="{Binding NavigationService.CurrentPageKey,
                                                              Converter={StaticResource PageToFontWeight}, 
                                                              ConverterParameter={x:Static enums:NavigationPageType.UseShipWorks}}"/>
                         </StackPanel>

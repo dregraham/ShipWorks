@@ -50,7 +50,6 @@ namespace ShipWorks.Installer.ViewModels
                 mainViewModel.InstallShipworksIcon = EFontAwesomeIcon.Regular_CheckCircle;
                 mainViewModel.InstallSettings.NeedsRollback = true;
             }
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 

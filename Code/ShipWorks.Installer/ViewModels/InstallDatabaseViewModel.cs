@@ -34,14 +34,12 @@ namespace ShipWorks.Installer.ViewModels
                     if (exitCode == 0)
                     {
                         mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Regular_CheckCircle;
-                        mainViewModel.CurrentPage = NavigationPageType.UseShipWorks;
                         navigationService.NavigateTo(NextPage);
                         return;
                     }
 
                     mainViewModel.InstallDatabaseIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
                     mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-                    mainViewModel.CurrentPage = NavigationPageType.UseShipWorks;
                     mainViewModel.InstallSettings.Error = InstallError.Database;
                     mainViewModel.InstallSettings.NeedsRollback = false;
                     navigationService.NavigateTo(NavigationPageType.Warning);

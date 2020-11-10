@@ -209,7 +209,6 @@ namespace ShipWorks.Installer.ViewModels
             mainViewModel.InstallSettings.ConnectionString = SelectedDatabase.GetConnectionString();
             log.Info(mainViewModel.InstallSettings.ConnectionString);
             mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 

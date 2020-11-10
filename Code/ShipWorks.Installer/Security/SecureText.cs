@@ -94,14 +94,9 @@ namespace ShipWorks.Installer.Security
         /// </summary>
         public static string Encrypt(string value, string salt)
         {
-            if (value == null)
+            if (value == null || salt == null)
             {
-                throw new ArgumentNullException("value");
-            }
-
-            if (salt == null)
-            {
-                throw new ArgumentNullException("salt");
+                return value;
             }
 
             // Create crypto provider

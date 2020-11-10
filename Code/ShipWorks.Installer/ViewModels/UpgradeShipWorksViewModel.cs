@@ -48,7 +48,6 @@ namespace ShipWorks.Installer.ViewModels
             {
                 mainViewModel.UpgradeShipWorksIcon = EFontAwesomeIcon.Regular_CheckCircle;
             }
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 

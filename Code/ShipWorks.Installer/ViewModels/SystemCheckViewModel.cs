@@ -62,7 +62,6 @@ namespace ShipWorks.Installer.ViewModels
         private void MoveNext()
         {
             mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
@@ -73,7 +72,6 @@ namespace ShipWorks.Installer.ViewModels
         {
             mainViewModel.SystemCheckIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
             mainViewModel.UseShipWorksIcon = EFontAwesomeIcon.Solid_ExclamationCircle;
-            mainViewModel.CurrentPage = NavigationPageType.UseShipWorks;
             navigationService.NavigateTo(NavigationPageType.Warning);
         }
 

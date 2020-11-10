@@ -25,7 +25,6 @@ namespace ShipWorks.Installer.ViewModels
         protected override void NextExecute()
         {
             mainViewModel.EulaIcon = EFontAwesomeIcon.Regular_CheckCircle;
-            mainViewModel.CurrentPage = NextPage;
             navigationService.NavigateTo(NextPage);
         }
 
