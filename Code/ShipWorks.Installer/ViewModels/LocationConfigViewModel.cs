@@ -68,7 +68,7 @@ namespace ShipWorks.Installer.ViewModels
             {
                 Set(ref selectedWarehouse, value);
 
-                if (value?.ID != null)
+                if (value?.Details?.SQLConfig != null)
                 {
                     OwnDbChecked = false;
                 }
