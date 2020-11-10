@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
@@ -10,8 +9,6 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
-using ShipWorks.Warehouse.Configuration;
 
 namespace ShipWorks.Stores.Platforms.Manual
 {
