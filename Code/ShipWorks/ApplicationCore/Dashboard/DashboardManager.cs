@@ -8,10 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
-using Autofac.Features.OwnedInstances;
-using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Dashboard.Content;
@@ -486,24 +483,30 @@ namespace ShipWorks.ApplicationCore.Dashboard
         {
             const string identifier = "QuickStart";
             var existingDashboardItem = dashboardItems.OfType<DashboardLocalMessageItem>().SingleOrDefault(i => i.Identifier == identifier);
-            var shouldShow = !StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled);
-            if (existingDashboardItem == null && shouldShow)
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                var quickStart =
-                    new DashboardLocalMessageItem(identifier,
-                        DashboardMessageImageType.LightBulb,
-                        "Quick Start",
-                        "Finish setting up ShipWorks.",
-                        new DashboardActionMethod("[link]Quick Start[/link]", ShowQuickStart))
-                    { ShowTime = false };
+                IQuickStart quickStart = lifetimeScope.Resolve<IQuickStart>();
+                bool shouldShow = quickStart.ShouldShow;
 
-                AddDashboardItem(quickStart);
-                quickStart.DashboardBar.CanUserDismiss = false;
-            }
-            
-            if(existingDashboardItem != null && !shouldShow)
-            {
-                RemoveDashboardItem(existingDashboardItem);
+                if (existingDashboardItem == null && shouldShow)
+                {
+                    var quickStartDashboardItem =
+                        new DashboardLocalMessageItem(identifier,
+                                                      DashboardMessageImageType.LightBulb,
+                                                      "Quick Start",
+                                                      "Finish setting up ShipWorks.",
+                                                      new DashboardActionMethod(
+                                                          "[link]Quick Start[/link]", ShowQuickStart))
+                            {ShowTime = false};
+
+                    AddDashboardItem(quickStartDashboardItem);
+                    quickStartDashboardItem.DashboardBar.CanUserDismiss = false;
+                }
+
+                if (existingDashboardItem != null && !shouldShow)
+                {
+                    RemoveDashboardItem(existingDashboardItem);
+                }
             }
         }
 

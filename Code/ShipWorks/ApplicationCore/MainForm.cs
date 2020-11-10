@@ -811,9 +811,12 @@ namespace ShipWorks
                 return;
             }
 
-            if (!StoreManager.GetAllStoresReadOnly().Any(x => x.StoreTypeCode != StoreTypeCode.Manual && x.Enabled))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                QueueLogonAction(ShowQuickStart);
+                if (lifetimeScope.Resolve<IQuickStart>().ShouldShow)
+                {
+                    QueueLogonAction(ShowQuickStart);
+                }
             }
 
             // If there are no stores, we need to make sure one is added before continuing

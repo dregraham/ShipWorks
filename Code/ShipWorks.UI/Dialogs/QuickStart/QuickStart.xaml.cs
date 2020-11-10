@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Autofac;
@@ -7,7 +8,9 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
+using ShipWorks.Templates;
 using ShipWorks.Templates.Management;
 using ShipWorks.UI.Dialogs.DefaultPrinters;
 
@@ -19,15 +22,24 @@ namespace ShipWorks.UI.Dialogs.QuickStart
     public partial class QuickStart : IQuickStart
     {
         private readonly IWin32Window owner;
+        private readonly IStoreManager storeManager;
+        private readonly ITemplateManager templateManager;
 
         /// <summary>
         /// ctor
         /// </summary>
-        public QuickStart(IWin32Window owner) : base(owner, null, false)
+        public QuickStart(IWin32Window owner, IStoreManager storeManager, ITemplateManager templateManager) : base(owner, null, false)
         {
             this.owner = owner;
+            this.storeManager = storeManager;
+            this.templateManager = templateManager;
             InitializeComponent();
         }
+
+        public bool ShouldShow => storeManager.GetEnabledStores().All(x => x.StoreTypeCode == StoreTypeCode.Manual) ||
+                                  templateManager.AllTemplates.All(
+                                      x => string.IsNullOrWhiteSpace(
+                                          templateManager.GetComputerSettings(x).PrinterName));
 
         /// <summary>
         /// Open the add store wizard
