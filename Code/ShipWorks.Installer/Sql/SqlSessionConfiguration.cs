@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Threading;
 using log4net;
+using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Security;
 
 namespace ShipWorks.Installer.Sql
@@ -48,6 +49,23 @@ namespace ShipWorks.Installer.Sql
         public SqlSessionConfiguration()
         {
 
+        }
+
+        /// <summary>
+        /// Create a SqlSessionConfiguration from a Warehouse
+        /// </summary>
+        public SqlSessionConfiguration(Warehouse warehouse)
+        {
+            if (warehouse?.Details?.SQLConfig == null)
+            {
+                return;
+            }
+
+            this.serverInstance = warehouse.Details.SQLConfig.Server.Instance;
+            this.databaseName = warehouse.Details.SQLConfig.Server.Database;
+            this.username = warehouse.Details.SQLConfig.Credentials.Username;
+            this.password = warehouse.Details.SQLConfig.Credentials.Password;
+            this.windowsAuth = warehouse.Details.SQLConfig.Credentials.WindowsAuth;
         }
 
         /// <summary>

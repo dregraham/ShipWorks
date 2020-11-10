@@ -13,6 +13,7 @@ using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
+using ShipWorks.Installer.Sql;
 
 namespace ShipWorks.Installer.ViewModels
 {
@@ -155,6 +156,11 @@ namespace ShipWorks.Installer.ViewModels
             }
             else
             {
+                if (SelectedWarehouse?.Details?.SQLConfig != null)
+                {
+                    mainViewModel.InstallSettings.ConnectionString = new SqlSessionConfiguration(SelectedWarehouse).GetConnectionString();
+                }
+
                 mainViewModel.LocationConfigIcon = EFontAwesomeIcon.Regular_CheckCircle;
                 NextPage = NavigationPageType.InstallShipworks;
             }
