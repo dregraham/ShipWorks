@@ -12,6 +12,9 @@ using ShipWorks.Data.Model.EntityInterfaces;
 
 namespace ShipWorks.Stores.Platforms.Manual
 {
+    /// <summary>
+    /// Activity for creating a default manual store
+    /// </summary>
     [Order(typeof(IInitializeForCurrentSession), Order.Unordered)]
     public class CreateDefaultStoreActivity : IInitializeForCurrentSession
     {
