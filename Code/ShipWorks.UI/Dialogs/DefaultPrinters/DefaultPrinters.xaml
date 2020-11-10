@@ -29,7 +29,7 @@
             <Style x:Key="Label" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource FieldLabel}">
                 <Setter Property="Margin" Value="15 0 0 10"/>
             </Style>
-            <Style x:Key="DisableableText" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Label}">
+            <Style x:Key="CanBeDisabled" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Label}">
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Foreground" Value="{StaticResource DisabledTextColor}"/>
@@ -78,7 +78,7 @@
                     Command="{Binding SetStandardAsDefault}"/>
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource DisableableText}"
+                       Style="{StaticResource CanBeDisabled}"
                        IsEnabled="{Binding StandardPaperSourceEnabled}"
                        />
             <ComboBox Grid.Row="2" Grid.Column="1"
@@ -103,7 +103,7 @@
                     Command="{Binding SetThermalAsDefault}"/>
             <TextBlock Grid.Row="6" Grid.Column="0"
                        Text="Source:"
-                       Style="{StaticResource DisableableText}"
+                       Style="{StaticResource CanBeDisabled}"
                        IsEnabled="{Binding ThermalPaperSourceEnabled}"/>
             <ComboBox Grid.Row="6" Grid.Column="1"
                       ItemsSource="{Binding ThermalPaperSources}"
