@@ -27,7 +27,7 @@
                          HorizontalAlignment="Center"
                          Spin="True"
                          SpinDuration="1.5"/>
-            <TextBlock Text="Your database instance can go up to 10GB in size, so you don't need to worry about running our of space any time soon." TextWrapping="Wrap" Margin="0,10"/>
+            <TextBlock Text="Your database instance can go up to 10GB in size, so you don't need to worry about running out of space any time soon." TextWrapping="Wrap" Margin="0,10"/>
             <TextBlock Text="It just Works." Margin="0,10"/>
         </StackPanel>
 </Page>
