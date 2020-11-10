@@ -1402,8 +1402,6 @@
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
-    <Compile Include="Data\Administration\ISetupGuide.cs" />
-    <Compile Include="Data\Administration\ISetupGuideViewModel.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Recovery\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Recovery\ISqlAdapterRetryFactory.cs" />

@@ -285,18 +285,6 @@
     <Compile Include="Dialogs\QuickStart\QuickStart.xaml.cs">
       <DependentUpon>QuickStart.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\SetupGuide\MainOptions.xaml.cs">
-      <DependentUpon>MainOptions.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\SetupGuide\SetupGuide.xaml.cs">
-      <DependentUpon>SetupGuide.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\SetupGuide\SetupGuideSection.cs" />
-    <Compile Include="Dialogs\SetupGuide\SetupGuideViewModel.cs" />
-    <Compile Include="Dialogs\SetupGuide\SectionToControlConverter.cs" />
-    <Compile Include="Dialogs\SetupGuide\ShippingOptions.xaml.cs">
-      <DependentUpon>ShippingOptions.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\UserConditionalNotification\DesignModeUserConditionalNotificationViewModel.cs" />
     <Compile Include="Dialogs\UserConditionalNotification\IUserConditionalNotificationDialog.cs" />
     <Compile Include="Dialogs\UserConditionalNotification\UserConditionalNotificationDialog.xaml.cs">
@@ -460,18 +448,6 @@
     <Page Include="Dialogs\QuickStart\QuickStart.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Dialogs\SetupGuide\MainOptions.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\SetupGuide\SetupGuide.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Dialogs\SetupGuide\ShippingOptions.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\UserConditionalNotification\UserConditionalNotificationDialog.xaml">
       <SubType>Designer</SubType>
