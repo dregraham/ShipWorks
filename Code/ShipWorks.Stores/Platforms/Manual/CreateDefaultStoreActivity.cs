@@ -20,8 +20,6 @@ namespace ShipWorks.Stores.Platforms.Manual
     {
         private readonly IStoreTypeManager storeTypeManager;
         private readonly IWarehouseSettingsApi warehouseSettingsApi;
-        private readonly IHubCarrierConfigurator carrierConfigurator;
-        private readonly IHubConfigurationWebClient webClient;
         private readonly IConfigurationData configurationData;
         private readonly ILicenseService licenseService;
 
@@ -29,12 +27,10 @@ namespace ShipWorks.Stores.Platforms.Manual
         /// Constructor
         /// </summary>
         public CreateDefaultStoreActivity(IStoreTypeManager storeTypeManager, IWarehouseSettingsApi warehouseSettingsApi, 
-            IHubCarrierConfigurator carrierConfigurator, IHubConfigurationWebClient webClient, IConfigurationData configurationData, ILicenseService licenseService)
+            IConfigurationData configurationData, ILicenseService licenseService)
         {
             this.storeTypeManager = storeTypeManager;
             this.warehouseSettingsApi = warehouseSettingsApi;
-            this.carrierConfigurator = carrierConfigurator;
-            this.webClient = webClient;
             this.configurationData = configurationData;
             this.licenseService = licenseService;
         }
