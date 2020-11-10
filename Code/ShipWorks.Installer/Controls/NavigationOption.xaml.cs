@@ -60,6 +60,10 @@ namespace ShipWorks.Installer.Controls
             {
                 control.CurrentIcon.Foreground = Brushes.Red;
             }
+            else if (newIcon == EFontAwesomeIcon.None)
+            {
+                control.CurrentIcon.Foreground = null;
+            }
             else
             {
                 control.CurrentIcon.Foreground = Brushes.Green;
