@@ -46,7 +46,7 @@ namespace ShipWorks.Stores.Platforms.Manual
         {
             IConfigurationEntity configuration = configurationData.FetchReadOnly();
 
-            if (StoreManager.GetDatabaseStoreCount() == 0 && licenseService.IsHub && !string.IsNullOrEmpty(configuration.WarehouseID))
+            if (storeManager.GetDatabaseStoreCount() == 0 && licenseService.IsHub && !string.IsNullOrEmpty(configuration.WarehouseID))
             {
                 StoreType storeType = storeTypeManager.GetType(StoreTypeCode.Manual);
                 StoreEntity store = storeType.CreateStoreInstance();
