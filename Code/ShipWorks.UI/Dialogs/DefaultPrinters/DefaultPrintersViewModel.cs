@@ -44,6 +44,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         private ObservableCollection<KeyValuePair<int, string>> standardPaperSources;
         private readonly Lazy<IPrinterSetting> defaultPrinter;
         private readonly ILog log;
+        private readonly KeyValuePair<string, string> initialSelectedPrinter =
+            new KeyValuePair<string, string>("(Select a Printer)", "(Select a Printer)");
 
         /// <summary>
         /// Constructor
@@ -65,8 +67,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
             this.printUtility = printUtility;
             this.messageHelper = messageHelper;
             LoadPrinters();
-            SelectedThermalPrinter = default;
-            SelectedStandardPrinter = default;
+            SelectedThermalPrinter = initialSelectedPrinter;
+            SelectedStandardPrinter = initialSelectedPrinter;
             defaultPrinter = new Lazy<IPrinterSetting>(printUtility.GetDefaultPrinterSettings);
             log = logFactory(typeof(DefaultPrintersViewModel));
         }
@@ -247,13 +249,19 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
 
                         if (template.Type == (int) TemplateType.Thermal)
                         {
-                            computerSettings.PrinterName = SelectedThermalPrinter.Key;
-                            computerSettings.PaperSource = SelectedThermalPaperSource.Key;
+                            if (selectedThermalPrinter.Key != initialSelectedPrinter.Key)
+                            {
+                                computerSettings.PrinterName = SelectedThermalPrinter.Key;
+                                computerSettings.PaperSource = SelectedThermalPaperSource.Key;
+                            }
                         }
                         else
                         {
-                            computerSettings.PrinterName = SelectedStandardPrinter.Key;
-                            computerSettings.PaperSource = SelectedStandardPaperSource.Key;
+                            if (selectedStandardPrinter.Key != initialSelectedPrinter.Key)
+                            {
+                                computerSettings.PrinterName = SelectedStandardPrinter.Key;
+                                computerSettings.PaperSource = SelectedStandardPaperSource.Key;
+                            }
                         }
 
                         template.IsDirty = true;
@@ -281,7 +289,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// </summary>
         private ObservableCollection<KeyValuePair<int, string>> GetPaperSources(string printerName)
         {
-            if (string.IsNullOrWhiteSpace(printerName))
+            if (printerName == initialSelectedPrinter.Key)
             {
                 return new ObservableCollection<KeyValuePair<int, string>>() { new KeyValuePair<int, string>((int) PaperSourceKind.AutomaticFeed, "") };
             }
@@ -308,7 +316,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// </summary>
         private void LoadPrinters()
         {
-            printers.Add(new KeyValuePair<string, string>(default, "(Select a Printer)"));
+            printers.Add(initialSelectedPrinter);
             foreach (var printer in printUtility.InstalledPrinters)
             {
                 printers.Add(new KeyValuePair<string, string>(printer, printer));
