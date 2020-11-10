@@ -68,7 +68,54 @@ namespace ShipWorks.Installer.Api.DTO
         /// <summary>
         /// The SQL configuration for this warehouse
         /// </summary>
-        [JsonProperty("sqlConfig")]
-        public string SQLConfig { get; set; }
+        [JsonProperty("sqlSession")]
+        public SQLSession SQLSession { get; set; }
+    }
+
+    /// <summary>
+    /// A warehouse's SQL configuration
+    /// </summary>
+    public class SQLSession
+    {
+        public Server Server { get; set; }
+
+        public Credentials Credentials { get; set; }
+    }
+
+    /// <summary>
+    /// Server information for a SQL Session
+    /// </summary>
+    public class Server
+    {
+        /// <summary>
+        /// The instance name
+        /// </summary>
+        public string Instance { get; set; }
+
+        /// <summary>
+        /// The database name
+        /// </summary>
+        public string Database { get; set; }
+    }
+
+    /// <summary>
+    /// Credentials for a SQL Session
+    /// </summary>
+    public class Credentials
+    {
+        /// <summary>
+        /// The username
+        /// </summary>
+        public string Username { get; set; }
+
+        /// <summary>
+        /// The password
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
+        /// Whether or not to use Windows Auth
+        /// </summary>
+        public bool WindowsAuth { get; set; }
     }
 }
