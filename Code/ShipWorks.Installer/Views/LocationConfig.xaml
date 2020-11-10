@@ -37,7 +37,7 @@
             </Border>
             <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}" IsChecked="{Binding OwnDbChecked, Mode=TwoWay}" Margin="10,10,0,0"
                 IsEnabled="{Binding Converter={StaticResource WarehouseTypeToBooleanConverter}, ElementName=WarehouseSelection, Path=SelectedItem}">
-                <Label VerticalAlignment="Center" Content="Manually configure SQL" Margin="0,1,0,0" />
+                <Label VerticalAlignment="Center" Content="Manually select an existing ShipWorks database to connect to" Margin="0,1,0,0" />
             </CheckBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1">

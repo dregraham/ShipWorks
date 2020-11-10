@@ -22,7 +22,7 @@ namespace ShipWorks.Installer.ValueConverters
 
             var warehouse = (Warehouse) value;
 
-            return warehouse.ID == null;
+            return warehouse.Details.SQLConfig == null;
         }
 
         /// <summary>

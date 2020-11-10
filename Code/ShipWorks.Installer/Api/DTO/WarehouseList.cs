@@ -64,5 +64,11 @@ namespace ShipWorks.Installer.Api.DTO
         /// </summary>
         [JsonProperty("shipWorksDatabaseId")]
         public string ShipWorksDatabaseId { get; set; }
+
+        /// <summary>
+        /// The SQL configuration for this warehouse
+        /// </summary>
+        [JsonProperty("sqlConfig")]
+        public string SQLConfig { get; set; }
     }
 }
