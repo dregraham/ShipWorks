@@ -167,7 +167,7 @@ namespace ShipWorks.Installer.Sql
                 string tempDecrypt = Password;
 
                 username = value;
-                password = SecureText.Encrypt(tempDecrypt, username);
+                password = string.IsNullOrWhiteSpace(tempDecrypt) ? tempDecrypt : SecureText.Encrypt(tempDecrypt, username);
 
                 OnConnectionChanged();
             }
@@ -189,7 +189,7 @@ namespace ShipWorks.Installer.Sql
                     throw new InvalidOperationException("Cannot modify the current SqlSessionConfiguration.");
                 }
 
-                password = SecureText.Encrypt(value, username);
+                password = string.IsNullOrWhiteSpace(value) ? value : SecureText.Encrypt(value, username);
                 OnConnectionChanged();
             }
         }
