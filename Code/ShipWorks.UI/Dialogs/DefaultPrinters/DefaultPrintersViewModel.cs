@@ -89,6 +89,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
                 SelectedStandardPrinter = Printers.SingleOrDefault(p => p.Key == defaultPrinter.Value.PrinterName);
                 SelectedStandardPaperSource = StandardPaperSources.SingleOrDefault(s => s.Key == defaultPrinter.Value.PaperSource.RawKind);
             }
+
+            Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
@@ -270,6 +272,8 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
                 log.Error(e);
                 messageHelper.ShowError("An error occured setting the default printer");
             }
+
+            Cursor.Current = Cursors.Default;
         }
 
         /// <summary>
