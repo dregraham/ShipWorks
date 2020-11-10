@@ -9,7 +9,7 @@ namespace ShipWorks.Installer.Enums
     {
         None,
 
-        [Description("You don't meet the minimum system requirements:")]
+        [Description("Your system doesn't meet the minimum system requirements:")]
         SystemCheck,
 
         [Description("There was a problem downloading the ShipWorks installer.")]

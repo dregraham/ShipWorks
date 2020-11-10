@@ -58,19 +58,19 @@ namespace ShipWorks.Installer.ViewModels
 
             if (!systemCheck.CpuMeetsRequirement)
             {
-                message += $"\u2022 {systemCheck.CpuDescription}\n";
+                message += $"\t \u2022 {systemCheck.CpuDescription}\n";
             }
             if (!systemCheck.RamMeetsRequirement)
             {
-                message += $"\u2022 {systemCheck.RamDescription}\n";
+                message += $"\t \u2022 {systemCheck.RamDescription}\n";
             }
             if (!systemCheck.HddMeetsRequirement)
             {
-                message += $"\u2022 {systemCheck.HddDescription}\n";
+                message += $"\t \u2022 {systemCheck.HddDescription}\n";
             }
             if (!systemCheck.OsMeetsRequirement)
             {
-                message += $"\u2022 {systemCheck.OsDescription}\n";
+                message += $"\t \u2022 {systemCheck.OsDescription}\n";
             }
 
             return message;

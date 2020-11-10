@@ -28,6 +28,11 @@ namespace ShipWorks.Installer.ViewModels
             var result = systemCheckService.CheckSystem();
             mainViewModel.InstallSettings.CheckSystemResult = result;
 
+            if (!result.AllRequirementsMet)
+            {
+                mainViewModel.InstallSettings.Error = InstallError.SystemCheck;
+            }
+
             //Wait for a second because this can happen so fast that the screen will flash
             Timer t = new Timer()
             {
