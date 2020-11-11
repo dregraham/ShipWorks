@@ -17,7 +17,7 @@
 
   <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' ">
     <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
-    <Exec Command='$(SignCommand) "%$(PublishDir)ShipWorks.Installer.exe"' />
+    <Exec Command='$(SignCommand) "%$(PublishDir)\ShipWorks.Installer.exe"' />
   </Target>
   
   <ItemGroup>
