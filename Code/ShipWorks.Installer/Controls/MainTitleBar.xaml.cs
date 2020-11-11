@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
 
@@ -9,11 +10,12 @@ namespace ShipWorks.Installer.Controls
     /// </summary>
     public partial class MainTitleBar : UserControl
     {
-        Window mainWindow;
+        private readonly Window mainWindow;
         public MainTitleBar()
         {
             InitializeComponent();
             mainWindow = Application.Current.MainWindow;
+            SetWindowMaxSize();
             RefreshMaximizeRestoreButton();
         }
 
@@ -36,9 +38,7 @@ namespace ShipWorks.Installer.Controls
             }
             else
             {
-                var screen = GetScreenDims(mainWindow);
-                mainWindow.MaxHeight = screen.WorkingArea.Height * .67;
-                mainWindow.MaxWidth = screen.WorkingArea.Width;
+                SetWindowMaxSize();
                 mainWindow.WindowState = WindowState.Maximized;
             }
         }
@@ -69,6 +69,15 @@ namespace ShipWorks.Installer.Controls
         }
 
         /// <summary>
+        /// Sets the MaxSize of the window to the working area of the current screen
+        /// </summary>
+        private void SetWindowMaxSize()
+        {
+            var screen = GetScreenDims(mainWindow);
+            mainWindow.MaxHeight = TransformPixelsToDeviceIndependant(screen.WorkingArea.Height);
+        }
+
+        /// <summary>
         /// Gets the dimension of the screen the attached window is 
         /// currently displayed on
         /// </summary>
@@ -76,6 +85,20 @@ namespace ShipWorks.Installer.Controls
         {
             WindowInteropHelper windowInteropHelper = new WindowInteropHelper(window);
             return System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
+        }
+
+        /// <summary>
+        /// Transforms pixels into device independant units
+        /// </summary>
+        private double TransformPixelsToDeviceIndependant(double pixels)
+        {
+            double deviceIndependant = 0;
+            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromHwnd(IntPtr.Zero))
+            {
+                deviceIndependant = (pixels / (g.DpiX / 96.75));
+            }
+
+            return deviceIndependant;
         }
     }
 }
