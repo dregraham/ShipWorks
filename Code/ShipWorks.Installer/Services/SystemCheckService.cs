@@ -12,6 +12,7 @@ namespace ShipWorks.Installer.Services
     {
         private const int windows2012R2MinVersion = 9600;
         private const long bytesInGigaByte = 1024 * 1024 * 1024;
+        private const long kbInGigaByte = 1024 * 1024;
         private const long minRamInKb = 4194304;
         private const int minSpaceInGb = 20;
         private const int minCpuSpeed = 1500;
@@ -217,11 +218,11 @@ namespace ShipWorks.Installer.Services
 
             if (long.TryParse(totalMemoryText, out var totalMemory))
             {
-                log.Info($"Got total RAM of {totalMemory}Kb, minimum is {minRamInKb}Kb");
+                log.Info($"Got total RAM of {totalMemory / kbInGigaByte}GB, minimum is {minRamInKb / kbInGigaByte}GB");
                 if (totalMemory < minRamInKb)
                 {
                     result.RamMeetsRequirement = false;
-                    result.RamDescription = $"ShipWorks requires at least {minRamInKb}Kb RAM.";
+                    result.RamDescription = $"ShipWorks requires at least {minRamInKb / kbInGigaByte}GB RAM.";
                 }
             }
             else
