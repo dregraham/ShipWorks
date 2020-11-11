@@ -32,7 +32,6 @@ namespace ShipWorks.Installer.Services
             {
                 log.Info("Could not find ShipWorks registry key");
             }
-
         }
 
         /// <summary>

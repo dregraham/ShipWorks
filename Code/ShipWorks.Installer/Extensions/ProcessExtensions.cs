@@ -25,7 +25,13 @@ namespace ShipWorks.Installer.Extensions
         /// </summary>
         public static void OpenFolder(string folderPath)
         {
-            Process.Start(new ProcessStartInfo("explorer", folderPath));
+            var info = new ProcessStartInfo("explorer")
+            {
+                Arguments = folderPath,
+                Verb = "runas"
+            };
+
+            Process.Start(info);
         }
 
         /// <summary>

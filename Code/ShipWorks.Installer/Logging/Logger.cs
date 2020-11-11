@@ -6,6 +6,7 @@ using log4net.Config;
 using log4net.Core;
 using log4net.Layout;
 using log4net.Repository.Hierarchy;
+using ShipWorks.Installer.Extensions;
 
 namespace ShipWorks.Installer.Logging
 {
@@ -23,7 +24,7 @@ namespace ShipWorks.Installer.Logging
         /// </summary>
         static Logger()
         {
-            logFolder = Path.Combine(Path.GetTempPath(), "ShipWorks.Installer");
+            logFolder = PathExtensions.GetTempPath();
             Directory.CreateDirectory(logFolder);
         }
 

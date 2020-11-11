@@ -17,7 +17,7 @@ namespace ShipWorks.Installer.Services
     /// </summary>
     public class InnoSetupService : IInnoSetupService
     {
-        private string innoSetupDownloadPath = $"{Path.GetTempPath()}ShipWorksInstaller.exe";
+        private readonly string innoSetupDownloadPath = PathExtensions.Combine("ShipWorksInstaller.exe");
         private readonly ILog log;
         private readonly WebClientEnvironment webClientEnvironment;
         private readonly IRegistryService registryService;
