@@ -8,7 +8,14 @@
         mc:Ignorable="d"
         SizeToContent="Height"
         Width="1000"
-        Title="Quick Start">
+        Title="Quick Start"
+        >
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Escape" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="Close"/>
+    </Window.CommandBindings>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
