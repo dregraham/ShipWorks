@@ -41,10 +41,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="shipworks.ico"></Resource>
-  </ItemGroup>
-
-  <ItemGroup>
+    <Resource Include="shipworks.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Styles\BlueSteel\Roboto-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
