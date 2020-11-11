@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Autofac.Extras.Moq;
 using Interapptive.Shared.UI;
@@ -10,7 +8,6 @@ using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Templates;
 using ShipWorks.Templates.Printing;
 using ShipWorks.Tests.Shared;
@@ -49,9 +46,9 @@ namespace ShipWorks.UI.Tests.Dialogs.DefaultPrinters
                 .Returns((TemplateEntity e) => e.ComputerSettings.First());
 
             configuredThermal = CreateTemplate("ThermalName", TemplateType.Thermal);
-            unconfiguredThermal = CreateTemplate(default(string), TemplateType.Thermal);
+            unconfiguredThermal = CreateTemplate("", TemplateType.Thermal);
             configuredStandard = CreateTemplate("StandardName", TemplateType.Standard);
-            unconfiguredStandard = CreateTemplate(default, TemplateType.Report);
+            unconfiguredStandard = CreateTemplate("", TemplateType.Report);
 
             var allTemplates = new List<TemplateEntity>
             {
