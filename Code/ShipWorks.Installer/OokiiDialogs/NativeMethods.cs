@@ -496,6 +496,7 @@ namespace Ookii.Dialogs.Wpf
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
+#pragma warning disable 0649
         internal struct CREDUI_INFO
         {
             public int cbSize;
@@ -506,7 +507,7 @@ namespace Ookii.Dialogs.Wpf
             public string pszCaptionText;
             public IntPtr hbmBanner;
         }
-
+#pragma warning restore 0649
         [DllImport("credui.dll", CharSet = CharSet.Unicode)]
         extern static internal CredUIReturnCodes CredUIPromptForCredentials(
             ref CREDUI_INFO pUiInfo,
