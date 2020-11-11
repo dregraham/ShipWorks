@@ -45,7 +45,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         private readonly Lazy<IPrinterSetting> defaultPrinter;
         private readonly ILog log;
         private readonly KeyValuePair<string, string> initialSelectedPrinter =
-            new KeyValuePair<string, string>("(Select a Printer)", "(Select a Printer)");
+            new KeyValuePair<string, string>("(None Selected)", "(None Selected)");
 
         /// <summary>
         /// Constructor
