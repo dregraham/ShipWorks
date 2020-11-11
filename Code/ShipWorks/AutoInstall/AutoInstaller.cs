@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Security;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
@@ -225,7 +226,7 @@ namespace ShipWorks.AutoInstall
                 sqlServerName = connectionStringBuilder.DataSource;
                 databaseName = connectionStringBuilder.InitialCatalog;
                 sqlUsername = connectionStringBuilder.UserID;
-                sqlPassword = connectionStringBuilder.Password;
+                sqlPassword = SecureText.Decrypt(connectionStringBuilder.Password, sqlUsername);
                 windowsAuth = connectionStringBuilder.Authentication == SqlAuthenticationMethod.ActiveDirectoryIntegrated ||
                               string.IsNullOrWhiteSpace(sqlUsername) || string.IsNullOrWhiteSpace(sqlPassword);
 
