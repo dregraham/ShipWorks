@@ -128,23 +128,7 @@ namespace ShipWorks.Installer.Services
 
             var cpuLines = cpuInfo.Split("\n");
 
-            if (int.TryParse(cpuLines[0].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var cpuMaxSpeed))
-            {
-                log.Info($"Got CPU max speed of {cpuMaxSpeed}, minimum required is {minCpuSpeed}");
-
-                if (cpuMaxSpeed < minCpuSpeed)
-                {
-                    result.CpuMeetsRequirement = false;
-                    result.CpuDescription = $"ShipWorks requires at a minimum 1.5 GHz processor.";
-                }
-            }
-            else
-            {
-                log.Error("Unable to parse CPU speed");
-            }
-
-            if (result.CpuMeetsRequirement &&
-                int.TryParse(cpuLines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var numberOfCores))
+            if (int.TryParse(cpuLines[1].Split("=", StringSplitOptions.RemoveEmptyEntries)[1], out var numberOfCores))
             {
                 log.Info($"Got {numberOfCores} CPU cores, minimum is {minCpuCores}");
 

@@ -27,7 +27,6 @@ namespace ShipWorks.Installer.Services.Tests
         [InlineData("MaxClockSpeed=2304\r\r\nNumberOfCores=8", true)]
         [InlineData("MaxClockSpeed=1500\r\r\nNumberOfCores=2", true)]
         [InlineData("MaxClockSpeed=1500\r\r\nNumberOfCores=1", false)]
-        [InlineData("MaxClockSpeed=1000\r\r\nNumberOfCores=2", false)]
         [InlineData("MaxClockSpeed=1000\r\r\nNumberOfCores=1", false)]
         public void SystemCheck_TestsCPU(string cpuInfo, bool expectedResult)
         {
