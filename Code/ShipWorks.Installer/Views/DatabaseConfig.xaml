@@ -1,0 +1,108 @@
+﻿<Page x:Class="ShipWorks.Installer.Views.DatabaseConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+      xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
+      xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
+      xmlns:fa5="http://schemas.fontawesome.com/icons/"
+      DataContext="{Binding Path=DatabaseConfigViewModel, Source={StaticResource Locator}}"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="575"
+      x:Name="DatabaseConfigPage"
+      Title="DatabaseConfig">
+    <Page.Resources>
+        <convert:PercentageConverter x:Key="PercentageConverter"/>
+        <convert:IconToBrushConverter x:Key="IconToBrushConverter"/>
+        <convert:BooleanToVisibilityConverter x:Key="VisiblityConverter"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Style="{StaticResource Header}" Text="Configure Database" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10,0,20">
+                <TextBlock.TextDecorations>
+                    <TextDecoration/>
+                </TextBlock.TextDecorations>
+            </TextBlock>
+            <TextBlock Style="{StaticResource Header}" Text="Where is your database running?"/>
+            <StackPanel Margin="0,0,0,20">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox Style="{StaticResource BlueSteelTextBox}" 
+                             Text="{Binding ServerInstance}"
+                             Width="250"
+                             Margin="0,0,20,0"/>
+                    <Button Style="{StaticResource SmallButton}" Command="{Binding ConnectCommand}">
+                        Connect
+                    </Button>
+                </StackPanel>
+                <TextBlock VerticalAlignment="Center" Margin="0,10,0,0">
+                    Don't know?
+                    <Hyperlink Command="{Binding HelpCommand}">
+                        Don't worry, we can help
+                    </Hyperlink>
+                </TextBlock>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Left" Visibility="{Binding ShowCredentialInput, Converter={StaticResource VisiblityConverter}}">
+                <TextBlock Text="Username" Style="{StaticResource Header}"/>
+                <TextBox Style="{StaticResource BlueSteelTextBox}" Text="{Binding Username}" Width="150"/>
+                <TextBlock Text="Password" Style="{StaticResource Header}" Margin="0,10,0,0"/>
+                <c:BindablePasswordBox Password="{Binding Password, Mode=OneWayToSource}" Width="150" Margin="0,0,0,20"/>
+            </StackPanel>
+            <TextBlock Style="{StaticResource Header}" Text="Select your ShipWorks database"/>
+            <StackPanel Orientation="Horizontal">
+                <fa5:FontAwesome x:Name="CurrentIcon"
+                         FontSize="15"
+                         Icon="{Binding ConnectionIcon}" 
+                         Foreground="{Binding ConnectionIcon, Converter={StaticResource IconToBrushConverter}}" 
+                         Grid.Column="1" 
+                         VerticalAlignment="Center"/>
+                <TextBlock Style="{StaticResource FieldLabel}" Text="{Binding ConnectionStatusText}" VerticalAlignment="Center" Margin="10,0"/>
+            </StackPanel>
+        </StackPanel>
+        <ListView ItemsSource="{Binding Databases}" Grid.Row="1" x:Name="DatabaseView" SelectedIndex="{Binding SelectedDatabaseIndex}" Margin="0,10">
+            <ListView.Resources>
+                <DataTemplate x:Key="Name">
+                    <TextBlock HorizontalAlignment="Left" 
+                        Text="{Binding XPath=@DatabaseName}"/>
+                </DataTemplate>
+            </ListView.Resources>
+            <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Database" DisplayMemberBinding="{Binding DatabaseName}" 
+                                        Width="{Binding 
+                                        Converter={StaticResource PercentageConverter}, 
+                                        ElementName=DatabaseView, 
+                                        Path=ActualWidth, 
+                                        ConverterParameter=.90}">
+                    <GridViewColumn.HeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="Width" Value="{Binding 
+                                        Converter={StaticResource PercentageConverter}, 
+                                        ElementName=DatabaseView, 
+                                        Path=ActualWidth, 
+                                        ConverterParameter=1}" />
+                        </Style>
+                    </GridViewColumn.HeaderContainerStyle>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Grid.Row="2" HorizontalAlignment="Right" Margin="10">
+            <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" 
+                    Command="{Binding NextCommand}" 
+                    Margin="10,0,20,0" 
+                    IsEnabled="{Binding NextEnabled}"
+                    IsDefault="True">
+                Next
+            </Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Page>

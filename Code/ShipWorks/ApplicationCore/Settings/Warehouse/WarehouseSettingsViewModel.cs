@@ -9,6 +9,7 @@ using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Licensing.Warehouse;
 using ShipWorks.Core.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Users;
@@ -28,6 +29,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
         private readonly IConfigurationData configurationData;
         private readonly IWarehouseSettingsApi warehouseSettingsApi;
         private readonly IMessageHelper messageHelper;
+        private readonly HubMigrator hubMigrator;
         private string warehouseName;
         private int modifiedProducts;
         private bool canLinkWarehouse;
@@ -45,7 +47,8 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             IWarehouseSettingsApi warehouseSettingsApi,
             IConfigurationData configurationData,
             IUserSession userSession,
-            IMessageHelper messageHelper)
+            IMessageHelper messageHelper,
+            HubMigrator hubMigrator)
         {
             this.userSession = userSession;
             this.messageHelper = messageHelper;
@@ -53,6 +56,7 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
             this.warehouseSettingsView = warehouseSettingsView;
             this.warehouseList = warehouseList;
             this.configurationData = configurationData;
+            this.hubMigrator = hubMigrator;
 
             SelectWarehouse = new RelayCommand(() => OnSelectWarehouse().Forget());
             UploadSKUs = new RelayCommand(() => OnUploadSKUs().Forget());
@@ -163,6 +167,9 @@ namespace ShipWorks.ApplicationCore.Settings.Warehouse
                         x.WarehouseID = warehouse.Id;
                         x.WarehouseName = warehouse.Name;
                     });
+
+                    // If linking was successful, upload the sql config to the hub
+                    await hubMigrator.MigrateSqlConfigToHub().ConfigureAwait(false);
 
                     WarehouseName = warehouse.Name;
                     CanUploadSKUs = isAdmin;
