@@ -923,6 +923,8 @@
     <Compile Include="ApplicationCore\MainForm.BasicUIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Common\IO\Hardware\Printers\IPrintUtility.cs" />
+    <Compile Include="Common\IO\Hardware\Printers\PrintUtilityWrapper.cs" />
     <Compile Include="Common\Net\RestSharpJsonNetSerializer.cs" />
     <Compile Include="Common\Threading\BackgroundExecutorWithoutDialog.cs" />
     <Compile Include="Common\Threading\BackgroundProgressProvider.cs" />
@@ -1400,8 +1402,6 @@
     <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Common\DateTimeProvider.cs" />
     <Compile Include="Common\WindowsMessageFilterRegistrar.cs" />
-    <Compile Include="Data\Administration\ISetupGuide.cs" />
-    <Compile Include="Data\Administration\ISetupGuideViewModel.cs" />
     <Compile Include="Data\Administration\ISqlSchemaVersion.cs" />
     <Compile Include="Data\Administration\Recovery\ISqlAdapterRetry.cs" />
     <Compile Include="Data\Administration\Recovery\ISqlAdapterRetryFactory.cs" />
@@ -11373,7 +11373,7 @@
     <Content Include="Resources\view_linked_arrow.png" />
     <Content Include="Resources\view_linked_infinity.png" />
     <None Include="Resources\view_next.png" />
-    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\DiviceIdentification.html" />    
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OneBalance\DiviceIdentification.html" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\adminhtml.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\Modules\MagentoOne\MagentoConnectExtension\app\code\community\Interapptive\ShipWorks\etc\config.xml" />

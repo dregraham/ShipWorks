@@ -105,7 +105,7 @@
             <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource ImageButton}" Click="OnClickAddStore">
                 <Image Style="{StaticResource LargeImage}" Source="{StaticResource Store}" />
             </Button>
-            <Button Grid.Row="0" Grid.Column="1" Margin="50 0 0 26" Style="{StaticResource ImageButton}" >
+            <Button Grid.Row="0" Grid.Column="1" Margin="50 0 0 26" Style="{StaticResource ImageButton}" Click="OnClickSetupPrinters">
                 <Image Style="{StaticResource LargeImage}" Source="{StaticResource Printer}" />
             </Button>
             <StackPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource LeftSection}">
@@ -115,7 +115,7 @@
                 <TextBlock Text="Add a new marketplace, file, or ODBC connection to import orders from." Style="{StaticResource Details}"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Style="{StaticResource RightSection}">
-                <Button Style="{StaticResource SectionButton}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickSetupPrinters">
                     <TextBlock Text="Setup Default Printers" Style="{StaticResource ButtonText}" />
                 </Button>
                 <TextBlock Text="Setup your default thermal or standard printers to use with ShipWorks." Style="{StaticResource Details}"/>

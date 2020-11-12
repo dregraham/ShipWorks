@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -8,8 +9,11 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Administration;
 using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
+using ShipWorks.Templates;
 using ShipWorks.Templates.Management;
+using ShipWorks.UI.Dialogs.DefaultPrinters;
 
 namespace ShipWorks.UI.Dialogs.QuickStart
 {
@@ -18,13 +22,26 @@ namespace ShipWorks.UI.Dialogs.QuickStart
     /// </summary>
     public partial class QuickStart : IQuickStart
     {
+        private readonly IStoreManager storeManager;
+        private readonly ITemplateManager templateManager;
+
         /// <summary>
         /// ctor
         /// </summary>
-        public QuickStart(IWin32Window owner) : base(owner, null, false)
+        public QuickStart(IWin32Window owner, IStoreManager storeManager, ITemplateManager templateManager) : base(owner, null, false)
         {
+            this.storeManager = storeManager;
+            this.templateManager = templateManager;
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Whether or not this dialog should show
+        /// </summary>
+        public bool ShouldShow => storeManager.GetEnabledStores().All(x => x.StoreTypeCode == StoreTypeCode.Manual) ||
+                                  templateManager.AllTemplates.All(
+                                      x => string.IsNullOrWhiteSpace(
+                                          templateManager.GetComputerSettings(x).PrinterName));
 
         /// <summary>
         /// Open the add store wizard
@@ -32,6 +49,18 @@ namespace ShipWorks.UI.Dialogs.QuickStart
         private void OnClickAddStore(object sender, RoutedEventArgs e)
         {
             AddStoreWizard.RunWizard(this, OpenedFromSource.QuickStart);
+        }
+
+        /// <summary>
+        /// Open click setup printers
+        /// </summary>
+        private void OnClickSetupPrinters(object sender, RoutedEventArgs e)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IDefaultPrinters defaultPrintersDialog = lifetimeScope.Resolve<IDefaultPrinters>();
+                defaultPrintersDialog.ShowDialog();
+            }
         }
 
         /// <summary>
