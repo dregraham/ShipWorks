@@ -463,15 +463,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Returns a list of countries eligible for free international delivery confirmation.
-        /// </summary>
-        /// <returns></returns>
-        protected override List<string> CountriesEligibleForFreeInternationalDeliveryConfirmation()
-        {
-            return base.CountriesEligibleForFreeInternationalDeliveryConfirmation().Union(new[] { "MX", "PL" }).ToList();
-        }
-
-        /// <summary>
         /// Get the service description for the shipment
         /// overridden to provide a more compatible version for GlobalPost
         /// </summary>
