@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -59,9 +58,9 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         {
             printers = new ObservableCollection<KeyValuePair<string, string>>();
 
-            SetDefaults = new RelayCommand<IDialog>(async dialog => SetDefaultsAction(dialog).ConfigureAwait(true));
-            SetStandardAsDefault = new RelayCommand(async () => SetAsDefaultAction(false));
-            SetThermalAsDefault = new RelayCommand(async () => SetAsDefaultAction(true));
+            SetDefaults = new RelayCommand<IDialog>(async dialog => await SetDefaultsAction(dialog).ConfigureAwait(true));
+            SetStandardAsDefault = new RelayCommand(() => SetAsDefaultAction(false));
+            SetThermalAsDefault = new RelayCommand(() => SetAsDefaultAction(true));
             this.templateManager = templateManager;
             this.sqlAdapterFactory = sqlAdapterFactory;
             this.printUtility = printUtility;
@@ -77,7 +76,7 @@ namespace ShipWorks.UI.Dialogs.DefaultPrinters
         /// Set printer as the default. 
         /// </summary>
         /// <param name="forThermal">Set thermal else standard</param>
-        private async Task SetAsDefaultAction(bool forThermal)
+        private void SetAsDefaultAction(bool forThermal)
         {
             Cursor.Current = Cursors.WaitCursor;
 
