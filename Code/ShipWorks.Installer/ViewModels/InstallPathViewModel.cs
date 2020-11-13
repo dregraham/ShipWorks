@@ -154,6 +154,13 @@ namespace ShipWorks.Installer.ViewModels
             }
 
             log.Info($"Validating path {InstallPath}");
+            //Validate that the path is not just a drive letter
+            if (InstallPath.Length < 4)
+            {
+                Error = "ShipWorks cannot be installed to a root drive directory. It must be installed to a folder inside the drive.";
+                return false;
+            }
+
             string driveLetter = Path.GetPathRoot(InstallPath);
             if (!systemCheckService.DriveMeetsRequirements(driveLetter))
             {
