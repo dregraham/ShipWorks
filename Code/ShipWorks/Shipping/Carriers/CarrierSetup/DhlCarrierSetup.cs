@@ -114,6 +114,9 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             SetupDefaultsIfNeeded(ShipmentTypeCode.DhlExpress, config.RequestedLabelFormat);
         }
 
+        /// <summary>
+        /// Add Dhl To Usps
+        /// </summary>
         private void AddDhlToUsps(IUspsAccountEntity oneBalanceUspsAccount)
         {
             try

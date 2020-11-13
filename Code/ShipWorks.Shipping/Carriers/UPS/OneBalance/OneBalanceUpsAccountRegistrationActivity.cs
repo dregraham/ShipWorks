@@ -57,6 +57,9 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
             return await RegisterUpsAccount(account, deviceIdentity).ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Setup UPS one balance when we know what USPS account to use 
+        /// </summary>
         public async Task<Result> Execute(IUspsAccountEntity uspsOneBalanceAccount, UpsAccountEntity upsAccountToCreate, string deviceIdentity)
         {
             UspsAccountEntity uspsAccount = uspsOneBalanceAccount as UspsAccountEntity;
