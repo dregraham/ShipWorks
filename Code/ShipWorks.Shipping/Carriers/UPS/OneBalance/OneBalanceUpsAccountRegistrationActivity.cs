@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Extensions;
@@ -53,10 +54,28 @@ namespace ShipWorks.Shipping.Carriers.Ups.OneBalance
                 return oneBalanceResult;
             }
 
-            var result = await shipEngineWebClient.RegisterUpsAccount(account.Address, deviceIdentity).ConfigureAwait(false);
+            return await RegisterUpsAccount(account, deviceIdentity).ConfigureAwait(false);
+        }
+
+        public async Task<Result> Execute(IUspsAccountEntity uspsOneBalanceAccount, UpsAccountEntity upsAccountToCreate, string deviceIdentity)
+        {
+            UspsAccountEntity uspsAccount = uspsOneBalanceAccount as UspsAccountEntity;
+            var uspsResult = await CreateOneBalanceAccount(uspsAccount).ConfigureAwait(false);
+
+            return uspsResult.Success ?
+                await RegisterUpsAccount(upsAccountToCreate, deviceIdentity).ConfigureAwait(false) :
+                Result.FromError(uspsResult.Message);
+        }
+
+        /// <summary>
+        /// Call ShipEngine to register the UPS account and set the ShipEngineCarrierId
+        /// </summary>
+        private async Task<Result> RegisterUpsAccount(UpsAccountEntity upsAccount, string deviceIdentity)
+        {
+            var result = await shipEngineWebClient.RegisterUpsAccount(upsAccount.Address, deviceIdentity).ConfigureAwait(false);
             if (result.Success)
             {
-                account.ShipEngineCarrierId = result.Value;
+                upsAccount.ShipEngineCarrierId = result.Value;
                 return Result.FromSuccess();
             }
 

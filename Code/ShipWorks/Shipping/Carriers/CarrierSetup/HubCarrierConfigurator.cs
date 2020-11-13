@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             else
             {
                 await carrierSetupFactory[ShipmentTypeCode.Usps].Setup(uspsOneBalanceConfig, null).ConfigureAwait(false);
-                oneBalanceUspsAccount = uspsAccountRepository.AccountsReadOnly.Single(a => a.HubCarrierId == uspsOneBalanceConfig.HubCarrierID);
+                oneBalanceUspsAccount = uspsAccountRepository.Accounts.Single(a => a.HubCarrierId == uspsOneBalanceConfig.HubCarrierID);
             }
 
             foreach (var config in configs
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription((ShipmentTypeCode) config.CarrierType)}: {ex.Message}", ex);
+                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.CarrierType)}: {ex.Message}", ex);
                 }
             }
         }

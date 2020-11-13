@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     {
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly IShippingSettings shippingSettings;
-        private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IMainForm mainForm;
+        private readonly IOneBalanceUpsAccountRegistrationActivity oneBalanceUpsAccountRegistrationActivity;
 
         /// <summary>
         /// Constructor
@@ -36,14 +36,14 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository,
             IShippingSettings shippingSettings,
             IShipmentPrintHelper printHelper,
-            IShipEngineWebClient shipEngineWebClient,
-            IMainForm mainForm) :
+            IMainForm mainForm,
+            IOneBalanceUpsAccountRegistrationActivity oneBalanceUpsAccountRegistrationActivity) :
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, upsAccountRepository)
         {
             this.upsAccountRepository = upsAccountRepository;
             this.shippingSettings = shippingSettings;
-            this.shipEngineWebClient = shipEngineWebClient;
             this.mainForm = mainForm;
+            this.oneBalanceUpsAccountRegistrationActivity = oneBalanceUpsAccountRegistrationActivity;
         }
 
         /// <summary>
@@ -81,28 +81,26 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                     upsAccount.UserID = account.UserId;
                     upsAccount.Password = account.Password;
                     upsAccount.RateType = (int) account.RateType;
-                    upsAccount.PromoStatus = 0;
-                    upsAccount.LocalRatingEnabled = false;
-
-                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                 }
                 else
                 {
-                    var result = await shipEngineWebClient.RegisterUpsAccount(upsAccount.Address, await GetDeviceIdentity().ConfigureAwait(false)).ConfigureAwait(false);
-                    if (result.Success)
-                    {
-                        upsAccount.ShipEngineCarrierId = result.Value;
-                        upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                    }
-                    else
+                    string deviceIdentity = await GetDeviceIdentity().ConfigureAwait(false);
+                    var result =
+                        await oneBalanceUpsAccountRegistrationActivity.Execute(
+                            oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
+                    if (result.Failure)
                     {
                         // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
                         return;
                     }
-                }                
+                }
+
+                upsAccount.PromoStatus = 0;
+                upsAccount.LocalRatingEnabled = false;
+                upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                upsAccount.InitializeNullsToDefault();
             }
 
-            upsAccount.InitializeNullsToDefault();
             upsAccountRepository.Save(upsAccount);
 
             SetupDefaultsIfNeeded(ShipmentTypeCode.UpsOnLineTools, config.RequestedLabelFormat);
