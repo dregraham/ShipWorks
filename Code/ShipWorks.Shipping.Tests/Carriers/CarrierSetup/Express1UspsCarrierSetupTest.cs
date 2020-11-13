@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.IsAny<UspsAccountEntity>()), Times.Never);
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<UspsAccountEntity>(y => y.Username == "username")), Times.Once);
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<Express1UspsCarrierSetup>().Setup(payload);
+            await mock.Create<Express1UspsCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<UspsAccountEntity>(y =>
@@ -134,7 +134,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<Express1UspsCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<UspsAccountEntity>()), Times.Once);
         }
@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<Express1UspsCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Express1Usps, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -175,7 +175,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<Express1UspsCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<Express1UspsCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
@@ -216,7 +216,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<Express1UspsCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<UspsAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
         }

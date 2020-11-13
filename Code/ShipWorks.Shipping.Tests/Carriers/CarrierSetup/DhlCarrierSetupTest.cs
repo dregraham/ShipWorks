@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<DhlCarrierSetup>().Setup(payload);
+            await mock.Create<DhlCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<DhlExpressAccountEntity>()), Times.Never);
         }
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<DhlCarrierSetup>().Setup(payload);
+            await mock.Create<DhlCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<DhlExpressAccountEntity>(y => y.AccountNumber == 123)), Times.Once);
@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<DhlCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<DhlExpressAccountEntity>()), Times.Once);
         }
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<DhlCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.DhlExpress, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<DhlCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
@@ -176,7 +176,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
 
             var testObject = mock.Create<DhlCarrierSetup>();
 
-            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
+            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload, null));
         }
 
         [Fact]
@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<DhlCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<DhlCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<DhlExpressAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
         }
