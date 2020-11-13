@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Security;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
@@ -26,6 +27,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         private readonly ICarrierAccountRepository<UpsAccountEntity, IUpsAccountEntity> upsAccountRepository;
         private readonly IShippingSettings shippingSettings;
         private readonly IMainForm mainForm;
+        private readonly ILog log;
         private readonly IOneBalanceUpsAccountRegistrationActivity oneBalanceUpsAccountRegistrationActivity;
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             IShippingSettings shippingSettings,
             IShipmentPrintHelper printHelper,
             IMainForm mainForm,
+            Func<Type, ILog> createLog,
             IOneBalanceUpsAccountRegistrationActivity oneBalanceUpsAccountRegistrationActivity) :
             base(shipmentTypeSetupActivity, shippingSettings, printHelper, upsAccountRepository)
         {
@@ -44,6 +47,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             this.shippingSettings = shippingSettings;
             this.mainForm = mainForm;
             this.oneBalanceUpsAccountRegistrationActivity = oneBalanceUpsAccountRegistrationActivity;
+			log = createLog(typeof(UpsCarrierSetup));
         }
 
         /// <summary>
@@ -90,6 +94,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                             oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
                     if (result.Failure)
                     {
+                        log.Warn("Error registering UPS account", result.Exception);
                         // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
                         return;
                     }
