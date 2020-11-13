@@ -41,6 +41,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         private bool SkipOneBalanceSetup(List<CarrierConfiguration> configs)
         {
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
+            if(uspsOneBalanceConfig == null)
+            {
+                // one balance isn't set up in the hub
+                return true;
+            }
+
             // USPS is setup for one balance, but it is a different account than the one in the hub
             if (uspsOneBalanceConfig != null &&
                 uspsAccountRepository.AccountsReadOnly

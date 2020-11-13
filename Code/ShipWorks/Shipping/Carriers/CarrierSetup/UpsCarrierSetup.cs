@@ -94,8 +94,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                             oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
                     if (result.Failure)
                     {
-                        log.Warn("Error registering UPS account", result.Exception);
                         // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
+                        log.Warn("Error registering UPS account", result.Exception);
                         return;
                     }
                 }
