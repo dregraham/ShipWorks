@@ -89,12 +89,16 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }
                 else
                 {
-                    upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
                     upsAccount.InitializeNullsToDefault();
                     var result = await shipEngineWebClient.RegisterUpsAccount(upsAccount.Address, await GetDeviceIdentity().ConfigureAwait(false)).ConfigureAwait(false);
                     if (result.Success)
                     {
                         upsAccount.ShipEngineCarrierId = result.Value;
+                        upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+                    }
+                    else
+                    {
+                        // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
                         return;
                     }
                 }                
