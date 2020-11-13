@@ -144,6 +144,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             IHttpVariableRequestSubmitter submitter = CreateRequest(profilesEndpoint, HttpVerb.Get);
 
             submitter.Variables.Add("access_token", GetAccessToken(refreshToken));
+            submitter.Variables.Add("$expand", "SiteAccounts");
 
             return ProcessRequest<ChannelAdvisorProfilesResponse>(submitter, "GetProfiles", refreshToken);
         }
@@ -195,7 +196,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             ordersFilter += $"AND (CreatedDateUtc ge {downloadStartDate:o})";
-                
+
             getOrdersRequestSubmitter.Variables.Add("access_token", GetAccessToken(refreshToken));
             getOrdersRequestSubmitter.Variables.Add("$filter", ordersFilter);
             getOrdersRequestSubmitter.Variables.Add("$orderby", "CreatedDateUtc desc");
