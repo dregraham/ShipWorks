@@ -72,7 +72,11 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
 
-            if (!skipOneBalanceSetup)
+            if(skipOneBalanceSetup)
+            {
+                log.Warn("Skipping One Balance accounts because One Balance already set up inside the client and conflicts with the hub");
+            }
+            else
             {
                 await carrierSetupFactory[ShipmentTypeCode.Usps].Setup(uspsOneBalanceConfig, null).ConfigureAwait(false);
                 oneBalanceUspsAccount = uspsAccountRepository.AccountsReadOnly.Single(a => a.HubCarrierId == uspsOneBalanceConfig.HubCarrierID);
