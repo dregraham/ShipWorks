@@ -7,9 +7,11 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
@@ -28,6 +30,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly IUspsWebClient uspsWebClient;
         private readonly ICarrierAccountDescription accountDescription;
+        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -39,13 +42,15 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
             IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory,
             IShipEngineWebClient shipEngineWebClient,
-            IUspsWebClient uspsWebClient)
+            IUspsWebClient uspsWebClient,
+            Func<Type,ILog> createLog)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
             this.uspsWebClient = uspsWebClient;
             accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
+            log = createLog(typeof(DhlCarrierSetup));
         }
 
         /// <summary>
@@ -73,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             {
                 if (config.IsOneBalance)
                 {
-                    uspsWebClient.AddDhlExpress(oneBalanceUspsAccount);
+                    AddDhlToUsps(oneBalanceUspsAccount);
                     dhlAccount.UspsAccountId = oneBalanceUspsAccount.UspsAccountID;
                     dhlAccount.AccountNumber = oneBalanceUspsAccount.UspsAccountID;
                     dhlAccount.FirstName = oneBalanceUspsAccount.FirstName;
@@ -107,6 +112,18 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             accountRepository.Save(dhlAccount);
             SetupDefaultsIfNeeded(ShipmentTypeCode.DhlExpress, config.RequestedLabelFormat);
+        }
+
+        private void AddDhlToUsps(IUspsAccountEntity oneBalanceUspsAccount)
+        {
+            try
+            {
+                uspsWebClient.AddDhlExpress(oneBalanceUspsAccount);
+            }
+            catch(UspsApiException ex) when (ex.Code == 5637639)
+            {
+                log.Warn("DHL Account already added", ex);
+            }
         }
 
         /// <summary>

@@ -85,7 +85,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                     upsAccount.LocalRatingEnabled = false;
 
                     upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
-                    upsAccount.InitializeNullsToDefault();
                 }
                 else
                 {
@@ -104,6 +103,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }                
             }
 
+            upsAccount.InitializeNullsToDefault();
             upsAccountRepository.Save(upsAccount);
 
             SetupDefaultsIfNeeded(ShipmentTypeCode.UpsOnLineTools, config.RequestedLabelFormat);
