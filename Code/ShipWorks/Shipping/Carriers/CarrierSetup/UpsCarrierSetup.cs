@@ -88,7 +88,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }
                 else
                 {
-                    upsAccount.InitializeNullsToDefault();
                     var result = await shipEngineWebClient.RegisterUpsAccount(upsAccount.Address, await GetDeviceIdentity().ConfigureAwait(false)).ConfigureAwait(false);
                     if (result.Success)
                     {
