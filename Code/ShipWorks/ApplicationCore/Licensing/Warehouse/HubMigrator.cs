@@ -4,14 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
+using RestSharp;
+using ShipWorks.ApplicationCore.Licensing.Warehouse.DTO;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
@@ -31,6 +36,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         private readonly IWarehouseStoreClient warehouseStoreClient;
         private readonly IConfigurationData configurationData;
         private readonly IUserSession userSession;
+        private readonly IWarehouseRequestFactory warehouseRequestFactory;
+        private readonly IWarehouseRequestClient warehouseRequestClient;
         private ILog log;
 
         /// <summary>
@@ -39,7 +46,9 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
         [NDependIgnoreTooManyParams]
         public HubMigrator(IStoreManager storeManager, IStoreTypeManager storeTypeManager, IMessageHelper messageHelper,
                            IWarehouseStoreClient warehouseStoreClient, IConfigurationData configurationData,
-                           IUserSession userSession, Func<Type, ILog> logFactory)
+                           IUserSession userSession, 
+                           IWarehouseRequestFactory warehouseRequestFactory, IWarehouseRequestClient warehouseRequestClient,
+                           Func<Type, ILog> logFactory)
         {
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
@@ -47,6 +56,8 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             this.warehouseStoreClient = warehouseStoreClient;
             this.configurationData = configurationData;
             this.userSession = userSession;
+            this.warehouseRequestFactory = warehouseRequestFactory;
+            this.warehouseRequestClient = warehouseRequestClient;
 
             log = logFactory(typeof(HubMigrator));
         }
@@ -150,6 +161,55 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
             stringBuilder.AppendLine(
                 "ShipWorks will attempt to migrate these stores on the next login. If this issue continues to occur, please contact ShipWorks support.");
             return stringBuilder.ToString();
+        }
+
+        /// <summary>
+        /// Upload SQL Config to hub for this warehouse
+        /// </summary>
+        public async Task MigrateSqlConfigToHub()
+        {
+            string warehouseId = configurationData.FetchReadOnly().WarehouseID;
+
+            // If no warehouse is linked, just return.
+            if (string.IsNullOrWhiteSpace(warehouseId))
+            {
+                return;
+            }
+
+            // If SqlSession isn't configured or can't connect, just return.
+            if (!SqlSession.IsConfigured || !SqlSession.Current.CanConnect())
+            {
+                return;
+            }
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load(SqlSessionConfiguration.SettingsFile);
+
+            string json = JsonConvert.SerializeXmlNode(doc);
+
+            SqlConfigChangedDto payload = new SqlConfigChangedDto()
+            {
+                WarehouseData = new WarehouseData()
+                {
+                    Id = warehouseId,
+                    SqlConfig = json
+                }
+            };
+
+            var request = warehouseRequestFactory.Create(WarehouseEndpoints.SqlConfig, Method.POST, payload);
+            var response = await warehouseRequestClient.MakeRequest(request, "SetSqlConfig").ConfigureAwait(false);
+
+            if (response.Success)
+            {
+                log.Info("MigrateSqlConfigToHub succeeded");
+            }
+            else
+            {
+                if (response.Exception == null)
+                    log.Info($"MigrateSqlConfigToHub failed : {response.Message}");
+                else
+                    log.Error($"MigrateSqlConfigToHub failed : {response.Message}", response.Exception);
+            }
         }
     }
 }

@@ -78,7 +78,7 @@ namespace ShipWorks.Templates.Printing
             PageSettings pageSettings;
             PaperSize paperSize;
             bool? landscape;
-            PaperSource paperSource;
+            System.Drawing.Printing.PaperSource paperSource;
 
             /// <summary>
             /// Constructor
@@ -118,7 +118,7 @@ namespace ShipWorks.Templates.Printing
             /// <summary>
             /// The default PaperSource of the printer
             /// </summary>
-            public PaperSource PaperSource
+            public System.Drawing.Printing.PaperSource PaperSource
             {
                 get
                 {

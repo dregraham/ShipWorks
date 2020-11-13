@@ -155,6 +155,7 @@ var
   ShouldUpgradeDatabase: Boolean;
   InstallStarted: Boolean;
   ShouldLaunchShipWorks: Boolean;
+  IsUpgrade: Boolean;
 
 //----------------------------------------------------------------
 // Convert a bool to a string
@@ -184,6 +185,8 @@ begin
   InstallStarted := False;
   ShouldUpgradeDatabase := False;
   ShouldLaunchShipWorks := False;
+
+  Log('IsUpgrade' + BoolToStr(IsUpgrade));
   
   for j := 1 to ParamCount do
   begin
@@ -356,8 +359,11 @@ begin
 	tempDir := GetTempDir + '\InstallBackup';
 	installStatus := 'success';
 
+    Log('tempDir' + tempDir);
+
 	if DirExists(tempDir)
 	then begin
+        Log('tempDir' + tempDir + 'EXISTS');
 		if DatabaseUpgradeFailed or not CopyFilesSucceeded then
 		begin
 			Log('DatabaseUpgradeFailed = ' + BoolToStr(DatabaseUpgradeFailed));
@@ -371,8 +377,11 @@ begin
 	end
 	else
 	begin
-		Log('BACKUP: Install failed, nothing to roll back');
-		installStatus := 'failure';
+        if IsUpgrade
+        then begin
+		    Log('BACKUP: Install failed, nothing to roll back');
+		    installStatus := 'failure';
+        end
 	end;
 
 	Log('Install Status = ' + installStatus);

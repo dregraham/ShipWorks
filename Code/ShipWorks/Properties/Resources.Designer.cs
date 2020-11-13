@@ -4983,6 +4983,16 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap window_gear {
+            get {
+                object obj = ResourceManager.GetObject("window_gear", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap window_open {
             get {
                 object obj = ResourceManager.GetObject("window_open", resourceCulture);

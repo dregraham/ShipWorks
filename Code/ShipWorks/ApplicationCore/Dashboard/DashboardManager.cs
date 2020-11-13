@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore.Dashboard.Content;
@@ -474,6 +473,52 @@ namespace ShipWorks.ApplicationCore.Dashboard
             CheckForLicenseDependentChanges();
             CheckForOneBalanceChanges();
             ValidateLocalRates();
+            CheckQuickStartNeeded();
+        }
+
+        /// <summary>
+        /// If no store set up, show quick start
+        /// </summary>
+        private static void CheckQuickStartNeeded()
+        {
+            const string identifier = "QuickStart";
+            var existingDashboardItem = dashboardItems.OfType<DashboardLocalMessageItem>().SingleOrDefault(i => i.Identifier == identifier);
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                IQuickStart quickStart = lifetimeScope.Resolve<IQuickStart>();
+                bool shouldShow = quickStart.ShouldShow;
+
+                if (existingDashboardItem == null && shouldShow)
+                {
+                    var quickStartDashboardItem =
+                        new DashboardLocalMessageItem(identifier,
+                                                      DashboardMessageImageType.LightBulb,
+                                                      "Quick Start",
+                                                      "Finish setting up ShipWorks.",
+                                                      new DashboardActionMethod(
+                                                          "[link]Quick Start[/link]", ShowQuickStart))
+                            {ShowTime = false};
+
+                    AddDashboardItem(quickStartDashboardItem);
+                    quickStartDashboardItem.DashboardBar.CanUserDismiss = false;
+                }
+
+                if (existingDashboardItem != null && !shouldShow)
+                {
+                    RemoveDashboardItem(existingDashboardItem);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Show the dialog
+        /// </summary>
+        private static void ShowQuickStart()
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<IQuickStart>().ShowDialog();
+            }
         }
 
         /// <summary>

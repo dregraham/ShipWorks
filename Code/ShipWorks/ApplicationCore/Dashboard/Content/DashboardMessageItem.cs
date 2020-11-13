@@ -37,10 +37,20 @@ namespace ShipWorks.ApplicationCore.Dashboard.Content
         public bool UseFriendlyDateTime { get; set; } = true;
 
         /// <summary>
+        /// Should we show the time
+        /// </summary>
+        public bool ShowTime { get; set; } = true;
+
+        /// <summary>
         /// Format the secondary text to display to include the timestamp
         /// </summary>
         protected string FormatSecondaryText(string text)
         {
+            if (!ShowTime)
+            {
+                return text;
+            }
+
             DateTime local = timestamp.ToLocalTime();
             string timeText;
 

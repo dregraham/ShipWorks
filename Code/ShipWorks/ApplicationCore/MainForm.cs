@@ -811,6 +811,14 @@ namespace ShipWorks
                 return;
             }
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                if (lifetimeScope.Resolve<IQuickStart>().ShouldShow)
+                {
+                    QueueLogonAction(ShowQuickStart);
+                }
+            }
+
             // If there are no stores, we need to make sure one is added before continuing
             if (StoreManager.GetDatabaseStoreCount() == 0)
             {
@@ -823,8 +831,6 @@ namespace ShipWorks
 
                     return;
                 }
-
-                QueueLogonAction(ShowSetupGuide);
             }
             else
             {
@@ -854,6 +860,8 @@ namespace ShipWorks
             UserEntity user = UserSession.User;
 
             MigrateStoresToHub();
+
+            MigrateSqlConfigToHub();
 
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
@@ -1526,15 +1534,14 @@ namespace ShipWorks
         public void QueueLogonAction(Action action) => logonActions.Enqueue(action);
 
         /// <summary>
-        /// Show the New User Experience dialog
+        /// Show the Quick Start dialog
         /// </summary>
-        public void ShowSetupGuide()
+        public void ShowQuickStart()
         {
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                ISetupGuide setupGuide = lifetimeScope.Resolve<ISetupGuide>();
-                setupGuide.LoadOwner(this);
-                setupGuide.ShowDialog();
+                IQuickStart quickStart = lifetimeScope.Resolve<IQuickStart>();
+                quickStart.ShowDialog();
             }
         }
 
@@ -5465,7 +5472,7 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Kick off the HubMigrator
+        /// Kick off the HubMigrator MigrateStoresToHub
         /// </summary>
         private void MigrateStoresToHub()
         {
@@ -5482,6 +5489,29 @@ namespace ShipWorks
             catch (Exception ex)
             {
                 log.Error("Failed to migrate stores to Hub", ex);
+            }
+        }
+
+        /// <summary>
+        /// Kick off the HubMigrator MigrateSqlConfigToHub
+        /// </summary>
+        private void MigrateSqlConfigToHub()
+        {
+            try
+            {
+                using (var lifetimeScope = IoC.BeginLifetimeScope())
+                {
+                    if (lifetimeScope.Resolve<ILicenseService>().IsHub)
+                    {
+                        var migrator = lifetimeScope.Resolve<HubMigrator>();
+
+                        Task.Run(async () => await migrator.MigrateSqlConfigToHub());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("Failed to migrate SQL Config to Hub", ex);
             }
         }
 
