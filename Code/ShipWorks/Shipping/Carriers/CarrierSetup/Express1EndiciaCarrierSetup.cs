@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Creates a new Express1 Endicia account from data imported from the hub
         /// </summary>
 #pragma warning disable 1998
-        public async Task Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
             if (express1AccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))

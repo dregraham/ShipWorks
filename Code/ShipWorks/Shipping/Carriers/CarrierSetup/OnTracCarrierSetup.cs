@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Setup an OnTrac account from data imported from the hub
         /// </summary>
 #pragma warning disable 1998
-        public async Task Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
             if (accountRepository.AccountsReadOnly.Any(x =>
