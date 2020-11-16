@@ -46,7 +46,15 @@ namespace ShipWorks.Shipping.CarrierSetup
         public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
+            // skip if we already know about this account
             if (uspsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
+            // skip if there is already a one balance account and this config is for onebalance
+            if (config.IsOneBalance &&
+                uspsAccountRepository.AccountsReadOnly.Any(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId)))
             {
                 return;
             }
