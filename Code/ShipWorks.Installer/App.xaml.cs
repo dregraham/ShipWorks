@@ -98,6 +98,9 @@ namespace ShipWorks.Installer
         protected override async void OnStartup(StartupEventArgs e)
         {
             Logger.Setup();
+
+            Telemetry.Telemetry.TrackStartShipWorksInstaller();
+
             await host.StartAsync();
 
             var window = ServiceProvider.GetRequiredService<MainWindow>();
@@ -111,6 +114,11 @@ namespace ShipWorks.Installer
         /// </summary>
         protected override async void OnExit(ExitEventArgs e)
         {
+            var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
+            var navService = ServiceProvider.GetRequiredService<INavigationService<NavigationPageType>>();
+
+            Telemetry.Telemetry.TrackFinish(mainViewModel.InstallSettings, navService.CurrentPageKey);
+
             using (host)
             {
                 await host.StopAsync(TimeSpan.FromSeconds(5));
@@ -165,6 +173,7 @@ namespace ShipWorks.Installer
             var logFactory = ServiceProvider.GetRequiredService<Func<Type, ILog>>();
 
             logFactory(typeof(App)).Error("An uncaught exception occured:", e);
+            Telemetry.Telemetry.TrackException(e);
             navService.NavigateTo(NavigationPageType.Warning);
         }
     }

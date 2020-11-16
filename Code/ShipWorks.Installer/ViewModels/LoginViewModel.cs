@@ -5,6 +5,7 @@ using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
 using log4net;
+using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
 using ShipWorks.Installer.Services;
@@ -93,6 +94,9 @@ namespace ShipWorks.Installer.ViewModels
 
                 // Needs ConfigureAwait(true) in order to set the mouse cursor in the finally block
                 await hubService.Login(mainViewModel.InstallSettings, Username, Password).ConfigureAwait(true);
+
+                Telemetry.Telemetry.GetCustomerID = () => Username;
+                Telemetry.Telemetry.TrackEvent(new EventTelemetry("UserLoggedInSuccessfully"));
             }
             catch (Exception ex)
             {
