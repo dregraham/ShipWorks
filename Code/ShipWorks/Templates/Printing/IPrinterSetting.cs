@@ -34,7 +34,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// The printer's paper sources
         /// </summary>
-        PaperSource PaperSource { get; }
+        System.Drawing.Printing.PaperSource PaperSource { get; }
 
         /// <summary>
         /// The printer's selected paper source name

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Interapptive.Shared.Data;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
 using Microsoft.Win32;
@@ -250,7 +251,7 @@ namespace ShipWorks.Data.Administration
         /// <summary>
         /// Get the names of all LocalDB databases we have recorded as having created
         /// </summary>
-        private static List<string> GetLocalDbDatabaseNames()
+        public static List<string> GetLocalDbDatabaseNames()
         {
             List<string> names = new List<string>();
 
@@ -408,6 +409,14 @@ namespace ShipWorks.Data.Administration
             DbCommandProvider.ExecuteNonQuery(con, string.Format("EXEC sp_detach_db '{0}'", database));
 
             return databaseInfo;
+        }
+
+        /// <summary>
+        /// Determines if localDb is installed
+        /// </summary>
+        public static bool IsLocalDBInstalled()
+        {
+            return FileUtilities.ExistsOnPath("SqlLocalDB.exe"); ;
         }
     }
 }

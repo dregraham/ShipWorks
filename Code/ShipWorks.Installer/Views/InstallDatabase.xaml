@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="ShipWorks.Installer.Views.InstallDatabase"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:c="clr-namespace:ShipWorks.Installer.Controls"
+    xmlns:fa5="http://schemas.fontawesome.com/icons/"
+    Title="InstallDatabase"
+    d:DesignHeight="600"
+    d:DesignWidth="575"
+    DataContext="{Binding Path=InstallDatabaseViewModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Install Database" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+            <TextBlock.TextDecorations>
+                <TextDecoration/>
+            </TextBlock.TextDecorations>
+        </TextBlock>
+        <TextBlock Text="Setting up database..." />
+            <fa5:FontAwesome Icon="Solid_Spinner"
+                         FontSize="40"
+                         Foreground="#2A67AB" 
+                         Grid.Column="1" 
+                         VerticalAlignment="Center" 
+                         HorizontalAlignment="Center"
+                         Spin="True"
+                         SpinDuration="1.5"/>
+            <TextBlock Text="Your database instance can go up to 10GB in size, so you don't need to worry about running out of space any time soon." TextWrapping="Wrap" Margin="0,10"/>
+            <TextBlock Text="It just Works." Margin="0,10"/>
+        </StackPanel>
+</Page>

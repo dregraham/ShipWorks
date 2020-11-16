@@ -1096,6 +1096,9 @@
   <data name="window_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\window_open.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="window_gear" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\window_gear.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="mail_forward1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\mail_forward1.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

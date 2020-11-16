@@ -15,6 +15,9 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.DTO
         [JsonProperty("ID")]
         public int ID { get; set; }
 
+        [JsonProperty("SiteAccountID")]
+        public int? SiteAccountID { get; set; }
+
         [JsonProperty("ProfileID")]
         public int ProfileID { get; set; }
 

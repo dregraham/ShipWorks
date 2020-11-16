@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:Double x:Key="StandardPaddingValue">10</sys:Double>
+
+    <Thickness x:Key="StandardPaddingFull" 
+               Left="{StaticResource StandardPaddingValue}" 
+               Top="{StaticResource StandardPaddingValue}" 
+               Right="{StaticResource StandardPaddingValue}" 
+               Bottom="{StaticResource StandardPaddingValue}" />
+
+    <Thickness x:Key="StandardPaddingLeft" 
+               Left="{StaticResource StandardPaddingValue}" 
+               Top="0" 
+               Right="0" 
+               Bottom="0" />
+
+    <Thickness x:Key="StandardPaddingTop" 
+               Left="0" 
+               Top="{StaticResource StandardPaddingValue}" 
+               Right="0" 
+               Bottom="0" />
+
+    <Thickness x:Key="StandardPaddingRight" 
+               Left="0" 
+               Top="0" 
+               Right="{StaticResource StandardPaddingValue}" 
+               Bottom="0" />
+
+    <Thickness x:Key="StandardPaddingBottom" 
+               Left="0" 
+               Top="0" 
+               Right="0" 
+               Bottom="{StaticResource StandardPaddingValue}" />
+
+    <Thickness x:Key="StandardPaddingLeftAndRight" 
+               Left="{StaticResource StandardPaddingValue}" 
+               Top="0" 
+               Right="{StaticResource StandardPaddingValue}" 
+               Bottom="0" />
+
+    <Thickness x:Key="StandardPaddingTopAndBottom" 
+               Left="0" 
+               Top="{StaticResource StandardPaddingValue}" 
+               Right="0" 
+               Bottom="{StaticResource StandardPaddingValue}" />
+</ResourceDictionary>

@@ -1,0 +1,166 @@
+<ui:InteropWindow xmlns:ui="clr-namespace:Interapptive.Shared.UI;assembly=Interapptive.Shared"
+        x:Class="ShipWorks.UI.Dialogs.QuickStart.QuickStart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:attachedProperties="clr-namespace:ShipWorks.UI.AttachedProperties"
+        mc:Ignorable="d"
+        SizeToContent="Height"
+        Width="1000"
+        Title="Quick Start"
+        >
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Escape" />
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="Close"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/Store.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/Printer.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/Configuration.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/List.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/Management.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Icons/Product.xaml"/>
+                <ResourceDictionary Source="/ShipWorks.UI;component/Styles/BlueSteel/ButtonStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="Foreground" Value="#4a4a4a"/>
+                <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
+            </Style>
+            <Style x:Key="Header" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="26"/>
+            </Style>
+            <Style x:Key="Subheader" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="ButtonText" TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="#0078d7"/>
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontFamily" Value="/ShipWorks.UI;component/Styles/BlueSteel/#Roboto"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+            <Style x:Key="Details" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+            <Style x:Key="LeftSection" TargetType="{x:Type StackPanel}">                
+                <Setter Property="Margin" Value="0 0 50 35"/>
+            </Style>
+            <Style x:Key="RightSection" TargetType="{x:Type StackPanel}">
+                <Setter Property="Margin" Value="50 0 0 35"/>
+            </Style>
+            <Style x:Key="LargeImage" TargetType="{x:Type Image}">
+                <Setter Property="Height" Value="100"/>
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>                
+            </Style>
+            <Style x:Key="SmallImage" TargetType="{x:Type Image}">
+                <Setter Property="Height" Value="24"/>
+                <Setter Property="Width" Value="24"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="RenderOptions.BitmapScalingMode" Value="Fant"/>
+                <Setter Property="Margin" Value="0 0 10 0"/>
+            </Style>
+            <Style x:Key="SectionButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
+                <Setter Property="Margin" Value="0 0 0 11"/>
+            </Style>
+            <Style x:Key="SectionHeader" TargetType="{x:Type StackPanel}">
+                <Setter Property="Orientation" Value="Horizontal"/>
+            </Style>
+            <Style x:Key="ImageButton" TargetType="{x:Type Button}" BasedOn="{StaticResource Link}">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Margin" Value="0 0 0 26"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+		<StackPanel Grid.Row="0" Margin="0 23 0 0">
+			<TextBlock Text="Welcome to ShipWorks" Style="{StaticResource Header}" />
+            <TextBlock Text="We offer powerful features and tools to enable your business" Style="{StaticResource Subheader}" />
+		</StackPanel>
+        <Grid Grid.Row="1"  Margin="72 34 72 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Style="{StaticResource ImageButton}" Click="OnClickAddStore">
+                <Image Style="{StaticResource LargeImage}" Source="{StaticResource Store}" />
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" Margin="50 0 0 26" Style="{StaticResource ImageButton}" Click="OnClickSetupPrinters">
+                <Image Style="{StaticResource LargeImage}" Source="{StaticResource Printer}" />
+            </Button>
+            <StackPanel Grid.Row="1" Grid.Column="0" Style="{StaticResource LeftSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickAddStore">
+                    <TextBlock Text="Connect a Store" Style="{StaticResource ButtonText}" />
+                </Button>
+                <TextBlock Text="Add a new marketplace, file, or ODBC connection to import orders from." Style="{StaticResource Details}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Style="{StaticResource RightSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickSetupPrinters">
+                    <TextBlock Text="Setup Default Printers" Style="{StaticResource ButtonText}" />
+                </Button>
+                <TextBlock Text="Setup your default thermal or standard printers to use with ShipWorks." Style="{StaticResource Details}"/>
+            </StackPanel>
+            <Separator Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="-52 0 -52 35" Background="#dededd"/>
+            <StackPanel Grid.Row="3" Grid.Column="0" Style="{StaticResource LeftSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickShippingRules">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource List}" />
+                        <TextBlock Text="Setup Automated Shipping Rules" Style="{StaticResource ButtonText}" />
+                    </StackPanel>
+                </Button>                               
+                <TextBlock Text="Configure rules to ensure your shipments are processed with the correct settings every time." Style="{StaticResource Details}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Style="{StaticResource RightSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickFilters">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Product}" />
+                        <TextBlock Text="Create a Filter" Style="{StaticResource ButtonText}"/>
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="Create a filter to find and display orders that meet criteria that you decide upon." Style="{StaticResource Details}"/>                
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="0" Style="{StaticResource LeftSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickTemplates">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Configuration}" />
+                        <TextBlock Text="Customize Templates" Style="{StaticResource ButtonText}"/>
+                    </StackPanel>
+                </Button>                             
+                <TextBlock Text="Customize your templates to ensure proper formatting and brand placement." Style="{StaticResource Details}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="4" Grid.Column="1" Style="{StaticResource RightSection}">
+                <Button Style="{StaticResource SectionButton}" Click="OnClickInventory">
+                    <StackPanel Style="{StaticResource SectionHeader}">
+                        <Image Style="{StaticResource SmallImage}" Source="{StaticResource Management}" VerticalAlignment="Center"/>
+                        <TextBlock Text="Setup Inventory Management" Style="{StaticResource ButtonText}" />
+                    </StackPanel>
+                </Button>
+                <TextBlock Text="Setup your inventory through The Hub to track product levels." Style="{StaticResource Details}"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Grid.Row="2" Style="{StaticResource Subheader}" Margin="0 0 0 50">
+            For additional information, visit our
+            <Hyperlink Foreground="#4a4a4a" NavigateUri="https://support.shipworks.com/" attachedProperties:Link.OpenInBrowser="True">knowledgebase</Hyperlink>
+        </TextBlock>          
+    </Grid>
+</ui:InteropWindow>
