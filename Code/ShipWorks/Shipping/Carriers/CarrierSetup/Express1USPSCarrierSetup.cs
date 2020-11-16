@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// Creates a new Express1 USPS account from data imported from the hub
         /// </summary>
 #pragma warning disable 1998
-        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
+        public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
             if (express1AccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))

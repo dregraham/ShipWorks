@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         public async Task Configure(List<CarrierConfiguration> configs)
         {
             bool skipOneBalanceSetup = SkipOneBalanceSetup(configs);
-            IUspsAccountEntity oneBalanceUspsAccount = null;
+            UspsAccountEntity oneBalanceUspsAccount = null;
 
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
 

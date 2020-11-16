@@ -13,6 +13,6 @@ namespace ShipWorks.Shipping.CarrierSetup
         /// <summary>
         /// Setup the carrier with the given config
         /// </summary>
-        Task Setup(CarrierConfiguration config, IUspsAccountEntity uspsOneBalanceAccount);
+        Task Setup(CarrierConfiguration config, UspsAccountEntity uspsOneBalanceAccount);
     }
 }

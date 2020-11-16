@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Setup a DHL account from data imported from the hub
         /// </summary>
-        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
+        public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
         {
             if (accountRepository.AccountsReadOnly.Any(x =>
                 x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))

@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Setup an Endicia account from data imported from the hub
         /// </summary>
 #pragma warning disable 1998
-        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
+        public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
             if (endiciaAccountRepository.AccountsReadOnly.Any(x =>
