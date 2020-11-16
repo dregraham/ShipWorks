@@ -58,8 +58,16 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
         {
+            // skip if we already know about this account
             if (accountRepository.AccountsReadOnly.Any(x =>
                 x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
+            // skip if there is already a one balance account and this config is for onebalance
+            if (config.IsOneBalance &&
+                accountRepository.AccountsReadOnly.Any(x => x.UspsAccountId.HasValue))
             {
                 return;
             }
@@ -78,7 +86,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             {
                 if (config.IsOneBalance)
                 {
-                    AddDhlToUsps(oneBalanceUspsAccount);
                     dhlAccount.UspsAccountId = oneBalanceUspsAccount.UspsAccountID;
                     dhlAccount.AccountNumber = oneBalanceUspsAccount.UspsAccountID;
                     dhlAccount.FirstName = oneBalanceUspsAccount.FirstName;
@@ -112,21 +119,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             accountRepository.Save(dhlAccount);
             SetupDefaultsIfNeeded(ShipmentTypeCode.DhlExpress, config.RequestedLabelFormat);
-        }
-
-        /// <summary>
-        /// Add Dhl To Usps
-        /// </summary>
-        private void AddDhlToUsps(IUspsAccountEntity oneBalanceUspsAccount)
-        {
-            try
-            {
-                uspsWebClient.AddDhlExpress(oneBalanceUspsAccount);
-            }
-            catch(UspsApiException ex) when (ex.Code == 5637639)
-            {
-                log.Warn("DHL Account already added", ex);
-            }
         }
 
         /// <summary>
