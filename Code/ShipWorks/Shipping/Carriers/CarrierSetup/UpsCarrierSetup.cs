@@ -54,10 +54,18 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// Setup a UPS account from data imported from the hub
         /// </summary>
 #pragma warning disable 1998
-        public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
+        public async Task Setup(CarrierConfiguration config, IUspsAccountEntity oneBalanceUspsAccount)
 #pragma warning restore 1998
         {
+            // skip if we already know about this account
             if (upsAccountRepository.AccountsReadOnly.Any(x => x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
+            // skip if there is already a one balance account and this config is for onebalance
+            if (config.IsOneBalance && 
+                upsAccountRepository.AccountsReadOnly.Any(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId)))
             {
                 return;
             }
