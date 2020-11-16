@@ -226,7 +226,7 @@ namespace ShipWorks.AutoInstall
                 sqlServerName = connectionStringBuilder.DataSource;
                 databaseName = connectionStringBuilder.InitialCatalog;
                 sqlUsername = connectionStringBuilder.UserID;
-                sqlPassword = SecureText.Decrypt(connectionStringBuilder.Password, sqlUsername);
+                sqlPassword = GetSqlPassword(connectionStringBuilder);
                 windowsAuth = connectionStringBuilder.Authentication == SqlAuthenticationMethod.ActiveDirectoryIntegrated ||
                               string.IsNullOrWhiteSpace(sqlUsername) || string.IsNullOrWhiteSpace(sqlPassword);
 
@@ -264,6 +264,23 @@ namespace ShipWorks.AutoInstall
             }
 
             return newSqlSession;
+        }
+
+        /// <summary>
+        /// Get the sql password from the connection string
+        /// </summary>
+        private string GetSqlPassword(SqlConnectionStringBuilder connectionStringBuilder)
+        {
+            string sqlPassword = SecureText.Decrypt(connectionStringBuilder.Password, connectionStringBuilder.UserID);
+
+            // If Decrypt isn't able to decrypt, it will return blank.  This could happen if the password is given
+            // to us unencrypted.
+            if (string.IsNullOrWhiteSpace(sqlPassword))
+            {
+                sqlPassword = connectionStringBuilder.Password;
+            }
+
+            return sqlPassword;
         }
 
         /// <summary>
