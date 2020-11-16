@@ -28,9 +28,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
         private readonly IShipEngineWebClient shipEngineWebClient;
-        private readonly IUspsWebClient uspsWebClient;
         private readonly ICarrierAccountDescription accountDescription;
-        private readonly ILog log;
 
         /// <summary>
         /// Constructor
@@ -41,16 +39,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             IShipmentPrintHelper printHelper,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
             IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory,
-            IShipEngineWebClient shipEngineWebClient,
-            IUspsWebClient uspsWebClient,
-            Func<Type,ILog> createLog)
+            IShipEngineWebClient shipEngineWebClient)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
             this.shipEngineWebClient = shipEngineWebClient;
-            this.uspsWebClient = uspsWebClient;
             accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
-            log = createLog(typeof(DhlCarrierSetup));
         }
 
         /// <summary>

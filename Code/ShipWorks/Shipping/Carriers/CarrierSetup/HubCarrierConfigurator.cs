@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     {
         private readonly IIndex<ShipmentTypeCode, ICarrierSetup> carrierSetupFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
-        private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository;
         private readonly ILog log;
 
         /// <summary>
@@ -29,12 +28,10 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         public HubCarrierConfigurator(
             IIndex<ShipmentTypeCode, ICarrierSetup> carrierSetupFactory,
-            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository,
-            ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> dhlExpressAccountRepository)
+            ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository)
         {
             this.carrierSetupFactory = carrierSetupFactory;
             this.uspsAccountRepository = uspsAccountRepository;
-            this.dhlExpressAccountRepository = dhlExpressAccountRepository;
             this.log = LogManager.GetLogger(typeof(HubCarrierConfigurator));
         }
 
@@ -49,8 +46,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             // USPS is setup for one balance, but it is a different account than the one in the hub
             if (uspsAccountRepository.AccountsReadOnly
-                   .Where(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId))
-                   .Any(a => a.Username != uspsOneBalanceConfig.AdditionalData["usps"].ToObject<UspsAccountConfiguration>().Username))
+                   .Any(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId) &&
+                            a.Username != uspsOneBalanceConfig.AdditionalData["usps"].ToObject<UspsAccountConfiguration>().Username))
             {
                 return true;
             }
@@ -68,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
 
-            if(skipOneBalanceSetup)
+            if (skipOneBalanceSetup)
             {
                 log.Warn("Skipping One Balance accounts because One Balance already set up inside the client and conflicts with the hub");
             }
@@ -79,8 +76,8 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             }
 
             foreach (var config in configs
-                .Where(c => uspsOneBalanceConfig == null || c.HubCarrierID != uspsOneBalanceConfig.HubCarrierID)
-                .Where(c=> !(skipOneBalanceSetup && c.IsOneBalance)))
+                .Where(c => (uspsOneBalanceConfig == null || c.HubCarrierID != uspsOneBalanceConfig.HubCarrierID) &&
+                            !(skipOneBalanceSetup && c.IsOneBalance)))
             {
                 try
                 {
