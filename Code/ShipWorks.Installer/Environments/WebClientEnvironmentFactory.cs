@@ -13,7 +13,7 @@ namespace ShipWorks.Installer.Environments
     {
         // Logger
         private readonly ILog log;
-        private const string InnoSetupInstallerProductionUrl = "https://prod-sw-downloads-app.s3.amazonaws.com/ShipWorksInstaller.exe";
+        private const string InnoSetupInstallerProductionUrl = "https://prod-sw-downloads-app.s3.amazonaws.com/ShipWorksInnoInstaller.exe";
         private const string EnvironmentSelectedName = "EnvironmentSelectedName";
         private const string EnvironmentOtherWarehouseUrl = "EnvironmentOtherWarehouseUrl";
         private const string EnvironmentOtherInnoInstallerUrl = "EnvironmentOtherInnoInstallerUrl";
