@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Forms;
+using Interapptive.Shared.Metrics;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -31,6 +34,28 @@ namespace ShipWorks.Shipping
         /// Determine what templates to use to print the given shipment with based on rules of the shipment type
         /// </summary>
         public static List<TemplateEntity> DetermineTemplatesToPrint(IShipmentEntity shipment)
+        {
+            List<TemplateEntity> results = new List<TemplateEntity>();
+
+            using (ITrackedEvent telementryEvent = new TrackedEvent("ShipmentPrintHelper"))
+            {
+                TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("DetermineTemplatesToPrint");
+
+                telemetricResult.RunTimedEvent("Time(ms)", () =>
+                {
+                    results = DetermineTemplatesToPrintInternal(shipment);
+                });
+
+                telemetricResult.WriteTo(telementryEvent);
+            }
+
+            return results;
+        }
+
+        /// <summary>
+        /// Determine what templates to use to print the given shipment with based on rules of the shipment type
+        /// </summary>
+        private static List<TemplateEntity> DetermineTemplatesToPrintInternal(IShipmentEntity shipment)
         {
             List<TemplateEntity> templates = new List<TemplateEntity>();
 
