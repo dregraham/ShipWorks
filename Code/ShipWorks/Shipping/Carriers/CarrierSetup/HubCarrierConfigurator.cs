@@ -48,19 +48,9 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             }
 
             // USPS is setup for one balance, but it is a different account than the one in the hub
-            if (uspsOneBalanceConfig != null &&
-                uspsAccountRepository.AccountsReadOnly
+            if (uspsAccountRepository.AccountsReadOnly
                    .Where(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId))
-                   .Any(a => a.HubCarrierId != uspsOneBalanceConfig.HubCarrierID))
-            {
-                return true;
-            }
-
-            var dhlOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.DhlExpress && c.IsOneBalance);
-            // DHLx is setup for one balance, but it is a different account than the one in the hub
-            if (dhlOneBalanceConfig != null &&
-                dhlExpressAccountRepository.AccountsReadOnly.Where(a => a.UspsAccountId.HasValue)
-                .Any(a => a.HubCarrierId != dhlOneBalanceConfig.HubCarrierID))
+                   .Any(a => a.Username != uspsOneBalanceConfig.AdditionalData["usps"].ToObject<UspsAccountConfiguration>().Username))
             {
                 return true;
             }
