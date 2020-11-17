@@ -121,12 +121,6 @@ namespace ShipWorks.Installer.Telemetry
                 AddProperty(eventTelemetry, $"{installSettings.Error}Succeeded", "No");
             }
 
-
-            //AddProperty(eventTelemetry, "InstallShipWorksSucceeded", installSettings.Error == InstallError.InstallShipWorks ? "No" : "Yes");
-            //AddProperty(eventTelemetry, "DatabaseSucceeded", installSettings.Error == InstallError.Database ? "No" : "Yes");
-            //AddProperty(eventTelemetry, "SystemCheckSucceeded", installSettings.Error == InstallError.SystemCheck ? "No" : "Yes");
-            //AddProperty(eventTelemetry, "UnknownFailure", installSettings.Error == InstallError.Unknown ? "Yes" : "No");
-
             if (installSettings.Error == InstallError.SystemCheck)
             {
                 AddProperty(eventTelemetry, "SystemCheckFailed.CpuMeetsRequirement", installSettings.CheckSystemResult.CpuMeetsRequirement ? "Yes" : "No");
