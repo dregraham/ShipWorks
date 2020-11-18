@@ -16,7 +16,6 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
 
         public string OnlineStoreCode { get; set; }
 
-        [JsonProperty("importStartDetails")]
-        public int InitialDaysBack { get; set; }
+        public long? ImportStartDetails { get; set; }
     }
 }
