@@ -3,11 +3,13 @@ using Interapptive.Shared.Collections;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Warehouse.Configuration.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// An abstract class for common carrier setup functionality

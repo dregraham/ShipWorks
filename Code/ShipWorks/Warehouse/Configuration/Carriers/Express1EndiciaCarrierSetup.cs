@@ -7,14 +7,15 @@ using Interapptive.Shared.Security;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Setup the Express1 Endicia Carrier configuration downloaded from the Hub

@@ -7,14 +7,14 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Setup the USPS Carrier configuration downloaded from the Hub

@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 
-namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
+namespace ShipWorks.Warehouse.Configuration.Carriers.DTO
 {
     /// <summary>
     /// DTO for importing UPS account data from the hub

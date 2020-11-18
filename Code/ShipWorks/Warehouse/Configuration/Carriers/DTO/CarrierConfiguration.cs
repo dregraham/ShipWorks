@@ -5,8 +5,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping;
+using ShipWorks.Warehouse.Configuration.DTO;
 
-namespace ShipWorks.Warehouse.Configuration.DTO.ShippingSettings
+namespace ShipWorks.Warehouse.Configuration.Carriers.DTO
 {
     /// <summary>
     /// DTO for importing a carrier confiugration from hub

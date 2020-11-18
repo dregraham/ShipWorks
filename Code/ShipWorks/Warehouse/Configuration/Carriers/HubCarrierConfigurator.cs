@@ -5,10 +5,10 @@ using Autofac.Features.Indexed;
 using Common.Logging;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.CarrierSetup;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Shipping;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Configures carriers downloaded from the Hub
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Configure carriers
         /// </summary>
-        public async Task Configure(List<CarrierConfiguration> configs)
+        public async Task Configure(IEnumerable<CarrierConfiguration> configs)
         {
             foreach (var config in configs)
             {

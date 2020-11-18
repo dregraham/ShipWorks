@@ -8,7 +8,6 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -19,7 +18,7 @@ namespace ShipWorks.Warehouse.Configuration
     public class HubConfigurationImporter : IInitializeForCurrentSession
     {
         private readonly ILicenseService licenseService;
-        private readonly IHubCarrierConfigurator carrierConfigurator;
+        private readonly IHubConfigurator configurator;
         private readonly IHubConfigurationWebClient webClient;
         private readonly IConfigurationData configurationData;
         private readonly ILog log;
@@ -28,13 +27,13 @@ namespace ShipWorks.Warehouse.Configuration
         /// Constructor
         /// </summary>
         public HubConfigurationImporter(ILicenseService licenseService,
-            IHubCarrierConfigurator carrierConfigurator,
+            IHubConfigurator configurator,
             IHubConfigurationWebClient webClient,
             IConfigurationData configurationData,
              Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
-            this.carrierConfigurator = carrierConfigurator;
+            this.configurator = configurator;
             this.webClient = webClient;
             this.configurationData = configurationData;
             log = logFactory(typeof(HubConfigurationImporter));
@@ -55,7 +54,7 @@ namespace ShipWorks.Warehouse.Configuration
                         try
                         {
                             var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
-                            await carrierConfigurator.Configure(hubConfig.CarrierConfigurations);
+                            await configurator.Configure(hubConfig);
                         }
                         catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
                         {

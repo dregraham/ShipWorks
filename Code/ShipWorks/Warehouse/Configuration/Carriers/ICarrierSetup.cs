@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Setup carrier configurations downloaded from the Hub
