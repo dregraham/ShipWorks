@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
-using Common.Logging;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
@@ -16,10 +17,12 @@ namespace ShipWorks.Warehouse.Configuration.Stores
     /// <summary>
     /// Class to configure stores downloaded from the Hub
     /// </summary>
+    [Component]
     public class HubStoreConfigurator : IHubStoreConfigurator
     {
         private readonly IIndex<StoreTypeCode, IStoreSetup> storeSetupFactory;
         private readonly IStoreManager storeManager;
+        private readonly IStoreTypeManager storeTypeManager;
         private readonly ILog log;
 
         /// <summary>
@@ -27,10 +30,12 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// </summary>
         public HubStoreConfigurator(IIndex<StoreTypeCode, IStoreSetup> storeSetupFactory,
             IStoreManager storeManager,
+            IStoreTypeManager storeTypeManager,
             Func<Type, ILog> logFactory)
         {
             this.storeSetupFactory = storeSetupFactory;
             this.storeManager = storeManager;
+            this.storeTypeManager = storeTypeManager;
             log = logFactory(typeof(HubStoreConfigurator));
         }
 
@@ -43,7 +48,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             {
                 try
                 {
-                    var store = await storeSetupFactory[config.StoreType]?.Setup(config);
+                    var storeType = storeTypeManager.GetType(config.StoreType);
+                    var type = storeType.StoreReadOnly.GetType();
+
+                    var store = storeSetupFactory[config.StoreType].Setup<StoreEntity>(config);
 
                     // Fill in non-null values for anything the store is not yet configured for
                     store.InitializeNullsToDefault();

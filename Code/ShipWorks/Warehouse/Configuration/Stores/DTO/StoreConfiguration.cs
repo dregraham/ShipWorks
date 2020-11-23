@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using ShipWorks.Stores;
+﻿using ShipWorks.Stores;
 
 namespace ShipWorks.Warehouse.Configuration.Stores.DTO
 {
@@ -26,9 +23,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         public string UniqueIdentifier { get; set; }
 
         /// <summary>
-        /// Additional store-specific configuration data
+        /// The JSON serialized store entity
         /// </summary>
-        [JsonExtensionData]
-        public IDictionary<string, JToken> AdditionalData { get; set; }
+        public string SyncPayload { get; set; }
     }
 }

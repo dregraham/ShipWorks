@@ -1568,14 +1568,18 @@
     <Compile Include="Warehouse\Configuration\Carriers\DTO\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\UpsAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\HubConfigurationSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\GenericModuleConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
-    <Compile Include="Warehouse\Configuration\Stores\GenericModuleSetup.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSynchronization.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\HubStoreSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\IHubStoreSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IStoreSetup.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\BaseStoreSetup.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
@@ -1590,7 +1594,6 @@
     <Compile Include="Warehouse\Orders\DTO\WarehouseUploadOrderResponses.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\CarrierConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\UspsAccountConfiguration.cs" />
-    <Compile Include="Warehouse\Configuration\HubConfigurationImporter.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurationWebClient.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurationWebClient.cs" />
     <Compile Include="Warehouse\Orders\IWarehouseOrderClient.cs" />

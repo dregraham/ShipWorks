@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Interapptive.Shared;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Warehouse.Configuration.Stores;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -15,28 +17,32 @@ namespace ShipWorks.Warehouse.Configuration
     /// Class to import and apply the configuration from Hub
     /// </summary>
     [Order(typeof(IInitializeForCurrentSession), 2)]
-    public class HubConfigurationImporter : IInitializeForCurrentSession
+    public class HubConfigurationSynchronizer : IInitializeForCurrentSession
     {
         private readonly ILicenseService licenseService;
         private readonly IHubConfigurator configurator;
         private readonly IHubConfigurationWebClient webClient;
         private readonly IConfigurationData configurationData;
+        private readonly IHubStoreSynchronizer hubStoreSynchronizer;
         private readonly ILog log;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubConfigurationImporter(ILicenseService licenseService,
+        [NDependIgnoreTooManyParams]
+        public HubConfigurationSynchronizer(ILicenseService licenseService,
             IHubConfigurator configurator,
             IHubConfigurationWebClient webClient,
             IConfigurationData configurationData,
-             Func<Type, ILog> logFactory)
+            IHubStoreSynchronizer hubStoreSynchronizer,
+            Func<Type, ILog> logFactory)
         {
             this.licenseService = licenseService;
             this.configurator = configurator;
             this.webClient = webClient;
             this.configurationData = configurationData;
-            log = logFactory(typeof(HubConfigurationImporter));
+            this.hubStoreSynchronizer = hubStoreSynchronizer;
+            log = logFactory(typeof(HubConfigurationSynchronizer));
         }
 
         /// <summary>
@@ -54,7 +60,8 @@ namespace ShipWorks.Warehouse.Configuration
                         try
                         {
                             var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
-                            await configurator.Configure(hubConfig);
+                            await configurator.Configure(hubConfig).ConfigureAwait(false);
+                            await hubStoreSynchronizer.SynchronizeStoresIfNeeded(hubConfig.StoreConfigurations).ConfigureAwait(false);
                         }
                         catch (AggregateException ex) when (ex.InnerExceptions.FirstOrDefault() is WebException)
                         {
