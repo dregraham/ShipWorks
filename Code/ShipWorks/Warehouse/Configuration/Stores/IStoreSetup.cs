@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.Stores
@@ -11,6 +12,6 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Setup a store from given store configuration
         /// </summary>
-        StoreEntity Setup<T>(StoreConfiguration config) where T : StoreEntity;
+        StoreEntity Setup(StoreConfiguration config, Type storeType);
     }
 }

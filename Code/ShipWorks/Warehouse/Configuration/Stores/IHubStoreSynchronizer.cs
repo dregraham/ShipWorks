@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
@@ -13,11 +14,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Synchronize any stores that aren't currently in Hub
         /// </summary>
-        Task SynchronizeStoresIfNeeded(IEnumerable<StoreConfiguration> storeConfigurations);
+        Task<Result> SynchronizeStoresIfNeeded(IEnumerable<StoreConfiguration> storeConfigurations);
 
         /// <summary>
         /// Synchronize a store to Hub
         /// </summary>
-        Task SynchronizeStore(StoreEntity store);
+        Task<Result> SynchronizeStore(StoreEntity store);
     }
 }

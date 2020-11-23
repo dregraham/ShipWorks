@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
@@ -48,37 +49,62 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             {
                 try
                 {
-                    var storeType = storeTypeManager.GetType(config.StoreType);
-                    var type = storeType.StoreReadOnly.GetType();
+                    //Convert the config store to a store entity
+                    var storeType = storeTypeManager.GetType(config.StoreType).CreateStoreInstance().GetType();
+                    var deserializedStore = storeSetupFactory[config.StoreType].Setup(config, storeType);
 
-                    var store = storeSetupFactory[config.StoreType].Setup<StoreEntity>(config);
-
-                    // Fill in non-null values for anything the store is not yet configured for
-                    store.InitializeNullsToDefault();
-                    store.StartSetup();
-
-                    using (SqlAdapter adapter = new SqlAdapter(true))
+                    if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier))
                     {
-                        // Create the default presets
-                        CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
-                        CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
-
-                        StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                        storeFilterRepository.Save(true);
-
-                        // Mark that this store is now ready
-                        store.CompleteSetup();
-                        storeManager.SaveStore(store, adapter);
-
-                        CreateOrigin(store, adapter);
-
-                        adapter.Commit();
+                        UpdateStore(deserializedStore);
+                    }
+                    else
+                    {
+                        ConfigureNewStore(deserializedStore);
                     }
                 }
                 catch (Exception ex)
                 {
                     log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.StoreType)}: {ex.Message}", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Updates an existing store and saves it to the DB
+        /// </summary>
+        private void UpdateStore(StoreEntity deserializedStore)
+        {
+            deserializedStore.IsNew = false;
+            storeManager.SaveStore(deserializedStore);
+        }
+
+        /// <summary>
+        /// Configures a new store and saves it to the DB
+        /// </summary>
+        private void ConfigureNewStore(StoreEntity store)
+        {
+            // Fill in non-null values for anything the store is not yet configured for
+            store.InitializeNullsToDefault();
+            store.StartSetup();
+
+            storeManager.SaveStore(store);
+
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                // Create the default presets
+                CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
+                CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
+
+                StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+                storeFilterRepository.Save(true);
+
+                // Mark that this store is now ready
+                store.CompleteSetup();
+                storeManager.SaveStore(store, adapter);
+
+                CreateOrigin(store, adapter);
+
+                adapter.Commit();
             }
         }
 

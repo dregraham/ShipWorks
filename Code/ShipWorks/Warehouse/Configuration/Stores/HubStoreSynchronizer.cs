@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
@@ -52,15 +53,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Synchronize a store to Hub
         /// </summary>
-        public async Task SynchronizeStore(StoreEntity store)
-        {
+        public async Task<Result> SynchronizeStore(StoreEntity store) =>
             await SynchronizeStores(new List<StoreEntity> { store }).ConfigureAwait(false);
-        }
 
         /// <summary>
         /// Synchronize the given stores to the Hub
         /// </summary>
-        private async Task SynchronizeStores(IEnumerable<StoreEntity> stores)
+        private async Task<Result> SynchronizeStores(IEnumerable<StoreEntity> stores)
         {
             var request = new StoreSynchronizationRequest()
             {
@@ -80,7 +79,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 request.StoreSynchronizations.Add(synchronization);
             }
 
-            await warehouseStoreClient.SynchronizeStores(request).ConfigureAwait(false);
+            return await warehouseStoreClient.SynchronizeStores(request).ConfigureAwait(false);
         }
     }
 }

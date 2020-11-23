@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -19,7 +18,6 @@ using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Appearance;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Licensing.LicenseEnforcement;
 using ShipWorks.ApplicationCore.Licensing.Warehouse;
@@ -40,6 +38,7 @@ using ShipWorks.UI.Wizard;
 using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse.Configuration.Stores;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -83,10 +82,10 @@ namespace ShipWorks.Stores.Management
         /// <summary>
         /// Constructor
         /// </summary>
-        public AddStoreWizard(ILifetimeScope scope, 
-            ILicenseService licenseService, 
-            Func<IChannelLimitFactory> channelLimitFactory, 
-            IDefaultWarehouseCreator defaultWarehouseCreator) 
+        public AddStoreWizard(ILifetimeScope scope,
+            ILicenseService licenseService,
+            Func<IChannelLimitFactory> channelLimitFactory,
+            IDefaultWarehouseCreator defaultWarehouseCreator)
         {
             this.scope = scope;
             this.licenseService = licenseService;
@@ -613,7 +612,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private async Task OnSteppingIntoAddress(object sender, WizardSteppingIntoEventArgs e)
         {
-            if((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value)
+            if ((await defaultWarehouseCreator.NeedsDefaultWarehouse().ConfigureAwait(true)).Value)
             {
                 labelDefaultWarehosue.Visible = true;
             }
@@ -659,16 +658,16 @@ namespace ShipWorks.Stores.Management
                 storeAddress.City.ValidateLength(30, 1, "The city must not be empty."),
             };
 
-            if(!Regex.IsMatch(storeAddress.PostalCode, "^([0-9]{5})(-?([0-9]{4}))?$"))
+            if (!Regex.IsMatch(storeAddress.PostalCode, "^([0-9]{5})(-?([0-9]{4}))?$"))
             {
-                results.Add(Result.FromError("The postal code you entered is not valid.")); 
+                results.Add(Result.FromError("The postal code you entered is not valid."));
             }
 
             if (results.Any(r => r.Failure))
             {
                 MessageHelper.ShowError(this, string.Join(Environment.NewLine, results.Where(r => r.Failure).Select(r => r.Message)));
                 return false;
-            } 
+            }
 
             return true;
         }
@@ -1062,9 +1061,7 @@ namespace ShipWorks.Stores.Management
 
                 await CreateDefaultWarehouse(store).ConfigureAwait(true);
 
-                if (store.WarehouseStoreID == null &&
-                    SelectedStoreType.ShouldUseHub(store) &&
-                    (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
+                if ((await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
                 }
@@ -1127,19 +1124,34 @@ namespace ShipWorks.Stores.Management
         {
             using (var innerScope = scope.BeginLifetimeScope())
             {
-                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store, true)
-                    .ConfigureAwait(true);
-                if (result.Failure)
-                {
-                    innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
+                var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store).ConfigureAwait(true);
 
-                    MessageHelper.ShowError(
-                        this,
-                        $"An error occurred saving the store to ShipWorks.");
-                    e.Skip = true;
-                    e.SkipToPage = wizardPageContactInfo;
-                    BackEnabled = true;
+                if (syncResult.Failure)
+                {
+                    var logger = scope.Resolve<Func<Type, ILog>>();
+                    logger(typeof(StoreSettingsDlg)).Error("Failed to Sync store to Hub.", syncResult.Exception);
                 }
+
+                Result result = Result.FromSuccess();
+
+                if (store.WarehouseStoreID == null && SelectedStoreType.ShouldUseHub(store))
+                {
+                    result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store, true)
+                   .ConfigureAwait(true);
+
+                    if (result.Failure)
+                    {
+                        innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
+
+                        MessageHelper.ShowError(
+                            this,
+                            $"An error occurred saving the store to ShipWorks.");
+                        e.Skip = true;
+                        e.SkipToPage = wizardPageContactInfo;
+                        BackEnabled = true;
+                    }
+                }
+
                 return result;
             }
         }
