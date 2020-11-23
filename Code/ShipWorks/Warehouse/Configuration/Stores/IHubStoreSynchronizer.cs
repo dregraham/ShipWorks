@@ -14,7 +14,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Synchronize any stores that aren't currently in Hub
         /// </summary>
-        Task<Result> SynchronizeStoresIfNeeded(IEnumerable<StoreConfiguration> storeConfigurations);
+        Task SynchronizeStoresIfNeeded(IEnumerable<StoreConfiguration> storeConfigurations);
 
         /// <summary>
         /// Synchronize a store to Hub

@@ -10,7 +10,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
     /// <summary>
     /// Base class for setting up a store from a getConfig call
     /// </summary>
-    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode), new object[] { StoreTypeCode.Amazon })]
+    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode))]
     public class BaseStoreSetup : IStoreSetup
     {
         /// <summary>
