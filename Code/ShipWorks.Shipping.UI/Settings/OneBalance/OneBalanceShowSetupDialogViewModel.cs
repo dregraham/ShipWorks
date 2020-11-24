@@ -13,6 +13,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.OneBalance;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
