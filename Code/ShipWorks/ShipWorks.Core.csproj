@@ -1571,7 +1571,6 @@
     <Compile Include="Warehouse\Configuration\HubConfigurationSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
-    <Compile Include="Warehouse\Configuration\Stores\DTO\GenericModuleConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSynchronization.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreConfigurator.cs" />
