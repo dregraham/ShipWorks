@@ -1,5 +1,4 @@
 using System.Reflection;
-using ShipWorks.Warehouse.Configuration.DTO;
 
 namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
 {
@@ -25,15 +24,5 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse.DTO
         /// The warehouse that migrated this store to the hub
         /// </summary>
         public string MigrationWarehouseId { get; set; }
-
-        /// <summary>
-        /// The store's address
-        /// </summary>
-        public ConfigurationAddress Address { get; set; }
-
-        /// <summary>
-        /// Whether or not this store should be synced with other instances of ShipWorks
-        /// </summary>
-        public bool ShipWorksSyncEnabled { get; set; }
     }
 }
