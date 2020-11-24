@@ -35,24 +35,19 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             this.log = LogManager.GetLogger(typeof(HubCarrierConfigurator));
         }
 
-        private bool SkipOneBalanceSetup(List<CarrierConfiguration> configs)
+        private bool SkipOneBalanceSetup(CarrierConfiguration uspsOneBalanceConfig, UspsAccountEntity existingUspsOneBalanceAccount)
         {
-            var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
             if(uspsOneBalanceConfig == null)
             {
                 // one balance isn't set up in the hub
                 return true;
             }
 
-            // USPS is setup for one balance, but it is a different account than the one in the hub
-            if (uspsAccountRepository.AccountsReadOnly
-                   .Any(a => !string.IsNullOrWhiteSpace(a.ShipEngineCarrierId) &&
-                            a.Username != uspsOneBalanceConfig.AdditionalData["usps"].ToObject<UspsAccountConfiguration>().Username))
-            {
-                return true;
-            }
+            var usernameFromConfig = uspsOneBalanceConfig.AdditionalData["usps"].ToObject<UspsAccountConfiguration>()
+                .Username;
 
-            return false;
+            // USPS is setup for one balance, but it is a different account than the one in the hub
+            return !string.Equals(existingUspsOneBalanceAccount.Username, usernameFromConfig, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>
@@ -60,10 +55,12 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// </summary>
         public async Task Configure(List<CarrierConfiguration> configs)
         {
-            bool skipOneBalanceSetup = SkipOneBalanceSetup(configs);
-            UspsAccountEntity oneBalanceUspsAccount = null;
-
             var uspsOneBalanceConfig = configs.SingleOrDefault(c => c.CarrierType == ShipmentTypeCode.Usps && c.IsOneBalance);
+
+            var oneBalanceUspsAccount =
+                uspsAccountRepository.Accounts.SingleOrDefault(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId));
+
+            bool skipOneBalanceSetup = SkipOneBalanceSetup(uspsOneBalanceConfig, oneBalanceUspsAccount);
 
             if (skipOneBalanceSetup)
             {
@@ -72,16 +69,25 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             else
             {
                 await carrierSetupFactory[ShipmentTypeCode.Usps].Setup(uspsOneBalanceConfig, null).ConfigureAwait(false);
-                oneBalanceUspsAccount = uspsAccountRepository.Accounts.Single(a => a.HubCarrierId == uspsOneBalanceConfig.HubCarrierID);
+                if (oneBalanceUspsAccount == null)
+                {
+                    oneBalanceUspsAccount = uspsAccountRepository.Accounts.Single(a => a.HubCarrierId == uspsOneBalanceConfig.HubCarrierID);
+                }
             }
 
-            foreach (var config in configs
-                .Where(c => (uspsOneBalanceConfig == null || c.HubCarrierID != uspsOneBalanceConfig.HubCarrierID) &&
-                            !(skipOneBalanceSetup && c.IsOneBalance)))
+            foreach (var config in configs)
             {
                 try
                 {
-                    await carrierSetupFactory[config.CarrierType]?.Setup(config, oneBalanceUspsAccount);
+                    var needsSetup = uspsOneBalanceConfig == null ||
+                                       config.HubCarrierID != uspsOneBalanceConfig.HubCarrierID;
+
+                    var skipOneBalance = skipOneBalanceSetup && config.IsOneBalance;
+
+                    if (needsSetup && !skipOneBalance)
+                    {
+                        await carrierSetupFactory[config.CarrierType]?.Setup(config, oneBalanceUspsAccount);
+                    }
                 }
                 catch (Exception ex)
                 {
