@@ -22,7 +22,7 @@ namespace Interapptive.Shared.ComponentRegistration
         {
             Service = service;
             EnumType = enumType;
-            Exlusions = exclusions;
+            Exclusions = exclusions;
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Interapptive.Shared.ComponentRegistration
         /// <summary>
         /// A list of values to exlude from registration
         /// </summary>
-        public object[] Exlusions { get; set; }
+        public object[] Exclusions { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether [externally owned].
@@ -71,7 +71,7 @@ namespace Interapptive.Shared.ComponentRegistration
                 {
                     foreach (var key in Enum.GetValues(attribute.EnumType))
                     {
-                        if (attribute.Exlusions != null && !attribute.Exlusions.Contains(key))
+                        if (attribute.Exclusions == null || !attribute.Exclusions.Contains(key))
                         {
                             var registration = ComponentAttribute.GetRegistrationBuilder(item.Component, builder, registrationCache)
                       .Keyed(key, attribute.Service)

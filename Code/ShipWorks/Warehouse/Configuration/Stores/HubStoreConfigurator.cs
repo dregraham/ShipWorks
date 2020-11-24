@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -83,9 +84,14 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// </summary>
         private void ConfigureNewStore(StoreEntity store)
         {
+            store.IsNew = true;
+            store.IsDirty = true;
             // Fill in non-null values for anything the store is not yet configured for
             store.InitializeNullsToDefault();
             store.StartSetup();
+
+            // Mark all fields as changed so they will be saved
+            store.Fields.ForEach(x => x.IsChanged = true);
 
             storeManager.SaveStore(store);
 
