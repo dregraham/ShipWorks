@@ -410,6 +410,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("OrderLookupFieldLayout", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("UpsAllowNoDims", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+			_fieldsCustomProperties.Add("ShipEngineAccountID", fieldHashtable);
 		}
 		#endregion
 
@@ -1036,6 +1038,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsAllowNoDims, value); }
+		}
+
+		/// <summary> The ShipEngineAccountID property of the Entity ShippingSettings<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."ShipEngineAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipEngineAccountID
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.ShipEngineAccountID, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

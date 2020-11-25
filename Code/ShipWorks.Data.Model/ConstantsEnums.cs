@@ -11702,6 +11702,8 @@ namespace ShipWorks.Data.Model
 		OrderLookupFieldLayout,
 		///<summary>UpsAllowNoDims. </summary>
 		UpsAllowNoDims,
+		///<summary>ShipEngineAccountID. </summary>
+		ShipEngineAccountID,
 		/// <summary></summary>
 		AmountOfFields
 	}
