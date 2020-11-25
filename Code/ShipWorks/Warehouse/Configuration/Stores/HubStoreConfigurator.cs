@@ -8,6 +8,9 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
+using ShipWorks.Actions;
+using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
@@ -25,6 +28,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private readonly IIndex<StoreTypeCode, IStoreSetup> storeSetupFactory;
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
+        private readonly IActionManager actionManager;
         private readonly ILog log;
 
         /// <summary>
@@ -33,11 +37,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         public HubStoreConfigurator(IIndex<StoreTypeCode, IStoreSetup> storeSetupFactory,
             IStoreManager storeManager,
             IStoreTypeManager storeTypeManager,
+            IActionManager actionManager,
             Func<Type, ILog> logFactory)
         {
             this.storeSetupFactory = storeSetupFactory;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
+            this.actionManager = actionManager;
             log = logFactory(typeof(HubStoreConfigurator));
         }
 
@@ -60,7 +66,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     }
                     else
                     {
-                        ConfigureNewStore(deserializedStore);
+                        var storeID = ConfigureNewStore(deserializedStore);
+                        ConfigureDefaultAction(storeID, config.ActionsPayload);
                     }
                 }
                 catch (Exception ex)
@@ -82,15 +89,15 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Configures a new store and saves it to the DB
         /// </summary>
-        private void ConfigureNewStore(StoreEntity store)
+        private long ConfigureNewStore(StoreEntity store)
         {
-            store.IsNew = true;
-            store.IsDirty = true;
             // Fill in non-null values for anything the store is not yet configured for
             store.InitializeNullsToDefault();
             store.StartSetup();
 
             // Mark all fields as changed so they will be saved
+            store.IsNew = true;
+            store.IsDirty = true;
             store.Fields.ForEach(x => x.IsChanged = true);
 
             storeManager.SaveStore(store);
@@ -112,6 +119,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 adapter.Commit();
             }
+
+            return store.StoreID;
         }
 
         /// <summary>
@@ -168,6 +177,45 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             origin.LastName = name.Last;
 
             adapter.SaveEntity(origin);
+        }
+
+        /// <summary>
+        /// Create the default store action
+        /// </summary>
+        private void ConfigureDefaultAction(long storeID, string actionPayload)
+        {
+            var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload);
+            var action = JsonConvert.DeserializeObject<ActionEntity>(actionConfiguration.SerializedAction);
+            var tasks = new List<ActionTask>();
+
+            foreach (var serializedTask in actionConfiguration.SerializedTasks)
+            {
+                var task = JsonConvert.DeserializeObject<ActionTask>(serializedTask);
+
+                // Mark all fields as changed so they will be saved
+                task.Entity.IsNew = true;
+                task.Entity.IsDirty = true;
+                task.Entity.Fields.ForEach(x => x.IsChanged = true);
+                tasks.Add(task);
+            }
+
+            action.IsNew = true;
+            action.IsDirty = true;
+            action.Fields.ForEach(x => x.IsChanged = true);
+
+            action.StoreLimitedList = new long[] { storeID };
+
+            using (var adapter = new SqlAdapter(true))
+            {
+                actionManager.SaveAction(action, adapter);
+
+                foreach (var task in tasks)
+                {
+                    task.Save(action, adapter);
+                }
+
+                adapter.Commit();
+            }
         }
     }
 }
