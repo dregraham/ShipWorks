@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
@@ -29,6 +30,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly IActionManager actionManager;
+        private readonly ILifetimeScope lifetimeScope;
         private readonly ILog log;
 
         /// <summary>
@@ -38,12 +40,14 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             IStoreManager storeManager,
             IStoreTypeManager storeTypeManager,
             IActionManager actionManager,
+            ILifetimeScope lifetimeScope,
             Func<Type, ILog> logFactory)
         {
             this.storeSetupFactory = storeSetupFactory;
             this.storeManager = storeManager;
             this.storeTypeManager = storeTypeManager;
             this.actionManager = actionManager;
+            this.lifetimeScope = lifetimeScope;
             log = logFactory(typeof(HubStoreConfigurator));
         }
 
@@ -115,7 +119,15 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 store.CompleteSetup();
                 storeManager.SaveStore(store, adapter);
 
-                CreateOrigin(store, adapter);
+                try
+                {
+                    CreateOrigin(store, adapter);
+                }
+                catch
+                {
+                    //Do nothing. This means that this store was previously 
+                    //added and we already have the origin.
+                }
 
                 adapter.Commit();
             }
@@ -185,17 +197,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private void ConfigureDefaultAction(long storeID, string actionPayload)
         {
             var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload);
-            var action = JsonConvert.DeserializeObject<ActionEntity>(actionConfiguration.SerializedAction);
+            var action = actionConfiguration.Action;
             var tasks = new List<ActionTask>();
 
-            foreach (var serializedTask in actionConfiguration.SerializedTasks)
+            foreach (var taskEntity in actionConfiguration.Tasks)
             {
-                var task = JsonConvert.DeserializeObject<ActionTask>(serializedTask);
+                var task = actionManager.InstantiateTask(lifetimeScope, taskEntity);
 
-                // Mark all fields as changed so they will be saved
-                task.Entity.IsNew = true;
-                task.Entity.IsDirty = true;
-                task.Entity.Fields.ForEach(x => x.IsChanged = true);
                 tasks.Add(task);
             }
 

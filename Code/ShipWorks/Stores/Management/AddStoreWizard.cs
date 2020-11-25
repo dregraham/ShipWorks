@@ -13,7 +13,6 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
-using Newtonsoft.Json;
 using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -1034,14 +1033,9 @@ namespace ShipWorks.Stores.Management
 
                 actionConfiguration = new ActionConfiguration
                 {
-                    SerializedAction = JsonConvert.SerializeObject(action),
-                    SerializedTasks = new List<string>()
+                    Action = action,
+                    Tasks = tasks.Select(t => t.Entity)
                 };
-
-                foreach (var task in tasks)
-                {
-                    actionConfiguration.SerializedTasks.Add(JsonConvert.SerializeObject(task));
-                }
             }
 
             return true;

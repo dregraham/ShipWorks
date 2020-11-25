@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Warehouse.Configuration.Stores.DTO
@@ -39,8 +40,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     /// </summary>
     public class ActionConfiguration
     {
-        public string SerializedAction { get; set; }
+        public ActionEntity Action { get; set; }
 
-        public List<string> SerializedTasks { get; set; }
+        public IEnumerable<ActionTaskEntity> Tasks { get; set; }
     }
 }
