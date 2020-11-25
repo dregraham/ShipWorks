@@ -26,5 +26,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         /// The JSON serialized store entity
         /// </summary>
         public string SyncPayload { get; set; }
+
+        /// <summary>
+        /// The JSON serialized actions list
+        /// </summary>
+        public string ActionsPayload { get; set; }
     }
 }
