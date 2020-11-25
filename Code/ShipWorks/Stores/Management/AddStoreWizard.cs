@@ -13,6 +13,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
+using Newtonsoft.Json;
 using Quartz.Util;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
@@ -39,6 +40,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
 using ShipWorks.Warehouse.Configuration.Stores;
+using ShipWorks.Warehouse.Configuration.Stores.DTO;
 using Control = System.Windows.Controls.Control;
 
 namespace ShipWorks.Stores.Management
@@ -78,6 +80,8 @@ namespace ShipWorks.Stores.Management
         private readonly ILicenseService licenseService;
         private readonly Func<IChannelLimitFactory> channelLimitFactory;
         private readonly IDefaultWarehouseCreator defaultWarehouseCreator;
+
+        private ActionConfiguration actionConfiguration;
 
         /// <summary>
         /// Constructor
@@ -990,10 +994,12 @@ namespace ShipWorks.Stores.Management
             // If there are any, we need to create the action for it
             if (tasks != null && tasks.Count > 0)
             {
+                ActionEntity action = null;
+
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     // Setup the basic action
-                    ActionEntity action = new ActionEntity();
+                    action = new ActionEntity();
                     action.Name = "Store Update";
                     action.Enabled = true;
 
@@ -1024,6 +1030,17 @@ namespace ShipWorks.Stores.Management
                     }
 
                     adapter.Commit();
+                }
+
+                actionConfiguration = new ActionConfiguration
+                {
+                    SerializedAction = JsonConvert.SerializeObject(action),
+                    SerializedTasks = new List<string>()
+                };
+
+                foreach (var task in tasks)
+                {
+                    actionConfiguration.SerializedTasks.Add(JsonConvert.SerializeObject(task));
                 }
             }
 
@@ -1124,7 +1141,7 @@ namespace ShipWorks.Stores.Management
         {
             using (var innerScope = scope.BeginLifetimeScope())
             {
-                var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store).ConfigureAwait(true);
+                var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store, actionConfiguration).ConfigureAwait(true);
 
                 if (syncResult.Failure)
                 {

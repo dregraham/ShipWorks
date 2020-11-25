@@ -57,9 +57,15 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             await SynchronizeStores(new List<StoreEntity> { store }).ConfigureAwait(false);
 
         /// <summary>
+        /// Synchronize a store to the Hub with an action
+        /// </summary>
+        public async Task<Result> SynchronizeStore(StoreEntity store, ActionConfiguration actionConfiguration) =>
+            await SynchronizeStores(new List<StoreEntity> { store }, actionConfiguration).ConfigureAwait(false);
+
+        /// <summary>
         /// Synchronize the given stores to the Hub
         /// </summary>
-        private async Task<Result> SynchronizeStores(IEnumerable<StoreEntity> stores)
+        private async Task<Result> SynchronizeStores(IEnumerable<StoreEntity> stores, ActionConfiguration actionConfiguration = null)
         {
             var request = new StoreSynchronizationRequest()
             {
@@ -73,7 +79,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     Name = store.StoreName,
                     UniqueIdentifier = storeTypeManager.GetType(store).LicenseIdentifier,
                     StoreType = store.StoreTypeCode,
-                    SyncPayload = JsonConvert.SerializeObject(store)
+                    SyncPayload = JsonConvert.SerializeObject(store),
+                    ActionsPayload = JsonConvert.SerializeObject(actionConfiguration)
                 };
 
                 request.StoreSynchronizations.Add(synchronization);

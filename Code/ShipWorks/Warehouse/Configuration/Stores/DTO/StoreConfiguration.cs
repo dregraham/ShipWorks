@@ -1,4 +1,5 @@
-﻿using ShipWorks.Stores;
+﻿using System.Collections.Generic;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Warehouse.Configuration.Stores.DTO
 {
@@ -31,5 +32,15 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
         /// The JSON serialized actions list
         /// </summary>
         public string ActionsPayload { get; set; }
+    }
+
+    /// <summary>
+    /// The DTO for serializing the ActionsPayload
+    /// </summary>
+    public class ActionConfiguration
+    {
+        public string SerializedAction { get; set; }
+
+        public List<string> SerializedTasks { get; set; }
     }
 }

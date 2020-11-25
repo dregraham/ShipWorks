@@ -20,5 +20,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// Synchronize a store to Hub
         /// </summary>
         Task<Result> SynchronizeStore(StoreEntity store);
+
+        /// <summary>
+        /// Synchronize a store to the Hub with an action
+        /// </summary>
+        Task<Result> SynchronizeStore(StoreEntity store, ActionConfiguration actionConfiguration);
     }
 }
