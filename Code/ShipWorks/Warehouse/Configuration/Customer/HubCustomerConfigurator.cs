@@ -34,20 +34,20 @@ namespace ShipWorks.Warehouse.Configuration.Customer
 
             if (!hasShipEngineAccountID)
             {
-                if (!hasShipEngineApiKey)
-                {
-                    // If the user doesn't have either ShipEngine field, that means a SE account has not been created for this
-                    // database, so import the account from the hub.
-                    shippingSettingsEntity.ShipEngineAccountID = hubConfiguration.ShipEngineAccountID;
-                    shippingSettingsEntity.ShipEngineApiKey = hubConfiguration.ShipEngineApiKey;
-                }
-                else
+                if (hasShipEngineApiKey)
                 {
                     // If the user has a ShipEngine API key, but not an account ID, that means they have a ShipEngine account that
                     // was created for this specific database. We don't want to overwrite this with the account from the hub,
                     // so just return.
                     return;
                 }
+
+                // If the user doesn't have either ShipEngine field, that means a SE account has not been created for this
+                // database, so import the account from the hub.
+                shippingSettingsEntity.ShipEngineAccountID = hubConfiguration.ShipEngineAccountID;
+                shippingSettingsEntity.ShipEngineApiKey = hubConfiguration.ShipEngineApiKey;
+
+                shippingSettings.Save(shippingSettingsEntity);
             }
             else
             {
@@ -62,10 +62,10 @@ namespace ShipWorks.Warehouse.Configuration.Customer
                                   StringComparison.InvariantCultureIgnoreCase))
                 {
                     shippingSettingsEntity.ShipEngineApiKey = hubConfiguration.ShipEngineApiKey;
+
+                    shippingSettings.Save(shippingSettingsEntity);
                 }
             }
-
-            shippingSettings.Save(shippingSettingsEntity);
         }
     }
 }
