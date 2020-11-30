@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.XPath;
 using Autofac;
 using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
@@ -202,6 +204,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             foreach (var taskEntity in actionConfiguration.Tasks)
             {
+                UpdateTaskStoreId(taskEntity, storeID);
+                taskEntity.IsNew = true;
+                taskEntity.IsDirty = true;
+                taskEntity.Fields.ForEach(x => x.IsChanged = true);
                 var task = actionManager.InstantiateTask(lifetimeScope, taskEntity);
 
                 tasks.Add(task);
@@ -212,6 +218,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             action.Fields.ForEach(x => x.IsChanged = true);
 
             action.StoreLimitedList = new long[] { storeID };
+            action.TaskSummary = actionManager.GetTaskSummary(tasks);
 
             using (var adapter = new SqlAdapter(true))
             {
@@ -224,6 +231,26 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 adapter.Commit();
             }
+        }
+
+        /// <summary>
+        /// Update a newly configured tasks store id
+        /// </summary>
+        private void UpdateTaskStoreId(ActionTaskEntity task, long storeId)
+        {
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(task.TaskSettings);
+
+            XPathNavigator xpath = xmlDocument.CreateNavigator();
+            xpath.MoveToFirstChild();
+
+            if (xpath.MoveToChild("StoreID", string.Empty))
+            {
+                xpath.MoveToAttribute("value", string.Empty);
+                xpath.SetValue(storeId.ToString());
+            }
+
+            task.TaskSettings = xmlDocument.OuterXml;
         }
     }
 }

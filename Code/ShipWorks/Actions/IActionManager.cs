@@ -42,5 +42,10 @@ namespace ShipWorks.Actions
         /// Check for any changes made in the database since initialization or the last check
         /// </summary>
         void CheckForChangesNeeded();
+
+        /// <summary>
+        /// Get the summary to display for the given list of tasks
+        /// </summary>
+        string GetTaskSummary(List<ActionTask> tasks);
     }
 }

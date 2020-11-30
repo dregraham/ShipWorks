@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Autofac;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.ApplicationCore;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -35,7 +35,7 @@ namespace ShipWorks.Actions
         /// <summary>
         /// Load all the tasks for the action from the database
         /// </summary>
-        public List<ActionTask> LoadTasks(ILifetimeScope lifetimeScope, ActionEntity action) => 
+        public List<ActionTask> LoadTasks(ILifetimeScope lifetimeScope, ActionEntity action) =>
             ActionManager.LoadTasks(lifetimeScope, action);
 
         /// <summary>
@@ -54,5 +54,11 @@ namespace ShipWorks.Actions
         /// </summary>
         public ActionTask InstantiateTask(ILifetimeScope lifetimeScope, ActionTaskEntity taskEntity) =>
             ActionManager.InstantiateTask(lifetimeScope, taskEntity);
+
+        /// <summary>
+        /// Get the summary to display for the given list of tasks
+        /// </summary>
+        public string GetTaskSummary(List<ActionTask> tasks) =>
+            ActionManager.GetTaskSummary(tasks);
     }
 }
