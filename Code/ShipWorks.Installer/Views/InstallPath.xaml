@@ -1,0 +1,45 @@
+﻿<Page
+    x:Class="ShipWorks.Installer.Views.InstallPath"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+    xmlns:convert="clr-namespace:ShipWorks.Installer.ValueConverters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:properties="clr-namespace:ShipWorks.Installer.AttachedProperties"
+    Title="Install Path"
+    d:DesignHeight="600"
+    d:DesignWidth="575"
+    DataContext="{Binding Path=InstallPathViewModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <convert:IsEmptyConverter x:Key="IsEmptyConverter"/>
+    </Page.Resources>
+    
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="Install Path" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,10">
+                <TextBlock.TextDecorations>
+                    <TextDecoration/>
+                </TextBlock.TextDecorations>
+            </TextBlock>
+            <TextBlock>Install Path:</TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <TextBox Width="300" Style="{StaticResource BlueSteelTextBox}" Text="{Binding InstallPath, Mode=TwoWay}" properties:TextBoxBehavior.OnLostFocus="{Binding ValidatePathCommand}" />
+                <Button Style="{StaticResource SmallButton}" Command="{Binding BrowseCommand}" Margin="10,0,0,0" Padding="5,2">Browse</Button>
+            </StackPanel>
+            <TextBlock FontSize="10" Foreground="Red" Text="{Binding Error}" Visibility="{Binding Error, Converter={StaticResource IsEmptyConverter}}" Margin="0,5,0,0"/>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <CheckBox VerticalContentAlignment="Center" Style="{StaticResource FormCheckBox}" IsChecked="{Binding CreateShortcut, Mode=TwoWay}">
+                    <Label VerticalAlignment="Center" Content="Create Desktop Shortcut" />
+                </CheckBox>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Margin="10" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+            <Button Style="{StaticResource SmallSecondaryButton}" Command="{Binding BackCommand}">Back</Button>
+            <Button Style="{StaticResource SmallPrimaryButton}" Margin="10,0,20,0" Command="{Binding NextCommand}" IsEnabled="{Binding Error, Converter={StaticResource IsEmptyConverter}}">Next</Button>
+            <Button Style="{StaticResource SmallSecondaryButton}" IsCancel="True" Command="{Binding CancelCommand}">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Page>

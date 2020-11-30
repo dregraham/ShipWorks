@@ -378,7 +378,7 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
         /// <summary>
         /// Kick off the installation of SQL Server Local DB,  The method returns before the installation is complete.
         /// </summary>
-        public void InstallLocalDb()
+        public void InstallLocalDb(bool waitForExit = false)
         {
             log.Info("Launching external process to elevate permissions to install SQL server Local DB.");
             lastExitCode = 0;
@@ -397,6 +397,11 @@ namespace ShipWorks.Data.Administration.SqlServerSetup
             }
 
             process.Start();
+
+            if (waitForExit)
+            {
+                process.WaitForExit((int) TimeSpan.FromMinutes(5).TotalMilliseconds);
+            }
         }
 
         /// <summary>

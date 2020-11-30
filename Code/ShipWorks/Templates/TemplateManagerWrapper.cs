@@ -23,6 +23,11 @@ namespace ShipWorks.Templates
             TemplateManager.Tree;
 
         /// <summary>
+        /// Gets all the templates
+        /// </summary>
+        public IList<TemplateEntity> AllTemplates => Tree.AllTemplates;
+
+        /// <summary>
         /// Ensure the given template is configured
         /// </summary>
         public bool EnsureTemplateConfigured(IWin32Window owner, TemplateEntity template) =>
@@ -39,5 +44,11 @@ namespace ShipWorks.Templates
         /// </summary>
         public IEnumerable<TemplateEntity> FetchPickListTemplates() =>
 			TemplateManager.FetchPickListTemplates();
+
+        /// <summary>
+        /// Load the computer specific settings for the template
+        /// </summary>
+        public TemplateComputerSettingsEntity GetComputerSettings(TemplateEntity template) =>
+            TemplateHelper.GetComputerSettings(template);
     }
 }

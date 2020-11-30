@@ -1,0 +1,13 @@
+﻿<Project>
+  <PropertyGroup>
+    <TargetsTriggeredByCompilation>$(SignIntermediateAssembly);SignIntermediateAssembly</TargetsTriggeredByCompilation>
+  </PropertyGroup>
+
+  <Target Name="SignIntermediateAssembly" Condition="'$(SignAssemblies)' == 'True'">
+    <Exec Command="$(SignCommand) %(IntermediateAssembly.FullPath)" />
+  </Target>
+
+  <Target Name="SignPublishedSingleFileBundle" AfterTargets="BundlePublishDirectory" Condition="'$(SignAssemblies)' == 'True'">
+    <Exec Command="$(SignCommand) $(PublishedSingleFilePath)" />
+  </Target>
+</Project>
