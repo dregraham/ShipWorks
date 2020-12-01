@@ -507,7 +507,7 @@ namespace ShipWorks.Users
         /// <summary>
         /// Save the given user information as the last user to use the system.
         /// </summary>
-        private static void SaveLastUser(string username, string password, bool remember)
+        public static void SaveLastUser(string username, string password, bool remember)
         {
             // Save this as the last user that got logged on
             lastUsername = username;

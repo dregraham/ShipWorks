@@ -280,6 +280,7 @@
     <Compile Include="Platforms\Magento\Warehouse\MagentoWarehouseOrderFactory.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStore.cs" />
     <Compile Include="Platforms\Magento\Warehouse\MagentoStoreDtoFactory.cs" />
+    <Compile Include="Platforms\Manual\CreateDefaultStoreActivity.cs" />
     <Compile Include="Platforms\Odbc\Mapping\OdbcStoreRepository.cs" />
     <Compile Include="Platforms\Odbc\Mapping\RefreshingOdbcStore.cs" />
     <Compile Include="Platforms\Rakuten\Content\RakutenCombineOrderAction.cs" />

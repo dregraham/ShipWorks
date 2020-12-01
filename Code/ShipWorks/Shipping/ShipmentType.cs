@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reactive;
 using System.Threading;
 using System.Xml.Linq;
 using Autofac;
@@ -11,6 +12,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Enums;
+using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -548,6 +550,25 @@ namespace ShipWorks.Shipping
         /// Attempts to apply shipping rules to the given shipment.
         /// </summary>
         private void ApplyShippingRules(ShipmentEntity shipment, IShippingProfile shippingProfile,
+            IShippingProfileManager shippingProfileManager, IShippingProfileService shippingProfileService)
+        {
+            using (ITrackedEvent telementryEvent = new TrackedEvent("ShipmentType"))
+            {
+                TelemetricResult<Unit> telemetricResult = new TelemetricResult<Unit>("ApplyShippingRules");
+
+                telemetricResult.RunTimedEvent("Time(ms)", () =>
+                {
+                    ApplyShippingRulesInternal(shipment, shippingProfile, shippingProfileManager, shippingProfileService);
+                });
+
+                telemetricResult.WriteTo(telementryEvent);
+            }
+        }
+
+        /// <summary>
+        /// Attempts to apply shipping rules to the given shipment.
+        /// </summary>
+        private void ApplyShippingRulesInternal(ShipmentEntity shipment, IShippingProfile shippingProfile,
             IShippingProfileManager shippingProfileManager, IShippingProfileService shippingProfileService)
         {
             // Go through each additional profile and apply it as well

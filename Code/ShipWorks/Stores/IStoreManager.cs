@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -70,5 +71,15 @@ namespace ShipWorks.Stores
         /// Get a collection of each store type in use by the current database. These are just a distinct list of the non-instanced types... with no stores attached.
         /// </summary>
         IEnumerable<StoreType> GetUniqueStoreTypes();
+
+        /// <summary>
+        /// Gets the number of setup stores in the database.
+        /// </summary>
+        int GetDatabaseStoreCount();
+
+        /// <summary>
+        /// Save the specified store, Translating known exceptions
+        /// </summary>
+        Task SaveStoreAsync(StoreEntity store);
     }
 }

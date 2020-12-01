@@ -16,6 +16,11 @@ namespace ShipWorks.Templates
         TemplateTree Tree { get; }
 
         /// <summary>
+        /// Gets all the templates
+        /// </summary>
+        IList<TemplateEntity> AllTemplates { get; }
+
+        /// <summary>
         /// Fetch the default pick list template
         /// </summary>
         TemplateEntity FetchDefaultPickListTemplate();
@@ -29,5 +34,10 @@ namespace ShipWorks.Templates
         /// Fetch all of the pick list templates
         /// </summary>
         IEnumerable<TemplateEntity> FetchPickListTemplates();
+
+        /// <summary>
+        /// Load the computer specific settings for the template
+        /// </summary>
+        TemplateComputerSettingsEntity GetComputerSettings(TemplateEntity template);
     }
 }

@@ -9,6 +9,7 @@ namespace ShipWorks.ApplicationCore.Licensing.Warehouse
     {
         public const string Login = "api/auth/token/login";
         public const string Warehouses = "api/warehouses";
+        public const string SqlConfig = "api/customer/warehouse/setSqlConfig";
         public const string RefreshToken = "api/auth/token/refresh";
         public const string UploadProducts = "api/products/import";
         public const string GenerateDataKey = "api/store/generateDataKey";

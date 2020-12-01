@@ -42,7 +42,7 @@ namespace ShipWorks.Templates.Printing
         /// <summary>
         /// The printer's paper sources
         /// </summary>
-        public PaperSource PaperSource => DefaultPageSettings.PaperSource;
+        public System.Drawing.Printing.PaperSource PaperSource => DefaultPageSettings.PaperSource;
 
         /// <summary>
         /// The printer's selected paper source name
@@ -53,7 +53,7 @@ namespace ShipWorks.Templates.Printing
             {
                 if (string.IsNullOrEmpty(paperSourceName))
                 {
-                    foreach (PaperSource source in PaperSources)
+                    foreach (System.Drawing.Printing.PaperSource source in PaperSources)
                     {
                         if (source.RawKind == PaperSource.RawKind)
                         {
