@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
@@ -56,7 +55,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Configure stores
         /// </summary>
-        public async Task Configure(IEnumerable<StoreConfiguration> storeConfigurations)
+        public void Configure(IEnumerable<StoreConfiguration> storeConfigurations)
         {
             foreach (var config in storeConfigurations)
             {

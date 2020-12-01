@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.Stores
@@ -12,6 +11,6 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Perform the configuration
         /// </summary>
-        Task Configure(IEnumerable<StoreConfiguration> storeConfigurations);
+        void Configure(IEnumerable<StoreConfiguration> storeConfigurations);
     }
 }
