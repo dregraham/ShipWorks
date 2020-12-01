@@ -32,8 +32,13 @@
     <PackageReference Include="Autofac.Mef" Version="4.0.0" />
     <PackageReference Include="InterapptiveAnalyzers" Version="1.0.5714.23531" />
     <PackageReference Include="log4net" Version="2.0.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.7" />
+    <PackageReference Include="Microsoft.Owin" Version="4.1.1" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
     <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.abstractions" Version="2.0.2" />
     <PackageReference Include="xunit.assert" Version="2.4.0" />
@@ -44,7 +49,12 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Api\ShipWorks.Api.csproj" />
     <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj" />
     <ProjectReference Include="..\ShipWorks.Tests.Shared\ShipWorks.Tests.Shared.csproj" />
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj" />
   </ItemGroup>
  </Project>
