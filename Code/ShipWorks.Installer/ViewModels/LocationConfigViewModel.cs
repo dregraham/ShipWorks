@@ -9,6 +9,7 @@ using System.Windows.Input;
 using FontAwesome5;
 using GalaSoft.MvvmLight.Command;
 using log4net;
+using Microsoft.ApplicationInsights.DataContracts;
 using ShipWorks.Installer.Api.DTO;
 using ShipWorks.Installer.Enums;
 using ShipWorks.Installer.Extensions;
@@ -165,6 +166,7 @@ namespace ShipWorks.Installer.ViewModels
                 NextPage = NavigationPageType.InstallShipworks;
             }
 
+            mainViewModel.InstallSettings.OwnDb = OwnDbChecked;
             mainViewModel.InstallSettings.Warehouse = SelectedWarehouse;
             navigationService.NavigateTo(NextPage);
         }

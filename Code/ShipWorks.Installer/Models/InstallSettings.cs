@@ -49,6 +49,11 @@ namespace ShipWorks.Installer.Models
         public Warehouse Warehouse { get; set; }
 
         /// <summary>
+        /// The user selected to use their own db
+        /// </summary>
+        public bool OwnDb { get; set; }
+
+        /// <summary>
         /// The type of error that occurred during installation
         /// </summary>
         public InstallError Error { get; set; } = InstallError.None;

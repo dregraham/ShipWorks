@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.IsAny<OnTracAccountEntity>()), Times.Never);
@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x =>
                 x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<OnTracAccountEntity>(y => y.AccountNumber == 1234)), Times.Once);
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<OnTracCarrierSetup>().Setup(payload);
+            await mock.Create<OnTracCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<OnTracAccountEntity>(y =>
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<OnTracCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<OnTracAccountEntity>()), Times.Once);
         }
@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<OnTracCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.OnTrac, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<OnTracCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
@@ -192,7 +192,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<OnTracCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<OnTracAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
@@ -208,7 +208,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<OnTracCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<OnTracAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
         }

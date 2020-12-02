@@ -6,6 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings.OneBalance;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
@@ -73,5 +74,25 @@ namespace ShipWorks.Shipping.UI.Settings.OneBalance
         /// </summary>
         public bool LocalUpsAccountExists() =>
             upsRepository.AccountsReadOnly.Any(e => e.ShipEngineCarrierId != null);
+
+        /// <summary>
+        /// Get the USPS account that has been used to setup one balance
+        /// </summary>
+        public UspsAccountEntity GetUspsOneBalanceAccount()
+        {
+            UspsAccountEntity account =
+                uspsRepository.Accounts.SingleOrDefault(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId));
+
+            if (account != null)
+            {
+                return account;
+            }
+
+            var dhlOneBalanceAccount = dhlRepository.AccountsReadOnly.SingleOrDefault(x => x.UspsAccountId != null);
+
+            return dhlOneBalanceAccount == null ?
+                null :
+                uspsRepository.GetAccount(dhlOneBalanceAccount.UspsAccountId.Value);
+        }
     }
 }

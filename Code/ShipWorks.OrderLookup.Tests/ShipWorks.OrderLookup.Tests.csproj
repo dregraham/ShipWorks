@@ -43,6 +43,7 @@
     <PackageReference Include="log4net" Version="2.0.7" />
     <PackageReference Include="Microsoft.Reactive.Testing" Version="3.1.1" />
     <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="SD.LLBLGen.Pro.ORMSupportClasses" Version="5.1.2" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="6.8.1.4648" />
