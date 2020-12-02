@@ -30,6 +30,7 @@ pipeline {
 			steps {
 				echo "Build on ${NODE_NAME}"
 				bat 'cake build:public_installer[0.0.0]'
+				bat 'dotnet publish Code/ShipWorks.Installer/ShipWorks.Installer.csproj -p:PublishSingleFile=true --self-contained false --runtime win-x64 --framework netcoreapp3.1 --output Artifacts/Installer'
 				bat 'powershell -command "mkdir -f Artifacts/Distribute"'
 				bat 'powershell "echo "Foo" > Artifacts/Distribute/test.txt"'
 				stash includes: '/Artifacts/Distribute/*.*,.build-label', name: 'installer'

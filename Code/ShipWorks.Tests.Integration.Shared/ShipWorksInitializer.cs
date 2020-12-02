@@ -25,8 +25,6 @@ namespace ShipWorks.Tests.Integration.Shared
     /// </summary>
     public class ShipWorksInitializer
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksInitializer));
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
         /// </summary>
@@ -85,7 +83,9 @@ namespace ShipWorks.Tests.Integration.Shared
 
                 if (!UserSession.Logon("shipworks", "shipworks", true))
                 {
+#pragma warning disable S112 // General exceptions should never be thrown
                     throw new Exception("A 'shipworks' account with password 'shipworks' needs to be created.");
+#pragma warning restore S112 // General exceptions should never be thrown
                 }
 
                 ShippingManager.InitializeForCurrentDatabase();
@@ -137,7 +137,9 @@ namespace ShipWorks.Tests.Integration.Shared
                     }
                     else
                     {
+#pragma warning disable S112 // General exceptions should never be thrown
                         throw new ApplicationException("Enter your machine and ShipWorks instance GUID in the ShipWorksInitializer");
+#pragma warning restore S112 // General exceptions should never be thrown
                     }
                     break;
             }
@@ -169,24 +171,6 @@ namespace ShipWorks.Tests.Integration.Shared
                 return Control.ModifierKeys == (Keys.Control | Keys.Shift | Keys.Alt) &&
                     (NativeMethods.GetAsyncKeyState(Keys.LWin) & 0x8000) != 0;
             }
-        }
-
-        /// <summary>
-        /// Gets the next.
-        /// </summary>
-        /// <param name="from">From.</param>
-        /// <param name="dayOfWeek">The day of week.</param>
-        /// <returns></returns>
-        private DateTime GetNext(DateTime from, DayOfWeek dayOfWeek)
-        {
-            DateTime date = new DateTime(from.Ticks);
-
-            while (date.DayOfWeek != dayOfWeek)
-            {
-                date = date.AddDays(1);
-            }
-
-            return date;
         }
     }
 }
