@@ -3,11 +3,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Autofac.Features.Indexed;
 using Interapptive.Shared;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipEngine;
@@ -22,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
     public class DhlCarrierSetup : BaseCarrierSetup<DhlExpressAccountEntity, IDhlExpressAccountEntity>, ICarrierSetup
     {
         private readonly ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository;
-        private readonly IShipEngineWebClient webClient;
+        private readonly IShipEngineWebClient shipEngineWebClient;
         private readonly ICarrierAccountDescription accountDescription;
 
         /// <summary>
@@ -34,21 +39,29 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             IShipmentPrintHelper printHelper,
             ICarrierAccountRepository<DhlExpressAccountEntity, IDhlExpressAccountEntity> accountRepository,
             IIndex<ShipmentTypeCode, ICarrierAccountDescription> accountDescriptionFactory,
-            IShipEngineWebClient webClient)
+            IShipEngineWebClient shipEngineWebClient)
             : base(shipmentTypeSetupActivity, shippingSettings, printHelper, accountRepository)
         {
             this.accountRepository = accountRepository;
-            this.webClient = webClient;
+            this.shipEngineWebClient = shipEngineWebClient;
             accountDescription = accountDescriptionFactory[ShipmentTypeCode.DhlExpress];
         }
 
         /// <summary>
         /// Setup a DHL account from data imported from the hub
         /// </summary>
-        public async Task Setup(CarrierConfiguration config)
+        public async Task Setup(CarrierConfiguration config, UspsAccountEntity oneBalanceUspsAccount)
         {
+            // skip if we already know about this account
             if (accountRepository.AccountsReadOnly.Any(x =>
                 x.HubCarrierId == config.HubCarrierID && x.HubVersion >= config.HubVersion))
+            {
+                return;
+            }
+
+            // skip if there is already a one balance account and this config is for onebalance
+            if (config.IsOneBalance &&
+                accountRepository.AccountsReadOnly.Any(x => x.UspsAccountId.HasValue))
             {
                 return;
             }
@@ -56,21 +69,45 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             var additionalAccountInfo = config.AdditionalData["dhl"].ToObject<DhlAccountConfiguration>();
             var dhlAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
-            GetAddress(config.Address).CopyTo(dhlAccount, string.Empty);
+            if (!config.IsOneBalance)
+            {
+                GetAddress(config.Address).CopyTo(dhlAccount, string.Empty);
+            }
+
             dhlAccount.HubVersion = config.HubVersion;
 
             if (dhlAccount.IsNew)
             {
-                GenericResult<string> connectAccountResult = await webClient.ConnectDhlAccount(additionalAccountInfo.AccountNumber);
-                if (connectAccountResult.Success)
+                if (config.IsOneBalance)
                 {
-                    dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
-                    dhlAccount.ShipEngineCarrierId = connectAccountResult.Value;
+                    dhlAccount.UspsAccountId = oneBalanceUspsAccount.UspsAccountID;
+                    dhlAccount.AccountNumber = oneBalanceUspsAccount.UspsAccountID;
+                    dhlAccount.FirstName = oneBalanceUspsAccount.FirstName;
+                    dhlAccount.MiddleName = oneBalanceUspsAccount.MiddleName;
+                    dhlAccount.LastName = oneBalanceUspsAccount.LastName;
+                    dhlAccount.Company = oneBalanceUspsAccount.Company;
+                    dhlAccount.Street1 = oneBalanceUspsAccount.Street1;
+                    dhlAccount.City = oneBalanceUspsAccount.City;
+                    dhlAccount.StateProvCode = Geography.GetStateProvCode(oneBalanceUspsAccount.StateProvCode);
+                    dhlAccount.PostalCode = oneBalanceUspsAccount.PostalCode;
+                    dhlAccount.CountryCode = Geography.GetCountryCode(oneBalanceUspsAccount.CountryCode);
+                    dhlAccount.Email = oneBalanceUspsAccount.Email;
+                    dhlAccount.Phone = oneBalanceUspsAccount.Phone;
                     dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
                 }
                 else
                 {
-                    throw connectAccountResult.Exception;
+                    GenericResult<string> connectAccountResult = await shipEngineWebClient.ConnectDhlAccount(additionalAccountInfo.AccountNumber);
+                    if (connectAccountResult.Success)
+                    {
+                        dhlAccount.AccountNumber = long.Parse(additionalAccountInfo.AccountNumber);
+                        dhlAccount.ShipEngineCarrierId = connectAccountResult.Value;
+                        dhlAccount.Description = accountDescription.GetDefaultAccountDescription(dhlAccount);
+                    }
+                    else
+                    {
+                        throw connectAccountResult.Exception;
+                    }
                 }
             }
 

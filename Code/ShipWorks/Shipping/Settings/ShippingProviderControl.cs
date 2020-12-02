@@ -45,7 +45,14 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void HandleCarrierConfigured(CarrierConfiguredMessage message)
         {
-            SetDefaultShipmentType();
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(SetDefaultShipmentType));
+            }
+            else
+            {
+                SetDefaultShipmentType();
+            }
         }
 
         /// <summary>

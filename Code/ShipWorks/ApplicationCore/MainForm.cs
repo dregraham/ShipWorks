@@ -6,6 +6,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -84,6 +85,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Asendia;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.UPS.OneBalance;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.ScanForms;
@@ -155,6 +157,7 @@ namespace ShipWorks
         private IUpdateService updateService;
         private IProductsMode productsMode;
         private readonly string unicodeCheckmark = $"    {'\u2714'.ToString()}";
+        DeviceIdentificationControl deviceIdentificationControl;
 
         // Is ShipWorks currently changing modes
         private bool isChangingMode = false;
@@ -417,11 +420,19 @@ namespace ShipWorks
 
             AutoUpdateTelemetryCollector.CollectTelemetry(ShipWorksSession.InstanceID);
 
+            deviceIdentificationControl = new DeviceIdentificationControl() { Size = new Size(0, 0) };
+            Controls.Add(deviceIdentificationControl);
+
             if (AutoUpdate())
             {
                 Close();
             }
         }
+
+        /// <summary>
+        /// The device Identify needed to register a UPS account. I don't like this being here either...
+        /// </summary>
+        public string DeviceIdentity => deviceIdentificationControl.Identity;
 
         /// <summary>
         /// Checks whether we have an Asendia account
