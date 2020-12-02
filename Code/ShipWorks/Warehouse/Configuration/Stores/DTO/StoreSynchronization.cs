@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using ShipWorks.Stores;
 
 namespace ShipWorks.Warehouse.Configuration.Stores.DTO
@@ -6,6 +7,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     /// <summary>
     /// The Store Synchronization request DTO
     /// </summary>
+    [Obfuscation()]
     public class StoreSynchronizationRequest
     {
         public List<StoreSynchronization> StoreSynchronizations;
@@ -14,6 +16,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     /// <summary>
     /// A Store Synchronization
     /// </summary>
+    [Obfuscation()]
     public class StoreSynchronization
     {
         public string Name { get; set; }

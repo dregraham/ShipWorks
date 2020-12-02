@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 
@@ -7,6 +8,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     /// <summary>
     /// A store configuration downloaded from the Hub
     /// </summary>
+    [Obfuscation]
     public class StoreConfiguration
     {
         /// <summary>
@@ -38,6 +40,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores.DTO
     /// <summary>
     /// The DTO for serializing the ActionsPayload
     /// </summary>
+    [Obfuscation]
     public class ActionConfiguration
     {
         public ActionEntity Action { get; set; }
