@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -88,6 +89,8 @@ namespace ShipWorks
         [STAThread]
         public static async Task Main()
         {
+            HttpWebRequest.DefaultMaximumErrorResponseLength = -1;
+
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);
             Application.EnableVisualStyles();
