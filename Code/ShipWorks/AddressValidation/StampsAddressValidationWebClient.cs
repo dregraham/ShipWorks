@@ -59,7 +59,7 @@ namespace ShipWorks.AddressValidation
             try
             {
                 var account = accountRepository.DefaultProfileAccount;
-                if(personAdapter.CountryCode == "US")
+                if (personAdapter.CountryCode == "US")
                 {
                     account.Password = string.Empty;
                 }
