@@ -89,6 +89,7 @@ namespace ShipWorks
         [STAThread]
         public static async Task Main()
         {
+            // This was put in here because large scan form error responses where being truncated. (WORKS-492)
             HttpWebRequest.DefaultMaximumErrorResponseLength = -1;
 
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
