@@ -58,7 +58,13 @@ namespace ShipWorks.AddressValidation
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
             try
             {
-                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountRepository.DefaultProfileAccount).ConfigureAwait(false);
+                var account = accountRepository.DefaultProfileAccount;
+                if(personAdapter.CountryCode == "US")
+                {
+                    account.Password = string.Empty;
+                }
+
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, account).ConfigureAwait(false);
                 validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 bool shouldParseAddress = !personAdapter.Street2.IsNullOrWhiteSpace();
