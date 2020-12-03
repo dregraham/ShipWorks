@@ -38,6 +38,11 @@ namespace ShipWorks.Warehouse.Configuration.Carriers.DTO
         public string ShipEngineCarrierID { get; set; }
 
         /// <summary>
+        /// Is this a one balance account 
+        /// </summary>
+        public bool IsOneBalance { get; set; }
+
+        /// <summary>
         /// The requested label format
         /// </summary>
         public ThermalLanguage RequestedLabelFormat { get; set; }

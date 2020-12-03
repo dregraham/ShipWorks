@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             };
 
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
-            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Never);
         }
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.AccountNumber == "foo")), Times.Once);
         }
@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.Accounts).Returns(accounts);
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
-            await mock.Create<EndiciaCarrierSetup>().Setup(payload);
+            await mock.Create<EndiciaCarrierSetup>().Setup(payload, null);
 
             carrierAccountRepository.Verify(x =>
                 x.Save(It.Is<EndiciaAccountEntity>(y =>
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<EndiciaCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<EndiciaAccountEntity>()), Times.Once);
         }
@@ -138,7 +138,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<EndiciaCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.Endicia, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<EndiciaCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<EndiciaCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<EndiciaCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<EndiciaAccountEntity>(y => y.HubCarrierId == carrierId)), Times.Once);
         }

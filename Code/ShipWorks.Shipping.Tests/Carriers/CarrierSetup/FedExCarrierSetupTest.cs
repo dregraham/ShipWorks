@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<FedExAccountEntity>()), Times.Once);
         }
@@ -93,7 +93,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.IsAny<FedExAccountEntity>()), Times.Never);
         }
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<FedExAccountEntity>(y => y.AccountNumber == "user")), Times.Once);
         }
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(ShipmentTypeCode.FedEx, ShipmentOriginSource.Account, false, ThermalLanguage.None), Times.Once);
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             shipmentTypeSetupActivity
                 .Verify(x => x.InitializeShipmentType(It.IsAny<ShipmentTypeCode>(), It.IsAny<ShipmentOriginSource>(), It.IsAny<bool>(), It.IsAny<ThermalLanguage>()), Times.Never);
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             factory.Setup(x => x.Create()).Returns(clerk.Object);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload));
+            await Assert.ThrowsAsync<WebException>(async () => await testObject.Setup(payload, null));
         }
 
         [Fact]
@@ -202,7 +202,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<FedExAccountEntity>(y => y.HubVersion == 2)), Times.Once);
         }
@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.CarrierSetup
             carrierAccountRepository.Setup(x => x.AccountsReadOnly).Returns(accounts);
 
             var testObject = mock.Create<FedExCarrierSetup>();
-            await testObject.Setup(payload);
+            await testObject.Setup(payload, null);
 
             carrierAccountRepository.Verify(x => x.Save(It.Is<FedExAccountEntity>(y => y.HubCarrierId == carrierID)), Times.Once);
         }

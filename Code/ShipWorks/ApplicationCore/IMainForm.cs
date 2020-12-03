@@ -17,6 +17,11 @@ namespace ShipWorks.ApplicationCore
         UIMode UIMode { get; }
 
         /// <summary>
+        /// The device Identify needed to register a UPS account. 
+        /// </summary>
+        string DeviceIdentity { get; }
+
+        /// <summary>
         /// Returns true if any forms, other than the main UI form or floating panels, are open.  False otherwise.
         /// </summary>
         bool AdditionalFormsOpen();

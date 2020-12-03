@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.OneBalance;
 
 namespace ShipWorks.Shipping.UI.Settings.OneBalance
 {
