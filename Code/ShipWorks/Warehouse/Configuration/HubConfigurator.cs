@@ -30,7 +30,7 @@ namespace ShipWorks.Warehouse.Configuration
         public async Task Configure(HubConfiguration config)
         {
             await carrierConfigurator.Configure(config.CarrierConfigurations).ConfigureAwait(false);
-            await customerConfigurator.Configure(config).ConfigureAwait(false);
+            customerConfigurator.Configure(config);
         }
     }
 }

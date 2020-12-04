@@ -26,7 +26,7 @@ namespace ShipWorks.Warehouse.Configuration.Customer
         /// <summary>
         /// Configure customer
         /// </summary>
-        public async Task Configure(HubConfiguration hubConfiguration)
+        public void Configure(HubConfiguration hubConfiguration)
         {
             ShippingSettingsEntity shippingSettingsEntity = shippingSettings.Fetch();
             bool hasShipEngineApiKey = !string.IsNullOrWhiteSpace(shippingSettingsEntity.ShipEngineApiKey);

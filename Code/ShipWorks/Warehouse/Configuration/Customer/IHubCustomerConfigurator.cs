@@ -11,6 +11,6 @@ namespace ShipWorks.Warehouse.Configuration.Customer
         /// <summary>
         /// Configure customer
         /// </summary>
-        Task Configure(HubConfiguration hubConfiguration);
+        void Configure(HubConfiguration hubConfiguration);
     }
 }
