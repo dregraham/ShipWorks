@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Metrics;
 using Interapptive.Shared.Security;
@@ -74,6 +75,12 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 UpdateDistributionCenters();
 
+                var profilesResponse = restClient.GetProfiles(refreshToken);
+
+                Dictionary<int, string> siteNames = new Dictionary<int, string>();
+
+                profilesResponse?.Profiles?.SelectMany(x => x.SiteAccounts)?.ForEach(x => siteNames[x.ID] = x.SiteAccountName);
+
                 ChannelAdvisorOrderResult ordersResult = restClient.GetOrders(caStore.DownloadDaysBack, refreshToken, !caStore.ExcludeFBA);
 
                 string previousLink = String.Empty;
@@ -93,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     AddProductsToCache(ordersResult);
 
-                    if (!await ProcessOrders(ordersResult).ConfigureAwait(false))
+                    if (!await ProcessOrders(ordersResult, siteNames).ConfigureAwait(false))
                     {
                         break;
                     }
@@ -115,7 +122,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             Progress.Detail = "Done";
         }
 
-        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult)
+        private async Task<bool> ProcessOrders(ChannelAdvisorOrderResult ordersResult, Dictionary<int, string> siteNames)
         {
 
             foreach (ChannelAdvisorOrder caOrder in ordersResult.Orders)
@@ -130,7 +137,13 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                 List<ChannelAdvisorProduct> caProducts = DownloadChannelAdvisorProducts(caOrder);
 
-                await LoadOrder(caOrder, caProducts).ConfigureAwait(false);
+                string siteAccountName = null;
+                if (caOrder.SiteAccountID != null)
+                {
+                    siteNames.TryGetValue(caOrder.SiteAccountID.Value, out siteAccountName);
+                }
+
+                await LoadOrder(caOrder, caProducts, siteAccountName).ConfigureAwait(false);
             }
 
             return true;
@@ -196,7 +209,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Load the given ChannelAdvisor order
         /// </summary>
-        private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts)
+        private async Task LoadOrder(ChannelAdvisorOrder caOrder, List<ChannelAdvisorProduct> caProducts, string siteName)
         {
             // Update the status
             Progress.Detail = $"Processing order {QuantitySaved + 1}...";
@@ -224,7 +237,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 order.Store = Store;
 
                 //Order loader loads the order
-                orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this);
+                orderLoaderFactory(distributionCenters).LoadOrder(order, caOrder, caProducts, this, siteName);
 
                 // Save the downloaded order
                 await sqlAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);

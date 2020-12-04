@@ -1,0 +1,21 @@
+﻿<Page
+    x:Class="ShipWorks.Installer.Views.SystemCheck"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ShipWorks.Installer.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="System Check"
+    d:DesignHeight="600"
+    d:DesignWidth="575"
+    DataContext="{Binding Path=SystemCheckViewModel, Source={StaticResource Locator}}"
+    mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock  Grid.Column="1" Style="{StaticResource Header}" Text="System Check" HorizontalAlignment="Center" FontSize="20" Margin="0,10">
+            <TextBlock.TextDecorations>
+                <TextDecoration/>
+            </TextBlock.TextDecorations>
+        </TextBlock>
+        <TextBlock Text="Checking your system..." HorizontalAlignment="Center" Margin="0,10,0,0"/>
+    </StackPanel>
+</Page>

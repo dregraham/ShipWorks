@@ -1,0 +1,141 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>shipworks.ico</ApplicationIcon>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <SnExe>C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.6 Tools\sn.exe</SnExe>
+    <SignToolExe>C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe</SignToolExe>
+    <SignCommand>"$(SignToolExe)" sign /v /sm /n Interapptive /d "ShipWorks" /du "http://www.shipworks.com" /t "http://timestamp.globalsign.com/scripts/timstamp.dll"</SignCommand>
+  </PropertyGroup>
+
+  <Target Name="SignInstaller" Condition=" $(ReleaseType) != 'None' ">
+    <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
+    <Exec Command='$(SignCommand) "%$(PublishDir)\ShipWorks.Installer.exe"' />
+  </Target>
+  
+  <ItemGroup>
+    <Compile Remove="Artifacts\**" />
+    <EmbeddedResource Remove="Artifacts\**" />
+    <None Remove="Artifacts\**" />
+    <Page Remove="Artifacts\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="License.rtf" />
+    <None Remove="shipworks.ico" />
+    <None Remove="Styles\BlueSteel\Roboto-Regular.ttf" />
+    <None Remove="Styles\BlueSteel\RobotoFontLicense.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="License.rtf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome5" Version="2.0.8" />
+    <PackageReference Include="log4net" Version="2.0.12" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.16.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="shipworks.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\BlueSteel\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Styles\BlueSteel\RobotoFontLicense.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\SystemCheck.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Eula - Copy - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Eula - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Eula - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>Eula.xaml.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Styles\BlueSteel\BlueSteelStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\CheckBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\ComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\DatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\EditableComboBoxStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\BlueSteel\ErrorTemplates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\BlackColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\BlueColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ColorSchemes\SilverColors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\ButtonStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\DatePickerStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\ExpanderStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Controls\GridStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\ErrorTemplates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\GlobalStyle.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Shapes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Styles\Sizes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\SystemCheck.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>
