@@ -79,10 +79,14 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                             ConfigureDefaultAction(storeID, config.ActionsPayload);
                         }
                     }
+                    else
+                    {
+                        throw new ArgumentException("Unsupported store type.");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.StoreType)}: {ex.Message}", ex);
+                    log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.StoreType)} store \"{config.Name}\": {ex.Message}", ex);
                 }
             }
         }
