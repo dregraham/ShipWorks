@@ -64,16 +64,20 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 {
                     //Convert the config store to a store entity
                     var storeType = storeTypeManager.GetType(config.StoreType).CreateStoreInstance().GetType();
-                    var deserializedStore = storeSetupFactory[config.StoreType].Setup(config, storeType);
+                    IStoreSetup storeSetup;
+                    if (storeSetupFactory.TryGetValue(config.StoreType, out storeSetup))
+                    {
+                        var deserializedStore = storeSetup.Setup(config, storeType);
 
-                    if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier))
-                    {
-                        UpdateStore(deserializedStore);
-                    }
-                    else
-                    {
-                        var storeID = ConfigureNewStore(deserializedStore);
-                        ConfigureDefaultAction(storeID, config.ActionsPayload);
+                        if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier))
+                        {
+                            UpdateStore(deserializedStore);
+                        }
+                        else
+                        {
+                            var storeID = ConfigureNewStore(deserializedStore);
+                            ConfigureDefaultAction(storeID, config.ActionsPayload);
+                        }
                     }
                 }
                 catch (Exception ex)
