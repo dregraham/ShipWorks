@@ -10,13 +10,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
     /// <summary>
     /// Base class for setting up a store from a getConfig call
     /// </summary>
-    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode), new object[] { StoreTypeCode.Manual, StoreTypeCode.Odbc, StoreTypeCode.GenericFile })]
+    [KeyAllComponent(typeof(IStoreSetup), typeof(StoreTypeCode), new object[] { StoreTypeCode.Manual, StoreTypeCode.Odbc, StoreTypeCode.GenericFile, StoreTypeCode.ThreeDCart })]
     public class BaseStoreSetup : IStoreSetup
     {
         /// <summary>
         /// Setup the specified store type
         /// </summary>
-        public StoreEntity Setup(StoreConfiguration config, Type storeType) =>
+        public virtual StoreEntity Setup(StoreConfiguration config, Type storeType) =>
             (StoreEntity) JsonConvert.DeserializeObject(config.SyncPayload, storeType);
     }
 }

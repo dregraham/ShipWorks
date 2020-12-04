@@ -1586,6 +1586,7 @@
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IStoreSetup.cs" />
     <Compile Include="Warehouse\Configuration\Stores\BaseStoreSetup.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\ThreeDCartStoreSetup.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
