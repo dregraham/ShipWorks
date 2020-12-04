@@ -16,6 +16,7 @@ using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
+using ShipWorks.Filters;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
@@ -107,6 +108,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             storeManager.SaveStore(store);
 
+            FilterLayoutContext.PushScope();
+
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 // Create the default presets
@@ -132,6 +135,10 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 adapter.Commit();
             }
+
+            storeManager.CheckForChanges();
+
+            FilterLayoutContext.PopScope();
 
             return store.StoreID;
         }
@@ -197,6 +204,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// </summary>
         private void ConfigureDefaultAction(long storeID, string actionPayload)
         {
+            if (string.IsNullOrWhiteSpace(actionPayload))
+            {
+                return;
+            }
+
             var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload);
             var action = actionConfiguration.Action;
             var tasks = new List<ActionTask>();
