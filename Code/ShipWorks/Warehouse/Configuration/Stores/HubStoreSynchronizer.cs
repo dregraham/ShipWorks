@@ -21,6 +21,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private readonly IStoreManager storeManager;
         private readonly IStoreTypeManager storeTypeManager;
         private readonly IWarehouseStoreClient warehouseStoreClient;
+        private readonly List<StoreTypeCode> excludedStoreTypes = new List<StoreTypeCode> { StoreTypeCode.Manual, StoreTypeCode.Odbc, StoreTypeCode.GenericFile };
 
         /// <summary>
         /// Constructor
@@ -72,7 +73,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 StoreSynchronizations = new List<StoreSynchronization>()
             };
 
-            foreach (var store in stores)
+            foreach (var store in stores.Where(x => !excludedStoreTypes.Contains(x.StoreTypeCode)))
             {
                 var synchronization = new StoreSynchronization()
                 {
