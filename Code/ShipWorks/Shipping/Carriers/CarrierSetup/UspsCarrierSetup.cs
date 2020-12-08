@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping.CarrierSetup
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly IUspsWebClient webClient;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
@@ -37,6 +38,7 @@ namespace ShipWorks.Shipping.CarrierSetup
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.webClient = uspsWebClientFactory(UspsResellerType.None);
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -68,10 +70,16 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             if (uspsAccount.IsNew)
             {
+                ShippingSettingsEntity settings  = shippingSettings.Fetch();
+
+                if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+                {
+                    uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+                }
+
                 uspsAccount.Username = account.Username;
                 webClient.PopulateUspsAccountEntity(uspsAccount);
                 uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
-                uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
                 uspsAccount.InitializeNullsToDefault();
             }
 

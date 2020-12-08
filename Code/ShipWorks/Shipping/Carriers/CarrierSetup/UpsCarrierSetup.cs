@@ -86,6 +86,13 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             if (upsAccount.IsNew)
             {
+                ShippingSettingsEntity settings = shippingSettings.Fetch();
+
+                if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+                {
+                    upsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+                }
+                
                 if(!config.IsOneBalance)
                 {
                     upsAccount.AccountNumber = account.AccountNumber;
