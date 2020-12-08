@@ -20,8 +20,7 @@ namespace ShipWorks.Serialization
             try
             {
                 //Get the name of the assembly, ignoring versions and public keys.
-                string shortAssemblyName = assemblyName.Split(',')[0];
-                var assembly = Assembly.Load(shortAssemblyName);
+                var assembly = Assembly.Load(assemblyName);
                 var type = assembly.GetType(typeName);
                 return type;
             }
@@ -36,8 +35,8 @@ namespace ShipWorks.Serialization
         /// Binds a serialized type to its type name
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
-        {
-            assemblyName = null;
+        { 
+            assemblyName = serializedType.Assembly.FullName.Split(',')[0];
             typeName = serializedType.Name;
         }
     }
