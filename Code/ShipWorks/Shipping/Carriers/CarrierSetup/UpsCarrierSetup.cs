@@ -74,9 +74,10 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
 
             var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+
             if (!config.IsOneBalance)
             {
-                ShippingSettingsEntity settings = shippingSettings.Fetch();
                 settings.UpsAccessKey = SecureText.Encrypt(account.CustomerAccessNumber, "UPS");
                 shippingSettings.Save(settings);
             }
@@ -84,16 +85,14 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);
             upsAccount.HubVersion = config.HubVersion;
 
+            if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            {
+                upsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+            }
+
             if (upsAccount.IsNew)
             {
-                ShippingSettingsEntity settings = shippingSettings.Fetch();
-
-                if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
-                {
-                    upsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
-                }
-                
-                if(!config.IsOneBalance)
+                if (!config.IsOneBalance)
                 {
                     upsAccount.AccountNumber = account.AccountNumber;
                     upsAccount.InvoiceAuth = account.InvoiceAuth;
