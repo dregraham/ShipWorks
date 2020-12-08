@@ -68,15 +68,15 @@ namespace ShipWorks.Shipping.CarrierSetup
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
 
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+
+            if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            {
+                uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+            }
+
             if (uspsAccount.IsNew)
             {
-                ShippingSettingsEntity settings  = shippingSettings.Fetch();
-
-                if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
-                {
-                    uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
-                }
-
                 uspsAccount.Username = account.Username;
                 webClient.PopulateUspsAccountEntity(uspsAccount);
                 uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
@@ -84,9 +84,7 @@ namespace ShipWorks.Shipping.CarrierSetup
             }
 
             GetAddress(config.Address).CopyTo(uspsAccount, string.Empty);
-
             uspsAccountRepository.Save(uspsAccount);
-
             SetupDefaultsIfNeeded(ShipmentTypeCode.Usps, config.RequestedLabelFormat);
         }
 
