@@ -2,6 +2,7 @@
 using Interapptive.Shared.ComponentRegistration;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Serialization;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
@@ -16,14 +17,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Setup the specified store type
         /// </summary>
-        public virtual StoreEntity Setup(StoreConfiguration config, Type storeType)
-        {
-            var settings = new JsonSerializerSettings
+        public virtual StoreEntity Setup(StoreConfiguration config, Type storeType) =>
+            (StoreEntity) JsonConvert.DeserializeObject(config.SyncPayload, storeType, new JsonSerializerSettings
             {
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
-            };
-
-            return (StoreEntity) JsonConvert.DeserializeObject(config.SyncPayload, storeType, settings);
-        }
+                TypeNameHandling = TypeNameHandling.Objects,
+                SerializationBinder = new JsonSerializationBinder()
+            });
     }
 }
