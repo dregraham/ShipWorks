@@ -85,7 +85,9 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);
             upsAccount.HubVersion = config.HubVersion;
 
-            if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            // If the customer has a ShipEngineAccountId, that means they have a single ShipEngine account and we can
+            // import this from the hub
+            if (!string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
             {
                 upsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
             }

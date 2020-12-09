@@ -70,7 +70,9 @@ namespace ShipWorks.Shipping.CarrierSetup
 
             ShippingSettingsEntity settings = shippingSettings.Fetch();
 
-            if (string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            // If the customer has a ShipEngineAccountId, that means they have a single ShipEngine account and we can
+            // import this from the hub
+            if (!string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
             {
                 uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
             }
