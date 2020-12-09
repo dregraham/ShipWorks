@@ -104,15 +104,20 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
                 }
                 else
                 {
-                    string deviceIdentity = await GetDeviceIdentity().ConfigureAwait(false);
-                    var result =
-                        await oneBalanceUpsAccountRegistrationActivity.Execute(
-                            oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
-                    if (result.Failure)
+                    // If we don't have a SE Carrier ID, that means the ups account was not linked to ShipEngine in the hub.
+                    // So link it here
+                    if (string.IsNullOrWhiteSpace(upsAccount.ShipEngineCarrierId))
                     {
-                        // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
-                        log.Warn("Error registering UPS account", result.Exception);
-                        return;
+                        string deviceIdentity = await GetDeviceIdentity().ConfigureAwait(false);
+                        var result =
+                            await oneBalanceUpsAccountRegistrationActivity.Execute(
+                                oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
+                        if (result.Failure)
+                        {
+                            // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
+                            log.Warn("Error registering UPS account", result.Exception);
+                            return;
+                        }
                     }
                 }
 
