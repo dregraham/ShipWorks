@@ -15,9 +15,9 @@ using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Serialization;
 using ShipWorks.Data.Utility;
 using ShipWorks.Filters;
-using ShipWorks.Serialization;
 using ShipWorks.Stores;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
@@ -218,11 +218,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 return;
             }
 
-            var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                SerializationBinder = new JsonSerializationBinder()
-            });
+            var actionConfiguration = JsonConvert.DeserializeObject<ActionConfiguration>(actionPayload, new EntityJsonSerializerSettings());
 
             var action = actionConfiguration.Action;
             var tasks = new List<ActionTask>();

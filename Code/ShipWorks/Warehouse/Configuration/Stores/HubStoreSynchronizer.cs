@@ -6,7 +6,7 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Utility;
 using Newtonsoft.Json;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Serialization;
+using ShipWorks.Data.Serialization;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Management;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
@@ -76,25 +76,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             foreach (var store in stores.Where(x => !excludedStoreTypes.Contains(x.StoreTypeCode)))
             {
-                var sync = JsonConvert.SerializeObject(store, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    SerializationBinder = new JsonSerializationBinder()
-                });
-
-                var action = JsonConvert.SerializeObject(actionConfiguration, new JsonSerializerSettings
-                {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    SerializationBinder = new JsonSerializationBinder()
-                });
-
                 var synchronization = new StoreSynchronization()
                 {
                     Name = store.StoreName,
                     UniqueIdentifier = storeTypeManager.GetType(store).LicenseIdentifier,
                     StoreType = store.StoreTypeCode,
-                    SyncPayload = sync,
-                    ActionsPayload = action
+                    SyncPayload = JsonConvert.SerializeObject(store, new EntityJsonSerializerSettings()),
+                    ActionsPayload = JsonConvert.SerializeObject(actionConfiguration, new EntityJsonSerializerSettings())
                 };
 
                 request.StoreSynchronizations.Add(synchronization);
