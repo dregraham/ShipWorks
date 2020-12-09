@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
 
@@ -35,9 +33,9 @@ namespace ShipWorks.Serialization
         /// Binds a serialized type to its type name
         /// </summary>
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
-        { 
+        {
             assemblyName = serializedType.Assembly.FullName.Split(',')[0];
-            typeName = serializedType.Name;
+            typeName = serializedType.FullName;
         }
     }
 }
