@@ -493,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductAttribute"."ProductAttributeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductAttributeID
 		{
 			get { return (System.Int64)GetValue((int)ProductAttributeFieldIndex.ProductAttributeID, true); }
@@ -503,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductAttribute"."ProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ProductID
 		{
 			get { return (System.Int64)GetValue((int)ProductAttributeFieldIndex.ProductID, true); }
@@ -513,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProductAttribute"."AttributeName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AttributeName
 		{
 			get { return (System.String)GetValue((int)ProductAttributeFieldIndex.AttributeName, true); }
@@ -521,6 +524,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ProductVariantAttributeValueEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ProductVariantAttributeValueEntity))]
+		[DataMember]
 		public virtual EntityCollection<ProductVariantAttributeValueEntity> ProductVariantAttributeValue
 		{
 			get { return GetOrCreateEntityCollection<ProductVariantAttributeValueEntity, ProductVariantAttributeValueEntityFactory>("ProductAttribute", true, false, ref _productVariantAttributeValue);	}
@@ -528,6 +532,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ProductEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ProductEntity Product
 		{
 			get	{ return _product; }

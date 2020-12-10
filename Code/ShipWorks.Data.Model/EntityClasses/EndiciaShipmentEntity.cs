@@ -559,6 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaShipmentFieldIndex.ShipmentID, true); }
@@ -569,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."EndiciaAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EndiciaAccountID
 		{
 			get { return (System.Int64)GetValue((int)EndiciaShipmentFieldIndex.EndiciaAccountID, true); }
@@ -579,6 +581,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."OriginalEndiciaAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> OriginalEndiciaAccountID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EndiciaShipmentFieldIndex.OriginalEndiciaAccountID, false); }
@@ -589,6 +592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."StealthPostage"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean StealthPostage
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.StealthPostage, true); }
@@ -599,6 +603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceID
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID, true); }
@@ -609,6 +614,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."TransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> TransactionID
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EndiciaShipmentFieldIndex.TransactionID, false); }
@@ -619,6 +625,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."RefundFormID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RefundFormID
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EndiciaShipmentFieldIndex.RefundFormID, false); }
@@ -629,6 +636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ScanFormBatchID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EndiciaShipmentFieldIndex.ScanFormBatchID, false); }
@@ -639,6 +647,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ScanBasedReturn"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ScanBasedReturn
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.ScanBasedReturn, true); }
@@ -649,6 +658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestedLabelFormat
 		{
 			get { return (System.Int32)GetValue((int)EndiciaShipmentFieldIndex.RequestedLabelFormat, true); }
@@ -659,6 +669,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)EndiciaShipmentFieldIndex.Insurance, true); }
@@ -669,6 +680,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceID2
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID2, true); }
@@ -679,6 +691,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID3"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceID3
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID3, true); }
@@ -689,6 +702,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."ReferenceID4"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceID4
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID4, true); }
@@ -699,6 +713,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EndiciaShipment"."GroupCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GroupCode
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.GroupCode, true); }
@@ -707,6 +722,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ScanFormBatchEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ScanFormBatchEntity ScanFormBatch
 		{
 			get	{ return _scanFormBatch; }
@@ -726,6 +742,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'PostalShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual PostalShipmentEntity PostalShipment
 		{
 			get { return _postalShipment; }

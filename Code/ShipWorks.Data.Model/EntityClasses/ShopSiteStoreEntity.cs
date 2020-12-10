@@ -410,6 +410,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."Username"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.Username, true); }
@@ -420,6 +421,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.Password, true); }
@@ -430,6 +432,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."ApiUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUrl
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.ApiUrl, true); }
@@ -440,6 +443,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."RequireSSL"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean RequireSSL
 		{
 			get { return (System.Boolean)GetValue((int)ShopSiteStoreFieldIndex.RequireSSL, true); }
@@ -450,6 +454,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."DownloadPageSize"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DownloadPageSize
 		{
 			get { return (System.Int32)GetValue((int)ShopSiteStoreFieldIndex.DownloadPageSize, true); }
@@ -460,6 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."RequestTimeout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestTimeout
 		{
 			get { return (System.Int32)GetValue((int)ShopSiteStoreFieldIndex.RequestTimeout, true); }
@@ -470,6 +476,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."ShopSiteAuthentication"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual Interapptive.Shared.Enums.ShopSiteAuthenticationType ShopSiteAuthentication
 		{
 			get { return (Interapptive.Shared.Enums.ShopSiteAuthenticationType)GetValue((int)ShopSiteStoreFieldIndex.ShopSiteAuthentication, true); }
@@ -480,6 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthClientID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OauthClientID
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthClientID, true); }
@@ -490,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthSecretKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OauthSecretKey
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthSecretKey, true); }
@@ -500,6 +509,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."Identifier"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Identifier
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.Identifier, true); }
@@ -510,6 +520,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopSiteStore"."OauthAuthorizationCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OauthAuthorizationCode
 		{
 			get { return (System.String)GetValue((int)ShopSiteStoreFieldIndex.OauthAuthorizationCode, true); }

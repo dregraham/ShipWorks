@@ -522,6 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ScanFormBatch"."ScanFormBatchID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ScanFormBatchID
 		{
 			get { return (System.Int64)GetValue((int)ScanFormBatchFieldIndex.ScanFormBatchID, true); }
@@ -532,6 +533,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ScanFormBatch"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentType
 		{
 			get { return (System.Int32)GetValue((int)ScanFormBatchFieldIndex.ShipmentType, true); }
@@ -542,6 +544,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ScanFormBatch"."CreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)ScanFormBatchFieldIndex.CreatedDate, true); }
@@ -552,6 +555,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ScanFormBatch"."ShipmentCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentCount
 		{
 			get { return (System.Int32)GetValue((int)ScanFormBatchFieldIndex.ShipmentCount, true); }
@@ -560,6 +564,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EndiciaScanFormEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EndiciaScanFormEntity))]
+		[DataMember]
 		public virtual EntityCollection<EndiciaScanFormEntity> EndiciaScanForms
 		{
 			get { return GetOrCreateEntityCollection<EndiciaScanFormEntity, EndiciaScanFormEntityFactory>("ScanFormBatch", true, false, ref _endiciaScanForms);	}
@@ -567,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EndiciaShipmentEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EndiciaShipmentEntity))]
+		[DataMember]
 		public virtual EntityCollection<EndiciaShipmentEntity> EndiciaShipment
 		{
 			get { return GetOrCreateEntityCollection<EndiciaShipmentEntity, EndiciaShipmentEntityFactory>("ScanFormBatch", true, false, ref _endiciaShipment);	}
@@ -574,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UspsScanFormEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UspsScanFormEntity))]
+		[DataMember]
 		public virtual EntityCollection<UspsScanFormEntity> UspsScanForms
 		{
 			get { return GetOrCreateEntityCollection<UspsScanFormEntity, UspsScanFormEntityFactory>("ScanFormBatch", true, false, ref _uspsScanForms);	}
@@ -581,6 +588,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UspsShipmentEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UspsShipmentEntity))]
+		[DataMember]
 		public virtual EntityCollection<UspsShipmentEntity> UspsShipment
 		{
 			get { return GetOrCreateEntityCollection<UspsShipmentEntity, UspsShipmentEntityFactory>("ScanFormBatch", true, false, ref _uspsShipment);	}

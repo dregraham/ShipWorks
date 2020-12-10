@@ -412,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportConnectionString"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ImportConnectionString
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportConnectionString, true); }
@@ -422,6 +423,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportMap"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ImportMap
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportMap, true); }
@@ -432,6 +434,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ImportStrategy
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportStrategy, true); }
@@ -442,6 +445,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSourceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ImportColumnSourceType
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportColumnSourceType, true); }
@@ -452,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportColumnSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ImportColumnSource
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.ImportColumnSource, true); }
@@ -462,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 UploadStrategy
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.UploadStrategy, true); }
@@ -472,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadMap"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UploadMap
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadMap, true); }
@@ -482,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadColumnSourceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 UploadColumnSourceType
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.UploadColumnSourceType, true); }
@@ -492,6 +500,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadColumnSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UploadColumnSource
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadColumnSource, true); }
@@ -502,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."UploadConnectionString"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2048<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UploadConnectionString
 		{
 			get { return (System.String)GetValue((int)OdbcStoreFieldIndex.UploadConnectionString, true); }
@@ -512,6 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."ImportOrderItemStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ImportOrderItemStrategy
 		{
 			get { return (System.Int32)GetValue((int)OdbcStoreFieldIndex.ImportOrderItemStrategy, true); }
@@ -522,6 +533,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OdbcStore"."WarehouseLastModified"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> WarehouseLastModified
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)OdbcStoreFieldIndex.WarehouseLastModified, false); }

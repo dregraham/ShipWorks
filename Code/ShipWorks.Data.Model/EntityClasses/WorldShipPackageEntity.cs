@@ -538,6 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."UpsPackageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UpsPackageID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipPackageFieldIndex.UpsPackageID, true); }
@@ -548,6 +549,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipPackageFieldIndex.ShipmentID, true); }
@@ -558,6 +560,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."PackageType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PackageType
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.PackageType, true); }
@@ -568,6 +571,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Weight
 		{
 			get { return (System.Double)GetValue((int)WorldShipPackageFieldIndex.Weight, true); }
@@ -578,6 +582,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."ReferenceNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceNumber
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.ReferenceNumber, true); }
@@ -588,6 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."ReferenceNumber2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ReferenceNumber2
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.ReferenceNumber2, true); }
@@ -598,6 +604,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."CodOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CodOption
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.CodOption, true); }
@@ -608,6 +615,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."CodAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal CodAmount
 		{
 			get { return (System.Decimal)GetValue((int)WorldShipPackageFieldIndex.CodAmount, true); }
@@ -618,6 +626,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."CodCashOnly"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CodCashOnly
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.CodCashOnly, true); }
@@ -628,6 +637,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DeliveryConfirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DeliveryConfirmation
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DeliveryConfirmation, true); }
@@ -638,6 +648,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DeliveryConfirmationSignature"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DeliveryConfirmationSignature
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DeliveryConfirmationSignature, true); }
@@ -648,6 +659,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DeliveryConfirmationAdult"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DeliveryConfirmationAdult
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DeliveryConfirmationAdult, true); }
@@ -658,6 +670,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Length"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Length
 		{
 			get { return (System.Int32)GetValue((int)WorldShipPackageFieldIndex.Length, true); }
@@ -668,6 +681,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Width"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Width
 		{
 			get { return (System.Int32)GetValue((int)WorldShipPackageFieldIndex.Width, true); }
@@ -678,6 +692,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Height"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Height
 		{
 			get { return (System.Int32)GetValue((int)WorldShipPackageFieldIndex.Height, true); }
@@ -688,6 +703,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DeclaredValueAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DeclaredValueAmount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)WorldShipPackageFieldIndex.DeclaredValueAmount, false); }
@@ -698,6 +714,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DeclaredValueOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NChar, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DeclaredValueOption
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DeclaredValueOption, true); }
@@ -708,6 +725,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."CN22GoodsType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CN22GoodsType
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.CN22GoodsType, true); }
@@ -718,6 +736,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."CN22Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String CN22Description
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.CN22Description, true); }
@@ -728,6 +747,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."PostalSubClass"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String PostalSubClass
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.PostalSubClass, true); }
@@ -738,6 +758,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."MIDeliveryConfirmation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String MIDeliveryConfirmation
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.MIDeliveryConfirmation, true); }
@@ -748,6 +769,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."QvnOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String QvnOption
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.QvnOption, true); }
@@ -758,6 +780,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."QvnFrom"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String QvnFrom
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.QvnFrom, true); }
@@ -768,6 +791,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."QvnSubjectLine"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 18<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String QvnSubjectLine
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.QvnSubjectLine, true); }
@@ -778,6 +802,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."QvnMemo"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String QvnMemo
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.QvnMemo, true); }
@@ -788,6 +813,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn1ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn1ShipNotify
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn1ShipNotify, true); }
@@ -798,6 +824,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn1ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn1ContactName
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn1ContactName, true); }
@@ -808,6 +835,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn1Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn1Email
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn1Email, true); }
@@ -818,6 +846,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn2ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn2ShipNotify
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn2ShipNotify, true); }
@@ -828,6 +857,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn2ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn2ContactName
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn2ContactName, true); }
@@ -838,6 +868,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn2Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn2Email
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn2Email, true); }
@@ -848,6 +879,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn3ShipNotify"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn3ShipNotify
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn3ShipNotify, true); }
@@ -858,6 +890,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn3ContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn3ContactName
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn3ContactName, true); }
@@ -868,6 +901,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Qvn3Email"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Qvn3Email
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.Qvn3Email, true); }
@@ -878,6 +912,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."ShipperRelease"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipperRelease
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.ShipperRelease, true); }
@@ -888,6 +923,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."AdditionalHandlingEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String AdditionalHandlingEnabled
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.AdditionalHandlingEnabled, true); }
@@ -898,6 +934,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationOption
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationOption, true); }
@@ -908,6 +945,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationContactName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 35<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationContactName
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationContactName, true); }
@@ -918,6 +956,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."VerbalConfirmationTelephone"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VerbalConfirmationTelephone
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.VerbalConfirmationTelephone, true); }
@@ -928,6 +967,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceRegulationSet"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 5<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DryIceRegulationSet
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceRegulationSet, true); }
@@ -938,6 +978,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceWeight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DryIceWeight
 		{
 			get { return (Nullable<System.Double>)GetValue((int)WorldShipPackageFieldIndex.DryIceWeight, false); }
@@ -948,6 +989,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceMedicalPurpose"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DryIceMedicalPurpose
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceMedicalPurpose, true); }
@@ -958,6 +1000,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 1<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DryIceOption
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceOption, true); }
@@ -968,6 +1011,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."DryIceWeightUnitOfMeasure"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 10<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DryIceWeightUnitOfMeasure
 		{
 			get { return (System.String)GetValue((int)WorldShipPackageFieldIndex.DryIceWeightUnitOfMeasure, true); }
@@ -978,6 +1022,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipPackage"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)WorldShipPackageFieldIndex.Insurance, true); }
@@ -986,6 +1031,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'WorldShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual WorldShipShipmentEntity WorldShipShipment
 		{
 			get	{ return _worldShipShipment; }

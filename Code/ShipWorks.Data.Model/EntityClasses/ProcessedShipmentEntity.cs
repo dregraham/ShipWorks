@@ -442,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipmentID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)ProcessedShipmentFieldIndex.ShipmentID, true); }
@@ -452,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipmentType"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.Shipping.ShipmentTypeCode ShipmentType
 		{
 			get { return (ShipWorks.Shipping.ShipmentTypeCode)GetValue((int)ProcessedShipmentFieldIndex.ShipmentType, true); }
@@ -462,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipDate"<br/>
 		/// View field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime ShipDate
 		{
 			get { return (System.DateTime)GetValue((int)ProcessedShipmentFieldIndex.ShipDate, true); }
@@ -472,6 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."Insurance"<br/>
 		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Insurance
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.Insurance, true); }
@@ -482,6 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."InsuranceProvider"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 InsuranceProvider
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.InsuranceProvider, true); }
@@ -492,6 +497,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ProcessedDate"<br/>
 		/// View field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> ProcessedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ProcessedShipmentFieldIndex.ProcessedDate, false); }
@@ -502,6 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ProcessedUserID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ProcessedUserID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ProcessedShipmentFieldIndex.ProcessedUserID, false); }
@@ -512,6 +519,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ProcessedComputerID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ProcessedComputerID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ProcessedShipmentFieldIndex.ProcessedComputerID, false); }
@@ -522,6 +530,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."Voided"<br/>
 		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Voided
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.Voided, true); }
@@ -532,6 +541,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."VoidedDate"<br/>
 		/// View field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> VoidedDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ProcessedShipmentFieldIndex.VoidedDate, false); }
@@ -542,6 +552,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."VoidedUserID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> VoidedUserID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ProcessedShipmentFieldIndex.VoidedUserID, false); }
@@ -552,6 +563,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."VoidedComputerID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> VoidedComputerID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ProcessedShipmentFieldIndex.VoidedComputerID, false); }
@@ -562,6 +574,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."TotalWeight"<br/>
 		/// View field type characteristics (type, precision, scale, length): Decimal, 29, 9, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double TotalWeight
 		{
 			get { return (System.Double)GetValue((int)ProcessedShipmentFieldIndex.TotalWeight, true); }
@@ -572,6 +585,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."TrackingNumber"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TrackingNumber
 		{
 			get { return (System.String)GetValue((int)ProcessedShipmentFieldIndex.TrackingNumber, true); }
@@ -582,6 +596,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipmentCost"<br/>
 		/// View field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal ShipmentCost
 		{
 			get { return (System.Decimal)GetValue((int)ProcessedShipmentFieldIndex.ShipmentCost, true); }
@@ -592,6 +607,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipSenseStatus"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipSenseStatus
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipSenseStatus, true); }
@@ -602,6 +618,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipAddressValidationStatus"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipAddressValidationStatus
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipAddressValidationStatus, true); }
@@ -612,6 +629,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipResidentialStatus"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipResidentialStatus
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipResidentialStatus, true); }
@@ -622,6 +640,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipPOBox"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipPOBox
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipPOBox, true); }
@@ -632,6 +651,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipMilitaryAddress"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipMilitaryAddress
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipMilitaryAddress, true); }
@@ -642,6 +662,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."RequestedLabelFormat"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestedLabelFormat
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.RequestedLabelFormat, true); }
@@ -652,6 +673,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ActualLabelFormat"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ActualLabelFormat
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ProcessedShipmentFieldIndex.ActualLabelFormat, false); }
@@ -662,6 +684,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."OrderID"<br/>
 		/// View field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderID
 		{
 			get { return (System.Int64)GetValue((int)ProcessedShipmentFieldIndex.OrderID, true); }
@@ -672,6 +695,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."OrderNumberComplete"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderNumberComplete
 		{
 			get { return (System.String)GetValue((int)ProcessedShipmentFieldIndex.OrderNumberComplete, true); }
@@ -682,6 +706,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."Service"<br/>
 		/// View field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 101<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String Service
 		{
 			get { return (System.String)GetValue((int)ProcessedShipmentFieldIndex.Service, true); }
@@ -692,6 +717,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ShipUSTerritory"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipUSTerritory
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.ShipUSTerritory, true); }
@@ -702,6 +728,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ProcessedWithUiMode"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ProcessedWithUiMode
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ProcessedShipmentFieldIndex.ProcessedWithUiMode, false); }
@@ -712,6 +739,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."CombineSplitStatus"<br/>
 		/// View field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 CombineSplitStatus
 		{
 			get { return (System.Int32)GetValue((int)ProcessedShipmentFieldIndex.CombineSplitStatus, true); }
@@ -722,6 +750,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."ReturnShipment"<br/>
 		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ReturnShipment
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.ReturnShipment, true); }
@@ -732,6 +761,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  view field: "ProcessedShipmentsView"."Verified"<br/>
 		/// View field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// View field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Verified
 		{
 			get { return (System.Boolean)GetValue((int)ProcessedShipmentFieldIndex.Verified, true); }

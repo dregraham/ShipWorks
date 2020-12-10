@@ -408,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceName
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceName, true); }
@@ -418,6 +419,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceStoreName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceStoreName
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceStoreName, true); }
@@ -428,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceBuyerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceBuyerID
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceBuyerID, true); }
@@ -438,6 +441,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."MarketplaceSalesID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceSalesID
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.MarketplaceSalesID, true); }
@@ -448,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."Classification"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Classification
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.Classification, true); }
@@ -458,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."DistributionCenter"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DistributionCenter
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenter, true); }
@@ -468,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."IsFBA"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsFBA
 		{
 			get { return (System.Boolean)GetValue((int)ChannelAdvisorOrderItemFieldIndex.IsFBA, true); }
@@ -478,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."DistributionCenterID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DistributionCenterID
 		{
 			get { return (System.Int64)GetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterID, true); }
@@ -488,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrderItem"."DistributionCenterName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DistributionCenterName
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderItemFieldIndex.DistributionCenterName, true); }

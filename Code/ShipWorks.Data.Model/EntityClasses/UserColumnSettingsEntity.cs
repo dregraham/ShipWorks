@@ -386,6 +386,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserColumnSettings"."UserColumnSettingsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 UserColumnSettingsID
 		{
 			get { return (System.Int64)GetValue((int)UserColumnSettingsFieldIndex.UserColumnSettingsID, true); }
@@ -396,6 +397,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserColumnSettings"."SettingsKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid SettingsKey
 		{
 			get { return (System.Guid)GetValue((int)UserColumnSettingsFieldIndex.SettingsKey, true); }
@@ -406,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserColumnSettings"."UserID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 UserID
 		{
 			get { return (System.Int64)GetValue((int)UserColumnSettingsFieldIndex.UserID, true); }
@@ -416,6 +419,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserColumnSettings"."InitialSortType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 InitialSortType
 		{
 			get { return (System.Int32)GetValue((int)UserColumnSettingsFieldIndex.InitialSortType, true); }
@@ -426,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UserColumnSettings"."GridColumnLayoutID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 GridColumnLayoutID
 		{
 			get { return (System.Int64)GetValue((int)UserColumnSettingsFieldIndex.GridColumnLayoutID, true); }

@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrder"."ShopifyOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShopifyOrderID
 		{
 			get { return (System.Int64)GetValue((int)ShopifyOrderFieldIndex.ShopifyOrderID, true); }
@@ -461,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrder"."FulfillmentStatusCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FulfillmentStatusCode
 		{
 			get { return (System.Int32)GetValue((int)ShopifyOrderFieldIndex.FulfillmentStatusCode, true); }
@@ -471,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyOrder"."PaymentStatusCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PaymentStatusCode
 		{
 			get { return (System.Int32)GetValue((int)ShopifyOrderFieldIndex.PaymentStatusCode, true); }
@@ -479,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShopifyOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ShopifyOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<ShopifyOrderSearchEntity> ShopifyOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<ShopifyOrderSearchEntity, ShopifyOrderSearchEntityFactory>("ShopifyOrder", true, false, ref _shopifyOrderSearch);	}

@@ -380,6 +380,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."FilterNodeContentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterNodeContentID
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentFieldIndex.FilterNodeContentID, true); }
@@ -390,6 +391,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)FilterNodeContentFieldIndex.RowVersion, true); }
@@ -400,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."CountVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 CountVersion
 		{
 			get { return (System.Int64)GetValue((int)FilterNodeContentFieldIndex.CountVersion, true); }
@@ -410,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."Status"<br/>
 		/// Table field type characteristics (type, precision, scale, length): SmallInt, 5, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int16 Status
 		{
 			get { return (System.Int16)GetValue((int)FilterNodeContentFieldIndex.Status, true); }
@@ -420,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."InitialCalculation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InitialCalculation
 		{
 			get { return (System.String)GetValue((int)FilterNodeContentFieldIndex.InitialCalculation, true); }
@@ -430,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."UpdateCalculation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UpdateCalculation
 		{
 			get { return (System.String)GetValue((int)FilterNodeContentFieldIndex.UpdateCalculation, true); }
@@ -440,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."ColumnMask"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] ColumnMask
 		{
 			get { return (System.Byte[])GetValue((int)FilterNodeContentFieldIndex.ColumnMask, true); }
@@ -450,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."JoinMask"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 JoinMask
 		{
 			get { return (System.Int32)GetValue((int)FilterNodeContentFieldIndex.JoinMask, true); }
@@ -460,6 +468,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."Cost"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Cost
 		{
 			get { return (System.Int32)GetValue((int)FilterNodeContentFieldIndex.Cost, true); }
@@ -470,6 +479,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."Count"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Count
 		{
 			get { return (System.Int32)GetValue((int)FilterNodeContentFieldIndex.Count, true); }
@@ -480,6 +490,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."EntityExistsQuery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EntityExistsQuery
 		{
 			get { return (System.String)GetValue((int)FilterNodeContentFieldIndex.EntityExistsQuery, true); }

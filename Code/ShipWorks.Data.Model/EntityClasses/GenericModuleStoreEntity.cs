@@ -434,6 +434,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleUsername
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleUsername, true); }
@@ -444,6 +445,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModulePassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModulePassword
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModulePassword, true); }
@@ -454,6 +456,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleUrl
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleUrl, true); }
@@ -464,6 +467,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleVersion
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleVersion, true); }
@@ -474,6 +478,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModulePlatform"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModulePlatform
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModulePlatform, true); }
@@ -484,6 +489,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleDeveloper"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleDeveloper
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleDeveloper, true); }
@@ -494,6 +500,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineStoreCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleOnlineStoreCode
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineStoreCode, true); }
@@ -504,6 +511,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleStatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ModuleStatusCodes
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.ModuleStatusCodes, true); }
@@ -514,6 +522,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleDownloadPageSize"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleDownloadPageSize
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleDownloadPageSize, true); }
@@ -524,6 +533,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleRequestTimeout"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleRequestTimeout
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleRequestTimeout, true); }
@@ -534,6 +544,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleDownloadStrategy"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleDownloadStrategy
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleDownloadStrategy, true); }
@@ -544,6 +555,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineStatusSupport"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleOnlineStatusSupport
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineStatusSupport, true); }
@@ -554,6 +566,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineStatusDataType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleOnlineStatusDataType
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineStatusDataType, true); }
@@ -564,6 +577,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineCustomerSupport"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ModuleOnlineCustomerSupport
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineCustomerSupport, true); }
@@ -574,6 +588,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineCustomerDataType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleOnlineCustomerDataType
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineCustomerDataType, true); }
@@ -584,6 +599,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleOnlineShipmentDetails"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ModuleOnlineShipmentDetails
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleStoreFieldIndex.ModuleOnlineShipmentDetails, true); }
@@ -594,6 +610,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleHttpExpect100Continue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ModuleHttpExpect100Continue
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleStoreFieldIndex.ModuleHttpExpect100Continue, true); }
@@ -604,6 +621,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."ModuleResponseEncoding"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ModuleResponseEncoding
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, true); }
@@ -614,6 +632,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."SchemaVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SchemaVersion
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.SchemaVersion, true); }
@@ -624,6 +643,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonMerchantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonMerchantID
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonMerchantID, true); }
@@ -634,6 +654,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonAuthToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonAuthToken
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonAuthToken, true); }
@@ -644,6 +665,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."AmazonApiRegion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonApiRegion
 		{
 			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.AmazonApiRegion, true); }
@@ -654,6 +676,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleStore"."IncludeMilliseconds"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IncludeMilliseconds
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleStoreFieldIndex.IncludeMilliseconds, true); }

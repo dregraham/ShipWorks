@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SparkPayStore"."Token"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 70<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Token
 		{
 			get { return (System.String)GetValue((int)SparkPayStoreFieldIndex.Token, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SparkPayStore"."StoreUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 350<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreUrl
 		{
 			get { return (System.String)GetValue((int)SparkPayStoreFieldIndex.StoreUrl, true); }
@@ -414,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SparkPayStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)SparkPayStoreFieldIndex.StatusCodes, true); }

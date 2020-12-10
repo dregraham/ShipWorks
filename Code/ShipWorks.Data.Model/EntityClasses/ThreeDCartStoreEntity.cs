@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."StoreUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 110<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreUrl
 		{
 			get { return (System.String)GetValue((int)ThreeDCartStoreFieldIndex.StoreUrl, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."ApiUserKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 65<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiUserKey
 		{
 			get { return (System.String)GetValue((int)ThreeDCartStoreFieldIndex.ApiUserKey, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."TimeZoneID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String TimeZoneID
 		{
 			get { return (System.String)GetValue((int)ThreeDCartStoreFieldIndex.TimeZoneID, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)ThreeDCartStoreFieldIndex.StatusCodes, true); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."DownloadModifiedNumberOfDaysBack"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DownloadModifiedNumberOfDaysBack
 		{
 			get { return (System.Int32)GetValue((int)ThreeDCartStoreFieldIndex.DownloadModifiedNumberOfDaysBack, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."RestUser"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean RestUser
 		{
 			get { return (System.Boolean)GetValue((int)ThreeDCartStoreFieldIndex.RestUser, true); }
@@ -462,6 +468,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ThreeDCartStore"."OrderIDUpgradeFixDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> OrderIDUpgradeFixDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)ThreeDCartStoreFieldIndex.OrderIDUpgradeFixDate, false); }

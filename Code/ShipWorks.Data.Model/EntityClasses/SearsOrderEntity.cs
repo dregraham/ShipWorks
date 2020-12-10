@@ -455,6 +455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrder"."PoNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PoNumber
 		{
 			get { return (System.String)GetValue((int)SearsOrderFieldIndex.PoNumber, true); }
@@ -465,6 +466,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrder"."PoNumberWithDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PoNumberWithDate
 		{
 			get { return (System.String)GetValue((int)SearsOrderFieldIndex.PoNumberWithDate, true); }
@@ -475,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrder"."LocationID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LocationID
 		{
 			get { return (System.Int32)GetValue((int)SearsOrderFieldIndex.LocationID, true); }
@@ -485,6 +488,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrder"."Commission"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal Commission
 		{
 			get { return (System.Decimal)GetValue((int)SearsOrderFieldIndex.Commission, true); }
@@ -495,6 +499,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SearsOrder"."CustomerPickup"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CustomerPickup
 		{
 			get { return (System.Boolean)GetValue((int)SearsOrderFieldIndex.CustomerPickup, true); }
@@ -503,6 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'SearsOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(SearsOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<SearsOrderSearchEntity> SearsOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<SearsOrderSearchEntity, SearsOrderSearchEntityFactory>("SearsOrder", true, false, ref _searsOrderSearch);	}

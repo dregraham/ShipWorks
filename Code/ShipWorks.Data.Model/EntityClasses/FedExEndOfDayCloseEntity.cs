@@ -368,6 +368,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExEndOfDayClose"."FedExEndOfDayCloseID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 FedExEndOfDayCloseID
 		{
 			get { return (System.Int64)GetValue((int)FedExEndOfDayCloseFieldIndex.FedExEndOfDayCloseID, true); }
@@ -378,6 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExEndOfDayClose"."FedExAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FedExAccountID
 		{
 			get { return (System.Int64)GetValue((int)FedExEndOfDayCloseFieldIndex.FedExAccountID, true); }
@@ -388,6 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExEndOfDayClose"."AccountNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccountNumber
 		{
 			get { return (System.String)GetValue((int)FedExEndOfDayCloseFieldIndex.AccountNumber, true); }
@@ -398,6 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExEndOfDayClose"."CloseDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime CloseDate
 		{
 			get { return (System.DateTime)GetValue((int)FedExEndOfDayCloseFieldIndex.CloseDate, true); }
@@ -408,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "FedExEndOfDayClose"."IsSmartPost"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsSmartPost
 		{
 			get { return (System.Boolean)GetValue((int)FedExEndOfDayCloseFieldIndex.IsSmartPost, true); }

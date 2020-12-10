@@ -516,6 +516,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)DhlExpressShipmentFieldIndex.ShipmentID, true); }
@@ -526,6 +527,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."DhlExpressAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 DhlExpressAccountID
 		{
 			get { return (System.Int64)GetValue((int)DhlExpressShipmentFieldIndex.DhlExpressAccountID, true); }
@@ -536,6 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."Service"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Service
 		{
 			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.Service, true); }
@@ -546,6 +549,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."DeliveredDutyPaid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean DeliveredDutyPaid
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.DeliveredDutyPaid, true); }
@@ -556,6 +560,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."NonMachinable"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean NonMachinable
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.NonMachinable, true); }
@@ -566,6 +571,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."SaturdayDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean SaturdayDelivery
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.SaturdayDelivery, true); }
@@ -576,6 +582,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RequestedLabelFormat
 		{
 			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.RequestedLabelFormat, true); }
@@ -586,6 +593,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."Contents"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Contents
 		{
 			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.Contents, true); }
@@ -596,6 +604,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."NonDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 NonDelivery
 		{
 			get { return (System.Int32)GetValue((int)DhlExpressShipmentFieldIndex.NonDelivery, true); }
@@ -606,6 +615,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ShipEngineLabelID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipEngineLabelID
 		{
 			get { return (System.String)GetValue((int)DhlExpressShipmentFieldIndex.ShipEngineLabelID, true); }
@@ -616,6 +626,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."IntegratorTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> IntegratorTransactionID
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressShipmentFieldIndex.IntegratorTransactionID, false); }
@@ -626,6 +637,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."StampsTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Guid> StampsTransactionID
 		{
 			get { return (Nullable<System.Guid>)GetValue((int)DhlExpressShipmentFieldIndex.StampsTransactionID, false); }
@@ -636,6 +648,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "DhlExpressShipment"."ResidentialDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ResidentialDelivery
 		{
 			get { return (System.Boolean)GetValue((int)DhlExpressShipmentFieldIndex.ResidentialDelivery, true); }
@@ -644,6 +657,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'DhlExpressPackageEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(DhlExpressPackageEntity))]
+		[DataMember]
 		public virtual EntityCollection<DhlExpressPackageEntity> Packages
 		{
 			get { return GetOrCreateEntityCollection<DhlExpressPackageEntity, DhlExpressPackageEntityFactory>("DhlExpressShipment", true, false, ref _packages);	}
@@ -652,6 +666,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ShipmentEntity Shipment
 		{
 			get { return _shipment; }

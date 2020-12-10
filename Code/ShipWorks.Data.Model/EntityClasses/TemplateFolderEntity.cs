@@ -534,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateFolder"."TemplateFolderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 TemplateFolderID
 		{
 			get { return (System.Int64)GetValue((int)TemplateFolderFieldIndex.TemplateFolderID, true); }
@@ -544,6 +545,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateFolder"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)TemplateFolderFieldIndex.RowVersion, true); }
@@ -554,6 +556,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateFolder"."ParentFolderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ParentFolderID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)TemplateFolderFieldIndex.ParentFolderID, false); }
@@ -564,6 +567,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "TemplateFolder"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)TemplateFolderFieldIndex.Name, true); }
@@ -572,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TemplateEntity))]
+		[DataMember]
 		public virtual EntityCollection<TemplateEntity> Templates
 		{
 			get { return GetOrCreateEntityCollection<TemplateEntity, TemplateEntityFactory>("ParentFolder", true, false, ref _templates);	}
@@ -579,6 +584,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'TemplateFolderEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(TemplateFolderEntity))]
+		[DataMember]
 		public virtual EntityCollection<TemplateFolderEntity> ChildFolders
 		{
 			get { return GetOrCreateEntityCollection<TemplateFolderEntity, TemplateFolderEntityFactory>("ParentFolder", true, false, ref _childFolders);	}
@@ -586,6 +592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'TemplateFolderEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual TemplateFolderEntity ParentFolder
 		{
 			get	{ return _parentFolder; }

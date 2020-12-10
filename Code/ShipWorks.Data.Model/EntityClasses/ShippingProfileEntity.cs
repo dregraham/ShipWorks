@@ -1283,6 +1283,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShippingProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ShippingProfileID
 		{
 			get { return (System.Int64)GetValue((int)ShippingProfileFieldIndex.ShippingProfileID, true); }
@@ -1293,6 +1294,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ShippingProfileFieldIndex.RowVersion, true); }
@@ -1303,6 +1305,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ShippingProfileFieldIndex.Name, true); }
@@ -1313,6 +1316,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<ShipWorks.Shipping.ShipmentTypeCode> ShipmentType
 		{
 			get { return (Nullable<ShipWorks.Shipping.ShipmentTypeCode>)GetValue((int)ShippingProfileFieldIndex.ShipmentType, false); }
@@ -1323,6 +1327,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ShipmentTypePrimary"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ShipmentTypePrimary
 		{
 			get { return (System.Boolean)GetValue((int)ShippingProfileFieldIndex.ShipmentTypePrimary, true); }
@@ -1333,6 +1338,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."OriginID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> OriginID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShippingProfileFieldIndex.OriginID, false); }
@@ -1343,6 +1349,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."Insurance"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> Insurance
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.Insurance, false); }
@@ -1353,6 +1360,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."InsuranceInitialValueSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> InsuranceInitialValueSource
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.InsuranceInitialValueSource, false); }
@@ -1363,6 +1371,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."InsuranceInitialValueAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Decimal> InsuranceInitialValueAmount
 		{
 			get { return (Nullable<System.Decimal>)GetValue((int)ShippingProfileFieldIndex.InsuranceInitialValueAmount, false); }
@@ -1373,6 +1382,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ReturnShipment"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> ReturnShipment
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.ReturnShipment, false); }
@@ -1383,6 +1393,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."RequestedLabelFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RequestedLabelFormat
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)ShippingProfileFieldIndex.RequestedLabelFormat, false); }
@@ -1393,6 +1404,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."IncludeReturn"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> IncludeReturn
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.IncludeReturn, false); }
@@ -1403,6 +1415,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ApplyReturnProfile"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Boolean> ApplyReturnProfile
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)ShippingProfileFieldIndex.ApplyReturnProfile, false); }
@@ -1413,6 +1426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShippingProfile"."ReturnProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ReturnProfileID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShippingProfileFieldIndex.ReturnProfileID, false); }
@@ -1421,6 +1435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'PackageProfileEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(PackageProfileEntity))]
+		[DataMember]
 		public virtual EntityCollection<PackageProfileEntity> Packages
 		{
 			get { return GetOrCreateEntityCollection<PackageProfileEntity, PackageProfileEntityFactory>("ShippingProfile", true, false, ref _packages);	}
@@ -1429,6 +1444,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'AmazonSFPProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual AmazonSFPProfileEntity AmazonSFP
 		{
 			get { return _amazonSFP; }
@@ -1465,6 +1481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'AmazonSWAProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual AmazonSWAProfileEntity AmazonSWA
 		{
 			get { return _amazonSWA; }
@@ -1501,6 +1518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'AsendiaProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual AsendiaProfileEntity Asendia
 		{
 			get { return _asendia; }
@@ -1537,6 +1555,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'BestRateProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual BestRateProfileEntity BestRate
 		{
 			get { return _bestRate; }
@@ -1573,6 +1592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'DhlExpressProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual DhlExpressProfileEntity DhlExpress
 		{
 			get { return _dhlExpress; }
@@ -1609,6 +1629,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'FedExProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual FedExProfileEntity FedEx
 		{
 			get { return _fedEx; }
@@ -1645,6 +1666,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'IParcelProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual IParcelProfileEntity IParcel
 		{
 			get { return _iParcel; }
@@ -1681,6 +1703,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'OnTracProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual OnTracProfileEntity OnTrac
 		{
 			get { return _onTrac; }
@@ -1717,6 +1740,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'OtherProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual OtherProfileEntity Other
 		{
 			get { return _other; }
@@ -1753,6 +1777,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'PostalProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual PostalProfileEntity Postal
 		{
 			get { return _postal; }
@@ -1789,6 +1814,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'UpsProfileEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned.<br/><br/>
 		/// </summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual UpsProfileEntity Ups
 		{
 			get { return _ups; }

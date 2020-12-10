@@ -471,6 +471,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."AuditChangeDetailID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditChangeDetailID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeDetailFieldIndex.AuditChangeDetailID, true); }
@@ -481,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."AuditChangeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditChangeID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeDetailFieldIndex.AuditChangeID, true); }
@@ -491,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."AuditID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 AuditID
 		{
 			get { return (System.Int64)GetValue((int)AuditChangeDetailFieldIndex.AuditID, true); }
@@ -501,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."DisplayName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DisplayName
 		{
 			get { return (System.String)GetValue((int)AuditChangeDetailFieldIndex.DisplayName, true); }
@@ -511,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."DisplayFormat"<br/>
 		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte DisplayFormat
 		{
 			get { return (System.Byte)GetValue((int)AuditChangeDetailFieldIndex.DisplayFormat, true); }
@@ -521,6 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."DataType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte DataType
 		{
 			get { return (System.Byte)GetValue((int)AuditChangeDetailFieldIndex.DataType, true); }
@@ -531,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."TextOld"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String TextOld
 		{
 			get { return (System.String)GetValue((int)AuditChangeDetailFieldIndex.TextOld, true); }
@@ -541,6 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."TextNew"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String TextNew
 		{
 			get { return (System.String)GetValue((int)AuditChangeDetailFieldIndex.TextNew, true); }
@@ -551,6 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."VariantOld"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Variant, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Object VariantOld
 		{
 			get { return (System.Object)GetValue((int)AuditChangeDetailFieldIndex.VariantOld, true); }
@@ -561,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AuditChangeDetail"."VariantNew"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Variant, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.Object VariantNew
 		{
 			get { return (System.Object)GetValue((int)AuditChangeDetailFieldIndex.VariantNew, true); }
@@ -569,6 +579,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'AuditEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual AuditEntity Audit
 		{
 			get	{ return _audit; }

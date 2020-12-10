@@ -484,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."ActionQueueStepID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ActionQueueStepID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueStepFieldIndex.ActionQueueStepID, true); }
@@ -494,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ActionQueueStepFieldIndex.RowVersion, true); }
@@ -504,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."ActionQueueID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ActionQueueID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueStepFieldIndex.ActionQueueID, true); }
@@ -514,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."StepStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 StepStatus
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.StepStatus, true); }
@@ -524,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."StepIndex"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 StepIndex
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.StepIndex, true); }
@@ -534,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."StepName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StepName
 		{
 			get { return (System.String)GetValue((int)ActionQueueStepFieldIndex.StepName, true); }
@@ -544,6 +550,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."TaskIdentifier"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TaskIdentifier
 		{
 			get { return (System.String)GetValue((int)ActionQueueStepFieldIndex.TaskIdentifier, true); }
@@ -554,6 +561,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."TaskSettings"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TaskSettings
 		{
 			get { return (System.String)GetValue((int)ActionQueueStepFieldIndex.TaskSettings, true); }
@@ -564,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."InputSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 InputSource
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.InputSource, true); }
@@ -574,6 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."InputFilterNodeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 InputFilterNodeID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueStepFieldIndex.InputFilterNodeID, true); }
@@ -584,6 +594,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."FilterCondition"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean FilterCondition
 		{
 			get { return (System.Boolean)GetValue((int)ActionQueueStepFieldIndex.FilterCondition, true); }
@@ -594,6 +605,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."FilterConditionNodeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterConditionNodeID
 		{
 			get { return (System.Int64)GetValue((int)ActionQueueStepFieldIndex.FilterConditionNodeID, true); }
@@ -604,6 +616,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."FlowSuccess"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FlowSuccess
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.FlowSuccess, true); }
@@ -614,6 +627,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."FlowSkipped"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FlowSkipped
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.FlowSkipped, true); }
@@ -624,6 +638,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."FlowError"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FlowError
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.FlowError, true); }
@@ -634,6 +649,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."AttemptDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime AttemptDate
 		{
 			get { return (System.DateTime)GetValue((int)ActionQueueStepFieldIndex.AttemptDate, true); }
@@ -644,6 +660,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."AttemptError"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 500<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AttemptError
 		{
 			get { return (System.String)GetValue((int)ActionQueueStepFieldIndex.AttemptError, true); }
@@ -654,6 +671,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionQueueStep"."AttemptCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AttemptCount
 		{
 			get { return (System.Int32)GetValue((int)ActionQueueStepFieldIndex.AttemptCount, true); }
@@ -662,6 +680,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'ActionQueueEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual ActionQueueEntity ActionQueue
 		{
 			get	{ return _actionQueue; }

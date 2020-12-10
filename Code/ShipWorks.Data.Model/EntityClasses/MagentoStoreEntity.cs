@@ -394,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MagentoStore"."MagentoTrackingEmails"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean MagentoTrackingEmails
 		{
 			get { return (System.Boolean)GetValue((int)MagentoStoreFieldIndex.MagentoTrackingEmails, true); }
@@ -404,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MagentoStore"."MagentoVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 MagentoVersion
 		{
 			get { return (System.Int32)GetValue((int)MagentoStoreFieldIndex.MagentoVersion, true); }
@@ -414,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MagentoStore"."UpdateSplitOrderOnlineStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UpdateSplitOrderOnlineStatus
 		{
 			get { return (System.Boolean)GetValue((int)MagentoStoreFieldIndex.UpdateSplitOrderOnlineStatus, true); }

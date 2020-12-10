@@ -368,6 +368,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Resource"."ResourceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ResourceID
 		{
 			get { return (System.Int64)GetValue((int)ResourceFieldIndex.ResourceID, true); }
@@ -378,6 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Resource"."Data"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] Data
 		{
 			get { return (System.Byte[])GetValue((int)ResourceFieldIndex.Data, true); }
@@ -388,6 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Resource"."Checksum"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Binary, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] Checksum
 		{
 			get { return (System.Byte[])GetValue((int)ResourceFieldIndex.Checksum, true); }
@@ -398,6 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Resource"."Compressed"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean Compressed
 		{
 			get { return (System.Boolean)GetValue((int)ResourceFieldIndex.Compressed, true); }
@@ -408,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Resource"."Filename"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Filename
 		{
 			get { return (System.String)GetValue((int)ResourceFieldIndex.Filename, true); }

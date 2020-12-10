@@ -84,16 +84,11 @@
     <Property Name="UseCustomFieldOrderingOnNewElements" Value="true" />
   </Properties>
   <TypeShortcuts>
-    <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="System.String" />
-    <TypeShortcut Shortcut="AddressValidationStoreSettingType1" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="AmazonIsPrime" Type="System.String" />
-    <TypeShortcut Shortcut="AmazonIsPrime1" Type="Interapptive.Shared.Enums.AmazonIsPrime, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="AsendiaServiceType" Type="System.String" />
-    <TypeShortcut Shortcut="AsendiaServiceType1" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="System.String" />
-    <TypeShortcut Shortcut="BigCommerceAuthenticationType1" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="CombineSplitStatusType" Type="System.String" />
-    <TypeShortcut Shortcut="CombineSplitStatusType1" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AddressValidationStoreSettingType" Type="Interapptive.Shared.Enums.AddressValidationStoreSettingType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AmazonIsPrime" Type="Interapptive.Shared.Enums.AmazonIsPrime, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="AsendiaServiceType" Type="Interapptive.Shared.Enums.AsendiaServiceType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="BigCommerceAuthenticationType" Type="Interapptive.Shared.Enums.BigCommerceAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="CombineSplitStatusType" Type="Interapptive.Shared.Enums.CombineSplitStatusType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="DayOfWeek" Type="System.DayOfWeek" />
     <TypeShortcut Shortcut="FedExBatteryMaterialType" Type="ShipWorks.Shipping.FedEx.FedExBatteryMaterialType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="FedExBatteryPackingType" Type="ShipWorks.Shipping.FedEx.FedExBatteryPackingType, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
@@ -109,13 +104,11 @@
     <TypeShortcut Shortcut="KeyboardShortcutCommand" Type="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="KeyboardShortcutModifiers" Type="ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShipmentTypeCode" Type="ShipWorks.Shipping.ShipmentTypeCode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="System.String" />
-    <TypeShortcut Shortcut="ShopSiteAuthenticationType1" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="ShopSiteAuthenticationType" Type="Interapptive.Shared.Enums.ShopSiteAuthenticationType, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="ShortcutHotkey" Type="System.String" />
     <TypeShortcut Shortcut="SingleScanConfirmationMode" Type="ShipWorks.Settings.SingleScanConfirmationMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
     <TypeShortcut Shortcut="UIMode" Type="ShipWorks.Settings.UIMode, ShipWorks.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
-    <TypeShortcut Shortcut="VirtualKeys" Type="System.String" />
-    <TypeShortcut Shortcut="VirtualKeys1" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.1, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
+    <TypeShortcut Shortcut="VirtualKeys" Type="Interapptive.Shared.Win32.Native.VirtualKeys, Interapptive.Shared, Version=0.0.0.0, Culture=neutral, PublicKeyToken=6a464ecbd35cd6df" />
   </TypeShortcuts>
   <IgnoredWarnings />
   <SavedSearchQueries />

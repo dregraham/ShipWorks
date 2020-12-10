@@ -408,6 +408,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AccountKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccountKey
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AccountKey, true); }
@@ -418,6 +419,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ProfileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ProfileID
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorStoreFieldIndex.ProfileID, true); }
@@ -428,6 +430,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AttributesToDownload"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AttributesToDownload
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, true); }
@@ -438,6 +441,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ConsolidatorAsUsps"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ConsolidatorAsUsps
 		{
 			get { return (System.Boolean)GetValue((int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, true); }
@@ -448,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonMerchantID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonMerchantID
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonMerchantID, true); }
@@ -458,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonAuthToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonAuthToken
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonAuthToken, true); }
@@ -468,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."AmazonApiRegion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Char, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonApiRegion
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AmazonApiRegion, true); }
@@ -478,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."RefreshToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String RefreshToken
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.RefreshToken, true); }
@@ -488,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."DownloadDaysBack"<br/>
 		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte DownloadDaysBack
 		{
 			get { return (System.Byte)GetValue((int)ChannelAdvisorStoreFieldIndex.DownloadDaysBack, true); }
@@ -498,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ExcludeFBA"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ExcludeFBA
 		{
 			get { return (System.Boolean)GetValue((int)ChannelAdvisorStoreFieldIndex.ExcludeFBA, true); }

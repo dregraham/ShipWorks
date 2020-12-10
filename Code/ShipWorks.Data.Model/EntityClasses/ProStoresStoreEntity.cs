@@ -420,6 +420,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ShortName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShortName
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ShortName, true); }
@@ -430,6 +431,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."Username"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Username
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.Username, true); }
@@ -440,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LoginMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LoginMethod
 		{
 			get { return (System.Int32)GetValue((int)ProStoresStoreFieldIndex.LoginMethod, true); }
@@ -450,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiEntryPoint"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiEntryPoint
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiEntryPoint, true); }
@@ -460,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Text, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiToken
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiToken, true); }
@@ -470,6 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiStorefrontUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiStorefrontUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiStorefrontUrl, true); }
@@ -480,6 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiTokenLogonUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiTokenLogonUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiTokenLogonUrl, true); }
@@ -490,6 +497,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiXteUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiXteUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiXteUrl, true); }
@@ -500,6 +508,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiRestSecureUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiRestSecureUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiRestSecureUrl, true); }
@@ -510,6 +519,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiRestNonSecureUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiRestNonSecureUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiRestNonSecureUrl, true); }
@@ -520,6 +530,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."ApiRestScriptSuffix"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiRestScriptSuffix
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.ApiRestScriptSuffix, true); }
@@ -530,6 +541,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyAdminUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 300<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LegacyAdminUrl
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.LegacyAdminUrl, true); }
@@ -540,6 +552,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyXtePath"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 75<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LegacyXtePath
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.LegacyXtePath, true); }
@@ -550,6 +563,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyPrefix"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LegacyPrefix
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.LegacyPrefix, true); }
@@ -560,6 +574,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String LegacyPassword
 		{
 			get { return (System.String)GetValue((int)ProStoresStoreFieldIndex.LegacyPassword, true); }
@@ -570,6 +585,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ProStoresStore"."LegacyCanUpgrade"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean LegacyCanUpgrade
 		{
 			get { return (System.Boolean)GetValue((int)ProStoresStoreFieldIndex.LegacyCanUpgrade, true); }

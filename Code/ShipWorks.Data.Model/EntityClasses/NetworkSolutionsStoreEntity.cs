@@ -396,6 +396,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsStore"."UserToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UserToken
 		{
 			get { return (System.String)GetValue((int)NetworkSolutionsStoreFieldIndex.UserToken, true); }
@@ -406,6 +407,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsStore"."DownloadOrderStatuses"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DownloadOrderStatuses
 		{
 			get { return (System.String)GetValue((int)NetworkSolutionsStoreFieldIndex.DownloadOrderStatuses, true); }
@@ -416,6 +418,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsStore"."StatusCodes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StatusCodes
 		{
 			get { return (System.String)GetValue((int)NetworkSolutionsStoreFieldIndex.StatusCodes, true); }
@@ -426,6 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NetworkSolutionsStore"."StoreUrl"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String StoreUrl
 		{
 			get { return (System.String)GetValue((int)NetworkSolutionsStoreFieldIndex.StoreUrl, true); }
