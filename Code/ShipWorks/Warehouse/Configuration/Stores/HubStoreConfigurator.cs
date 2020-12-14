@@ -117,37 +117,48 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             storeManager.SaveStore(store);
 
-            FilterLayoutContext.PushScope();
-
-            using (SqlAdapter adapter = new SqlAdapter(true))
+            // Go into a try so we make sure to always run FilterLayoutContext.PopScope()
+            try
             {
-                // Create the default presets
-                CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
-                CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
+                FilterLayoutContext.PushScope();
 
-                StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                storeFilterRepository.Save(true);
-
-                // Mark that this store is now ready
-                store.CompleteSetup();
-                storeManager.SaveStore(store, adapter);
-
-                try
+                using (SqlAdapter adapter = new SqlAdapter(true))
                 {
-                    CreateOrigin(store, adapter);
-                }
-                catch
-                {
-                    //Do nothing. This means that this store was previously 
-                    //added and we already have the origin.
+                    // Create the default presets
+                    CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
+                    CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
+
+                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+                    storeFilterRepository.Save(true);
+
+                    // Mark that this store is now ready
+                    store.CompleteSetup();
+                    storeManager.SaveStore(store, adapter);
+
+                    try
+                    {
+                        CreateOrigin(store, adapter);
+                    }
+                    catch
+                    {
+                        //Do nothing. This means that this store was previously 
+                        //added and we already have the origin.
+                    }
+
+                    adapter.Commit();
                 }
 
-                adapter.Commit();
+                storeManager.CheckForChanges();
             }
-
-            storeManager.CheckForChanges();
-
-            FilterLayoutContext.PopScope();
+            catch (Exception ex)
+            {
+                log.Error("An exception was through in HubStoreConfigurator.ConfigureNewStore", ex);
+                throw;
+            }
+            finally
+            {
+                FilterLayoutContext.PopScope();
+            }
 
             return store.StoreID;
         }
