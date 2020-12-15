@@ -1567,6 +1567,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\WPF\WPFInterop.cs" />
+    <Compile Include="Warehouse\Configuration\Customer\HubCustomerConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Customer\IHubCustomerConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ConfigurationAddress.cs" />
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\DhlAccountConfiguration.cs" />
@@ -1575,6 +1577,8 @@
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\FedExAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\OnTracAccountConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ShippingSettings\UpsAccountConfiguration.cs" />
+    <Compile Include="Warehouse\Configuration\HubConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\IHubConfigurator.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseGetOrdersResponse.cs" />
     <Compile Include="Warehouse\Orders\DTO\WarehouseImportDetails.cs" />
     <Compile Include="Users\IUserManager.cs" />
