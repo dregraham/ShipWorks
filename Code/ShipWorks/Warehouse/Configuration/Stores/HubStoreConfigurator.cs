@@ -70,7 +70,13 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     {
                         var deserializedStore = storeSetup.Setup(config, storeType);
 
-                        if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier))
+                        // Make sure we don't add a store that won't actually show
+                        if (!deserializedStore.SetupComplete)
+                        {
+                            throw new Exception("SetupComplete was false");
+                        }
+
+                        if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier && x.StoreName.Equals(deserializedStore.StoreName)))
                         {
                             UpdateStore(deserializedStore);
                         }
@@ -152,7 +158,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             }
             catch (Exception ex)
             {
-                log.Error("An exception was through in HubStoreConfigurator.ConfigureNewStore", ex);
+                log.Error("An exception was thrown in HubStoreConfigurator.ConfigureNewStore", ex);
                 throw;
             }
             finally

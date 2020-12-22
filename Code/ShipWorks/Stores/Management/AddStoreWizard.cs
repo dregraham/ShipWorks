@@ -1072,7 +1072,9 @@ namespace ShipWorks.Stores.Management
 
                 await CreateDefaultWarehouse(store).ConfigureAwait(true);
 
-                if ((await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
+                if (store.WarehouseStoreID == null &&
+                    SelectedStoreType.ShouldUseHub(store) &&
+                    (await UploadStoreToWarehouse(e).ConfigureAwait(true)).Failure)
                 {
                     return;
                 }
@@ -1083,6 +1085,15 @@ namespace ShipWorks.Stores.Management
                     SaveUIMode(adapter);
 
                     adapter.Commit();
+                }
+
+                // Sync the store after it's been successfully saved
+                var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store, actionConfiguration).ConfigureAwait(true);
+
+                if (syncResult.Failure)
+                {
+                    var logger = scope.Resolve<Func<Type, ILog>>();
+                    logger(typeof(StoreSettingsDlg)).Error("Failed to Sync store to Hub.", syncResult.Exception);
                 }
 
                 // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the addition of this store.
@@ -1135,32 +1146,19 @@ namespace ShipWorks.Stores.Management
         {
             using (var innerScope = scope.BeginLifetimeScope())
             {
-                var syncResult = await scope.Resolve<IHubStoreSynchronizer>().SynchronizeStore(store, actionConfiguration).ConfigureAwait(true);
-
-                if (syncResult.Failure)
-                {
-                    var logger = scope.Resolve<Func<Type, ILog>>();
-                    logger(typeof(StoreSettingsDlg)).Error("Failed to Sync store to Hub.", syncResult.Exception);
-                }
-
-                Result result = Result.FromSuccess();
-
-                if (store.WarehouseStoreID == null && SelectedStoreType.ShouldUseHub(store))
-                {
-                    result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store, true)
+                Result result = await innerScope.Resolve<IWarehouseStoreClient>().UploadStoreToWarehouse(store, true)
                    .ConfigureAwait(true);
 
-                    if (result.Failure)
-                    {
-                        innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
+                if (result.Failure)
+                {
+                    innerScope.Resolve<Func<Type, ILog>>()(typeof(AddStoreWizard)).Error(result.Message);
 
-                        MessageHelper.ShowError(
-                            this,
-                            $"An error occurred saving the store to ShipWorks.");
-                        e.Skip = true;
-                        e.SkipToPage = wizardPageContactInfo;
-                        BackEnabled = true;
-                    }
+                    MessageHelper.ShowError(
+                        this,
+                        $"An error occurred saving the store to ShipWorks.");
+                    e.Skip = true;
+                    e.SkipToPage = wizardPageContactInfo;
+                    BackEnabled = true;
                 }
 
                 return result;
