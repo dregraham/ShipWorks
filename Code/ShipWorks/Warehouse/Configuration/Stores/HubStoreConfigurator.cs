@@ -59,6 +59,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// </summary>
         public void Configure(IEnumerable<StoreConfiguration> storeConfigurations)
         {
+            FilterLayoutContext.PushScope();
+
             foreach (var config in storeConfigurations)
             {
                 try
@@ -96,6 +98,8 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.StoreType)} store \"{config.Name}\": {ex.Message}", ex);
                 }
             }
+
+            FilterLayoutContext.PopScope();
         }
 
         /// <summary>
@@ -123,48 +127,33 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             storeManager.SaveStore(store);
 
-            // Go into a try so we make sure to always run FilterLayoutContext.PopScope()
-            try
+            using (SqlAdapter adapter = new SqlAdapter(true))
             {
-                FilterLayoutContext.PushScope();
+                // Create the default presets
+                CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
+                CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
 
-                using (SqlAdapter adapter = new SqlAdapter(true))
+                StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+                storeFilterRepository.Save(true);
+
+                // Mark that this store is now ready
+                store.CompleteSetup();
+                storeManager.SaveStore(store, adapter);
+
+                try
                 {
-                    // Create the default presets
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
-                    CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
-
-                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
-                    storeFilterRepository.Save(true);
-
-                    // Mark that this store is now ready
-                    store.CompleteSetup();
-                    storeManager.SaveStore(store, adapter);
-
-                    try
-                    {
-                        CreateOrigin(store, adapter);
-                    }
-                    catch
-                    {
-                        //Do nothing. This means that this store was previously 
-                        //added and we already have the origin.
-                    }
-
-                    adapter.Commit();
+                    CreateOrigin(store, adapter);
+                }
+                catch
+                {
+                    //Do nothing. This means that this store was previously 
+                    //added and we already have the origin.
                 }
 
-                storeManager.CheckForChanges();
+                adapter.Commit();
             }
-            catch (Exception ex)
-            {
-                log.Error("An exception was thrown in HubStoreConfigurator.ConfigureNewStore", ex);
-                throw;
-            }
-            finally
-            {
-                FilterLayoutContext.PopScope();
-            }
+
+            storeManager.CheckForChanges();
 
             return store.StoreID;
         }
