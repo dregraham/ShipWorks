@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Interapptive.Shared.Threading;
 using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.Stores
@@ -11,6 +12,6 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Perform the configuration
         /// </summary>
-        void Configure(IEnumerable<StoreConfiguration> storeConfigurations);
+        void Configure(IEnumerable<StoreConfiguration> storeConfigurations, IProgressReporter storeProgress);
     }
 }

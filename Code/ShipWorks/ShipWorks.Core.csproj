@@ -1582,6 +1582,7 @@
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Stores\DTO\StoreSynchronization.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Stores\HubStoreImporter.cs" />
     <Compile Include="Warehouse\Configuration\Stores\HubStoreSynchronizer.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\Stores\IHubStoreSynchronizer.cs" />

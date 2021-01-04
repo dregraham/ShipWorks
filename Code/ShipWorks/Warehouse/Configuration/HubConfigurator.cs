@@ -2,7 +2,6 @@
 using Interapptive.Shared.ComponentRegistration;
 using ShipWorks.Warehouse.Configuration.Carriers;
 using ShipWorks.Warehouse.Configuration.DTO;
-using ShipWorks.Warehouse.Configuration.Stores;
 
 namespace ShipWorks.Warehouse.Configuration
 {
@@ -13,15 +12,13 @@ namespace ShipWorks.Warehouse.Configuration
     public class HubConfigurator : IHubConfigurator
     {
         private readonly IHubCarrierConfigurator carrierConfigurator;
-        private readonly IHubStoreConfigurator storeConfigurator;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public HubConfigurator(IHubCarrierConfigurator carrierConfigurator, IHubStoreConfigurator storeConfigurator)
+        public HubConfigurator(IHubCarrierConfigurator carrierConfigurator)
         {
             this.carrierConfigurator = carrierConfigurator;
-            this.storeConfigurator = storeConfigurator;
         }
 
         /// <summary>
@@ -30,7 +27,6 @@ namespace ShipWorks.Warehouse.Configuration
         public async Task Configure(HubConfiguration config)
         {
             await carrierConfigurator.Configure(config.CarrierConfigurations).ConfigureAwait(false);
-            storeConfigurator.Configure(config.StoreConfigurations);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Autofac;
@@ -8,6 +9,7 @@ using Autofac.Features.Indexed;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.ComponentRegistration;
+using Interapptive.Shared.Threading;
 using Interapptive.Shared.Utility;
 using log4net;
 using Newtonsoft.Json;
@@ -57,13 +59,19 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Configure stores
         /// </summary>
-        public void Configure(IEnumerable<StoreConfiguration> storeConfigurations)
+        public void Configure(IEnumerable<StoreConfiguration> storeConfigurations, IProgressReporter storeProgress)
         {
+            int index = 1;
+            int totalStoresToImport = storeConfigurations.Count();
+            List<string> storesThatFailedImport = new List<string>();
+
             foreach (var config in storeConfigurations)
             {
+                storeProgress.Detail = $"Importing '{config.Name}' ({index} of {totalStoresToImport})";
+
                 try
                 {
-                    //Convert the config store to a store entity
+                    // Convert the config store to a store entity
                     var storeType = storeTypeManager.GetType(config.StoreType).CreateStoreInstance().GetType();
                     IStoreSetup storeSetup;
                     if (storeSetupFactory.TryGetValue(config.StoreType, out storeSetup))
@@ -94,7 +102,22 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 catch (Exception ex)
                 {
                     log.Error($"Failed to import configuration for {EnumHelper.GetDescription(config.StoreType)} store \"{config.Name}\": {ex.Message}", ex);
+                    storesThatFailedImport.Add(config.Name);
                 }
+
+                storeProgress.PercentComplete = 100 * index / totalStoresToImport;
+                index++;
+            }
+
+            storeProgress.Detail = "Done";
+            if (storesThatFailedImport.Any())
+            {
+                string errorMessage = CreateErrorMessage(storesThatFailedImport);
+                storeProgress.Failed(new Exception(errorMessage));
+            }
+            else
+            {
+                storeProgress.Completed();
             }
         }
 
@@ -289,6 +312,24 @@ namespace ShipWorks.Warehouse.Configuration.Stores
             }
 
             task.TaskSettings = xmlDocument.OuterXml;
+        }
+
+        /// <summary>
+        /// Create a error message that includes the list of stores that failed to import
+        /// </summary>
+        private static string CreateErrorMessage(IEnumerable<string> storesThatFailedImport)
+        {
+            StringBuilder stringBuilder = new StringBuilder("The following stores failed to import from ShipWorks Hub");
+            stringBuilder.AppendLine();
+            foreach (string storeName in storesThatFailedImport)
+            {
+                stringBuilder.AppendLine($"    - {storeName}");
+            }
+
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine(
+                "ShipWorks will attempt to import these stores on the next login. If this issue continues to occur, please contact ShipWorks support.");
+            return stringBuilder.ToString();
         }
     }
 }
