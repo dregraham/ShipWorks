@@ -45,6 +45,12 @@ namespace ShipWorks.Data.Model.EntityInterfaces
         /// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
         /// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
         System.Boolean IsSameDay { get; }
+        /// <summary> The OrderSource property of the Entity GenericModuleOrder<br/><br/>
+        /// </summary>
+        /// <remarks>Mapped on table field: "GenericModuleOrder"."OrderSource"<br/>
+        /// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+        /// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+        System.String OrderSource { get; }
         
         
         
