@@ -5539,8 +5539,13 @@ namespace ShipWorks
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    var config = lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this);
-                    lifetimeScope.Resolve<HubConfigurationSynchronizer>().Synchronize(config);
+                    var configuration = lifetimeScope.Resolve<IConfigurationData>().FetchReadOnly();
+
+                    if (!string.IsNullOrEmpty(configuration.WarehouseID))
+                    {
+                        var hubConfig = lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this, configuration.WarehouseID);
+                        lifetimeScope.Resolve<HubConfigurationSynchronizer>().Synchronize(hubConfig);
+                    }
                 }
             }
             catch (Exception ex)

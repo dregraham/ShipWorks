@@ -4,7 +4,6 @@ using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.Threading;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Warehouse.Configuration.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.Stores
@@ -35,7 +34,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Import stores from the Hub
         /// </summary>
-        public HubConfiguration ImportStores(IWin32Window owner)
+        public HubConfiguration ImportStores(IWin32Window owner, string warehouseID)
         {
             ProgressProvider progressProvider = new ProgressProvider();
             IProgressReporter storeProgress = progressProvider.AddItem("Importing stores");
@@ -46,32 +45,19 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                 progressDialog.AllowCloseWhenRunning = false;
                 progressDialog.AutoCloseWhenComplete = true;
 
-                ImportAndConfigureStores(storeProgress);
-
-                progressDialog.ShowDialog(owner);
-            }
-            return hubConfig;
-        }
-
-        /// <summary>
-        /// Get the list of stores from the Hub and configure them
-        /// </summary>
-        private void ImportAndConfigureStores(IProgressReporter storeProgress)
-        {
-            IConfigurationEntity configuration = configurationData.FetchReadOnly();
-
-            if (!string.IsNullOrEmpty(configuration.WarehouseID))
-            {
                 Task.Run(async () =>
                 {
                     storeProgress.Detail = "Getting list of stores to import";
                     storeProgress.Starting();
                     storeProgress.PercentComplete = 0;
 
-                    hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
+                    hubConfig = await webClient.GetConfig(warehouseID).ConfigureAwait(false);
                     storeConfigurator.Configure(hubConfig.StoreConfigurations, storeProgress);
                 });
+
+                progressDialog.ShowDialog(owner);
             }
+            return hubConfig;
         }
     }
 }
