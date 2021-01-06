@@ -5,6 +5,7 @@ using Interapptive.Shared.Threading;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Warehouse.Configuration.DTO;
 
 namespace ShipWorks.Warehouse.Configuration.Stores
 {
@@ -17,6 +18,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         private readonly IHubStoreConfigurator storeConfigurator;
         private readonly IHubConfigurationWebClient webClient;
         private readonly IConfigurationData configurationData;
+        private HubConfiguration hubConfig;
 
         /// <summary>
         /// Constructor
@@ -33,7 +35,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Import stores from the Hub
         /// </summary>
-        public void ImportStores(IWin32Window owner)
+        public HubConfiguration ImportStores(IWin32Window owner)
         {
             ProgressProvider progressProvider = new ProgressProvider();
             IProgressReporter storeProgress = progressProvider.AddItem("Importing stores");
@@ -48,6 +50,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
                 progressDialog.ShowDialog(owner);
             }
+            return hubConfig;
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     storeProgress.Starting();
                     storeProgress.PercentComplete = 0;
 
-                    var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
+                    hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
                     storeConfigurator.Configure(hubConfig.StoreConfigurations, storeProgress);
                 });
             }

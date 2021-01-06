@@ -67,7 +67,11 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             foreach (var config in storeConfigurations)
             {
-                storeProgress.Detail = $"Importing '{config.Name}' ({index} of {totalStoresToImport})";
+                var existingStore = storeManager.GetAllStores()
+                .FirstOrDefault(x => x.StoreTypeCode == config.StoreType &&
+                    storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier);
+
+                storeProgress.Detail = $"{(existingStore == null ? "Importing" : "Updating")} '{config.Name}' ({index} of {totalStoresToImport})";
 
                 try
                 {
@@ -76,7 +80,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                     IStoreSetup storeSetup;
                     if (storeSetupFactory.TryGetValue(config.StoreType, out storeSetup))
                     {
-                        var deserializedStore = storeSetup.Setup(config, storeType);
+                        var deserializedStore = storeSetup.Setup(config, storeType, existingStore);
 
                         // Make sure we don't add a store that won't actually show
                         if (!deserializedStore.SetupComplete)
@@ -84,7 +88,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
                             throw new Exception("SetupComplete was false");
                         }
 
-                        if (storeManager.GetAllStores().Any(x => storeTypeManager.GetType(x).LicenseIdentifier == config.UniqueIdentifier && x.StoreName.Equals(deserializedStore.StoreName)))
+                        if (existingStore != null)
                         {
                             UpdateStore(deserializedStore);
                         }
@@ -128,6 +132,7 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         {
             deserializedStore.IsNew = false;
             storeManager.SaveStore(deserializedStore);
+            storeManager.CheckForChanges();
         }
 
         /// <summary>

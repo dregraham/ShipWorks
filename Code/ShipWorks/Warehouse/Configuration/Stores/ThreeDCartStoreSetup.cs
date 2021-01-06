@@ -15,9 +15,9 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Setup a 3DCart store based on the given config
         /// </summary>
-        public override StoreEntity Setup(StoreConfiguration config, Type storeType)
+        public override StoreEntity Setup(StoreConfiguration config, Type storeType, StoreEntity existingStore)
         {
-            var store = (ThreeDCartStoreEntity) base.Setup(config, storeType);
+            var store = (ThreeDCartStoreEntity) base.Setup(config, storeType, existingStore);
             store.TimeZoneID = TimeZoneInfo.Local.Id;
             return store;
         }

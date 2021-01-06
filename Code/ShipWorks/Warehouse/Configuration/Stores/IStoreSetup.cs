@@ -12,6 +12,6 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Setup a store from given store configuration
         /// </summary>
-        StoreEntity Setup(StoreConfiguration config, Type storeType);
+        StoreEntity Setup(StoreConfiguration config, Type storeType, StoreEntity existingStore);
     }
 }

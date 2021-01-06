@@ -110,6 +110,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Logon;
 using ShipWorks.Users.Security;
+using ShipWorks.Warehouse.Configuration;
 using ShipWorks.Warehouse.Configuration.Stores;
 using TD.SandDock;
 using static Interapptive.Shared.Utility.Functional;
@@ -873,7 +874,7 @@ namespace ShipWorks
 
             MigrateStoresToHub();
 
-            ImportStoresFromHub();
+            SynchronizeConfig();
 
             MigrateSqlConfigToHub();
 
@@ -5530,15 +5531,16 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Import stores that have been synchronized to the Hub
+        /// Synchronize our database with the config from Hub
         /// </summary>
-        private void ImportStoresFromHub()
+        private void SynchronizeConfig()
         {
             try
             {
                 using (var lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this);
+                    var config = lifetimeScope.Resolve<HubStoreImporter>().ImportStores(this);
+                    lifetimeScope.Resolve<HubConfigurationSynchronizer>().Synchronize(config);
                 }
             }
             catch (Exception ex)

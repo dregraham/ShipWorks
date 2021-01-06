@@ -3,12 +3,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Interapptive.Shared;
-using Interapptive.Shared.ComponentRegistration.Ordering;
+using Interapptive.Shared.ComponentRegistration;
 using log4net;
-using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Warehouse.Configuration.DTO;
 using ShipWorks.Warehouse.Configuration.Stores;
 
 namespace ShipWorks.Warehouse.Configuration
@@ -16,8 +16,8 @@ namespace ShipWorks.Warehouse.Configuration
     /// <summary>
     /// Class to import and apply the configuration from Hub
     /// </summary>
-    [Order(typeof(IInitializeForCurrentSession), 2)]
-    public class HubConfigurationSynchronizer : IInitializeForCurrentSession
+    [Component(RegistrationType.Self)]
+    public class HubConfigurationSynchronizer
     {
         private readonly ILicenseService licenseService;
         private readonly IHubConfigurator configurator;
@@ -46,9 +46,9 @@ namespace ShipWorks.Warehouse.Configuration
         }
 
         /// <summary>
-        /// Initialize for the currently logged on user
+        /// Synchronize this database with the config from Hub
         /// </summary>
-        public void InitializeForCurrentSession()
+        public void Synchronize(HubConfiguration hubConfig)
         {
             if (licenseService.IsHub)
             {
@@ -59,7 +59,6 @@ namespace ShipWorks.Warehouse.Configuration
                     {
                         try
                         {
-                            var hubConfig = await webClient.GetConfig(configuration.WarehouseID).ConfigureAwait(false);
                             await configurator.Configure(hubConfig).ConfigureAwait(false);
                             await hubStoreSynchronizer.SynchronizeStoresIfNeeded(hubConfig.StoreConfigurations).ConfigureAwait(false);
                         }

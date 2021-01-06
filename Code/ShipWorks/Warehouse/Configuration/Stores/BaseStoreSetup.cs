@@ -17,7 +17,17 @@ namespace ShipWorks.Warehouse.Configuration.Stores
         /// <summary>
         /// Setup the specified store type
         /// </summary>
-        public virtual StoreEntity Setup(StoreConfiguration config, Type storeType) =>
-            (StoreEntity) JsonConvert.DeserializeObject(config.SyncPayload, storeType, new EntityJsonSerializerSettings());
+        public virtual StoreEntity Setup(StoreConfiguration config, Type storeType, StoreEntity existingStore)
+        {
+            var deserializedStore = (StoreEntity) JsonConvert.DeserializeObject(config.SyncPayload, storeType, new EntityJsonSerializerSettings());
+
+            if (existingStore != null)
+            {
+                deserializedStore.StoreID = existingStore.StoreID;
+            }
+
+            return deserializedStore;
+        }
+
     }
 }
