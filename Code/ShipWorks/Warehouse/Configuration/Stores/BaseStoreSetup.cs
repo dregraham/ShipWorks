@@ -28,6 +28,5 @@ namespace ShipWorks.Warehouse.Configuration.Stores
 
             return deserializedStore;
         }
-
     }
 }

@@ -5545,7 +5545,8 @@ namespace ShipWorks
             }
             catch (Exception ex)
             {
-                log.Error("Failed to import stores from Hub", ex);
+                // Log a generic message here - more detailed error logging is done by the importer/synchronizer
+                log.Error("Failed to synchronize with Hub configuration", ex);
             }
         }
 
