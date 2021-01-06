@@ -6384,7 +6384,8 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[AmazonOrderID] [varchar](32) NOT NULL,
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
-	[IsSameDay] bit NOT NULL
+	[IsSameDay] bit NOT NULL,
+	[OrderSource] [nvarchar](50)
  CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC
