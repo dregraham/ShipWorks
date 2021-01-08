@@ -420,6 +420,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             LoadAmazonOrderDetails(order, xpath);
 
+            LoadGenericModuleFields(order, xpath);
+
             // last modified
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "LastModified", order.OrderDate.ToString(storeType.DateFormat)));
 
@@ -432,6 +434,21 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // CustomerID
             LoadCustomerIdentifier(order, xpath);
 
+            // OnlineStatus
+            LoadOnlineStatus(xpath, order);
+
+            // Save the downloaded order
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
+            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
+
+            return true;
+        }
+
+        /// <summary>
+        ///  Load Online Status
+        /// </summary>
+        private void LoadOnlineStatus(XPathNavigator xpath, OrderEntity order)
+        {
             // OnlineStatus and custom OnlineStatusCode
             if (GenericModuleStoreEntity.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
             {
@@ -464,12 +481,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 order.OnlineStatusCode = null;
                 order.OnlineStatus = "";
             }
-
-            // Save the downloaded order
-            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GenericModuleDownloader.LoadOrder");
-            await retryAdapter.ExecuteWithRetryAsync(() => SaveDownloadedOrder(order)).ConfigureAwait(false);
-
-            return true;
         }
 
         /// <summary>
@@ -486,6 +497,21 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 genericModuleOrder.IsFBA = XPathUtility.Evaluate(xpath, "Amazon/IsFBA", false);
                 genericModuleOrder.AmazonOrderID = XPathUtility.Evaluate(xpath, "Amazon/AmazonOrderID", string.Empty);
                 genericModuleOrder.IsSameDay = XPathUtility.Evaluate(xpath, "Amazon/IsSameDay", false);
+            }
+        }
+
+        /// <summary>
+        /// Load GenericModule specific fields
+        /// </summary>
+        private void LoadGenericModuleFields(OrderEntity order, XPathNavigator xpath)
+        {
+            {
+                GenericModuleOrderEntity genericModuleOrder = order as GenericModuleOrderEntity;
+
+                if (genericModuleOrder != null)
+                {
+                    genericModuleOrder.OrderSource= XPathUtility.Evaluate(xpath, "OrderSource", string.Empty);
+                }
             }
         }
 

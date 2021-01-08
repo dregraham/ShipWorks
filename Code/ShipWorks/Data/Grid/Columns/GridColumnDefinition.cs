@@ -9,6 +9,7 @@ using Divelements.SandGrid;
 using System.Linq;
 using Interapptive.Shared;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.GenericModule;
 
 namespace ShipWorks.Data.Grid.Columns
 {
@@ -350,7 +351,9 @@ namespace ShipWorks.Data.Grid.Columns
         {
             IList<StoreType> storeTypes = StoreManager.GetUniqueStoreTypes();
 
-            if (storeTypeCode != null && !storeTypes.Select(t => t.TypeCode).Contains(storeTypeCode.Value))
+            bool appliesToStoreType = storeTypeCode != null && !storeTypes.Select(t => t.TypeCode).Contains(storeTypeCode.Value);
+
+            if (storeTypeCode != null && !storeTypes.Any(AppliesToStore))
             {
                 return false;
             }
@@ -364,6 +367,25 @@ namespace ShipWorks.Data.Grid.Columns
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Returns true if StoreType is the expected TypeCode or if it derives from the type
+        /// </summary>
+        private bool AppliesToStore(StoreType storeType)
+        {
+            if (storeType.TypeCode == storeTypeCode.Value)
+            {
+                return true;
+            }
+
+            if (storeTypeCode.Value == Stores.StoreTypeCode.GenericModule &&
+                storeType.GetType().IsSubclassOf(typeof(GenericModuleStoreType)))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>

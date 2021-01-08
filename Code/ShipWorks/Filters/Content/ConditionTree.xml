@@ -179,6 +179,7 @@
         <Condition identifier="GenericModule.AmazonOrderID" />
         <Condition identifier="GenericModule.IsFBA" />
         <Condition identifier="GenericModule.IsPrime" />
+		<Condition identifier="GenericModule.OrderSource" />
         <Condition identifier="InfiPlex.AmazonOrderID" />
         <Condition identifier="InfiPlex.IsFBA" />
         <Condition identifier="InfiPlex.IsPrime" />

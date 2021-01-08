@@ -6401,6 +6401,9 @@ GO
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
 GO
 
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GenericModuleOrder_OrderSource] ON [dbo].[GenericModuleOrder] ([OrderSource])
+GO
+
 PRINT N'Creating MagentoOrder foreign key'
 GO
 ALTER TABLE [dbo].[MagentoOrder]  WITH CHECK ADD CONSTRAINT [FK_MagentoOrder_GenericModuleOrder] FOREIGN KEY([OrderID])

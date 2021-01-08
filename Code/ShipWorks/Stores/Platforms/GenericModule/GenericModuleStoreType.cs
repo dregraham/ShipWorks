@@ -533,6 +533,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             outline.AddElement("IsPrime", () => EnumHelper.GetDescription(order.Value.IsPrime));
             outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
             outline.AddElement("IsSameDay", () => order.Value.IsSameDay);
+            outline.AddElement("OrderSource", () => order.Value.OrderSource);
         }
 
         /// <summary>
