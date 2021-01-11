@@ -509,7 +509,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             if (genericModuleOrder != null)
             {
-                genericModuleOrder.OrderSource = XPathUtility.Evaluate(xpath, "OrderSource", string.Empty).Truncate(50);
+                genericModuleOrder.Marketplace = XPathUtility.Evaluate(xpath, "Marketplace", string.Empty).Truncate(50);
             }
         }
 

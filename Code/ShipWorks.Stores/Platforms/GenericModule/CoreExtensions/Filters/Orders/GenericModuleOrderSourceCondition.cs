@@ -14,30 +14,30 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
     /// <summary>
     /// Filter condition for Is Prime
     /// </summary>
-    [ConditionElement("Generic Module Order Source", "GenericModule.OrderSource")]
+    [ConditionElement("Generic Module Marketplace", "GenericModule.Marketplace")]
     [ConditionStoreType(StoreTypeCode.GenericModule)]
-    public class GenericModuleOrderSourceCondition : StringCondition
+    public class GenericModuleMarketplaceCondition : StringCondition
     {
         /// <summary>
-        /// Generate Sql that filters orders based on StoreType and OrderSource
+        /// Generate Sql that filters orders based on StoreType and Marketplace
         /// </summary>
         public override string GenerateSql(SqlGenerationContext context)
         {
             string storeSql = GenerateStoreTypeSql(context);
-            string genericModuleOrderSourceSql = GenerateOrderSourceSql(context);
+            string genericModuleMarketplaceSql = GenerateMarketplaceSql(context);
 
             // AND the two together.
-            return $"{storeSql} AND {genericModuleOrderSourceSql}";
+            return $"{storeSql} AND {genericModuleMarketplaceSql}";
         }
 
         /// <summary>
         /// Generate the SQL for the condition
         /// </summary>
-        public string GenerateOrderSourceSql(SqlGenerationContext context)
+        public string GenerateMarketplaceSql(SqlGenerationContext context)
         {
             using (SqlGenerationScope scope = context.PushScope(OrderFields.OrderID, GenericModuleOrderFields.OrderID, SqlGenerationScopeType.AnyChild))
             {
-                return scope.Adorn(base.GenerateSql(context.GetColumnReference(GenericModuleOrderFields.OrderSource), context));
+                return scope.Adorn(base.GenerateSql(context.GetColumnReference(GenericModuleOrderFields.Marketplace), context));
             }
         }
 

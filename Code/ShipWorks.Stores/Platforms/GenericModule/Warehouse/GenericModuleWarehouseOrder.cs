@@ -32,8 +32,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule.Warehouse
         public bool IsSameDay { get; set; }
 
         /// <summary>
-        /// Order source
+        /// Marketplace
         /// </summary>
-        public string OrderSource { get; set; }
+        public string Marketplace { get; set; }
     }
 }
