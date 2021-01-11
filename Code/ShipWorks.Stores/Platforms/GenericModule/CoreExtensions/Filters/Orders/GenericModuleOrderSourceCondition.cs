@@ -14,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.CoreExtensions.Filters.Orders
     /// <summary>
     /// Filter condition for Is Prime
     /// </summary>
-    [ConditionElement("Generic Module Marketplace", "GenericModule.Marketplace")]
+    [ConditionElement("Marketplace", "GenericModule.Marketplace")]
     [ConditionStoreType(StoreTypeCode.GenericModule)]
     public class GenericModuleMarketplaceCondition : StringCondition
     {
