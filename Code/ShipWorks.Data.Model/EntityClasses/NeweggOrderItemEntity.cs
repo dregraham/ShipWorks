@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."SellerPartNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String SellerPartNumber
 		{
 			get { return (System.String)GetValue((int)NeweggOrderItemFieldIndex.SellerPartNumber, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."NeweggItemNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String NeweggItemNumber
 		{
 			get { return (System.String)GetValue((int)NeweggOrderItemFieldIndex.NeweggItemNumber, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."ManufacturerPartNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ManufacturerPartNumber
 		{
 			get { return (System.String)GetValue((int)NeweggOrderItemFieldIndex.ManufacturerPartNumber, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."ShippingStatusID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> ShippingStatusID
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)NeweggOrderItemFieldIndex.ShippingStatusID, false); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."ShippingStatusDescription"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShippingStatusDescription
 		{
 			get { return (System.String)GetValue((int)NeweggOrderItemFieldIndex.ShippingStatusDescription, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "NeweggOrderItem"."QuantityShipped"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> QuantityShipped
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)NeweggOrderItemFieldIndex.QuantityShipped, false); }

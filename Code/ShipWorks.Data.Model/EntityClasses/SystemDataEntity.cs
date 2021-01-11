@@ -368,6 +368,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SystemData"."SystemDataID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Boolean SystemDataID
 		{
 			get { return (System.Boolean)GetValue((int)SystemDataFieldIndex.SystemDataID, true); }
@@ -378,6 +379,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SystemData"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)SystemDataFieldIndex.RowVersion, true); }
@@ -388,6 +390,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SystemData"."DatabaseID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid DatabaseID
 		{
 			get { return (System.Guid)GetValue((int)SystemDataFieldIndex.DatabaseID, true); }
@@ -398,6 +401,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SystemData"."DateFiltersLastUpdate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime DateFiltersLastUpdate
 		{
 			get { return (System.DateTime)GetValue((int)SystemDataFieldIndex.DateFiltersLastUpdate, true); }
@@ -408,6 +412,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "SystemData"."TemplateVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TemplateVersion
 		{
 			get { return (System.String)GetValue((int)SystemDataFieldIndex.TemplateVersion, true); }

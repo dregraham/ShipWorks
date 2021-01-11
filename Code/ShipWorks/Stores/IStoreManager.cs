@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 
@@ -45,6 +46,11 @@ namespace ShipWorks.Stores
         /// Saves the store.
         /// </summary>
         void SaveStore(StoreEntity store);
+
+        /// <summary>
+        /// Saves the store
+        /// </summary>
+        void SaveStore(StoreEntity store, SqlAdapter adapter);
 
         /// <summary>
         /// Creates the online status filters for the given store.

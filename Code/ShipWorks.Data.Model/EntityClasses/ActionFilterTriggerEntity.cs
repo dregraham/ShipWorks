@@ -383,6 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ActionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ActionID
 		{
 			get { return (System.Int64)GetValue((int)ActionFilterTriggerFieldIndex.ActionID, true); }
@@ -393,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."FilterNodeID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 FilterNodeID
 		{
 			get { return (System.Int64)GetValue((int)ActionFilterTriggerFieldIndex.FilterNodeID, true); }
@@ -403,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."Direction"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Direction
 		{
 			get { return (System.Int32)GetValue((int)ActionFilterTriggerFieldIndex.Direction, true); }
@@ -413,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ComputerLimitedType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ComputerLimitedType
 		{
 			get { return (System.Int32)GetValue((int)ActionFilterTriggerFieldIndex.ComputerLimitedType, true); }
@@ -423,6 +427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ActionFilterTrigger"."ComputerLimitedList"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InternalComputerLimitedList
 		{
 			get { return (System.String)GetValue((int)ActionFilterTriggerFieldIndex.InternalComputerLimitedList, true); }

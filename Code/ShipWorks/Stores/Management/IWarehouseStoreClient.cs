@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Warehouse.Configuration.Stores.DTO;
 
 namespace ShipWorks.Stores.Management
 {
@@ -18,5 +19,10 @@ namespace ShipWorks.Stores.Management
         /// Update an existing stores credentials
         /// </summary>
         Task<Result> UpdateStoreCredentials(StoreEntity store);
+
+        /// <summary>
+        /// Synchronize the given stores with the Hub
+        /// </summary>
+        Task<Result> SynchronizeStores(StoreSynchronizationRequest storesDTO);
     }
 }

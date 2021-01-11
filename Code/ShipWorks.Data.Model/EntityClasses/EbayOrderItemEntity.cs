@@ -441,6 +441,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."OrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 LocalEbayOrderID
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderItemFieldIndex.LocalEbayOrderID, true); }
@@ -451,6 +452,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."EbayItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EbayItemID
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderItemFieldIndex.EbayItemID, true); }
@@ -461,6 +463,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."EbayTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EbayTransactionID
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderItemFieldIndex.EbayTransactionID, true); }
@@ -471,6 +474,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."SellingManagerRecord"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SellingManagerRecord
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.SellingManagerRecord, true); }
@@ -481,6 +485,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."EffectiveCheckoutStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EffectiveCheckoutStatus
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.EffectiveCheckoutStatus, true); }
@@ -491,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."EffectivePaymentMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 EffectivePaymentMethod
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.EffectivePaymentMethod, true); }
@@ -501,6 +507,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."PaymentStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PaymentStatus
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.PaymentStatus, true); }
@@ -511,6 +518,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."PaymentMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PaymentMethod
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.PaymentMethod, true); }
@@ -521,6 +529,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."CompleteStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 CompleteStatus
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.CompleteStatus, true); }
@@ -531,6 +540,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."FeedbackLeftType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FeedbackLeftType
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.FeedbackLeftType, true); }
@@ -541,6 +551,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."FeedbackLeftComments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FeedbackLeftComments
 		{
 			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.FeedbackLeftComments, true); }
@@ -551,6 +562,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."FeedbackReceivedType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FeedbackReceivedType
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.FeedbackReceivedType, true); }
@@ -561,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."FeedbackReceivedComments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FeedbackReceivedComments
 		{
 			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.FeedbackReceivedComments, true); }
@@ -571,6 +584,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."MyEbayPaid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean MyEbayPaid
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderItemFieldIndex.MyEbayPaid, true); }
@@ -581,6 +595,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."MyEbayShipped"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean MyEbayShipped
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderItemFieldIndex.MyEbayShipped, true); }
@@ -591,6 +606,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."PayPalTransactionID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PayPalTransactionID
 		{
 			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.PayPalTransactionID, true); }
@@ -601,6 +617,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."PayPalAddressStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PayPalAddressStatus
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderItemFieldIndex.PayPalAddressStatus, true); }
@@ -611,6 +628,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrderItem"."ExtendedOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ExtendedOrderID
 		{
 			get { return (System.String)GetValue((int)EbayOrderItemFieldIndex.ExtendedOrderID, true); }

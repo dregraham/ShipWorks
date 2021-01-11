@@ -449,6 +449,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrder"."GrouponOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GrouponOrderID
 		{
 			get { return (System.String)GetValue((int)GrouponOrderFieldIndex.GrouponOrderID, true); }
@@ -459,6 +460,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrder"."ParentOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ParentOrderID
 		{
 			get { return (System.String)GetValue((int)GrouponOrderFieldIndex.ParentOrderID, true); }
@@ -467,6 +469,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'GrouponOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(GrouponOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<GrouponOrderSearchEntity> GrouponOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<GrouponOrderSearchEntity, GrouponOrderSearchEntityFactory>("GrouponOrder", true, false, ref _grouponOrderSearch);	}

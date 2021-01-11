@@ -366,6 +366,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ExcludedPackageType"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShipmentType
 		{
 			get { return (System.Int32)GetValue((int)ExcludedPackageTypeFieldIndex.ShipmentType, true); }
@@ -376,6 +377,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ExcludedPackageType"."PackageType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int32 PackageType
 		{
 			get { return (System.Int32)GetValue((int)ExcludedPackageTypeFieldIndex.PackageType, true); }

@@ -392,6 +392,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleOrderItem"."AmazonOrderItemCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonOrderItemCode
 		{
 			get { return (System.String)GetValue((int)GenericModuleOrderItemFieldIndex.AmazonOrderItemCode, true); }

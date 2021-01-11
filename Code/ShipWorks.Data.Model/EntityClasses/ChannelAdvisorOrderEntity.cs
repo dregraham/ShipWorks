@@ -465,6 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."CustomOrderIdentifier"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomOrderIdentifier
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderFieldIndex.CustomOrderIdentifier, true); }
@@ -475,6 +476,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."ResellerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ResellerID
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderFieldIndex.ResellerID, true); }
@@ -485,6 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."OnlineShippingStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OnlineShippingStatus
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorOrderFieldIndex.OnlineShippingStatus, true); }
@@ -495,6 +498,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."OnlineCheckoutStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OnlineCheckoutStatus
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorOrderFieldIndex.OnlineCheckoutStatus, true); }
@@ -505,6 +509,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."OnlinePaymentStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OnlinePaymentStatus
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorOrderFieldIndex.OnlinePaymentStatus, true); }
@@ -515,6 +520,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."FlagStyle"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FlagStyle
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderFieldIndex.FlagStyle, true); }
@@ -525,6 +531,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."FlagDescription"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FlagDescription
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderFieldIndex.FlagDescription, true); }
@@ -535,6 +542,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."FlagType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FlagType
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorOrderFieldIndex.FlagType, true); }
@@ -545,6 +553,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."MarketplaceNames"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 1024<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String MarketplaceNames
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorOrderFieldIndex.MarketplaceNames, true); }
@@ -555,6 +564,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ChannelAdvisorOrder"."IsPrime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IsPrime
 		{
 			get { return (System.Int32)GetValue((int)ChannelAdvisorOrderFieldIndex.IsPrime, true); }
@@ -563,6 +573,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ChannelAdvisorOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ChannelAdvisorOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<ChannelAdvisorOrderSearchEntity> ChannelAdvisorOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<ChannelAdvisorOrderSearchEntity, ChannelAdvisorOrderSearchEntityFactory>("ChannelAdvisorOrder", true, false, ref _channelAdvisorOrderSearch);	}

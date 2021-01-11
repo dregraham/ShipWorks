@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OrderMotionOrder"."OrderMotionShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OrderMotionShipmentID
 		{
 			get { return (System.Int32)GetValue((int)OrderMotionOrderFieldIndex.OrderMotionShipmentID, true); }
@@ -461,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OrderMotionOrder"."OrderMotionPromotion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderMotionPromotion
 		{
 			get { return (System.String)GetValue((int)OrderMotionOrderFieldIndex.OrderMotionPromotion, true); }
@@ -471,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OrderMotionOrder"."OrderMotionInvoiceNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OrderMotionInvoiceNumber
 		{
 			get { return (System.String)GetValue((int)OrderMotionOrderFieldIndex.OrderMotionInvoiceNumber, true); }
@@ -479,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderMotionOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderMotionOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderMotionOrderSearchEntity> OrderMotionOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<OrderMotionOrderSearchEntity, OrderMotionOrderSearchEntityFactory>("OrderMotionOrder", true, false, ref _orderMotionOrderSearch);	}

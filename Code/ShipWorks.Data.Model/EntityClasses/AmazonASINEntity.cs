@@ -383,6 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonASIN"."StoreID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Int64 StoreID
 		{
 			get { return (System.Int64)GetValue((int)AmazonASINFieldIndex.StoreID, true); }
@@ -393,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonASIN"."SKU"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.String SKU
 		{
 			get { return (System.String)GetValue((int)AmazonASINFieldIndex.SKU, true); }
@@ -403,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonASIN"."AmazonASIN"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonASIN
 		{
 			get { return (System.String)GetValue((int)AmazonASINFieldIndex.AmazonASIN, true); }

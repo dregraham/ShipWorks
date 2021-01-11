@@ -576,6 +576,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."EbayOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 EbayOrderID
 		{
 			get { return (System.Int64)GetValue((int)EbayOrderFieldIndex.EbayOrderID, true); }
@@ -586,6 +587,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."EbayBuyerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EbayBuyerID
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.EbayBuyerID, true); }
@@ -596,6 +598,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."CombinedLocally"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CombinedLocally
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderFieldIndex.CombinedLocally, true); }
@@ -606,6 +609,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."SelectedShippingMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 SelectedShippingMethod
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderFieldIndex.SelectedShippingMethod, true); }
@@ -616,6 +620,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."SellingManagerRecord"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> SellingManagerRecord
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.SellingManagerRecord, false); }
@@ -626,6 +631,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspEligible"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean GspEligible
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderFieldIndex.GspEligible, true); }
@@ -636,6 +642,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspFirstName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspFirstName
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspFirstName, true); }
@@ -646,6 +653,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspLastName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspLastName
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspLastName, true); }
@@ -656,6 +664,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspStreet1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 512<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspStreet1
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspStreet1, true); }
@@ -666,6 +675,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspStreet2"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 512<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspStreet2
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspStreet2, true); }
@@ -676,6 +686,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspCity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspCity
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspCity, true); }
@@ -686,6 +697,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspStateProvince"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspStateProvince
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspStateProvince, true); }
@@ -696,6 +708,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspPostalCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 9<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspPostalCode
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspPostalCode, true); }
@@ -706,6 +719,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspCountryCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspCountryCode
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspCountryCode, true); }
@@ -716,6 +730,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GspReferenceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 128<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GspReferenceID
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.GspReferenceID, true); }
@@ -726,6 +741,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupEbayItemCount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 RollupEbayItemCount
 		{
 			get { return (System.Int32)GetValue((int)EbayOrderFieldIndex.RollupEbayItemCount, true); }
@@ -736,6 +752,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupEffectiveCheckoutStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RollupEffectiveCheckoutStatus
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupEffectiveCheckoutStatus, false); }
@@ -746,6 +763,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupEffectivePaymentMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RollupEffectivePaymentMethod
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupEffectivePaymentMethod, false); }
@@ -756,6 +774,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupFeedbackLeftType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RollupFeedbackLeftType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupFeedbackLeftType, false); }
@@ -766,6 +785,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupFeedbackLeftComments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupFeedbackLeftComments
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.RollupFeedbackLeftComments, true); }
@@ -776,6 +796,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupFeedbackReceivedType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RollupFeedbackReceivedType
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupFeedbackReceivedType, false); }
@@ -786,6 +807,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupFeedbackReceivedComments"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 80<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String RollupFeedbackReceivedComments
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.RollupFeedbackReceivedComments, true); }
@@ -796,6 +818,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."RollupPayPalAddressStatus"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int32> RollupPayPalAddressStatus
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)EbayOrderFieldIndex.RollupPayPalAddressStatus, false); }
@@ -806,6 +829,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."GuaranteedDelivery"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean GuaranteedDelivery
 		{
 			get { return (System.Boolean)GetValue((int)EbayOrderFieldIndex.GuaranteedDelivery, true); }
@@ -816,6 +840,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EbayOrder"."ExtendedOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 25<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ExtendedOrderID
 		{
 			get { return (System.String)GetValue((int)EbayOrderFieldIndex.ExtendedOrderID, true); }
@@ -824,6 +849,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EbayCombinedOrderRelationEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EbayCombinedOrderRelationEntity))]
+		[DataMember]
 		public virtual EntityCollection<EbayCombinedOrderRelationEntity> EbayCombinedOrderRelation
 		{
 			get { return GetOrCreateEntityCollection<EbayCombinedOrderRelationEntity, EbayCombinedOrderRelationEntityFactory>("EbayOrder", true, false, ref _ebayCombinedOrderRelation);	}
@@ -831,6 +857,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EbayOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EbayOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<EbayOrderSearchEntity> EbayOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<EbayOrderSearchEntity, EbayOrderSearchEntityFactory>("EbayOrder", true, false, ref _ebayOrderSearch);	}
@@ -838,6 +865,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'EbayStoreEntity' which are related to this entity via a relation of type 'm:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(EbayStoreEntity))]
+		[DataMember]
 		public virtual EntityCollection<EbayStoreEntity> EbayStoreCollectionViaEbayCombinedOrderRelation
 		{
 			get { return GetOrCreateEntityCollection<EbayStoreEntity, EbayStoreEntityFactory>("EbayOrderCollectionViaEbayCombinedOrderRelation", false, true, ref _ebayStoreCollectionViaEbayCombinedOrderRelation);	}

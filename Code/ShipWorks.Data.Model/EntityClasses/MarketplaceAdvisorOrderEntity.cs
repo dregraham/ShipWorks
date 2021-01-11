@@ -453,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorOrder"."BuyerNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 BuyerNumber
 		{
 			get { return (System.Int64)GetValue((int)MarketplaceAdvisorOrderFieldIndex.BuyerNumber, true); }
@@ -463,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorOrder"."SellerOrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 SellerOrderNumber
 		{
 			get { return (System.Int64)GetValue((int)MarketplaceAdvisorOrderFieldIndex.SellerOrderNumber, true); }
@@ -473,6 +475,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorOrder"."InvoiceNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String InvoiceNumber
 		{
 			get { return (System.String)GetValue((int)MarketplaceAdvisorOrderFieldIndex.InvoiceNumber, true); }
@@ -483,6 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "MarketplaceAdvisorOrder"."ParcelID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ParcelID
 		{
 			get { return (System.Int64)GetValue((int)MarketplaceAdvisorOrderFieldIndex.ParcelID, true); }
@@ -491,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'MarketplaceAdvisorOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(MarketplaceAdvisorOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<MarketplaceAdvisorOrderSearchEntity> MarketplaceAdvisorOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<MarketplaceAdvisorOrderSearchEntity, MarketplaceAdvisorOrderSearchEntityFactory>("MarketplaceAdvisorOrder", true, false, ref _marketplaceAdvisorOrderSearch);	}

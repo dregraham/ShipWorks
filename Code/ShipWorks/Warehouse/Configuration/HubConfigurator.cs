@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Interapptive.Shared.ComponentRegistration;
-using ShipWorks.Shipping.Carriers.CarrierSetup;
+using ShipWorks.Warehouse.Configuration.Carriers;
 using ShipWorks.Warehouse.Configuration.Customer;
 using ShipWorks.Warehouse.Configuration.DTO;
 

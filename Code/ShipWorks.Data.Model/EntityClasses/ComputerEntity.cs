@@ -454,6 +454,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Computer"."ComputerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ComputerID
 		{
 			get { return (System.Int64)GetValue((int)ComputerFieldIndex.ComputerID, true); }
@@ -464,6 +465,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Computer"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ComputerFieldIndex.RowVersion, true); }
@@ -474,6 +476,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Computer"."Identifier"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid Identifier
 		{
 			get { return (System.Guid)GetValue((int)ComputerFieldIndex.Identifier, true); }
@@ -484,6 +487,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Computer"."Name"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Name
 		{
 			get { return (System.String)GetValue((int)ComputerFieldIndex.Name, true); }
@@ -492,6 +496,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AuditEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AuditEntity))]
+		[DataMember]
 		public virtual EntityCollection<AuditEntity> Audit
 		{
 			get { return GetOrCreateEntityCollection<AuditEntity, AuditEntityFactory>("Computer", true, false, ref _audit);	}
@@ -499,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ServiceStatusEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(ServiceStatusEntity))]
+		[DataMember]
 		public virtual EntityCollection<ServiceStatusEntity> ServiceStatus
 		{
 			get { return GetOrCreateEntityCollection<ServiceStatusEntity, ServiceStatusEntityFactory>("Computer", true, false, ref _serviceStatus);	}

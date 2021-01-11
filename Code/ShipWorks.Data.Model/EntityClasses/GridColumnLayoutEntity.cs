@@ -411,6 +411,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."GridColumnLayoutID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 GridColumnLayoutID
 		{
 			get { return (System.Int64)GetValue((int)GridColumnLayoutFieldIndex.GridColumnLayoutID, true); }
@@ -421,6 +422,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."DefinitionSet"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DefinitionSet
 		{
 			get { return (System.Int32)GetValue((int)GridColumnLayoutFieldIndex.DefinitionSet, true); }
@@ -431,6 +433,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."DefaultSortColumnGuid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid DefaultSortColumnGuid
 		{
 			get { return (System.Guid)GetValue((int)GridColumnLayoutFieldIndex.DefaultSortColumnGuid, true); }
@@ -441,6 +444,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."DefaultSortOrder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 DefaultSortOrder
 		{
 			get { return (System.Int32)GetValue((int)GridColumnLayoutFieldIndex.DefaultSortOrder, true); }
@@ -451,6 +455,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."LastSortColumnGuid"<br/>
 		/// Table field type characteristics (type, precision, scale, length): UniqueIdentifier, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Guid LastSortColumnGuid
 		{
 			get { return (System.Guid)GetValue((int)GridColumnLayoutFieldIndex.LastSortColumnGuid, true); }
@@ -461,6 +466,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."LastSortOrder"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LastSortOrder
 		{
 			get { return (System.Int32)GetValue((int)GridColumnLayoutFieldIndex.LastSortOrder, true); }
@@ -471,6 +477,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GridColumnLayout"."DetailViewSettings"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DetailViewSettings
 		{
 			get { return (System.String)GetValue((int)GridColumnLayoutFieldIndex.DetailViewSettings, true); }
@@ -479,6 +486,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'GridColumnPositionEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(GridColumnPositionEntity))]
+		[DataMember]
 		public virtual EntityCollection<GridColumnPositionEntity> GridColumnPositions
 		{
 			get { return GetOrCreateEntityCollection<GridColumnPositionEntity, GridColumnPositionEntityFactory>("GridColumnLayout", true, false, ref _gridColumnPositions);	}

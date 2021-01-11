@@ -372,6 +372,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."ShortcutID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ShortcutID
 		{
 			get { return (System.Int64)GetValue((int)ShortcutFieldIndex.ShortcutID, true); }
@@ -382,6 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ShortcutFieldIndex.RowVersion, true); }
@@ -392,6 +394,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."ModifierKeys"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers> ModifierKeys
 		{
 			get { return (Nullable<ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutModifiers>)GetValue((int)ShortcutFieldIndex.ModifierKeys, false); }
@@ -402,6 +405,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."VirtualKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<Interapptive.Shared.Win32.Native.VirtualKeys> VirtualKey
 		{
 			get { return (Nullable<Interapptive.Shared.Win32.Native.VirtualKeys>)GetValue((int)ShortcutFieldIndex.VirtualKey, false); }
@@ -412,6 +416,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."Barcode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Barcode
 		{
 			get { return (System.String)GetValue((int)ShortcutFieldIndex.Barcode, true); }
@@ -422,6 +427,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."Action"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand Action
 		{
 			get { return (ShipWorks.IO.KeyboardShortcuts.KeyboardShortcutCommand)GetValue((int)ShortcutFieldIndex.Action, true); }
@@ -432,6 +438,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Shortcut"."RelatedObjectID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> RelatedObjectID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ShortcutFieldIndex.RelatedObjectID, false); }

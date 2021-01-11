@@ -404,6 +404,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."ConfigurationID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ConfigurationID
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.ConfigurationID, true); }
@@ -414,6 +415,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)ConfigurationFieldIndex.RowVersion, true); }
@@ -424,6 +426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."LogOnMethod"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LogOnMethod
 		{
 			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.LogOnMethod, true); }
@@ -434,6 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AddressCasing"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AddressCasing
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AddressCasing, true); }
@@ -444,6 +448,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerCompareEmail"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CustomerCompareEmail
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.CustomerCompareEmail, true); }
@@ -454,6 +459,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerCompareAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CustomerCompareAddress
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.CustomerCompareAddress, true); }
@@ -464,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateBilling"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CustomerUpdateBilling
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.CustomerUpdateBilling, true); }
@@ -474,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateShipping"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean CustomerUpdateShipping
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.CustomerUpdateShipping, true); }
@@ -484,6 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateModifiedBilling"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 CustomerUpdateModifiedBilling
 		{
 			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedBilling, true); }
@@ -494,6 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerUpdateModifiedShipping"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 CustomerUpdateModifiedShipping
 		{
 			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.CustomerUpdateModifiedShipping, true); }
@@ -504,6 +514,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AuditNewOrders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AuditNewOrders
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditNewOrders, true); }
@@ -514,6 +525,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AuditDeletedOrders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AuditDeletedOrders
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditDeletedOrders, true); }
@@ -524,6 +536,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."CustomerKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CustomerKey
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.CustomerKey, true); }
@@ -534,6 +547,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."UseParallelActionQueue"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean UseParallelActionQueue
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.UseParallelActionQueue, true); }
@@ -544,6 +558,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AllowEbayCombineLocally"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AllowEbayCombineLocally
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AllowEbayCombineLocally, true); }
@@ -554,6 +569,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."ArchivalSettingsXml"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ArchivalSettingsXml
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.ArchivalSettingsXml, true); }
@@ -564,6 +580,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AuditEnabled"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AuditEnabled
 		{
 			get { return (System.Boolean)GetValue((int)ConfigurationFieldIndex.AuditEnabled, true); }
@@ -574,6 +591,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."DefaultPickListTemplateID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> DefaultPickListTemplateID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)ConfigurationFieldIndex.DefaultPickListTemplateID, false); }
@@ -584,6 +602,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateDayOfWeek"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DayOfWeek AutoUpdateDayOfWeek
 		{
 			get { return (System.DayOfWeek)GetValue((int)ConfigurationFieldIndex.AutoUpdateDayOfWeek, true); }
@@ -594,6 +613,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateHourOfDay"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AutoUpdateHourOfDay
 		{
 			get { return (System.Int32)GetValue((int)ConfigurationFieldIndex.AutoUpdateHourOfDay, true); }
@@ -604,6 +624,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."AutoUpdateStartDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime AutoUpdateStartDate
 		{
 			get { return (System.DateTime)GetValue((int)ConfigurationFieldIndex.AutoUpdateStartDate, true); }
@@ -614,6 +635,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."WarehouseID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WarehouseID
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.WarehouseID, true); }
@@ -624,6 +646,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "Configuration"."WarehouseName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String WarehouseName
 		{
 			get { return (System.String)GetValue((int)ConfigurationFieldIndex.WarehouseName, true); }

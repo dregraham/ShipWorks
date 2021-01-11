@@ -482,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."WorldShipProcessedID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 WorldShipProcessedID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipProcessedFieldIndex.WorldShipProcessedID, true); }
@@ -492,6 +493,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShipmentID
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.ShipmentID, true); }
@@ -502,6 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)WorldShipProcessedFieldIndex.RowVersion, true); }
@@ -512,6 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."PublishedCharges"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double PublishedCharges
 		{
 			get { return (System.Double)GetValue((int)WorldShipProcessedFieldIndex.PublishedCharges, true); }
@@ -522,6 +526,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."NegotiatedCharges"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double NegotiatedCharges
 		{
 			get { return (System.Double)GetValue((int)WorldShipProcessedFieldIndex.NegotiatedCharges, true); }
@@ -532,6 +537,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."TrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String TrackingNumber
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.TrackingNumber, true); }
@@ -542,6 +548,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."UspsTrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String UspsTrackingNumber
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.UspsTrackingNumber, true); }
@@ -552,6 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."ServiceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String ServiceType
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.ServiceType, true); }
@@ -562,6 +570,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."PackageType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String PackageType
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.PackageType, true); }
@@ -572,6 +581,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."UpsPackageID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 20<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String UpsPackageID
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.UpsPackageID, true); }
@@ -582,6 +592,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."DeclaredValueAmount"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Double> DeclaredValueAmount
 		{
 			get { return (Nullable<System.Double>)GetValue((int)WorldShipProcessedFieldIndex.DeclaredValueAmount, false); }
@@ -592,6 +603,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."DeclaredValueOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NChar, 0, 0, 2<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String DeclaredValueOption
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.DeclaredValueOption, true); }
@@ -602,6 +614,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."WorldShipShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String WorldShipShipmentID
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.WorldShipShipmentID, true); }
@@ -612,6 +625,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."VoidIndicator"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String VoidIndicator
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.VoidIndicator, true); }
@@ -622,6 +636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."NumberOfPackages"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String NumberOfPackages
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.NumberOfPackages, true); }
@@ -632,6 +647,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."LeadTrackingNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String LeadTrackingNumber
 		{
 			get { return (System.String)GetValue((int)WorldShipProcessedFieldIndex.LeadTrackingNumber, true); }
@@ -642,6 +658,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipProcessed"."ShipmentIdCalculated"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ShipmentIdCalculated
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)WorldShipProcessedFieldIndex.ShipmentIdCalculated, false); }
@@ -650,6 +667,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets / sets related entity of type 'WorldShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity is set for this property, null is returned..<br/><br/></summary>
 		[Browsable(true)]
+		[DataMember]
 		public virtual WorldShipShipmentEntity WorldShipShipment
 		{
 			get	{ return _worldShipShipment; }

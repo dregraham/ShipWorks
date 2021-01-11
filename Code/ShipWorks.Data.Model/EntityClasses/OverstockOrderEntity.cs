@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrder"."WarehouseCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String WarehouseCode
 		{
 			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.WarehouseCode, true); }
@@ -461,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrder"."SalesChannelName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String SalesChannelName
 		{
 			get { return (System.String)GetValue((int)OverstockOrderFieldIndex.SalesChannelName, true); }
@@ -471,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "OverstockOrder"."SofsCreatedDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime SofsCreatedDate
 		{
 			get { return (System.DateTime)GetValue((int)OverstockOrderFieldIndex.SofsCreatedDate, true); }
@@ -479,6 +482,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OverstockOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OverstockOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<OverstockOrderSearchEntity> OverstockOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<OverstockOrderSearchEntity, OverstockOrderSearchEntityFactory>("OverstockOrder", true, false, ref _overstockOrderSearch);	}

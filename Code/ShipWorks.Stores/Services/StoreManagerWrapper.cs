@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using Interapptive.Shared.ComponentRegistration;
 using Interapptive.Shared.ComponentRegistration.Ordering;
 using ShipWorks.ApplicationCore;
+using ShipWorks.Common.Net;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
 using ShipWorks.Users.Security;
@@ -86,6 +88,14 @@ namespace ShipWorks.Stores.Services
 
             StatusPresetManager.CheckForChanges();
             StoreManager.CheckForChanges();
+        }
+
+        /// <summary>
+        /// Saves the store
+        /// </summary>
+        public void SaveStore(StoreEntity store, SqlAdapter adapter)
+        {
+            StoreManager.SaveStore(store, adapter);
         }
 
         /// <summary>

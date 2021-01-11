@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Configures carriers downloaded from the Hub
@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
         /// <summary>
         /// Configure carriers
         /// </summary>
-        Task Configure(List<CarrierConfiguration> carrierConfigurations);
+        Task Configure(IEnumerable<CarrierConfiguration> carrierConfigurations);
     }
 }

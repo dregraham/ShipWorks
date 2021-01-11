@@ -451,6 +451,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."EmailAccountID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 EmailAccountID
 		{
 			get { return (System.Int64)GetValue((int)EmailAccountFieldIndex.EmailAccountID, true); }
@@ -461,6 +462,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."RowVersion"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Timestamp, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] RowVersion
 		{
 			get { return (System.Byte[])GetValue((int)EmailAccountFieldIndex.RowVersion, true); }
@@ -471,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."AccountName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AccountName
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.AccountName, true); }
@@ -481,6 +484,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."DisplayName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String DisplayName
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.DisplayName, true); }
@@ -491,6 +495,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."EmailAddress"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String EmailAddress
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.EmailAddress, true); }
@@ -501,6 +506,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingServer"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String IncomingServer
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.IncomingServer, true); }
@@ -511,6 +517,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingServerType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IncomingServerType
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.IncomingServerType, true); }
@@ -521,6 +528,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingPort"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IncomingPort
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.IncomingPort, true); }
@@ -531,6 +539,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingSecurityType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IncomingSecurityType
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.IncomingSecurityType, true); }
@@ -541,6 +550,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String IncomingUsername
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.IncomingUsername, true); }
@@ -551,6 +561,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."IncomingPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String IncomingPassword
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.IncomingPassword, true); }
@@ -561,6 +572,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingServer"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OutgoingServer
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.OutgoingServer, true); }
@@ -571,6 +583,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingPort"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OutgoingPort
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.OutgoingPort, true); }
@@ -581,6 +594,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingSecurityType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OutgoingSecurityType
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.OutgoingSecurityType, true); }
@@ -591,6 +605,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingCredentialSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 OutgoingCredentialSource
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.OutgoingCredentialSource, true); }
@@ -601,6 +616,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingUsername"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OutgoingUsername
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.OutgoingUsername, true); }
@@ -611,6 +627,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."OutgoingPassword"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String OutgoingPassword
 		{
 			get { return (System.String)GetValue((int)EmailAccountFieldIndex.OutgoingPassword, true); }
@@ -621,6 +638,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."AutoSend"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean AutoSend
 		{
 			get { return (System.Boolean)GetValue((int)EmailAccountFieldIndex.AutoSend, true); }
@@ -631,6 +649,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."AutoSendMinutes"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 AutoSendMinutes
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.AutoSendMinutes, true); }
@@ -641,6 +660,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."AutoSendLastTime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime AutoSendLastTime
 		{
 			get { return (System.DateTime)GetValue((int)EmailAccountFieldIndex.AutoSendLastTime, true); }
@@ -651,6 +671,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessagesPerConnection"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean LimitMessagesPerConnection
 		{
 			get { return (System.Boolean)GetValue((int)EmailAccountFieldIndex.LimitMessagesPerConnection, true); }
@@ -661,6 +682,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessagesPerConnectionQuantity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LimitMessagesPerConnectionQuantity
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.LimitMessagesPerConnectionQuantity, true); }
@@ -671,6 +693,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessagesPerHour"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean LimitMessagesPerHour
 		{
 			get { return (System.Boolean)GetValue((int)EmailAccountFieldIndex.LimitMessagesPerHour, true); }
@@ -681,6 +704,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessagesPerHourQuantity"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LimitMessagesPerHourQuantity
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.LimitMessagesPerHourQuantity, true); }
@@ -691,6 +715,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessageInterval"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean LimitMessageInterval
 		{
 			get { return (System.Boolean)GetValue((int)EmailAccountFieldIndex.LimitMessageInterval, true); }
@@ -701,6 +726,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."LimitMessageIntervalSeconds"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 LimitMessageIntervalSeconds
 		{
 			get { return (System.Int32)GetValue((int)EmailAccountFieldIndex.LimitMessageIntervalSeconds, true); }
@@ -711,6 +737,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "EmailAccount"."InternalOwnerID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> InternalOwnerID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)EmailAccountFieldIndex.InternalOwnerID, false); }
@@ -719,6 +746,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'OrderMotionStoreEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(OrderMotionStoreEntity))]
+		[DataMember]
 		public virtual EntityCollection<OrderMotionStoreEntity> OrderMotionStore
 		{
 			get { return GetOrCreateEntityCollection<OrderMotionStoreEntity, OrderMotionStoreEntityFactory>("OrderMotionEmailAccount", true, false, ref _orderMotionStore);	}

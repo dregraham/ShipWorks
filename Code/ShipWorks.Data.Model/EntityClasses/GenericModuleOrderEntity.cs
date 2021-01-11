@@ -414,6 +414,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleOrder"."AmazonOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonOrderID
 		{
 			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.AmazonOrderID, true); }
@@ -424,6 +425,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsFBA"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsFBA
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleOrderFieldIndex.IsFBA, true); }
@@ -434,6 +436,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsPrime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual Interapptive.Shared.Enums.AmazonIsPrime IsPrime
 		{
 			get { return (Interapptive.Shared.Enums.AmazonIsPrime)GetValue((int)GenericModuleOrderFieldIndex.IsPrime, true); }
@@ -444,6 +447,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GenericModuleOrder"."IsSameDay"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsSameDay
 		{
 			get { return (System.Boolean)GetValue((int)GenericModuleOrderFieldIndex.IsSameDay, true); }

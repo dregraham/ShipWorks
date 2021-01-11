@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."Permalink"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Permalink
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.Permalink, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."ChannelSKUProvided"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ChannelSKUProvided
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.ChannelSKUProvided, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."FulfillmentLineItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String FulfillmentLineItemID
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."BomSKU"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String BomSKU
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.BomSKU, true); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."GrouponLineItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String GrouponLineItemID
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "GrouponOrderItem"."PONumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PONumber
 		{
 			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.PONumber, true); }

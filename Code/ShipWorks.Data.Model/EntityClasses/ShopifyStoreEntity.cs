@@ -404,6 +404,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyShopUrlName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShopifyShopUrlName
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ShopifyShopUrlName, true); }
@@ -414,6 +415,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyShopDisplayName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShopifyShopDisplayName
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ShopifyShopDisplayName, true); }
@@ -424,6 +426,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyAccessToken"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ShopifyAccessToken
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ShopifyAccessToken, true); }
@@ -434,6 +437,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyRequestedShippingOption"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 ShopifyRequestedShippingOption
 		{
 			get { return (System.Int32)GetValue((int)ShopifyStoreFieldIndex.ShopifyRequestedShippingOption, true); }
@@ -444,6 +448,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ApiKey"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String ApiKey
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.ApiKey, true); }
@@ -454,6 +459,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."Password"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Password
 		{
 			get { return (System.String)GetValue((int)ShopifyStoreFieldIndex.Password, true); }
@@ -464,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyNotifyCustomer"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean ShopifyNotifyCustomer
 		{
 			get { return (System.Boolean)GetValue((int)ShopifyStoreFieldIndex.ShopifyNotifyCustomer, true); }
@@ -474,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "ShopifyStore"."ShopifyFulfillmentLocation"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShopifyFulfillmentLocation
 		{
 			get { return (System.Int64)GetValue((int)ShopifyStoreFieldIndex.ShopifyFulfillmentLocation, true); }

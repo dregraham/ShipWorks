@@ -442,6 +442,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZoneFile"."ZoneFileID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 ZoneFileID
 		{
 			get { return (System.Int64)GetValue((int)UpsLocalRatingZoneFileFieldIndex.ZoneFileID, true); }
@@ -452,6 +453,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZoneFile"."UploadDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime2, 7, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.DateTime UploadDate
 		{
 			get { return (System.DateTime)GetValue((int)UpsLocalRatingZoneFileFieldIndex.UploadDate, true); }
@@ -462,6 +464,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "UpsLocalRatingZoneFile"."FileContent"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Byte[] FileContent
 		{
 			get { return (System.Byte[])GetValue((int)UpsLocalRatingZoneFileFieldIndex.FileContent, true); }
@@ -470,6 +473,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsLocalRatingDeliveryAreaSurchargeEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsLocalRatingDeliveryAreaSurchargeEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsLocalRatingDeliveryAreaSurchargeEntity> UpsLocalRatingDeliveryAreaSurcharge
 		{
 			get { return GetOrCreateEntityCollection<UpsLocalRatingDeliveryAreaSurchargeEntity, UpsLocalRatingDeliveryAreaSurchargeEntityFactory>("UpsLocalRatingZoneFile", true, false, ref _upsLocalRatingDeliveryAreaSurcharge);	}
@@ -477,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'UpsLocalRatingZoneEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(UpsLocalRatingZoneEntity))]
+		[DataMember]
 		public virtual EntityCollection<UpsLocalRatingZoneEntity> UpsLocalRatingZone
 		{
 			get { return GetOrCreateEntityCollection<UpsLocalRatingZoneEntity, UpsLocalRatingZoneEntityFactory>("UpsLocalRatingZoneFile", true, false, ref _upsLocalRatingZone);	}

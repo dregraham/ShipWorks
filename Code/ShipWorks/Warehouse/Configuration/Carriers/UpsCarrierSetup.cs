@@ -9,14 +9,14 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Licensing.Activation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.EntityInterfaces;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.OneBalance;
-using ShipWorks.Shipping.CarrierSetup;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.ShipEngine;
-using ShipWorks.Warehouse.Configuration.DTO.ShippingSettings;
+using ShipWorks.Warehouse.Configuration.Carriers.DTO;
 
-namespace ShipWorks.Shipping.Carriers.CarrierSetup
+namespace ShipWorks.Warehouse.Configuration.Carriers
 {
     /// <summary>
     /// Setup the UPS carrier configuration downloaded from the hub
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             this.shippingSettings = shippingSettings;
             this.mainForm = mainForm;
             this.oneBalanceUpsAccountRegistrationActivity = oneBalanceUpsAccountRegistrationActivity;
-			log = createLog(typeof(UpsCarrierSetup));
+            log = createLog(typeof(UpsCarrierSetup));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.CarrierSetup
             }
 
             // skip if there is already a one balance account and this config is for onebalance
-            if (config.IsOneBalance && 
+            if (config.IsOneBalance &&
                 upsAccountRepository.AccountsReadOnly.Any(x => !string.IsNullOrWhiteSpace(x.ShipEngineCarrierId)))
             {
                 return;

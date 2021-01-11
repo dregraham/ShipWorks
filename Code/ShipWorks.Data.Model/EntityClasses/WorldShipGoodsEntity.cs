@@ -395,6 +395,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."WorldShipGoodsID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, true</remarks>
+		[DataMember]
 		public virtual System.Int64 WorldShipGoodsID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.WorldShipGoodsID, true); }
@@ -405,6 +406,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."ShipmentID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.ShipmentID, true); }
@@ -415,6 +417,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."ShipmentCustomsItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 ShipmentCustomsItemID
 		{
 			get { return (System.Int64)GetValue((int)WorldShipGoodsFieldIndex.ShipmentCustomsItemID, true); }
@@ -425,6 +428,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."Description"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 150<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String Description
 		{
 			get { return (System.String)GetValue((int)WorldShipGoodsFieldIndex.Description, true); }
@@ -435,6 +439,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."TariffCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 15<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String TariffCode
 		{
 			get { return (System.String)GetValue((int)WorldShipGoodsFieldIndex.TariffCode, true); }
@@ -445,6 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."CountryOfOrigin"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String CountryOfOrigin
 		{
 			get { return (System.String)GetValue((int)WorldShipGoodsFieldIndex.CountryOfOrigin, true); }
@@ -455,6 +461,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."Units"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 Units
 		{
 			get { return (System.Int32)GetValue((int)WorldShipGoodsFieldIndex.Units, true); }
@@ -465,6 +472,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."UnitOfMeasure"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 5<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String UnitOfMeasure
 		{
 			get { return (System.String)GetValue((int)WorldShipGoodsFieldIndex.UnitOfMeasure, true); }
@@ -475,6 +483,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."UnitPrice"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal UnitPrice
 		{
 			get { return (System.Decimal)GetValue((int)WorldShipGoodsFieldIndex.UnitPrice, true); }
@@ -485,6 +494,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."Weight"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Double Weight
 		{
 			get { return (System.Double)GetValue((int)WorldShipGoodsFieldIndex.Weight, true); }
@@ -495,6 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "WorldShipGoods"."InvoiceCurrencyCode"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 3<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String InvoiceCurrencyCode
 		{
 			get { return (System.String)GetValue((int)WorldShipGoodsFieldIndex.InvoiceCurrencyCode, true); }

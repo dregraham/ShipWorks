@@ -459,6 +459,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."AmazonOrderID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 32<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String AmazonOrderID
 		{
 			get { return (System.String)GetValue((int)AmazonOrderFieldIndex.AmazonOrderID, true); }
@@ -469,6 +470,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."AmazonCommission"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Money, 19, 4, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Decimal AmazonCommission
 		{
 			get { return (System.Decimal)GetValue((int)AmazonOrderFieldIndex.AmazonCommission, true); }
@@ -479,6 +481,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."FulfillmentChannel"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 FulfillmentChannel
 		{
 			get { return (System.Int32)GetValue((int)AmazonOrderFieldIndex.FulfillmentChannel, true); }
@@ -489,6 +492,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."IsPrime"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int32 IsPrime
 		{
 			get { return (System.Int32)GetValue((int)AmazonOrderFieldIndex.IsPrime, true); }
@@ -499,6 +503,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."EarliestExpectedDeliveryDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> EarliestExpectedDeliveryDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AmazonOrderFieldIndex.EarliestExpectedDeliveryDate, false); }
@@ -509,6 +514,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."LatestExpectedDeliveryDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> LatestExpectedDeliveryDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, false); }
@@ -519,6 +525,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "AmazonOrder"."PurchaseOrderNumber"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.String PurchaseOrderNumber
 		{
 			get { return (System.String)GetValue((int)AmazonOrderFieldIndex.PurchaseOrderNumber, true); }
@@ -527,6 +534,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'AmazonOrderSearchEntity' which are related to this entity via a relation of type '1:n'. If the EntityCollection hasn't been fetched yet, the collection returned will be empty.<br/><br/></summary>
 		[TypeContainedAttribute(typeof(AmazonOrderSearchEntity))]
+		[DataMember]
 		public virtual EntityCollection<AmazonOrderSearchEntity> AmazonOrderSearch
 		{
 			get { return GetOrCreateEntityCollection<AmazonOrderSearchEntity, AmazonOrderSearchEntityFactory>("AmazonOrder", true, false, ref _amazonOrderSearch);	}

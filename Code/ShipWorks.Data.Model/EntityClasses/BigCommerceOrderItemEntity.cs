@@ -402,6 +402,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."OrderAddressID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderAddressID
 		{
 			get { return (System.Int64)GetValue((int)BigCommerceOrderItemFieldIndex.OrderAddressID, true); }
@@ -412,6 +413,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."OrderProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Int64 OrderProductID
 		{
 			get { return (System.Int64)GetValue((int)BigCommerceOrderItemFieldIndex.OrderProductID, true); }
@@ -422,6 +424,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."IsDigitalItem"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		[DataMember]
 		public virtual System.Boolean IsDigitalItem
 		{
 			get { return (System.Boolean)GetValue((int)BigCommerceOrderItemFieldIndex.IsDigitalItem, true); }
@@ -432,6 +435,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."EventDate"<br/>
 		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.DateTime> EventDate
 		{
 			get { return (Nullable<System.DateTime>)GetValue((int)BigCommerceOrderItemFieldIndex.EventDate, false); }
@@ -442,6 +446,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."EventName"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual System.String EventName
 		{
 			get { return (System.String)GetValue((int)BigCommerceOrderItemFieldIndex.EventName, true); }
@@ -452,6 +457,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Mapped on  table field: "BigCommerceOrderItem"."ParentOrderProductID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		[DataMember]
 		public virtual Nullable<System.Int64> ParentOrderProductID
 		{
 			get { return (Nullable<System.Int64>)GetValue((int)BigCommerceOrderItemFieldIndex.ParentOrderProductID, false); }
