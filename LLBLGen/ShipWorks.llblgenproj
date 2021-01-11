@@ -1515,7 +1515,7 @@
           <Field Name="IsFBA" Type="bool" FieldIndex="1" />
           <Field Name="IsPrime" Type="AmazonIsPrime" FieldIndex="2" />
           <Field Name="IsSameDay" Type="bool" FieldIndex="3" />
-          <Field Name="OrderSource" Type="string" IsOptional="true" MaxLength="50" FieldIndex="4" />
+          <Field Name="Marketplace" Type="string" MaxLength="50" FieldIndex="4" />
         </Fields>
       </EntityDefinition>
       <EntityDefinition Name="GenericModuleOrderItem" ObjectID="3f76a303-a9a3-4ede-a743-3d09e2c7e4ca" InheritanceType="2">
@@ -6929,7 +6929,7 @@
                     <Field Name="IsFBA" Ordinal="3" DbType="2" />
                     <Field Name="IsPrime" Ordinal="4" DbType="8" Precision="10" />
                     <Field Name="IsSameDay" Ordinal="5" DbType="2" />
-                    <Field Name="OrderSource" Ordinal="6" IsOptional="true" DbType="12" Length="50" />
+                    <Field Name="Marketplace" Ordinal="6" DbType="12" Length="50" />
                   </Fields>
                 </Table>
                 <Table Name="GenericModuleOrderItem">
@@ -12464,8 +12464,8 @@
             <FieldMapping FieldName="IsFBA" TargetFieldName="IsFBA" />
             <FieldMapping FieldName="IsPrime" TargetFieldName="IsPrime" />
             <FieldMapping FieldName="IsSameDay" TargetFieldName="IsSameDay" />
+            <FieldMapping FieldName="Marketplace" TargetFieldName="Marketplace" />
             <FieldMapping FieldName="OrderID" TargetFieldName="OrderID" />
-            <FieldMapping FieldName="OrderSource" TargetFieldName="OrderSource" />
           </FieldMappings>
         </EntityMapping>
         <EntityMapping EntityName=":GenericModuleOrderItem" TargetName="ShipWorksLocal:dbo:GenericModuleOrderItem">

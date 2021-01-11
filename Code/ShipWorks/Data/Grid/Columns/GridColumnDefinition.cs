@@ -351,8 +351,6 @@ namespace ShipWorks.Data.Grid.Columns
         {
             IList<StoreType> storeTypes = StoreManager.GetUniqueStoreTypes();
 
-            bool appliesToStoreType = storeTypeCode != null && !storeTypes.Select(t => t.TypeCode).Contains(storeTypeCode.Value);
-
             if (storeTypeCode != null && !storeTypes.Any(AppliesToStore))
             {
                 return false;

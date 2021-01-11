@@ -505,13 +505,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         private void LoadGenericModuleFields(OrderEntity order, XPathNavigator xpath)
         {
-            {
-                GenericModuleOrderEntity genericModuleOrder = order as GenericModuleOrderEntity;
+            GenericModuleOrderEntity genericModuleOrder = order as GenericModuleOrderEntity;
 
-                if (genericModuleOrder != null)
-                {
-                    genericModuleOrder.OrderSource= XPathUtility.Evaluate(xpath, "OrderSource", string.Empty);
-                }
+            if (genericModuleOrder != null)
+            {
+                genericModuleOrder.OrderSource = XPathUtility.Evaluate(xpath, "OrderSource", string.Empty).Truncate(50);
             }
         }
 

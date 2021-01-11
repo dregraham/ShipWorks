@@ -358,7 +358,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 			_fieldsCustomProperties.Add("IsSameDay", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
-			_fieldsCustomProperties.Add("OrderSource", fieldHashtable);
+			_fieldsCustomProperties.Add("Marketplace", fieldHashtable);
 		}
 		#endregion
 
@@ -452,14 +452,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)GenericModuleOrderFieldIndex.IsSameDay, value); }
 		}
 
-		/// <summary> The OrderSource property of the Entity GenericModuleOrder<br/><br/></summary>
-		/// <remarks>Mapped on  table field: "GenericModuleOrder"."OrderSource"<br/>
+		/// <summary> The Marketplace property of the Entity GenericModuleOrder<br/><br/></summary>
+		/// <remarks>Mapped on  table field: "GenericModuleOrder"."Marketplace"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String OrderSource
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Marketplace
 		{
-			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.OrderSource, true); }
-			set	{ SetValue((int)GenericModuleOrderFieldIndex.OrderSource, value); }
+			get { return (System.String)GetValue((int)GenericModuleOrderFieldIndex.Marketplace, true); }
+			set	{ SetValue((int)GenericModuleOrderFieldIndex.Marketplace, value); }
 		}
 	
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>

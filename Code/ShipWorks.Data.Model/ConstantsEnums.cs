@@ -4872,8 +4872,8 @@ namespace ShipWorks.Data.Model
 		IsPrime,
 		///<summary>IsSameDay. </summary>
 		IsSameDay,
-		///<summary>OrderSource. </summary>
-		OrderSource,
+		///<summary>Marketplace. </summary>
+		Marketplace,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6814,8 +6814,8 @@ namespace ShipWorks.Data.Model
 		IsPrime,
 		///<summary>IsSameDay. Inherited from GenericModuleOrder</summary>
 		IsSameDay,
-		///<summary>OrderSource. Inherited from GenericModuleOrder</summary>
-		OrderSource,
+		///<summary>Marketplace. Inherited from GenericModuleOrder</summary>
+		Marketplace,
 		///<summary>OrderID. </summary>
 		OrderID,
 		///<summary>MagentoOrderID. </summary>

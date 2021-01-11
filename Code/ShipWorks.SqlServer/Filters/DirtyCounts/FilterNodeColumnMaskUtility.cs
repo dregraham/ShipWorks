@@ -75,7 +75,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.ThreeDCartOrderSearch] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.WalmartOrderSearch] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.YahooOrderSearch] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 5;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GenericModuleOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.OverstockOrder] = 4;
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];

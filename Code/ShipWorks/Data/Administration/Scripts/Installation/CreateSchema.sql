@@ -6385,7 +6385,7 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
 	[IsSameDay] bit NOT NULL,
-	[OrderSource] [nvarchar](50)
+	[OrderSource] [nvarchar](50) NOT NULL
  CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC

@@ -1827,7 +1827,7 @@ namespace ShipWorks.Data.Model
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsFBA", "IsFBA", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 2);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsPrime", "IsPrime", false, "Int", 0, 10, 0, false, "", null, typeof(System.Int32), 3);
 			this.AddElementFieldMapping("GenericModuleOrderEntity", "IsSameDay", "IsSameDay", false, "Bit", 0, 0, 0, false, "", null, typeof(System.Boolean), 4);
-			this.AddElementFieldMapping("GenericModuleOrderEntity", "OrderSource", "OrderSource", true, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
+			this.AddElementFieldMapping("GenericModuleOrderEntity", "Marketplace", "Marketplace", false, "NVarChar", 50, 0, 0, false, "", null, typeof(System.String), 5);
 		}
 
 		/// <summary>Inits GenericModuleOrderItemEntity's mappings</summary>
