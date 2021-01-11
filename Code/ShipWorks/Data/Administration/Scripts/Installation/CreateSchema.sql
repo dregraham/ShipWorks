@@ -6385,7 +6385,7 @@ CREATE TABLE [dbo].[GenericModuleOrder](
 	[IsFBA] [bit] NOT NULL,
 	[IsPrime] [int] NOT NULL,
 	[IsSameDay] bit NOT NULL,
-	[OrderSource] [nvarchar](50) NOT NULL
+	[Marketplace] [nvarchar](50) NOT NULL
  CONSTRAINT [PK_GenericModuleOrder] PRIMARY KEY CLUSTERED
 (
 	[OrderID] ASC
@@ -6401,7 +6401,7 @@ GO
 ALTER TABLE [dbo].[GenericModuleOrder] CHECK CONSTRAINT [FK_GenericModuleOrder_Order]
 GO
 
-CREATE NONCLUSTERED INDEX [IX_SWDefault_GenericModuleOrder_OrderSource] ON [dbo].[GenericModuleOrder] ([OrderSource])
+CREATE NONCLUSTERED INDEX [IX_SWDefault_GenericModuleOrder_Marketplace] ON [dbo].[GenericModuleOrder] ([Marketplace])
 GO
 
 PRINT N'Creating MagentoOrder foreign key'
