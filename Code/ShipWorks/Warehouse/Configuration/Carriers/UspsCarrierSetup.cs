@@ -24,6 +24,7 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity, IUspsAccountEntity> uspsAccountRepository;
         private readonly IUspsWebClient webClient;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor
@@ -37,6 +38,7 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
         {
             this.uspsAccountRepository = uspsAccountRepository;
             this.webClient = uspsWebClientFactory(UspsResellerType.None);
+            this.shippingSettings = shippingSettings;
         }
 
         /// <summary>
@@ -66,19 +68,25 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
             uspsAccount.Password = SecureText.Encrypt(account.Password, account.Username);
             uspsAccount.HubVersion = config.HubVersion;
 
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+
+            // If the customer has a ShipEngineAccountId, that means they have a single ShipEngine account and we can
+            // import this from the hub
+            if (!string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            {
+                uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+            }
+
             if (uspsAccount.IsNew)
             {
                 uspsAccount.Username = account.Username;
                 webClient.PopulateUspsAccountEntity(uspsAccount);
                 uspsAccount.PendingInitialAccount = (int) UspsPendingAccountType.None;
-                uspsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
                 uspsAccount.InitializeNullsToDefault();
             }
 
             GetAddress(config.Address).CopyTo(uspsAccount, string.Empty);
-
             uspsAccountRepository.Save(uspsAccount);
-
             SetupDefaultsIfNeeded(ShipmentTypeCode.Usps, config.RequestedLabelFormat);
         }
 

@@ -6,7 +6,6 @@ using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.ComponentRegistration;
 using Quartz.Util;
 using ShipWorks.AddressValidation.Enums;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -59,11 +58,14 @@ namespace ShipWorks.AddressValidation
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
             try
             {
-                UspsAccountEntity accountWithoutPassword = accountRepository.DefaultProfileAccount;
-                accountWithoutPassword.Password = string.Empty;
+                var account = accountRepository.DefaultProfileAccount;
 
-                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, accountWithoutPassword).ConfigureAwait(false);
+                if (personAdapter.IsDomesticCountry())
+                {
+                    account.Password = string.Empty;
+                }
 
+                UspsAddressValidationResults uspsResult = await uspsWebClient.ValidateAddressAsync(personAdapter, account).ConfigureAwait(false);
                 validationResult.AddressType = ConvertAddressType(uspsResult, addressAdapter);
 
                 bool shouldParseAddress = !personAdapter.Street2.IsNullOrWhiteSpace();

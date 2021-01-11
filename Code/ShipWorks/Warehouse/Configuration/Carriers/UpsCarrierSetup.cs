@@ -74,15 +74,23 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
 
             var upsAccount = GetOrCreateAccountEntity(config.HubCarrierID);
 
+            ShippingSettingsEntity settings = shippingSettings.Fetch();
+
             if (!config.IsOneBalance)
             {
-                ShippingSettingsEntity settings = shippingSettings.Fetch();
                 settings.UpsAccessKey = SecureText.Encrypt(account.CustomerAccessNumber, "UPS");
                 shippingSettings.Save(settings);
             }
 
             GetAddress(config.Address).CopyTo(upsAccount, string.Empty);
             upsAccount.HubVersion = config.HubVersion;
+
+            // If the customer has a ShipEngineAccountId, that means they have a single ShipEngine account and we can
+            // import this from the hub
+            if (!string.IsNullOrWhiteSpace(settings.ShipEngineAccountID))
+            {
+                upsAccount.ShipEngineCarrierId = config.ShipEngineCarrierID;
+            }
 
             if (upsAccount.IsNew)
             {
@@ -96,15 +104,20 @@ namespace ShipWorks.Warehouse.Configuration.Carriers
                 }
                 else
                 {
-                    string deviceIdentity = await GetDeviceIdentity().ConfigureAwait(false);
-                    var result =
-                        await oneBalanceUpsAccountRegistrationActivity.Execute(
-                            oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
-                    if (result.Failure)
+                    // If we don't have a SE Carrier ID, that means the ups account was not linked to ShipEngine in the hub.
+                    // So link it here
+                    if (string.IsNullOrWhiteSpace(upsAccount.ShipEngineCarrierId))
                     {
-                        // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
-                        log.Warn("Error registering UPS account", result.Exception);
-                        return;
+                        string deviceIdentity = await GetDeviceIdentity().ConfigureAwait(false);
+                        var result =
+                            await oneBalanceUpsAccountRegistrationActivity.Execute(
+                                oneBalanceUspsAccount, upsAccount, deviceIdentity).ConfigureAwait(false);
+                        if (result.Failure)
+                        {
+                            // if we failed to register the ups account, we don't want to save it, so just bail. We'll try again next time.
+                            log.Warn("Error registering UPS account", result.Exception);
+                            return;
+                        }
                     }
                 }
 

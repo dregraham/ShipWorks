@@ -1568,6 +1568,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\WPF\WPFInterop.cs" />
+    <Compile Include="Warehouse\Configuration\Customer\HubCustomerConfigurator.cs" />
+    <Compile Include="Warehouse\Configuration\Customer\IHubCustomerConfigurator.cs" />
     <Compile Include="Warehouse\Configuration\DTO\ConfigurationAddress.cs" />
     <Compile Include="Warehouse\Configuration\DTO\HubConfiguration.cs" />
     <Compile Include="Warehouse\Configuration\Carriers\DTO\DhlAccountConfiguration.cs" />

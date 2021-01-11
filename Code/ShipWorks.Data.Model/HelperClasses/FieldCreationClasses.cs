@@ -27397,6 +27397,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsAllowNoDims);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.ShipEngineAccountID field instance</summary>
+		public static EntityField2 ShipEngineAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.ShipEngineAccountID);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ShipSenseKnowledgebaseEntity</summary>

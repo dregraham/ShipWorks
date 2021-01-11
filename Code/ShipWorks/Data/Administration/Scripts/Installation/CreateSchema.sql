@@ -5285,7 +5285,8 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipmentDateCutoffJson] [nvarchar] (1000) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipmentDateCutoffJson] DEFAULT (''),
 [ShipEngineApiKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OrderLookupFieldLayout] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_OrderLookupFieldLayout] DEFAULT (''),
-[UpsAllowNoDims] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_UpsAllowNoDims] DEFAULT ((0))
+[UpsAllowNoDims] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_UpsAllowNoDims] DEFAULT ((0)),
+[ShipEngineAccountID] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_ShipEngineAccountID] DEFAULT (''),
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
